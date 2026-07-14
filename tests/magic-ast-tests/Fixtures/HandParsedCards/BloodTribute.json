@@ -51,7 +51,12 @@
           ],
           "Reminder": {
             "Text": "(You may tap a Vampire you control in addition to any other costs as you cast this spell.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 134
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -85,7 +90,12 @@
                 "Keyword": "Kicker"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 135,
+            "Length": 123
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

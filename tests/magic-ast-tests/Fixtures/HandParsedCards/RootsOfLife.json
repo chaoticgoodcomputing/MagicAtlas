@@ -4,8 +4,12 @@
     "ManaCost": "{1}{G}{G}",
     "TypeLine": "Enchantment",
     "OracleText": "As this enchantment enters, choose Island or Swamp.\nWhenever a land of the chosen type an opponent controls becomes tapped, you gain 1 life.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "26724a51-87dd-4159-b012-71598e4cf5eb",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Roots of Life",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "As this enchantment enters, choose Island or Swamp.\nWhenever a land of the chosen type an opponent controls becomes tapped, you gain 1 life.",
@@ -25,9 +31,17 @@
           "Effects": [
             {
               "EffectType": "chooseBasicLandType",
-              "Options": ["Island", "Swamp"]
+              "Options": [
+                "Island",
+                "Swamp"
+              ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -35,7 +49,9 @@
             "Timing": "Whenever",
             "Event": "BecomesTapped",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "Controller": "Opponent",
               "ChosenCharacteristic": "BasicLandType"
             }
@@ -51,7 +67,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 88
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -66,11 +87,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -78,11 +103,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

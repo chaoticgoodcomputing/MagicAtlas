@@ -38,7 +38,12 @@
           "Condition": {
             "ConditionType": "other",
             "Text": "if it targets a tapped creature"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 66
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -54,7 +59,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 67,
+            "Length": 22
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

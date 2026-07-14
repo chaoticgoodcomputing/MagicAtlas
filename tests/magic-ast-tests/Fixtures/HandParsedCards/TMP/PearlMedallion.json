@@ -13,7 +13,9 @@
     "Name": "Pearl Medallion",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "White spells you cast cost {1} less to cast.",
@@ -23,14 +25,26 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell"],
-            "Colors": ["W"],
+            "CardTypes": [
+              "spell"
+            ],
+            "Colors": [
+              "W"
+            ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,12 +53,21 @@
         "Kind": "manaCost",
         "Raw": "{2}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

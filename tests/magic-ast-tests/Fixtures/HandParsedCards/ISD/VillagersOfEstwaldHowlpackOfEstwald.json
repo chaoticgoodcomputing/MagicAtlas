@@ -105,7 +105,12 @@
                     "Kind": "Self"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 104
+              },
+              "OracleLineIndex": 0
             }
           ]
         },
@@ -176,7 +181,12 @@
                   "Keyword": "Trample"
                 }
               ],
-              "KeywordSource": "Trample"
+              "KeywordSource": "Trample",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 7
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -198,7 +208,12 @@
                     "Kind": "Self"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 8,
+                "Length": 91
+              },
+              "OracleLineIndex": 1
             }
           ]
         },

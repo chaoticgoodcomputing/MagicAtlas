@@ -38,7 +38,12 @@
           "KeywordSource": "Reach",
           "Reminder": {
             "Text": "(This creature can block creatures with flying.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

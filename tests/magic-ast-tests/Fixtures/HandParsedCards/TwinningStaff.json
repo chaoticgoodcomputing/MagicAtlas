@@ -36,7 +36,12 @@
                 "MayChooseNewTargets": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 153
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -71,7 +76,12 @@
               "MayChooseNewTargets": true
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 154,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

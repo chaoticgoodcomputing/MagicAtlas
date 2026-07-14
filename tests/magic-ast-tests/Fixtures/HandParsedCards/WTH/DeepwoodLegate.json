@@ -67,7 +67,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 111
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -107,7 +112,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 112,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

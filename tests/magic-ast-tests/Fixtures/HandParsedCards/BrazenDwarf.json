@@ -6,15 +6,24 @@
     "OracleText": "Whenever you roll one or more dice, this creature deals 1 damage to each opponent.",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Brazen Dwarf",
     "TypeLine": {
       "Raw": "Creature — Dwarf Shaman",
-      "Types": ["Creature"],
-      "Subtypes": ["Dwarf", "Shaman"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dwarf",
+        "Shaman"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you roll one or more dice, this creature deals 1 damage to each opponent.",
@@ -28,11 +37,23 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
-              "Target": { "Kind": "EachOpponent" },
-              "Source": { "Kind": "Self" }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "EachOpponent"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 82
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,17 +62,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

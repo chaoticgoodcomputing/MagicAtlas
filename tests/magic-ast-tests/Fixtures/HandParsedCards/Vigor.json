@@ -6,9 +6,15 @@
     "OracleText": "Trample\nIf damage would be dealt to another creature you control, prevent that damage. Put a +1/+1 counter on that creature for each 1 damage prevented this way.\nWhen Vigor is put into a graveyard from anywhere, shuffle it into its owner's library.",
     "Power": "6",
     "Toughness": "6",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Trample"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Trample"
+    ],
     "Id": "ea7047d8-8d32-48a3-829b-7eb5427ed53a",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Vigor",
     "TypeLine": {
       "Raw": "Creature — Elemental Incarnation",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental", "Incarnation"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Incarnation"
+      ]
     },
     "Oracle": {
       "RawText": "Trample\nIf damage would be dealt to another creature you control, prevent that damage. Put a +1/+1 counter on that creature for each 1 damage prevented this way.\nWhen Vigor is put into a graveyard from anywhere, shuffle it into its owner's library.",
@@ -30,7 +41,12 @@
               "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Trample"
+          "KeywordSource": "Trample",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 7
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,7 +56,9 @@
               "Event": {
                 "EventType": "damage",
                 "AffectedObjects": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
@@ -70,7 +88,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 8,
+            "Length": 153
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -78,7 +101,9 @@
             "Timing": "When",
             "Event": "PutIntoGraveyard",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -89,7 +114,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 162,
+            "Length": 86
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -104,15 +134,21 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 6,
@@ -120,11 +156,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

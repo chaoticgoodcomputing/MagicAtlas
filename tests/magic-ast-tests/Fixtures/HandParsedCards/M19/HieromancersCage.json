@@ -56,7 +56,12 @@
                 "Object": "this enchantment"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 128
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

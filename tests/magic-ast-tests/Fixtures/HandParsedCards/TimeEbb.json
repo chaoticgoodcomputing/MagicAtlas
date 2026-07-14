@@ -6,14 +6,20 @@
     "OracleText": "Put target creature on top of its owner's library.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Time Ebb",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Put target creature on top of its owner's library.",
@@ -26,11 +32,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 50
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,13 +52,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          {"Kind": "generic", "GenericAmount": 2},
-          {"Kind": "colored", "Colors": ["U"]}
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      {"Kind": "colors", "Colors": ["U"]},
-      {"Kind": "colorIdentity", "ColorIdentity": ["U"]}
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

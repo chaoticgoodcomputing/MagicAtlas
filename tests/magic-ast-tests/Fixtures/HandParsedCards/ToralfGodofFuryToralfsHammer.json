@@ -101,7 +101,12 @@
                   "Keyword": "Trample"
                 }
               ],
-              "KeywordSource": "Trample"
+              "KeywordSource": "Trample",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 7
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -130,7 +135,12 @@
                     "Kind": "Self"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 8,
+                "Length": 171
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -252,10 +262,16 @@
                         }
                       }
                     ],
-                    "IsManaAbility": false
+                    "IsManaAbility": false,
+                    "OracleLineIndex": 0
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 139
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "static",
@@ -281,7 +297,12 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 140,
+                "Length": 55
+              },
+              "OracleLineIndex": 1
             },
             {
               "Kind": "activated",
@@ -320,7 +341,12 @@
                 "OnlyAsSorcery"
               ],
               "IsManaAbility": false,
-              "KeywordSource": "Equip"
+              "KeywordSource": "Equip",
+              "SourceSpan": {
+                "Start": 196,
+                "Length": 12
+              },
+              "OracleLineIndex": 2
             }
           ]
         },

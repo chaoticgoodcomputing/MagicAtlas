@@ -6,15 +6,23 @@
     "OracleText": "Trample\nWhen this creature dies, create three 5/5 green Wurm creature tokens with trample.\nWhen Worldspine Wurm is put into a graveyard from anywhere, shuffle it into its owner's library.",
     "Power": "15",
     "Toughness": "15",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Worldspine Wurm",
     "TypeLine": {
       "Raw": "Creature — Wurm",
-      "Types": ["Creature"],
-      "Subtypes": ["Wurm"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Wurm"
+      ]
     },
     "Oracle": {
       "RawText": "Trample\nWhen this creature dies, create three 5/5 green Wurm creature tokens with trample.\nWhen Worldspine Wurm is put into a graveyard from anywhere, shuffle it into its owner's library.",
@@ -27,7 +35,12 @@
               "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Trample"
+          "KeywordSource": "Trample",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 7
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -35,7 +48,9 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -49,9 +64,15 @@
               "Token": {
                 "Power": "5",
                 "Toughness": "5",
-                "Colors": ["G"],
-                "Types": ["creature"],
-                "Subtypes": ["Wurm"],
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Wurm"
+                ],
                 "Abilities": [
                   {
                     "Kind": "static",
@@ -61,7 +82,8 @@
                         "Keyword": "Trample"
                       }
                     ],
-                    "KeywordSource": "Trample"
+                    "KeywordSource": "Trample",
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -70,7 +92,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 8,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -78,7 +105,9 @@
             "Timing": "When",
             "Event": "PutIntoGraveyard",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -89,7 +118,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 91,
+            "Length": 96
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -104,15 +138,21 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 11,
@@ -120,11 +160,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

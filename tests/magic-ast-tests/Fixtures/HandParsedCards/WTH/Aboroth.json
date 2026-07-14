@@ -42,7 +42,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -66,7 +71,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 69
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

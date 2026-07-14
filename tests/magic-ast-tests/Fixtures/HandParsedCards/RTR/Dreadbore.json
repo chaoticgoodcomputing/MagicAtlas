@@ -6,14 +6,22 @@
     "OracleText": "Destroy target creature or planeswalker.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B", "R"],
-    "ColorIdentity": ["B", "R"]
+    "Colors": [
+      "B",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Dreadbore",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target creature or planeswalker.",
@@ -26,11 +34,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature", "planeswalker"]
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,18 +55,34 @@
         "Kind": "manaCost",
         "Raw": "{B}{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "R"]
+        "Colors": [
+          "B",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "R"]
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
       }
     ]
   }

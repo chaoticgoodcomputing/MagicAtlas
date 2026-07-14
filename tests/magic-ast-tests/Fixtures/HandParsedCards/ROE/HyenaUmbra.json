@@ -37,7 +37,12 @@
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -72,12 +77,18 @@
                         "Timing": "First"
                       }
                     ],
-                    "KeywordSource": "First strike"
+                    "KeywordSource": "First strike",
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -90,7 +101,12 @@
           "KeywordSource": "Umbra armor",
           "Reminder": {
             "Text": "(If enchanted creature would be destroyed, instead remove all damage from it and destroy this Aura.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 69,
+            "Length": 112
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

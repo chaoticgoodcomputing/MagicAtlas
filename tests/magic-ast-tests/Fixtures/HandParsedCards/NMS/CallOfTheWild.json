@@ -34,11 +34,15 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["G"]
+                  "Colors": [
+                    "G"
+                  ]
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["G"]
+                  "Colors": [
+                    "G"
+                  ]
                 }
               ]
             }
@@ -50,11 +54,18 @@
                 "Kind": "You"
               },
               "Filter": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 140
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -69,22 +80,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

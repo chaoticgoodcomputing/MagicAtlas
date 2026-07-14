@@ -4,14 +4,20 @@
     "ManaCost": "{2}{B}",
     "TypeLine": "Sorcery",
     "OracleText": "Exile all creature cards from all graveyards.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Exile All Graveyard Cards",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Exile all creature cards from all graveyards.",
@@ -24,12 +30,19 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Zone": "Graveyard"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 45
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -38,18 +51,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

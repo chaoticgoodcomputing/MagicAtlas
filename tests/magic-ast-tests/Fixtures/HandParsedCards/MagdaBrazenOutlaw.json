@@ -63,7 +63,12 @@
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 36
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -100,7 +105,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 69
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -148,7 +158,12 @@
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 107,
+            "Length": 127
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

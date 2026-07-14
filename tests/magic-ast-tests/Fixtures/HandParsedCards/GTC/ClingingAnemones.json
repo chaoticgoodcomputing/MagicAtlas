@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Defender"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 8
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -48,7 +53,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Evolve"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 9,
+            "Length": 154
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,14 +6,20 @@
     "OracleText": "Destroy target land.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Stone Rain",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target land.",
@@ -26,11 +32,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,13 +52,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
     ]
   }
 }

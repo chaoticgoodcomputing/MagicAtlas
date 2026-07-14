@@ -8,7 +8,10 @@
     "Toughness": "5",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Trample", "Domain"],
+    "Keywords": [
+      "Trample",
+      "Domain"
+    ],
     "Id": "324bc757-9942-4862-b691-5af42e07f682",
     "Layout": "normal"
   },
@@ -16,8 +19,13 @@
     "Name": "Stratadon",
     "TypeLine": {
       "Raw": "Artifact Creature — Beast",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Beast"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "Domain — This spell costs {1} less to cast for each basic land type among lands you control.\nTrample",
@@ -28,16 +36,31 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "domain" }
+              "Amount": {
+                "QuantityType": "domain"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 92
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "KeywordSource": "Trample",
           "Effects": [
-            { "EffectType": "keywordAbility", "Keyword": "Trample" }
-          ]
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 93,
+            "Length": 7
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -46,16 +69,33 @@
         "Kind": "manaCost",
         "Raw": "{10}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 10 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 10
+          }
         ],
         "ManaValue": 10
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 5, "Raw": "5" },
-        "Toughness": { "ValueType": "fixed", "Value": 5, "Raw": "5" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        }
       }
     ]
   }

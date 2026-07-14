@@ -6,15 +6,23 @@
     "OracleText": "Flying\nWhenever a creature you control without flying dies, return it to the battlefield under its owner's control with a flying counter on it.",
     "Power": "3",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Luminous Broodmoth",
     "TypeLine": {
       "Raw": "Creature — Insect",
-      "Types": ["Creature"],
-      "Subtypes": ["Insect"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWhenever a creature you control without flying dies, return it to the battlefield under its owner's control with a flying counter on it.",
@@ -26,7 +34,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -39,7 +49,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -47,7 +62,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You",
               "Characteristics": [
                 {
@@ -75,7 +92,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 136
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -90,11 +112,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -102,11 +128,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

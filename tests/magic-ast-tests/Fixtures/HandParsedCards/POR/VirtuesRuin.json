@@ -4,8 +4,12 @@
     "ManaCost": "{2}{B}",
     "TypeLine": "Sorcery",
     "OracleText": "Destroy all white creatures.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "7854928a-d467-4616-b96b-de7e5fe7303e",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Virtue's Ruin",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy all white creatures.",
@@ -27,12 +33,21 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Colors": ["W"]
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Colors": [
+                    "W"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 28
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,18 +56,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

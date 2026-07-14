@@ -2,8 +2,14 @@
   "Input": {
     "Name": "Lunarch Veteran // Luminous Phantom",
     "TypeLine": "Creature — Human Cleric // Creature — Spirit Cleric",
-    "ColorIdentity": ["W"],
-    "Keywords": ["Flying", "Transform", "Disturb"],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Flying",
+      "Transform",
+      "Disturb"
+    ],
     "Id": "438e3302-daf9-436b-8b08-24b3f33295f6",
     "Layout": "transform",
     "CardFaces": [
@@ -14,7 +20,9 @@
         "OracleText": "Whenever another creature you control enters, you gain 1 life.\nDisturb {1}{W} (You may cast this card from your graveyard transformed for its disturb cost.)",
         "Power": "1",
         "Toughness": "1",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Name": "Luminous Phantom",
@@ -23,8 +31,12 @@
         "OracleText": "Flying\nWhenever another creature you control leaves the battlefield, you gain 1 life.\nIf Luminous Phantom would be put into a graveyard from anywhere, exile it instead.",
         "Power": "1",
         "Toughness": "1",
-        "Colors": ["W"],
-        "ColorIndicator": ["W"]
+        "Colors": [
+          "W"
+        ],
+        "ColorIndicator": [
+          "W"
+        ]
       }
     ]
   },
@@ -32,8 +44,18 @@
     "Name": "Lunarch Veteran // Luminous Phantom",
     "TypeLine": {
       "Raw": "Creature — Human Cleric // Creature — Spirit Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric", "//", "Creature", "—", "Spirit", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric",
+        "//",
+        "Creature",
+        "—",
+        "Spirit",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "",
@@ -46,7 +68,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "layout",
@@ -58,8 +82,13 @@
         "Name": "Lunarch Veteran",
         "TypeLine": {
           "Raw": "Creature — Human Cleric",
-          "Types": ["Creature"],
-          "Subtypes": ["Human", "Cleric"]
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Human",
+            "Cleric"
+          ]
         },
         "Oracle": {
           "RawText": "Whenever another creature you control enters, you gain 1 life.\nDisturb {1}{W} (You may cast this card from your graveyard transformed for its disturb cost.)",
@@ -70,7 +99,9 @@
                 "Timing": "Whenever",
                 "Event": "Enters",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
@@ -86,7 +117,12 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 62
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "static",
@@ -107,13 +143,20 @@
                       },
                       {
                         "Kind": "colored",
-                        "Colors": ["W"]
+                        "Colors": [
+                          "W"
+                        ]
                       }
                     ]
                   },
                   "Transformed": true
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 63,
+                "Length": 93
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -124,7 +167,9 @@
             "Symbols": [
               {
                 "Kind": "colored",
-                "Colors": ["W"]
+                "Colors": [
+                  "W"
+                ]
               }
             ],
             "ManaValue": 1,
@@ -132,7 +177,9 @@
           },
           {
             "Kind": "colors",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "creatureStats",
@@ -153,8 +200,13 @@
         "Name": "Luminous Phantom",
         "TypeLine": {
           "Raw": "Creature — Spirit Cleric",
-          "Types": ["Creature"],
-          "Subtypes": ["Spirit", "Cleric"]
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Spirit",
+            "Cleric"
+          ]
         },
         "Oracle": {
           "RawText": "Flying\nWhenever another creature you control leaves the battlefield, you gain 1 life.\nIf Luminous Phantom would be put into a graveyard from anywhere, exile it instead.",
@@ -166,7 +218,9 @@
                 {
                   "EffectType": "evasion",
                   "CanBeBlockedBy": {
-                    "CardTypes": ["creature"],
+                    "CardTypes": [
+                      "creature"
+                    ],
                     "Characteristics": [
                       {
                         "CharacteristicType": "keyword",
@@ -179,7 +233,12 @@
                     ]
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 6
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -187,7 +246,9 @@
                 "Timing": "Whenever",
                 "Event": "LeavesTheBattlefield",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
@@ -203,7 +264,12 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 78
+              },
+              "OracleLineIndex": 1
             },
             {
               "Kind": "static",
@@ -225,14 +291,21 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 86,
+                "Length": 82
+              },
+              "OracleLineIndex": 2
             }
           ]
         },
         "Attributes": [
           {
             "Kind": "colors",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "creatureStats",

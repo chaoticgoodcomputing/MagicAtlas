@@ -6,8 +6,14 @@
     "OracleText": "Discard a card: This creature gets +1/+1 until end of turn.\nExile two cards from your graveyard: This creature gets +1/+1 until end of turn.",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["B", "U"],
-    "ColorIdentity": ["B", "U"],
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ],
     "Keywords": [],
     "Id": "f60911a4-2eb6-4f20-a1c1-2fc5a29c35b5",
     "Layout": "normal"
@@ -16,8 +22,12 @@
     "Name": "Psychatog",
     "TypeLine": {
       "Raw": "Creature — Atog",
-      "Types": ["Creature"],
-      "Subtypes": ["Atog"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Atog"
+      ]
     },
     "Oracle": {
       "RawText": "Discard a card: This creature gets +1/+1 until end of turn.\nExile two cards from your graveyard: This creature gets +1/+1 until end of turn.",
@@ -28,7 +38,9 @@
             {
               "CostType": "discard",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -59,7 +71,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 59
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -67,7 +84,9 @@
             {
               "CostType": "exile",
               "Filter": {
-                "CardTypes": ["card"],
+                "CardTypes": [
+                  "card"
+                ],
                 "Controller": "You"
               },
               "Quantity": {
@@ -100,7 +119,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 60,
+            "Length": 80
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -115,11 +139,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -127,11 +155,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "U"]
+        "Colors": [
+          "B",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "U"]
+        "ColorIdentity": [
+          "B",
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -6,9 +6,15 @@
     "OracleText": "Flying\nActivated abilities of creatures your opponents control can't be activated.",
     "Power": "3",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Flying"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Flying"
+    ],
     "Id": "dded98c3-17cb-4a43-a209-289ceb11df39",
     "Layout": "normal"
   },
@@ -16,9 +22,15 @@
     "Name": "Linvala, Keeper of Silence",
     "TypeLine": {
       "Raw": "Legendary Creature — Angel",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Angel"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Angel"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nActivated abilities of creatures your opponents control can't be activated.",
@@ -30,26 +42,46 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
-                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "AffectedObjects": {
-            "CardTypes": ["creature"],
+            "CardTypes": [
+              "creature"
+            ],
             "Controller": "Opponent"
           },
           "Effects": [
             {
               "EffectType": "cantActivateAbilities"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 75
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -58,25 +90,50 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
-        "Toughness": { "ValueType": "fixed", "Value": 4, "Raw": "4" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
       }
     ]
   }

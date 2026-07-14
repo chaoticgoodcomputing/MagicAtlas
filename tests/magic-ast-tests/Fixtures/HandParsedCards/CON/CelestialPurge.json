@@ -4,14 +4,20 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Instant",
     "OracleText": "Exile target black or red permanent.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Celestial Purge",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target black or red permanent.",
@@ -24,12 +30,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "Colors": ["B", "R"]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "Colors": [
+                    "B",
+                    "R"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 36
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -38,18 +54,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

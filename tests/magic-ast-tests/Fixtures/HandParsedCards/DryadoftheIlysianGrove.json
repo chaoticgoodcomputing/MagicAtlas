@@ -38,7 +38,12 @@
                 "EffectType": "playAdditionalLand"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -62,7 +67,12 @@
                 "Forest"
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 77
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

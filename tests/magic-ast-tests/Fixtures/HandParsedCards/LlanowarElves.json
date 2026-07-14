@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Llanowar Elves",
     "ManaCost": "{G}",
-    "TypeLine": "Creature \u2014 Elf Druid",
+    "TypeLine": "Creature — Elf Druid",
     "OracleText": "{T}: Add {G}.",
     "Power": "1",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Llanowar Elves",
     "TypeLine": {
-      "Raw": "Creature \u2014 Elf Druid",
+      "Raw": "Creature — Elf Druid",
       "Types": [
         "Creature"
       ],
@@ -42,7 +42,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -33,7 +33,9 @@
                   "Target": {
                     "Kind": "Target",
                     "Filter": {
-                      "CardTypes": ["creature"],
+                      "CardTypes": [
+                        "creature"
+                      ],
                       "Controller": "You"
                     }
                   }
@@ -55,7 +57,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 95
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

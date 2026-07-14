@@ -41,7 +41,12 @@
             ],
             "IsColorless": true,
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 48
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -129,7 +134,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 1
+          "LoyaltyCost": 1,
+          "SourceSpan": {
+            "Start": 49,
+            "Length": 186
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -154,7 +164,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -3
+          "LoyaltyCost": -3,
+          "SourceSpan": {
+            "Start": 236,
+            "Length": 55
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

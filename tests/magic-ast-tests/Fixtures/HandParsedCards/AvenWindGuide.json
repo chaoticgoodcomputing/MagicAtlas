@@ -59,7 +59,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 17
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -69,7 +74,12 @@
               "Keyword": "Vigilance"
             }
           ],
-          "KeywordSource": "Vigilance"
+          "KeywordSource": "Vigilance",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 17
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -108,7 +118,8 @@
                     }
                   }
                 ],
-                "KeywordSource": "Flying"
+                "KeywordSource": "Flying",
+                "OracleLineIndex": 0
               }
             },
             {
@@ -131,10 +142,16 @@
                     "Keyword": "Vigilance"
                   }
                 ],
-                "KeywordSource": "Vigilance"
+                "KeywordSource": "Vigilance",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 18,
+            "Length": 54
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -203,7 +220,12 @@
           "KeywordSource": "Embalm",
           "Reminder": {
             "Text": "({4}{W}{U}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Bird Warrior with no mana cost. Embalm only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 73,
+            "Length": 187
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

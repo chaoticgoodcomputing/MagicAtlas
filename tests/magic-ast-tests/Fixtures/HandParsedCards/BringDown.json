@@ -36,7 +36,12 @@
           ],
           "Reminder": {
             "Text": "(Another player can pay up to {3} of this spell's cost.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 63
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -56,7 +61,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

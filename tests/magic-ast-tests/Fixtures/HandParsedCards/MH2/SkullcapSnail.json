@@ -6,15 +6,24 @@
     "OracleText": "When this creature enters, target opponent exiles a card from their hand.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Skullcap Snail",
     "TypeLine": {
       "Raw": "Creature — Fungus Snail",
-      "Types": ["Creature"],
-      "Subtypes": ["Fungus", "Snail"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Fungus",
+        "Snail"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, target opponent exiles a card from their hand.",
@@ -25,7 +34,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -35,13 +46,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Owner": "Opponent",
                   "Zone": "Hand"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 73
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -56,7 +74,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -64,11 +84,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

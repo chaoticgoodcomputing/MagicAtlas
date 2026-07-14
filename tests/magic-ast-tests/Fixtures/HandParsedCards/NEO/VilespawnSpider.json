@@ -37,7 +37,12 @@
               "Keyword": "Reach"
             }
           ],
-          "KeywordSource": "Reach"
+          "KeywordSource": "Reach",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -60,7 +65,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 47
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

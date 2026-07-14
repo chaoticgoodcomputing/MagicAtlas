@@ -6,14 +6,20 @@
     "OracleText": "Target player draws X cards.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Stroke of Genius",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target player draws X cards.",
@@ -30,11 +36,18 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 28
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,19 +56,33 @@
         "Kind": "manaCost",
         "Raw": "{X}{2}{U}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

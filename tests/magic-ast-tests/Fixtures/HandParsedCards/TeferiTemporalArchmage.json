@@ -42,7 +42,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 1
+          "LoyaltyCost": 1,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 122
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -66,7 +71,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -1
+          "LoyaltyCost": -1,
+          "SourceSpan": {
+            "Start": 123,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -94,14 +104,20 @@
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ]
               }
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -10
+          "LoyaltyCost": -10,
+          "SourceSpan": {
+            "Start": 163,
+            "Length": 150
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -109,7 +125,12 @@
             {
               "EffectType": "commanderDesignation"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 314,
+            "Length": 48
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

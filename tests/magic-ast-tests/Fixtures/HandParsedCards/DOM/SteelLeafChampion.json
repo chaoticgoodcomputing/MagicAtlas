@@ -6,15 +6,24 @@
     "OracleText": "This creature can't be blocked by creatures with power 2 or less.",
     "Power": "5",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Steel Leaf Champion",
     "TypeLine": {
       "Raw": "Creature — Elf Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "This creature can't be blocked by creatures with power 2 or less.",
@@ -25,14 +34,21 @@
             {
               "EffectType": "cantBeBlocked",
               "BlockedByFilter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "PowerComparison": {
                   "Operator": "LessThanOrEqual",
                   "Value": 2
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 65
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,24 +57,51 @@
         "Kind": "manaCost",
         "Raw": "{G}{G}{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 5, "Raw": "5" },
-        "Toughness": { "ValueType": "fixed", "Value": 4, "Raw": "4" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 5,
+          "Raw": "5"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
       }
     ]
   }

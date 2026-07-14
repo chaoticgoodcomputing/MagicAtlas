@@ -36,7 +36,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,7 +68,12 @@
           ],
           "Reminder": {
             "Text": "(If you cast this spell for its mutate cost, put it over or under target non-Human creature you own. They mutate into the creature on top plus all abilities from under it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 186
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -88,7 +98,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 193,
+            "Length": 44
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

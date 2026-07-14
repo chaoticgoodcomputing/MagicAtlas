@@ -52,7 +52,12 @@
                 "IsOptional": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 72
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -62,7 +67,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "First"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 73,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -87,7 +97,12 @@
             "ConditionType": "keywordCostPaid",
             "Keyword": "Kicker"
           },
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 86,
+            "Length": 84
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

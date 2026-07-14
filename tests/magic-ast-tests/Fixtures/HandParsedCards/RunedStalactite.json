@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature gets +1/+1 and is every creature type.\nEquip {2}",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Equip"],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "a54f50fe-d4c0-49ba-9063-853c76ae3e19",
     "Layout": "normal"
   },
@@ -14,8 +16,12 @@
     "Name": "Runed Stalactite",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +1/+1 and is every creature type.\nEquip {2}",
@@ -50,10 +56,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Changeling"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -75,14 +87,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 9
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

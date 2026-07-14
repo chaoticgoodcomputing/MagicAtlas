@@ -32,7 +32,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Changeling"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -42,7 +47,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 5
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -72,7 +82,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 53,
+            "Length": 71
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -54,7 +54,12 @@
           ],
           "Reminder": {
             "Text": "(Whenever this creature becomes blocked, defending player loses 2 life.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 82
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -110,7 +115,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 83,
+            "Length": 67
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -39,7 +39,12 @@
           "KeywordSource": "Evolve",
           "Reminder": {
             "Text": "(Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 154
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -63,7 +68,12 @@
               }
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 155,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

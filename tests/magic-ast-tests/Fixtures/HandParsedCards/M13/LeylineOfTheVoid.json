@@ -33,7 +33,12 @@
                 "EffectType": "openingHand"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 88
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

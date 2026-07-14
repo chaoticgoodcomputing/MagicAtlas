@@ -6,8 +6,12 @@
     "OracleText": "When this creature enters, look at the top six cards of your library. You may reveal an instant, sorcery, or Dragon card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nUntapped Dragons you control have hexproof.",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "8810ebb4-9e51-46f0-a54a-a0b4d77b762a",
     "Layout": "normal"
@@ -16,8 +20,13 @@
     "Name": "Dragonologist",
     "TypeLine": {
       "Raw": "Creature — Human Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, look at the top six cards of your library. You may reveal an instant, sorcery, or Dragon card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\nUntapped Dragons you control have hexproof.",
@@ -28,21 +37,38 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
           "Effects": [
             {
               "EffectType": "lookAtTopMayRevealMatchingRestToBottom",
-              "Player": { "Kind": "You" },
-              "Count": { "QuantityType": "literal", "Value": 6 },
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 6
+              },
               "Filter": {
-                "CardTypes": ["instant", "sorcery"],
-                "Subtypes": ["Dragon"]
+                "CardTypes": [
+                  "instant",
+                  "sorcery"
+                ],
+                "Subtypes": [
+                  "Dragon"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 225
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -52,8 +78,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Dragon"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Dragon"
+                  ],
                   "Controller": "You",
                   "Characteristics": [
                     {
@@ -71,10 +101,16 @@
                     "Keyword": "Hexproof"
                   }
                 ],
-                "KeywordSource": "Hexproof"
+                "KeywordSource": "Hexproof",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 226,
+            "Length": 43
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -83,24 +119,44 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
-        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
       }
     ]
   }

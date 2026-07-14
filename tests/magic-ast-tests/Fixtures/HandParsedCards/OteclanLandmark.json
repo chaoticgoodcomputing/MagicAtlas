@@ -105,7 +105,12 @@
                     "Value": 2
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 34
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "activated",
@@ -175,7 +180,12 @@
               "KeywordSource": "Craft",
               "Reminder": {
                 "Text": "({2}{W}, Exile this artifact, Exile another artifact you control or an artifact card from your graveyard: Return this card transformed under its owner's control. Craft only as a sorcery.)"
-              }
+              },
+              "SourceSpan": {
+                "Start": 35,
+                "Length": 214
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -239,7 +249,12 @@
                   }
                 }
               ],
-              "KeywordSource": "Flying"
+              "KeywordSource": "Flying",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 6
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -262,7 +277,12 @@
                     "Length": 104
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 104
+              },
+              "OracleLineIndex": 1
             }
           ]
         },

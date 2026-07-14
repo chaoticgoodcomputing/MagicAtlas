@@ -40,7 +40,12 @@
                 "Type": "additionalTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 150
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -66,7 +71,12 @@
           ],
           "Reminder": {
             "Text": "A copy of a permanent spell becomes a token."
-          }
+          },
+          "SourceSpan": {
+            "Start": 151,
+            "Length": 133
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

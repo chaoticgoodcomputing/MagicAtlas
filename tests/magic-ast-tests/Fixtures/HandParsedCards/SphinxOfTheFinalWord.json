@@ -6,9 +6,16 @@
     "OracleText": "This spell can't be countered.\nFlying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)\nInstant and sorcery spells you control can't be countered.",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Flying", "Hexproof"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Flying",
+      "Hexproof"
+    ],
     "Id": "6071239e-0b85-4c54-bef8-d9456eb8d8fc",
     "Layout": "normal"
   },
@@ -16,8 +23,12 @@
     "Name": "Sphinx of the Final Word",
     "TypeLine": {
       "Raw": "Creature — Sphinx",
-      "Types": ["Creature"],
-      "Subtypes": ["Sphinx"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Sphinx"
+      ]
     },
     "Oracle": {
       "RawText": "This spell can't be countered.\nFlying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)\nInstant and sorcery spells you control can't be countered.",
@@ -28,7 +39,12 @@
             {
               "EffectType": "cantBeCountered"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -37,7 +53,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -50,7 +68,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 6
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -60,19 +83,32 @@
               "EffectType": "keywordAbility",
               "Keyword": "Hexproof"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 38,
+            "Length": 91
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
           "AffectedObjects": {
-            "CardTypes": ["instant", "sorcery"],
+            "CardTypes": [
+              "instant",
+              "sorcery"
+            ],
             "Controller": "You"
           },
           "Effects": [
             {
               "EffectType": "cantBeCountered"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 130,
+            "Length": 58
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -81,19 +117,36 @@
         "Kind": "manaCost",
         "Raw": "{5}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 7
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

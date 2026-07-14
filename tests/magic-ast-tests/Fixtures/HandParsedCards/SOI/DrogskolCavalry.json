@@ -50,7 +50,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -78,7 +83,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 60
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -144,14 +154,20 @@
                         }
                       }
                     ],
-                    "KeywordSource": "Flying"
+                    "KeywordSource": "Flying",
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 61
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

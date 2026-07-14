@@ -2,8 +2,8 @@
   "Input": {
     "Name": "Chorale of the Void",
     "ManaCost": "{3}{B}",
-    "TypeLine": "Enchantment \u2014 Aura",
-    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid \u2014 At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "TypeLine": "Enchantment — Aura",
+    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
     "Power": null,
     "Toughness": null,
     "Colors": [
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Chorale of the Void",
     "TypeLine": {
-      "Raw": "Enchantment \u2014 Aura",
+      "Raw": "Enchantment — Aura",
       "Types": [
         "Enchantment"
       ],
@@ -25,7 +25,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid \u2014 At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
       "Abilities": [
         {
           "Kind": "static",
@@ -40,7 +40,12 @@
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 28
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -63,7 +68,12 @@
                 "Length": 157
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 29,
+            "Length": 157
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -85,7 +95,12 @@
               }
             }
           ],
-          "AbilityWord": "Void"
+          "AbilityWord": "Void",
+          "SourceSpan": {
+            "Start": 187,
+            "Length": 152
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

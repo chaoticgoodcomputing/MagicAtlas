@@ -58,7 +58,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this spell for its freerunning cost if you dealt combat damage to a player this turn with an Assassin or commander.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 149
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -93,7 +98,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 150,
+            "Length": 63
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

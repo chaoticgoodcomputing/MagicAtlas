@@ -6,8 +6,12 @@
     "OracleText": "You may have this creature enter as a copy of a creature or planeswalker you control, except it enters with an additional +1/+1 counter on it if it's a creature, it enters with an additional loyalty counter on it if it's a planeswalker, and it isn't legendary.",
     "Power": "0",
     "Toughness": "0",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "c41b9ba2-0006-4d8e-b600-efe81ff5e0cc",
     "Layout": "normal"
@@ -16,8 +20,12 @@
     "Name": "Spark Double",
     "TypeLine": {
       "Raw": "Creature — Illusion",
-      "Types": ["Creature"],
-      "Subtypes": ["Illusion"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Illusion"
+      ]
     },
     "Oracle": {
       "RawText": "You may have this creature enter as a copy of a creature or planeswalker you control, except it enters with an additional +1/+1 counter on it if it's a creature, it enters with an additional loyalty counter on it if it's a planeswalker, and it isn't legendary.",
@@ -35,7 +43,10 @@
                 "CopyTarget": {
                   "Kind": "Any",
                   "Filter": {
-                    "CardTypes": ["creature", "planeswalker"],
+                    "CardTypes": [
+                      "creature",
+                      "planeswalker"
+                    ],
                     "Controller": "You"
                   }
                 },
@@ -74,13 +85,20 @@
                   },
                   {
                     "ModificationType": "supertypeRemover",
-                    "Supertypes": ["Legendary"]
+                    "Supertypes": [
+                      "Legendary"
+                    ]
                   }
                 ]
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 260
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -95,18 +113,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

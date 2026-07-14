@@ -7,8 +7,14 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["B", "U", "W"],
-    "Keywords": ["Cycling"],
+    "ColorIdentity": [
+      "B",
+      "U",
+      "W"
+    ],
+    "Keywords": [
+      "Cycling"
+    ],
     "Id": "e2312c49-1627-47ad-8113-78a999a97d8d",
     "Layout": "normal"
   },
@@ -16,7 +22,9 @@
     "Name": "Contaminated Landscape",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Add {C}.\n{T}, Sacrifice this land: Search your library for a basic Plains, Island, or Swamp card, put it onto the battlefield tapped, then shuffle.\nCycling {W}{U}{B} ({W}{U}{B}, Discard this card: Draw a card.)",
@@ -34,7 +42,12 @@
               "Mana": "{C}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -45,7 +58,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["land"],
+                "CardTypes": [
+                  "land"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -61,9 +76,17 @@
                 {
                   "EffectType": "searchLibrary",
                   "Filter": {
-                    "Supertypes": ["Basic"],
-                    "CardTypes": ["land"],
-                    "Subtypes": ["Plains", "Island", "Swamp"]
+                    "Supertypes": [
+                      "Basic"
+                    ],
+                    "CardTypes": [
+                      "land"
+                    ],
+                    "Subtypes": [
+                      "Plains",
+                      "Island",
+                      "Swamp"
+                    ]
                   },
                   "Count": {
                     "QuantityType": "literal",
@@ -81,7 +104,12 @@
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 138
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -92,19 +120,25 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["W"],
+                  "Colors": [
+                    "W"
+                  ],
                   "IsPhyrexian": false,
                   "IsSnow": false
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["U"],
+                  "Colors": [
+                    "U"
+                  ],
                   "IsPhyrexian": false,
                   "IsSnow": false
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["B"],
+                  "Colors": [
+                    "B"
+                  ],
                   "IsPhyrexian": false,
                   "IsSnow": false
                 }
@@ -113,7 +147,9 @@
             {
               "CostType": "discard",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -133,7 +169,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 153,
+            "Length": 62
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -144,7 +185,11 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "U", "W"]
+        "ColorIdentity": [
+          "B",
+          "U",
+          "W"
+        ]
       }
     ]
   }

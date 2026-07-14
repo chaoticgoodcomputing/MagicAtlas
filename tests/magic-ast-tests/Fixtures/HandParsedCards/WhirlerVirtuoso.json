@@ -56,7 +56,12 @@
           ],
           "Reminder": {
             "Text": "three energy counters"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 69
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -115,14 +120,20 @@
                         }
                       }
                     ],
-                    "KeywordSource": "Flying"
+                    "KeywordSource": "Flying",
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 70,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -34,7 +34,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -44,7 +49,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Indestructible"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 14
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -59,7 +69,12 @@
               "Mana": "{B} or {G}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 40,
+            "Length": 20
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

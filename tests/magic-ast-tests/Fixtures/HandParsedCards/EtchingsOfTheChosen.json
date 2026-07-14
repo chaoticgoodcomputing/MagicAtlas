@@ -31,7 +31,12 @@
             {
               "EffectType": "chooseCreatureType"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,7 +62,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -105,7 +115,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Indestructible"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -116,7 +127,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 171
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -39,7 +39,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -60,7 +65,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 135
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

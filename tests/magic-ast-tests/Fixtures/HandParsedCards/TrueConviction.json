@@ -47,7 +47,8 @@
                     "EffectType": "combatDamageTiming",
                     "Timing": "Both"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -68,10 +69,16 @@
                   {
                     "EffectType": "lifelink"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

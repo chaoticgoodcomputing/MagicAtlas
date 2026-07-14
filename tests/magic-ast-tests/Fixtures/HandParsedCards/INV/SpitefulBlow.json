@@ -6,14 +6,20 @@
     "OracleText": "Destroy target creature and target land.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Spiteful Blow",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target creature and target land.",
@@ -26,7 +32,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             },
@@ -35,11 +43,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -48,19 +63,36 @@
         "Kind": "manaCost",
         "Raw": "{4}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

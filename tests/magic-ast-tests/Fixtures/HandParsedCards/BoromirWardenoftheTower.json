@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -61,7 +66,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 88
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -97,7 +107,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Indestructible"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -111,7 +122,12 @@
               "EffectType": "ringTemptsYou"
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 99,
+            "Length": 100
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

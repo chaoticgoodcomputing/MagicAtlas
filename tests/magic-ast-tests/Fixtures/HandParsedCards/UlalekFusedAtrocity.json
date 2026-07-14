@@ -7,15 +7,27 @@
     "Power": "2",
     "Toughness": "5",
     "Colors": [],
-    "ColorIdentity": ["B", "G", "R", "U", "W"]
+    "ColorIdentity": [
+      "B",
+      "G",
+      "R",
+      "U",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Ulalek, Fused Atrocity",
     "TypeLine": {
       "Raw": "Legendary Creature — Eldrazi",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Eldrazi"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Eldrazi"
+      ]
     },
     "Oracle": {
       "RawText": "Devoid (This card has no color.)\nWhenever you cast an Eldrazi spell, you may pay {C}{C}. If you do, copy all spells you control, then copy all other activated and triggered abilities you control. You may choose new targets for the copies. (Mana abilities can't be copied.)",
@@ -28,7 +40,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Devoid"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 32
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -36,8 +53,12 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "Subtypes": ["Eldrazi"],
+              "CardTypes": [
+                "spell"
+              ],
+              "Subtypes": [
+                "Eldrazi"
+              ],
               "Controller": "You"
             }
           },
@@ -49,8 +70,12 @@
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "colorless" },
-                    { "Kind": "colorless" }
+                    {
+                      "Kind": "colorless"
+                    },
+                    {
+                      "Kind": "colorless"
+                    }
                   ]
                 }
               },
@@ -62,7 +87,9 @@
                     "Target": {
                       "Kind": "Each",
                       "Filter": {
-                        "CardTypes": ["spell"],
+                        "CardTypes": [
+                          "spell"
+                        ],
                         "Controller": "You",
                         "Zone": "Stack"
                       }
@@ -74,7 +101,10 @@
                     "Target": {
                       "Kind": "Each",
                       "Filter": {
-                        "CardTypes": ["activatedAbility", "triggeredAbility"],
+                        "CardTypes": [
+                          "activatedAbility",
+                          "triggeredAbility"
+                        ],
                         "Controller": "You",
                         "Zone": "Stack",
                         "ExcludeSelf": true
@@ -86,10 +116,17 @@
               }
             }
           ],
-          "Instructions": ["you may pay {C}{C}"],
+          "Instructions": [
+            "you may pay {C}{C}"
+          ],
           "Reminder": {
             "Text": "Mana abilities can't be copied."
-          }
+          },
+          "SourceSpan": {
+            "Start": 33,
+            "Length": 239
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -98,11 +135,36 @@
         "Kind": "manaCost",
         "Raw": "{C/W}{C/U}{C/B}{C/R}{C/G}",
         "Symbols": [
-          { "Kind": "colorlessHybrid", "Colors": ["W"] },
-          { "Kind": "colorlessHybrid", "Colors": ["U"] },
-          { "Kind": "colorlessHybrid", "Colors": ["B"] },
-          { "Kind": "colorlessHybrid", "Colors": ["R"] },
-          { "Kind": "colorlessHybrid", "Colors": ["G"] }
+          {
+            "Kind": "colorlessHybrid",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colorlessHybrid",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colorlessHybrid",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colorlessHybrid",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colorlessHybrid",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5
       },
@@ -112,7 +174,13 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "G", "R", "U", "W"]
+        "ColorIdentity": [
+          "B",
+          "G",
+          "R",
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

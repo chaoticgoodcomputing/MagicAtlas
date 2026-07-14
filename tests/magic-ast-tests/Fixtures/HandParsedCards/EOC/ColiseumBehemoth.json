@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 7
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -73,7 +78,8 @@
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -90,13 +96,19 @@
                           "Kind": "You"
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ],
               "AllowDuplicates": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 8,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -40,7 +40,12 @@
               "Timing": "First"
             }
           ],
-          "KeywordSource": "First strike"
+          "KeywordSource": "First strike",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -75,7 +80,12 @@
           "KeywordSource": "Unearth",
           "Reminder": {
             "Text": "({U}{B}{R}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 215
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

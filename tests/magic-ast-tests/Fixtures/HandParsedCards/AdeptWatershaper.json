@@ -57,10 +57,16 @@
                     "Keyword": "Indestructible"
                   }
                 ],
-                "KeywordSource": "Indestructible"
+                "KeywordSource": "Indestructible",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 55
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

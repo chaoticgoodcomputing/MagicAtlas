@@ -4,8 +4,12 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Enchantment",
     "OracleText": "{1}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Keywords": [],
     "Id": "d7920b6d-ff71-4802-9589-e1df0c58b9ff",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Circle of Protection: Red",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "{1}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.",
@@ -39,7 +45,9 @@
               "Source": {
                 "Kind": "Designated",
                 "Filter": {
-                  "Colors": ["R"]
+                  "Colors": [
+                    "R"
+                  ]
                 }
               },
               "Target": {
@@ -54,7 +62,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 103
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -69,18 +82,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

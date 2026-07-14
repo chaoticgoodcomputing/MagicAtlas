@@ -37,7 +37,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -80,12 +85,18 @@
                         "Keyword": "Haste"
                       }
                     ],
-                    "KeywordSource": "Haste"
+                    "KeywordSource": "Haste",
+                    "OracleLineIndex": 0
                   }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 63,
+            "Length": 91
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

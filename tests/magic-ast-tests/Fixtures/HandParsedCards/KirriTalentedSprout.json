@@ -6,8 +6,16 @@
     "OracleText": "Other Plants and Treefolk you control get +2/+0.\nAt the beginning of each of your postcombat main phases, return target Plant, Treefolk, or land card from your graveyard to your hand.",
     "Power": "0",
     "Toughness": "3",
-    "Colors": ["G", "R", "W"],
-    "ColorIdentity": ["G", "R", "W"],
+    "Colors": [
+      "G",
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R",
+      "W"
+    ],
     "Keywords": [],
     "Id": "22cc9c49-54d7-4989-8d7d-651b17b84b4e",
     "Layout": "normal"
@@ -16,9 +24,16 @@
     "Name": "Kirri, Talented Sprout",
     "TypeLine": {
       "Raw": "Legendary Creature — Plant Druid",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Plant", "Druid"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Plant",
+        "Druid"
+      ]
     },
     "Oracle": {
       "RawText": "Other Plants and Treefolk you control get +2/+0.\nAt the beginning of each of your postcombat main phases, return target Plant, Treefolk, or land card from your graveyard to your hand.",
@@ -31,8 +46,13 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Plant", "Treefolk"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Plant",
+                    "Treefolk"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
@@ -46,7 +66,12 @@
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 48
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -64,14 +89,24 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"],
-                  "Subtypes": ["Plant", "Treefolk"],
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Subtypes": [
+                    "Plant",
+                    "Treefolk"
+                  ],
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 49,
+            "Length": 134
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -86,15 +121,21 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -102,11 +143,19 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "R", "W"]
+        "Colors": [
+          "G",
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "R", "G"]
+        "ColorIdentity": [
+          "W",
+          "R",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

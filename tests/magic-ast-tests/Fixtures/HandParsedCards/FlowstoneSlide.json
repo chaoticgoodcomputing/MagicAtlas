@@ -4,8 +4,12 @@
     "ManaCost": "{X}{2}{R}{R}",
     "TypeLine": "Sorcery",
     "OracleText": "All creatures get +X/-X until end of turn.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "074121e8-aecc-469f-b181-8e6a9e918826",
     "Layout": "normal"
@@ -55,7 +59,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 42
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -50,7 +50,12 @@
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -58,7 +63,12 @@
             {
               "EffectType": "anyNumberInDeck"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

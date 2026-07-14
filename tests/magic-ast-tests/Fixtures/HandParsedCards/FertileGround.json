@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -62,7 +67,12 @@
                 "Kind": "Controller"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,8 +6,12 @@
     "OracleText": "Nonbasic lands are Islands.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "00212714-a410-4cbc-bf1c-f90d7d77378c",
     "Layout": "normal"
@@ -16,8 +20,13 @@
     "Name": "Harbinger of the Seas",
     "TypeLine": {
       "Raw": "Creature — Merfolk Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Merfolk", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "Nonbasic lands are Islands.",
@@ -30,13 +39,24 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["land"],
-                  "ExcludedSupertypes": ["Basic"]
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "ExcludedSupertypes": [
+                    "Basic"
+                  ]
                 }
               },
-              "Subtypes": ["Island"]
+              "Subtypes": [
+                "Island"
+              ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 27
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -51,11 +71,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -63,11 +87,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

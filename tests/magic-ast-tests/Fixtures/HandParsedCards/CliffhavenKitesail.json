@@ -48,7 +48,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 69
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -80,10 +85,16 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 70,
+            "Length": 29
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -105,14 +116,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 80
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -43,7 +43,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 63
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -58,7 +63,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

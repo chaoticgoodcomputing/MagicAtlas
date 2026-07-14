@@ -4,9 +4,15 @@
     "ManaCost": "{3}{U}",
     "TypeLine": "Instant — Arcane",
     "OracleText": "Exchange control of two target lands.\nSplice onto Arcane {3}{U} (As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Splice"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Splice"
+    ],
     "Id": "0cbe44b0-e770-41f2-b91c-c574976e6b53",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Shifting Borders",
     "TypeLine": {
       "Raw": "Instant — Arcane",
-      "Types": ["Instant"],
-      "Subtypes": ["Arcane"]
+      "Types": [
+        "Instant"
+      ],
+      "Subtypes": [
+        "Arcane"
+      ]
     },
     "Oracle": {
       "RawText": "Exchange control of two target lands.\nSplice onto Arcane {3}{U} (As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)",
@@ -29,17 +39,26 @@
               "First": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               },
               "Second": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 37
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -48,20 +67,35 @@
             {
               "EffectType": "splice",
               "Onto": {
-                "Subtypes": ["Arcane"]
+                "Subtypes": [
+                  "Arcane"
+                ]
               },
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 3 },
-                  { "Kind": "colored", "Colors": ["U"] }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 3
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  }
                 ]
               }
             }
           ],
           "Reminder": {
             "Text": "(As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 38,
+            "Length": 171
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -70,18 +104,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

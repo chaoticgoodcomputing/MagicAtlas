@@ -70,7 +70,12 @@
               ]
             }
           ],
-          "AbilityWord": "Void"
+          "AbilityWord": "Void",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 161
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -4,14 +4,20 @@
     "ManaCost": "{3}{U}",
     "TypeLine": "Instant",
     "OracleText": "Target player discards their hand, then draws four cards.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Wheel and Deal",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target player discards their hand, then draws four cards.",
@@ -21,22 +27,41 @@
           "Effects": [
             {
               "EffectType": "discardCards",
-              "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "CardsInHand"
+              },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               },
               "Random": false
             },
             {
               "EffectType": "drawCards",
-              "Count": { "QuantityType": "literal", "Value": 4 },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 57
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -45,18 +70,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

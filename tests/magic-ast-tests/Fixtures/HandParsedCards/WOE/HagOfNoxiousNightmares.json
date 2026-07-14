@@ -55,10 +55,16 @@
                     "MinimumBlockers": 2
                   }
                 ],
-                "KeywordSource": "Menace"
+                "KeywordSource": "Menace",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 33
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

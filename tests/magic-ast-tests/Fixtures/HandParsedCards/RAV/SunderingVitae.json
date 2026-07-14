@@ -40,7 +40,12 @@
               },
               "ColorMustMatchMana": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -57,7 +62,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

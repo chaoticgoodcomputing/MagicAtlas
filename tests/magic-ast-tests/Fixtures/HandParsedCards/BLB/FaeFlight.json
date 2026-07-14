@@ -34,7 +34,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -48,7 +53,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 16
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -76,7 +86,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Hexproof"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -86,7 +97,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 23,
+            "Length": 75
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -135,12 +151,18 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 99,
+            "Length": 45
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

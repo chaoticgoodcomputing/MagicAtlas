@@ -59,7 +59,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -84,10 +89,16 @@
                     "Keyword": "Hexproof"
                   }
                 ],
-                "KeywordSource": "Hexproof"
+                "KeywordSource": "Hexproof",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 43
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -98,7 +109,12 @@
                 "EffectType": "lookAtTopCardAnyTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 51,
+            "Length": 54
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -123,7 +139,12 @@
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 106,
+            "Length": 72
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

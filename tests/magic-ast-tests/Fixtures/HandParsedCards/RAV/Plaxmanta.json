@@ -37,7 +37,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -71,7 +76,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Shroud"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -84,7 +90,12 @@
           ],
           "Reminder": {
             "Text": "They can't be the targets of spells or abilities."
-          }
+          },
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 131
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -113,7 +124,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 138,
+            "Length": 72
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

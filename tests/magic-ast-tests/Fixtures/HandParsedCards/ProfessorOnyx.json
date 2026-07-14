@@ -64,7 +64,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 114
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -90,7 +95,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 1
+          "LoyaltyCost": 1,
+          "SourceSpan": {
+            "Start": 115,
+            "Length": 130
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -115,7 +125,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -3
+          "LoyaltyCost": -3,
+          "SourceSpan": {
+            "Start": 246,
+            "Length": 101
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -151,7 +166,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -8
+          "LoyaltyCost": -8,
+          "SourceSpan": {
+            "Start": 348,
+            "Length": 106
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

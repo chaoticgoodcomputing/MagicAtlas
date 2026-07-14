@@ -45,7 +45,12 @@
               "Destination": "BattlefieldTapped",
               "Revealed": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 99
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

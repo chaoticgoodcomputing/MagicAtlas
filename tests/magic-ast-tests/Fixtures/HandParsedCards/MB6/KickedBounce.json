@@ -47,7 +47,12 @@
           "KeywordSource": "Kicker",
           "Reminder": {
             "Text": "(You may pay an additional {2} as you cast this spell.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 66
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -80,7 +85,12 @@
                 "Keyword": "Kicker"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 67,
+            "Length": 91
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

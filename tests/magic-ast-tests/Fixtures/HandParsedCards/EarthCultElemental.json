@@ -6,15 +6,23 @@
     "OracleText": "Siege Monster — When this creature enters, roll a d20.\n1—9 | Each player sacrifices a permanent of their choice.\n10—19 | Each opponent sacrifices a permanent of their choice.\n20 | Each opponent sacrifices two permanents of their choice.",
     "Power": "6",
     "Toughness": "6",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Earth-Cult Elemental",
     "TypeLine": {
       "Raw": "Creature — Elemental",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "Siege Monster — When this creature enters, roll a d20.\n1—9 | Each player sacrifices a permanent of their choice.\n10—19 | Each opponent sacrifices a permanent of their choice.\n20 | Each opponent sacrifices two permanents of their choice.",
@@ -25,7 +33,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -46,7 +56,9 @@
                       "Target": {
                         "Kind": "EachPlayer",
                         "Filter": {
-                          "CardTypes": ["permanent"]
+                          "CardTypes": [
+                            "permanent"
+                          ]
                         }
                       }
                     }
@@ -61,7 +73,9 @@
                       "Target": {
                         "Kind": "EachOpponent",
                         "Filter": {
-                          "CardTypes": ["permanent"]
+                          "CardTypes": [
+                            "permanent"
+                          ]
                         }
                       }
                     }
@@ -76,7 +90,9 @@
                       "Target": {
                         "Kind": "EachOpponent",
                         "Filter": {
-                          "CardTypes": ["permanent"]
+                          "CardTypes": [
+                            "permanent"
+                          ]
                         }
                       },
                       "Count": {
@@ -88,7 +104,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -103,11 +124,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 6,
@@ -115,11 +140,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

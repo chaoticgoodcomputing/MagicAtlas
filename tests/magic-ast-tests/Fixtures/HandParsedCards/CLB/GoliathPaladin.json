@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -55,7 +60,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "TakeInitiative"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

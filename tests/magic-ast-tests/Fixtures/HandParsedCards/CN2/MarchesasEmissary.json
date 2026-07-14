@@ -39,7 +39,12 @@
           ],
           "Reminder": {
             "Text": "(This creature can't be the target of spells or abilities your opponents control.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 91
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -72,7 +77,12 @@
           ],
           "Reminder": {
             "Text": "(Whenever this creature attacks the player with the most life or tied for most life, put a +1/+1 counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 92,
+            "Length": 121
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

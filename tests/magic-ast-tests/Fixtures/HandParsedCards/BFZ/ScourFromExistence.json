@@ -13,7 +13,9 @@
     "Name": "Scour from Existence",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target permanent.",
@@ -26,11 +28,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"]
+                  "CardTypes": [
+                    "permanent"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 23
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,7 +48,10 @@
         "Kind": "manaCost",
         "Raw": "{7}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 7 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          }
         ],
         "ManaValue": 7
       },

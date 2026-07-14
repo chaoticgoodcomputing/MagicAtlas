@@ -33,7 +33,12 @@
               "Mana": "{C}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -52,7 +57,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 138
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

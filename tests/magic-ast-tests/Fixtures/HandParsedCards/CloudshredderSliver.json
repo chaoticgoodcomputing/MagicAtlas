@@ -71,7 +71,8 @@
                     }
                   }
                 ],
-                "KeywordSource": "Flying"
+                "KeywordSource": "Flying",
+                "OracleLineIndex": 0
               }
             },
             {
@@ -96,10 +97,16 @@
                     "Keyword": "Haste"
                   }
                 ],
-                "KeywordSource": "Haste"
+                "KeywordSource": "Haste",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

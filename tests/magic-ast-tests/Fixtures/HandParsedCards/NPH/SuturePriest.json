@@ -52,7 +52,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 85
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -77,7 +82,12 @@
                 "Kind": "ThatPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 86,
+            "Length": 90
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

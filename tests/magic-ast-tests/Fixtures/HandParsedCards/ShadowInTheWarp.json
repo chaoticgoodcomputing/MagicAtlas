@@ -4,8 +4,14 @@
     "ManaCost": "{1}{R}{G}",
     "TypeLine": "Enchantment",
     "OracleText": "The first creature spell you cast each turn costs {2} less to cast.\nWhenever an opponent casts their first noncreature spell each turn, this enchantment deals 2 damage to that player.",
-    "Colors": ["G", "R"],
-    "ColorIdentity": ["G", "R"],
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ],
     "Keywords": [],
     "Id": "bd60cd99-1511-4903-b678-ff5a1853a742",
     "Layout": "normal"
@@ -14,7 +20,9 @@
     "Name": "Shadow in the Warp",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "The first creature spell you cast each turn costs {2} less to cast.\nWhenever an opponent casts their first noncreature spell each turn, this enchantment deals 2 damage to that player.",
@@ -31,14 +39,22 @@
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell", "creature"],
+            "CardTypes": [
+              "spell",
+              "creature"
+            ],
             "Controller": "You",
             "History": {
               "PredicateType": "castThisTurn",
               "Caster": "You",
               "Ordinal": 1
             }
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -46,8 +62,12 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "ExcludedCardTypes": ["creature"],
+              "CardTypes": [
+                "spell"
+              ],
+              "ExcludedCardTypes": [
+                "creature"
+              ],
               "Controller": "Opponent"
             },
             "Ordinal": 1,
@@ -67,7 +87,12 @@
                 "Kind": "ThatPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 115
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -82,22 +107,32 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "R"]
+        "Colors": [
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "R"]
+        "ColorIdentity": [
+          "G",
+          "R"
+        ]
       }
     ]
   }

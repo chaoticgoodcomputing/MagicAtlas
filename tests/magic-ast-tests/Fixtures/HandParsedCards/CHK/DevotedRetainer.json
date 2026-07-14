@@ -66,7 +66,12 @@
           ],
           "Reminder": {
             "Text": "(Whenever this creature blocks or becomes blocked, it gets +1/+1 until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 94
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

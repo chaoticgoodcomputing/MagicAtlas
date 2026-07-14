@@ -35,7 +35,9 @@
           "Fields": [
             "Costs",
             "Effects",
-            "IsManaAbility"
+            "IsManaAbility",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -44,7 +46,9 @@
           "IsUnparsed": false,
           "Fields": [
             "BaseAbilities",
-            "Levels"
+            "Levels",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -53,6 +57,8 @@
           "IsUnparsed": false,
           "Fields": [
             "LevelUpCost",
+            "OracleLineIndex",
+            "SourceSpan",
             "Stanzas"
           ]
         },
@@ -63,7 +69,9 @@
           "Fields": [
             "AllowDuplicates",
             "ModeSelection",
-            "Modes"
+            "Modes",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -71,7 +79,9 @@
           "Discriminator": "saga",
           "IsUnparsed": false,
           "Fields": [
-            "Chapters"
+            "Chapters",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -79,7 +89,9 @@
           "Discriminator": "spell",
           "IsUnparsed": false,
           "Fields": [
-            "Effects"
+            "Effects",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -88,7 +100,9 @@
           "IsUnparsed": false,
           "Fields": [
             "AdditionalCost",
-            "Effects"
+            "Effects",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -96,7 +110,9 @@
           "Discriminator": "static",
           "IsUnparsed": false,
           "Fields": [
-            "Effects"
+            "Effects",
+            "OracleLineIndex",
+            "SourceSpan"
           ]
         },
         {
@@ -105,6 +121,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Effects",
+            "OracleLineIndex",
+            "SourceSpan",
             "Trigger"
           ]
         },
@@ -114,6 +132,7 @@
           "IsUnparsed": true,
           "Fields": [
             "Diagnostics",
+            "OracleLineIndex",
             "RawText",
             "SourceSpan"
           ]
@@ -3114,5 +3133,5 @@
       ]
     }
   ],
-  "SchemaHash": "17ce92b6dd4988e76854730a4e892b5d83366cd8ed4f3a3264a704ee71fa9adf"
+  "SchemaHash": "e8f0c92e62f8c832e19b87a5102bf264c99cb1d8bfb99779c04d9bfd672156ab"
 }

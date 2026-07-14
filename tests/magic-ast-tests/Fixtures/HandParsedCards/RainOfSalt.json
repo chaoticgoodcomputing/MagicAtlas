@@ -6,14 +6,20 @@
     "OracleText": "Destroy two target lands.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Rain of Salt",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy two target lands.",
@@ -26,7 +32,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 },
                 "Quantity": {
                   "QuantityType": "literal",
@@ -34,7 +42,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 25
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,19 +56,36 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

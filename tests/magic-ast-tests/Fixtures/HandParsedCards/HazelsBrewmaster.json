@@ -41,7 +41,12 @@
               "MinimumBlockers": 2
             }
           ],
-          "KeywordSource": "Menace"
+          "KeywordSource": "Menace",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -100,7 +105,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 111
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -127,7 +137,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 119,
+            "Length": 95
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

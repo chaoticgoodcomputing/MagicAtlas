@@ -6,14 +6,22 @@
     "OracleText": "Sacred Fire deals 2 damage to any target and you gain 2 life.\nFlashback {4}{R}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"]
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Sacred Fire",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Sacred Fire deals 2 damage to any target and you gain 2 life.\nFlashback {4}{R}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
@@ -44,7 +52,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 61
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -62,16 +75,25 @@
                   },
                   {
                     "Kind": "colored",
-                    "Colors": ["R"]
+                    "Colors": [
+                      "R"
+                    ]
                   },
                   {
                     "Kind": "colored",
-                    "Colors": ["W"]
+                    "Colors": [
+                      "W"
+                    ]
                   }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 62,
+            "Length": 103
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -80,18 +102,34 @@
         "Kind": "manaCost",
         "Raw": "{R}{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "W"]
+        "Colors": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "W"]
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
       }
     ]
   }

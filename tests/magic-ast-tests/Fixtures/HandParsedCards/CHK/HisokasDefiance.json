@@ -6,14 +6,20 @@
     "OracleText": "Counter target Spirit or Arcane spell.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Hisoka's Defiance",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Counter target Spirit or Arcane spell.",
@@ -26,12 +32,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"],
-                  "Subtypes": ["Spirit", "Arcane"]
+                  "CardTypes": [
+                    "spell"
+                  ],
+                  "Subtypes": [
+                    "Spirit",
+                    "Arcane"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 38
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +56,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

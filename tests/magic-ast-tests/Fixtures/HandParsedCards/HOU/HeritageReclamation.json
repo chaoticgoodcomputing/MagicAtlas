@@ -4,14 +4,20 @@
     "ManaCost": "{1}{G}",
     "TypeLine": "Sorcery",
     "OracleText": "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.\n• Exile up to one target card from a graveyard. Draw a card.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Heritage Reclamation",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.\n• Exile up to one target card from a graveyard. Draw a card.",
@@ -32,11 +38,14 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["artifact"]
+                        "CardTypes": [
+                          "artifact"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -48,11 +57,14 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["enchantment"]
+                        "CardTypes": [
+                          "enchantment"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -64,7 +76,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["card"],
+                        "CardTypes": [
+                          "card"
+                        ],
                         "Zone": "Graveyard"
                       },
                       "Quantity": {
@@ -84,11 +98,17 @@
                       "Kind": "You"
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -97,18 +117,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

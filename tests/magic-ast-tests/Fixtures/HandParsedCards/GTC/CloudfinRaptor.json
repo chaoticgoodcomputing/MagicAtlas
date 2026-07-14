@@ -50,7 +50,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,7 +68,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Evolve"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 154
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

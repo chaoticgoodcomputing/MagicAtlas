@@ -6,14 +6,22 @@
     "OracleText": "Exile target creature.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W", "B"],
-    "ColorIdentity": ["W", "B"]
+    "Colors": [
+      "W",
+      "B"
+    ],
+    "ColorIdentity": [
+      "W",
+      "B"
+    ]
   },
   "Output": {
     "Name": "Unmake",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target creature.",
@@ -26,11 +34,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 22
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,19 +54,43 @@
         "Kind": "manaCost",
         "Raw": "{W/B}{W/B}{W/B}",
         "Symbols": [
-          { "Kind": "hybrid", "Colors": ["W", "B"] },
-          { "Kind": "hybrid", "Colors": ["W", "B"] },
-          { "Kind": "hybrid", "Colors": ["W", "B"] }
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "W",
+              "B"
+            ]
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "W",
+              "B"
+            ]
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "W",
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W", "B"]
+        "Colors": [
+          "W",
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "B"]
+        "ColorIdentity": [
+          "W",
+          "B"
+        ]
       }
     ]
   }

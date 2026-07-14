@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature gets +1/+1 and is an artifact in addition to its other types.\nEquip {2}",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Equip"],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "d1dba839-bd1e-4ce8-ab90-005eb1f0102e",
     "Layout": "normal"
   },
@@ -14,8 +16,12 @@
     "Name": "Silverskin Armor",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +1/+1 and is an artifact in addition to its other types.\nEquip {2}",
@@ -42,9 +48,16 @@
               "Target": {
                 "Kind": "EnchantedOrEquipped"
               },
-              "AddedCardTypes": ["artifact"]
+              "AddedCardTypes": [
+                "artifact"
+              ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 79
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -66,14 +79,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 80,
+            "Length": 9
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -48,7 +48,12 @@
               }
             }
           ],
-          "KeywordSource": "Kicker"
+          "KeywordSource": "Kicker",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -88,7 +93,12 @@
                 "Keyword": "Kicker"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 118
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

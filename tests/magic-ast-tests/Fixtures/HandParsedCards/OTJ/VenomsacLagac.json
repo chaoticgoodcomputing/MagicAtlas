@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -76,7 +81,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 11,
+            "Length": 78
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -89,7 +99,12 @@
               "EffectType": "saddle",
               "Value": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 90,
+            "Length": 156
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

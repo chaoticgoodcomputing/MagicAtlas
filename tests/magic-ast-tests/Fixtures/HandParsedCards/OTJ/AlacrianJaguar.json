@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -76,7 +81,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 78
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -89,7 +99,12 @@
               "EffectType": "saddle",
               "Value": 1
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 89,
+            "Length": 156
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

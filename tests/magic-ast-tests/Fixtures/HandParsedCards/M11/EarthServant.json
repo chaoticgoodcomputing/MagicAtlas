@@ -6,15 +6,23 @@
     "OracleText": "This creature gets +0/+1 for each Mountain you control.",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Earth Servant",
     "TypeLine": {
       "Raw": "Creature — Elemental",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental"
+      ]
     },
     "Oracle": {
       "RawText": "This creature gets +0/+1 for each Mountain you control.",
@@ -24,17 +32,29 @@
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 0
               },
               "ToughnessModifier": {
                 "QuantityType": "count",
-                "CountOf": { "Subtypes": ["Mountain"], "Controller": "You" }
+                "CountOf": {
+                  "Subtypes": [
+                    "Mountain"
+                  ],
+                  "Controller": "You"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 55
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,23 +63,43 @@
         "Kind": "manaCost",
         "Raw": "{5}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

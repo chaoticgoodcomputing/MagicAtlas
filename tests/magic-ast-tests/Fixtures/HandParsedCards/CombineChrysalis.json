@@ -63,10 +63,16 @@
                     }
                   }
                 ],
-                "KeywordSource": "Flying"
+                "KeywordSource": "Flying",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -135,7 +141,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 41,
+            "Length": 103
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

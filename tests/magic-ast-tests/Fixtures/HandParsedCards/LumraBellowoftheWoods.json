@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,7 +54,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -67,7 +77,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 78
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -106,7 +121,12 @@
               },
               "Tapped": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 96,
+            "Length": 109
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

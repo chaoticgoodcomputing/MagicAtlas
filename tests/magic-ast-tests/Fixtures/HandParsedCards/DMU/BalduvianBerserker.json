@@ -41,7 +41,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Enlist"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 175
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -70,7 +75,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 176,
+            "Length": 74
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -39,7 +39,8 @@
             "Costs": [],
             "Effects": [],
             "IsManaAbility": false,
-            "KeywordSource": "Level up"
+            "KeywordSource": "Level up",
+            "OracleLineIndex": 0
           },
           "Stanzas": [
             {
@@ -84,11 +85,17 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 76
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

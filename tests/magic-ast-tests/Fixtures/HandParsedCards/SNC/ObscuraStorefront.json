@@ -11,7 +11,9 @@
     "Name": "Obscura Storefront",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "When this land enters, sacrifice it. When you do, search your library for a basic Plains, Island, or Swamp card, put it onto the battlefield tapped, then shuffle and you gain 1 life.",
@@ -22,7 +24,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "IsSelf": true
             }
           },
@@ -40,7 +44,9 @@
                   "Timing": "When",
                   "Event": "Sacrifices",
                   "Filter": {
-                    "CardTypes": ["land"],
+                    "CardTypes": [
+                      "land"
+                    ],
                     "IsSelf": true
                   }
                 },
@@ -48,9 +54,17 @@
                   {
                     "EffectType": "searchLibrary",
                     "Filter": {
-                      "Supertypes": ["Basic"],
-                      "CardTypes": ["land"],
-                      "Subtypes": ["Plains", "Island", "Swamp"]
+                      "Supertypes": [
+                        "Basic"
+                      ],
+                      "CardTypes": [
+                        "land"
+                      ],
+                      "Subtypes": [
+                        "Plains",
+                        "Island",
+                        "Swamp"
+                      ]
                     },
                     "Count": {
                       "QuantityType": "literal",
@@ -78,7 +92,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 182
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

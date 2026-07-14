@@ -5,9 +5,18 @@
     "TypeLine": "Legendary Creature — Goblin Sorcerer // Sorcery",
     "Power": "0",
     "Toughness": "4",
-    "Colors": ["R", "U"],
-    "ColorIdentity": ["R", "U"],
-    "Keywords": ["Treasure", "Prepared"],
+    "Colors": [
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ],
+    "Keywords": [
+      "Treasure",
+      "Prepared"
+    ],
     "Id": "173157aa-712d-44f2-89ba-dd2511a07f26",
     "Layout": "prepare",
     "CardFaces": [
@@ -31,9 +40,18 @@
     "Name": "Sanar, Unfinished Genius // Wild Idea",
     "TypeLine": {
       "Raw": "Legendary Creature — Goblin Sorcerer // Sorcery",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Goblin", "Sorcerer", "//", "Sorcery"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Sorcerer",
+        "//",
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "",
@@ -44,27 +62,64 @@
         "Kind": "manaCost",
         "Raw": "{U}{R} // {3}{U}{R}",
         "Symbols": [
-          {"Kind": "colored", "Colors": ["U"]},
-          {"Kind": "colored", "Colors": ["R"]},
-          {"Kind": "generic", "GenericAmount": 3},
-          {"Kind": "colored", "Colors": ["U"]},
-          {"Kind": "colored", "Colors": ["R"]}
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 7,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "U"]
+        "Colors": [
+          "R",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "R"]
+        "ColorIdentity": [
+          "U",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": {"ValueType": "fixed", "Value": 0, "Raw": "0"},
-        "Toughness": {"ValueType": "fixed", "Value": 4, "Raw": "4"}
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 0,
+          "Raw": "0"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
       },
       {
         "Kind": "layout",
@@ -76,9 +131,16 @@
         "Name": "Sanar, Unfinished Genius",
         "TypeLine": {
           "Raw": "Legendary Creature — Goblin Sorcerer",
-          "Supertypes": ["Legendary"],
-          "Types": ["Creature"],
-          "Subtypes": ["Goblin", "Sorcerer"]
+          "Supertypes": [
+            "Legendary"
+          ],
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Goblin",
+            "Sorcerer"
+          ]
         },
         "Oracle": {
           "RawText": "Sanar enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)\n{T}: Create a Treasure token. Activate only if you've cast an instant or sorcery spell this turn.",
@@ -91,21 +153,37 @@
                   "Keyword": "Prepared"
                 }
               ],
-              "KeywordSource": "Prepared"
+              "KeywordSource": "Prepared",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 103
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "activated",
               "Costs": [
-                {"CostType": "tap"}
+                {
+                  "CostType": "tap"
+                }
               ],
               "Effects": [
                 {
                   "EffectType": "createToken",
-                  "Player": {"Kind": "You"},
-                  "Count": {"QuantityType": "literal", "Value": 1},
+                  "Player": {
+                    "Kind": "You"
+                  },
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
                   "Token": {
-                    "Types": ["artifact"],
-                    "Subtypes": ["Treasure"],
+                    "Types": [
+                      "artifact"
+                    ],
+                    "Subtypes": [
+                      "Treasure"
+                    ],
                     "AbilityText": [
                       "{T}, Sacrifice this artifact: Add one mana of any color."
                     ],
@@ -116,16 +194,28 @@
               "ActivationCondition": {
                 "ConditionType": "count",
                 "Filter": {
-                  "CardTypes": ["spell", "instant", "sorcery"],
+                  "CardTypes": [
+                    "spell",
+                    "instant",
+                    "sorcery"
+                  ],
                   "Controller": "You",
                   "History": {
                     "PredicateType": "castThisTurn",
                     "Caster": "You"
                   }
                 },
-                "Count": {"Operator": "GreaterThanOrEqual", "Value": 1}
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 1
+                }
               },
-              "IsManaAbility": false
+              "IsManaAbility": false,
+              "SourceSpan": {
+                "Start": 104,
+                "Length": 97
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -134,16 +224,34 @@
             "Kind": "manaCost",
             "Raw": "{U}{R}",
             "Symbols": [
-              {"Kind": "colored", "Colors": ["U"]},
-              {"Kind": "colored", "Colors": ["R"]}
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "U"
+                ]
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
             ],
             "ManaValue": 2,
             "IsVariable": false
           },
           {
             "Kind": "creatureStats",
-            "Power": {"ValueType": "fixed", "Value": 0, "Raw": "0"},
-            "Toughness": {"ValueType": "fixed", "Value": 4, "Raw": "4"}
+            "Power": {
+              "ValueType": "fixed",
+              "Value": 0,
+              "Raw": "0"
+            },
+            "Toughness": {
+              "ValueType": "fixed",
+              "Value": 4,
+              "Raw": "4"
+            }
           }
         ]
       },
@@ -151,7 +259,9 @@
         "Name": "Wild Idea",
         "TypeLine": {
           "Raw": "Sorcery",
-          "Types": ["Sorcery"]
+          "Types": [
+            "Sorcery"
+          ]
         },
         "Oracle": {
           "RawText": "Search your library for an instant or sorcery card, reveal it, put it into your hand, then shuffle.",
@@ -162,13 +272,24 @@
                 {
                   "EffectType": "searchLibrary",
                   "Filter": {
-                    "CardTypes": ["instant", "sorcery"]
+                    "CardTypes": [
+                      "instant",
+                      "sorcery"
+                    ]
                   },
-                  "Count": {"QuantityType": "literal", "Value": 1},
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  },
                   "Destination": "Hand",
                   "Revealed": true
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 99
+              },
+              "OracleLineIndex": 0
             }
           ]
         },
@@ -177,9 +298,22 @@
             "Kind": "manaCost",
             "Raw": "{3}{U}{R}",
             "Symbols": [
-              {"Kind": "generic", "GenericAmount": 3},
-              {"Kind": "colored", "Colors": ["U"]},
-              {"Kind": "colored", "Colors": ["R"]}
+              {
+                "Kind": "generic",
+                "GenericAmount": 3
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "U"
+                ]
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
             ],
             "ManaValue": 5,
             "IsVariable": false

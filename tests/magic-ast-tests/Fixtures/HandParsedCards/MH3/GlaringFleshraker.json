@@ -87,13 +87,19 @@
                         "OfChosenColor": false
                       }
                     ],
-                    "IsManaAbility": true
+                    "IsManaAbility": true,
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 126
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -123,7 +129,12 @@
                 "Kind": "EachOpponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 127,
+            "Length": 102
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

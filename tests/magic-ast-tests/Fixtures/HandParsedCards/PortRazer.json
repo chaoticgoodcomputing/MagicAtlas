@@ -6,8 +6,12 @@
     "OracleText": "Whenever this creature deals combat damage to a player, untap each creature you control. After this phase, there is an additional combat phase.\nThis creature can't attack a player it has already attacked this turn.",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "eb32429a-7ef9-418f-baf8-fed9aa010c9e",
     "Layout": "normal"
@@ -16,8 +20,13 @@
     "Name": "Port Razer",
     "TypeLine": {
       "Raw": "Creature — Orc Pirate",
-      "Types": ["Creature"],
-      "Subtypes": ["Orc", "Pirate"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Orc",
+        "Pirate"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever this creature deals combat damage to a player, untap each creature you control. After this phase, there is an additional combat phase.\nThis creature can't attack a player it has already attacked this turn.",
@@ -28,7 +37,9 @@
             "Timing": "Whenever",
             "Event": "DealsCombatDamageToPlayer",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -38,7 +49,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
@@ -46,7 +59,12 @@
             {
               "EffectType": "additionalCombatPhase"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 143
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -55,7 +73,12 @@
               "EffectType": "cantAttack",
               "AlreadyAttackedThisTurn": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 144,
+            "Length": 70
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -64,25 +87,50 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 4, "Raw": "4" },
-        "Toughness": { "ValueType": "fixed", "Value": 4, "Raw": "4" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
       }
     ]
   }

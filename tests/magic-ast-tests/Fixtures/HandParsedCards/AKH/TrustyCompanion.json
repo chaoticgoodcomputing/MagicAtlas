@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -44,7 +49,12 @@
               "EffectType": "cantAttack",
               "Alone": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 33
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -55,7 +55,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 109
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -69,7 +74,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 110,
+            "Length": 16
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -81,7 +91,12 @@
               },
               "WhoseUntapStep": "its controller's"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 127,
+            "Length": 68
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

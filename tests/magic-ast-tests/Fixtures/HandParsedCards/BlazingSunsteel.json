@@ -4,9 +4,15 @@
     "ManaCost": "{1}{R}",
     "TypeLine": "Artifact — Equipment",
     "OracleText": "Equipped creature gets +1/+0 for each opponent you have.\nWhenever equipped creature is dealt damage, it deals that much damage to any target.\nEquip {4}",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Equip"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "69d276fe-5f2b-41aa-80fa-64d3b60fd54f",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Blazing Sunsteel",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +1/+0 for each opponent you have.\nWhenever equipped creature is dealt damage, it deals that much damage to any target.\nEquip {4}",
@@ -36,7 +46,12 @@
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -44,7 +59,9 @@
             "Timing": "Whenever",
             "Event": "CreatureDealtDamage",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsEquipped": true
             }
           },
@@ -62,7 +79,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 84
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -84,14 +106,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 142,
+            "Length": 9
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -106,18 +137,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

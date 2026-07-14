@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature has \"{2}, {T}: This creature deals 1 damage to any target\" and \"Whenever a creature dies, untap this creature.\"\nWhenever a Shaman creature enters, you may attach this Equipment to it.\nEquip {4}",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Equip"],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "c1ab3225-64a9-411e-b22b-1869e958b8e5",
     "Layout": "normal"
   },
@@ -14,8 +16,14 @@
     "Name": "Thornbite Staff",
     "TypeLine": {
       "Raw": "Kindred Artifact — Shaman Equipment",
-      "Types": ["Kindred", "Artifact"],
-      "Subtypes": ["Shaman", "Equipment"]
+      "Types": [
+        "Kindred",
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Shaman",
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature has \"{2}, {T}: This creature deals 1 damage to any target\" and \"Whenever a creature dies, untap this creature.\"\nWhenever a Shaman creature enters, you may attach this Equipment to it.\nEquip {4}",
@@ -25,46 +33,77 @@
           "Effects": [
             {
               "EffectType": "gainAbility",
-              "Target": { "Kind": "EnchantedOrEquipped" },
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
               "GainedAbility": {
                 "Kind": "activated",
                 "Costs": [
                   {
                     "CostType": "mana",
-                    "Symbols": [{ "Kind": "generic", "GenericAmount": 2 }]
+                    "Symbols": [
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 2
+                      }
+                    ]
                   },
-                  { "CostType": "tap" }
+                  {
+                    "CostType": "tap"
+                  }
                 ],
                 "Effects": [
                   {
                     "EffectType": "dealDamage",
-                    "Amount": { "QuantityType": "literal", "Value": 1 },
-                    "Target": { "Kind": "AnyTarget" },
-                    "Source": { "Kind": "Self" }
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    },
+                    "Target": {
+                      "Kind": "AnyTarget"
+                    },
+                    "Source": {
+                      "Kind": "Self"
+                    }
                   }
                 ],
-                "IsManaAbility": false
+                "IsManaAbility": false,
+                "OracleLineIndex": 0
               }
             },
             {
               "EffectType": "gainAbility",
-              "Target": { "Kind": "EnchantedOrEquipped" },
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
               "GainedAbility": {
                 "Kind": "triggered",
                 "Trigger": {
                   "Timing": "Whenever",
                   "Event": "Dies",
-                  "Filter": { "CardTypes": ["creature"] }
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  }
                 },
                 "Effects": [
                   {
                     "EffectType": "untap",
-                    "Target": { "Kind": "Self" }
+                    "Target": {
+                      "Kind": "Self"
+                    }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 129
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -72,8 +111,12 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Subtypes": ["Shaman"]
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Shaman"
+              ]
             }
           },
           "Effects": [
@@ -81,10 +124,17 @@
               "EffectType": "optional",
               "Inner": {
                 "EffectType": "attach",
-                "Target": { "Kind": "It" }
+                "Target": {
+                  "Kind": "It"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 130,
+            "Length": 71
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -92,7 +142,12 @@
           "Costs": [
             {
               "CostType": "mana",
-              "Symbols": [{ "Kind": "generic", "GenericAmount": 4 }]
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 4
+                }
+              ]
             }
           ],
           "Effects": [
@@ -101,14 +156,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 202,
+            "Length": 9
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -116,12 +180,23 @@
       {
         "Kind": "manaCost",
         "Raw": "{2}",
-        "Symbols": [{ "Kind": "generic", "GenericAmount": 2 }],
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
         "ManaValue": 2,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

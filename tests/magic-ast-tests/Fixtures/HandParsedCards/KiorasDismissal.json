@@ -4,9 +4,15 @@
     "ManaCost": "{U}",
     "TypeLine": "Instant",
     "OracleText": "Strive — This spell costs {U} more to cast for each target beyond the first.\nReturn any number of target enchantments to their owners' hands.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Strive"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Strive"
+    ],
     "Id": "21b040e5-651b-42ca-b487-66cf1d8180f9",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Kiora's Dismissal",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Strive — This spell costs {U} more to cast for each target beyond the first.\nReturn any number of target enchantments to their owners' hands.",
@@ -24,11 +32,26 @@
           "Effects": [
             {
               "EffectType": "costIncrease",
-              "Amount": { "QuantityType": "literal", "Value": 0 },
-              "ManaSymbols": [{ "Kind": "colored", "Colors": ["U"] }],
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "ManaSymbols": [
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
+              ],
               "PerTargetBeyondFirst": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 76
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -37,11 +60,22 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["enchantment"] },
-                "Quantity": { "QuantityType": "anyAmount" }
+                "Filter": {
+                  "CardTypes": [
+                    "enchantment"
+                  ]
+                },
+                "Quantity": {
+                  "QuantityType": "anyAmount"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 77,
+            "Length": 64
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -49,11 +83,28 @@
       {
         "Kind": "manaCost",
         "Raw": "{U}",
-        "Symbols": [{ "Kind": "colored", "Colors": ["U"] }],
+        "Symbols": [
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
+        ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

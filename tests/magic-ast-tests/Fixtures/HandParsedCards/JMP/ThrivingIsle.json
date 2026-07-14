@@ -36,7 +36,12 @@
               "Restriction": "other than blue"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 70
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -52,7 +57,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 71,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -69,7 +79,12 @@
               "OfChosenColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 85,
+            "Length": 38
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

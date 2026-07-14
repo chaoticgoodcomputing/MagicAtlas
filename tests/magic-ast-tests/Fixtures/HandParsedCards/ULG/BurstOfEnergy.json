@@ -6,14 +6,20 @@
     "OracleText": "Untap target permanent.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Burst of Energy",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Untap target permanent.",
@@ -26,11 +32,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"]
+                  "CardTypes": [
+                    "permanent"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 23
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,17 +52,26 @@
         "Kind": "manaCost",
         "Raw": "{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

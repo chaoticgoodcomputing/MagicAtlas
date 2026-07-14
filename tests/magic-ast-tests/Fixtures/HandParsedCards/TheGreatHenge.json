@@ -37,7 +37,12 @@
               },
               "BasedOn": "the greatest power among creatures you control"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 93
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -65,7 +70,12 @@
               }
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 94,
+            "Length": 33
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -107,7 +117,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 128,
+            "Length": 91
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

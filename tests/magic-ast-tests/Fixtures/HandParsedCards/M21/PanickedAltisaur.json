@@ -40,7 +40,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -64,7 +69,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

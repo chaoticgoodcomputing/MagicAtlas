@@ -58,7 +58,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -89,10 +94,16 @@
                     "OfChosenColor": false
                   }
                 ],
-                "IsManaAbility": true
+                "IsManaAbility": true,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 43
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

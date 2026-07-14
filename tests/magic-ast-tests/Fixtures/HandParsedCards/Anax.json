@@ -6,8 +6,12 @@
     "OracleText": "Anax's power is equal to your devotion to red. (Each {R} in the mana costs of permanents you control counts toward your devotion to red.)\nWhenever Anax or another nontoken creature you control dies, create a 1/1 red Satyr creature token with \"This token can't block.\" If the creature had power 4 or greater, create two of those tokens instead.",
     "Power": "*",
     "Toughness": "3",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "ad107ae0-2540-46f8-9970-72983b87ba04",
     "Layout": "normal"
@@ -16,9 +20,16 @@
     "Name": "Anax, Hardened in the Forge",
     "TypeLine": {
       "Raw": "Legendary Enchantment Creature — Demigod",
-      "Supertypes": ["Legendary"],
-      "Types": ["Enchantment", "Creature"],
-      "Subtypes": ["Demigod"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Demigod"
+      ]
     },
     "Oracle": {
       "RawText": "Anax's power is equal to your devotion to red. (Each {R} in the mana costs of permanents you control counts toward your devotion to red.)\nWhenever Anax or another nontoken creature you control dies, create a 1/1 red Satyr creature token with \"This token can't block.\" If the creature had power 4 or greater, create two of those tokens instead.",
@@ -31,13 +42,20 @@
               "Characteristic": "Power",
               "Value": {
                 "QuantityType": "devotion",
-                "Colors": ["R"]
+                "Colors": [
+                  "R"
+                ]
               }
             }
           ],
           "Reminder": {
             "Text": "Each {R} in the mana costs of permanents you control counts toward your devotion to red."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 137
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -45,7 +63,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsToken": false,
               "Controller": "You"
             }
@@ -75,9 +95,15 @@
                 "Token": {
                   "Power": "1",
                   "Toughness": "1",
-                  "Colors": ["R"],
-                  "Types": ["creature"],
-                  "Subtypes": ["Satyr"],
+                  "Colors": [
+                    "R"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Satyr"
+                  ],
                   "Abilities": [
                     {
                       "Kind": "static",
@@ -85,7 +111,8 @@
                         {
                           "EffectType": "cantBlock"
                         }
-                      ]
+                      ],
+                      "OracleLineIndex": 0
                     }
                   ],
                   "IsCopy": false
@@ -103,9 +130,15 @@
                 "Token": {
                   "Power": "1",
                   "Toughness": "1",
-                  "Colors": ["R"],
-                  "Types": ["creature"],
-                  "Subtypes": ["Satyr"],
+                  "Colors": [
+                    "R"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Satyr"
+                  ],
                   "Abilities": [
                     {
                       "Kind": "static",
@@ -113,7 +146,8 @@
                         {
                           "EffectType": "cantBlock"
                         }
-                      ]
+                      ],
+                      "OracleLineIndex": 0
                     }
                   ],
                   "IsCopy": false
@@ -123,7 +157,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 138,
+            "Length": 205
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -138,11 +177,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -150,11 +193,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

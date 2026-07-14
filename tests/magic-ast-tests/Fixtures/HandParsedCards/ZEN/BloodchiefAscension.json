@@ -6,14 +6,20 @@
     "OracleText": "At the beginning of each end step, if an opponent lost 2 or more life this turn, you may put a quest counter on this enchantment. (Damage causes loss of life.)\nWhenever a card is put into an opponent's graveyard from anywhere, if this enchantment has three or more quest counters on it, you may have that player lose 2 life. If you do, you gain 2 life.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Bloodchief Ascension",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "At the beginning of each end step, if an opponent lost 2 or more life this turn, you may put a quest counter on this enchantment. (Damage causes loss of life.)\nWhenever a card is put into an opponent's graveyard from anywhere, if this enchantment has three or more quest counters on it, you may have that player lose 2 life. If you do, you gain 2 life.",
@@ -49,7 +55,12 @@
           ],
           "Reminder": {
             "Text": "Damage causes loss of life."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 159
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -57,7 +68,9 @@
             "Timing": "Whenever",
             "Event": "PutIntoGraveyard",
             "Filter": {
-              "CardTypes": ["card"],
+              "CardTypes": [
+                "card"
+              ],
               "Controller": "Opponent"
             }
           },
@@ -100,7 +113,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 160,
+            "Length": 192
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -111,18 +129,24 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

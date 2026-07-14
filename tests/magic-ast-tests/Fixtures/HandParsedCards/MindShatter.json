@@ -6,14 +6,20 @@
     "OracleText": "Target player discards X cards at random.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Mind Shatter",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Target player discards X cards at random.",
@@ -23,14 +29,26 @@
           "Effects": [
             {
               "EffectType": "discardCards",
-              "Count": { "QuantityType": "variable", "Name": "X" },
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               },
               "Random": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 41
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,19 +57,35 @@
         "Kind": "manaCost",
         "Raw": "{X}{B}{B}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

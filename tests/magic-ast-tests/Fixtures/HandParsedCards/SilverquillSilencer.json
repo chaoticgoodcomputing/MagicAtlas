@@ -6,8 +6,14 @@
     "OracleText": "As this creature enters, choose a nonland card name.\nWhenever an opponent casts a spell with the chosen name, they lose 3 life and you draw a card.",
     "Power": "3",
     "Toughness": "2",
-    "Colors": ["B", "W"],
-    "ColorIdentity": ["B", "W"],
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ],
     "Keywords": [],
     "Id": "8bb60dcc-cb4a-414d-850f-c98efd872894",
     "Layout": "normal"
@@ -16,8 +22,13 @@
     "Name": "Silverquill Silencer",
     "TypeLine": {
       "Raw": "Creature — Human Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "As this creature enters, choose a nonland card name.\nWhenever an opponent casts a spell with the chosen name, they lose 3 life and you draw a card.",
@@ -29,11 +40,20 @@
             {
               "EffectType": "chooseCardName",
               "Filter": {
-                "CardTypes": ["card"],
-                "ExcludedCardTypes": ["land"]
+                "CardTypes": [
+                  "card"
+                ],
+                "ExcludedCardTypes": [
+                  "land"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -41,7 +61,9 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
+              "CardTypes": [
+                "spell"
+              ],
               "Controller": "Opponent",
               "ChosenCharacteristic": "CardName"
             }
@@ -67,7 +89,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 53,
+            "Length": 94
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -76,19 +103,35 @@
         "Kind": "manaCost",
         "Raw": "{W}{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "W"]
+        "Colors": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "W"]
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

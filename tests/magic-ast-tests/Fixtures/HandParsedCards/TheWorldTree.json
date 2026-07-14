@@ -34,7 +34,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -52,7 +57,12 @@
               "OfChosenColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -84,7 +94,8 @@
                     "OfChosenColor": false
                   }
                 ],
-                "IsManaAbility": true
+                "IsManaAbility": true,
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -103,7 +114,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 98
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -111,16 +127,66 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["W"] },
-                { "Kind": "colored", "Colors": ["W"] },
-                { "Kind": "colored", "Colors": ["U"] },
-                { "Kind": "colored", "Colors": ["U"] },
-                { "Kind": "colored", "Colors": ["B"] },
-                { "Kind": "colored", "Colors": ["B"] },
-                { "Kind": "colored", "Colors": ["R"] },
-                { "Kind": "colored", "Colors": ["R"] },
-                { "Kind": "colored", "Colors": ["G"] },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             },
             {
@@ -166,7 +232,12 @@
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 138,
+            "Length": 151
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

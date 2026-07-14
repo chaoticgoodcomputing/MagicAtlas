@@ -52,7 +52,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 151
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

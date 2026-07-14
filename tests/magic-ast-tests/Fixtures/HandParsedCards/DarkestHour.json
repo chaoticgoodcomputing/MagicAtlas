@@ -4,8 +4,12 @@
     "ManaCost": "{B}",
     "TypeLine": "Enchantment",
     "OracleText": "All creatures are black.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "aeeb0f91-2084-448a-8226-95d7c87dd6bb",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Darkest Hour",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "All creatures are black.",
@@ -27,12 +33,21 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
-              "Colors": ["B"]
+              "Colors": [
+                "B"
+              ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,7 +58,9 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 1,
@@ -51,11 +68,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

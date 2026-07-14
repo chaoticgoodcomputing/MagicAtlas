@@ -34,7 +34,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 112,
+            "Length": 28
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -50,7 +55,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 141,
+            "Length": 20
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

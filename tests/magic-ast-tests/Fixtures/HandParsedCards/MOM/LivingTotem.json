@@ -47,7 +47,12 @@
           "KeywordSource": "Convoke",
           "Reminder": {
             "Text": "(Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -82,7 +87,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

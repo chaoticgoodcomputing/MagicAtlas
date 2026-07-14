@@ -34,7 +34,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -51,7 +56,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 27
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -90,13 +100,19 @@
                       "Value": 5
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
           "Reminder": {
             "Text": "(It's not a creature unless it's crewed.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 34,
+            "Length": 130
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

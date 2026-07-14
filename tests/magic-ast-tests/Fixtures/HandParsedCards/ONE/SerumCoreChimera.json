@@ -44,7 +44,12 @@
               "CounterType": "oil"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,15 +62,24 @@
               "PowerModifier": {
                 "QuantityType": "counterCount",
                 "CounterType": "oil",
-                "On": { "Kind": "Self" }
+                "On": {
+                  "Kind": "Self"
+                }
               },
               "ToughnessModifier": {
                 "QuantityType": "counterCount",
                 "CounterType": "oil",
-                "On": { "Kind": "Self" }
+                "On": {
+                  "Kind": "Self"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

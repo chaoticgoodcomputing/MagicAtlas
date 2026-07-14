@@ -6,15 +6,26 @@
     "OracleText": "({R/W} can be paid with either {R} or {W}.)\nFirst strike",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"]
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Boros Recruit",
     "TypeLine": {
       "Raw": "Creature — Goblin Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Goblin", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "({R/W} can be paid with either {R} or {W}.)\nFirst strike",
@@ -27,7 +38,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "First"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 44,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -38,18 +54,27 @@
         "Symbols": [
           {
             "Kind": "hybrid",
-            "Colors": ["W", "R"]
+            "Colors": [
+              "W",
+              "R"
+            ]
           }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "W"]
+        "Colors": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "W"]
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

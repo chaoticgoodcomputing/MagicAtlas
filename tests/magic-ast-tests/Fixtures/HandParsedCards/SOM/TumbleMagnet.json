@@ -35,7 +35,12 @@
               "CounterType": "charge"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -69,7 +74,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 81
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -39,7 +39,12 @@
               "EffectType": "vanishing",
               "Value": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 168
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -54,7 +54,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 205
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

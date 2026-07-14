@@ -40,7 +40,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Changeling"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -63,7 +64,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Changeling"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -85,10 +87,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Changeling"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 154
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -137,7 +145,8 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Changeling"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -147,7 +156,12 @@
           "Reminder": {
             "Text": "(It is every creature type.)"
           },
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 155,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -7,7 +7,10 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["G", "W"]
+    "ColorIdentity": [
+      "G",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Stirring Wildwood",
@@ -30,7 +33,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -47,7 +55,12 @@
               "OfChosenColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 20
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -108,7 +121,8 @@
                       "Keyword": "Reach"
                     }
                   ],
-                  "KeywordSource": "Reach"
+                  "KeywordSource": "Reach",
+                  "OracleLineIndex": 0
                 }
               ],
               "Duration": {
@@ -120,7 +134,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 46,
+            "Length": 119
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -42,7 +42,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "First"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,7 +62,12 @@
               },
               "MinimumBlockers": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -67,7 +77,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -80,7 +95,12 @@
               "EffectType": "partner",
               "PartnerType": "Partner"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 30,
+            "Length": 59
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -39,7 +39,12 @@
               },
               "CantBeRegenerated": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -66,7 +71,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 107
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -32,7 +32,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -53,7 +58,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 50
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

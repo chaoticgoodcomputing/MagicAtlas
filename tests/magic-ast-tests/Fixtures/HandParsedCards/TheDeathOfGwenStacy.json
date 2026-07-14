@@ -49,7 +49,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -82,7 +83,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -110,10 +112,16 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 88
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

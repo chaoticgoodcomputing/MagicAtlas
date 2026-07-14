@@ -39,7 +39,12 @@
           ],
           "Reminder": {
             "Text": "(This creature can block creatures with flying.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -76,7 +81,8 @@
                           "Value": 1
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -107,13 +113,19 @@
                           "IsCopy": false
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ],
               "AllowDuplicates": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

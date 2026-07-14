@@ -62,7 +62,12 @@
               },
               "MayChooseNewTargets": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 171
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

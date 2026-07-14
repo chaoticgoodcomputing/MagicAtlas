@@ -67,7 +67,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -87,11 +88,17 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -113,7 +120,12 @@
                 "Repeatable": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 136,
+            "Length": 54
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

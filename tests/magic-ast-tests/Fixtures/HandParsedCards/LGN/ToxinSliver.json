@@ -49,7 +49,12 @@
               },
               "CantBeRegenerated": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 100
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

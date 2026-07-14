@@ -17,9 +17,16 @@
     "Name": "Ioreth of the Healing House",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Cleric",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Untap another target permanent.\n{T}: Untap two other target legendary creatures.",
@@ -27,7 +34,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -35,18 +44,27 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
+                  "CardTypes": [
+                    "permanent"
+                  ],
                   "ExcludeSelf": true
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 36
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -58,14 +76,23 @@
                   "Value": 2
                 },
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Supertypes": ["Legendary"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Supertypes": [
+                    "Legendary"
+                  ],
                   "ExcludeSelf": true
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -74,24 +101,44 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

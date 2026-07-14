@@ -6,14 +6,20 @@
     "OracleText": "Counter target spell unless its controller pays {3}.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Mana Leak",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"],
+      "Types": [
+        "Instant"
+      ],
       "Subtypes": []
     },
     "Oracle": {
@@ -26,17 +32,36 @@
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "counterSpell",
-                "Target": { "Kind": "Target", "Filter": { "CardTypes": ["spell"] } }
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ]
+                  }
+                }
               },
               "Unless": {
-                "Player": { "Kind": "Controller" },
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "mana",
-                  "Symbols": [ { "Kind": "generic", "GenericAmount": 3 } ]
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 3
+                    }
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -45,13 +70,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

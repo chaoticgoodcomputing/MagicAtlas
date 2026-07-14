@@ -6,16 +6,26 @@
     "OracleText": "Flying, first strike, vigilance, trample, haste, protection from black and from red",
     "Power": "6",
     "Toughness": "6",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Akroma, Angel of Wrath",
     "TypeLine": {
       "Raw": "Legendary Creature — Angel",
-      "Types": ["Creature"],
-      "Supertypes": ["Legendary"],
-      "Subtypes": ["Angel"]
+      "Types": [
+        "Creature"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Subtypes": [
+        "Angel"
+      ]
     },
     "Oracle": {
       "RawText": "Flying, first strike, vigilance, trample, haste, protection from black and from red",
@@ -27,34 +37,87 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
-                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "KeywordSource": "First strike",
-          "Effects": [ { "EffectType": "combatDamageTiming", "Timing": "First" } ]
+          "Effects": [
+            {
+              "EffectType": "combatDamageTiming",
+              "Timing": "First"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "KeywordSource": "Vigilance",
-          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Vigilance" } ]
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Vigilance"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "KeywordSource": "Trample",
-          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Trample" } ]
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Trample"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "KeywordSource": "Haste",
-          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Haste" } ]
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Haste"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,11 +126,22 @@
             {
               "EffectType": "protection",
               "From": [
-                { "Kind": "Color", "Value": "B" },
-                { "Kind": "Color", "Value": "R" }
+                {
+                  "Kind": "Color",
+                  "Value": "B"
+                },
+                {
+                  "Kind": "Color",
+                  "Value": "R"
+                }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -76,19 +150,55 @@
         "Kind": "manaCost",
         "Raw": "{5}{W}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 8
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
-        "Toughness": { "ValueType": "fixed", "Raw": "6", "Value": 6 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        }
       }
     ]
   }

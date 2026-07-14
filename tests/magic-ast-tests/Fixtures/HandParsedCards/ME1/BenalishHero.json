@@ -37,7 +37,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Banding"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 326
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

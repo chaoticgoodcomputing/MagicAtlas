@@ -41,7 +41,12 @@
               },
               "MinimumBlockers": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -51,7 +56,12 @@
               "EffectType": "fabricate",
               "Value": 1
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 123
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

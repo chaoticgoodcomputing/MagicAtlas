@@ -45,7 +45,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Shroud"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -55,7 +56,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 96
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -97,7 +103,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 50
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

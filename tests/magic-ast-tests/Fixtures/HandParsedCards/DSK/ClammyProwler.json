@@ -6,15 +6,24 @@
     "OracleText": "Whenever this creature attacks, another target attacking creature can't be blocked this turn.",
     "Power": "2",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Clammy Prowler",
     "TypeLine": {
       "Raw": "Enchantment Creature — Horror",
-      "Types": ["Enchantment", "Creature"],
-      "Subtypes": ["Horror"]
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Horror"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever this creature attacks, another target attacking creature can't be blocked this turn.",
@@ -25,7 +34,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -35,7 +46,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "ExcludeSelf": true,
                   "Characteristics": [
                     {
@@ -53,7 +66,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 93
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -62,23 +80,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
       }
     ]
   }

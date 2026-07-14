@@ -6,8 +6,14 @@
     "OracleText": "Legendary Humans you control have indestructible.\n{2}{W}{B}: Exile target card from a graveyard. If it was a creature card, create a 1/1 white Human Soldier creature token.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["B", "W"],
-    "ColorIdentity": ["B", "W"],
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ],
     "Keywords": [],
     "Id": "f6a45d0e-582a-4ec1-b83b-71b6a0ff6249",
     "Layout": "normal"
@@ -16,8 +22,13 @@
     "Name": "General's Enforcer",
     "TypeLine": {
       "Raw": "Creature — Human Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Legendary Humans you control have indestructible.\n{2}{W}{B}: Exile target card from a graveyard. If it was a creature card, create a 1/1 white Human Soldier creature token.",
@@ -30,9 +41,15 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Supertypes": ["Legendary"],
-                  "Subtypes": ["Human"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Supertypes": [
+                    "Legendary"
+                  ],
+                  "Subtypes": [
+                    "Human"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -44,10 +61,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Indestructible"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 49
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -55,9 +78,22 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["W"] },
-                { "Kind": "colored", "Colors": ["B"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
               ]
             }
           ],
@@ -67,7 +103,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Zone": "Graveyard"
                 }
               }
@@ -91,15 +129,27 @@
                 "Token": {
                   "Power": "1",
                   "Toughness": "1",
-                  "Colors": ["W"],
-                  "Types": ["creature"],
-                  "Subtypes": ["Human", "Soldier"],
+                  "Colors": [
+                    "W"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Human",
+                    "Soldier"
+                  ],
                   "IsCopy": false
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 50,
+            "Length": 122
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -108,24 +158,48 @@
         "Kind": "manaCost",
         "Raw": "{W}{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "W"]
+        "Colors": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "W"]
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
-        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
       }
     ]
   }

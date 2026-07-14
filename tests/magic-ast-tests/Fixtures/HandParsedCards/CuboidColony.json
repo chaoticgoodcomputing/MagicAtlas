@@ -44,7 +44,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -68,7 +73,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 15
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -78,7 +88,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 15
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -90,7 +105,12 @@
           ],
           "Reminder": {
             "Text": "(Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 22,
+            "Length": 160
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

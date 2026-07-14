@@ -4,14 +4,20 @@
     "ManaCost": "{4}{R}",
     "TypeLine": "Sorcery",
     "OracleText": "Choose one —\n• Ready to Rumble deals 5 damage to target creature or planeswalker.\n• Destroy target artifact.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Ready to Rumble",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Choose one —\n• Ready to Rumble deals 5 damage to target creature or planeswalker.\n• Destroy target artifact.",
@@ -39,11 +45,15 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature", "planeswalker"]
+                        "CardTypes": [
+                          "creature",
+                          "planeswalker"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -55,15 +65,23 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["artifact"]
+                        "CardTypes": [
+                          "artifact"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -72,18 +90,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

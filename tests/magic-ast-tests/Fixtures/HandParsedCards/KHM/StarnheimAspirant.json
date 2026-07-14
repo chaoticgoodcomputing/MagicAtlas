@@ -6,15 +6,24 @@
     "OracleText": "Angel spells you cast cost {2} less to cast.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Starnheim Aspirant",
     "TypeLine": {
       "Raw": "Creature — Human Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "Angel spells you cast cost {2} less to cast.",
@@ -24,14 +33,26 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 2 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell"],
-            "Subtypes": ["Angel"],
+            "CardTypes": [
+              "spell"
+            ],
+            "Subtypes": [
+              "Angel"
+            ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,17 +61,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
-        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
       }
     ]
   }

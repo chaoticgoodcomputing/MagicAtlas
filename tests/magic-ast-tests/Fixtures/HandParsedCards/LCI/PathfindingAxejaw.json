@@ -6,15 +6,23 @@
     "OracleText": "When this creature enters, it explores. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard.)",
     "Power": "4",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Pathfinding Axejaw",
     "TypeLine": {
       "Raw": "Creature — Dinosaur",
-      "Types": ["Creature"],
-      "Subtypes": ["Dinosaur"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dinosaur"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, it explores. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard.)",
@@ -25,19 +33,28 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
           "Effects": [
             {
               "EffectType": "explore",
-              "Target": { "Kind": "It" }
+              "Target": {
+                "Kind": "It"
+              }
             }
           ],
           "Reminder": {
             "Text": "Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 226
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -46,13 +63,31 @@
         "Kind": "manaCost",
         "Raw": "{3}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

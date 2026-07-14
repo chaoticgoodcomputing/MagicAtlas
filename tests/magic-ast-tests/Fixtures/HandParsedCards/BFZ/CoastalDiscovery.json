@@ -37,7 +37,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 15
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -68,7 +73,12 @@
           ],
           "Reminder": {
             "Text": "(If you cast this spell for {5}{U}, also put four +1/+1 counters on target land you control and it becomes a 0/0 Elemental creature with haste that's still a land.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 16,
+            "Length": 180
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

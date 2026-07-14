@@ -6,15 +6,23 @@
     "OracleText": "Flying\nWhen this creature enters, you lose 3 life.\nDisguise {B}{B} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Nightdrinker Moroii",
     "TypeLine": {
       "Raw": "Creature — Vampire",
-      "Types": ["Creature"],
-      "Subtypes": ["Vampire"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWhen this creature enters, you lose 3 life.\nDisguise {B}{B} (You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)",
@@ -26,11 +34,27 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -38,7 +62,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -53,7 +79,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 43
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -66,11 +97,15 @@
                 "Symbols": [
                   {
                     "Kind": "colored",
-                    "Colors": ["B"]
+                    "Colors": [
+                      "B"
+                    ]
                   },
                   {
                     "Kind": "colored",
-                    "Colors": ["B"]
+                    "Colors": [
+                      "B"
+                    ]
                   }
                 ]
               }
@@ -78,7 +113,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this card face down for {3} as a 2/2 creature with ward {2}. Turn it face up any time for its disguise cost.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 51,
+            "Length": 139
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -87,19 +127,36 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -6,15 +6,23 @@
     "OracleText": "Enchant creature\nAll creatures able to block enchanted creature do so.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Lure",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nAll creatures able to block enchanted creature do so.",
@@ -26,10 +34,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,7 +55,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -55,22 +75,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

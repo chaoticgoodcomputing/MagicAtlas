@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Quirion Dryad",
     "ManaCost": "{1}{G}",
-    "TypeLine": "Creature \u2014 Dryad",
+    "TypeLine": "Creature — Dryad",
     "OracleText": "Whenever you cast a spell that's white, blue, black, or red, put a +1/+1 counter on this creature.",
     "Power": "1",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Quirion Dryad",
     "TypeLine": {
-      "Raw": "Creature \u2014 Dryad",
+      "Raw": "Creature — Dryad",
       "Types": [
         "Creature"
       ],
@@ -57,7 +57,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 98
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

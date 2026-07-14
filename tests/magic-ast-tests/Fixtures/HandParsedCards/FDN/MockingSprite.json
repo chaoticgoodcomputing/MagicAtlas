@@ -6,15 +6,24 @@
     "OracleText": "Flying\nInstant and sorcery spells you cast cost {1} less to cast.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Mocking Sprite",
     "TypeLine": {
       "Raw": "Creature — Faerie Rogue",
-      "Types": ["Creature"],
-      "Subtypes": ["Faerie", "Rogue"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Faerie",
+        "Rogue"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nInstant and sorcery spells you cast cost {1} less to cast.",
@@ -26,24 +35,51 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["instant", "sorcery"],
+            "CardTypes": [
+              "instant",
+              "sorcery"
+            ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 58
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -52,17 +88,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
-        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
       }
     ]
   }

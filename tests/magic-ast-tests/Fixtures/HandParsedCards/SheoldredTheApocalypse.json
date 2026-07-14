@@ -6,16 +6,27 @@
     "OracleText": "Deathtouch\nWhenever you draw a card, you gain 2 life.\nWhenever an opponent draws a card, they lose 2 life.",
     "Power": "4",
     "Toughness": "5",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Sheoldred, the Apocalypse",
     "TypeLine": {
       "Raw": "Legendary Creature — Phyrexian Praetor",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Phyrexian", "Praetor"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Praetor"
+      ]
     },
     "Oracle": {
       "RawText": "Deathtouch\nWhenever you draw a card, you gain 2 life.\nWhenever an opponent draws a card, they lose 2 life.",
@@ -28,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -50,7 +66,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 11,
+            "Length": 42
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -72,7 +93,12 @@
                 "Kind": "ThatPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 54,
+            "Length": 52
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -87,22 +113,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -82,7 +87,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 162
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

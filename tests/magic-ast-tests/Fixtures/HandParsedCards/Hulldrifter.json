@@ -55,7 +55,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -80,7 +85,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 41
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -96,7 +106,12 @@
           "KeywordSource": "Crew",
           "Reminder": {
             "Text": "(Tap any number of creatures you control with total power 3 or more: This Vehicle becomes an artifact creature until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 49,
+            "Length": 137
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

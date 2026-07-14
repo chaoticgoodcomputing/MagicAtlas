@@ -37,7 +37,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -66,7 +71,12 @@
               },
               "MayChooseNewTargets": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 105
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

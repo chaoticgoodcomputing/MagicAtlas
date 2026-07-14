@@ -54,7 +54,12 @@
               "Location": "Top",
               "PutBackInAnyOrder": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 103
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -83,7 +88,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 49
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

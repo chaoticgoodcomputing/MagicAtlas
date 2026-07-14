@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Myriad"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 222
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

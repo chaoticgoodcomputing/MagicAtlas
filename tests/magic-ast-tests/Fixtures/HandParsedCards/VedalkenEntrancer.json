@@ -6,15 +6,24 @@
     "OracleText": "{U}, {T}: Target player mills two cards.",
     "Power": "1",
     "Toughness": "4",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Vedalken Entrancer",
     "TypeLine": {
       "Raw": "Creature — Vedalken Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Vedalken", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vedalken",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "{U}, {T}: Target player mills two cards.",
@@ -25,7 +34,12 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             },
             {
@@ -41,11 +55,20 @@
               },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -54,18 +77,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

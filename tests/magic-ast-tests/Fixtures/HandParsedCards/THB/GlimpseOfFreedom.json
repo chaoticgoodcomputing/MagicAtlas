@@ -4,14 +4,20 @@
     "ManaCost": "{1}{U}",
     "TypeLine": "Instant",
     "OracleText": "Draw a card.\nEscape—{2}{U}, Exile five other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Glimpse of Freedom",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Draw a card.\nEscape—{2}{U}, Exile five other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)",
@@ -29,7 +35,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -46,7 +57,9 @@
                   },
                   {
                     "Kind": "colored",
-                    "Colors": ["U"]
+                    "Colors": [
+                      "U"
+                    ]
                   }
                 ]
               },
@@ -55,7 +68,12 @@
                 "Value": 5
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 124
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -70,18 +88,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

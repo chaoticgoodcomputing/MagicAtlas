@@ -6,14 +6,20 @@
     "OracleText": "Target player draws cards equal to half the number of cards in their library and loses half their life. Round up each time.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Peer into the Abyss",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Target player draws cards equal to half the number of cards in their library and loses half their life. Round up each time.",
@@ -28,7 +34,9 @@
                 "BaseQuantity": {
                   "QuantityType": "count",
                   "CountOf": {
-                    "CardTypes": ["card"],
+                    "CardTypes": [
+                      "card"
+                    ],
                     "Zone": "Library",
                     "Controller": "Target"
                   }
@@ -39,7 +47,9 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             },
@@ -57,11 +67,18 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 123
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -70,20 +87,42 @@
         "Kind": "manaCost",
         "Raw": "{4}{B}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 7
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

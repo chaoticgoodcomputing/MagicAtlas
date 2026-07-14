@@ -68,10 +68,16 @@
                     }
                   }
                 ],
-                "IsManaAbility": false
+                "IsManaAbility": false,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 104
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -104,7 +110,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 105,
+            "Length": 9
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

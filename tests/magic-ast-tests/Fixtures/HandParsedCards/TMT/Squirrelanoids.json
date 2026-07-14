@@ -37,7 +37,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

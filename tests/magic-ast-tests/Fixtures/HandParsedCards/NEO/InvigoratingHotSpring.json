@@ -39,7 +39,12 @@
               "CounterType": "+1/+1"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 55
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -66,10 +71,16 @@
                     "Keyword": "Haste"
                   }
                 ],
-                "KeywordSource": "Haste"
+                "KeywordSource": "Haste",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 56,
+            "Length": 106
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -105,7 +116,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 163,
+            "Length": 149
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 17
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -50,7 +55,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 18,
+            "Length": 32
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

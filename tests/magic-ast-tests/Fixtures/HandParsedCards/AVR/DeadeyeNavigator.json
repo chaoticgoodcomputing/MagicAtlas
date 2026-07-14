@@ -38,7 +38,12 @@
           "KeywordSource": "Soulbond",
           "Reminder": {
             "Text": "(You may pair this creature with another unpaired creature when either enters. They remain paired for as long as you control both of them.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -91,7 +96,8 @@
                     }
                   }
                 ],
-                "IsManaAbility": false
+                "IsManaAbility": false,
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -101,7 +107,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 174
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

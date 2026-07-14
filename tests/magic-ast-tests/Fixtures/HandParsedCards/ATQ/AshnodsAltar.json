@@ -13,7 +13,9 @@
     "Name": "Ashnod's Altar",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "Sacrifice a creature: Add {C}{C}.",
@@ -24,7 +26,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -39,7 +43,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 33
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -48,7 +57,10 @@
         "Kind": "manaCost",
         "Raw": "{3}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
         ],
         "ManaValue": 3
       },

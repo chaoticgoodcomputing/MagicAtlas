@@ -35,7 +35,12 @@
                 "artifact"
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -76,7 +81,12 @@
               },
               "Colors": []
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 63,
+            "Length": 79
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -85,7 +95,12 @@
               "EffectType": "spendManaAsAnyColor",
               "Beneficiary": "Players"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 143,
+            "Length": 59
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

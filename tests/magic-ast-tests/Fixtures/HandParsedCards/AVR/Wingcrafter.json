@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Soulbond"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 164
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -71,7 +76,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -81,7 +87,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 165,
+            "Length": 83
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

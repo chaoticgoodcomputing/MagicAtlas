@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +50,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -74,7 +84,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 174
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

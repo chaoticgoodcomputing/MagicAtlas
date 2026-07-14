@@ -55,7 +55,12 @@
                 "Type": "additionalTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 127
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -107,7 +112,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 128,
+            "Length": 148
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

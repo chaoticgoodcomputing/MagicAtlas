@@ -50,7 +50,12 @@
               },
               "Keyword": "Flying"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,7 +68,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 70
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -99,7 +109,12 @@
           "IsManaAbility": false,
           "Reminder": {
             "Text": "({2}: Attach to target creature you control. Equip only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 118,
+            "Length": 80
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

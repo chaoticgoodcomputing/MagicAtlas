@@ -49,7 +49,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -94,7 +99,12 @@
           ],
           "Reminder": {
             "Text": "Put a +1/+1 counter on each of up to two other target creatures."
-          }
+          },
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 104
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

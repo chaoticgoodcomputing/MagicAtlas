@@ -4,8 +4,12 @@
     "ManaCost": "{3}{R}",
     "TypeLine": "Enchantment",
     "OracleText": "You can't play lands.\nSacrifice a land: Draw two cards. Activate only once each turn.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "e15a3f1a-83af-4541-8d1c-bf7844f969c9",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Aggressive Mining",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "You can't play lands.\nSacrifice a land: Draw two cards. Activate only once each turn.",
@@ -28,7 +34,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 21
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -36,7 +47,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["land"]
+                "CardTypes": [
+                  "land"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -56,8 +69,15 @@
               }
             }
           ],
-          "Restrictions": ["OnlyOnceEachTurn"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyOnceEachTurn"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 22,
+            "Length": 63
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -72,7 +92,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -80,11 +102,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

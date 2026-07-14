@@ -6,14 +6,20 @@
     "OracleText": "When this enchantment enters, exile target creature or planeswalker an opponent controls until this enchantment leaves the battlefield.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Citizen's Arrest",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "When this enchantment enters, exile target creature or planeswalker an opponent controls until this enchantment leaves the battlefield.",
@@ -24,7 +30,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["enchantment"],
+              "CardTypes": [
+                "enchantment"
+              ],
               "IsSelf": true
             }
           },
@@ -34,7 +42,10 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature", "planeswalker"],
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ],
                   "Controller": "Opponent"
                 }
               },
@@ -43,7 +54,12 @@
                 "Object": "this enchantment"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 135
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,20 +68,37 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

@@ -42,7 +42,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "For Mirrodin"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 106
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -61,7 +66,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 107,
+            "Length": 29
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -76,7 +86,9 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["W"]
+                  "Colors": [
+                    "W"
+                  ]
                 }
               ]
             }
@@ -87,14 +99,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 137,
+            "Length": 86
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

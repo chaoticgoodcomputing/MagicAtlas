@@ -6,14 +6,20 @@
     "OracleText": "This spell costs {1} less to cast for each creature in your party. (Your party consists of up to one each of Cleric, Rogue, Warrior, and Wizard.)\nDestroy target creature or planeswalker.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Deadly Alliance",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast for each creature in your party. (Your party consists of up to one each of Cleric, Rogue, Warrior, and Wizard.)\nDestroy target creature or planeswalker.",
@@ -23,14 +29,24 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Controller": "You",
                 "InParty": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 145
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -40,11 +56,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature", "planeswalker"]
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 146,
+            "Length": 40
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -53,18 +77,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

@@ -6,15 +6,23 @@
     "OracleText": "Flying\nGrant an Advantage — If you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Pixie Guide",
     "TypeLine": {
       "Raw": "Creature — Faerie",
-      "Types": ["Creature"],
-      "Subtypes": ["Faerie"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Faerie"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nGrant an Advantage — If you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.",
@@ -26,14 +34,27 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
-                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -44,12 +65,21 @@
               "Event": {
                 "EventType": "diceRoll",
                 "MinimumQuantity": 1,
-                "Controller": { "Kind": "You" }
+                "Controller": {
+                  "Kind": "You"
+                }
               },
               "OriginalEventOccurs": false,
-              "Modifier": { "Type": "advantage" }
+              "Modifier": {
+                "Type": "advantage"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 121
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -58,17 +88,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
-        "Toughness": { "ValueType": "fixed", "Value": 3, "Raw": "3" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        }
       }
     ]
   }

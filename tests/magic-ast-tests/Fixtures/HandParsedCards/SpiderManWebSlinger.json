@@ -6,16 +6,28 @@
     "OracleText": "Web-slinging {W} (You may cast this spell for {W} if you also return a tapped creature you control to its owner's hand.)",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Spider-Man, Web-Slinger",
     "TypeLine": {
       "Raw": "Legendary Creature — Spider Human Hero",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Spider", "Human", "Hero"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spider",
+        "Human",
+        "Hero"
+      ]
     },
     "Oracle": {
       "RawText": "Web-slinging {W} (You may cast this spell for {W} if you also return a tapped creature you control to its owner's hand.)",
@@ -29,14 +41,24 @@
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "colored", "Colors": ["W"] }
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "W"
+                    ]
+                  }
                 ]
               }
             }
           ],
           "Reminder": {
             "Text": "(You may cast this spell for {W} if you also return a tapped creature you control to its owner's hand.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 120
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -45,18 +67,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

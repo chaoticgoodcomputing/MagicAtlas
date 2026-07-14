@@ -52,7 +52,12 @@
           ],
           "Reminder": {
             "Text": "(You may pay an additional {G} any number of times as you cast this spell.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 91
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -91,7 +96,12 @@
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 92,
+            "Length": 94
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

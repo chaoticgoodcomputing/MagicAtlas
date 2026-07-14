@@ -4,9 +4,15 @@
     "ManaCost": "{1}{W}{W}",
     "TypeLine": "Enchantment",
     "OracleText": "Cumulative upkeep—Pay 2 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nPrevent all damage that would be dealt to creatures you control.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Cumulative upkeep"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Cumulative upkeep"
+    ],
     "Id": "2298faae-370e-4b87-bf32-d20c2282a928",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Inner Sanctum",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Cumulative upkeep—Pay 2 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nPrevent all damage that would be dealt to creatures you control.",
@@ -37,28 +45,42 @@
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "age",
-              "Count": { "QuantityType": "literal", "Value": 1 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             },
             {
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "sacrifice",
-                "Target": { "Kind": "Self" }
+                "Target": {
+                  "Kind": "Self"
+                }
               },
               "Unless": {
-                "Player": { "Kind": "Controller" },
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "scaledCost",
                   "PerUnit": {
                     "CostType": "payLife",
-                    "Amount": { "QuantityType": "literal", "Value": 2 }
+                    "Amount": {
+                      "QuantityType": "literal",
+                      "Value": 2
+                    }
                   },
                   "Count": {
                     "QuantityType": "counterCount",
                     "CounterType": "age",
-                    "On": { "Kind": "Self" }
+                    "On": {
+                      "Kind": "Self"
+                    }
                   }
                 }
               }
@@ -66,7 +88,12 @@
           ],
           "Reminder": {
             "Text": "(At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 179
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -77,12 +104,19 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 180,
+            "Length": 64
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -91,19 +125,36 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

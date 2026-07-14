@@ -4,14 +4,20 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Sorcery",
     "OracleText": "Each player discards their hand, then draws cards equal to the greatest number of cards a player discarded this way.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Windfall",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Each player discards their hand, then draws cards equal to the greatest number of cards a player discarded this way.",
@@ -21,8 +27,13 @@
           "Effects": [
             {
               "EffectType": "discardCards",
-              "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
-              "Player": { "Kind": "EachPlayer" },
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "CardsInHand"
+              },
+              "Player": {
+                "Kind": "EachPlayer"
+              },
               "Random": false
             },
             {
@@ -31,9 +42,16 @@
                 "QuantityType": "calculated",
                 "Expression": "the greatest number of cards a player discarded this way"
               },
-              "Player": { "Kind": "EachPlayer" }
+              "Player": {
+                "Kind": "EachPlayer"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 116
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -42,18 +60,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

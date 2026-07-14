@@ -37,7 +37,12 @@
                 "Zone": "Graveyard"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 115
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

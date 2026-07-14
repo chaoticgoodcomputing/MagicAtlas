@@ -6,16 +6,29 @@
     "OracleText": "Indestructible\nAs long as your devotion to white and blue is less than seven, Ephara isn't a creature.\nAt the beginning of each upkeep, if you had another creature enter the battlefield under your control last turn, draw a card.",
     "Power": "6",
     "Toughness": "5",
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"]
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Ephara, God of the Polis",
     "TypeLine": {
       "Raw": "Legendary Enchantment Creature — God",
-      "Supertypes": ["Legendary"],
-      "Types": ["Enchantment", "Creature"],
-      "Subtypes": ["God"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "God"
+      ]
     },
     "Oracle": {
       "RawText": "Indestructible\nAs long as your devotion to white and blue is less than seven, Ephara isn't a creature.\nAt the beginning of each upkeep, if you had another creature enter the battlefield under your control last turn, draw a card.",
@@ -28,7 +41,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Indestructible"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +63,10 @@
                   "ConditionType": "quantityComparison",
                   "Left": {
                     "QuantityType": "devotion",
-                    "Colors": ["W", "U"]
+                    "Colors": [
+                      "W",
+                      "U"
+                    ]
                   },
                   "Operator": "LessThan",
                   "Right": {
@@ -55,7 +76,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 87
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -81,7 +107,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 103,
+            "Length": 125
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -96,11 +127,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -108,11 +143,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "W"]
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "U"]
+        "ColorIdentity": [
+          "W",
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

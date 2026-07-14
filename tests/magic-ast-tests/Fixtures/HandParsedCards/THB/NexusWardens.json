@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -62,7 +67,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 76
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

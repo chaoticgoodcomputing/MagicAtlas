@@ -6,15 +6,23 @@
     "OracleText": "You may look at the top card of your library any time.\nYou may play lands and cast spells from the top of your library. If you cast a spell this way, pay life equal to its mana value rather than pay its mana cost.\n{T}, Sacrifice ten nonland permanents: Each opponent loses 10 life.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Bolas's Citadel",
     "TypeLine": {
       "Raw": "Legendary Artifact",
-      "Supertypes": ["Legendary"],
-      "Types": ["Artifact"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "You may look at the top card of your library any time.\nYou may play lands and cast spells from the top of your library. If you cast a spell this way, pay life equal to its mana value rather than pay its mana cost.\n{T}, Sacrifice ten nonland permanents: Each opponent loses 10 life.",
@@ -28,17 +36,30 @@
                 "EffectType": "lookAtTopCardAnyTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "mayPlayFromTopOfLibrary",
-              "Actions": ["PlayLands", "CastSpells"],
+              "Actions": [
+                "PlayLands",
+                "CastSpells"
+              ],
               "SpellAltCost": "payLifeEqualToManaValue"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 158
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -49,8 +70,12 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["permanent"],
-                "ExcludedCardTypes": ["land"]
+                "CardTypes": [
+                  "permanent"
+                ],
+                "ExcludedCardTypes": [
+                  "land"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -70,7 +95,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 214,
+            "Length": 67
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -85,26 +115,36 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

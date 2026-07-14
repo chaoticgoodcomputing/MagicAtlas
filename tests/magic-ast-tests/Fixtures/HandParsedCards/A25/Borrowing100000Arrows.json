@@ -4,15 +4,21 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Sorcery",
     "OracleText": "Draw a card for each tapped creature target opponent controls.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": []
   },
   "Output": {
     "Name": "Borrowing 100,000 Arrows",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Draw a card for each tapped creature target opponent controls.",
@@ -25,10 +31,15 @@
               "Count": {
                 "QuantityType": "count",
                 "CountOf": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "Target",
                   "Characteristics": [
-                    { "CharacteristicType": "tapped", "Tapped": true }
+                    {
+                      "CharacteristicType": "tapped",
+                      "Tapped": true
+                    }
                   ]
                 }
               },
@@ -36,7 +47,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -45,18 +61,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

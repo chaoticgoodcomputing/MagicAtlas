@@ -6,14 +6,20 @@
     "OracleText": "{2}{W}: Prevent all combat damage that would be dealt by target creature this turn.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Safeguard",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "{2}{W}: Prevent all combat damage that would be dealt by target creature this turn.",
@@ -30,7 +36,9 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["W"]
+                  "Colors": [
+                    "W"
+                  ]
                 }
               ]
             }
@@ -43,7 +51,9 @@
               "Source": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "Duration": {
@@ -55,7 +65,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -70,22 +85,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

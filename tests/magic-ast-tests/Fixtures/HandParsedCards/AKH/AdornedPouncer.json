@@ -35,7 +35,12 @@
               "Timing": "Both"
             }
           ],
-          "KeywordSource": "Double strike"
+          "KeywordSource": "Double strike",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -103,7 +108,12 @@
           "KeywordSource": "Eternalize",
           "Reminder": {
             "Text": "({3}{W}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a 4/4 black Zombie Cat with no mana cost. Eternalize only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 190
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

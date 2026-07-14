@@ -60,7 +60,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 95
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -87,7 +92,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 96,
+            "Length": 117
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

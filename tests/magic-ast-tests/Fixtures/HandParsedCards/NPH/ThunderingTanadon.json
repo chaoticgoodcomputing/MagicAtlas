@@ -37,7 +37,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 7
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

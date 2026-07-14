@@ -6,14 +6,20 @@
     "OracleText": "Electro's Bolt deals 4 damage to target creature.\nMayhem {1}{R} (You may cast this card from your graveyard for {1}{R} if you discarded it this turn. Timing rules still apply.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Electro's Bolt",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Electro's Bolt deals 4 damage to target creature.\nMayhem {1}{R} (You may cast this card from your graveyard for {1}{R} if you discarded it this turn. Timing rules still apply.)",
@@ -33,11 +39,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 49
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -55,7 +68,9 @@
                   },
                   {
                     "Kind": "colored",
-                    "Colors": ["R"]
+                    "Colors": [
+                      "R"
+                    ]
                   }
                 ]
               },
@@ -67,7 +82,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this card from your graveyard for {1}{R} if you discarded it this turn. Timing rules still apply.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 50,
+            "Length": 126
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -82,18 +102,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

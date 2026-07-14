@@ -46,7 +46,12 @@
           "KeywordSource": "Fear",
           "Reminder": {
             "Text": "(This creature can't be blocked except by artifact creatures and/or black creatures.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 90
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

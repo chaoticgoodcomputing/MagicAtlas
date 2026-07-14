@@ -40,7 +40,12 @@
                 "Name": "X"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 23
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -49,19 +54,35 @@
         "Kind": "manaCost",
         "Raw": "{X}{B}{B}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

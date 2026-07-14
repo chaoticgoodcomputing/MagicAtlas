@@ -6,8 +6,12 @@
     "OracleText": "{R}, Sacrifice this creature: Destroy target artifact.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "60c3aa66-2436-40a3-a541-185f457bd55a",
     "Layout": "normal"
@@ -16,8 +20,12 @@
     "Name": "Torch Fiend",
     "TypeLine": {
       "Raw": "Creature — Devil",
-      "Types": ["Creature"],
-      "Subtypes": ["Devil"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Devil"
+      ]
     },
     "Oracle": {
       "RawText": "{R}, Sacrifice this creature: Destroy target artifact.",
@@ -28,13 +36,20 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["R"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -49,12 +64,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact"]
+                  "CardTypes": [
+                    "artifact"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -63,24 +85,44 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

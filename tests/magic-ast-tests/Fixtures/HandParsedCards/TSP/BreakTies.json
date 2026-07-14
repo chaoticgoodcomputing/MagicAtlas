@@ -15,7 +15,9 @@
     "Name": "Break Ties",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.\n• Exile target card from a graveyard.\nReinforce 1—{W} ({W}, Discard this card: Put a +1/+1 counter on target creature.)",
@@ -36,11 +38,14 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["artifact"]
+                        "CardTypes": [
+                          "artifact"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -52,11 +57,14 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["enchantment"]
+                        "CardTypes": [
+                          "enchantment"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -68,16 +76,24 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["card"],
+                        "CardTypes": [
+                          "card"
+                        ],
                         "Zone": "Graveyard"
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -88,14 +104,18 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["W"]
+                  "Colors": [
+                    "W"
+                  ]
                 }
               ]
             },
             {
               "CostType": "discard",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -109,7 +129,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "CounterType": "+1/+1",
@@ -122,7 +144,12 @@
           "IsManaAbility": false,
           "Reminder": {
             "Text": "({W}, Discard this card: Put a +1/+1 counter on target creature.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 81
+          },
+          "OracleLineIndex": 4
         }
       ]
     },
@@ -131,18 +158,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

@@ -37,7 +37,12 @@
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -55,10 +60,16 @@
                     "Keyword": "Shroud"
                   }
                 ],
-                "KeywordSource": "Shroud"
+                "KeywordSource": "Shroud",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 79
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -79,7 +90,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 91
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

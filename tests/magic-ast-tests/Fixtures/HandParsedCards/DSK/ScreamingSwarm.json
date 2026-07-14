@@ -6,15 +6,23 @@
     "OracleText": "Flying\nWhenever a creature you control with flying dies, surveil 2.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Screaming Swarm",
     "TypeLine": {
       "Raw": "Creature — Insect",
-      "Types": ["Creature"],
-      "Subtypes": ["Insect"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Insect"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWhenever a creature you control with flying dies, surveil 2.",
@@ -26,11 +34,27 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
-                "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}, {"CharacteristicType": "keyword", "Keyword": "Reach"}]
+                "CardTypes": [
+                  "creature"
+                ],
+                "Characteristics": [
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -38,7 +62,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             }
           },
@@ -50,7 +76,12 @@
                 "Value": 2
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 60
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -59,18 +90,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -69,7 +69,12 @@
           "KeywordSource": "Persist",
           "Reminder": {
             "Text": "(When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 152
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

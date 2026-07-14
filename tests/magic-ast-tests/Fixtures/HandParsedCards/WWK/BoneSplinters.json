@@ -4,14 +4,20 @@
     "ManaCost": "{B}",
     "TypeLine": "Sorcery",
     "OracleText": "As an additional cost to cast this spell, sacrifice a creature.\nDestroy target creature.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Bone Splinters",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "As an additional cost to cast this spell, sacrifice a creature.\nDestroy target creature.",
@@ -24,11 +30,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 24
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -37,12 +50,27 @@
         "Kind": "manaCost",
         "Raw": "{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
       {
         "Kind": "additionalCosts",
         "Costs": [
@@ -50,7 +78,9 @@
             "Cost": {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -58,7 +88,10 @@
               }
             },
             "IsOptional": false,
-            "SourceSpan": { "Start": 0, "Length": 63 }
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 63
+            }
           }
         ]
       }

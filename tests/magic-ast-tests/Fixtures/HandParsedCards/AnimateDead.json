@@ -38,7 +38,12 @@
                 "Zone": "Graveyard"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 36
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -84,7 +89,8 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -127,7 +133,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 346
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -146,7 +157,12 @@
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 384,
+            "Length": 30
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

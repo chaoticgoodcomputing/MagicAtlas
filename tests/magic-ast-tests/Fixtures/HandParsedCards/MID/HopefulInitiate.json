@@ -59,7 +59,12 @@
           ],
           "Reminder": {
             "Text": "(Whenever this creature attacks with another creature with greater power, put a +1/+1 counter on this creature.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 121
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -95,7 +100,12 @@
               "CantBeRegenerated": false
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 122,
+            "Length": 107
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

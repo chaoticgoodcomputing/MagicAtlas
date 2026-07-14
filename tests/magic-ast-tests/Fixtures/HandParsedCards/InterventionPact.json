@@ -4,9 +4,15 @@
     "ManaCost": "{0}",
     "TypeLine": "Instant",
     "OracleText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. You gain life equal to the damage prevented this way.\nAt the beginning of your next upkeep, pay {1}{W}{W}. If you don't, you lose the game.",
-    "Colors": ["W"],
-    "ColorIndicator": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIndicator": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Keywords": [],
     "Id": "bca127ef-349e-4380-875d-49c14fa03b18",
     "Layout": "normal"
@@ -15,7 +21,9 @@
     "Name": "Intervention Pact",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. You gain life equal to the damage prevented this way.\nAt the beginning of your next upkeep, pay {1}{W}{W}. If you don't, you lose the game.",
@@ -50,7 +58,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -85,17 +98,26 @@
                     },
                     {
                       "Kind": "colored",
-                      "Colors": ["W"]
+                      "Colors": [
+                        "W"
+                      ]
                     },
                     {
                       "Kind": "colored",
-                      "Colors": ["W"]
+                      "Colors": [
+                        "W"
+                      ]
                     }
                   ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 85
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -113,11 +135,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

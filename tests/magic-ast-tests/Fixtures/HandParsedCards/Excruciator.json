@@ -6,8 +6,12 @@
     "OracleText": "Damage that would be dealt by this creature can't be prevented.",
     "Power": "7",
     "Toughness": "7",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "a3c98460-e8b8-45d6-9bf0-7600b234964b",
     "Layout": "normal"
@@ -16,8 +20,12 @@
     "Name": "Excruciator",
     "TypeLine": {
       "Raw": "Creature — Avatar",
-      "Types": ["Creature"],
-      "Subtypes": ["Avatar"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Avatar"
+      ]
     },
     "Oracle": {
       "RawText": "Damage that would be dealt by this creature can't be prevented.",
@@ -31,7 +39,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 63
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -46,11 +59,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 8,
@@ -58,11 +75,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

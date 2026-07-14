@@ -28,9 +28,16 @@
           "Effects": [
             {
               "EffectType": "noMaxHandSize",
-              "Player": { "Kind": "You" }
+              "Player": {
+                "Kind": "You"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

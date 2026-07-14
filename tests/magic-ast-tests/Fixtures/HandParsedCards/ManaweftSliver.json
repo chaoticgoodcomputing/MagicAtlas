@@ -6,8 +6,12 @@
     "OracleText": "Sliver creatures you control have \"{T}: Add one mana of any color.\"",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "e51629ac-51d5-47cb-a7fc-315b34dd82ce",
     "Layout": "normal"
@@ -57,10 +61,16 @@
                     "AnyColor": true
                   }
                 ],
-                "IsManaAbility": true
+                "IsManaAbility": true,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

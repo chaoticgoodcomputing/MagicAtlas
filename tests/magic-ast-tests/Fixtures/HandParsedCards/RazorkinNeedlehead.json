@@ -40,7 +40,12 @@
           "Condition": {
             "ConditionType": "other",
             "Text": "During your turn"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 48
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -65,7 +70,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 49,
+            "Length": 72
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

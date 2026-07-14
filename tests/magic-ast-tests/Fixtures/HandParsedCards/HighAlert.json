@@ -39,7 +39,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 93
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -56,7 +61,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 94,
+            "Length": 69
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -96,7 +106,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 164,
+            "Length": 33
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

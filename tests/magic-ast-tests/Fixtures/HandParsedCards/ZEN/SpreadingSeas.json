@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -64,7 +69,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 42
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -78,7 +88,12 @@
                 "Island"
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 56,
+            "Length": 28
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -4,8 +4,12 @@
     "ManaCost": "{1}{B}",
     "TypeLine": "Instant",
     "OracleText": "Choose one —\n• Destroy target creature with no counters on it.\n• Remove up to three counters from target creature.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "b57c57a8-d72b-4c6c-a2db-a7ef61190f42",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Heartless Act",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Choose one —\n• Destroy target creature with no counters on it.\n• Remove up to three counters from target creature.",
@@ -35,7 +41,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"],
+                        "CardTypes": [
+                          "creature"
+                        ],
                         "Characteristics": [
                           {
                             "CharacteristicType": "counter",
@@ -49,7 +57,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -61,7 +70,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     },
                     "CounterType": "any",
@@ -70,11 +81,17 @@
                       "Maximum": 3
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -89,7 +106,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -97,11 +116,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

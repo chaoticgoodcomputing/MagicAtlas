@@ -43,7 +43,12 @@
           ],
           "Reminder": {
             "Text": "Look at the top card of your library. You may put it into your graveyard."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 109
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -58,7 +63,12 @@
               "Mana": "{C}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 110,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -83,7 +93,12 @@
               "AnyColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 124,
+            "Length": 36
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -69,7 +69,12 @@
           ],
           "Reminder": {
             "Text": "It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 121
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -99,7 +104,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 122,
+            "Length": 104
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

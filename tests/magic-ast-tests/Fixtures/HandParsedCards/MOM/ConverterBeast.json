@@ -51,7 +51,12 @@
           ],
           "Reminder": {
             "Text": "Create an Incubator token with five +1/+1 counters on it and \"{2}: Transform this token.\" It transforms into a 0/0 Phyrexian artifact creature."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 184
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -49,7 +49,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -88,7 +93,8 @@
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -110,13 +116,19 @@
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ],
               "AllowDuplicates": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 133
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -190,12 +202,18 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 141,
+            "Length": 142
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

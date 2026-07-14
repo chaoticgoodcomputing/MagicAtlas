@@ -103,7 +103,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 194
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -128,13 +133,19 @@
                     "EffectType": "dredge",
                     "Value": 2
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
           "Reminder": {
             "Text": "(You may return a land card from your graveyard to your hand and mill two cards instead of drawing a card.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 195,
+            "Length": 151
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

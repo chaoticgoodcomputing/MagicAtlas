@@ -6,15 +6,25 @@
     "OracleText": "Enchant creature\nAs long as enchanted creature is black, it gets +1/+1 and has deathtouch. (Any amount of damage it deals to a creature is enough to destroy that creature.)\nAs long as enchanted creature is green, it gets +1/+1 and all creatures able to block it do so.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B", "G"],
-    "ColorIdentity": ["B", "G"]
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
   },
   "Output": {
     "Name": "Gift of the Deity",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nAs long as enchanted creature is black, it gets +1/+1 and has deathtouch. (Any amount of damage it deals to a creature is enough to destroy that creature.)\nAs long as enchanted creature is green, it gets +1/+1 and all creatures able to block it do so.",
@@ -23,45 +33,99 @@
           "Kind": "static",
           "KeywordSource": "Enchant",
           "Effects": [
-            { "EffectType": "enchantRestriction", "LegalTargets": { "CardTypes": ["creature"] } }
-          ]
+            {
+              "EffectType": "enchantRestriction",
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
-          "Condition": { "ConditionType": "other", "Text": "enchanted creature is black" },
+          "Condition": {
+            "ConditionType": "other",
+            "Text": "enchanted creature is black"
+          },
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "EnchantedOrEquipped" },
-              "PowerModifier": { "QuantityType": "literal", "Value": 1 },
-              "ToughnessModifier": { "QuantityType": "literal", "Value": 1 }
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             },
             {
               "EffectType": "gainAbility",
-              "Target": { "Kind": "EnchantedOrEquipped" },
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
               "GainedAbility": {
                 "Kind": "static",
                 "KeywordSource": "Deathtouch",
-                "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Deathtouch" } ]
+                "Effects": [
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Deathtouch"
+                  }
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 155
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
-          "Condition": { "ConditionType": "other", "Text": "enchanted creature is green" },
+          "Condition": {
+            "ConditionType": "other",
+            "Text": "enchanted creature is green"
+          },
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "EnchantedOrEquipped" },
-              "PowerModifier": { "QuantityType": "literal", "Value": 1 },
-              "ToughnessModifier": { "QuantityType": "literal", "Value": 1 }
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             },
             {
               "EffectType": "allMustBlock",
-              "Target": { "Kind": "EnchantedOrEquipped" }
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 173,
+            "Length": 95
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -70,13 +134,34 @@
         "Kind": "manaCost",
         "Raw": "{4}{B/G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "hybrid", "Colors": ["B", "G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "B",
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5
       },
-      { "Kind": "colors", "Colors": ["B", "G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B", "G"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B",
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
+      }
     ]
   }
 }

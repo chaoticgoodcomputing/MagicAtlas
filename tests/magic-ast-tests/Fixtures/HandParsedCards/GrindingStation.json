@@ -13,7 +13,9 @@
     "Name": "Grinding Station",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{T}, Sacrifice an artifact: Target player mills three cards.\nWhenever an artifact enters, you may untap this artifact.",
@@ -27,7 +29,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["artifact"]
+                "CardTypes": [
+                  "artifact"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -45,12 +49,19 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 60
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -58,7 +69,9 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["artifact"]
+              "CardTypes": [
+                "artifact"
+              ]
             }
           },
           "Effects": [
@@ -71,7 +84,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 61,
+            "Length": 57
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

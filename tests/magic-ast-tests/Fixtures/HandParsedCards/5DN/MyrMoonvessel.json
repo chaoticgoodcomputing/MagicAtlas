@@ -42,7 +42,12 @@
               "Mana": "{C}",
               "AnyColor": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 33
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

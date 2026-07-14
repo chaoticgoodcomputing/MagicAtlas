@@ -50,7 +50,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -99,7 +104,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -109,7 +115,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 99
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -151,10 +162,16 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 107,
+            "Length": 41
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

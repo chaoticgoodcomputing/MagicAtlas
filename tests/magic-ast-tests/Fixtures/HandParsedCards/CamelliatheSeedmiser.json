@@ -46,7 +46,12 @@
               },
               "MinimumBlockers": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -79,10 +84,16 @@
                     },
                     "MinimumBlockers": 2
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 40
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -122,7 +133,12 @@
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 48,
+            "Length": 85
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -163,7 +179,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 134,
+            "Length": 140
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

@@ -4,9 +4,15 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\n{U}: Tap enchanted creature.\n{U}: Untap enchanted creature.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "c47ee6f6-50c1-4f56-b9ce-4c309bfb92ca",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Freed from the Real",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\n{U}: Tap enchanted creature.\n{U}: Untap enchanted creature.",
@@ -27,10 +37,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -38,7 +55,12 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             }
           ],
@@ -50,7 +72,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 28
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -58,7 +85,12 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             }
           ],
@@ -70,7 +102,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 46,
+            "Length": 30
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -79,18 +116,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

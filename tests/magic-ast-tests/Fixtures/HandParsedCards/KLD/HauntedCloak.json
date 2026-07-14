@@ -11,8 +11,12 @@
     "Name": "Haunted Cloak",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature has vigilance, trample, and haste.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
@@ -33,7 +37,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Vigilance"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -49,7 +54,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Trample"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -65,10 +71,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -90,14 +102,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 53,
+            "Length": 80
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

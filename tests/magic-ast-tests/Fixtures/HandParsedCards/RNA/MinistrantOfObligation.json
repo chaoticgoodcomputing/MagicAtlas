@@ -87,7 +87,8 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -96,7 +97,12 @@
           ],
           "Reminder": {
             "Text": "(When this creature dies, create two 1/1 white and black Spirit creature tokens with flying.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 105
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

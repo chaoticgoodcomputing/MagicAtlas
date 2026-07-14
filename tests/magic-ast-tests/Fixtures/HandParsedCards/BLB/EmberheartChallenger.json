@@ -6,15 +6,24 @@
     "OracleText": "Mobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Emberheart Challenger",
     "TypeLine": {
       "Raw": "Creature — Human Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Mobilize 1 (Whenever this creature attacks, create a tapped and attacking 1/1 red Warrior creature token. Sacrifice it at the beginning of the next end step.)",
@@ -25,9 +34,17 @@
           "Effects": [
             {
               "EffectType": "mobilize",
-              "Amount": { "QuantityType": "literal", "Value": 1 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 158
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -36,23 +53,45 @@
         "Kind": "manaCost",
         "Raw": "{R}{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

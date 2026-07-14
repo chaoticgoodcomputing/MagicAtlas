@@ -6,15 +6,23 @@
     "OracleText": "When this creature dies, target player loses 2 life.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Infectious Host",
     "TypeLine": {
       "Raw": "Creature — Zombie",
-      "Types": ["Creature"],
-      "Subtypes": ["Zombie"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature dies, target player loses 2 life.",
@@ -25,7 +33,9 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -39,11 +49,18 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -58,18 +75,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

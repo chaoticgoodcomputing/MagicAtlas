@@ -6,14 +6,20 @@
     "OracleText": "Destroy target artifact or land.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Demolish",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target artifact or land.",
@@ -26,11 +32,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "land"]
+                  "CardTypes": [
+                    "artifact",
+                    "land"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 32
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,18 +53,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

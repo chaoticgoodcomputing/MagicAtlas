@@ -46,7 +46,12 @@
               "W"
             ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -65,7 +70,12 @@
                 "Type": "double"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 62
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -129,7 +139,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -157,7 +168,8 @@
                   {
                     "EffectType": "lifelink"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -168,7 +180,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 81
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -77,7 +77,12 @@
           "KeywordSource": "Battle cry",
           "Reminder": {
             "Text": "(Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 104
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Horsemanship"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 84
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,7 +52,12 @@
             {
               "EffectType": "cantBlock"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 85,
+            "Length": 26
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

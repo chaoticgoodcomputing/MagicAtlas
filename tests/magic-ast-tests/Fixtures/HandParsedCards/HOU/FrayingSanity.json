@@ -6,15 +6,24 @@
     "OracleText": "Enchant player\nAt the beginning of each end step, enchanted player mills X cards, where X is the number of cards put into their graveyard from anywhere this turn.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Fraying Sanity",
     "TypeLine": {
       "Raw": "Enchantment — Aura Curse",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura", "Curse"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura",
+        "Curse"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant player\nAt the beginning of each end step, enchanted player mills X cards, where X is the number of cards put into their graveyard from anywhere this turn.",
@@ -25,9 +34,16 @@
           "Effects": [
             {
               "EffectType": "enchantRestriction",
-              "LegalTargets": { "EntityType": "player" }
+              "LegalTargets": {
+                "EntityType": "player"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -44,7 +60,9 @@
               "Count": {
                 "QuantityType": "count",
                 "CountOf": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Owner": "EnchantedPlayer",
                   "History": {
                     "PredicateType": "putIntoGraveyardThisTurn",
@@ -56,7 +74,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 147
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -65,13 +88,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

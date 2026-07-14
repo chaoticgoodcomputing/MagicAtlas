@@ -6,9 +6,15 @@
     "OracleText": "Vigilance\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Vigilance"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Vigilance"
+    ],
     "Id": "67ab8f9a-b17c-452f-b4ef-a3f91909e3de",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Undergrowth Leopard",
     "TypeLine": {
       "Raw": "Creature — Cat",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat"
+      ]
     },
     "Oracle": {
       "RawText": "Vigilance\n{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
@@ -30,7 +40,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -38,13 +53,18 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -59,12 +79,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "enchantment"]
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 69
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -73,24 +101,44 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

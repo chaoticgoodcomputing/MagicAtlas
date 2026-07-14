@@ -52,7 +52,12 @@
           ],
           "Reminder": {
             "Text": "two energy counters"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 65
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -78,7 +83,12 @@
               },
               "WhoseUntapStep": "its controller's"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 66,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -99,7 +109,12 @@
                 "Length": 155
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 155
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -132,7 +147,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 305,
+            "Length": 9
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

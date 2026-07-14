@@ -6,15 +6,24 @@
     "OracleText": "You may activate equip abilities any time you could cast an instant.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Leonin Shikari",
     "TypeLine": {
       "Raw": "Creature — Cat Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "You may activate equip abilities any time you could cast an instant.",
@@ -32,7 +41,12 @@
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 68
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,17 +55,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

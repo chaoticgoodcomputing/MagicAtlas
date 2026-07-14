@@ -44,7 +44,12 @@
           "KeywordSource": "Protection",
           "Reminder": {
             "Text": "(This creature can't be blocked, targeted, dealt damage, or enchanted by anything black.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 111
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -90,7 +95,12 @@
           "KeywordSource": "Exalted",
           "Reminder": {
             "Text": "(Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 112,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

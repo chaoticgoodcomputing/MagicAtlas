@@ -6,14 +6,20 @@
     "OracleText": "Return X target nonland permanents to their owners' hands.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Distorting Wake",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Return X target nonland permanents to their owners' hands.",
@@ -30,12 +36,21 @@
                   "Name": "X"
                 },
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "ExcludedCardTypes": ["land"]
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 58
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -44,20 +59,41 @@
         "Kind": "manaCost",
         "Raw": "{X}{U}{U}{U}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

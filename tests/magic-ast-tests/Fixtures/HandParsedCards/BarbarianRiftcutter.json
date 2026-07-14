@@ -6,8 +6,12 @@
     "OracleText": "{R}, Sacrifice this creature: Destroy target land.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "152f4cfa-4f03-404d-a6f7-24c27505906f",
     "Layout": "normal"
@@ -16,8 +20,13 @@
     "Name": "Barbarian Riftcutter",
     "TypeLine": {
       "Raw": "Creature — Human Barbarian",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Barbarian"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Barbarian"
+      ]
     },
     "Oracle": {
       "RawText": "{R}, Sacrifice this creature: Destroy target land.",
@@ -28,13 +37,20 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["R"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -49,12 +65,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 50
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -63,24 +86,44 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

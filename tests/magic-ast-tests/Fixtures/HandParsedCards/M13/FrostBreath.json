@@ -50,7 +50,12 @@
               },
               "WhoseUntapStep": "their controller's next"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 102
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

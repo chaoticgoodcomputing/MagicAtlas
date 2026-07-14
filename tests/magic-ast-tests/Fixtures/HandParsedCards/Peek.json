@@ -41,7 +41,12 @@
               },
               "Zone": "Hand"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -56,7 +61,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 30,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

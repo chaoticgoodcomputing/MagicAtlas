@@ -40,7 +40,12 @@
               "EffectType": "toxic",
               "Value": 1
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 100
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

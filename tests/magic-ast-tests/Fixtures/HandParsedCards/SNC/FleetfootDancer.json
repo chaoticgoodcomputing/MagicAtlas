@@ -40,7 +40,12 @@
               "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Trample"
+          "KeywordSource": "Trample",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,7 +54,12 @@
               "EffectType": "lifelink"
             }
           ],
-          "KeywordSource": "Lifelink"
+          "KeywordSource": "Lifelink",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -59,7 +69,12 @@
               "Keyword": "Haste"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Haste",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

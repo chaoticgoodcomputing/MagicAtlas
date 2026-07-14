@@ -54,7 +54,12 @@
               "EffectType": "addMana",
               "Mana": "{R}{R}"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 96
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -98,7 +103,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 128
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -118,7 +128,12 @@
               "AsThoughFlash": true,
               "ManaSpend": "anyType"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 226,
+            "Length": 154
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

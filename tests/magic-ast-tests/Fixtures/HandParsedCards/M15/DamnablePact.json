@@ -6,14 +6,20 @@
     "OracleText": "Target player draws X cards and loses X life.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Damnable Pact",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Target player draws X cards and loses X life.",
@@ -30,7 +36,9 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             },
@@ -43,11 +51,18 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 45
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -56,19 +71,35 @@
         "Kind": "manaCost",
         "Raw": "{X}{B}{B}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

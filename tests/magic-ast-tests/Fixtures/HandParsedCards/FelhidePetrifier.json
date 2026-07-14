@@ -36,7 +36,12 @@
               "Keyword": "Deathtouch"
             }
           ],
-          "KeywordSource": "Deathtouch"
+          "KeywordSource": "Deathtouch",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -64,10 +69,16 @@
                     "Keyword": "Deathtouch"
                   }
                 ],
-                "KeywordSource": "Deathtouch"
+                "KeywordSource": "Deathtouch",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 11,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

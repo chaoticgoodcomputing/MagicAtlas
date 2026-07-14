@@ -4,9 +4,15 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\nAs this Aura enters, choose a color.\nPrevent all damage that would be dealt to enchanted creature by sources of the chosen color.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "d9c1e9de-3c9b-4a1e-9f6f-8dfd1e0f0f9b",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Prismatic Ward",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nAs this Aura enters, choose a color.\nPrevent all damage that would be dealt to enchanted creature by sources of the chosen color.",
@@ -26,11 +36,18 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -39,7 +56,12 @@
               "EffectType": "chooseColor"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 36
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -57,7 +79,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 54,
+            "Length": 92
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -72,7 +99,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -80,11 +109,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

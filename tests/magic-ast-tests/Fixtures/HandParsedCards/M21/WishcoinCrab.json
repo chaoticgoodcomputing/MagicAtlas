@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Wishcoin Crab",
     "ManaCost": "{3}{U}",
-    "TypeLine": "Creature \u2014 Crab",
+    "TypeLine": "Creature — Crab",
     "OracleText": "",
     "Power": "2",
     "Toughness": "5",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Wishcoin Crab",
     "TypeLine": {
-      "Raw": "Creature \u2014 Crab",
+      "Raw": "Creature — Crab",
       "Types": [
         "Creature"
       ],

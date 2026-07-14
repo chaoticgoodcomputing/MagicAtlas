@@ -42,7 +42,12 @@
             {
               "EffectType": "lifelink"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 8
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -67,10 +72,16 @@
                   {
                     "EffectType": "lifelink"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 9,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -143,7 +154,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 63,
+            "Length": 167
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

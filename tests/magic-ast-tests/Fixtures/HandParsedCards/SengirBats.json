@@ -6,15 +6,23 @@
     "OracleText": "Flying\nWhenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature.",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Sengir Bats",
     "TypeLine": {
       "Raw": "Creature — Bat",
-      "Types": ["Creature"],
-      "Subtypes": ["Bat"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Bat"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWhenever a creature dealt damage by this creature this turn dies, put a +1/+1 counter on this creature.",
@@ -26,7 +34,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -39,7 +49,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -47,7 +62,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "History": {
                 "PredicateType": "dealtDamageBy",
                 "Source": {
@@ -69,7 +86,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 103
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -84,22 +106,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -38,7 +38,12 @@
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 28
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -102,7 +107,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 29,
+            "Length": 219
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

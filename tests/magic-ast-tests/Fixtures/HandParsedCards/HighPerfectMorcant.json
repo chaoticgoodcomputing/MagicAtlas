@@ -62,7 +62,12 @@
           ],
           "Reminder": {
             "Text": "They each put a -1/-1 counter on a creature they control."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 149
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -92,7 +97,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 150,
+            "Length": 187
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

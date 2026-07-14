@@ -13,8 +13,13 @@
     "Name": "Frogmite",
     "TypeLine": {
       "Raw": "Artifact Creature — Frog",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Frog"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Frog"
+      ]
     },
     "Oracle": {
       "RawText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)",
@@ -28,13 +33,23 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["artifact"],
+                "CardTypes": [
+                  "artifact"
+                ],
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 89
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,16 +58,33 @@
         "Kind": "manaCost",
         "Raw": "{4}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

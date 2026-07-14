@@ -65,7 +65,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 74
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -108,7 +113,12 @@
           ],
           "Instructions": [
             "you may pay {2}"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 75,
+            "Length": 81
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

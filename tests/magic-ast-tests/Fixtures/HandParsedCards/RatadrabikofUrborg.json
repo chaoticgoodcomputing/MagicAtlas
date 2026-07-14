@@ -41,7 +41,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 19
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -77,7 +82,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 19
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -105,10 +115,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Vigilance"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 20,
+            "Length": 41
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -164,7 +180,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 62,
+            "Length": 197
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

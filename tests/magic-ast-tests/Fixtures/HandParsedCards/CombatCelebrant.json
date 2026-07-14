@@ -40,7 +40,12 @@
             {
               "EffectType": "exert"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 252
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -69,7 +74,12 @@
             {
               "EffectType": "additionalCombatPhase"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 252
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

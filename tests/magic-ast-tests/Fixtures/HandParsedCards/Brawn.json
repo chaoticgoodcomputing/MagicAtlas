@@ -6,9 +6,15 @@
     "OracleText": "Trample\nAs long as this card is in your graveyard and you control a Forest, creatures you control have trample.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Trample"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Trample"
+    ],
     "Id": "8c05568e-fa50-46e9-aec4-1ba5e814029e",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Brawn",
     "TypeLine": {
       "Raw": "Creature — Incarnation",
-      "Types": ["Creature"],
-      "Subtypes": ["Incarnation"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Incarnation"
+      ]
     },
     "Oracle": {
       "RawText": "Trample\nAs long as this card is in your graveyard and you control a Forest, creatures you control have trample.",
@@ -30,7 +40,12 @@
               "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Trample"
+          "KeywordSource": "Trample",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 7
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,7 +55,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -52,7 +69,8 @@
                     "Keyword": "Trample"
                   }
                 ],
-                "KeywordSource": "Trample"
+                "KeywordSource": "Trample",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -62,7 +80,9 @@
                     {
                       "ConditionType": "count",
                       "Filter": {
-                        "CardTypes": ["card"],
+                        "CardTypes": [
+                          "card"
+                        ],
                         "IsSelf": true,
                         "Zone": "Graveyard"
                       },
@@ -74,7 +94,9 @@
                     {
                       "ConditionType": "count",
                       "Filter": {
-                        "Subtypes": ["Forest"],
+                        "Subtypes": [
+                          "Forest"
+                        ],
                         "Controller": "You"
                       },
                       "Count": {
@@ -86,7 +108,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 8,
+            "Length": 103
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -101,7 +128,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -109,11 +138,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

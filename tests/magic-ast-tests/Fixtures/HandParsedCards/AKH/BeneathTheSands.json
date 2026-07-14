@@ -44,7 +44,12 @@
               "Destination": "BattlefieldTapped",
               "Revealed": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 92
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -84,7 +89,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 93,
+            "Length": 50
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

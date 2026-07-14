@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Bill Potts",
     "ManaCost": "{3}{R}",
-    "TypeLine": "Legendary Creature \u2014 Human",
+    "TypeLine": "Legendary Creature — Human",
     "OracleText": "Whenever you cast an instant or sorcery spell that targets only Bill Potts or activate an ability that targets only Bill Potts, copy that spell or ability. You may choose new targets for the copy. This ability triggers only once each turn.\nDoctor's companion (You can have two commanders if the other is the Doctor.)",
     "Power": "2",
     "Toughness": "4",
@@ -19,7 +19,7 @@
   "Output": {
     "Name": "Bill Potts",
     "TypeLine": {
-      "Raw": "Legendary Creature \u2014 Human",
+      "Raw": "Legendary Creature — Human",
       "Supertypes": [
         "Legendary"
       ],
@@ -59,7 +59,12 @@
           ],
           "Restrictions": [
             "OnlyOnceEachTurn"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 239
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -72,7 +77,12 @@
           "KeywordSource": "Doctor's companion",
           "Reminder": {
             "Text": "(You can have two commanders if the other is the Doctor.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 240,
+            "Length": 76
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

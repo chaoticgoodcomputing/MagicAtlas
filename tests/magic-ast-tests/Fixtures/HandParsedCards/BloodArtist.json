@@ -6,15 +6,23 @@
     "OracleText": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.",
     "Power": "0",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Blood Artist",
     "TypeLine": {
       "Raw": "Creature — Vampire",
-      "Types": ["Creature"],
-      "Subtypes": ["Vampire"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.",
@@ -25,7 +33,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -41,7 +51,9 @@
                   "Player": {
                     "Kind": "Target",
                     "Filter": {
-                      "CardTypes": ["player"]
+                      "CardTypes": [
+                        "player"
+                      ]
                     }
                   }
                 },
@@ -57,7 +69,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 96
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -72,18 +89,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

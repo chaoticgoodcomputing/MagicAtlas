@@ -57,13 +57,19 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Haste"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 55
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

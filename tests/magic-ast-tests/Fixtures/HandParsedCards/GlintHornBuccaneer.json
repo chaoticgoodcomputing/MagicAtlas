@@ -36,7 +36,12 @@
               "Keyword": "Haste"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Haste",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -61,7 +66,12 @@
                 "Kind": "EachOpponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 75
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -110,7 +120,12 @@
             "ConditionType": "sourceCombatState",
             "State": "Attacking"
           },
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 82,
+            "Length": 81
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

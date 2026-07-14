@@ -6,15 +6,24 @@
     "OracleText": "Flash\nThis spell can't be countered.\nWhenever you cast a spell, choose up to one —\n• Return target spell you don't control to its owner's hand.\n• Return target nonland permanent to its owner's hand.",
     "Power": "7",
     "Toughness": "8",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Hullbreaker Horror",
     "TypeLine": {
       "Raw": "Creature — Kraken Horror",
-      "Types": ["Creature"],
-      "Subtypes": ["Kraken", "Horror"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kraken",
+        "Horror"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nThis spell can't be countered.\nWhenever you cast a spell, choose up to one —\n• Return target spell you don't control to its owner's hand.\n• Return target nonland permanent to its owner's hand.",
@@ -28,7 +37,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -36,7 +50,12 @@
             {
               "EffectType": "cantBeCountered"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 30
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -64,13 +83,16 @@
                         "Target": {
                           "Kind": "Target",
                           "Filter": {
-                            "CardTypes": ["spell"],
+                            "CardTypes": [
+                              "spell"
+                            ],
                             "Controller": "Opponent",
                             "Zone": "Stack"
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -82,18 +104,28 @@
                         "Target": {
                           "Kind": "Target",
                           "Filter": {
-                            "CardTypes": ["permanent"],
-                            "ExcludedCardTypes": ["land"]
+                            "CardTypes": [
+                              "permanent"
+                            ],
+                            "ExcludedCardTypes": [
+                              "land"
+                            ]
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ],
               "AllowDuplicates": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 45
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -102,19 +134,36 @@
         "Kind": "manaCost",
         "Raw": "{5}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 7
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

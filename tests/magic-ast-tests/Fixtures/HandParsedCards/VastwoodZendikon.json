@@ -4,9 +4,15 @@
     "ManaCost": "{4}{G}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant land\nEnchanted land is a 6/4 green Elemental creature. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "d00cb59d-de35-45b2-a7f8-f8c1e821f6ee",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Vastwood Zendikon",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant land\nEnchanted land is a 6/4 green Elemental creature. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
@@ -27,10 +37,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["land"]
+                "CardTypes": [
+                  "land"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -48,12 +65,24 @@
                 "QuantityType": "literal",
                 "Value": 4
               },
-              "Colors": ["G"],
-              "CardTypes": ["land", "creature"],
-              "AddedSubtypes": ["Elemental"],
+              "Colors": [
+                "G"
+              ],
+              "CardTypes": [
+                "land",
+                "creature"
+              ],
+              "AddedSubtypes": [
+                "Elemental"
+              ],
               "GainedAbilities": []
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 68
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -61,7 +90,9 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "IsEnchanted": true
             }
           },
@@ -72,7 +103,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 82,
+            "Length": 63
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -87,7 +123,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 5,
@@ -95,11 +133,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

@@ -42,7 +42,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 7
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -64,7 +69,12 @@
                 "Value": 4
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 8,
+            "Length": 30
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -105,7 +115,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 187
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

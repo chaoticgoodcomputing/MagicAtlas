@@ -59,7 +59,12 @@
           ],
           "Reminder": {
             "Text": "Put a +1/+1 counter on an Army you control. It's also a Zombie. If you don't control an Army, create a 0/0 black Zombie Army creature token first."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 192
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -84,7 +89,8 @@
                     "Keyword": "Hexproof"
                   }
                 ],
-                "KeywordSource": "Hexproof"
+                "KeywordSource": "Hexproof",
+                "OracleLineIndex": 0
               }
             },
             {
@@ -112,10 +118,16 @@
                     "MinimumBlockers": 2
                   }
                 ],
-                "KeywordSource": "Menace"
+                "KeywordSource": "Menace",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 193,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

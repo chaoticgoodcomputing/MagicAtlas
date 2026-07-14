@@ -13,7 +13,9 @@
     "Name": "Candelabra of Tawnos",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{X}, {T}: Untap X target lands.",
@@ -24,22 +26,38 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "variable" }
+                {
+                  "Kind": "variable"
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
               "EffectType": "untap",
               "Target": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["land"] }
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ]
+                }
               },
-              "Count": { "QuantityType": "variable", "Name": "X" }
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 31
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -48,12 +66,21 @@
         "Kind": "manaCost",
         "Raw": "{1}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

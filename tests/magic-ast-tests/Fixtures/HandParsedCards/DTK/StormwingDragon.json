@@ -49,7 +49,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -59,7 +64,12 @@
               "Timing": "First"
             }
           ],
-          "KeywordSource": "First strike"
+          "KeywordSource": "First strike",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -92,7 +102,12 @@
           "KeywordSource": "Megamorph",
           "Reminder": {
             "Text": "(You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its megamorph cost and put a +1/+1 counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 21,
+            "Length": 160
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -127,7 +142,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 182,
+            "Length": 100
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

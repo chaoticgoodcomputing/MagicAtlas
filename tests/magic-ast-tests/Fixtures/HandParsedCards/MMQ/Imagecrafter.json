@@ -6,15 +6,24 @@
     "OracleText": "{T}: Choose a creature type other than Wall. Target creature becomes that type until end of turn.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Imagecrafter",
     "TypeLine": {
       "Raw": "Creature — Human Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Choose a creature type other than Wall. Target creature becomes that type until end of turn.",
@@ -22,7 +31,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -34,7 +45,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "ChosenSubtypeReference": "CreatureType",
@@ -47,7 +60,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -56,22 +74,39 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

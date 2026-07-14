@@ -49,7 +49,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -59,7 +64,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -103,7 +113,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -140,7 +155,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this card from your graveyard for its escape cost.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 66,
+            "Length": 128
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -160,7 +180,12 @@
           ],
           "Condition": {
             "ConditionType": "escaped"
-          }
+          },
+          "SourceSpan": {
+            "Start": 195,
+            "Length": 49
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

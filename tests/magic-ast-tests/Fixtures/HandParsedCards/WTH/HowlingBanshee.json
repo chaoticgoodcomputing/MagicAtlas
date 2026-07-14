@@ -49,7 +49,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -74,7 +79,12 @@
                 "Kind": "EachPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

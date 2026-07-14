@@ -6,16 +6,27 @@
     "OracleText": "If you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.\nWhenever you roll one or more dice, put a +1/+1 counter on Wyll.\nChoose a Background (You can have a Background as a second commander.)",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Wyll, Blade of Frontiers",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Warlock",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Warlock"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warlock"
+      ]
     },
     "Oracle": {
       "RawText": "If you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.\nWhenever you roll one or more dice, put a +1/+1 counter on Wyll.\nChoose a Background (You can have a Background as a second commander.)",
@@ -28,12 +39,21 @@
               "Event": {
                 "EventType": "diceRoll",
                 "MinimumQuantity": 1,
-                "Controller": { "Kind": "You" }
+                "Controller": {
+                  "Kind": "You"
+                }
               },
               "OriginalEventOccurs": false,
-              "Modifier": { "Type": "advantage" }
+              "Modifier": {
+                "Type": "advantage"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 100
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -44,22 +64,39 @@
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "+1/+1",
-              "Count": { "QuantityType": "literal", "Value": 1 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 101,
+            "Length": 64
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
           "KeywordSource": "Choose a Background",
-          "Reminder": { "Text": "(You can have a Background as a second commander.)" },
+          "Reminder": {
+            "Text": "(You can have a Background as a second commander.)"
+          },
           "Effects": [
             {
               "EffectType": "partner",
               "PartnerType": "ChooseABackground"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 166,
+            "Length": 70
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -68,17 +105,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
-        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
       }
     ]
   }

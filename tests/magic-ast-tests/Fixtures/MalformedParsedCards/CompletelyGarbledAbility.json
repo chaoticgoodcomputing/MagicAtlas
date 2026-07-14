@@ -47,7 +47,8 @@
               "LastAttemptedRule": "StaticAbilityParser.Parse",
               "FailurePosition": 0
             }
-          ]
+          ],
+          "OracleLineIndex": 0
         }
       ]
     },

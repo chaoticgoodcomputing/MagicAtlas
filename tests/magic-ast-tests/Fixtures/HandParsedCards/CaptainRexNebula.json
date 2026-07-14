@@ -83,7 +83,8 @@
                         "Value": 2
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 },
                 {
                   "Kind": "triggered",
@@ -138,7 +139,8 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ],
               "Duration": {
@@ -149,7 +151,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 414
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

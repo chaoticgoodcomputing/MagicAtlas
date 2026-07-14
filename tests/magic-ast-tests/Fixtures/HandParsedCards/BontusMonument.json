@@ -41,7 +41,12 @@
               "B"
             ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 53
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -77,7 +82,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 54,
+            "Length": 83
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

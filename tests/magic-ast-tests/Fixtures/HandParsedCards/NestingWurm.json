@@ -35,7 +35,12 @@
               "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Trample"
+          "KeywordSource": "Trample",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 7
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -66,7 +71,12 @@
                 "Revealed": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 8,
+            "Length": 148
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

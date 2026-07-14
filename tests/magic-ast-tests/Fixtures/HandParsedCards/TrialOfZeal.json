@@ -49,7 +49,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -70,7 +75,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 63,
+            "Length": 81
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

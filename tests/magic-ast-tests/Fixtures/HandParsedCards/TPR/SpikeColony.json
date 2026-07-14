@@ -42,7 +42,12 @@
               "CounterType": "+1/+1"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -86,7 +91,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 53,
+            "Length": 87
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

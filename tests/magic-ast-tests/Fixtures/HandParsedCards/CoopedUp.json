@@ -4,9 +4,15 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\nEnchanted creature can't attack or block.\n{2}{W}: Exile enchanted creature.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "8acb8758-09c5-4e19-ada1-904e36ece1fc",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Cooped Up",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEnchanted creature can't attack or block.\n{2}{W}: Exile enchanted creature.",
@@ -27,10 +37,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,7 +64,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 41
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -55,8 +77,16 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["W"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
               ]
             }
           ],
@@ -68,7 +98,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 59,
+            "Length": 33
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -77,18 +112,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

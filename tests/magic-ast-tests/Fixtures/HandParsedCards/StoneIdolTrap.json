@@ -4,8 +4,12 @@
     "ManaCost": "{5}{R}",
     "TypeLine": "Instant — Trap",
     "OracleText": "This spell costs {1} less to cast for each attacking creature.\nCreate a 6/12 colorless Construct artifact creature token with trample. Exile it at the beginning of your next end step.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "44dee4b3-f3c1-4ef5-8dfa-fa10c860be1e",
     "Layout": "normal"
@@ -14,8 +18,12 @@
     "Name": "Stone Idol Trap",
     "TypeLine": {
       "Raw": "Instant — Trap",
-      "Types": ["Instant"],
-      "Subtypes": ["Trap"]
+      "Types": [
+        "Instant"
+      ],
+      "Subtypes": [
+        "Trap"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast for each attacking creature.\nCreate a 6/12 colorless Construct artifact creature token with trample. Exile it at the beginning of your next end step.",
@@ -25,40 +33,69 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  { "CharacteristicType": "combatState", "State": "Attacking" }
+                  {
+                    "CharacteristicType": "combatState",
+                    "State": "Attacking"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
           "Effects": [
             {
               "EffectType": "createToken",
-              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "Token": {
                 "Power": "6",
                 "Toughness": "12",
-                "Colors": ["C"],
-                "Types": ["artifact", "creature"],
-                "Subtypes": ["Construct"],
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Construct"
+                ],
                 "Abilities": [
                   {
                     "Kind": "static",
                     "KeywordSource": "Trample",
                     "Effects": [
-                      { "EffectType": "keywordAbility", "Keyword": "Trample" }
-                    ]
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Trample"
+                      }
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
               },
-              "Player": { "Kind": "You" }
+              "Player": {
+                "Kind": "You"
+              }
             },
             {
               "EffectType": "createDelayedTrigger",
@@ -73,11 +110,21 @@
                   }
                 },
                 "Effects": [
-                  { "EffectType": "exile", "Target": { "Kind": "It" } }
+                  {
+                    "EffectType": "exile",
+                    "Target": {
+                      "Kind": "It"
+                    }
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 63,
+            "Length": 120
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -86,13 +133,31 @@
         "Kind": "manaCost",
         "Raw": "{5}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 6
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
     ]
   }
 }

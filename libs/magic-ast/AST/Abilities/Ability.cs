@@ -47,20 +47,18 @@ public abstract record Ability
   /// at parse time (MAST oracle-text provenance — upstream-atlas-data-plan §4).
   /// <c>null</c> when a parser cannot attribute a span; never fabricated.
   /// <para>
-  /// Deliberately NOT serialized: it is held in-memory for downstream consumers
-  /// (port projection / Explorer span highlighting) so that adding provenance does
-  /// not perturb the gold-fixture JSON contract that the parser round-trip tests
-  /// compare against. Enabling serialization is a separate, fixture-regenerating
-  /// follow-up.
+  /// Serialized so the provenance flows downstream (port projection → Explorer
+  /// span highlighting). Emitted only when non-null (WhenWritingNull), so abilities
+  /// without an attributable span add no key. The <see cref="UnparsedAbility"/> span
+  /// rides on this single base property — there is no separate serialized copy.
   /// </para>
   /// </summary>
-  [JsonIgnore]
   public TextSpan? SourceSpan { get; init; }
 
   /// <summary>
   /// The 0-based oracle-text line (paragraph) index this ability's originating
-  /// clause starts on. Defaults to 0. Not serialized — see <see cref="SourceSpan"/>.
+  /// clause starts on. Defaults to 0. Serialized alongside <see cref="SourceSpan"/>
+  /// so downstream consumers can attribute each ability to its oracle line.
   /// </summary>
-  [JsonIgnore]
   public int OracleLineIndex { get; init; }
 }

@@ -46,7 +46,12 @@
                 "IsOptional": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 66
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -67,7 +72,12 @@
             "ConditionType": "keywordCostPaid",
             "Keyword": "Kicker"
           },
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 67,
+            "Length": 69
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -75,7 +85,12 @@
             {
               "EffectType": "cantBeBlocked"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 137,
+            "Length": 31
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

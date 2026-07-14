@@ -54,7 +54,12 @@
           ],
           "Reminder": {
             "Text": "Put the top three cards of your library into your graveyard."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 107
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -104,7 +109,12 @@
               "Tapped": true
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

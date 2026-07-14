@@ -31,7 +31,12 @@
               "EffectType": "chooseColor"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 42
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,7 +62,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 43,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

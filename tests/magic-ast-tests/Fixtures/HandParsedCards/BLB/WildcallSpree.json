@@ -35,14 +35,22 @@
           ],
           "Reminder": {
             "Text": "(Choose one or more additional costs.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spreeMode",
           "AdditionalCost": {
             "CostType": "mana",
             "Symbols": [
-              { "Kind": "generic", "GenericAmount": 1 }
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              }
             ]
           },
           "Effects": [
@@ -55,22 +63,36 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["G"],
-                "Types": ["creature"],
-                "Subtypes": ["Squirrel"]
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Squirrel"
+                ]
               },
               "Player": {
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "spreeMode",
           "AdditionalCost": {
             "CostType": "mana",
             "Symbols": [
-              { "Kind": "generic", "GenericAmount": 2 }
+              {
+                "Kind": "generic",
+                "GenericAmount": 2
+              }
             ]
           },
           "Effects": [
@@ -83,15 +105,26 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["G"],
-                "Types": ["creature"],
-                "Subtypes": ["Squirrel"]
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Squirrel"
+                ]
               },
               "Player": {
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 52
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

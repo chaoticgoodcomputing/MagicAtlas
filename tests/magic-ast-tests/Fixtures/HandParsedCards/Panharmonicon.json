@@ -43,7 +43,12 @@
                 "Type": "additionalTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 143
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

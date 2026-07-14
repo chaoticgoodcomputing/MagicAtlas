@@ -46,7 +46,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 74
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

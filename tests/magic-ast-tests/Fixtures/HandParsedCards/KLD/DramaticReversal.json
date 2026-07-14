@@ -6,14 +6,20 @@
     "OracleText": "Untap all nonland permanents you control.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Dramatic Reversal",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Untap all nonland permanents you control.",
@@ -26,13 +32,22 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "ExcludedCardTypes": ["land"],
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ],
                   "Controller": "You"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 41
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -47,7 +62,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -55,11 +72,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

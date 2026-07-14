@@ -84,7 +84,8 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 },
                 "Duration": {
                   "DurationType": "untilTime",
@@ -98,7 +99,12 @@
           ],
           "Instructions": [
             "you may pay {W}"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 94
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

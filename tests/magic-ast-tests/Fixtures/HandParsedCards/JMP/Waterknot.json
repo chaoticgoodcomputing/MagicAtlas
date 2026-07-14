@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -60,7 +65,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 46
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -72,7 +82,12 @@
               },
               "WhoseUntapStep": "its controller's"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 68
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -6,14 +6,20 @@
     "OracleText": "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Tail Swipe",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control.",
@@ -26,7 +32,9 @@
               "Source": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -38,12 +46,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature", "planeswalker"],
+                  "CardTypes": [
+                    "creature",
+                    "planeswalker"
+                  ],
                   "Controller": "Opponent"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 113
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,19 +68,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

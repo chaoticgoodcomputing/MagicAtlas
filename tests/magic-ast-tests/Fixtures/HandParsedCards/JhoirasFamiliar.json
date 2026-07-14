@@ -46,7 +46,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -65,7 +70,12 @@
             ],
             "IsHistoric": true,
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 97
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

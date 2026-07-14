@@ -43,7 +43,12 @@
               },
               "CantBeRegenerated": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "unparsed",
@@ -65,7 +70,8 @@
               "LastAttemptedRule": "StaticAbilityParser.Parse",
               "FailurePosition": 25
             }
-          ]
+          ],
+          "OracleLineIndex": 1
         },
         {
           "Kind": "spell",
@@ -78,7 +84,12 @@
                 "Length": 48
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 28,
+            "Length": 48
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -91,7 +102,12 @@
           "KeywordSource": "Fuse",
           "Reminder": {
             "Text": "(You may cast one or both halves of this card from your hand.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 77,
+            "Length": 67
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

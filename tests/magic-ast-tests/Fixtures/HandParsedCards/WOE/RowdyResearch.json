@@ -6,14 +6,20 @@
     "OracleText": "This spell costs {1} less to cast for each creature that attacked this turn.\nDraw three cards.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Rowdy Research",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast for each creature that attacked this turn.\nDraw three cards.",
@@ -23,26 +29,46 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "History": {
                   "PredicateType": "other",
                   "Description": "attacked this turn"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 76
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
           "Effects": [
             {
               "EffectType": "drawCards",
-              "Count": { "QuantityType": "literal", "Value": 3 },
-              "Player": { "Kind": "You" }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 77,
+            "Length": 17
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -51,13 +77,31 @@
         "Kind": "manaCost",
         "Raw": "{6}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 6 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 6
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 7
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

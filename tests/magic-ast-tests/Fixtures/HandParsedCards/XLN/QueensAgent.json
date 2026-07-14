@@ -35,7 +35,12 @@
             {
               "EffectType": "lifelink"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 8
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -59,7 +64,12 @@
           ],
           "Reminder": {
             "Text": "Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on this creature, then put the card back or put it into your graveyard."
-          }
+          },
+          "SourceSpan": {
+            "Start": 9,
+            "Length": 226
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

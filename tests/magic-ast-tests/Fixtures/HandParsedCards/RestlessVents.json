@@ -7,7 +7,10 @@
     "Power": null,
     "Toughness": null,
     "Colors": [],
-    "ColorIdentity": ["B", "R"]
+    "ColorIdentity": [
+      "B",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Restless Vents",
@@ -30,7 +33,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -47,7 +55,12 @@
               "OfChosenColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 20
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -113,7 +126,8 @@
                       "MinimumBlockers": 2
                     }
                   ],
-                  "KeywordSource": "Menace"
+                  "KeywordSource": "Menace",
+                  "OracleLineIndex": 0
                 }
               ],
               "Duration": {
@@ -125,7 +139,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 46,
+            "Length": 115
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "triggered",
@@ -164,7 +183,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 162,
+            "Length": 75
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

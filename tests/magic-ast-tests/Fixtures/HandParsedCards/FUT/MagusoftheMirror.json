@@ -6,15 +6,24 @@
     "OracleText": "{T}, Sacrifice this creature: Exchange life totals with target opponent. Activate only during your upkeep.",
     "Power": "4",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Magus of the Mirror",
     "TypeLine": {
       "Raw": "Creature — Human Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "{T}, Sacrifice this creature: Exchange life totals with target opponent. Activate only during your upkeep.",
@@ -28,7 +37,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -49,8 +60,15 @@
               }
             }
           ],
-          "Restrictions": ["OnlyDuringYourUpkeep"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyDuringYourUpkeep"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 106
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -59,25 +77,50 @@
         "Kind": "manaCost",
         "Raw": "{4}{B}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 6,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

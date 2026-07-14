@@ -45,7 +45,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 25
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -68,7 +73,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 26,
+            "Length": 90
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -95,7 +105,12 @@
             "OnlyAsSorcery"
           ],
           "WhoMayActivate": "Opponent",
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 117,
+            "Length": 92
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

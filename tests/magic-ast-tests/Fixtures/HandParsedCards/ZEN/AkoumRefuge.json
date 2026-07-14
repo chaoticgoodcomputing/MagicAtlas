@@ -33,7 +33,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -58,7 +63,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -73,7 +83,12 @@
               "Mana": "{B} or {R}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 65,
+            "Length": 20
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

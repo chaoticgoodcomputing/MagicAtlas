@@ -37,7 +37,12 @@
             {
               "EffectType": "cantBeCountered"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,7 +52,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 25
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -57,7 +67,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 25
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -67,7 +82,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 25
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -103,7 +123,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 136
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -113,7 +138,12 @@
               "EffectType": "partner",
               "PartnerType": "ChooseABackground"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 194,
+            "Length": 70
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

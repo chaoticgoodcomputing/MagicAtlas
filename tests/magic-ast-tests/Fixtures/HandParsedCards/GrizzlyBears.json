@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Grizzly Bears",
     "ManaCost": "{1}{G}",
-    "TypeLine": "Creature \u2014 Bear",
+    "TypeLine": "Creature — Bear",
     "OracleText": null,
     "Power": "2",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Grizzly Bears",
     "TypeLine": {
-      "Raw": "Creature \u2014 Bear",
+      "Raw": "Creature — Bear",
       "Types": [
         "Creature"
       ],

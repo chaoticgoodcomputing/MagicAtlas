@@ -28,7 +28,12 @@
               "EffectType": "chooseColor"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -54,7 +59,12 @@
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 41,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -71,7 +81,12 @@
               "OfChosenColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 94,
+            "Length": 38
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

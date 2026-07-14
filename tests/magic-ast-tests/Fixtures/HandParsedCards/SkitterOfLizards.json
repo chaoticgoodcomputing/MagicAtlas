@@ -56,7 +56,12 @@
           ],
           "Reminder": {
             "Text": "(You may pay an additional {1}{R} any number of times as you cast this spell.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -66,7 +71,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 98,
+            "Length": 5
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -83,7 +93,12 @@
                 "Keyword": "Kicker"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 76
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

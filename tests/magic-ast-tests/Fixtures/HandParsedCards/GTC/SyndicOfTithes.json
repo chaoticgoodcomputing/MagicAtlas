@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Extort"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 121
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

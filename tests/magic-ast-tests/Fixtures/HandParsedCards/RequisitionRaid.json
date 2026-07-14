@@ -4,9 +4,15 @@
     "ManaCost": "{W}",
     "TypeLine": "Sorcery",
     "OracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Spree"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Spree"
+    ],
     "Id": "154e9ba9-0d0e-4b0e-acf2-f66a993cf3a2",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Requisition Raid",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
@@ -30,14 +38,22 @@
           ],
           "Reminder": {
             "Text": "(Choose one or more additional costs.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spreeMode",
           "AdditionalCost": {
             "CostType": "mana",
             "Symbols": [
-              { "Kind": "generic", "GenericAmount": 1 }
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              }
             ]
           },
           "Effects": [
@@ -46,18 +62,28 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact"]
+                  "CardTypes": [
+                    "artifact"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 32
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "spreeMode",
           "AdditionalCost": {
             "CostType": "mana",
             "Symbols": [
-              { "Kind": "generic", "GenericAmount": 1 }
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              }
             ]
           },
           "Effects": [
@@ -66,18 +92,28 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["enchantment"]
+                  "CardTypes": [
+                    "enchantment"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 78,
+            "Length": 35
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "spreeMode",
           "AdditionalCost": {
             "CostType": "mana",
             "Symbols": [
-              { "Kind": "generic", "GenericAmount": 1 }
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              }
             ]
           },
           "Effects": [
@@ -86,7 +122,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "Target"
                 }
               },
@@ -96,7 +134,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 114,
+            "Length": 68
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -105,17 +148,26 @@
         "Kind": "manaCost",
         "Raw": "{W}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

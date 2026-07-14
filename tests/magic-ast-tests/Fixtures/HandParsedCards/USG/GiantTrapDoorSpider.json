@@ -6,8 +6,14 @@
     "OracleText": "{1}{R}{G}, {T}: Exile this creature and target creature without flying that's attacking you.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["G", "R"],
-    "ColorIdentity": ["G", "R"],
+    "Colors": [
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ],
     "Keywords": [],
     "Layout": "normal"
   },
@@ -15,8 +21,12 @@
     "Name": "Giant Trap Door Spider",
     "TypeLine": {
       "Raw": "Creature — Spider",
-      "Types": ["Creature"],
-      "Subtypes": ["Spider"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spider"
+      ]
     },
     "Oracle": {
       "RawText": "{1}{R}{G}, {T}: Exile this creature and target creature without flying that's attacking you.",
@@ -27,12 +37,27 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 },
-                { "Kind": "colored", "Colors": ["R"] },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -46,16 +71,29 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Characteristics": [
-                    { "CharacteristicType": "other", "Description": "withoutFlying" },
-                    { "CharacteristicType": "other", "Description": "attackingYou" }
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "withoutFlying"
+                    },
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "attackingYou"
+                    }
                   ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 92
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -64,25 +102,52 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "R"]
+        "Colors": [
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "G"]
+        "ColorIdentity": [
+          "R",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

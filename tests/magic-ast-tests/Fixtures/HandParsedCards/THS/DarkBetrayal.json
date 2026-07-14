@@ -4,8 +4,12 @@
     "ManaCost": "{B}",
     "TypeLine": "Instant",
     "OracleText": "Destroy target black creature.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "56adf4ea-1b1c-4737-8574-1848ca47d4f3",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Dark Betrayal",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target black creature.",
@@ -27,12 +33,21 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Colors": ["B"]
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Colors": [
+                    "B"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,17 +56,26 @@
         "Kind": "manaCost",
         "Raw": "{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

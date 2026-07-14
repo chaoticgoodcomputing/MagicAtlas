@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Evolve"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 154
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

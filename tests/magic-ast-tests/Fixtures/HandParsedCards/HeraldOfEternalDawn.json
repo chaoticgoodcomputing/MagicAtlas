@@ -45,7 +45,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this spell any time you could cast an instant.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -69,7 +74,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 6
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -86,7 +96,12 @@
                 "Kind": "EachOpponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 75,
+            "Length": 62
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

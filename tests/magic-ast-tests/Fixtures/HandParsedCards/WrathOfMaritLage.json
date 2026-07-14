@@ -4,8 +4,12 @@
     "ManaCost": "{3}{U}{U}",
     "TypeLine": "Enchantment",
     "OracleText": "When this enchantment enters, tap all red creatures.\nRed creatures don't untap during their controllers' untap steps.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "a0111ef4-f0be-4af3-981f-aa19a17a3d7b",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Wrath of Marit Lage",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "When this enchantment enters, tap all red creatures.\nRed creatures don't untap during their controllers' untap steps.",
@@ -25,7 +31,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["enchantment"],
+              "CardTypes": [
+                "enchantment"
+              ],
               "IsSelf": true
             }
           },
@@ -35,12 +43,21 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "Colors": ["R"],
-                  "CardTypes": ["creature"]
+                  "Colors": [
+                    "R"
+                  ],
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -50,13 +67,22 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "Colors": ["R"],
-                  "CardTypes": ["creature"]
+                  "Colors": [
+                    "R"
+                  ],
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "WhoseUntapStep": "their controllers'"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 53,
+            "Length": 64
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -71,11 +97,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 5,
@@ -83,11 +113,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

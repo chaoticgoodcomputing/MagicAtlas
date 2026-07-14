@@ -27,7 +27,12 @@
               "EffectType": "chooseCreatureType"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -42,7 +47,12 @@
               "Mana": "{C}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -59,7 +69,12 @@
               "SpendRestriction": "cast a creature spell of the chosen type"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 59,
+            "Length": 97
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -64,7 +64,12 @@
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 69
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

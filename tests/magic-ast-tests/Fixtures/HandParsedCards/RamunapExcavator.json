@@ -6,8 +6,12 @@
     "OracleText": "You may play lands from your graveyard.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Ramunap Excavator",
@@ -37,7 +41,12 @@
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 39
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

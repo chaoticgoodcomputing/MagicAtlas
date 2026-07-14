@@ -60,7 +60,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -70,7 +71,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 47
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

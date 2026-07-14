@@ -6,8 +6,12 @@
     "OracleText": "Play with the top card of your library revealed.\nYou may play lands and cast spells from the top of your library.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "27ba1ea5-c861-4bb4-a681-fc0633268bd9",
     "Layout": "normal"
@@ -16,8 +20,13 @@
     "Name": "Magus of the Future",
     "TypeLine": {
       "Raw": "Creature — Human Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "Play with the top card of your library revealed.\nYou may play lands and cast spells from the top of your library.",
@@ -28,16 +37,29 @@
             {
               "EffectType": "playWithTopRevealed"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 48
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "mayPlayFromTopOfLibrary",
-              "Actions": ["PlayLands", "CastSpells"]
+              "Actions": [
+                "PlayLands",
+                "CastSpells"
+              ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 49,
+            "Length": 64
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -52,26 +74,36 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

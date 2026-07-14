@@ -38,12 +38,23 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -54,12 +65,25 @@
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 3 },
-                  { "Kind": "colored", "Colors": ["U"] }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 3
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "U"
+                    ]
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 159
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -68,18 +92,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

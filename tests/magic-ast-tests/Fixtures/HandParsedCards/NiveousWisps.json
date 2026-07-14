@@ -4,8 +4,12 @@
     "ManaCost": "{W}",
     "TypeLine": "Instant",
     "OracleText": "Target creature becomes white until end of turn. Tap that creature.\nDraw a card.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Keywords": [],
     "Id": "bea1e2c4-1671-4322-b8ba-e4e1a879cf37",
     "Layout": "normal"
@@ -51,7 +55,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -66,7 +75,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

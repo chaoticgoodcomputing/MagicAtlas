@@ -4,9 +4,15 @@
     "ManaCost": "{2}{W}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\nEnchanted creature gets +0/+2 and assigns combat damage equal to its toughness rather than its power.\nEnchanted creature has \"{2}{W}: Untap this creature.\"",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "da0d5436-b881-45ac-b8ec-248d88714021",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Gauntlets of Light",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEnchanted creature gets +0/+2 and assigns combat damage equal to its toughness rather than its power.\nEnchanted creature has \"{2}{W}: Untap this creature.\"",
@@ -27,53 +37,93 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "EnchantedOrEquipped" },
-              "PowerModifier": { "QuantityType": "literal", "Value": 0 },
-              "ToughnessModifier": { "QuantityType": "literal", "Value": 2 }
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
+              "PowerModifier": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
+              "ToughnessModifier": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
             },
             {
               "EffectType": "assignDamageAsToughness",
-              "AppliesTo": { "Kind": "EnchantedOrEquipped" }
+              "AppliesTo": {
+                "Kind": "EnchantedOrEquipped"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "gainAbility",
-              "Target": { "Kind": "EnchantedOrEquipped" },
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
               "GainedAbility": {
                 "Kind": "activated",
                 "Costs": [
                   {
                     "CostType": "mana",
                     "Symbols": [
-                      { "Kind": "generic", "GenericAmount": 2 },
-                      { "Kind": "colored", "Colors": ["W"] }
+                      {
+                        "Kind": "generic",
+                        "GenericAmount": 2
+                      },
+                      {
+                        "Kind": "colored",
+                        "Colors": [
+                          "W"
+                        ]
+                      }
                     ]
                   }
                 ],
                 "Effects": [
                   {
                     "EffectType": "untap",
-                    "Target": { "Kind": "Self" }
+                    "Target": {
+                      "Kind": "Self"
+                    }
                   }
                 ],
-                "IsManaAbility": false
+                "IsManaAbility": false,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 119,
+            "Length": 53
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -82,19 +132,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

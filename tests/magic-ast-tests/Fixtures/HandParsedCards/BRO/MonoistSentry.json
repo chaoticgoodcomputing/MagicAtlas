@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Defender"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 8
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

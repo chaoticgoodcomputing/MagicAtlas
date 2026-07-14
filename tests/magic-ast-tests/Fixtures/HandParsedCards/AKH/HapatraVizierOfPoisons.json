@@ -6,16 +6,29 @@
     "OracleText": "Whenever Hapatra deals combat damage to a player, you may put a -1/-1 counter on target creature.\nWhenever you put one or more -1/-1 counters on a creature, create a 1/1 green Snake creature token with deathtouch.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["B", "G"],
-    "ColorIdentity": ["B", "G"]
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
   },
   "Output": {
     "Name": "Hapatra, Vizier of Poisons",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Cleric",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever Hapatra deals combat damage to a player, you may put a -1/-1 counter on target creature.\nWhenever you put one or more -1/-1 counters on a creature, create a 1/1 green Snake creature token with deathtouch.",
@@ -26,7 +39,9 @@
             "Timing": "Whenever",
             "Event": "DealsCombatDamageToPlayer",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -38,7 +53,9 @@
                 "Target": {
                   "Kind": "Target",
                   "Filter": {
-                    "CardTypes": ["creature"]
+                    "CardTypes": [
+                      "creature"
+                    ]
                   }
                 },
                 "CounterType": "-1/-1",
@@ -48,7 +65,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -58,7 +80,9 @@
             "CounterType": "-1/-1",
             "MinimumCount": 1,
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -74,9 +98,15 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["G"],
-                "Types": ["creature"],
-                "Subtypes": ["Snake"],
+                "Colors": [
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Snake"
+                ],
                 "IsCopy": false,
                 "Abilities": [
                   {
@@ -87,12 +117,18 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Deathtouch"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 98,
+            "Length": 115
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -103,22 +139,32 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "G"]
+        "Colors": [
+          "B",
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "G"]
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

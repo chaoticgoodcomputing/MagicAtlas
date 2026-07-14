@@ -45,7 +45,8 @@
                   }
                 ],
                 "IsManaAbility": false,
-                "LoyaltyCost": 0
+                "LoyaltyCost": 0,
+                "OracleLineIndex": 0
               }
             },
             {
@@ -71,10 +72,16 @@
                   }
                 ],
                 "IsManaAbility": false,
-                "LoyaltyCost": -12
+                "LoyaltyCost": -12,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -98,7 +105,12 @@
                 "Kind": "Target"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 98,
+            "Length": 134
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

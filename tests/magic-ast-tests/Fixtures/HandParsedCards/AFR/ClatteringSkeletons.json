@@ -47,7 +47,12 @@
           ],
           "Reminder": {
             "Text": "Enter the first room or advance to the next room."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 102
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

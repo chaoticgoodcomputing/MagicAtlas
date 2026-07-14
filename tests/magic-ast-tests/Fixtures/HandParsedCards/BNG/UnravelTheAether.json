@@ -6,8 +6,12 @@
     "OracleText": "Choose target artifact or enchantment. Its owner shuffles it into their library.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "a2c4e6f8-1b3d-4a7c-9e2f-5d8b0c1a3e5f",
     "Layout": "normal"
@@ -16,7 +20,9 @@
     "Name": "Unravel the Aether",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Choose target artifact or enchantment. Its owner shuffles it into their library.",
@@ -29,11 +35,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "enchantment"]
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 80
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -42,18 +56,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

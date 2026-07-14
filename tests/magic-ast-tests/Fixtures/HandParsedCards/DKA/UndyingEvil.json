@@ -70,7 +70,8 @@
                     }
                   }
                 ],
-                "KeywordSource": "Undying"
+                "KeywordSource": "Undying",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -80,7 +81,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 182
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -37,14 +37,21 @@
               "Method": "TapObject",
               "Pays": "Generic",
               "Source": {
-                "CardTypes": ["artifact"],
+                "CardTypes": [
+                  "artifact"
+                ],
                 "Controller": "You"
               }
             }
           ],
           "Reminder": {
             "Text": "(Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 132
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,7 +64,12 @@
           "KeywordSource": "Hexproof",
           "Reminder": {
             "Text": "(This creature can't be the target of spells or abilities your opponents control.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 133,
+            "Length": 91
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

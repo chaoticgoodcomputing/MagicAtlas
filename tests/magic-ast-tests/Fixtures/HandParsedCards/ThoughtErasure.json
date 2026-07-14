@@ -6,14 +6,22 @@
     "OracleText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nSurveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B", "U"],
-    "ColorIdentity": ["B", "U"]
+    "Colors": [
+      "B",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U"
+    ]
   },
   "Output": {
     "Name": "Thought Erasure",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nSurveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
@@ -23,29 +31,55 @@
           "Effects": [
             {
               "EffectType": "discardCards",
-              "Count": { "QuantityType": "literal", "Value": 1 },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["opponent"] }
+                "Filter": {
+                  "CardTypes": [
+                    "opponent"
+                  ]
+                }
               },
               "Filter": {
-                "CardTypes": ["card"],
-                "ExcludedCardTypes": ["land"]
+                "CardTypes": [
+                  "card"
+                ],
+                "ExcludedCardTypes": [
+                  "land"
+                ]
               },
-              "Chooser": { "Kind": "You" },
+              "Chooser": {
+                "Kind": "You"
+              },
               "RevealHand": true,
               "Random": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 102
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
           "Effects": [
             {
               "EffectType": "surveil",
-              "Count": { "QuantityType": "literal", "Value": 1 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 103,
+            "Length": 86
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -54,19 +88,35 @@
         "Kind": "manaCost",
         "Raw": "{U}{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "U"]
+        "Colors": [
+          "B",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "B"]
+        "ColorIdentity": [
+          "U",
+          "B"
+        ]
       }
     ]
   }

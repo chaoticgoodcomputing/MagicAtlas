@@ -132,7 +132,12 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 97
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -180,7 +185,12 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 166
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -265,7 +275,12 @@
                   }
                 }
               ],
-              "KeywordSource": "Flying"
+              "KeywordSource": "Flying",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 6
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -316,12 +331,22 @@
                               "Kind": "You"
                             }
                           }
-                        ]
+                        ],
+                        "SourceSpan": {
+                          "Start": 0,
+                          "Length": 75
+                        },
+                        "OracleLineIndex": 0
                       }
                     ]
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 175
+              },
+              "OracleLineIndex": 1
             },
             {
               "Kind": "triggered",
@@ -364,7 +389,12 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 183,
+                "Length": 109
+              },
+              "OracleLineIndex": 2
             }
           ]
         },

@@ -52,7 +52,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -104,7 +109,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 62
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -129,7 +139,12 @@
           ],
           "Reminder": {
             "Text": "Damage causes loss of life."
-          }
+          },
+          "SourceSpan": {
+            "Start": 70,
+            "Length": 75
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

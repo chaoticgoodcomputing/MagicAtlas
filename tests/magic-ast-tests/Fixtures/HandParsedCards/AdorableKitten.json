@@ -6,15 +6,24 @@
     "OracleText": "When this creature enters, roll a six-sided die. You gain life equal to the result.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Adorable Kitten",
     "TypeLine": {
       "Raw": "Host Creature — Cat",
-      "Types": ["Host", "Creature"],
-      "Subtypes": ["Cat"]
+      "Types": [
+        "Host",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, roll a six-sided die. You gain life equal to the result.",
@@ -25,7 +34,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -43,7 +54,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -54,7 +70,9 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 1,
@@ -62,11 +80,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

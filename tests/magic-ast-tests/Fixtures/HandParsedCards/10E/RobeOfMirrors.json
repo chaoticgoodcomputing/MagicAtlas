@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 98
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,10 +62,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Shroud"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 99,
+            "Length": 79
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

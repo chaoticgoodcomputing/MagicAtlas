@@ -39,7 +39,12 @@
           ],
           "Reminder": {
             "Text": "({B/P} can be paid with {B} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 126
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -70,7 +75,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 0
+          "LoyaltyCost": 0,
+          "SourceSpan": {
+            "Start": 127,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -133,7 +143,8 @@
                     "OfChosenColor": false
                   }
                 ],
-                "IsManaAbility": true
+                "IsManaAbility": true,
+                "OracleLineIndex": 0
               }
             },
             {
@@ -145,7 +156,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -2
+          "LoyaltyCost": -2,
+          "SourceSpan": {
+            "Start": 176,
+            "Length": 156
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -171,7 +187,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -9
+          "LoyaltyCost": -9,
+          "SourceSpan": {
+            "Start": 333,
+            "Length": 119
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

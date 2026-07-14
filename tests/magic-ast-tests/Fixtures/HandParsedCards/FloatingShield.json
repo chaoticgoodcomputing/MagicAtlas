@@ -4,9 +4,15 @@
     "ManaCost": "{2}{W}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\nAs this Aura enters, choose a color.\nEnchanted creature has protection from the chosen color. This effect doesn't remove this Aura.\nSacrifice this Aura: Target creature gains protection from the chosen color until end of turn.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "4dbda39b-a998-4ad9-95df-72ed9556c390",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Floating Shield",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nAs this Aura enters, choose a color.\nEnchanted creature has protection from the chosen color. This effect doesn't remove this Aura.\nSacrifice this Aura: Target creature gains protection from the chosen color until end of turn.",
@@ -26,11 +36,18 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -39,7 +56,12 @@
               "EffectType": "chooseColor"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 36
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -63,10 +85,16 @@
                     ],
                     "DoesNotRemoveThisAura": true
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 54,
+            "Length": 94
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -74,8 +102,12 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["enchantment"],
-                "Subtypes": ["Aura"],
+                "CardTypes": [
+                  "enchantment"
+                ],
+                "Subtypes": [
+                  "Aura"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -90,7 +122,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "GainedAbility": {
@@ -106,7 +140,8 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -117,7 +152,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 94
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -132,18 +172,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

@@ -38,7 +38,12 @@
           "KeywordSource": "Haste",
           "Reminder": {
             "Text": "(This creature can attack and {T} as soon as it comes under your control.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 80
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -90,10 +95,16 @@
                     "Keyword": "Haste"
                   }
                 ],
-                "KeywordSource": "Haste"
+                "KeywordSource": "Haste",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 81,
+            "Length": 60
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

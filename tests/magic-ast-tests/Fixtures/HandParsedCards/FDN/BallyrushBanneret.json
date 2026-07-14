@@ -6,15 +6,24 @@
     "OracleText": "Kithkin spells and Soldier spells you cast cost {1} less to cast.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Ballyrush Banneret",
     "TypeLine": {
       "Raw": "Creature — Kithkin Soldier",
-      "Types": ["Creature"],
-      "Subtypes": ["Kithkin", "Soldier"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kithkin",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Kithkin spells and Soldier spells you cast cost {1} less to cast.",
@@ -24,14 +33,27 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell"],
-            "Subtypes": ["Kithkin", "Soldier"],
+            "CardTypes": [
+              "spell"
+            ],
+            "Subtypes": [
+              "Kithkin",
+              "Soldier"
+            ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 65
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,17 +62,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
-        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
       }
     ]
   }

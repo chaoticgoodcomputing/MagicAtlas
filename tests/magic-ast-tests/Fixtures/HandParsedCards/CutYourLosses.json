@@ -51,7 +51,12 @@
           ],
           "Reminder": {
             "Text": "(As you cast this spell, you may sacrifice a creature with power 2 or greater. When you do, copy this spell and you may choose a new target for the copy.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 165
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -72,7 +77,12 @@
               },
               "MayChooseNewTargets": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 165
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -103,7 +113,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 166,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -40,7 +40,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 41
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "unparsed",
@@ -63,7 +68,8 @@
               "FailurePosition": 42
             }
           ],
-          "AbilityWord": "Void"
+          "AbilityWord": "Void",
+          "OracleLineIndex": 1
         }
       ]
     },

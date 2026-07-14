@@ -51,7 +51,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -61,7 +66,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -93,7 +103,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 78
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -106,7 +121,12 @@
               "EffectType": "saddle",
               "Value": 3
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 93,
+            "Length": 156
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

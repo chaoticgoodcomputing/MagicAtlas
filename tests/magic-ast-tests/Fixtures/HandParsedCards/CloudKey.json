@@ -25,7 +25,12 @@
             {
               "EffectType": "chooseCardType"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 85
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -44,7 +49,12 @@
             ],
             "Controller": "You",
             "ChosenCharacteristic": "CardType"
-          }
+          },
+          "SourceSpan": {
+            "Start": 86,
+            "Length": 57
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -36,12 +36,20 @@
                     "creature"
                   ],
                   "Characteristics": [
-                    {"CharacteristicType": "other", "Description": "you own"}
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "you own"
+                    }
                   ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

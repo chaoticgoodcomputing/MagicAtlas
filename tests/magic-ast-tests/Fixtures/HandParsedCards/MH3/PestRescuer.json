@@ -85,7 +85,8 @@
                           "Kind": "You"
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -94,7 +95,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 171
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -117,7 +123,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 172,
+            "Length": 63
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -46,7 +46,12 @@
               },
               "ColorMustMatchMana": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,7 +68,12 @@
               "CounterType": "+1/+1"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 49
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

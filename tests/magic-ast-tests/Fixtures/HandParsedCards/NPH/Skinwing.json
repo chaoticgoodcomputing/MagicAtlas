@@ -31,7 +31,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Living weapon"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 117
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -80,12 +85,18 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 118,
+            "Length": 44
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -107,14 +118,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 163,
+            "Length": 9
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

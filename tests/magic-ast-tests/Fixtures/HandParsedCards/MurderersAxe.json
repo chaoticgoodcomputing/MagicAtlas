@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature gets +2/+2.\nEquip—Discard a card.",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Equip"],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "696dcb79-4915-424f-ba8f-5363ae3395a6",
     "Layout": "normal"
   },
@@ -14,8 +16,12 @@
     "Name": "Murderer's Axe",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +2/+2.\nEquip—Discard a card.",
@@ -37,7 +43,12 @@
                 "Value": 2
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -46,7 +57,9 @@
             {
               "CostType": "discard",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -60,14 +73,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 30,
+            "Length": 21
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,8 +6,12 @@
     "OracleText": "{T}: Target creature can't block this turn.\n{S}: This creature gains haste until end of turn. ({S} can be paid with one mana from a snow source.)",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "0254a437-5240-40ca-bf7b-d30b95942bf5",
     "Layout": "normal"
@@ -16,9 +20,16 @@
     "Name": "Goblin Rimerunner",
     "TypeLine": {
       "Raw": "Snow Creature — Goblin Warrior",
-      "Supertypes": ["Snow"],
-      "Types": ["Creature"],
-      "Subtypes": ["Goblin", "Warrior"]
+      "Supertypes": [
+        "Snow"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Goblin",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Target creature can't block this turn.\n{S}: This creature gains haste until end of turn. ({S} can be paid with one mana from a snow source.)",
@@ -36,7 +47,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "Duration": {
@@ -48,7 +61,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 43
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -76,7 +94,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -90,7 +109,12 @@
           "Reminder": {
             "Text": "({S} can be paid with one mana from a snow source.)"
           },
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 44,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -105,7 +129,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -113,11 +139,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

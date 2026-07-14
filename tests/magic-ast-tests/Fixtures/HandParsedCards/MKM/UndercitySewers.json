@@ -40,7 +40,12 @@
               "Mana": "{U} or {B}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 22
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -52,7 +57,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 23,
+            "Length": 24
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -74,7 +84,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 48,
+            "Length": 109
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

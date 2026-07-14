@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -74,12 +79,18 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Trample"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 46
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -100,7 +111,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 91
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -41,7 +41,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -49,7 +51,12 @@
               "EffectType": "addMana",
               "Mana": "{R}"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 93
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -89,7 +96,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 94,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

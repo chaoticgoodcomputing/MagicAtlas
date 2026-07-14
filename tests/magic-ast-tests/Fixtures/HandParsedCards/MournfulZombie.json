@@ -6,15 +6,24 @@
     "OracleText": "{W}, {T}: Target player gains 1 life.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B", "W"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Mournful Zombie",
     "TypeLine": {
       "Raw": "Creature — Zombie",
-      "Types": ["Creature"],
-      "Subtypes": ["Zombie"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie"
+      ]
     },
     "Oracle": {
       "RawText": "{W}, {T}: Target player gains 1 life.",
@@ -25,10 +34,17 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["W"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "W"
+                  ]
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -39,11 +55,20 @@
               },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 37
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,23 +77,44 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "W"]
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

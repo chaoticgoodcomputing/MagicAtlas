@@ -4,9 +4,15 @@
     "ManaCost": "{U}",
     "TypeLine": "Instant",
     "OracleText": "Target player mills two cards.\nDraw a card.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Mill"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Mill"
+    ],
     "Id": "4afee6b3-55a4-44e5-b08c-85e0c813cd09",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Thought Scour",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target player mills two cards.\nDraw a card.",
@@ -30,10 +38,19 @@
               },
               "Player": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["player"] }
+                "Filter": {
+                  "CardTypes": [
+                    "player"
+                  ]
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -48,7 +65,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -57,17 +79,26 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

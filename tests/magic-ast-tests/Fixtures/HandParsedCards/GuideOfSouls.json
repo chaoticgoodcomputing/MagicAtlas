@@ -73,7 +73,12 @@
           ],
           "Reminder": {
             "Text": "an energy counter"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 94
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -148,7 +153,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 95,
+            "Length": 182
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -34,7 +34,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -62,7 +67,12 @@
               "Tapped": true
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 68
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

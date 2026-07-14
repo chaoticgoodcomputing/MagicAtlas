@@ -53,7 +53,12 @@
               "Power": "1",
               "Toughness": "1"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 125
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,7 +68,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "Both"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 126,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -88,7 +98,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 140,
+            "Length": 39
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

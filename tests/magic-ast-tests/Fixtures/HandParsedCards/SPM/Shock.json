@@ -40,7 +40,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 35
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

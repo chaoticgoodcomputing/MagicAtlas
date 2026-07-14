@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 99
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -46,7 +51,12 @@
               "EffectType": "renown",
               "Value": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 138
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

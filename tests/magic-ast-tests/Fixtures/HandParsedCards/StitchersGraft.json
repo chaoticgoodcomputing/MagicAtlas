@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature gets +3/+3.\nWhenever equipped creature attacks, it doesn't untap during its controller's next untap step.\nWhenever this Equipment becomes unattached from a permanent, sacrifice that permanent.\nEquip {2}",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Equip"],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "a5dad4be-599b-4c4d-a957-3fe6b52b4141",
     "Layout": "normal"
   },
@@ -14,8 +16,12 @@
     "Name": "Stitcher's Graft",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +3/+3.\nWhenever equipped creature attacks, it doesn't untap during its controller's next untap step.\nWhenever this Equipment becomes unattached from a permanent, sacrifice that permanent.\nEquip {2}",
@@ -25,7 +31,9 @@
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "EnchantedOrEquipped" },
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
               "PowerModifier": {
                 "QuantityType": "literal",
                 "Value": 3
@@ -35,7 +43,12 @@
                 "Value": 3
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -43,17 +56,26 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsEquipped": true
             }
           },
           "Effects": [
             {
               "EffectType": "doesntUntap",
-              "Target": { "Kind": "It" },
+              "Target": {
+                "Kind": "It"
+              },
               "WhoseUntapStep": "its controller's next"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 30,
+            "Length": 93
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -61,15 +83,24 @@
             "Timing": "Whenever",
             "Event": "BecomesUnattached",
             "Filter": {
-              "CardTypes": ["permanent"]
+              "CardTypes": [
+                "permanent"
+              ]
             }
           },
           "Effects": [
             {
               "EffectType": "sacrifice",
-              "Target": { "Kind": "ThatPermanent" }
+              "Target": {
+                "Kind": "ThatPermanent"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 124,
+            "Length": 86
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -78,7 +109,10 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
               ]
             }
           ],
@@ -88,14 +122,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 211,
+            "Length": 9
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -104,12 +147,21 @@
         "Kind": "manaCost",
         "Raw": "{1}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          }
         ],
         "ManaValue": 1
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

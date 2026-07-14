@@ -31,7 +31,12 @@
               "EffectType": "alternativeCast",
               "FromZone": "Exile"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 34
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -53,7 +58,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 35,
+            "Length": 102
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

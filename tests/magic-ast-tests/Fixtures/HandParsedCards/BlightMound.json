@@ -4,8 +4,12 @@
     "ManaCost": "{2}{B}",
     "TypeLine": "Enchantment",
     "OracleText": "Attacking Pests you control get +1/+0 and have menace.\nWhenever a nontoken creature you control dies, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "dc060028-e01c-4bc7-8b52-7d0e2a350061",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Blight Mound",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Attacking Pests you control get +1/+0 and have menace.\nWhenever a nontoken creature you control dies, create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"",
@@ -27,8 +33,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Pest"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Pest"
+                  ],
                   "Controller": "You",
                   "Characteristics": [
                     {
@@ -52,8 +62,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Pest"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Pest"
+                  ],
                   "Controller": "You",
                   "Characteristics": [
                     {
@@ -70,14 +84,22 @@
                   {
                     "EffectType": "evasion",
                     "CanBeBlockedBy": {
-                      "CardTypes": ["creature"]
+                      "CardTypes": [
+                        "creature"
+                      ]
                     },
                     "MinimumBlockers": 2
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -85,7 +107,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsToken": false,
               "Controller": "You"
             }
@@ -100,9 +124,16 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["B", "G"],
-                "Types": ["creature"],
-                "Subtypes": ["Pest"],
+                "Colors": [
+                  "B",
+                  "G"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Pest"
+                ],
                 "Abilities": [
                   {
                     "Kind": "triggered",
@@ -110,7 +141,9 @@
                       "Timing": "When",
                       "Event": "Dies",
                       "Filter": {
-                        "CardTypes": ["creature"],
+                        "CardTypes": [
+                          "creature"
+                        ],
                         "IsSelf": true
                       }
                     },
@@ -125,7 +158,8 @@
                           "Kind": "You"
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -134,7 +168,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 141
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -149,7 +188,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -157,11 +198,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

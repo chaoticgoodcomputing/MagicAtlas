@@ -38,7 +38,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Reach"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -78,7 +83,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 201
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -91,7 +101,12 @@
               "EffectType": "partner",
               "PartnerType": "Partner"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 208,
+            "Length": 59
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

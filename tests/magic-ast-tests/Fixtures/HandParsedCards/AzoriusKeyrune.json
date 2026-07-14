@@ -5,7 +5,10 @@
     "TypeLine": "Artifact",
     "OracleText": "{T}: Add {W} or {U}.\n{W}{U}: This artifact becomes a 2/2 white and blue Bird artifact creature with flying until end of turn.",
     "Colors": [],
-    "ColorIdentity": ["U", "W"],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ],
     "Keywords": [],
     "Id": "a8755662-b329-4c5b-8bf7-c9e1702e5979",
     "Layout": "normal"
@@ -35,7 +38,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -106,7 +114,8 @@
                         ]
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ],
               "Duration": {
@@ -118,7 +127,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 21,
+            "Length": 104
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,8 +6,14 @@
     "OracleText": "{T}: Add {C}{C}. Spend this mana only to cast artifact spells or activate abilities of artifacts.\nEquipped creatures you control have flying and haste.",
     "Power": "2",
     "Toughness": "4",
-    "Colors": ["R", "U"],
-    "ColorIdentity": ["R", "U"],
+    "Colors": [
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ],
     "Keywords": [],
     "Id": "57ea0ba2-3ccf-4313-ad1d-161272c48851",
     "Layout": "normal"
@@ -44,7 +50,12 @@
               "SpendRestriction": "cast artifact spells or activate abilities of artifacts"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -88,7 +99,8 @@
                     }
                   }
                 ],
-                "KeywordSource": "Flying"
+                "KeywordSource": "Flying",
+                "OracleLineIndex": 0
               }
             },
             {
@@ -116,10 +128,16 @@
                     "Keyword": "Haste"
                   }
                 ],
-                "KeywordSource": "Haste"
+                "KeywordSource": "Haste",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 98,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

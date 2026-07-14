@@ -68,7 +68,12 @@
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 71
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -95,7 +100,12 @@
           ],
           "Reminder": {
             "Text": "({4}{B}, Exile this card from your graveyard: For each opponent, create a token copy of this card that attacks that opponent this turn if able. Those tokens gain haste. Sacrifice those tokens at the beginning of the next end step. Encore only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 72,
+            "Length": 271
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

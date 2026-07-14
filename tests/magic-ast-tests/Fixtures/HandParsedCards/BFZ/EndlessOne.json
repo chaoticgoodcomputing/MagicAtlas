@@ -39,7 +39,12 @@
               "CounterType": "+1/+1"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 49
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

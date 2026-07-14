@@ -49,7 +49,12 @@
           ],
           "Reminder": {
             "Text": "(When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 135
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -73,7 +78,12 @@
                 "Keyword": "Replicate"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 135
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -89,7 +99,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 136,
+            "Length": 24
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

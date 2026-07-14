@@ -30,7 +30,12 @@
               "EffectType": "chooseColor"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -52,7 +57,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 41,
+            "Length": 63
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

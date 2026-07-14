@@ -6,9 +6,16 @@
     "OracleText": "First strike, haste\nWhenever this creature attacks, another target attacking Knight you control gets +1/+0 until end of turn.\nEquip abilities you activate that target this creature cost {3} less to activate.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["First strike", "Haste"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "First strike",
+      "Haste"
+    ],
     "Id": "c52d66db-5570-48a1-99cf-e0417517747b",
     "Layout": "normal"
   },
@@ -16,8 +23,13 @@
     "Name": "Fervent Champion",
     "TypeLine": {
       "Raw": "Creature — Human Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "First strike, haste\nWhenever this creature attacks, another target attacking Knight you control gets +1/+0 until end of turn.\nEquip abilities you activate that target this creature cost {3} less to activate.",
@@ -30,7 +42,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "First"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 19
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,7 +57,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 19
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -48,7 +70,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -58,8 +82,12 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Knight"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Knight"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true,
                   "Characteristics": [
@@ -86,7 +114,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 20,
+            "Length": 105
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -106,7 +139,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 126,
+            "Length": 81
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -117,7 +155,9 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 1,
@@ -125,11 +165,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

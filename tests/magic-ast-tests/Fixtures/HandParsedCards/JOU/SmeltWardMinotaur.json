@@ -6,15 +6,24 @@
     "OracleText": "Whenever you cast an instant or sorcery spell, target creature an opponent controls can't block this turn.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Smelt-Ward Minotaur",
     "TypeLine": {
       "Raw": "Creature — Minotaur Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Minotaur", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Minotaur",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you cast an instant or sorcery spell, target creature an opponent controls can't block this turn.",
@@ -25,7 +34,11 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell", "instant", "sorcery"],
+              "CardTypes": [
+                "spell",
+                "instant",
+                "sorcery"
+              ],
               "Controller": "You"
             }
           },
@@ -35,7 +48,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "Opponent"
                 }
               },
@@ -47,7 +62,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 106
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -62,7 +82,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -70,11 +92,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

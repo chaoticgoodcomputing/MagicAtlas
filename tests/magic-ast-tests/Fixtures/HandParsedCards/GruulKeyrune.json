@@ -5,7 +5,10 @@
     "TypeLine": "Artifact",
     "OracleText": "{T}: Add {R} or {G}.\n{R}{G}: This artifact becomes a 3/2 red and green Beast artifact creature with trample until end of turn.",
     "Colors": [],
-    "ColorIdentity": ["G", "R"],
+    "ColorIdentity": [
+      "G",
+      "R"
+    ],
     "Keywords": [],
     "Id": "7cf96f1c-066e-4fde-acb8-4674842fb6c2",
     "Layout": "normal"
@@ -35,7 +38,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -92,7 +100,8 @@
                       "EffectType": "keywordAbility",
                       "Keyword": "Trample"
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ],
               "Duration": {
@@ -104,7 +113,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 21,
+            "Length": 105
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

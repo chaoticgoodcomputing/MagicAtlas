@@ -37,7 +37,12 @@
           "Condition": {
             "ConditionType": "other",
             "Text": "you reveal a Swamp or Forest card from your hand"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 113
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -52,7 +57,12 @@
               "Mana": "{B} or {G}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 114,
+            "Length": 20
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

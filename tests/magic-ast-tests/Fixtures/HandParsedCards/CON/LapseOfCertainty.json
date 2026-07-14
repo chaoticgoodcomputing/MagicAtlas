@@ -6,14 +6,20 @@
     "OracleText": "Counter target spell. If that spell is countered this way, put it on top of its owner's library instead of into that player's graveyard.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Lapse of Certainty",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"],
+      "Types": [
+        "Instant"
+      ],
       "Subtypes": []
     },
     "Oracle": {
@@ -24,10 +30,22 @@
           "Effects": [
             {
               "EffectType": "counterSpell",
-              "Target": { "Kind": "Target", "Filter": { "CardTypes": ["spell"] } },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "spell"
+                  ]
+                }
+              },
               "TopOfLibraryInsteadOfGraveyard": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 136
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -36,13 +54,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
     ]
   }
 }

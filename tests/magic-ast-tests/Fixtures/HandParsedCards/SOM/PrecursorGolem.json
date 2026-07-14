@@ -62,7 +62,12 @@
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "unparsed",
@@ -84,7 +89,8 @@
               "LastAttemptedRule": "TriggeredAbilityParser.Parse",
               "FailurePosition": 84
             }
-          ]
+          ],
+          "OracleLineIndex": 1
         }
       ]
     },

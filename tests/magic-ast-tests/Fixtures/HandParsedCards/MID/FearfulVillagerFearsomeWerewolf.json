@@ -105,7 +105,12 @@
               "KeywordSource": "Menace",
               "Reminder": {
                 "Text": "(This creature can't be blocked except by two or more creatures.)"
-              }
+              },
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 72
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "static",
@@ -118,7 +123,12 @@
               "KeywordSource": "Daybound",
               "Reminder": {
                 "Text": "(If a player casts no spells during their own turn, it becomes night next turn.)"
-              }
+              },
+              "SourceSpan": {
+                "Start": 73,
+                "Length": 89
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -192,7 +202,12 @@
               "KeywordSource": "Menace",
               "Reminder": {
                 "Text": "(This creature can't be blocked except by two or more creatures.)"
-              }
+              },
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 72
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "static",
@@ -205,7 +220,12 @@
               "KeywordSource": "Nightbound",
               "Reminder": {
                 "Text": "(If a player casts at least two spells during their own turn, it becomes day next turn.)"
-              }
+              },
+              "SourceSpan": {
+                "Start": 73,
+                "Length": 99
+              },
+              "OracleLineIndex": 1
             }
           ]
         },

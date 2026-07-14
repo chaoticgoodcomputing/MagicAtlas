@@ -32,7 +32,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Cascade"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 224
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

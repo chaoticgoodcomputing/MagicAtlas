@@ -4,9 +4,15 @@
     "ManaCost": "{2}{U}{U}",
     "TypeLine": "Enchantment",
     "OracleText": "Cumulative upkeep—Draw a card. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of your end step, sacrifice a land and discard your hand.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Cumulative upkeep"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Cumulative upkeep"
+    ],
     "Id": "3bc2a419-7122-4eeb-bb64-738a647cfd82",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Psychic Vortex",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Cumulative upkeep—Draw a card. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of your end step, sacrifice a land and discard your hand.",
@@ -37,28 +45,42 @@
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "age",
-              "Count": { "QuantityType": "literal", "Value": 1 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             },
             {
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "sacrifice",
-                "Target": { "Kind": "Self" }
+                "Target": {
+                  "Kind": "Self"
+                }
               },
               "Unless": {
-                "Player": { "Kind": "Controller" },
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "scaledCost",
                   "PerUnit": {
                     "CostType": "drawCards",
-                    "Quantity": { "QuantityType": "literal", "Value": 1 }
+                    "Quantity": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
                   },
                   "Count": {
                     "QuantityType": "counterCount",
                     "CounterType": "age",
-                    "On": { "Kind": "Self" }
+                    "On": {
+                      "Kind": "Self"
+                    }
                   }
                 }
               }
@@ -66,7 +88,12 @@
           ],
           "Reminder": {
             "Text": "(At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 180
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -86,17 +113,31 @@
                   "EffectType": "sacrifice",
                   "Target": {
                     "Kind": "Any",
-                    "Filter": { "CardTypes": ["land"] }
+                    "Filter": {
+                      "CardTypes": [
+                        "land"
+                      ]
+                    }
                   }
                 },
                 {
                   "EffectType": "discardCards",
-                  "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
-                  "Player": { "Kind": "You" }
+                  "Count": {
+                    "QuantityType": "derived",
+                    "DerivedFrom": "CardsInHand"
+                  },
+                  "Player": {
+                    "Kind": "You"
+                  }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 181,
+            "Length": 74
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -105,19 +146,36 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

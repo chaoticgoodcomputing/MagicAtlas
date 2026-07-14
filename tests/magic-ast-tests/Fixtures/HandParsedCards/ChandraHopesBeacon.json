@@ -5,8 +5,12 @@
     "TypeLine": "Legendary Planeswalker — Chandra",
     "OracleText": "Whenever you cast an instant or sorcery spell, copy it. You may choose new targets for the copy. This ability triggers only once each turn.\n+2: Add two mana in any combination of colors.\n+1: Exile the top five cards of your library. Until the end of your next turn, you may cast an instant or sorcery spell from among those exiled cards.\n−X: Chandra deals X damage to each of up to two targets.",
     "Loyalty": "5",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "a146ea07-ec1c-448d-b67a-dd9f9e27c2e0",
     "Layout": "normal"
@@ -15,9 +19,15 @@
     "Name": "Chandra, Hope's Beacon",
     "TypeLine": {
       "Raw": "Legendary Planeswalker — Chandra",
-      "Supertypes": ["Legendary"],
-      "Types": ["Planeswalker"],
-      "Subtypes": ["Chandra"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Chandra"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you cast an instant or sorcery spell, copy it. You may choose new targets for the copy. This ability triggers only once each turn.\n+2: Add two mana in any combination of colors.\n+1: Exile the top five cards of your library. Until the end of your next turn, you may cast an instant or sorcery spell from among those exiled cards.\n−X: Chandra deals X damage to each of up to two targets.",
@@ -28,18 +38,31 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell", "instant", "sorcery"],
+              "CardTypes": [
+                "spell",
+                "instant",
+                "sorcery"
+              ],
               "Controller": "You"
             }
           },
           "Effects": [
             {
               "EffectType": "copy",
-              "Target": { "Kind": "It" },
+              "Target": {
+                "Kind": "It"
+              },
               "MayChooseNewTargets": true
             }
           ],
-          "Restrictions": ["OnlyOnceEachTurn"]
+          "Restrictions": [
+            "OnlyOnceEachTurn"
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 139
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -48,12 +71,26 @@
             {
               "EffectType": "addMana",
               "Mana": "",
-              "Amount": { "QuantityType": "literal", "Value": 2 },
-              "AnyCombinationOf": ["W", "U", "B", "R", "G"]
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "AnyCombinationOf": [
+                "W",
+                "U",
+                "B",
+                "R",
+                "G"
+              ]
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 2
+          "LoyaltyCost": 2,
+          "SourceSpan": {
+            "Start": 140,
+            "Length": 46
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -61,9 +98,17 @@
           "Effects": [
             {
               "EffectType": "impulse",
-              "Count": { "QuantityType": "literal", "Value": 5 },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 5
+              },
               "RestDestination": "RemainExiled",
-              "PlayableFilter": { "CardTypes": ["instant", "sorcery"] },
+              "PlayableFilter": {
+                "CardTypes": [
+                  "instant",
+                  "sorcery"
+                ]
+              },
               "Duration": {
                 "DurationType": "untilTime",
                 "Until": {
@@ -76,7 +121,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 1
+          "LoyaltyCost": 1,
+          "SourceSpan": {
+            "Start": 187,
+            "Length": 150
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -84,16 +134,33 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "Self" },
-              "Amount": { "QuantityType": "variable", "Name": "X" },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Amount": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
               "Target": {
                 "Kind": "AnyTarget",
-                "Quantity": { "QuantityType": "upTo", "Maximum": 2, "Minimum": 0 }
+                "Quantity": {
+                  "QuantityType": "upTo",
+                  "Maximum": 2,
+                  "Minimum": 0
+                }
               }
             }
           ],
           "IsManaAbility": false,
-          "VariableLoyaltyCost": { "QuantityType": "variable", "Name": "X" }
+          "VariableLoyaltyCost": {
+            "QuantityType": "variable",
+            "Name": "X"
+          },
+          "SourceSpan": {
+            "Start": 338,
+            "Length": 56
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -102,15 +169,38 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 6,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "loyalty",
         "Raw": "5",

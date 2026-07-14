@@ -4,14 +4,20 @@
     "ManaCost": "{1}{R}",
     "TypeLine": "Enchantment",
     "OracleText": "Each nonland card in your graveyard has escape. The escape cost is equal to the card's mana cost plus exile three other cards from your graveyard. (You may cast cards from your graveyard for their escape cost.)\nAt the beginning of the end step, sacrifice this enchantment.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Underworld Breach",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Each nonland card in your graveyard has escape. The escape cost is equal to the card's mana cost plus exile three other cards from your graveyard. (You may cast cards from your graveyard for their escape cost.)\nAt the beginning of the end step, sacrifice this enchantment.",
@@ -24,8 +30,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["card"],
-                  "ExcludedCardTypes": ["land"],
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "ExcludedCardTypes": [
+                    "land"
+                  ],
                   "Controller": "You",
                   "Zone": "Graveyard"
                 }
@@ -44,13 +54,19 @@
                       "Value": 3
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
           "Reminder": {
             "Text": "(You may cast cards from your graveyard for their escape cost.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 210
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -68,7 +84,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 211,
+            "Length": 61
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -83,18 +104,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

@@ -6,14 +6,20 @@
     "OracleText": "{1}{U}: Counter target red spell.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Douse",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "{1}{U}: Counter target red spell.",
@@ -24,8 +30,16 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 },
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             }
           ],
@@ -35,13 +49,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"],
-                  "Colors": ["R"]
+                  "CardTypes": [
+                    "spell"
+                  ],
+                  "Colors": [
+                    "R"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 33
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -50,18 +73,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

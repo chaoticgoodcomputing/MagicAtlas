@@ -50,7 +50,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -60,7 +65,12 @@
               "Keyword": "Haste"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Haste",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -99,7 +109,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -126,7 +141,12 @@
           "KeywordSource": "Plot",
           "Reminder": {
             "Text": "(You may pay {1}{R} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 159
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

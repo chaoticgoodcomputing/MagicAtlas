@@ -17,8 +17,14 @@
     "Name": "Sakura-Tribe Scout",
     "TypeLine": {
       "Raw": "Creature — Snake Shaman Scout",
-      "Types": ["Creature"],
-      "Subtypes": ["Snake", "Shaman", "Scout"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Snake",
+        "Shaman",
+        "Scout"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: You may put a land card from your hand onto the battlefield.",
@@ -26,7 +32,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -34,14 +42,21 @@
               "Inner": {
                 "EffectType": "putFromHandOntoBattlefield",
                 "Filter": {
-                  "CardTypes": ["land"],
+                  "CardTypes": [
+                    "land"
+                  ],
                   "Zone": "Hand",
                   "Controller": "You"
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 65
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -50,23 +65,42 @@
         "Kind": "manaCost",
         "Raw": "{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["G"], "IsPhyrexian": false, "IsSnow": false }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

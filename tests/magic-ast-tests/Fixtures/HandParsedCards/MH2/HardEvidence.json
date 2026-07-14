@@ -54,7 +54,12 @@
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 38
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -62,7 +67,12 @@
             {
               "EffectType": "investigate"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 99
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

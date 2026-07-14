@@ -4,9 +4,15 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Instant",
     "OracleText": "Cleave {5}{W} (You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)\nDestroy target [attacking] creature.",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Cleave"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Cleave"
+    ],
     "Id": "9597b163-5c6b-4f64-b1f1-5f1fa2e23e5d",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Fierce Retribution",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Cleave {5}{W} (You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)\nDestroy target [attacking] creature.",
@@ -35,7 +43,9 @@
                   },
                   {
                     "Kind": "colored",
-                    "Colors": ["W"]
+                    "Colors": [
+                      "W"
+                    ]
                   }
                 ]
               }
@@ -43,7 +53,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this spell for its cleave cost. If you do, remove the words in square brackets.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 108
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -53,7 +68,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Characteristics": [
                     {
                       "CharacteristicType": "combatState",
@@ -64,7 +81,12 @@
               },
               "CantBeRegenerated": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 109,
+            "Length": 36
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -79,7 +101,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -87,11 +111,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

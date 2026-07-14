@@ -6,9 +6,15 @@
     "OracleText": "First strike\nAs an additional cost to cast red permanent spells, you may pay 2 life. Those spells cost {R} less to cast if you paid life this way. This effect reduces only the amount of red mana you pay.\nWhenever you cast a red permanent spell, this creature deals 1 damage to any target.",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["First strike"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "First strike"
+    ],
     "Id": "0e76e0cc-caff-4b15-b550-39e2324c8c95",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Defiler of Instinct",
     "TypeLine": {
       "Raw": "Creature — Phyrexian Kavu",
-      "Types": ["Creature"],
-      "Subtypes": ["Phyrexian", "Kavu"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Kavu"
+      ]
     },
     "Oracle": {
       "RawText": "First strike\nAs an additional cost to cast red permanent spells, you may pay 2 life. Those spells cost {R} less to cast if you paid life this way. This effect reduces only the amount of red mana you pay.\nWhenever you cast a red permanent spell, this creature deals 1 damage to any target.",
@@ -30,7 +41,12 @@
               "Timing": "First"
             }
           ],
-          "KeywordSource": "First strike"
+          "KeywordSource": "First strike",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,30 +56,58 @@
               "AdditionalCost": {
                 "Cost": {
                   "CostType": "payLife",
-                  "Amount": { "QuantityType": "literal", "Value": 2 }
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  }
                 },
                 "IsOptional": true
               },
               "AffectedSpells": {
-                "CardTypes": ["spell", "permanent"],
-                "Colors": ["R"],
+                "CardTypes": [
+                  "spell",
+                  "permanent"
+                ],
+                "Colors": [
+                  "R"
+                ],
                 "Controller": "You"
               }
             },
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 0 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 0
+              },
               "ManaSymbols": [
-                { "Kind": "colored", "Colors": ["R"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
               ],
-              "Condition": { "ConditionType": "additionalCostPaid" }
+              "Condition": {
+                "ConditionType": "additionalCostPaid"
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell", "permanent"],
-            "Colors": ["R"],
+            "CardTypes": [
+              "spell",
+              "permanent"
+            ],
+            "Colors": [
+              "R"
+            ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 190
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -71,19 +115,36 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell", "permanent"],
-              "Colors": ["R"],
+              "CardTypes": [
+                "spell",
+                "permanent"
+              ],
+              "Colors": [
+                "R"
+              ],
               "Controller": "You"
             }
           },
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
-              "Target": { "Kind": "AnyTarget" },
-              "Source": { "Kind": "Self" }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "AnyTarget"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 204,
+            "Length": 84
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -92,19 +153,50 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 4, "Raw": "4" },
-        "Toughness": { "ValueType": "fixed", "Value": 4, "Raw": "4" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 4,
+          "Raw": "4"
+        }
       }
     ]
   }

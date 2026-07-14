@@ -6,8 +6,16 @@
     "OracleText": "As long as your life total is less than or equal to half your starting life total, Bane has indestructible.\nWhenever another nontoken creature you control dies, target opponent may have you draw a card. If they don't, you may put a creature card with equal or lesser toughness from your hand onto the battlefield.",
     "Power": "5",
     "Toughness": "2",
-    "Colors": ["B", "U", "W"],
-    "ColorIdentity": ["B", "U", "W"],
+    "Colors": [
+      "B",
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "U",
+      "W"
+    ],
     "Keywords": [],
     "Id": "1a576d17-693d-4cc1-bb5b-bf81c74de03b",
     "Layout": "normal"
@@ -16,9 +24,15 @@
     "Name": "Bane, Lord of Darkness",
     "TypeLine": {
       "Raw": "Legendary Creature — God",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["God"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "God"
+      ]
     },
     "Oracle": {
       "RawText": "As long as your life total is less than or equal to half your starting life total, Bane has indestructible.\nWhenever another nontoken creature you control dies, target opponent may have you draw a card. If they don't, you may put a creature card with equal or lesser toughness from your hand onto the battlefield.",
@@ -39,7 +53,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Indestructible"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -63,7 +78,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 107
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -71,7 +91,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsToken": false,
               "Controller": "You",
               "ExcludeSelf": true
@@ -83,7 +105,9 @@
               "Chooser": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["opponent"]
+                  "CardTypes": [
+                    "opponent"
+                  ]
                 }
               },
               "Inner": {
@@ -101,7 +125,9 @@
                 "Inner": {
                   "EffectType": "putFromHandOntoBattlefield",
                   "Filter": {
-                    "CardTypes": ["creature"],
+                    "CardTypes": [
+                      "creature"
+                    ],
                     "Zone": "Hand",
                     "Controller": "You",
                     "ToughnessComparison": {
@@ -115,7 +141,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 205
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -130,15 +161,21 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -146,11 +183,19 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "U", "W"]
+        "Colors": [
+          "B",
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "U", "B"]
+        "ColorIdentity": [
+          "W",
+          "U",
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

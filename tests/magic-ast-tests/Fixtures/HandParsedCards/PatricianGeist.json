@@ -6,9 +6,15 @@
     "OracleText": "Flying\nOther Spirits you control get +1/+1.\nSpells you cast from your graveyard cost {1} less to cast.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Flying"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Flying"
+    ],
     "Id": "de2b0c63-c929-42ec-aada-dddb2a26550c",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Patrician Geist",
     "TypeLine": {
       "Raw": "Creature — Spirit Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Spirit", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nOther Spirits you control get +1/+1.\nSpells you cast from your graveyard cost {1} less to cast.",
@@ -29,7 +40,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -42,7 +55,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -52,8 +70,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Spirit"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Spirit"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
@@ -67,7 +89,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 36
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -81,10 +108,17 @@
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell"],
+            "CardTypes": [
+              "spell"
+            ],
             "Controller": "You",
             "Zone": "Graveyard"
-          }
+          },
+          "SourceSpan": {
+            "Start": 44,
+            "Length": 58
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -99,7 +133,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -107,11 +143,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

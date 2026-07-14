@@ -6,15 +6,25 @@
     "OracleText": "({W/P} can be paid with either {W} or 2 life.)\nFirst strike",
     "Power": "3",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Porcelain Legionnaire",
     "TypeLine": {
       "Raw": "Artifact Creature — Phyrexian Soldier",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Phyrexian", "Soldier"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "({W/P} can be paid with either {W} or 2 life.)\nFirst strike",
@@ -27,7 +37,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "First"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -42,7 +57,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"],
+            "Colors": [
+              "W"
+            ],
             "IsPhyrexian": true
           }
         ],
@@ -50,11 +67,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

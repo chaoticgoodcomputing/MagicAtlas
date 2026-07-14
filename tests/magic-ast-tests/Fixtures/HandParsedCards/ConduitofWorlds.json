@@ -35,7 +35,12 @@
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 39
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -87,7 +92,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 40,
+            "Length": 206
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -42,11 +42,19 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Shadow"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Shadow"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 77
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

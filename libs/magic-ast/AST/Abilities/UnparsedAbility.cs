@@ -15,13 +15,16 @@ public sealed record UnparsedAbility : Ability, IUnparsed
   public override AbilityKind AbilityKind => AbilityKind.Unparsed;
 
   /// <summary>
-  /// Location of this unparsed ability in the original oracle text. This node
-  /// serializes its span (unparsed provenance is part of the gold contract), so it
-  /// intentionally hides the non-serialized in-memory <see cref="Ability.SourceSpan"/>
-  /// via <c>new</c>: the base property is <c>[JsonIgnore]</c>, so only this one
-  /// participates in JSON and there is no duplicate-property collision.
+  /// Non-null projection of the inherited <see cref="Ability.SourceSpan"/> for the
+  /// <see cref="IUnparsed"/> contract, which needs a concrete span to attribute the
+  /// failure to its oracle line. Every unparsed node is constructed with a span (and
+  /// the parser stamps top-level ones), so this is effectively always the real span;
+  /// the <c>?? Empty</c> is a defensive floor. An explicit interface implementation —
+  /// it is NOT a serialized property, so the single serialized SourceSpan remains the
+  /// inherited <see cref="Ability.SourceSpan"/> and there is no duplicate key.
   /// </summary>
-  public new required TextSpan SourceSpan { get; init; }
+  MagicAST.AST.TextSpan MagicAST.AST.IUnparsed.SourceSpan =>
+    SourceSpan ?? MagicAST.AST.TextSpan.Empty;
 
   /// <summary>
   /// The raw text that could not be parsed.

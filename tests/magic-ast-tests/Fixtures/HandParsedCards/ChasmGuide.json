@@ -65,7 +65,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -75,7 +76,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 118
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

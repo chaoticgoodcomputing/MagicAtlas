@@ -64,7 +64,12 @@
           "KeywordSource": "Melee",
           "Reminder": {
             "Text": "(Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 115
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -98,7 +103,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 116,
+            "Length": 108
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

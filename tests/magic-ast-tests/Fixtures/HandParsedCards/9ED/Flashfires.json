@@ -4,8 +4,12 @@
     "ManaCost": "{3}{R}",
     "TypeLine": "Sorcery",
     "OracleText": "Destroy all Plains.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "277e0846-237e-4117-bdd4-d2e4ae450d43",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Flashfires",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy all Plains.",
@@ -27,11 +33,18 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "Subtypes": ["Plains"]
+                  "Subtypes": [
+                    "Plains"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 19
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +53,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

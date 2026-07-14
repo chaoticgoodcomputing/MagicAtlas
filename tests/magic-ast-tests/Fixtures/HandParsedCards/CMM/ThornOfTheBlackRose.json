@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -57,7 +62,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 11,
+            "Length": 50
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

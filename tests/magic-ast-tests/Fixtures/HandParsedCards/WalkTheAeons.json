@@ -4,9 +4,15 @@
     "ManaCost": "{4}{U}{U}",
     "TypeLine": "Sorcery",
     "OracleText": "Buyback—Sacrifice three Islands. (You may sacrifice three Islands in addition to any other costs as you cast this spell. If you do, put this card into your hand as it resolves.)\nTarget player takes an extra turn after this one.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Buyback"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Buyback"
+    ],
     "Id": "794d09ae-a995-482f-848e-7f99477bd6f3",
     "Layout": "normal"
   },
@@ -46,7 +52,12 @@
                 "IsOptional": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 177
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -71,7 +82,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 177
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -87,7 +103,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 178,
+            "Length": 49
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -102,22 +123,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

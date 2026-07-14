@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Body Dropper",
     "ManaCost": "{B}{R}",
-    "TypeLine": "Creature \u2014 Devil Warrior",
+    "TypeLine": "Creature — Devil Warrior",
     "OracleText": "Whenever you sacrifice another creature, put a +1/+1 counter on this creature.\n{B}{R}, Sacrifice another creature: This creature gains menace until end of turn. (It can't be blocked except by two or more creatures.)",
     "Power": "2",
     "Toughness": "2",
@@ -18,7 +18,7 @@
   "Output": {
     "Name": "Body Dropper",
     "TypeLine": {
-      "Raw": "Creature \u2014 Devil Warrior",
+      "Raw": "Creature — Devil Warrior",
       "Types": [
         "Creature"
       ],
@@ -55,7 +55,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 78
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -110,7 +115,8 @@
                     "MinimumBlockers": 2
                   }
                 ],
-                "KeywordSource": "Menace"
+                "KeywordSource": "Menace",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -121,7 +127,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 79,
+            "Length": 136
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

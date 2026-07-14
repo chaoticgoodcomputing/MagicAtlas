@@ -4,16 +4,28 @@
     "ManaCost": "{1}{W}{U}",
     "TypeLine": "Legendary Planeswalker — Teferi",
     "OracleText": "Each opponent can cast spells only any time they could cast a sorcery.\n+1: Until your next turn, you may cast sorcery spells as though they had flash.\n−3: Return up to one target artifact, creature, or enchantment to its owner's hand. Draw a card.",
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"]
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Teferi, Time Raveler",
     "TypeLine": {
       "Raw": "Legendary Planeswalker — Teferi",
-      "Supertypes": ["Legendary"],
-      "Types": ["Planeswalker"],
-      "Subtypes": ["Teferi"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Planeswalker"
+      ],
+      "Subtypes": [
+        "Teferi"
+      ]
     },
     "Oracle": {
       "RawText": "Each opponent can cast spells only any time they could cast a sorcery.\n+1: Until your next turn, you may cast sorcery spells as though they had flash.\n−3: Return up to one target artifact, creature, or enchantment to its owner's hand. Draw a card.",
@@ -32,7 +44,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 70
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -45,7 +62,9 @@
               "AppliesTo": {
                 "Kind": "spell",
                 "Filter": {
-                  "CardTypes": ["sorcery"],
+                  "CardTypes": [
+                    "sorcery"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -61,7 +80,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": 1
+          "LoyaltyCost": 1,
+          "SourceSpan": {
+            "Start": 71,
+            "Length": 79
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -72,7 +96,11 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "creature", "enchantment"]
+                  "CardTypes": [
+                    "artifact",
+                    "creature",
+                    "enchantment"
+                  ]
                 },
                 "Quantity": {
                   "QuantityType": "upTo",
@@ -93,7 +121,12 @@
             }
           ],
           "IsManaAbility": false,
-          "LoyaltyCost": -3
+          "LoyaltyCost": -3,
+          "SourceSpan": {
+            "Start": 151,
+            "Length": 96
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -108,11 +141,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -120,11 +157,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "W"]
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "U"]
+        "ColorIdentity": [
+          "W",
+          "U"
+        ]
       }
     ]
   }

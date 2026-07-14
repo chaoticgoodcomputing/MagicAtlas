@@ -6,14 +6,20 @@
     "OracleText": "Draw three cards. Then discard two cards unless you discard a creature card.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Mystic Meditation",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Draw three cards. Then discard two cards unless you discard a creature card.",
@@ -23,27 +29,51 @@
           "Effects": [
             {
               "EffectType": "drawCards",
-              "Count": { "QuantityType": "literal", "Value": 3 },
-              "Player": { "Kind": "You" }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
+              "Player": {
+                "Kind": "You"
+              }
             },
             {
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "discardCards",
-                "Count": { "QuantityType": "literal", "Value": 2 },
-                "Player": { "Kind": "You" },
+                "Count": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Player": {
+                  "Kind": "You"
+                },
                 "Random": false
               },
               "Unless": {
-                "Player": { "Kind": "You" },
+                "Player": {
+                  "Kind": "You"
+                },
                 "Cost": {
                   "CostType": "discard",
-                  "Filter": { "CardTypes": ["creature"] },
-                  "Quantity": { "QuantityType": "literal", "Value": 1 }
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  },
+                  "Quantity": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 76
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,18 +82,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

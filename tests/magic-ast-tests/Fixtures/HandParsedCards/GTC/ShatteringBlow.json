@@ -6,14 +6,22 @@
     "OracleText": "Exile target artifact.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W", "R"],
-    "ColorIdentity": ["W", "R"]
+    "Colors": [
+      "W",
+      "R"
+    ],
+    "ColorIdentity": [
+      "W",
+      "R"
+    ]
   },
   "Output": {
     "Name": "Shattering Blow",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target artifact.",
@@ -26,11 +34,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact"]
+                  "CardTypes": [
+                    "artifact"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 22
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,18 +54,33 @@
         "Kind": "manaCost",
         "Raw": "{1}{R/W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "hybrid", "Colors": ["W", "R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "hybrid",
+            "Colors": [
+              "W",
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W", "R"]
+        "Colors": [
+          "W",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "R"]
+        "ColorIdentity": [
+          "W",
+          "R"
+        ]
       }
     ]
   }

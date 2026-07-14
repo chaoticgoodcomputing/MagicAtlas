@@ -6,16 +6,27 @@
     "OracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\nWhenever a creature you control with deathtouch deals combat damage to a player, that player gets two poison counters. (A player with ten or more poison counters loses the game.)",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Fynn, the Fangbearer",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Warrior",
-      "Types": ["Creature"],
-      "Supertypes": ["Legendary"],
-      "Subtypes": ["Human", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Subtypes": [
+        "Human",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)\nWhenever a creature you control with deathtouch deals combat damage to a player, that player gets two poison counters. (A player with ten or more poison counters loses the game.)",
@@ -23,8 +34,20 @@
         {
           "Kind": "static",
           "KeywordSource": "Deathtouch",
-          "Reminder": { "Text": "(Any amount of damage this deals to a creature is enough to destroy it.)" },
-          "Effects": [ { "EffectType": "keywordAbility", "Keyword": "Deathtouch" } ]
+          "Reminder": {
+            "Text": "(Any amount of damage this deals to a creature is enough to destroy it.)"
+          },
+          "Effects": [
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Deathtouch"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 83
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -32,19 +55,36 @@
             "Timing": "Whenever",
             "Event": "DealsCombatDamageToPlayer",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You",
-              "Characteristics": [ { "CharacteristicType": "keyword", "Keyword": "Deathtouch" } ]
+              "Characteristics": [
+                {
+                  "CharacteristicType": "keyword",
+                  "Keyword": "Deathtouch"
+                }
+              ]
             }
           },
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "ThatPlayer" },
+              "Target": {
+                "Kind": "ThatPlayer"
+              },
               "CounterType": "poison",
-              "Count": { "QuantityType": "literal", "Value": 2 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 84,
+            "Length": 178
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -53,17 +93,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

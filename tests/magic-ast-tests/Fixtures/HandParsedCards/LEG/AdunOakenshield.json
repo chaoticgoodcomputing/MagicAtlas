@@ -41,9 +41,24 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["B"] },
-                { "Kind": "colored", "Colors": ["R"] },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             },
             {
@@ -65,7 +80,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 77
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -74,9 +94,24 @@
         "Kind": "manaCost",
         "Raw": "{B}{R}{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false

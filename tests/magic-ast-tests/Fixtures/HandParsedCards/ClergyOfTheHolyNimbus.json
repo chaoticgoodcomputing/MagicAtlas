@@ -6,9 +6,15 @@
     "OracleText": "If this creature would be destroyed, regenerate it.\n{1}: This creature can't be regenerated this turn. Only your opponents may activate this ability.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Regenerate"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Regenerate"
+    ],
     "Id": "db1f578f-fa3b-4447-953b-1490852b6c80",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Clergy of the Holy Nimbus",
     "TypeLine": {
       "Raw": "Creature — Human Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "If this creature would be destroyed, regenerate it.\n{1}: This creature can't be regenerated this turn. Only your opponents may activate this ability.",
@@ -41,7 +52,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -69,7 +85,12 @@
             }
           ],
           "WhoMayActivate": "Opponent",
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 97
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -80,7 +101,9 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 1,
@@ -88,11 +111,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

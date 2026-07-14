@@ -6,9 +6,15 @@
     "OracleText": "Double strike\nEquipped Warriors you control have double strike.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Double strike"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Double strike"
+    ],
     "Id": "fc6d6049-5599-47eb-ae58-a8eb96927ece",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Kor Blademaster",
     "TypeLine": {
       "Raw": "Creature — Kor Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Kor", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kor",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Double strike\nEquipped Warriors you control have double strike.",
@@ -30,7 +41,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "Both"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,8 +56,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Warrior"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Warrior"
+                  ],
                   "Controller": "You",
                   "Characteristics": [
                     {
@@ -59,10 +79,16 @@
                     "EffectType": "combatDamageTiming",
                     "Timing": "Both"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 49
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -71,24 +97,44 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 1, "Raw": "1" },
-        "Toughness": { "ValueType": "fixed", "Value": 1, "Raw": "1" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 1,
+          "Raw": "1"
+        }
       }
     ]
   }

@@ -59,7 +59,12 @@
                 "Revealed": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 193
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

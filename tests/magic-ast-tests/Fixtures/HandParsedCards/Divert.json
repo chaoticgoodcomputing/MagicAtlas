@@ -6,14 +6,20 @@
     "OracleText": "Change the target of target spell with a single target.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Divert",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Change the target of target spell with a single target.",
@@ -26,12 +32,24 @@
               "Spell": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"],
-                  "Characteristics": [{"CharacteristicType": "other", "Description": "single target"}]
+                  "CardTypes": [
+                    "spell"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "other",
+                      "Description": "single target"
+                    }
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 55
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +58,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

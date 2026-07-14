@@ -75,7 +75,12 @@
           "KeywordSource": "Mentor",
           "Reminder": {
             "Text": "(Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 108
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -49,7 +49,12 @@
               },
               "Tapped": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 103
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

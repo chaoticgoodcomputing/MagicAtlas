@@ -38,7 +38,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 64
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -54,7 +59,12 @@
           ],
           "Reminder": {
             "Text": "(Tap any number of creatures you control with total power 5 or more: This Vehicle becomes an artifact creature until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 65,
+            "Length": 137
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

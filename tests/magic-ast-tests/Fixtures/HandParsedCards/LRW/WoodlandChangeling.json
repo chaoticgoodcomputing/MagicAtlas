@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Changeling"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

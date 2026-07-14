@@ -4,14 +4,22 @@
     "ManaCost": "{4}{R}{W}",
     "TypeLine": "Enchantment",
     "OracleText": "Whenever a creature you control attacks, put a +1/+1 counter on it.",
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"]
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Gleam of Battle",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever a creature you control attacks, put a +1/+1 counter on it.",
@@ -22,7 +30,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             }
           },
@@ -38,7 +48,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -47,14 +62,39 @@
         "Kind": "manaCost",
         "Raw": "{4}{R}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 6
       },
-      { "Kind": "colors", "Colors": ["R", "W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R", "W"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R",
+          "W"
+        ]
+      }
     ]
   }
 }

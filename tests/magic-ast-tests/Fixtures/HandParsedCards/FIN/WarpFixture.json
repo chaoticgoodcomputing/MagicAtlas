@@ -53,7 +53,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -80,7 +85,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this card from your hand for its warp cost. It enters the battlefield tapped.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 104
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -75,7 +75,8 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -104,7 +105,8 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ],
@@ -113,7 +115,12 @@
           ],
           "Reminder": {
             "Text": "Food is an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\" Treasure is an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 250
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

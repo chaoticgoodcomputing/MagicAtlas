@@ -36,7 +36,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -50,7 +55,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 16
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -72,7 +82,12 @@
                 "Value": 2
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 23,
+            "Length": 30
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -91,7 +106,12 @@
                 "Value": 3
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 54,
+            "Length": 30
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

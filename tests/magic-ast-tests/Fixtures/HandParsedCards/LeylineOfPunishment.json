@@ -34,7 +34,12 @@
                 "EffectType": "openingHand"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 88
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +50,12 @@
                 "Kind": "EachPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 89,
+            "Length": 24
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -53,7 +63,12 @@
             {
               "EffectType": "cantPreventDamage"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 114,
+            "Length": 26
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

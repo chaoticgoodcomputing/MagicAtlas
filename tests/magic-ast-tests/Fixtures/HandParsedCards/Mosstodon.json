@@ -34,7 +34,10 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             }
           ],
@@ -44,7 +47,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "PowerComparison": {
                     "Operator": "GreaterThanOrEqual",
                     "Value": 5
@@ -59,7 +64,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Trample"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -70,7 +76,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 77
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -79,24 +90,44 @@
         "Kind": "manaCost",
         "Raw": "{4}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

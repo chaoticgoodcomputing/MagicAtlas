@@ -17,8 +17,13 @@
     "Name": "Ondu Spiritdancer",
     "TypeLine": {
       "Raw": "Creature — Kor Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Kor", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Kor",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever an enchantment you control enters, you may create a token that's a copy of it. Do this only once each turn.",
@@ -29,7 +34,9 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["enchantment"],
+              "CardTypes": [
+                "enchantment"
+              ],
               "Controller": "You"
             }
           },
@@ -44,7 +51,14 @@
               }
             }
           ],
-          "Restrictions": ["OnlyOnceEachTurn"]
+          "Restrictions": [
+            "OnlyOnceEachTurn"
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 116
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -53,24 +67,44 @@
         "Kind": "manaCost",
         "Raw": "{4}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "3", "Value": 3 },
-        "Toughness": { "ValueType": "fixed", "Raw": "3", "Value": 3 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "3",
+          "Value": 3
+        }
       }
     ]
   }

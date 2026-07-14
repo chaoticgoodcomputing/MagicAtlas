@@ -6,15 +6,23 @@
     "OracleText": "Sacrifice a creature: Put a +1/+1 counter on Bloodflow Connoisseur.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Bloodflow Connoisseur",
     "TypeLine": {
       "Raw": "Creature — Vampire",
-      "Types": ["Creature"],
-      "Subtypes": ["Vampire"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire"
+      ]
     },
     "Oracle": {
       "RawText": "Sacrifice a creature: Put a +1/+1 counter on Bloodflow Connoisseur.",
@@ -25,7 +33,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -46,7 +56,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -55,24 +70,44 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

@@ -6,8 +6,12 @@
     "OracleText": "Exile a creature you control: Add X mana of any one color, where X is 1 plus the exiled creature's mana value. Spend this mana only to cast creature spells.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Food Chain",
@@ -57,7 +61,12 @@
               "SpendRestriction": "cast creature spells"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 156
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

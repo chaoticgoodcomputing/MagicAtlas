@@ -39,7 +39,12 @@
               "Keyword": "Trample"
             }
           ],
-          "KeywordSource": "Trample"
+          "KeywordSource": "Trample",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,7 +54,12 @@
               "Keyword": "Haste"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Haste",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -68,7 +78,12 @@
                 "Type": "double"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 155
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -87,7 +102,12 @@
                 "Type": "halveRoundDown"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 171,
+            "Length": 181
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

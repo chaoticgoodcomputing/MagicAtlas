@@ -65,7 +65,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -79,7 +80,12 @@
           "Reminder": {
             "Text": "(It can't be blocked except by artifact creatures and/or black creatures.)"
           },
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 123
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

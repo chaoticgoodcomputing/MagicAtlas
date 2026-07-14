@@ -45,7 +45,12 @@
           "KeywordSource": "Sneak",
           "Reminder": {
             "Text": "(You may cast this spell for {U} if you also return an unblocked attacker you control to hand during the declare blockers step.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 138
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -60,7 +65,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 139,
+            "Length": 15
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

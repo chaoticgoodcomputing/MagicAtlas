@@ -6,14 +6,20 @@
     "OracleText": "Whenever a creature you control with flying enters, it gains haste until end of turn.\nWhenever a Dragon you control enters, it deals X damage to any target, where X is the number of Dragons you control.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Dragon Tempest",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever a creature you control with flying enters, it gains haste until end of turn.\nWhenever a Dragon you control enters, it deals X damage to any target, where X is the number of Dragons you control.",
@@ -24,7 +30,9 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You",
               "Characteristics": [
                 {
@@ -48,7 +56,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -58,7 +67,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 85
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -66,7 +80,9 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "Subtypes": ["Dragon"],
+              "Subtypes": [
+                "Dragon"
+              ],
               "Controller": "You"
             }
           },
@@ -79,7 +95,9 @@
               "Amount": {
                 "QuantityType": "count",
                 "CountOf": {
-                  "Subtypes": ["Dragon"],
+                  "Subtypes": [
+                    "Dragon"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -87,7 +105,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 86,
+            "Length": 116
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -102,18 +125,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

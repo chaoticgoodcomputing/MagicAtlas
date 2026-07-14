@@ -47,7 +47,12 @@
           "KeywordSource": "Swampwalk",
           "Reminder": {
             "Text": "(This creature can't be blocked as long as defending player controls a Swamp.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 88
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

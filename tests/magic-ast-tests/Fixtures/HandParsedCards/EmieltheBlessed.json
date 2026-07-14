@@ -75,7 +75,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 108
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -145,7 +150,12 @@
           ],
           "Reminder": {
             "Text": "{G/W} can be paid with either {G} or {W}."
-          }
+          },
+          "SourceSpan": {
+            "Start": 109,
+            "Length": 203
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

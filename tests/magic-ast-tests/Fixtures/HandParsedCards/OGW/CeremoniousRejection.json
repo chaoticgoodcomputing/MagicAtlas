@@ -6,14 +6,20 @@
     "OracleText": "Counter target colorless spell.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Ceremonious Rejection",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Counter target colorless spell.",
@@ -26,12 +32,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"],
+                  "CardTypes": [
+                    "spell"
+                  ],
                   "IsColorless": true
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 31
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,17 +53,26 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

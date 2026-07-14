@@ -6,15 +6,23 @@
     "OracleText": "You may have this creature enter as a copy of any creature on the battlefield.",
     "Power": "0",
     "Toughness": "0",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Clone",
     "TypeLine": {
       "Raw": "Creature — Shapeshifter",
-      "Types": ["Creature"],
-      "Subtypes": ["Shapeshifter"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shapeshifter"
+      ]
     },
     "Oracle": {
       "RawText": "You may have this creature enter as a copy of any creature on the battlefield.",
@@ -32,14 +40,21 @@
                 "CopyTarget": {
                   "Kind": "Any",
                   "Filter": {
-                    "CardTypes": ["creature"],
+                    "CardTypes": [
+                      "creature"
+                    ],
                     "Zone": "Battlefield"
                   }
                 }
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 78
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -54,18 +69,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

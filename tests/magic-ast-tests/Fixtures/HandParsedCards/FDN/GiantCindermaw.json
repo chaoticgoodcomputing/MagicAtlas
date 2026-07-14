@@ -39,7 +39,12 @@
           ],
           "Reminder": {
             "Text": "(This creature can deal excess combat damage to the player or planeswalker it's attacking.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 99
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -50,7 +55,12 @@
                 "Kind": "EachPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 24
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

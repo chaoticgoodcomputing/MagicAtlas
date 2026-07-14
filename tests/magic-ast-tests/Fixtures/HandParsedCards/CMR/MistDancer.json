@@ -50,7 +50,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -116,10 +121,16 @@
                     }
                   }
                 ],
-                "KeywordSource": "Flying"
+                "KeywordSource": "Flying",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -152,7 +163,12 @@
           ],
           "Reminder": {
             "Text": "({5}{U}{U}, Exile this card from your graveyard: For each opponent, create a token copy that attacks that opponent this turn if able. They gain haste. Sacrifice them at the beginning of the next end step. Activate only as a sorcery.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 60,
+            "Length": 250
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

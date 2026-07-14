@@ -48,7 +48,12 @@
               "MinimumBlockers": 2
             }
           ],
-          "KeywordSource": "Menace"
+          "KeywordSource": "Menace",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -58,7 +63,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haste"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -138,7 +148,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 285
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

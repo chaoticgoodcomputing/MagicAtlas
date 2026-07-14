@@ -42,7 +42,12 @@
               "Timing": "Instant"
             }
           ],
-          "KeywordSource": "Flash"
+          "KeywordSource": "Flash",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -84,7 +89,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 153
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -141,7 +151,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 160,
+            "Length": 57
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

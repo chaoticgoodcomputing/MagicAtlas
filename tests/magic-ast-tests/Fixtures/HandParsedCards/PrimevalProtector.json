@@ -6,8 +6,12 @@
     "OracleText": "This spell costs {1} less to cast for each creature your opponents control.\nWhen this creature enters, put a +1/+1 counter on each other creature you control.",
     "Power": "10",
     "Toughness": "10",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "15ab4c3b-323a-47c6-b675-447d16def3d5",
     "Layout": "normal"
@@ -42,7 +46,12 @@
                 "Controller": "Opponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 75
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -75,7 +84,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 76,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

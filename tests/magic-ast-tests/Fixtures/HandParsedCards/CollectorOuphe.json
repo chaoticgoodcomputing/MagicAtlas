@@ -41,7 +41,12 @@
             {
               "EffectType": "cantActivateAbilities"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

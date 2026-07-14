@@ -4,8 +4,12 @@
     "ManaCost": "{R}",
     "TypeLine": "Enchantment — Class",
     "OracleText": "(Gain the next level as a sorcery to add its ability.)\nIf you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.\n{1}{R}: Level 2\nWhenever you roll one or more dice, target creature you control gets +2/+0 and gains menace until end of turn.\n{2}{R}: Level 3\nCreatures you control have haste.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "647c2269-bdc7-4455-9158-73abbff6e50e",
     "Layout": "class"
@@ -14,8 +18,12 @@
     "Name": "Barbarian Class",
     "TypeLine": {
       "Raw": "Enchantment — Class",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Class"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Class"
+      ]
     },
     "Oracle": {
       "RawText": "(Gain the next level as a sorcery to add its ability.)\nIf you would roll one or more dice, instead roll that many dice plus one and ignore the lowest roll.\n{1}{R}: Level 2\nWhenever you roll one or more dice, target creature you control gets +2/+0 and gains menace until end of turn.\n{2}{R}: Level 3\nCreatures you control have haste.",
@@ -31,12 +39,17 @@
                   "Event": {
                     "EventType": "diceRoll",
                     "MinimumQuantity": 1,
-                    "Controller": { "Kind": "You" }
+                    "Controller": {
+                      "Kind": "You"
+                    }
                   },
                   "OriginalEventOccurs": false,
-                  "Modifier": { "Type": "advantage" }
+                  "Modifier": {
+                    "Type": "advantage"
+                  }
                 }
-              ]
+              ],
+              "OracleLineIndex": 0
             }
           ],
           "Levels": [
@@ -45,8 +58,16 @@
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 1 },
-                  { "Kind": "colored", "Colors": ["R"] }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "R"
+                    ]
+                  }
                 ]
               },
               "Abilities": [
@@ -62,37 +83,59 @@
                       "Target": {
                         "Kind": "Target",
                         "Filter": {
-                          "CardTypes": ["creature"],
+                          "CardTypes": [
+                            "creature"
+                          ],
                           "Controller": "You"
                         }
                       },
-                      "PowerModifier": { "QuantityType": "literal", "Value": 2 },
-                      "ToughnessModifier": { "QuantityType": "literal", "Value": 0 },
+                      "PowerModifier": {
+                        "QuantityType": "literal",
+                        "Value": 2
+                      },
+                      "ToughnessModifier": {
+                        "QuantityType": "literal",
+                        "Value": 0
+                      },
                       "Duration": {
                         "DurationType": "untilTime",
-                        "Until": { "Part": "Turn", "Edge": "End" }
+                        "Until": {
+                          "Part": "Turn",
+                          "Edge": "End"
+                        }
                       }
                     },
                     {
                       "EffectType": "gainAbility",
-                      "Target": { "Kind": "It" },
+                      "Target": {
+                        "Kind": "It"
+                      },
                       "GainedAbility": {
                         "Kind": "static",
                         "Effects": [
                           {
                             "EffectType": "evasion",
-                            "CanBeBlockedBy": { "CardTypes": ["creature"] },
+                            "CanBeBlockedBy": {
+                              "CardTypes": [
+                                "creature"
+                              ]
+                            },
                             "MinimumBlockers": 2
                           }
                         ],
-                        "KeywordSource": "Menace"
+                        "KeywordSource": "Menace",
+                        "OracleLineIndex": 0
                       },
                       "Duration": {
                         "DurationType": "untilTime",
-                        "Until": { "Part": "Turn", "Edge": "End" }
+                        "Until": {
+                          "Part": "Turn",
+                          "Edge": "End"
+                        }
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ]
             },
@@ -101,8 +144,16 @@
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 2 },
-                  { "Kind": "colored", "Colors": ["R"] }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 2
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "R"
+                    ]
+                  }
                 ]
               },
               "Abilities": [
@@ -114,7 +165,9 @@
                       "Target": {
                         "Kind": "Each",
                         "Filter": {
-                          "CardTypes": ["creature"],
+                          "CardTypes": [
+                            "creature"
+                          ],
                           "Controller": "You"
                         }
                       },
@@ -126,14 +179,21 @@
                             "Keyword": "Haste"
                           }
                         ],
-                        "KeywordSource": "Haste"
+                        "KeywordSource": "Haste",
+                        "OracleLineIndex": 0
                       }
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -142,14 +202,32 @@
         "Kind": "manaCost",
         "Raw": "{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
-      { "Kind": "layout", "Layout": "class" }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "class"
+      }
     ]
   }
 }

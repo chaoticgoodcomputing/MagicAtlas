@@ -4,9 +4,15 @@
     "ManaCost": "{1}{R}{R}",
     "TypeLine": "Sorcery",
     "OracleText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nWildfire Howl deals 2 damage to each creature. If the gift was promised, instead Wildfire Howl deals 1 damage to any target and 2 damage to each creature.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Gift"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Gift"
+    ],
     "Id": "7392d397-9836-4df2-944d-c930c9566811",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Wildfire Howl",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Gift a card (You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)\nWildfire Howl deals 2 damage to each creature. If the gift was promised, instead Wildfire Howl deals 1 damage to any target and 2 damage to each creature.",
@@ -49,7 +57,12 @@
           "KeywordSource": "Gift",
           "Reminder": {
             "Text": "(You may promise an opponent a gift as you cast this spell. If you do, they draw a card before its other effects.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 126
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -87,7 +100,9 @@
                     "Target": {
                       "Kind": "Each",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     }
                   }
@@ -105,12 +120,19 @@
                 "Target": {
                   "Kind": "Each",
                   "Filter": {
-                    "CardTypes": ["creature"]
+                    "CardTypes": [
+                      "creature"
+                    ]
                   }
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 127,
+            "Length": 154
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -125,22 +147,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

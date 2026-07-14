@@ -36,7 +36,12 @@
                 "DerivedFrom": "CardsInHand"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 91
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -58,7 +63,12 @@
                 "Kind": "EachOpponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 92,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -47,7 +47,12 @@
           ],
           "Reminder": {
             "Text": "Put the top card of your Attraction deck onto the battlefield."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 111
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

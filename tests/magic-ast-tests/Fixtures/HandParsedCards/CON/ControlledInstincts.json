@@ -43,7 +43,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 29
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -55,7 +60,12 @@
               },
               "WhoseUntapStep": "its controller's"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 30,
+            "Length": 68
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

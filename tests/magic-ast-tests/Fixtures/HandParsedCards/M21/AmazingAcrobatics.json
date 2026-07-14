@@ -4,14 +4,20 @@
     "ManaCost": "{1}{U}{U}",
     "TypeLine": "Instant",
     "OracleText": "Choose one or both —\n• Counter target spell.\n• Tap one or two target creatures.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Amazing Acrobatics",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Choose one or both —\n• Counter target spell.\n• Tap one or two target creatures.",
@@ -32,11 +38,14 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["spell"]
+                        "CardTypes": [
+                          "spell"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -48,7 +57,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     },
                     "Count": {
@@ -57,11 +68,17 @@
                       "Maximum": 2
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -70,19 +87,36 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

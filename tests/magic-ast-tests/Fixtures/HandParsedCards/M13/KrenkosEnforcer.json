@@ -47,7 +47,12 @@
           "KeywordSource": "Intimidate",
           "Reminder": {
             "Text": "(This creature can't be blocked except by artifact creatures and/or creatures that share a color with it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 117
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

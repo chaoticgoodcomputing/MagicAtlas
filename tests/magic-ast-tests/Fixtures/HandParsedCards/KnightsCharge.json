@@ -4,8 +4,14 @@
     "ManaCost": "{1}{W}{B}",
     "TypeLine": "Enchantment",
     "OracleText": "Whenever a Knight you control attacks, each opponent loses 1 life and you gain 1 life.\n{6}{W}{B}, Sacrifice this enchantment: Return all Knight creature cards from your graveyard to the battlefield.",
-    "Colors": ["B", "W"],
-    "ColorIdentity": ["B", "W"],
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ],
     "Keywords": [],
     "Id": "53d74710-7396-4984-afd8-fe47059e3d12",
     "Layout": "normal"
@@ -14,7 +20,9 @@
     "Name": "Knights' Charge",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever a Knight you control attacks, each opponent loses 1 life and you gain 1 life.\n{6}{W}{B}, Sacrifice this enchantment: Return all Knight creature cards from your graveyard to the battlefield.",
@@ -25,8 +33,12 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Subtypes": ["Knight"],
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Knight"
+              ],
               "Controller": "You"
             }
           },
@@ -51,7 +63,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 86
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -65,18 +82,24 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["W"]
+                  "Colors": [
+                    "W"
+                  ]
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["B"]
+                  "Colors": [
+                    "B"
+                  ]
                 }
               ]
             },
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["enchantment"],
+                "CardTypes": [
+                  "enchantment"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -91,15 +114,24 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Knight"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Knight"
+                  ],
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 87,
+            "Length": 111
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -114,11 +146,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -126,11 +162,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "W"]
+        "Colors": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "W"]
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
       }
     ]
   }

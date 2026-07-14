@@ -6,15 +6,23 @@
     "OracleText": "Whenever this creature is dealt damage, it deals that much damage to you.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Jackal Pup",
     "TypeLine": {
       "Raw": "Creature — Jackal",
-      "Types": ["Creature"],
-      "Subtypes": ["Jackal"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Jackal"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever this creature is dealt damage, it deals that much damage to you.",
@@ -25,7 +33,9 @@
             "Timing": "Whenever",
             "Event": "CreatureDealtDamage",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -43,7 +53,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 73
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,22 +67,39 @@
         "Kind": "manaCost",
         "Raw": "{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

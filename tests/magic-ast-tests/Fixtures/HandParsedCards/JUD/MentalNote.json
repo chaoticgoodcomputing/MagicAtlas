@@ -4,9 +4,15 @@
     "ManaCost": "{U}",
     "TypeLine": "Instant",
     "OracleText": "Mill two cards.\nDraw a card.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Mill"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Mill"
+    ],
     "Id": "1f343724-6ecd-494f-8bfc-93676af4e173",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Mental Note",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Mill two cards.\nDraw a card.",
@@ -32,7 +40,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 15
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -47,7 +60,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 16,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -56,17 +74,26 @@
         "Kind": "manaCost",
         "Raw": "{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

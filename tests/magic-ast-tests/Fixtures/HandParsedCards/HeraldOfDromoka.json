@@ -36,7 +36,12 @@
               "Keyword": "Vigilance"
             }
           ],
-          "KeywordSource": "Vigilance"
+          "KeywordSource": "Vigilance",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 9
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -64,10 +69,16 @@
                     "Keyword": "Vigilance"
                   }
                 ],
-                "KeywordSource": "Vigilance"
+                "KeywordSource": "Vigilance",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 10,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

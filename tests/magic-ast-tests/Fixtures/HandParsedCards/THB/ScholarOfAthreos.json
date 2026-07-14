@@ -6,15 +6,25 @@
     "OracleText": "{2}{B}: Each opponent loses 1 life. You gain life equal to the life lost this way.",
     "Power": "1",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["B", "W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Scholar of Athreos",
     "TypeLine": {
       "Raw": "Creature — Human Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "{2}{B}: Each opponent loses 1 life. You gain life equal to the life lost this way.",
@@ -25,8 +35,16 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["B"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
               ]
             }
           ],
@@ -52,7 +70,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 82
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -61,18 +84,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "W"]
+        "ColorIdentity": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -38,7 +38,12 @@
           "KeywordSource": "Trample",
           "Reminder": {
             "Text": "(This creature can deal excess combat damage to the player or planeswalker it's attacking.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 99
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,10 +68,16 @@
                     "Keyword": "Trample"
                   }
                 ],
-                "KeywordSource": "Trample"
+                "KeywordSource": "Trample",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 41
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

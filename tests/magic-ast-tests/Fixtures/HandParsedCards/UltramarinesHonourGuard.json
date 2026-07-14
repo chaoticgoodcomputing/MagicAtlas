@@ -51,7 +51,12 @@
           "KeywordSource": "Squad",
           "Reminder": {
             "Text": "(As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 164
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -78,7 +83,12 @@
               }
             }
           ],
-          "KeywordSource": "Squad"
+          "KeywordSource": "Squad",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 164
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -104,7 +114,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 165,
+            "Length": 38
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

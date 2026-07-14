@@ -40,7 +40,12 @@
                 "Kind": "AnyTarget"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 39
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -53,7 +58,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this card from your graveyard by discarding a land card in addition to paying its other costs.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 40,
+            "Length": 117
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

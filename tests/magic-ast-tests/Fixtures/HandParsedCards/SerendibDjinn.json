@@ -6,9 +6,15 @@
     "OracleText": "Flying\nAt the beginning of your upkeep, sacrifice a land. If you sacrifice an Island this way, this creature deals 3 damage to you.\nWhen you control no lands, sacrifice this creature.",
     "Power": "5",
     "Toughness": "6",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Flying"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Flying"
+    ],
     "Id": "ed1409f0-f17b-4f5c-9cf7-8ed18143b7b8",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Serendib Djinn",
     "TypeLine": {
       "Raw": "Creature — Djinn",
-      "Types": ["Creature"],
-      "Subtypes": ["Djinn"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Djinn"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nAt the beginning of your upkeep, sacrifice a land. If you sacrifice an Island this way, this creature deals 3 damage to you.\nWhen you control no lands, sacrifice this creature.",
@@ -28,15 +38,28 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
-                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -54,7 +77,9 @@
               "Target": {
                 "Kind": "Any",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               }
             },
@@ -78,7 +103,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 124
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -86,7 +116,9 @@
             "Timing": "When",
             "Event": "ControlNoLandType",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "Controller": "You"
             }
           },
@@ -97,7 +129,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 132,
+            "Length": 51
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -106,19 +143,36 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

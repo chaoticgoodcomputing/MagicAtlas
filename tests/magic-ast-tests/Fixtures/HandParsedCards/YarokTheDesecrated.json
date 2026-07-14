@@ -6,9 +6,20 @@
     "OracleText": "Deathtouch, lifelink\nIf a permanent entering causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.",
     "Power": "3",
     "Toughness": "5",
-    "Colors": ["B", "G", "U"],
-    "ColorIdentity": ["B", "G", "U"],
-    "Keywords": ["Lifelink", "Deathtouch"],
+    "Colors": [
+      "B",
+      "G",
+      "U"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G",
+      "U"
+    ],
+    "Keywords": [
+      "Lifelink",
+      "Deathtouch"
+    ],
     "Id": "c08a2da8-3ce7-4e0d-bdb0-81b6cdf3126a",
     "Layout": "normal"
   },
@@ -38,7 +49,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,7 +63,12 @@
             {
               "EffectType": "lifelink"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -73,7 +94,12 @@
                 "Type": "additionalTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 21,
+            "Length": 131
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

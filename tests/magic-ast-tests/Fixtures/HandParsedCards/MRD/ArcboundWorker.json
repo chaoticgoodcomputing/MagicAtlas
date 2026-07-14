@@ -43,7 +43,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 125
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -82,7 +87,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 125
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

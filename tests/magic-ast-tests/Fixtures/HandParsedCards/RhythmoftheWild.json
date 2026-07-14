@@ -37,7 +37,12 @@
             {
               "EffectType": "cantBeCountered"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 47
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -65,10 +70,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Riot"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 48,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -13,7 +13,9 @@
     "Name": "Rings of Brighthearth",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you activate an ability, if it isn't a mana ability, you may pay {2}. If you do, copy that ability. You may choose new targets for the copy.",
@@ -39,7 +41,10 @@
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "generic", "GenericAmount": 2 }
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 2
+                    }
                   ]
                 }
               },
@@ -52,7 +57,14 @@
               }
             }
           ],
-          "Instructions": ["you may pay {2}"]
+          "Instructions": [
+            "you may pay {2}"
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 149
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -61,7 +73,10 @@
         "Kind": "manaCost",
         "Raw": "{3}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
         ],
         "ManaValue": 3
       },

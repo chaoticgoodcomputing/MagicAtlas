@@ -6,14 +6,20 @@
     "OracleText": "Whenever an opponent casts a white spell, that player loses 1 life and you gain 1 life.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Yawgmoth's Edict",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever an opponent casts a white spell, that player loses 1 life and you gain 1 life.",
@@ -24,8 +30,12 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "Colors": ["W"],
+              "CardTypes": [
+                "spell"
+              ],
+              "Colors": [
+                "W"
+              ],
               "Controller": "Opponent"
             }
           },
@@ -55,7 +65,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 87
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -70,18 +85,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature gets +2/+0 and has shroud. (It can't be the target of spells or abilities.)\nWhenever a Rogue creature enters, you may attach this Equipment to it.\nEquip {3}",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Equip"],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "38bb3e3c-1a7d-4bc4-b69d-6a8e9f1b3fe7",
     "Layout": "normal"
   },
@@ -14,8 +16,14 @@
     "Name": "Cloak and Dagger",
     "TypeLine": {
       "Raw": "Kindred Artifact — Rogue Equipment",
-      "Types": ["Kindred", "Artifact"],
-      "Subtypes": ["Rogue", "Equipment"]
+      "Types": [
+        "Kindred",
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Rogue",
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +2/+0 and has shroud. (It can't be the target of spells or abilities.)\nWhenever a Rogue creature enters, you may attach this Equipment to it.\nEquip {3}",
@@ -28,24 +36,43 @@
               "Effects": [
                 {
                   "EffectType": "modifyPT",
-                  "Target": { "Kind": "EnchantedOrEquipped" },
-                  "PowerModifier": { "QuantityType": "literal", "Value": 2 },
-                  "ToughnessModifier": { "QuantityType": "literal", "Value": 0 }
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 2
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 0
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
-                  "Target": { "Kind": "EnchantedOrEquipped" },
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
                   "GainedAbility": {
                     "Kind": "static",
                     "Effects": [
-                      { "EffectType": "keywordAbility", "Keyword": "Shroud" }
+                      {
+                        "EffectType": "keywordAbility",
+                        "Keyword": "Shroud"
+                      }
                     ],
-                    "KeywordSource": "Shroud"
+                    "KeywordSource": "Shroud",
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 93
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -53,8 +80,12 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Subtypes": ["Rogue"]
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Rogue"
+              ]
             }
           },
           "Effects": [
@@ -62,10 +93,17 @@
               "EffectType": "optional",
               "Inner": {
                 "EffectType": "attach",
-                "Target": { "Kind": "It" }
+                "Target": {
+                  "Kind": "It"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 94,
+            "Length": 70
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -73,7 +111,12 @@
           "Costs": [
             {
               "CostType": "mana",
-              "Symbols": [{ "Kind": "generic", "GenericAmount": 3 }]
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
+              ]
             }
           ],
           "Effects": [
@@ -82,14 +125,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 165,
+            "Length": 9
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -97,12 +149,23 @@
       {
         "Kind": "manaCost",
         "Raw": "{2}",
-        "Symbols": [{ "Kind": "generic", "GenericAmount": 2 }],
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          }
+        ],
         "ManaValue": 2,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

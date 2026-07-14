@@ -92,7 +92,12 @@
                   "Keyword": "Prepared"
                 }
               ],
-              "KeywordSource": "Prepared"
+              "KeywordSource": "Prepared",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 111
+              },
+              "OracleLineIndex": 0
             }
           ]
         },
@@ -176,7 +181,12 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 56
+              },
+              "OracleLineIndex": 0
             }
           ]
         },

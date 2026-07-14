@@ -6,14 +6,22 @@
     "OracleText": "Counter target spell unless its controller pays {3}. If that spell is countered this way, exile it instead of putting it into its owner's graveyard.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"]
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ]
   },
   "Output": {
     "Name": "No More Lies",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"],
+      "Types": [
+        "Instant"
+      ],
       "Subtypes": []
     },
     "Oracle": {
@@ -26,18 +34,37 @@
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "counterSpell",
-                "Target": { "Kind": "Target", "Filter": { "CardTypes": ["spell"] } },
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ]
+                  }
+                },
                 "ExileInsteadOfGraveyard": true
               },
               "Unless": {
-                "Player": { "Kind": "Controller" },
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "mana",
-                  "Symbols": [ { "Kind": "generic", "GenericAmount": 3 } ]
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 3
+                    }
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -46,13 +73,35 @@
         "Kind": "manaCost",
         "Raw": "{W}{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["U", "W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U", "W"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U",
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U",
+          "W"
+        ]
+      }
     ]
   }
 }

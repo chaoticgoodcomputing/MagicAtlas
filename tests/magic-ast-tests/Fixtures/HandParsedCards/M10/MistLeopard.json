@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Shroud"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 66
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

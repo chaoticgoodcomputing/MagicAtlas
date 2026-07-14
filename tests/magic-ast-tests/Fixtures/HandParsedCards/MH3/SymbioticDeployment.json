@@ -36,7 +36,12 @@
               },
               "OriginalEventOccurs": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -76,7 +81,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 21,
+            "Length": 57
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

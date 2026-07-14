@@ -50,7 +50,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 18
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -60,7 +65,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 18
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -85,7 +95,12 @@
           ],
           "Reminder": {
             "Text": "Damage causes loss of life."
-          }
+          },
+          "SourceSpan": {
+            "Start": 19,
+            "Length": 87
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

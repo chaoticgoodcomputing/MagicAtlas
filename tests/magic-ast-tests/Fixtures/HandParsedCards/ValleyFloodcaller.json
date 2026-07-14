@@ -6,15 +6,24 @@
     "OracleText": "Flash\nYou may cast noncreature spells as though they had flash.\nWhenever you cast a noncreature spell, Birds, Frogs, Otters, and Rats you control get +1/+1 until end of turn. Untap them.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Valley Floodcaller",
     "TypeLine": {
       "Raw": "Creature — Otter Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Otter", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Otter",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nYou may cast noncreature spells as though they had flash.\nWhenever you cast a noncreature spell, Birds, Frogs, Otters, and Rats you control get +1/+1 until end of turn. Untap them.",
@@ -28,7 +37,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,13 +54,22 @@
               "AppliesTo": {
                 "Kind": "spell",
                 "Filter": {
-                  "CardTypes": ["spell"],
-                  "ExcludedCardTypes": ["creature"],
+                  "CardTypes": [
+                    "spell"
+                  ],
+                  "ExcludedCardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 57
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -54,8 +77,12 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "ExcludedCardTypes": ["creature"],
+              "CardTypes": [
+                "spell"
+              ],
+              "ExcludedCardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             }
           },
@@ -65,8 +92,15 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Bird", "Frog", "Otter", "Rat"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Bird",
+                    "Frog",
+                    "Otter",
+                    "Rat"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -92,7 +126,12 @@
                 "Kind": "It"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 122
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -107,7 +146,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -115,11 +156,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

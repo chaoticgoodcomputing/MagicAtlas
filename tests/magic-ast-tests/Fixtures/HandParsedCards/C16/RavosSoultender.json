@@ -55,7 +55,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -81,7 +86,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 38
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -108,7 +118,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 46,
+            "Length": 102
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -121,7 +136,12 @@
           "KeywordSource": "Partner",
           "Reminder": {
             "Text": "(You can have two commanders if both have partner.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 149,
+            "Length": 59
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

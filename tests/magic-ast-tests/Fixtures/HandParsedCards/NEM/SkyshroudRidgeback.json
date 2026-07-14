@@ -38,7 +38,12 @@
               "EffectType": "fading",
               "Value": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 153
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -35,7 +35,12 @@
               "Keyword": "Defender"
             }
           ],
-          "KeywordSource": "Defender"
+          "KeywordSource": "Defender",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 8
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -59,7 +64,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 9,
+            "Length": 70
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -100,7 +110,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 80,
+            "Length": 92
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

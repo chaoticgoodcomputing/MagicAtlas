@@ -50,7 +50,12 @@
           ],
           "Reminder": {
             "Text": "Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 126
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -44,7 +44,12 @@
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 84
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -54,7 +59,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 85,
+            "Length": 9
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

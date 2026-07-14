@@ -6,15 +6,24 @@
     "OracleText": "Menace\nWard—Discard a card.\nWhenever this creature attacks, put a +1/+1 counter on target creature an opponent controls.",
     "Power": "4",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Sunset Saboteur",
     "TypeLine": {
       "Raw": "Creature — Human Rogue",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Rogue"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Rogue"
+      ]
     },
     "Oracle": {
       "RawText": "Menace\nWard—Discard a card.\nWhenever this creature attacks, put a +1/+1 counter on target creature an opponent controls.",
@@ -25,12 +34,19 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "MinimumBlockers": 2
             }
           ],
-          "KeywordSource": "Menace"
+          "KeywordSource": "Menace",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -58,7 +74,9 @@
                 "Cost": {
                   "CostType": "discard",
                   "Filter": {
-                    "CardTypes": ["card"]
+                    "CardTypes": [
+                      "card"
+                    ]
                   },
                   "Quantity": {
                     "QuantityType": "literal",
@@ -67,7 +85,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 20
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -75,7 +98,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -85,7 +110,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "Opponent"
                 }
               },
@@ -95,7 +122,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 28,
+            "Length": 92
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -104,23 +136,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

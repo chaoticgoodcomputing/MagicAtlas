@@ -6,16 +6,29 @@
     "OracleText": "Flying\nYou have no maximum hand size.\nWhenever a source you control deals noncombat damage to an opponent, you draw that many cards.",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["R", "U"],
-    "ColorIdentity": ["R", "U"]
+    "Colors": [
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ]
   },
   "Output": {
     "Name": "Niv-Mizzet, Visionary",
     "TypeLine": {
       "Raw": "Legendary Creature — Dragon Wizard",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Dragon", "Wizard"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dragon",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nYou have no maximum hand size.\nWhenever a source you control deals noncombat damage to an opponent, you draw that many cards.",
@@ -27,7 +40,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -40,16 +55,28 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "noMaxHandSize",
-              "Player": { "Kind": "You" }
+              "Player": {
+                "Kind": "You"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 30
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -57,7 +84,9 @@
             "Timing": "Whenever",
             "Event": "NoncombatDamageDealt",
             "Filter": {
-              "CardTypes": ["source"],
+              "CardTypes": [
+                "source"
+              ],
               "Controller": "You"
             }
           },
@@ -72,7 +101,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 38,
+            "Length": 94
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -87,22 +121,32 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "U"]
+        "Colors": [
+          "R",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "U"]
+        "ColorIdentity": [
+          "R",
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

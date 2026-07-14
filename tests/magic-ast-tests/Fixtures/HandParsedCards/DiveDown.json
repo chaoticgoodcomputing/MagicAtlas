@@ -67,7 +67,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Hexproof"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -77,7 +78,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 148
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

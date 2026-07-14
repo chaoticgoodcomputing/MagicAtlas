@@ -54,7 +54,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 181
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -85,7 +90,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 181
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -104,7 +114,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -114,7 +125,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 181
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

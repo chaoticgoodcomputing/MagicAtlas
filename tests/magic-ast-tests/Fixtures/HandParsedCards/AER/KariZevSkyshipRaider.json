@@ -39,7 +39,12 @@
               "Timing": "First"
             }
           ],
-          "KeywordSource": "First strike"
+          "KeywordSource": "First strike",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -54,7 +59,12 @@
               "MinimumBlockers": 2
             }
           ],
-          "KeywordSource": "Menace"
+          "KeywordSource": "Menace",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -113,7 +123,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 21,
+            "Length": 186
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

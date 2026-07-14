@@ -36,7 +36,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Haunt"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -61,7 +66,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 85
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

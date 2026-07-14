@@ -50,7 +50,12 @@
           "KeywordSource": "Forestwalk",
           "Reminder": {
             "Text": "(This creature can't be blocked as long as defending player controls a Forest.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 90
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -88,7 +93,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 91,
+            "Length": 142
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -150,7 +160,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 234,
+            "Length": 73
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

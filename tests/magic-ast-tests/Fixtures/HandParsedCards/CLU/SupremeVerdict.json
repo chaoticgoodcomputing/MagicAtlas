@@ -4,8 +4,14 @@
     "ManaCost": "{1}{W}{W}{U}",
     "TypeLine": "Sorcery",
     "OracleText": "This spell can't be countered.\nDestroy all creatures.",
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"],
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ],
     "Keywords": [],
     "Id": "3892f1c5-937e-4ef4-b6f9-e0c0ded070d0",
     "Layout": "normal"
@@ -14,7 +20,9 @@
     "Name": "Supreme Verdict",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "This spell can't be countered.\nDestroy all creatures.",
@@ -25,7 +33,12 @@
             {
               "EffectType": "cantBeCountered"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -35,11 +48,18 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 22
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -48,20 +68,44 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}{W}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "W"]
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "U"]
+        "ColorIdentity": [
+          "W",
+          "U"
+        ]
       }
     ]
   }

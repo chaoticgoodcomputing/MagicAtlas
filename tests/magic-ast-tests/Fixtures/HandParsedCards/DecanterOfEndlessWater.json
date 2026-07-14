@@ -25,9 +25,16 @@
           "Effects": [
             {
               "EffectType": "noMaxHandSize",
-              "Player": { "Kind": "You" }
+              "Player": {
+                "Kind": "You"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -43,7 +50,12 @@
               "AnyColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 31
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

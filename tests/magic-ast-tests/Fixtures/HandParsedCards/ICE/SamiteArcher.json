@@ -60,7 +60,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 75
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -84,7 +89,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 76,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

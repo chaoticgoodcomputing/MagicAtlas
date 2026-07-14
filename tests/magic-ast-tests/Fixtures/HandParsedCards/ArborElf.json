@@ -6,15 +6,24 @@
     "OracleText": "{T}: Untap target Forest.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Arbor Elf",
     "TypeLine": {
       "Raw": "Creature — Elf Druid",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Druid"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Druid"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Untap target Forest.",
@@ -22,7 +31,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -30,12 +41,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "Subtypes": ["Forest"]
+                  "Subtypes": [
+                    "Forest"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 25
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -44,23 +62,42 @@
         "Kind": "manaCost",
         "Raw": "{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["G"], "IsPhyrexian": false, "IsSnow": false }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ],
+            "IsPhyrexian": false,
+            "IsSnow": false
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

@@ -48,7 +48,8 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -58,7 +59,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 93
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -70,7 +76,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 94,
+            "Length": 7
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,15 +6,24 @@
     "OracleText": "When this creature enters, you may exile another target permanent you control, then return that card to the battlefield under its owner's control.",
     "Power": "1",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Felidar Guardian",
     "TypeLine": {
       "Raw": "Creature — Cat Beast",
-      "Types": ["Creature"],
-      "Subtypes": ["Cat", "Beast"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Cat",
+        "Beast"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, you may exile another target permanent you control, then return that card to the battlefield under its owner's control.",
@@ -25,7 +34,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -40,7 +51,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["permanent"],
+                        "CardTypes": [
+                          "permanent"
+                        ],
                         "Controller": "You",
                         "ExcludeSelf": true
                       }
@@ -64,7 +77,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 146
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -73,23 +91,43 @@
         "Kind": "manaCost",
         "Raw": "{3}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

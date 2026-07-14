@@ -4,8 +4,14 @@
     "ManaCost": "{1}{W}{U}",
     "TypeLine": "Enchantment",
     "OracleText": "You can't cast more than one spell each turn.\nWhenever you cast a spell, draw a card.",
-    "Colors": ["U", "W"],
-    "ColorIdentity": ["U", "W"],
+    "Colors": [
+      "U",
+      "W"
+    ],
+    "ColorIdentity": [
+      "U",
+      "W"
+    ],
     "Keywords": [],
     "Id": "c41b3d7a-f8e1-46b8-a689-6125dcd9cb17",
     "Layout": "normal"
@@ -32,7 +38,12 @@
               "MaxPerPeriod": 1,
               "Period": "eachTurn"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 45
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -54,7 +65,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 46,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -69,22 +85,32 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U", "W"]
+        "Colors": [
+          "U",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "W"]
+        "ColorIdentity": [
+          "U",
+          "W"
+        ]
       }
     ]
   }

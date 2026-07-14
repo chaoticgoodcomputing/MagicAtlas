@@ -38,7 +38,12 @@
           ],
           "Reminder": {
             "Text": "(As this creature enters, put a +1/+1 counter on it for each Beast card you reveal in your hand.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 107
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

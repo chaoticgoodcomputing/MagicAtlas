@@ -38,7 +38,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Infect"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 125
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

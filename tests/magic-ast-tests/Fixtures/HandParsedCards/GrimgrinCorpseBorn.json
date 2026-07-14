@@ -43,7 +43,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 64
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -52,7 +57,12 @@
               "EffectType": "doesntUntap",
               "WhoseUntapStep": "your"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 64
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -90,7 +100,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 65,
+            "Length": 73
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -133,7 +148,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 139,
+            "Length": 115
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

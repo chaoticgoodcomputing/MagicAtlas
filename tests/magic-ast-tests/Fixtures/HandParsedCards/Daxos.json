@@ -6,8 +6,12 @@
     "OracleText": "Daxos's toughness is equal to your devotion to white. (Each {W} in the mana costs of permanents you control counts toward your devotion to white.)\nWhenever another creature you control enters or dies, you gain 1 life.",
     "Power": "2",
     "Toughness": "*",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Keywords": [],
     "Id": "0fd2adb3-a6f4-448e-af2a-15ca92b1de63",
     "Layout": "normal"
@@ -16,9 +20,16 @@
     "Name": "Daxos, Blessed by the Sun",
     "TypeLine": {
       "Raw": "Legendary Enchantment Creature — Demigod",
-      "Supertypes": ["Legendary"],
-      "Types": ["Enchantment", "Creature"],
-      "Subtypes": ["Demigod"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Demigod"
+      ]
     },
     "Oracle": {
       "RawText": "Daxos's toughness is equal to your devotion to white. (Each {W} in the mana costs of permanents you control counts toward your devotion to white.)\nWhenever another creature you control enters or dies, you gain 1 life.",
@@ -31,13 +42,20 @@
               "Characteristic": "Toughness",
               "Value": {
                 "QuantityType": "devotion",
-                "Colors": ["W"]
+                "Colors": [
+                  "W"
+                ]
               }
             }
           ],
           "Reminder": {
             "Text": "Each {W} in the mana costs of permanents you control counts toward your devotion to white."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 146
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -45,7 +63,9 @@
             "Timing": "Whenever",
             "Event": "EntersOrDies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You",
               "ExcludeSelf": true
             }
@@ -61,7 +81,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 147,
+            "Length": 70
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -72,11 +97,15 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -84,11 +113,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

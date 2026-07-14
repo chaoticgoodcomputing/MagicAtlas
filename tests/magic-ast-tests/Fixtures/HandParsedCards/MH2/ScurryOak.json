@@ -6,15 +6,23 @@
     "OracleText": "Evolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)\nWhenever one or more +1/+1 counters are put on this creature, you may create a 1/1 green Squirrel creature token.",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Scurry Oak",
     "TypeLine": {
       "Raw": "Creature — Treefolk",
-      "Types": ["Creature"],
-      "Subtypes": ["Treefolk"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Treefolk"
+      ]
     },
     "Oracle": {
       "RawText": "Evolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)\nWhenever one or more +1/+1 counters are put on this creature, you may create a 1/1 green Squirrel creature token.",
@@ -30,7 +38,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Evolve"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 154
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -40,7 +53,9 @@
             "CounterType": "+1/+1",
             "MinimumCount": 1,
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -59,14 +74,25 @@
                 "Token": {
                   "Power": "1",
                   "Toughness": "1",
-                  "Colors": ["G"],
-                  "Types": ["creature"],
-                  "Subtypes": ["Squirrel"],
+                  "Colors": [
+                    "G"
+                  ],
+                  "Types": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Squirrel"
+                  ],
                   "IsCopy": false
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 155,
+            "Length": 113
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -81,18 +107,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

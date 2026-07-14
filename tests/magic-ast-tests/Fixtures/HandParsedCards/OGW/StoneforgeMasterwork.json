@@ -6,15 +6,23 @@
     "OracleText": "Equipped creature gets +1/+1 for each creature you control.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
     "Power": null,
     "Toughness": null,
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Stoneforge Masterwork",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +1/+1 for each creature you control.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
@@ -29,14 +37,29 @@
               },
               "PowerModifier": {
                 "QuantityType": "count",
-                "CountOf": { "CardTypes": ["creature"], "Controller": "You" }
+                "CountOf": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
               },
               "ToughnessModifier": {
                 "QuantityType": "count",
-                "CountOf": { "CardTypes": ["creature"], "Controller": "You" }
+                "CountOf": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 59
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -58,14 +81,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 60,
+            "Length": 80
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -80,18 +112,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

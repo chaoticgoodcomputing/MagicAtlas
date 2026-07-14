@@ -41,7 +41,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 35
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -62,7 +67,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 36,
+            "Length": 97
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -36,7 +36,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -64,7 +69,12 @@
                 "Kind": "Opponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 60
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -79,7 +89,12 @@
               "Mana": "{U} or {R}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 86,
+            "Length": 20
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

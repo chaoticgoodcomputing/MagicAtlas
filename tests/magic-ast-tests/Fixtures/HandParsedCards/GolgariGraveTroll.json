@@ -6,9 +6,17 @@
     "OracleText": "This creature enters with a +1/+1 counter on it for each creature card in your graveyard.\n{1}, Remove a +1/+1 counter from this creature: Regenerate this creature.\nDredge 6 (If you would draw a card, you may mill six cards instead. If you do, return this card from your graveyard to your hand.)",
     "Power": "0",
     "Toughness": "0",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Dredge", "Regenerate", "Mill"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Dredge",
+      "Regenerate",
+      "Mill"
+    ],
     "Id": "d332acbc-6224-43bc-a509-3a7edc877423",
     "Layout": "normal"
   },
@@ -16,8 +24,13 @@
     "Name": "Golgari Grave-Troll",
     "TypeLine": {
       "Raw": "Creature — Troll Skeleton",
-      "Types": ["Creature"],
-      "Subtypes": ["Troll", "Skeleton"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Troll",
+        "Skeleton"
+      ]
     },
     "Oracle": {
       "RawText": "This creature enters with a +1/+1 counter on it for each creature card in your graveyard.\n{1}, Remove a +1/+1 counter from this creature: Regenerate this creature.\nDredge 6 (If you would draw a card, you may mill six cards instead. If you do, return this card from your graveyard to your hand.)",
@@ -28,18 +41,27 @@
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "+1/+1",
               "Count": {
                 "QuantityType": "count",
                 "CountOf": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You",
                   "Zone": "Graveyard"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 89
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -47,23 +69,38 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
             {
               "CostType": "removeCounters",
               "CounterType": "+1/+1",
-              "Quantity": { "QuantityType": "literal", "Value": 1 },
-              "Target": { "Kind": "Self" }
+              "Quantity": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
+              "Target": {
+                "Kind": "Self"
+              }
             }
           ],
           "Effects": [
             {
               "EffectType": "regenerate",
-              "Target": { "Kind": "Self" }
+              "Target": {
+                "Kind": "Self"
+              }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 90,
+            "Length": 73
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -76,7 +113,12 @@
           ],
           "Reminder": {
             "Text": "(If you would draw a card, you may mill six cards instead. If you do, return this card from your graveyard to your hand.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 164,
+            "Length": 130
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -85,19 +127,31 @@
         "Kind": "manaCost",
         "Raw": "{4}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

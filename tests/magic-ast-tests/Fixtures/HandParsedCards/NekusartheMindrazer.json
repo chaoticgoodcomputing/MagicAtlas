@@ -21,9 +21,16 @@
     "Name": "Nekusar, the Mindrazer",
     "TypeLine": {
       "Raw": "Legendary Creature — Zombie Wizard",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Zombie", "Wizard"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Zombie",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "At the beginning of each player's draw step, that player draws an additional card.\nWhenever an opponent draws a card, Nekusar deals 1 damage to that player.",
@@ -49,7 +56,12 @@
                 "Kind": "ThatPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 82
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -74,7 +86,12 @@
                 "Kind": "ThatPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 83,
+            "Length": 73
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -89,26 +106,40 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "R", "U"]
+        "Colors": [
+          "B",
+          "R",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "B", "R"]
+        "ColorIdentity": [
+          "U",
+          "B",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

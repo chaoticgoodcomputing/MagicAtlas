@@ -67,7 +67,8 @@
                     "EffectType": "combatDamageTiming",
                     "Timing": "First"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -90,7 +91,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Trample"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -100,7 +102,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 92
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

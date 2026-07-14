@@ -56,7 +56,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 45
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -65,7 +70,9 @@
             {
               "EffectType": "splice",
               "Onto": {
-                "Subtypes": ["Arcane"]
+                "Subtypes": [
+                  "Arcane"
+                ]
               },
               "Cost": {
                 "CostType": "mana",
@@ -82,7 +89,12 @@
           ],
           "Reminder": {
             "Text": "(As you cast an Arcane spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's effects to that spell.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 46,
+            "Length": 168
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

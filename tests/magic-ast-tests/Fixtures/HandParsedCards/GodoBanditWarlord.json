@@ -72,7 +72,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 111
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -115,7 +120,12 @@
             {
               "EffectType": "additionalCombatPhase"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 112,
+            "Length": 144
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

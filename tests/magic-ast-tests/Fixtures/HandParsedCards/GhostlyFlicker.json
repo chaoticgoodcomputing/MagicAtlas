@@ -6,14 +6,20 @@
     "OracleText": "Exile two target artifacts, creatures, and/or lands you control, then return those cards to the battlefield under your control.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Ghostly Flicker",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile two target artifacts, creatures, and/or lands you control, then return those cards to the battlefield under your control.",
@@ -29,7 +35,11 @@
                   "Target": {
                     "Kind": "Target",
                     "Filter": {
-                      "CardTypes": ["artifact", "creature", "land"],
+                      "CardTypes": [
+                        "artifact",
+                        "creature",
+                        "land"
+                      ],
                       "Controller": "You"
                     },
                     "Quantity": {
@@ -55,7 +65,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 127
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -64,18 +79,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

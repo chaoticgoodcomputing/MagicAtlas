@@ -4,9 +4,16 @@
     "ManaCost": "{1}{G}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Flash\nEnchant creature or Vehicle\nWhen this Aura enters, untap enchanted permanent.\nEnchanted permanent gets +1/+2 and has reach.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Enchant", "Flash"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Enchant",
+      "Flash"
+    ],
     "Id": "ce0e1ded-9b00-4d7b-884c-70a429783b1f",
     "Layout": "normal"
   },
@@ -14,8 +21,12 @@
     "Name": "Silken Strength",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nEnchant creature or Vehicle\nWhen this Aura enters, untap enchanted permanent.\nEnchanted permanent gets +1/+2 and has reach.",
@@ -29,7 +40,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -46,7 +62,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 27
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -54,7 +75,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["aura"],
+              "CardTypes": [
+                "aura"
+              ],
               "IsSelf": true
             }
           },
@@ -65,7 +88,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 34,
+            "Length": 49
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -100,12 +128,18 @@
                         "Keyword": "Reach"
                       }
                     ],
-                    "KeywordSource": "Reach"
+                    "KeywordSource": "Reach",
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 84,
+            "Length": 45
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -120,7 +154,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -128,11 +164,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

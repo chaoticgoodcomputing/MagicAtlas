@@ -6,9 +6,18 @@
     "OracleText": "Double strike, vigilance\nWhenever you cast a creature spell with mana value 5 or greater, you get an experience counter.\nKalemne gets +1/+1 for each experience counter you have.",
     "Power": "3",
     "Toughness": "3",
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"],
-    "Keywords": ["Vigilance", "Double strike"],
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ],
+    "Keywords": [
+      "Vigilance",
+      "Double strike"
+    ],
     "Id": "3c718940-dc07-4449-ba35-4029f366c3eb",
     "Layout": "normal"
   },
@@ -16,9 +25,16 @@
     "Name": "Kalemne, Disciple of Iroas",
     "TypeLine": {
       "Raw": "Legendary Creature — Giant Soldier",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Giant", "Soldier"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Giant",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "Double strike, vigilance\nWhenever you cast a creature spell with mana value 5 or greater, you get an experience counter.\nKalemne gets +1/+1 for each experience counter you have.",
@@ -31,7 +47,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "Both"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -41,7 +62,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Vigilance"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -49,7 +75,10 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell", "creature"],
+              "CardTypes": [
+                "spell",
+                "creature"
+              ],
               "Controller": "You",
               "ManaValueComparison": {
                 "Operator": "GreaterThanOrEqual",
@@ -69,7 +98,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 95
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -94,7 +128,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 121,
+            "Length": 56
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -109,11 +148,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -121,11 +164,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "W"]
+        "Colors": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "R"]
+        "ColorIdentity": [
+          "W",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

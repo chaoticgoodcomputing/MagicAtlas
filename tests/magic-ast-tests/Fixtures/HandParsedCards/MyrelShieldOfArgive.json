@@ -6,8 +6,12 @@
     "OracleText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments.\nWhenever Myrel attacks, create X 1/1 colorless Soldier artifact creature tokens, where X is the number of Soldiers you control.",
     "Power": "3",
     "Toughness": "4",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Keywords": [],
     "Id": "e632ed57-bb00-4493-adef-7b4805edd7ea",
     "Layout": "normal"
@@ -16,9 +20,16 @@
     "Name": "Myrel, Shield of Argive",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Soldier",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Soldier"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments.\nWhenever Myrel attacks, create X 1/1 colorless Soldier artifact creature tokens, where X is the number of Soldiers you control.",
@@ -31,13 +42,20 @@
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell"],
+            "CardTypes": [
+              "spell"
+            ],
             "Controller": "Opponent"
           },
           "Condition": {
             "ConditionType": "other",
             "Text": "During your turn"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 114
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,13 +65,22 @@
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["artifact", "creature", "enchantment"],
+            "CardTypes": [
+              "artifact",
+              "creature",
+              "enchantment"
+            ],
             "Controller": "Opponent"
           },
           "Condition": {
             "ConditionType": "other",
             "Text": "During your turn"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 114
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -61,7 +88,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -74,20 +103,34 @@
               "Count": {
                 "QuantityType": "count",
                 "CountOf": {
-                  "Subtypes": ["Soldier"],
+                  "Subtypes": [
+                    "Soldier"
+                  ],
                   "Controller": "You"
                 }
               },
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["C"],
-                "Types": ["artifact", "creature"],
-                "Subtypes": ["Soldier"],
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "artifact",
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Soldier"
+                ],
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 115,
+            "Length": 127
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -102,7 +145,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -110,11 +155,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

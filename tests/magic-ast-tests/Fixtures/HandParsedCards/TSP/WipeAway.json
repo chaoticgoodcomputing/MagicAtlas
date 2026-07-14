@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Split second"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 129
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -51,7 +56,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 130,
+            "Length": 44
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

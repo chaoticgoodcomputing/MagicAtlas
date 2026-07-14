@@ -37,7 +37,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Converge"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 99
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

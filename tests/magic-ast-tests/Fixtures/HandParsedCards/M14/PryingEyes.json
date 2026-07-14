@@ -6,14 +6,20 @@
     "OracleText": "Draw four cards, then discard two cards.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Prying Eyes",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Draw four cards, then discard two cards.",
@@ -23,16 +29,31 @@
           "Effects": [
             {
               "EffectType": "drawCards",
-              "Count": { "QuantityType": "literal", "Value": 4 },
-              "Player": { "Kind": "You" }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 4
+              },
+              "Player": {
+                "Kind": "You"
+              }
             },
             {
               "EffectType": "discardCards",
-              "Count": { "QuantityType": "literal", "Value": 2 },
-              "Player": { "Kind": "You" },
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Player": {
+                "Kind": "You"
+              },
               "Random": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 40
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,18 +62,30 @@
         "Kind": "manaCost",
         "Raw": "{4}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

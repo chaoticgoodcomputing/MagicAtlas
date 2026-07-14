@@ -37,7 +37,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,7 +52,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Cipher"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 215
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

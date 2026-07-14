@@ -39,7 +39,12 @@
               "EffectType": "graft",
               "Value": 1
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 149
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

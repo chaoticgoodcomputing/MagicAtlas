@@ -48,7 +48,12 @@
                 "Kind": "EachOpponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

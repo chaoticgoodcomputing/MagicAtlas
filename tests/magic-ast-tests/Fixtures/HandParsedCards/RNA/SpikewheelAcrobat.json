@@ -58,7 +58,12 @@
           "KeywordSource": "Spectacle",
           "Reminder": {
             "Text": "(You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 127
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -79,7 +84,12 @@
             "ConditionType": "other",
             "Text": "an opponent lost life this turn"
           },
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 128,
+            "Length": 83
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

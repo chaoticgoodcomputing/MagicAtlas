@@ -6,14 +6,20 @@
     "OracleText": "Destroy target artifact, enchantment, or creature with flying.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Broken Wings",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy target artifact, enchantment, or creature with flying.",
@@ -26,12 +32,26 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["artifact", "enchantment", "creature"],
-                  "Characteristics": [{"CharacteristicType": "keyword", "Keyword": "Flying"}]
+                  "CardTypes": [
+                    "artifact",
+                    "enchantment",
+                    "creature"
+                  ],
+                  "Characteristics": [
+                    {
+                      "CharacteristicType": "keyword",
+                      "Keyword": "Flying"
+                    }
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +60,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

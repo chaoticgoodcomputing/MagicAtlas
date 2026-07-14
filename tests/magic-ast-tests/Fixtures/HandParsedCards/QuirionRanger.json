@@ -17,8 +17,13 @@
     "Name": "Quirion Ranger",
     "TypeLine": {
       "Raw": "Creature — Elf Ranger",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Ranger"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Ranger"
+      ]
     },
     "Oracle": {
       "RawText": "Return a Forest you control to its owner's hand: Untap target creature. Activate only once each turn.",
@@ -31,8 +36,12 @@
               "Target": {
                 "Kind": "Any",
                 "Filter": {
-                  "CardTypes": ["land"],
-                  "Subtypes": ["Forest"],
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Subtypes": [
+                    "Forest"
+                  ],
                   "Controller": "You"
                 }
               }
@@ -44,13 +53,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyOnceEachTurn"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyOnceEachTurn"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 101
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -61,7 +79,9 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["G"],
+            "Colors": [
+              "G"
+            ],
             "IsPhyrexian": false,
             "IsSnow": false
           }
@@ -71,16 +91,28 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

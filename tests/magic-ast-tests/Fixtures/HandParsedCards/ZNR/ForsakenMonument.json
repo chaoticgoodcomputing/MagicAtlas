@@ -47,7 +47,12 @@
                 "Value": 2
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 42
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -67,7 +72,12 @@
               "EffectType": "addMana",
               "Mana": "{C}"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 43,
+            "Length": 60
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -93,7 +103,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 53
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

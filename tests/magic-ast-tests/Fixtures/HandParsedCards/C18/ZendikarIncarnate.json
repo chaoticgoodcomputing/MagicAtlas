@@ -37,10 +37,20 @@
               "Characteristic": "Power",
               "Value": {
                 "QuantityType": "count",
-                "CountOf": { "CardTypes": ["land"], "Controller": "You" }
+                "CountOf": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "Controller": "You"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 71
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

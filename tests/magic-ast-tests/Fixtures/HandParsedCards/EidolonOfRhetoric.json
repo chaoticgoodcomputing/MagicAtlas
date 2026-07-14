@@ -39,7 +39,12 @@
               "MaxPerPeriod": 1,
               "Period": "eachTurn"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 53
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

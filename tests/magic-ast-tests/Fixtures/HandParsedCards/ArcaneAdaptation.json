@@ -4,8 +4,12 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Enchantment",
     "OracleText": "As this enchantment enters, choose a creature type.\nCreatures you control are the chosen type in addition to their other types. The same is true for creature spells you control and creature cards you own that aren't on the battlefield.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "bf3edaaf-cf63-4e17-94ae-9d9991d9fb5f",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Arcane Adaptation",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "As this enchantment enters, choose a creature type.\nCreatures you control are the chosen type in addition to their other types. The same is true for creature spells you control and creature cards you own that aren't on the battlefield.",
@@ -26,7 +32,12 @@
             {
               "EffectType": "chooseCreatureType"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -36,7 +47,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -47,7 +60,10 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["spell", "creature"],
+                  "CardTypes": [
+                    "spell",
+                    "creature"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -58,13 +74,20 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Owner": "You"
                 }
               },
               "ChosenSubtypeReference": "CreatureType"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 183
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -79,18 +102,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

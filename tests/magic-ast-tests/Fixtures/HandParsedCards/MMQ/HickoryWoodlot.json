@@ -43,7 +43,12 @@
               "CounterType": "depletion"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 58
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -70,7 +75,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 59,
+            "Length": 122
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

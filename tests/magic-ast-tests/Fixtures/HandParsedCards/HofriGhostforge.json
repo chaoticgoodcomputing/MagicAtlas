@@ -6,8 +6,14 @@
     "OracleText": "Spirits you control get +1/+1 and have trample and haste.\nWhenever another nontoken creature you control dies, exile it. If you do, create a token that's a copy of that creature, except it's a Spirit in addition to its other types and it has \"When this token leaves the battlefield, return the exiled card to its owner's graveyard.\"",
     "Power": "4",
     "Toughness": "5",
-    "Colors": ["R", "W"],
-    "ColorIdentity": ["R", "W"],
+    "Colors": [
+      "R",
+      "W"
+    ],
+    "ColorIdentity": [
+      "R",
+      "W"
+    ],
     "Keywords": [],
     "Id": "bc03cdb6-5ad0-452d-a698-bd19f5ebac83",
     "Layout": "normal"
@@ -16,9 +22,16 @@
     "Name": "Hofri Ghostforge",
     "TypeLine": {
       "Raw": "Legendary Creature — Dwarf Cleric",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Dwarf", "Cleric"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dwarf",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "Spirits you control get +1/+1 and have trample and haste.\nWhenever another nontoken creature you control dies, exile it. If you do, create a token that's a copy of that creature, except it's a Spirit in addition to its other types and it has \"When this token leaves the battlefield, return the exiled card to its owner's graveyard.\"",
@@ -31,8 +44,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Spirit"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Spirit"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -50,8 +67,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Spirit"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Spirit"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -63,7 +84,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Trample"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -71,8 +93,12 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
-                  "Subtypes": ["Spirit"],
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Subtypes": [
+                    "Spirit"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -84,10 +110,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 57
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -95,7 +127,9 @@
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsToken": false,
               "Controller": "You",
               "ExcludeSelf": true
@@ -119,7 +153,9 @@
                   "Modifications": [
                     {
                       "ModificationType": "typeAdder",
-                      "Subtypes": ["Spirit"]
+                      "Subtypes": [
+                        "Spirit"
+                      ]
                     },
                     {
                       "ModificationType": "triggeredAbilityAdder",
@@ -141,14 +177,20 @@
                               }
                             }
                           }
-                        ]
+                        ],
+                        "OracleLineIndex": 0
                       }
                     }
                   ]
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 58,
+            "Length": 274
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -157,25 +199,52 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 5,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "W"]
+        "Colors": [
+          "R",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "R"]
+        "ColorIdentity": [
+          "W",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
       }
     ]
   }

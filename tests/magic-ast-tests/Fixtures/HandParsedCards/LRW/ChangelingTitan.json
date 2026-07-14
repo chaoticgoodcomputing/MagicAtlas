@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Changeling"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +50,12 @@
               "EffectType": "champion",
               "CreatureType": "creature"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 171
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

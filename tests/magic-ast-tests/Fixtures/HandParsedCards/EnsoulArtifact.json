@@ -4,9 +4,15 @@
     "ManaCost": "{1}{U}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant artifact\nEnchanted artifact is a creature with base power and toughness 5/5 in addition to its other types.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "8351efc5-a392-4ec8-877f-15d5b3dc0929",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Ensoul Artifact",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant artifact\nEnchanted artifact is a creature with base power and toughness 5/5 in addition to its other types.",
@@ -27,10 +37,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["artifact"]
+                "CardTypes": [
+                  "artifact"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,11 +66,19 @@
                 "Value": 5
               },
               "Colors": [],
-              "CardTypes": ["artifact", "creature"],
+              "CardTypes": [
+                "artifact",
+                "creature"
+              ],
               "AddedSubtypes": [],
               "GainedAbilities": []
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 98
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -68,7 +93,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -76,11 +103,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

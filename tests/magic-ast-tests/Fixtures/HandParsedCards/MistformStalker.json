@@ -56,7 +56,12 @@
               "ChosenSubtype": "CreatureType"
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 78
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -135,7 +140,8 @@
                           ]
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   },
                   "Duration": {
                     "DurationType": "untilTime",
@@ -148,7 +154,12 @@
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 79,
+            "Length": 71
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

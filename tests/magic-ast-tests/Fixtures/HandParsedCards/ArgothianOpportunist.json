@@ -64,7 +64,12 @@
           ],
           "Reminder": {
             "Text": "It's an artifact with \"{T}: Add {C}. This mana can't be spent to cast a nonartifact spell.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 154
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

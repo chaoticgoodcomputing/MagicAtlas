@@ -15,7 +15,9 @@
     "Name": "Doublecast",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"],
+      "Types": [
+        "Sorcery"
+      ],
       "Subtypes": []
     },
     "Oracle": {
@@ -30,22 +32,39 @@
                 "Trigger": {
                   "Timing": "When",
                   "Event": "SpellCast",
-                  "Filter": { "CardTypes": ["spell", "instant", "sorcery"], "Controller": "You" }
+                  "Filter": {
+                    "CardTypes": [
+                      "spell",
+                      "instant",
+                      "sorcery"
+                    ],
+                    "Controller": "You"
+                  }
                 },
                 "Window": {
                   "DurationType": "untilTime",
-                  "Until": { "Part": "Turn", "Edge": "End" }
+                  "Until": {
+                    "Part": "Turn",
+                    "Edge": "End"
+                  }
                 },
                 "Effects": [
                   {
                     "EffectType": "copy",
-                    "Target": { "Kind": "It" },
+                    "Target": {
+                      "Kind": "It"
+                    },
                     "MayChooseNewTargets": true
                   }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 115
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -54,13 +73,33 @@
         "Kind": "manaCost",
         "Raw": "{R}{R}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
     ]
   }
 }

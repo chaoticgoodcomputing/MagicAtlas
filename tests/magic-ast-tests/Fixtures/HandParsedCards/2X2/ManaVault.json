@@ -27,7 +27,12 @@
               "EffectType": "doesntUntap",
               "WhoseUntapStep": "your"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -52,7 +57,12 @@
           ],
           "Instructions": [
             "you may pay {4}"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 81
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -82,7 +92,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 134,
+            "Length": 89
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -97,7 +112,12 @@
               "Mana": "{C}{C}{C}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 224,
+            "Length": 19
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

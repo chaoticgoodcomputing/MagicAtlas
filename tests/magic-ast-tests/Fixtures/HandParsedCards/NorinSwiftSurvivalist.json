@@ -6,8 +6,12 @@
     "OracleText": "Norin can't block.\nWhenever a creature you control becomes blocked, you may exile it. You may play that card from exile this turn.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "49f0fdf4-3881-4327-924f-2c1b67ccda93",
     "Layout": "normal"
@@ -16,9 +20,16 @@
     "Name": "Norin, Swift Survivalist",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Coward",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Coward"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Coward"
+      ]
     },
     "Oracle": {
       "RawText": "Norin can't block.\nWhenever a creature you control becomes blocked, you may exile it. You may play that card from exile this turn.",
@@ -29,7 +40,12 @@
             {
               "EffectType": "cantBlock"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 18
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -37,7 +53,9 @@
             "Timing": "Whenever",
             "Event": "BecomesBlocked",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             }
           },
@@ -67,7 +85,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 19,
+            "Length": 111
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -78,7 +101,9 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 1,
@@ -86,11 +111,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

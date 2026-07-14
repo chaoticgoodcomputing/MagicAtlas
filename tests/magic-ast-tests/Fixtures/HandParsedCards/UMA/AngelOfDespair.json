@@ -40,12 +40,23 @@
                   "creature"
                 ],
                 "Characteristics": [
-                  {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                  {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -71,7 +82,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

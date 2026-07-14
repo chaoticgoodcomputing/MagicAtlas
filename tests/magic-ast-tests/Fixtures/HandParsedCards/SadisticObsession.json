@@ -6,15 +6,23 @@
     "OracleText": "Enchant creature\nEnchanted creature has \"{B}, {T}: Put a -1/-1 counter on target creature.\"",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Sadistic Obsession",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEnchanted creature has \"{B}, {T}: Put a -1/-1 counter on target creature.\"",
@@ -26,10 +34,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +60,12 @@
                   {
                     "CostType": "mana",
                     "Symbols": [
-                      { "Kind": "colored", "Colors": ["B"] }
+                      {
+                        "Kind": "colored",
+                        "Colors": [
+                          "B"
+                        ]
+                      }
                     ]
                   },
                   {
@@ -58,7 +78,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     },
                     "CounterType": "-1/-1",
@@ -68,10 +90,16 @@
                     }
                   }
                 ],
-                "IsManaAbility": false
+                "IsManaAbility": false,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 74
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -80,18 +108,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

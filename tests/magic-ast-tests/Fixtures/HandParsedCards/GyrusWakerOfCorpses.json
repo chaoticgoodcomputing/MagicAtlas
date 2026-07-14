@@ -6,8 +6,16 @@
     "OracleText": "Gyrus enters with a number of +1/+1 counters on it equal to the amount of mana spent to cast it.\nWhenever Gyrus attacks, you may exile target creature card with lesser power from your graveyard. If you do, create a token that's a copy of that card and that's tapped and attacking. Exile the token at end of combat.",
     "Power": "0",
     "Toughness": "0",
-    "Colors": ["B", "G", "R"],
-    "ColorIdentity": ["B", "G", "R"],
+    "Colors": [
+      "B",
+      "G",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G",
+      "R"
+    ],
     "Keywords": [],
     "Id": "91585912-038d-4d26-b552-0e7c48ba1e4f",
     "Layout": "normal"
@@ -16,9 +24,15 @@
     "Name": "Gyrus, Waker of Corpses",
     "TypeLine": {
       "Raw": "Legendary Creature — Hydra",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Hydra"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Hydra"
+      ]
     },
     "Oracle": {
       "RawText": "Gyrus enters with a number of +1/+1 counters on it equal to the amount of mana spent to cast it.\nWhenever Gyrus attacks, you may exile target creature card with lesser power from your graveyard. If you do, create a token that's a copy of that card and that's tapped and attacking. Exile the token at end of combat.",
@@ -29,11 +43,20 @@
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "+1/+1",
-              "Count": { "QuantityType": "manaSpentToCast" }
+              "Count": {
+                "QuantityType": "manaSpentToCast"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 96
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -41,7 +64,9 @@
             "Timing": "Whenever",
             "Event": "Attacks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -53,12 +78,16 @@
                 "Target": {
                   "Kind": "Target",
                   "Filter": {
-                    "CardTypes": ["creature"],
+                    "CardTypes": [
+                      "creature"
+                    ],
                     "Zone": "Graveyard",
                     "Controller": "You",
                     "PowerComparison": {
                       "Operator": "LessThan",
-                      "RelativeTo": { "Kind": "Self" },
+                      "RelativeTo": {
+                        "Kind": "Self"
+                      },
                       "RelativeCharacteristic": "Power"
                     }
                   }
@@ -69,19 +98,26 @@
                 "Effects": [
                   {
                     "EffectType": "copy",
-                    "Target": { "Kind": "It" }
+                    "Target": {
+                      "Kind": "It"
+                    }
                   },
                   {
                     "EffectType": "createDelayedTrigger",
                     "DelayedTrigger": {
                       "Trigger": {
                         "Timing": "At",
-                        "Event": { "Part": "Combat", "Edge": "End" }
+                        "Event": {
+                          "Part": "Combat",
+                          "Edge": "End"
+                        }
                       },
                       "Effects": [
                         {
                           "EffectType": "exile",
-                          "Target": { "Kind": "It" }
+                          "Target": {
+                            "Kind": "It"
+                          }
                         }
                       ]
                     }
@@ -89,7 +125,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 217
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -98,20 +139,45 @@
         "Kind": "manaCost",
         "Raw": "{X}{B}{R}{G}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["B"] },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "G", "R"]
+        "Colors": [
+          "B",
+          "G",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "R", "G"]
+        "ColorIdentity": [
+          "B",
+          "R",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

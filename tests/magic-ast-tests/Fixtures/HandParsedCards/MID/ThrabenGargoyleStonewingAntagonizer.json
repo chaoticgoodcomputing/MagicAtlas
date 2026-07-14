@@ -91,7 +91,12 @@
                   "EffectType": "keywordAbility",
                   "Keyword": "Defender"
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 8
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "activated",
@@ -114,7 +119,12 @@
                   }
                 }
               ],
-              "IsManaAbility": false
+              "IsManaAbility": false,
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 29
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -183,7 +193,12 @@
                     ]
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 6
+              },
+              "OracleLineIndex": 0
             }
           ]
         },

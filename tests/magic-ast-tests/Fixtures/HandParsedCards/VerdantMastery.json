@@ -4,8 +4,12 @@
     "ManaCost": "{5}{G}",
     "TypeLine": "Sorcery",
     "OracleText": "You may pay {3}{G} rather than pay this spell's mana cost.\nSearch your library for up to four basic land cards and reveal them. Put one of them onto the battlefield tapped under an opponent's control if the {3}{G} cost was paid. Put two of them onto the battlefield tapped under your control and the rest into your hand. Then shuffle.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "197455e5-7929-47b8-ad00-8d3918949eb7",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Verdant Mastery",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "You may pay {3}{G} rather than pay this spell's mana cost.\nSearch your library for up to four basic land cards and reveal them. Put one of them onto the battlefield tapped under an opponent's control if the {3}{G} cost was paid. Put two of them onto the battlefield tapped under your control and the rest into your hand. Then shuffle.",
@@ -27,16 +33,31 @@
               "AlternativeCost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 3 },
-                  { "Kind": "colored", "Colors": ["G"] }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 3
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "G"
+                    ]
+                  }
                 ]
               },
               "AffectedSpells": {
-                "CardTypes": ["spell"],
+                "CardTypes": [
+                  "spell"
+                ],
                 "IsSelf": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 58
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -44,8 +65,12 @@
             {
               "EffectType": "searchLibrary",
               "Filter": {
-                "Supertypes": ["Basic"],
-                "CardTypes": ["land"]
+                "Supertypes": [
+                  "Basic"
+                ],
+                "CardTypes": [
+                  "land"
+                ]
               },
               "Count": {
                 "QuantityType": "upTo",
@@ -82,7 +107,12 @@
               ],
               "Revealed": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 59,
+            "Length": 275
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -91,18 +121,30 @@
         "Kind": "manaCost",
         "Raw": "{5}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 6
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

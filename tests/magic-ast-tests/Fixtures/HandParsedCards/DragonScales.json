@@ -37,7 +37,12 @@
               }
             }
           ],
-          "KeywordSource": "Enchant"
+          "KeywordSource": "Enchant",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -72,12 +77,18 @@
                         "Keyword": "Vigilance"
                       }
                     ],
-                    "KeywordSource": "Vigilance"
+                    "KeywordSource": "Vigilance",
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -119,7 +130,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 66,
+            "Length": 143
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -6,15 +6,24 @@
     "OracleText": "Flash\nWhen this creature enters and whenever an opponent draws a card except the first one they draw in each of their draw steps, this creature deals 1 damage to any target. Then amass Orcs 1.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Orcish Bowmasters",
     "TypeLine": {
       "Raw": "Creature — Orc Archer",
-      "Types": ["Creature"],
-      "Subtypes": ["Orc", "Archer"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Orc",
+        "Archer"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nWhen this creature enters and whenever an opponent draws a card except the first one they draw in each of their draw steps, this creature deals 1 damage to any target. Then amass Orcs 1.",
@@ -28,7 +37,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -36,7 +50,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -70,7 +86,12 @@
               },
               "ArmySubtype": "Orcs"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 186
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -85,18 +106,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

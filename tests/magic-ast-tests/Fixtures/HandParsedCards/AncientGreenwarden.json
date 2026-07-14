@@ -43,7 +43,12 @@
           "KeywordSource": "Reach",
           "Reminder": {
             "Text": "(This creature can block creatures with flying.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -58,7 +63,12 @@
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 39
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -84,7 +94,12 @@
                 "Type": "additionalTime"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 95,
+            "Length": 126
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

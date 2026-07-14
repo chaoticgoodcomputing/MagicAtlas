@@ -40,7 +40,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,10 +68,16 @@
                     "Mana": "{G}{G}"
                   }
                 ],
-                "IsManaAbility": true
+                "IsManaAbility": true,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 37
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,7 +6,9 @@
     "OracleText": "Equipped creature gets +2/+0 and is goaded. (It attacks each combat if able and attacks a player other than you if able.)\n{1}: Attach this Equipment to target creature an opponent controls. Activate only as a sorcery.",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Goad"],
+    "Keywords": [
+      "Goad"
+    ],
     "Id": "bcdf583e-25f8-4227-96e9-e70ec8a36b09",
     "Layout": "normal"
   },
@@ -14,8 +16,12 @@
     "Name": "Bloodthirsty Blade",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +2/+0 and is goaded. (It attacks each combat if able and attacks a player other than you if able.)\n{1}: Attach this Equipment to target creature an opponent controls. Activate only as a sorcery.",
@@ -46,7 +52,12 @@
           ],
           "Reminder": {
             "Text": "(It attacks each combat if able and attacks a player other than you if able.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 121
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -67,14 +78,23 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "Opponent"
                 }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 122,
+            "Length": 95
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

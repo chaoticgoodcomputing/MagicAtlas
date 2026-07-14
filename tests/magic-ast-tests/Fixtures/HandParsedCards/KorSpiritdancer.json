@@ -41,7 +41,14 @@
                 "Expression": "+2 for each Aura attached to it",
                 "BaseQuantity": {
                   "QuantityType": "count",
-                  "CountOf": { "Subtypes": ["Aura"], "AttachedTo": { "Kind": "EnchantedOrEquipped" } }
+                  "CountOf": {
+                    "Subtypes": [
+                      "Aura"
+                    ],
+                    "AttachedTo": {
+                      "Kind": "EnchantedOrEquipped"
+                    }
+                  }
                 },
                 "Operation": "multiply"
               },
@@ -50,12 +57,24 @@
                 "Expression": "+2 for each Aura attached to it",
                 "BaseQuantity": {
                   "QuantityType": "count",
-                  "CountOf": { "Subtypes": ["Aura"], "AttachedTo": { "Kind": "EnchantedOrEquipped" } }
+                  "CountOf": {
+                    "Subtypes": [
+                      "Aura"
+                    ],
+                    "AttachedTo": {
+                      "Kind": "EnchantedOrEquipped"
+                    }
+                  }
                 },
                 "Operation": "multiply"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 54
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -86,7 +105,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 53
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

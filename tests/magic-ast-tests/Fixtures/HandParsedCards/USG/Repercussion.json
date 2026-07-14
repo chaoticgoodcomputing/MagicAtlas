@@ -4,14 +4,20 @@
     "ManaCost": "{1}{R}{R}",
     "TypeLine": "Enchantment",
     "OracleText": "Whenever a creature is dealt damage, this enchantment deals that much damage to that creature's controller.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Repercussion",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever a creature is dealt damage, this enchantment deals that much damage to that creature's controller.",
@@ -22,7 +28,9 @@
             "Timing": "Whenever",
             "Event": "CreatureDealtDamage",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -39,7 +47,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 107
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -54,22 +67,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

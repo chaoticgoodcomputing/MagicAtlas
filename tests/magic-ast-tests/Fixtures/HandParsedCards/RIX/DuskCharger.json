@@ -38,7 +38,12 @@
           ],
           "Reminder": {
             "Text": "(If you control ten or more permanents, you get the city's blessing for the rest of the game.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 101
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -64,7 +69,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 102,
+            "Length": 65
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

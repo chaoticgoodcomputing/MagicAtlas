@@ -6,8 +6,12 @@
     "OracleText": "Lands don't untap during their controllers' untap steps.\nAt the beginning of each player's upkeep, that player untaps a land they control.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
     "Keywords": [],
     "Id": "5a03f5d5-d5c3-4a7d-8d44-e60b498b4ed5",
     "Layout": "normal"
@@ -16,9 +20,15 @@
     "Name": "Hokori, Dust Drinker",
     "TypeLine": {
       "Raw": "Legendary Creature — Spirit",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Spirit"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "Lands don't untap during their controllers' untap steps.\nAt the beginning of each player's upkeep, that player untaps a land they control.",
@@ -31,12 +41,19 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["land"]
+                  "CardTypes": [
+                    "land"
+                  ]
                 }
               },
               "WhoseUntapStep": "their controllers'"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -54,12 +71,19 @@
               "Target": {
                 "Kind": "Any",
                 "Filter": {
-                  "CardTypes": ["land"],
+                  "CardTypes": [
+                    "land"
+                  ],
                   "Controller": "ThatPlayer"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 81
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -74,11 +98,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -86,11 +114,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

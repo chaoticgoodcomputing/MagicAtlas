@@ -37,7 +37,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Hexproof"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 91
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

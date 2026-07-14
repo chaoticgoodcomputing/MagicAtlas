@@ -6,9 +6,15 @@
     "OracleText": "Flying\nWhenever a Dragon you control is dealt damage, it deals that much damage to any target that isn't a Dragon.",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Flying"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Flying"
+    ],
     "Id": "acd207de-eec3-4d82-b8b9-b1e60a7bad12",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Wrathful Red Dragon",
     "TypeLine": {
       "Raw": "Creature — Dragon",
-      "Types": ["Creature"],
-      "Subtypes": ["Dragon"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dragon"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWhenever a Dragon you control is dealt damage, it deals that much damage to any target that isn't a Dragon.",
@@ -28,7 +38,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -42,7 +54,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -50,7 +67,9 @@
             "Timing": "Whenever",
             "Event": "CreatureDealtDamage",
             "Filter": {
-              "Subtypes": ["Dragon"],
+              "Subtypes": [
+                "Dragon"
+              ],
               "Controller": "You"
             }
           },
@@ -67,11 +86,18 @@
               "Target": {
                 "Kind": "AnyTarget",
                 "Filter": {
-                  "ExcludedSubtypes": ["Dragon"]
+                  "ExcludedSubtypes": [
+                    "Dragon"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 107
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -86,27 +112,43 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "5", "Value": 5 },
-        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
       }
     ]
   }

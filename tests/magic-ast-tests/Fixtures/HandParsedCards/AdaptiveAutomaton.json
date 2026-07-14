@@ -34,7 +34,12 @@
               "EffectType": "chooseCreatureType"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 48
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -46,7 +51,12 @@
               },
               "ChosenSubtypeReference": "CreatureType"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 49,
+            "Length": 64
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -73,7 +83,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 114,
+            "Length": 57
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -6,16 +6,29 @@
     "OracleText": "Deathtouch\nAt the beginning of your upkeep, sacrifice The Gitrog Monster unless you sacrifice a land.\nYou may play an additional land on each of your turns.\nWhenever one or more land cards are put into your graveyard from anywhere, draw a card.",
     "Power": "6",
     "Toughness": "6",
-    "Colors": ["B", "G"],
-    "ColorIdentity": ["B", "G"]
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
   },
   "Output": {
     "Name": "The Gitrog Monster",
     "TypeLine": {
       "Raw": "Legendary Creature — Frog Horror",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Frog", "Horror"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Frog",
+        "Horror"
+      ]
     },
     "Oracle": {
       "RawText": "Deathtouch\nAt the beginning of your upkeep, sacrifice The Gitrog Monster unless you sacrifice a land.\nYou may play an additional land on each of your turns.\nWhenever one or more land cards are put into your graveyard from anywhere, draw a card.",
@@ -28,7 +41,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -56,7 +74,9 @@
                 "Cost": {
                   "CostType": "sacrifice",
                   "Filter": {
-                    "CardTypes": ["land"]
+                    "CardTypes": [
+                      "land"
+                    ]
                   },
                   "Quantity": {
                     "QuantityType": "literal",
@@ -65,7 +85,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 11,
+            "Length": 90
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -76,7 +101,12 @@
                 "EffectType": "playAdditionalLand"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 102,
+            "Length": 54
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "triggered",
@@ -84,7 +114,9 @@
             "Timing": "Whenever",
             "Event": "PutIntoGraveyard",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "Controller": "You"
             }
           },
@@ -99,7 +131,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 157,
+            "Length": 87
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -114,22 +151,32 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "G"]
+        "Colors": [
+          "B",
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "G"]
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

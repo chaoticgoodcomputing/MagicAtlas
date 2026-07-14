@@ -4,8 +4,12 @@
     "ManaCost": "{2}{G}",
     "TypeLine": "Enchantment",
     "OracleText": "Islands don't untap during their controllers' untap steps.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "e1ce4bab-6eb1-421f-b425-7bb0076defc7",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Choke",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Islands don't untap during their controllers' untap steps.",
@@ -27,12 +33,19 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "Subtypes": ["Island"]
+                  "Subtypes": [
+                    "Island"
+                  ]
                 }
               },
               "WhoseUntapStep": "their controllers'"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 58
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -41,19 +54,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

@@ -82,7 +82,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -105,7 +106,8 @@
                     "EffectType": "combatDamageTiming",
                     "Timing": "First"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -115,7 +117,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 79
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

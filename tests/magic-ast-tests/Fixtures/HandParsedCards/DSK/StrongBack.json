@@ -6,15 +6,23 @@
     "OracleText": "Enchant creature\nEquip abilities you activate that target enchanted creature cost {3} less to activate.\nAura spells you cast that target enchanted creature cost {3} less to cast.\nEnchanted creature gets +2/+2 for each Aura and Equipment attached to it.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Strong Back",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEquip abilities you activate that target enchanted creature cost {3} less to activate.\nAura spells you cast that target enchanted creature cost {3} less to cast.\nEnchanted creature gets +2/+2 for each Aura and Equipment attached to it.",
@@ -25,52 +33,93 @@
           "Effects": [
             {
               "EffectType": "enchantRestriction",
-              "LegalTargets": { "CardTypes": ["creature"] }
+              "LegalTargets": {
+                "CardTypes": [
+                  "creature"
+                ]
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 3 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
               "AppliesTo": {
                 "Kind": "activatedAbility",
                 "Keyword": "Equip",
                 "Controller": "You",
-                "TargetsObject": { "Kind": "EnchantedOrEquipped" }
+                "TargetsObject": {
+                  "Kind": "EnchantedOrEquipped"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 86
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 3 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 3
+              },
               "AppliesTo": {
                 "Kind": "spell",
-                "Filter": { "Subtypes": ["Aura"], "Controller": "You" },
-                "TargetsObject": { "Kind": "EnchantedOrEquipped" }
+                "Filter": {
+                  "Subtypes": [
+                    "Aura"
+                  ],
+                  "Controller": "You"
+                },
+                "TargetsObject": {
+                  "Kind": "EnchantedOrEquipped"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 74
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "EnchantedOrEquipped" },
+              "Target": {
+                "Kind": "EnchantedOrEquipped"
+              },
               "PowerModifier": {
                 "QuantityType": "calculated",
                 "BaseQuantity": {
                   "QuantityType": "count",
                   "CountOf": {
-                    "Subtypes": ["Aura", "Equipment"],
-                    "AttachedTo": { "Kind": "EnchantedOrEquipped" }
+                    "Subtypes": [
+                      "Aura",
+                      "Equipment"
+                    ],
+                    "AttachedTo": {
+                      "Kind": "EnchantedOrEquipped"
+                    }
                   }
                 },
                 "Operation": "multiply",
@@ -81,15 +130,25 @@
                 "BaseQuantity": {
                   "QuantityType": "count",
                   "CountOf": {
-                    "Subtypes": ["Aura", "Equipment"],
-                    "AttachedTo": { "Kind": "EnchantedOrEquipped" }
+                    "Subtypes": [
+                      "Aura",
+                      "Equipment"
+                    ],
+                    "AttachedTo": {
+                      "Kind": "EnchantedOrEquipped"
+                    }
                   }
                 },
                 "Operation": "multiply",
                 "Operand": 2
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 179,
+            "Length": 73
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -98,13 +157,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["G"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["G"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "G"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "G"
+        ]
+      }
     ]
   }
 }

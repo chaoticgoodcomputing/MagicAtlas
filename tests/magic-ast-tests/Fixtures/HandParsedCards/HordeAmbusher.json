@@ -6,9 +6,15 @@
     "OracleText": "Whenever this creature blocks, it deals 1 damage to you.\nMorph—Reveal a red card in your hand. (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)\nWhen this creature is turned face up, target creature can't block this turn.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Morph"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Morph"
+    ],
     "Id": "53926b92-adf0-4bb2-873f-103d9a1bdda8",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Horde Ambusher",
     "TypeLine": {
       "Raw": "Creature — Human Berserker",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Berserker"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Berserker"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever this creature blocks, it deals 1 damage to you.\nMorph—Reveal a red card in your hand. (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)\nWhen this creature is turned face up, target creature can't block this turn.",
@@ -28,7 +39,9 @@
             "Timing": "Whenever",
             "Event": "Blocks",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -39,10 +52,19 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "Target": { "Kind": "You" },
-              "Source": { "Kind": "Self" }
+              "Target": {
+                "Kind": "You"
+              },
+              "Source": {
+                "Kind": "Self"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -52,8 +74,12 @@
               "Cost": {
                 "CostType": "reveal",
                 "Filter": {
-                  "CardTypes": ["card"],
-                  "Colors": ["R"]
+                  "CardTypes": [
+                    "card"
+                  ],
+                  "Colors": [
+                    "R"
+                  ]
                 },
                 "Quantity": {
                   "QuantityType": "literal",
@@ -66,7 +92,12 @@
           "KeywordSource": "Morph",
           "Reminder": {
             "Text": "(You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 144
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -74,7 +105,9 @@
             "Timing": "When",
             "Event": "TurnedFaceUp",
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -83,7 +116,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "Duration": {
@@ -94,7 +129,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 202,
+            "Length": 76
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -109,7 +149,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -117,11 +159,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

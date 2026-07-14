@@ -55,7 +55,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 108
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

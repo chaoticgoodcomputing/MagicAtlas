@@ -13,7 +13,9 @@
     "Name": "Crystal Grotto",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "When this land enters, scry 1.\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.",
@@ -24,7 +26,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "IsSelf": true
             }
           },
@@ -36,12 +40,19 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 30
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -49,7 +60,12 @@
               "Mana": "{C}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 31,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -57,10 +73,15 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -69,7 +90,12 @@
               "AnyColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 36
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

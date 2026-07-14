@@ -37,7 +37,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -61,10 +66,16 @@
                     ],
                     "DoesNotRemoveThisAura": true
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 81
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

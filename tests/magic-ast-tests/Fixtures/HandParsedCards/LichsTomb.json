@@ -30,7 +30,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 50
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -60,7 +65,12 @@
           ],
           "Reminder": {
             "Text": "Damage causes loss of life."
-          }
+          },
+          "SourceSpan": {
+            "Start": 51,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

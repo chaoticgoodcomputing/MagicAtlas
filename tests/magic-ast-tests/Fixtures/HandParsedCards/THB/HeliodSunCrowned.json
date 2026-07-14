@@ -6,16 +6,27 @@
     "OracleText": "Indestructible\nAs long as your devotion to white is less than five, Heliod isn't a creature.\nWhenever you gain life, put a +1/+1 counter on target creature or enchantment you control.\n{1}{W}: Another target creature gains lifelink until end of turn.",
     "Power": "5",
     "Toughness": "5",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Heliod, Sun-Crowned",
     "TypeLine": {
       "Raw": "Legendary Enchantment Creature — God",
-      "Supertypes": ["Legendary"],
-      "Types": ["Enchantment", "Creature"],
-      "Subtypes": ["God"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "God"
+      ]
     },
     "Oracle": {
       "RawText": "Indestructible\nAs long as your devotion to white is less than five, Heliod isn't a creature.\nWhenever you gain life, put a +1/+1 counter on target creature or enchantment you control.\n{1}{W}: Another target creature gains lifelink until end of turn.",
@@ -28,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Indestructible"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +61,9 @@
                   "ConditionType": "quantityComparison",
                   "Left": {
                     "QuantityType": "devotion",
-                    "Colors": ["W"]
+                    "Colors": [
+                      "W"
+                    ]
                   },
                   "Operator": "LessThan",
                   "Right": {
@@ -55,7 +73,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 77
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -72,7 +95,10 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature", "enchantment"],
+                  "CardTypes": [
+                    "creature",
+                    "enchantment"
+                  ],
                   "Controller": "You"
                 }
               },
@@ -82,7 +108,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 93,
+            "Length": 90
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -96,7 +127,9 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["W"]
+                  "Colors": [
+                    "W"
+                  ]
                 }
               ]
             }
@@ -107,7 +140,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "ExcludeSelf": true
                 }
               },
@@ -118,7 +153,8 @@
                   {
                     "EffectType": "lifelink"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -129,7 +165,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 184,
+            "Length": 65
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -144,7 +185,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -152,11 +195,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",

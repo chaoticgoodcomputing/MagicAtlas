@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Enlist"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 146
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

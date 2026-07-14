@@ -4,8 +4,12 @@
     "ManaCost": "{B}",
     "TypeLine": "Instant",
     "OracleText": "Choose a card name. Exile the top six cards of your library, then reveal cards from the top of your library until you reveal a card with the chosen name. Put that card into your hand and exile all other cards revealed this way.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "1d779f19-3068-4976-b96b-8f93d156900b",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Demonic Consultation",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Choose a card name. Exile the top six cards of your library, then reveal cards from the top of your library until you reveal a card with the chosen name. Put that card into your hand and exile all other cards revealed this way.",
@@ -30,7 +36,9 @@
               "Target": {
                 "Kind": "Designated",
                 "Filter": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Zone": "Library",
                   "Controller": "You",
                   "Characteristics": [
@@ -49,14 +57,21 @@
             {
               "EffectType": "revealUntilExileRest",
               "Filter": {
-                "CardTypes": ["card"],
+                "CardTypes": [
+                  "card"
+                ],
                 "ChosenCharacteristic": "CardName"
               },
               "Player": {
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 227
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -65,12 +80,27 @@
         "Kind": "manaCost",
         "Raw": "{B}",
         "Symbols": [
-          {"Kind": "colored", "Colors": ["B"]}
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 1
       },
-      {"Kind": "colors", "Colors": ["B"]},
-      {"Kind": "colorIdentity", "ColorIdentity": ["B"]}
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      }
     ]
   }
 }

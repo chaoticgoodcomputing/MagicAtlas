@@ -6,16 +6,27 @@
     "OracleText": "Indestructible\nAs long as your devotion to blue is less than five, Thassa isn't a creature.\nAt the beginning of your end step, exile up to one other target creature you control, then return that card to the battlefield under your control.\n{3}{U}: Tap another target creature.",
     "Power": "6",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Thassa, Deep-Dwelling",
     "TypeLine": {
       "Raw": "Legendary Enchantment Creature — God",
-      "Supertypes": ["Legendary"],
-      "Types": ["Enchantment", "Creature"],
-      "Subtypes": ["God"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Enchantment",
+        "Creature"
+      ],
+      "Subtypes": [
+        "God"
+      ]
     },
     "Oracle": {
       "RawText": "Indestructible\nAs long as your devotion to blue is less than five, Thassa isn't a creature.\nAt the beginning of your end step, exile up to one other target creature you control, then return that card to the battlefield under your control.\n{3}{U}: Tap another target creature.",
@@ -28,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Indestructible"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +61,9 @@
                   "ConditionType": "quantityComparison",
                   "Left": {
                     "QuantityType": "devotion",
-                    "Colors": ["U"]
+                    "Colors": [
+                      "U"
+                    ]
                   },
                   "Operator": "LessThan",
                   "Right": {
@@ -55,7 +73,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 76
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -81,7 +104,9 @@
                       "Minimum": 0
                     },
                     "Filter": {
-                      "CardTypes": ["creature"],
+                      "CardTypes": [
+                        "creature"
+                      ],
                       "Controller": "You",
                       "ExcludeSelf": true
                     }
@@ -104,7 +129,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 92,
+            "Length": 146
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -118,7 +148,9 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["U"]
+                  "Colors": [
+                    "U"
+                  ]
                 }
               ]
             }
@@ -129,13 +161,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "ExcludeSelf": true
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 239,
+            "Length": 36
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -150,7 +189,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -158,11 +199,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

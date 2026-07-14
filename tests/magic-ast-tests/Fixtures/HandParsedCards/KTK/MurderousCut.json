@@ -43,7 +43,12 @@
           ],
           "Reminder": {
             "Text": "(Each card you exile from your graveyard while casting this spell pays for {1}.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 86
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -59,7 +64,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 87,
+            "Length": 24
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

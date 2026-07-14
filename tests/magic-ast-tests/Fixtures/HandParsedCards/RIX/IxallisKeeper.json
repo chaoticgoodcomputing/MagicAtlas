@@ -106,7 +106,8 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Trample"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   },
                   "Duration": {
                     "DurationType": "untilTime",
@@ -119,7 +120,12 @@
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 101
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

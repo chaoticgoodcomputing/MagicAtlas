@@ -39,7 +39,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 59
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -62,7 +67,12 @@
           "KeywordSource": "Miracle",
           "Reminder": {
             "Text": "(You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 60,
+            "Length": 117
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

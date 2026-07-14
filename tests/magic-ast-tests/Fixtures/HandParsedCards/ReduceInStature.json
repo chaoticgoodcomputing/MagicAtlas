@@ -4,9 +4,15 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant creature\nEnchanted creature has base power and toughness 0/2.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "8bad1d13-c4f6-4440-9988-e1db40039f02",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Reduce in Stature",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant creature\nEnchanted creature has base power and toughness 0/2.",
@@ -27,10 +37,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,7 +66,12 @@
                 "Value": 2
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -64,18 +86,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

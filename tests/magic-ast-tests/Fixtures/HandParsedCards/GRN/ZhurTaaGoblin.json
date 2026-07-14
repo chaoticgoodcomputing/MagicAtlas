@@ -41,7 +41,12 @@
           ],
           "Reminder": {
             "Text": "(This creature enters with your choice of a +1/+1 counter or haste.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 73
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

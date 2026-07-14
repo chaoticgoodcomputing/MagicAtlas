@@ -65,12 +65,18 @@
                           }
                         ]
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 74
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -113,7 +119,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 75,
+            "Length": 124
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -146,7 +157,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 200,
+            "Length": 9
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

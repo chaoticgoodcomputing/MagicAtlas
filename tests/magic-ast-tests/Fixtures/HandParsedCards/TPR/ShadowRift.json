@@ -45,7 +45,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Shadow"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -55,7 +56,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 107
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -70,7 +76,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 12
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

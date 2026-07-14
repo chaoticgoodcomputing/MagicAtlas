@@ -6,9 +6,15 @@
     "OracleText": "When this creature enters, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)\nCreatures you control with +1/+1 counters on them have trample.",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Earthbend"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Earthbend"
+    ],
     "Id": "aabbd420-b7fc-496f-9168-bad823d51d9e",
     "Layout": "normal"
   },
@@ -16,8 +22,13 @@
     "Name": "Badgermole",
     "TypeLine": {
       "Raw": "Creature — Badger Mole",
-      "Types": ["Creature"],
-      "Subtypes": ["Badger", "Mole"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Badger",
+        "Mole"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)\nCreatures you control with +1/+1 counters on them have trample.",
@@ -28,19 +39,29 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
           "Effects": [
             {
               "EffectType": "earthbend",
-              "Count": { "QuantityType": "literal", "Value": 2 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 2
+              }
             }
           ],
           "Reminder": {
             "Text": "Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 214
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -50,22 +71,36 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You",
                   "Characteristics": [
-                    { "CharacteristicType": "counter", "CounterType": "+1/+1" }
+                    {
+                      "CharacteristicType": "counter",
+                      "CounterType": "+1/+1"
+                    }
                   ]
                 }
               },
               "GainedAbility": {
                 "Kind": "static",
                 "Effects": [
-                  { "EffectType": "keywordAbility", "Keyword": "Trample" }
+                  {
+                    "EffectType": "keywordAbility",
+                    "Keyword": "Trample"
+                  }
                 ],
-                "KeywordSource": "Trample"
+                "KeywordSource": "Trample",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 215,
+            "Length": 63
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -74,23 +109,43 @@
         "Kind": "manaCost",
         "Raw": "{4}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

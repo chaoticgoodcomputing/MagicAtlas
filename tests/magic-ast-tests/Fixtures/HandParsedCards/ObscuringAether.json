@@ -4,8 +4,12 @@
     "ManaCost": "{G}",
     "TypeLine": "Enchantment",
     "OracleText": "Face-down creature spells you cast cost {1} less to cast.\n{1}{G}: Turn this enchantment face down. (It becomes a 2/2 creature.)",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "d8b28abe-9ff6-42aa-ade6-90b9e44d2a01",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Obscuring Aether",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Face-down creature spells you cast cost {1} less to cast.\n{1}{G}: Turn this enchantment face down. (It becomes a 2/2 creature.)",
@@ -31,10 +37,18 @@
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell", "creature"],
+            "CardTypes": [
+              "spell",
+              "creature"
+            ],
             "IsFaceDown": true,
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 57
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -42,18 +56,33 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 },
-                { "Kind": "colored", "Colors": ["G"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "G"
+                  ]
+                }
               ]
             }
           ],
           "Effects": [
             {
               "EffectType": "turnFaceDown",
-              "Target": { "Kind": "Self" }
+              "Target": {
+                "Kind": "Self"
+              }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 58,
+            "Length": 69
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -62,18 +91,27 @@
         "Kind": "manaCost",
         "Raw": "{G}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 1,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

@@ -94,7 +94,12 @@
           ],
           "Instructions": [
             "you may pay {B}"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 135
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

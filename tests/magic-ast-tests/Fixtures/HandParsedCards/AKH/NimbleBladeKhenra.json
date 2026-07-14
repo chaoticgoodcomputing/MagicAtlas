@@ -37,7 +37,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Prowess"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 92
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

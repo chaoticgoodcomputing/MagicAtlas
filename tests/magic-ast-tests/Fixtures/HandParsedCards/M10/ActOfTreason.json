@@ -62,7 +62,8 @@
                     "Keyword": "Haste"
                   }
                 ],
-                "KeywordSource": "Haste"
+                "KeywordSource": "Haste",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -72,7 +73,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 140
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

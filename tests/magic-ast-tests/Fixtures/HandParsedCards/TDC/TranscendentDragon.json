@@ -36,7 +36,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -60,7 +65,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 6
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -99,7 +109,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 211
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

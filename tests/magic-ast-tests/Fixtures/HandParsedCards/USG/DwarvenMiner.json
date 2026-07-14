@@ -6,8 +6,12 @@
     "OracleText": "{2}{R}, {T}: Destroy target nonbasic land.",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "b7142196-c379-4932-9402-97642ad2ebdb",
     "Layout": "normal"
@@ -16,8 +20,12 @@
     "Name": "Dwarven Miner",
     "TypeLine": {
       "Raw": "Creature — Dwarf",
-      "Types": ["Creature"],
-      "Subtypes": ["Dwarf"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dwarf"
+      ]
     },
     "Oracle": {
       "RawText": "{2}{R}, {T}: Destroy target nonbasic land.",
@@ -28,11 +36,21 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["R"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "R"
+                  ]
+                }
               ]
             },
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -40,13 +58,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["land"],
-                  "ExcludedSupertypes": ["Basic"]
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "ExcludedSupertypes": [
+                    "Basic"
+                  ]
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 42
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -55,24 +82,44 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

@@ -35,7 +35,12 @@
               "Keyword": "Deathtouch"
             }
           ],
-          "KeywordSource": "Deathtouch"
+          "KeywordSource": "Deathtouch",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 10
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -113,7 +118,8 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Deathtouch"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   },
                   "Duration": {
                     "DurationType": "untilTime",
@@ -127,7 +133,12 @@
             }
           ],
           "IsManaAbility": false,
-          "AbilityWord": "Bloodrush"
+          "AbilityWord": "Bloodrush",
+          "SourceSpan": {
+            "Start": 11,
+            "Length": 112
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

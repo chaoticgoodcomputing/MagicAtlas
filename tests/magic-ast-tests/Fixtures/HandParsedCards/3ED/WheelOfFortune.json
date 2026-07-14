@@ -4,14 +4,20 @@
     "ManaCost": "{2}{R}",
     "TypeLine": "Sorcery",
     "OracleText": "Each player discards their hand, then draws seven cards.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Wheel of Fortune",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "Each player discards their hand, then draws seven cards.",
@@ -21,16 +27,31 @@
           "Effects": [
             {
               "EffectType": "discardCards",
-              "Count": { "QuantityType": "derived", "DerivedFrom": "CardsInHand" },
-              "Player": { "Kind": "EachPlayer" },
+              "Count": {
+                "QuantityType": "derived",
+                "DerivedFrom": "CardsInHand"
+              },
+              "Player": {
+                "Kind": "EachPlayer"
+              },
               "Random": false
             },
             {
               "EffectType": "drawCards",
-              "Count": { "QuantityType": "literal", "Value": 7 },
-              "Player": { "Kind": "EachPlayer" }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 7
+              },
+              "Player": {
+                "Kind": "EachPlayer"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,18 +60,30 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

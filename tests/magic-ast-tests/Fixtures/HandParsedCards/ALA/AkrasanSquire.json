@@ -72,7 +72,12 @@
           "KeywordSource": "Exalted",
           "Reminder": {
             "Text": "(Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 100
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

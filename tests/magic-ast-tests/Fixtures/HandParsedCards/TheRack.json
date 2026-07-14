@@ -29,7 +29,12 @@
               "Scope": "Opponent"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 44
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -69,7 +74,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 45,
+            "Length": 146
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

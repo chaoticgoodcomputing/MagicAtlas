@@ -42,7 +42,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -60,10 +65,16 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Infect"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 138
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

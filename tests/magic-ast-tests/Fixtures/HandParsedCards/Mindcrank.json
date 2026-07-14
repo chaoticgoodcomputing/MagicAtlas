@@ -13,7 +13,9 @@
     "Name": "Mindcrank",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever an opponent loses life, that player mills that many cards. (Damage causes loss of life.)",
@@ -41,7 +43,12 @@
           ],
           "Reminder": {
             "Text": "Damage causes loss of life."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

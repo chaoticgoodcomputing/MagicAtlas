@@ -4,8 +4,12 @@
     "ManaCost": "{1}{R}{R}",
     "TypeLine": "Instant",
     "OracleText": "You may sacrifice a nontoken red creature rather than pay this spell's mana cost.\nCopy target instant or sorcery spell. You may choose new targets for the copy.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "497a10c6-131b-464e-95e4-e47708a24d48",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Flare of Duplication",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "You may sacrifice a nontoken red creature rather than pay this spell's mana cost.\nCopy target instant or sorcery spell. You may choose new targets for the copy.",
@@ -27,13 +33,21 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["instant", "sorcery"],
+                  "CardTypes": [
+                    "instant",
+                    "sorcery"
+                  ],
                   "Zone": "Stack"
                 }
               },
               "MayChooseNewTargets": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 82,
+            "Length": 78
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -48,22 +62,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "alternativeCosts",
@@ -72,8 +94,12 @@
             "Cost": {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
-                "Colors": ["R"],
+                "CardTypes": [
+                  "creature"
+                ],
+                "Colors": [
+                  "R"
+                ],
                 "IsToken": false
               },
               "Quantity": {

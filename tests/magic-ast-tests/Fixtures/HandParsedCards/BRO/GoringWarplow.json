@@ -53,7 +53,12 @@
               "Power": "1",
               "Toughness": "1"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 125
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -63,7 +68,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Deathtouch"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 126,
+            "Length": 10
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

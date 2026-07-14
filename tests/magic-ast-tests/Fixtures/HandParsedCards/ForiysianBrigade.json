@@ -34,7 +34,12 @@
             {
               "EffectType": "blockAdditional"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 59
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

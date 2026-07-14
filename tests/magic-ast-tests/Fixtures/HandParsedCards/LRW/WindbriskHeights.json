@@ -36,7 +36,12 @@
           "KeywordSource": "Hideaway",
           "Reminder": {
             "Text": "(When this land enters, look at the top four cards of your library, exile one face down, then put the rest on the bottom in a random order.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 151
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -54,7 +59,12 @@
               "OfChosenColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 152,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -84,7 +94,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 166,
+            "Length": 123
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -35,7 +35,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Devoid"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 32
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -45,7 +50,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 33,
+            "Length": 7
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -6,15 +6,24 @@
     "OracleText": "{T}: Switch target creature's power and toughness until end of turn.",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Dwarven Thaumaturgist",
     "TypeLine": {
       "Raw": "Creature — Dwarf Shaman",
-      "Types": ["Creature"],
-      "Subtypes": ["Dwarf", "Shaman"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dwarf",
+        "Shaman"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Switch target creature's power and toughness until end of turn.",
@@ -22,7 +31,9 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" }
+            {
+              "CostType": "tap"
+            }
           ],
           "Effects": [
             {
@@ -30,7 +41,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "Duration": {
@@ -42,7 +55,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 68
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -51,23 +69,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "1", "Value": 1 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

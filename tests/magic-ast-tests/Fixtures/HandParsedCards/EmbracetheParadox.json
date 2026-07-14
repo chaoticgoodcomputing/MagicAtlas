@@ -6,14 +6,22 @@
     "OracleText": "Draw three cards. You may put a land card from your hand onto the battlefield tapped.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["G", "U"],
-    "ColorIdentity": ["G", "U"]
+    "Colors": [
+      "G",
+      "U"
+    ],
+    "ColorIdentity": [
+      "G",
+      "U"
+    ]
   },
   "Output": {
     "Name": "Embrace the Paradox",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Draw three cards. You may put a land card from your hand onto the battlefield tapped.",
@@ -36,14 +44,21 @@
               "Inner": {
                 "EffectType": "putFromHandOntoBattlefield",
                 "Filter": {
-                  "CardTypes": ["land"],
+                  "CardTypes": [
+                    "land"
+                  ],
                   "Zone": "Hand",
                   "Controller": "You"
                 },
                 "Tapped": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 85
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,19 +67,38 @@
         "Kind": "manaCost",
         "Raw": "{3}{G}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "U"]
+        "Colors": [
+          "G",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "U"]
+        "ColorIdentity": [
+          "G",
+          "U"
+        ]
       }
     ]
   }

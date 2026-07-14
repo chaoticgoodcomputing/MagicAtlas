@@ -33,7 +33,12 @@
             {
               "EffectType": "cantBlock"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 26
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -55,7 +60,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 27,
+            "Length": 75
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

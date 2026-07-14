@@ -84,7 +84,8 @@
                         }
                       }
                     ],
-                    "KeywordSource": "Flying"
+                    "KeywordSource": "Flying",
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -93,7 +94,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 97
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -132,7 +138,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 98,
+            "Length": 83
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -53,7 +53,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 45
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "unparsed",
@@ -76,7 +81,8 @@
               "FailurePosition": 46
             }
           ],
-          "AbilityWord": "Void"
+          "AbilityWord": "Void",
+          "OracleLineIndex": 1
         }
       ]
     },

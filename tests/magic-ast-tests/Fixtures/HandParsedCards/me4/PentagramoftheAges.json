@@ -14,7 +14,9 @@
     "Name": "Pentagram of the Ages",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "{4}, {T}: The next time a source of your choice would deal damage to you this turn, prevent that damage.",
@@ -54,7 +56,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 104
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

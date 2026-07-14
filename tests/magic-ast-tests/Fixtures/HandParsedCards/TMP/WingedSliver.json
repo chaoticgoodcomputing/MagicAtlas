@@ -54,15 +54,27 @@
                         "creature"
                       ],
                       "Characteristics": [
-                        {"CharacteristicType": "keyword", "Keyword": "Flying"},
-                        {"CharacteristicType": "keyword", "Keyword": "Reach"}
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Flying"
+                        },
+                        {
+                          "CharacteristicType": "keyword",
+                          "Keyword": "Reach"
+                        }
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 33
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

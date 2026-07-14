@@ -37,7 +37,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 38
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -65,7 +70,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 168
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -96,7 +106,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 168
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -115,7 +130,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -153,7 +169,8 @@
                       "Kind": "You"
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -163,7 +180,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 39,
+            "Length": 168
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

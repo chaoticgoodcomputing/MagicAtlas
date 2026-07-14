@@ -39,7 +39,12 @@
           ],
           "Reminder": {
             "Text": "(Another player can pay up to {7} of this spell's cost.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 63
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,7 +54,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 64,
+            "Length": 7
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

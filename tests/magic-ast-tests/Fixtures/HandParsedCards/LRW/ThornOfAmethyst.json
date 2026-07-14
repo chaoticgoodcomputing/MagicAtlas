@@ -36,7 +36,12 @@
             "ExcludedCardTypes": [
               "creature"
             ]
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 41
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

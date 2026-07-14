@@ -43,7 +43,12 @@
               "CounterType": "charge"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 55
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -58,7 +63,12 @@
               "Mana": "{U}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 56,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -85,7 +95,12 @@
               "AnyColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 70,
+            "Length": 71
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

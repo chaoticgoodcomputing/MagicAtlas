@@ -13,7 +13,9 @@
     "Name": "Fabled Passage",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle. Then if you control four or more lands, untap that land.",
@@ -27,7 +29,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["land"],
+                "CardTypes": [
+                  "land"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -43,8 +47,12 @@
                 {
                   "EffectType": "searchLibrary",
                   "Filter": {
-                    "Supertypes": ["Basic"],
-                    "CardTypes": ["land"]
+                    "Supertypes": [
+                      "Basic"
+                    ],
+                    "CardTypes": [
+                      "land"
+                    ]
                   },
                   "Count": {
                     "QuantityType": "literal",
@@ -66,7 +74,9 @@
               "Condition": {
                 "ConditionType": "count",
                 "Filter": {
-                  "CardTypes": ["land"],
+                  "CardTypes": [
+                    "land"
+                  ],
                   "Controller": "You"
                 },
                 "Count": {
@@ -82,7 +92,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 175
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

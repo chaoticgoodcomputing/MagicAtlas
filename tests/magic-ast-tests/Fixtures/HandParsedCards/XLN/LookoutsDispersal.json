@@ -47,7 +47,12 @@
               "Operator": "GreaterThanOrEqual",
               "Value": 1
             }
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 58
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -80,7 +85,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 59,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

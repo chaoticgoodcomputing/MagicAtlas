@@ -51,7 +51,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -75,7 +80,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this spell for its evoke cost. If you do, it's sacrificed when it enters.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 98
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -95,7 +105,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 98
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

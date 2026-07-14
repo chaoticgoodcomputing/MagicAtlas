@@ -2,7 +2,9 @@
   "Input": {
     "Name": "Glasspool Mimic // Glasspool Shore",
     "TypeLine": "Creature — Shapeshifter Rogue // Land",
-    "ColorIdentity": ["U"],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "5adcb500-8c77-4925-8e2c-1243502827d1",
     "Layout": "modal_dfc",
@@ -14,7 +16,9 @@
         "OracleText": "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its other types.",
         "Power": "0",
         "Toughness": "0",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Name": "Glasspool Shore",
@@ -29,8 +33,15 @@
     "Name": "Glasspool Mimic // Glasspool Shore",
     "TypeLine": {
       "Raw": "Creature — Shapeshifter Rogue // Land",
-      "Types": ["Creature"],
-      "Subtypes": ["Shapeshifter", "Rogue", "//", "Land"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Shapeshifter",
+        "Rogue",
+        "//",
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "",
@@ -43,7 +54,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "layout",
@@ -55,8 +68,13 @@
         "Name": "Glasspool Mimic",
         "TypeLine": {
           "Raw": "Creature — Shapeshifter Rogue",
-          "Types": ["Creature"],
-          "Subtypes": ["Shapeshifter", "Rogue"]
+          "Types": [
+            "Creature"
+          ],
+          "Subtypes": [
+            "Shapeshifter",
+            "Rogue"
+          ]
         },
         "Oracle": {
           "RawText": "You may have this creature enter as a copy of a creature you control, except it's a Shapeshifter Rogue in addition to its other types.",
@@ -74,20 +92,30 @@
                     "CopyTarget": {
                       "Kind": "Any",
                       "Filter": {
-                        "CardTypes": ["creature"],
+                        "CardTypes": [
+                          "creature"
+                        ],
                         "Controller": "You"
                       }
                     },
                     "Modifications": [
                       {
                         "ModificationType": "typeAdder",
-                        "Subtypes": ["Shapeshifter", "Rogue"]
+                        "Subtypes": [
+                          "Shapeshifter",
+                          "Rogue"
+                        ]
                       }
                     ]
                   }
                 }
               ],
-              "When": "asThisEnters"
+              "When": "asThisEnters",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 134
+              },
+              "OracleLineIndex": 0
             }
           ]
         },
@@ -102,7 +130,9 @@
               },
               {
                 "Kind": "colored",
-                "Colors": ["U"]
+                "Colors": [
+                  "U"
+                ]
               }
             ],
             "ManaValue": 3,
@@ -110,7 +140,9 @@
           },
           {
             "Kind": "colors",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "creatureStats",
@@ -131,7 +163,9 @@
         "Name": "Glasspool Shore",
         "TypeLine": {
           "Raw": "Land",
-          "Types": ["Land"]
+          "Types": [
+            "Land"
+          ]
         },
         "Oracle": {
           "RawText": "This land enters tapped.\n{T}: Add {U}.",
@@ -146,7 +180,12 @@
                   }
                 }
               ],
-              "When": "asThisEnters"
+              "When": "asThisEnters",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 24
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "activated",
@@ -162,7 +201,12 @@
                   "AnyColor": false
                 }
               ],
-              "IsManaAbility": true
+              "IsManaAbility": true,
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 13
+              },
+              "OracleLineIndex": 1
             }
           ]
         },

@@ -15,7 +15,9 @@
     "Name": "Krosan Reclamation",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Target player shuffles up to two target cards from their graveyard into their library.\nFlashback {1}{G} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
@@ -28,13 +30,17 @@
               "Player": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["player"]
+                  "CardTypes": [
+                    "player"
+                  ]
                 }
               },
               "Cards": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Zone": "Graveyard",
                   "Controller": "Target"
                 },
@@ -45,7 +51,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 86
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,12 +68,25 @@
               "Cost": {
                 "CostType": "mana",
                 "Symbols": [
-                  { "Kind": "generic", "GenericAmount": 1 },
-                  { "Kind": "colored", "Colors": ["G"] }
+                  {
+                    "Kind": "generic",
+                    "GenericAmount": 1
+                  },
+                  {
+                    "Kind": "colored",
+                    "Colors": [
+                      "G"
+                    ]
+                  }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 87,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -71,18 +95,30 @@
         "Kind": "manaCost",
         "Raw": "{1}{G}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

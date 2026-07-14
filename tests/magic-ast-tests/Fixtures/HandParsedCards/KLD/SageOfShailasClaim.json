@@ -54,7 +54,12 @@
           ],
           "Reminder": {
             "Text": "three energy counters"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 69
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

@@ -6,8 +6,12 @@
     "OracleText": "When this creature dies, it deals 2 damage to target creature.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Id": "6517a2ed-adbc-4f73-9bd9-dde739f3a3bd",
     "Layout": "normal"
   },
@@ -15,8 +19,13 @@
     "Name": "Bogardan Firefiend",
     "TypeLine": {
       "Raw": "Creature — Elemental Spirit",
-      "Types": ["Creature"],
-      "Subtypes": ["Elemental", "Spirit"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elemental",
+        "Spirit"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature dies, it deals 2 damage to target creature.",
@@ -27,23 +36,37 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Source": { "Kind": "It" },
-              "Amount": { "QuantityType": "literal", "Value": 2 },
+              "Source": {
+                "Kind": "It"
+              },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 62
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -52,17 +75,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

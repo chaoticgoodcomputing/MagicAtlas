@@ -57,7 +57,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 123
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

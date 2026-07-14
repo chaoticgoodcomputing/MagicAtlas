@@ -33,7 +33,12 @@
             {
               "EffectType": "cantBeBlocked"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 31
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

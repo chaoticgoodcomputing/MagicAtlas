@@ -6,15 +6,25 @@
     "OracleText": "When this creature enters, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
     "Power": "1",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Red Room Recruit",
     "TypeLine": {
       "Raw": "Creature — Human Spy Villain",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Spy", "Villain"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Spy",
+        "Villain"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)",
@@ -25,19 +35,28 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
           "Effects": [
             {
               "EffectType": "connive",
-              "Target": { "Kind": "It" }
+              "Target": {
+                "Kind": "It"
+              }
             }
           ],
           "Reminder": {
             "Text": "Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 146
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -46,13 +65,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["B"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["B"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "B"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "B"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

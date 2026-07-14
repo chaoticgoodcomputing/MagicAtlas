@@ -4,8 +4,12 @@
     "ManaCost": "{U}{U}",
     "TypeLine": "Enchantment",
     "OracleText": "As this enchantment enters, choose a card name.\n{U}: Counter target spell with the chosen name.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "2e67d62f-9629-463b-a445-4181f6fafd0f",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Declaration of Naught",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "As this enchantment enters, choose a card name.\n{U}: Counter target spell with the chosen name.",
@@ -23,8 +29,15 @@
           "Kind": "static",
           "When": "asThisEnters",
           "Effects": [
-            { "EffectType": "chooseCardName" }
-          ]
+            {
+              "EffectType": "chooseCardName"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 47
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -32,7 +45,12 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "colored", "Colors": ["U"] }
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "U"
+                  ]
+                }
               ]
             }
           ],
@@ -42,13 +60,20 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"],
+                  "CardTypes": [
+                    "spell"
+                  ],
                   "ChosenCharacteristic": "CardName"
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 48,
+            "Length": 47
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -57,19 +82,33 @@
         "Kind": "manaCost",
         "Raw": "{U}{U}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

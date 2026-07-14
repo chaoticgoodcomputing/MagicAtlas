@@ -61,7 +61,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -82,7 +83,12 @@
                 "Zombie"
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 188
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -133,7 +139,12 @@
           ],
           "Instructions": [
             "you may pay {4}"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 189,
+            "Length": 174
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -166,7 +177,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 364,
+            "Length": 9
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

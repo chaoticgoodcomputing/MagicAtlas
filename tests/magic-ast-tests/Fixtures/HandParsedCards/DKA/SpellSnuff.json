@@ -6,14 +6,20 @@
     "OracleText": "Counter target spell.\nFateful hour — If you have 5 or less life, draw a card.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Spell Snuff",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Counter target spell.\nFateful hour — If you have 5 or less life, draw a card.",
@@ -26,11 +32,18 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["spell"]
+                  "CardTypes": [
+                    "spell"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 21
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -47,7 +60,14 @@
               }
             }
           ],
-          "Instructions": ["If you have 5 or less life"]
+          "Instructions": [
+            "If you have 5 or less life"
+          ],
+          "SourceSpan": {
+            "Start": 22,
+            "Length": 55
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -56,19 +76,36 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

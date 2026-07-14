@@ -38,7 +38,12 @@
               }
             }
           ],
-          "When": "asObjectEnters"
+          "When": "asObjectEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

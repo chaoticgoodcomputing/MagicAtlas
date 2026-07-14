@@ -44,7 +44,12 @@
                 "Doubt"
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 49
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -89,7 +94,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -134,7 +144,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 115
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -57,7 +57,8 @@
                     }
                   }
                 ],
-                "KeywordSource": "Flying"
+                "KeywordSource": "Flying",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -79,7 +80,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 64
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -97,7 +103,8 @@
                     "Keyword": "Persist"
                   }
                 ],
-                "KeywordSource": "Persist"
+                "KeywordSource": "Persist",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -122,7 +129,12 @@
           ],
           "Reminder": {
             "Text": "(When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 65,
+            "Length": 211
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

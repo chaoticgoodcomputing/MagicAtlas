@@ -44,7 +44,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 43
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -106,7 +111,12 @@
           ],
           "Restrictions": [
             "OnlyAsSorcery"
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 44,
+            "Length": 147
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

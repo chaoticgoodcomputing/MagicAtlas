@@ -58,7 +58,12 @@
           ],
           "Reminder": {
             "Text": "It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 122
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -74,7 +79,12 @@
               "AnyColor": true
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 123,
+            "Length": 31
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

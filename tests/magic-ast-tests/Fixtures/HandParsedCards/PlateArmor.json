@@ -4,9 +4,15 @@
     "ManaCost": "{2}{W}",
     "TypeLine": "Artifact — Equipment",
     "OracleText": "Equipped creature gets +3/+3 and has ward {1}. (Whenever equipped creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nEquip {3}. This ability costs {1} less to activate for each other Equipment you control. ({3}: Attach to target creature you control. Equip only as a sorcery.)",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Equip"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Equip"
+    ],
     "Id": "ad447e50-cfb1-40df-ae01-a65c46f2f572",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Plate Armor",
     "TypeLine": {
       "Raw": "Artifact — Equipment",
-      "Types": ["Artifact"],
-      "Subtypes": ["Equipment"]
+      "Types": [
+        "Artifact"
+      ],
+      "Subtypes": [
+        "Equipment"
+      ]
     },
     "Oracle": {
       "RawText": "Equipped creature gets +3/+3 and has ward {1}. (Whenever equipped creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nEquip {3}. This ability costs {1} less to activate for each other Equipment you control. ({3}: Attach to target creature you control. Equip only as a sorcery.)",
@@ -28,42 +38,69 @@
               "Effects": [
                 {
                   "EffectType": "modifyPT",
-                  "Target": { "Kind": "EnchantedOrEquipped" },
-                  "PowerModifier": { "QuantityType": "literal", "Value": 3 },
-                  "ToughnessModifier": { "QuantityType": "literal", "Value": 3 }
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
+                  "PowerModifier": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  },
+                  "ToughnessModifier": {
+                    "QuantityType": "literal",
+                    "Value": 3
+                  }
                 },
                 {
                   "EffectType": "gainAbility",
-                  "Target": { "Kind": "EnchantedOrEquipped" },
+                  "Target": {
+                    "Kind": "EnchantedOrEquipped"
+                  },
                   "GainedAbility": {
                     "Kind": "triggered",
                     "KeywordSource": "Ward",
                     "Trigger": {
                       "Timing": "Whenever",
                       "Event": "BecomesTarget",
-                      "Filter": { "Controller": "Opponent" }
+                      "Filter": {
+                        "Controller": "Opponent"
+                      }
                     },
                     "Effects": [
                       {
                         "EffectType": "preventable",
                         "Inner": {
                           "EffectType": "counterSpell",
-                          "Target": { "Kind": "It" }
+                          "Target": {
+                            "Kind": "It"
+                          }
                         },
                         "Unless": {
-                          "Player": { "Kind": "ThatPlayer" },
+                          "Player": {
+                            "Kind": "ThatPlayer"
+                          },
                           "Cost": {
                             "CostType": "mana",
-                            "Symbols": [{ "Kind": "generic", "GenericAmount": 1 }]
+                            "Symbols": [
+                              {
+                                "Kind": "generic",
+                                "GenericAmount": 1
+                              }
+                            ]
                           }
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 178
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -71,7 +108,12 @@
           "Costs": [
             {
               "CostType": "mana",
-              "Symbols": [{ "Kind": "generic", "GenericAmount": 3 }]
+              "Symbols": [
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 3
+                }
+              ]
             }
           ],
           "Effects": [
@@ -79,26 +121,48 @@
               "EffectType": "attach",
               "Target": {
                 "Kind": "Target",
-                "Filter": { "CardTypes": ["creature"], "Controller": "You" }
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
               }
             }
           ],
-          "Restrictions": ["OnlyAsSorcery"],
-          "IsManaAbility": false
+          "Restrictions": [
+            "OnlyAsSorcery"
+          ],
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 179,
+            "Length": 159
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "Subtypes": ["Equipment"],
+                "Subtypes": [
+                  "Equipment"
+                ],
                 "Controller": "You",
                 "ExcludeSelf": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 179,
+            "Length": 159
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -107,13 +171,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      }
     ]
   }
 }

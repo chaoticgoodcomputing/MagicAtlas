@@ -39,7 +39,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Skulk"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 71
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -51,7 +56,12 @@
             {
               "EffectType": "lifelink"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 72,
+            "Length": 80
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

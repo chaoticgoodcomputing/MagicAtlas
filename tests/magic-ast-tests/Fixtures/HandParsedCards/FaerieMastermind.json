@@ -6,9 +6,16 @@
     "OracleText": "Flash\nFlying\nWhenever an opponent draws their second card each turn, you draw a card.\n{3}{U}: Each player draws a card.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Flying", "Flash"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Flying",
+      "Flash"
+    ],
     "Id": "bc9a7599-3c7d-4b83-bff3-e3d1f20f1b0f",
     "Layout": "normal"
   },
@@ -16,8 +23,13 @@
     "Name": "Faerie Mastermind",
     "TypeLine": {
       "Raw": "Creature — Faerie Rogue",
-      "Types": ["Creature"],
-      "Subtypes": ["Faerie", "Rogue"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Faerie",
+        "Rogue"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nFlying\nWhenever an opponent draws their second card each turn, you draw a card.\n{3}{U}: Each player draws a card.",
@@ -31,7 +43,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -40,7 +57,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -53,7 +72,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 6
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -77,7 +101,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 72
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
@@ -91,7 +120,9 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["U"]
+                  "Colors": [
+                    "U"
+                  ]
                 }
               ]
             }
@@ -108,7 +139,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 86,
+            "Length": 33
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -123,7 +159,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -131,11 +169,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

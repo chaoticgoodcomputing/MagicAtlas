@@ -6,9 +6,15 @@
     "OracleText": "First strike\nCreatures and nonbasic lands your opponents control enter tapped.",
     "Power": "3",
     "Toughness": "2",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["First strike"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "First strike"
+    ],
     "Id": "c062937f-d519-4206-99b0-cbea01b85a0d",
     "Layout": "normal"
   },
@@ -16,9 +22,16 @@
     "Name": "Thalia, Heretic Cathar",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Soldier",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Soldier"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Soldier"
+      ]
     },
     "Oracle": {
       "RawText": "First strike\nCreatures and nonbasic lands your opponents control enter tapped.",
@@ -31,7 +44,12 @@
               "Timing": "First"
             }
           ],
-          "KeywordSource": "First strike"
+          "KeywordSource": "First strike",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -42,13 +60,23 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature", "land"],
-                  "ExcludedSupertypes": ["Basic"],
+                  "CardTypes": [
+                    "creature",
+                    "land"
+                  ],
+                  "ExcludedSupertypes": [
+                    "Basic"
+                  ],
                   "Controller": "Opponent"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 13,
+            "Length": 65
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -57,18 +85,44 @@
         "Kind": "manaCost",
         "Raw": "{2}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["W"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["W"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "W"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "W"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
-        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
       }
     ]
   }

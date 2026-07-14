@@ -36,7 +36,12 @@
               "EffectType": "toxic",
               "Value": 1
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 81
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -71,7 +76,12 @@
                 "Revealed": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 82,
+            "Length": 127
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

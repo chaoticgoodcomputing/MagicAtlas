@@ -6,9 +6,17 @@
     "OracleText": "Ward—Pay 2 life.\nOther creatures you control enter with an additional +1/+1 counter on them for each opponent who lost life this turn.\nWhenever you cast a Lizard spell, Gev deals 1 damage to target opponent.",
     "Power": "3",
     "Toughness": "2",
-    "Colors": ["B", "R"],
-    "ColorIdentity": ["B", "R"],
-    "Keywords": ["Ward"],
+    "Colors": [
+      "B",
+      "R"
+    ],
+    "ColorIdentity": [
+      "B",
+      "R"
+    ],
+    "Keywords": [
+      "Ward"
+    ],
     "Id": "131ea976-289e-4f32-896d-27bbfd423ba9",
     "Layout": "normal"
   },
@@ -16,9 +24,16 @@
     "Name": "Gev, Scaled Scorch",
     "TypeLine": {
       "Raw": "Legendary Creature — Lizard Mercenary",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Lizard", "Mercenary"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Lizard",
+        "Mercenary"
+      ]
     },
     "Oracle": {
       "RawText": "Ward—Pay 2 life.\nOther creatures you control enter with an additional +1/+1 counter on them for each opponent who lost life this turn.\nWhenever you cast a Lizard spell, Gev deals 1 damage to target opponent.",
@@ -55,7 +70,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -66,7 +86,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
@@ -83,7 +105,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 117
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -91,8 +118,12 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "Subtypes": ["Lizard"],
+              "CardTypes": [
+                "spell"
+              ],
+              "Subtypes": [
+                "Lizard"
+              ],
               "Controller": "You"
             }
           },
@@ -110,7 +141,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 135,
+            "Length": 72
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -121,11 +157,15 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -133,16 +173,30 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "R"]
+        "Colors": [
+          "B",
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "R"]
+        "ColorIdentity": [
+          "B",
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
-        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
       }
     ]
   }

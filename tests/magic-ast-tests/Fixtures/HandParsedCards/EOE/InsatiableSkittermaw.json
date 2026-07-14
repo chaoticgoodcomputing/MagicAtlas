@@ -44,7 +44,12 @@
           "KeywordSource": "Menace",
           "Reminder": {
             "Text": "(This creature can't be blocked except by two or more creatures.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 72
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -73,7 +78,12 @@
               }
             }
           ],
-          "AbilityWord": "Void"
+          "AbilityWord": "Void",
+          "SourceSpan": {
+            "Start": 73,
+            "Length": 166
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

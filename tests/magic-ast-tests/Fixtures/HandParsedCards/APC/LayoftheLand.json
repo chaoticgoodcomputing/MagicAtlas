@@ -42,7 +42,12 @@
               "Destination": "Hand",
               "Revealed": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 90
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

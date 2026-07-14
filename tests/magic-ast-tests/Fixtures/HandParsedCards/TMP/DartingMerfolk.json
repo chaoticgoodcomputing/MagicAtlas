@@ -6,8 +6,12 @@
     "OracleText": "{U}: Return this creature to its owner's hand.",
     "Power": "1",
     "Toughness": "1",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "438e15f7-59bb-4047-af1f-ef92cc1866b8",
     "Layout": "normal"
@@ -16,8 +20,12 @@
     "Name": "Darting Merfolk",
     "TypeLine": {
       "Raw": "Creature — Merfolk",
-      "Types": ["Creature"],
-      "Subtypes": ["Merfolk"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk"
+      ]
     },
     "Oracle": {
       "RawText": "{U}: Return this creature to its owner's hand.",
@@ -30,7 +38,9 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["U"]
+                  "Colors": [
+                    "U"
+                  ]
                 }
               ]
             }
@@ -43,7 +53,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 46
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -58,18 +73,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

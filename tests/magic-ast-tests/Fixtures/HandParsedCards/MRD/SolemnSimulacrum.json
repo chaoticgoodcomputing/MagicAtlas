@@ -57,7 +57,12 @@
                 "Revealed": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 134
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -85,7 +90,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 135,
+            "Length": 45
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

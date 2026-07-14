@@ -6,14 +6,22 @@
     "OracleText": "Exile target monocolored permanent.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B", "W"],
-    "ColorIdentity": ["W", "B"]
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "W",
+      "B"
+    ]
   },
   "Output": {
     "Name": "Vanishing Verse",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target monocolored permanent.",
@@ -26,12 +34,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
+                  "CardTypes": [
+                    "permanent"
+                  ],
                   "IsMonocolored": true
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 35
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +55,34 @@
         "Kind": "manaCost",
         "Raw": "{W}{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "W"]
+        "Colors": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "B"]
+        "ColorIdentity": [
+          "W",
+          "B"
+        ]
       }
     ]
   }

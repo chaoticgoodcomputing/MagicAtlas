@@ -39,7 +39,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,7 +62,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 29
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -78,7 +88,12 @@
                 "Kind": "EnchantedOrEquipped"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 98,
+            "Length": 46
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -90,7 +105,12 @@
               },
               "WhoseUntapStep": "its controller's"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 145,
+            "Length": 68
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

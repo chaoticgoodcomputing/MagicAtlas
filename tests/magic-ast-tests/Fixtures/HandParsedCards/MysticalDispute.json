@@ -4,8 +4,12 @@
     "ManaCost": "{2}{U}",
     "TypeLine": "Instant",
     "OracleText": "This spell costs {2} less to cast if it targets a blue spell.\nCounter target spell unless its controller pays {3}.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "fbe04cb8-a8b9-4241-baae-b398a2509a3a",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Mystical Dispute",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {2} less to cast if it targets a blue spell.\nCounter target spell unless its controller pays {3}.",
@@ -34,10 +40,19 @@
             "ConditionType": "targetsFilter",
             "Subject": "It",
             "Filter": {
-              "CardTypes": ["spell"],
-              "Colors": ["U"]
+              "CardTypes": [
+                "spell"
+              ],
+              "Colors": [
+                "U"
+              ]
             }
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 61
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -46,17 +61,36 @@
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "counterSpell",
-                "Target": { "Kind": "Target", "Filter": { "CardTypes": ["spell"] } }
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "spell"
+                    ]
+                  }
+                }
               },
               "Unless": {
-                "Player": { "Kind": "Controller" },
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "mana",
-                  "Symbols": [ { "Kind": "generic", "GenericAmount": 3 } ]
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 3
+                    }
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 62,
+            "Length": 52
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -65,13 +99,31 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

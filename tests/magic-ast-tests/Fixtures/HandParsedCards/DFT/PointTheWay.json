@@ -32,7 +32,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Start your engines"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 144
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -96,7 +101,12 @@
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 145,
+            "Length": 121
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

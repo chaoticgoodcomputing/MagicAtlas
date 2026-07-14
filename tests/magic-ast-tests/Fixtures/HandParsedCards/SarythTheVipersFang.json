@@ -60,10 +60,16 @@
                     "Keyword": "Deathtouch"
                   }
                 ],
-                "KeywordSource": "Deathtouch"
+                "KeywordSource": "Deathtouch",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -94,10 +100,16 @@
                     "Keyword": "Hexproof"
                   }
                 ],
-                "KeywordSource": "Hexproof"
+                "KeywordSource": "Hexproof",
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 51
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -131,7 +143,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 60
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

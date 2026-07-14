@@ -43,7 +43,12 @@
               "CounterType": "oil"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 47
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -83,7 +88,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Indestructible"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -94,7 +100,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 48,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

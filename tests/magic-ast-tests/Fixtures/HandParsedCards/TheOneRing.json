@@ -13,8 +13,12 @@
     "Name": "The One Ring",
     "TypeLine": {
       "Raw": "Legendary Artifact",
-      "Supertypes": ["Legendary"],
-      "Types": ["Artifact"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "Indestructible\nWhen The One Ring enters, if you cast it, you gain protection from everything until your next turn.\nAt the beginning of your upkeep, you lose 1 life for each burden counter on The One Ring.\n{T}: Put a burden counter on The One Ring, then draw a card for each burden counter on The One Ring.",
@@ -23,82 +27,145 @@
           "Kind": "static",
           "KeywordSource": "Indestructible",
           "Effects": [
-            { "EffectType": "keywordAbility", "Keyword": "Indestructible" }
-          ]
+            {
+              "EffectType": "keywordAbility",
+              "Keyword": "Indestructible"
+            }
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
           "Trigger": {
             "Timing": "When",
             "Event": "Enters",
-            "Filter": { "CardTypes": ["artifact"], "IsSelf": true }
+            "Filter": {
+              "CardTypes": [
+                "artifact"
+              ],
+              "IsSelf": true
+            }
           },
-          "InterveningIf": { "ConditionType": "castThisObject" },
+          "InterveningIf": {
+            "ConditionType": "castThisObject"
+          },
           "Effects": [
             {
               "EffectType": "gainAbility",
-              "Target": { "Kind": "You" },
+              "Target": {
+                "Kind": "You"
+              },
               "GainedAbility": {
                 "Kind": "static",
                 "KeywordSource": "Protection",
                 "Effects": [
                   {
                     "EffectType": "protection",
-                    "From": [{ "Kind": "Everything" }]
+                    "From": [
+                      {
+                        "Kind": "Everything"
+                      }
+                    ]
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
-                "Until": { "Part": "Turn", "Edge": "Beginning", "When": "Next", "Whose": "You" }
+                "Until": {
+                  "Part": "Turn",
+                  "Edge": "Beginning",
+                  "When": "Next",
+                  "Whose": "You"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 99
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
           "Trigger": {
             "Timing": "At",
-            "Event": { "Part": "Upkeep", "Edge": "Beginning", "Whose": "You" }
+            "Event": {
+              "Part": "Upkeep",
+              "Edge": "Beginning",
+              "Whose": "You"
+            }
           },
           "Effects": [
             {
               "EffectType": "loseLife",
-              "Player": { "Kind": "You" },
+              "Player": {
+                "Kind": "You"
+              },
               "Amount": {
                 "QuantityType": "counterCount",
                 "CounterType": "burden",
-                "On": { "Kind": "Self" }
+                "On": {
+                  "Kind": "Self"
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 115,
+            "Length": 89
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "activated",
-          "Costs": [{ "CostType": "tap" }],
+          "Costs": [
+            {
+              "CostType": "tap"
+            }
+          ],
           "Effects": [
             {
               "EffectType": "composite",
               "Effects": [
                 {
                   "EffectType": "putCounters",
-                  "Target": { "Kind": "Self" },
+                  "Target": {
+                    "Kind": "Self"
+                  },
                   "CounterType": "burden",
-                  "Count": { "QuantityType": "literal", "Value": 1 }
+                  "Count": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
                 },
                 {
                   "EffectType": "drawCards",
-                  "Player": { "Kind": "You" },
+                  "Player": {
+                    "Kind": "You"
+                  },
                   "Count": {
                     "QuantityType": "counterCount",
                     "CounterType": "burden",
-                    "On": { "Kind": "Self" }
+                    "On": {
+                      "Kind": "Self"
+                    }
                   }
                 }
               ]
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 205,
+            "Length": 100
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -106,11 +173,22 @@
       {
         "Kind": "manaCost",
         "Raw": "{4}",
-        "Symbols": [{ "Kind": "generic", "GenericAmount": 4 }],
+        "Symbols": [
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
+        ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] }
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      }
     ]
   }
 }

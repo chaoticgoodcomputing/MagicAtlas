@@ -4,8 +4,14 @@
     "ManaCost": "{G}{U}",
     "TypeLine": "Instant",
     "OracleText": "Choose one —\n• Target creature gets +3/+3 until end of turn.\n• Permanents you control gain hexproof until end of turn.\n• Return target creature to its owner's hand.",
-    "Colors": ["G", "U"],
-    "ColorIdentity": ["G", "U"],
+    "Colors": [
+      "G",
+      "U"
+    ],
+    "ColorIdentity": [
+      "G",
+      "U"
+    ],
     "Keywords": [],
     "Id": "3384ee4e-738f-4442-bccd-4f96022b7219",
     "Layout": "normal"
@@ -14,7 +20,9 @@
     "Name": "Simic Charm",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Choose one —\n• Target creature gets +3/+3 until end of turn.\n• Permanents you control gain hexproof until end of turn.\n• Return target creature to its owner's hand.",
@@ -35,7 +43,9 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     },
                     "PowerModifier": {
@@ -54,7 +64,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -66,7 +77,9 @@
                     "Target": {
                       "Kind": "Each",
                       "Filter": {
-                        "CardTypes": ["permanent"],
+                        "CardTypes": [
+                          "permanent"
+                        ],
                         "Controller": "You"
                       }
                     },
@@ -78,7 +91,8 @@
                           "EffectType": "keywordAbility",
                           "Keyword": "Hexproof"
                         }
-                      ]
+                      ],
+                      "OracleLineIndex": 0
                     },
                     "Duration": {
                       "DurationType": "untilTime",
@@ -88,7 +102,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -100,15 +115,23 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 12
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -119,22 +142,32 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "U"]
+        "Colors": [
+          "G",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G", "U"]
+        "ColorIdentity": [
+          "G",
+          "U"
+        ]
       }
     ]
   }

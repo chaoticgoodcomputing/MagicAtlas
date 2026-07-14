@@ -6,9 +6,16 @@
     "OracleText": "Flying\nCumulative upkeep—Discard a card. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhen this creature dies, draw a card for each age counter on it.",
     "Power": "4",
     "Toughness": "4",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Cumulative upkeep", "Flying"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Cumulative upkeep",
+      "Flying"
+    ],
     "Id": "2c75f806-b900-403c-8de1-cc3173afc8f0",
     "Layout": "normal"
   },
@@ -16,8 +23,12 @@
     "Name": "Vexing Sphinx",
     "TypeLine": {
       "Raw": "Creature — Sphinx",
-      "Types": ["Creature"],
-      "Subtypes": ["Sphinx"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Sphinx"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nCumulative upkeep—Discard a card. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhen this creature dies, draw a card for each age counter on it.",
@@ -28,15 +39,28 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
-                  { "CharacteristicType": "keyword", "Keyword": "Flying" },
-                  { "CharacteristicType": "keyword", "Keyword": "Reach" }
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Flying"
+                  },
+                  {
+                    "CharacteristicType": "keyword",
+                    "Keyword": "Reach"
+                  }
                 ]
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -56,29 +80,47 @@
           "Effects": [
             {
               "EffectType": "putCounters",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "CounterType": "age",
-              "Count": { "QuantityType": "literal", "Value": 1 }
+              "Count": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             },
             {
               "EffectType": "preventable",
               "Inner": {
                 "EffectType": "sacrifice",
-                "Target": { "Kind": "Self" }
+                "Target": {
+                  "Kind": "Self"
+                }
               },
               "Unless": {
-                "Player": { "Kind": "Controller" },
+                "Player": {
+                  "Kind": "Controller"
+                },
                 "Cost": {
                   "CostType": "scaledCost",
                   "PerUnit": {
                     "CostType": "discard",
-                    "Filter": { "CardTypes": ["card"] },
-                    "Quantity": { "QuantityType": "literal", "Value": 1 }
+                    "Filter": {
+                      "CardTypes": [
+                        "card"
+                      ]
+                    },
+                    "Quantity": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
                   },
                   "Count": {
                     "QuantityType": "counterCount",
                     "CounterType": "age",
-                    "On": { "Kind": "Self" }
+                    "On": {
+                      "Kind": "Self"
+                    }
                   }
                 }
               }
@@ -86,7 +128,12 @@
           ],
           "Reminder": {
             "Text": "(At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 183
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -94,7 +141,9 @@
             "Timing": "When",
             "Event": "Dies",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -104,11 +153,20 @@
               "Count": {
                 "QuantityType": "counterCount",
                 "CounterType": "age",
-                "On": { "Kind": "Self" }
+                "On": {
+                  "Kind": "Self"
+                }
               },
-              "Player": { "Kind": "You" }
+              "Player": {
+                "Kind": "You"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 191,
+            "Length": 64
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -117,24 +175,49 @@
         "Kind": "manaCost",
         "Raw": "{1}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

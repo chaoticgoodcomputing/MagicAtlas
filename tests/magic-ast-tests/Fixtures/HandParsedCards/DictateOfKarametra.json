@@ -4,9 +4,15 @@
     "ManaCost": "{3}{G}{G}",
     "TypeLine": "Enchantment",
     "OracleText": "Flash\nWhenever a player taps a land for mana, that player adds one mana of any type that land produced.",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
-    "Keywords": ["Flash"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
+    "Keywords": [
+      "Flash"
+    ],
     "Id": "d5114607-df8f-4e44-8ef5-b6af89964bbc",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Dictate of Karametra",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Flash\nWhenever a player taps a land for mana, that player adds one mana of any type that land produced.",
@@ -28,7 +36,12 @@
               "Modification": "Grant",
               "Timing": "Instant"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -36,7 +49,9 @@
             "Timing": "Whenever",
             "Event": "TapsForMana",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "Controller": "Any"
             }
           },
@@ -49,7 +64,12 @@
                 "Kind": "ThatPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 97
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -64,22 +84,30 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 5
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

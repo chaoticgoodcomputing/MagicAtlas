@@ -47,7 +47,12 @@
                 "Value": 3
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 112
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -57,7 +62,12 @@
               "EffectType": "keywordAbility",
               "Keyword": "Trample"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 113,
+            "Length": 99
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

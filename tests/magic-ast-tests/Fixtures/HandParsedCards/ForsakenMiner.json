@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Forsaken Miner",
     "ManaCost": "{B}",
-    "TypeLine": "Creature \u2014 Skeleton Rogue",
+    "TypeLine": "Creature — Skeleton Rogue",
     "OracleText": "This creature can't block.\nWhenever you commit a crime, you may pay {B}. If you do, return this card from your graveyard to the battlefield. (Targeting opponents, anything they control, and/or cards in their graveyards is a crime.)",
     "Power": "2",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Forsaken Miner",
     "TypeLine": {
-      "Raw": "Creature \u2014 Skeleton Rogue",
+      "Raw": "Creature — Skeleton Rogue",
       "Types": [
         "Creature"
       ],
@@ -34,7 +34,12 @@
             {
               "EffectType": "cantBlock"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 26
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -80,7 +85,12 @@
           ],
           "Reminder": {
             "Text": "Targeting opponents, anything they control, and/or cards in their graveyards is a crime."
-          }
+          },
+          "SourceSpan": {
+            "Start": 27,
+            "Length": 204
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

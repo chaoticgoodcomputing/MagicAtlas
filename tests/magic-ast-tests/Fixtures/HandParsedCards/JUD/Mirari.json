@@ -13,8 +13,12 @@
     "Name": "Mirari",
     "TypeLine": {
       "Raw": "Legendary Artifact",
-      "Supertypes": ["Legendary"],
-      "Types": ["Artifact"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you cast an instant or sorcery spell, you may pay {3}. If you do, copy that spell. You may choose new targets for the copy.",
@@ -25,7 +29,11 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell", "instant", "sorcery"],
+              "CardTypes": [
+                "spell",
+                "instant",
+                "sorcery"
+              ],
               "Controller": "You"
             }
           },
@@ -37,7 +45,10 @@
                 "Cost": {
                   "CostType": "mana",
                   "Symbols": [
-                    { "Kind": "generic", "GenericAmount": 3 }
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 3
+                    }
                   ]
                 }
               },
@@ -50,7 +61,14 @@
               }
             }
           ],
-          "Instructions": ["you may pay {3}"]
+          "Instructions": [
+            "you may pay {3}"
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 132
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -59,7 +77,10 @@
         "Kind": "manaCost",
         "Raw": "{5}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          }
         ],
         "ManaValue": 5
       },

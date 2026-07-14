@@ -39,7 +39,12 @@
             {
               "EffectType": "lifelink"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 47,
+            "Length": 8
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -51,7 +56,12 @@
               ],
               "LifePerMana": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 56,
+            "Length": 69
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "triggered",
@@ -80,7 +90,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 126,
+            "Length": 63
+          },
+          "OracleLineIndex": 3
         }
       ]
     },

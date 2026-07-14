@@ -4,14 +4,22 @@
     "ManaCost": "{W}{B}",
     "TypeLine": "Instant",
     "OracleText": "Exile target permanent with mana value 4 or greater.",
-    "Colors": ["B", "W"],
-    "ColorIdentity": ["B", "W"]
+    "Colors": [
+      "B",
+      "W"
+    ],
+    "ColorIdentity": [
+      "B",
+      "W"
+    ]
   },
   "Output": {
     "Name": "Despark",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Exile target permanent with mana value 4 or greater.",
@@ -24,12 +32,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["permanent"],
-                  "ManaValueComparison": { "Operator": "GreaterThanOrEqual", "Value": 4 }
+                  "CardTypes": [
+                    "permanent"
+                  ],
+                  "ManaValueComparison": {
+                    "Operator": "GreaterThanOrEqual",
+                    "Value": 4
+                  }
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 52
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -38,18 +56,34 @@
         "Kind": "manaCost",
         "Raw": "{W}{B}",
         "Symbols": [
-          { "Kind": "colored", "Colors": ["W"] },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "W"]
+        "Colors": [
+          "B",
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W", "B"]
+        "ColorIdentity": [
+          "W",
+          "B"
+        ]
       }
     ]
   }

@@ -6,15 +6,24 @@
     "OracleText": "Flying, haste\nWhen this creature enters, roll a six-sided die. If the result is 3 or less, you lose that much life.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Dissatisfied Customer",
     "TypeLine": {
       "Raw": "Creature — Vampire Guest",
-      "Types": ["Creature"],
-      "Subtypes": ["Vampire", "Guest"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Vampire",
+        "Guest"
+      ]
     },
     "Oracle": {
       "RawText": "Flying, haste\nWhen this creature enters, roll a six-sided die. If the result is 3 or less, you lose that much life.",
@@ -25,7 +34,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -39,7 +50,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,7 +65,12 @@
               "Keyword": "Haste"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Haste",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -57,7 +78,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -89,7 +112,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -104,7 +132,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3,
@@ -112,11 +142,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",

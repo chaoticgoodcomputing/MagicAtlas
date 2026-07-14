@@ -58,12 +58,18 @@
                           "Kind": "Self"
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 142
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -94,7 +100,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 143,
+            "Length": 103
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

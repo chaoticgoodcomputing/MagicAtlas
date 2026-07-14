@@ -46,7 +46,12 @@
               "MinimumBlockers": 2
             }
           ],
-          "KeywordSource": "Menace"
+          "KeywordSource": "Menace",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -79,7 +84,12 @@
                 "Kind": "EachPlayer"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 75
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

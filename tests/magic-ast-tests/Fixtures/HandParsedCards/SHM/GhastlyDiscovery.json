@@ -50,7 +50,12 @@
               },
               "Random": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 36
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -82,7 +87,12 @@
           ],
           "Reminder": {
             "Text": "(As you cast this spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 131
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -105,7 +115,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 37,
+            "Length": 131
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

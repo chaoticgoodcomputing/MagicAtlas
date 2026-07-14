@@ -6,15 +6,24 @@
     "OracleText": "When this creature enters, look at the top X cards of your library, where X is your devotion to blue. Put up to one of them on top of your library and the rest on the bottom of your library in a random order. If X is greater than or equal to the number of cards in your library, you win the game. (Each {U} in the mana costs of permanents you control counts toward your devotion to blue.)",
     "Power": "1",
     "Toughness": "3",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Thassa's Oracle",
     "TypeLine": {
       "Raw": "Creature — Merfolk Wizard",
-      "Types": ["Creature"],
-      "Subtypes": ["Merfolk", "Wizard"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Merfolk",
+        "Wizard"
+      ]
     },
     "Oracle": {
       "RawText": "When this creature enters, look at the top X cards of your library, where X is your devotion to blue. Put up to one of them on top of your library and the rest on the bottom of your library in a random order. If X is greater than or equal to the number of cards in your library, you win the game. (Each {U} in the mana costs of permanents you control counts toward your devotion to blue.)",
@@ -25,7 +34,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -40,7 +51,9 @@
                   "EffectType": "oracleTopLook",
                   "Count": {
                     "QuantityType": "devotion",
-                    "Colors": ["U"]
+                    "Colors": [
+                      "U"
+                    ]
                   },
                   "Player": {
                     "Kind": "You"
@@ -52,7 +65,9 @@
                     "ConditionType": "quantityComparison",
                     "Left": {
                       "QuantityType": "devotion",
-                      "Colors": ["U"]
+                      "Colors": [
+                        "U"
+                      ]
                     },
                     "Operator": "GreaterThanOrEqual",
                     "Right": {
@@ -69,7 +84,12 @@
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 388
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -80,22 +100,30 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

@@ -6,15 +6,23 @@
     "OracleText": "This spell costs {1} less to cast for each instant and sorcery card in your graveyard.",
     "Power": "6",
     "Toughness": "5",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Cryptic Serpent",
     "TypeLine": {
       "Raw": "Creature — Serpent",
-      "Types": ["Creature"],
-      "Subtypes": ["Serpent"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Serpent"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast for each instant and sorcery card in your graveyard.",
@@ -24,14 +32,25 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["instant", "sorcery"],
+                "CardTypes": [
+                  "instant",
+                  "sorcery"
+                ],
                 "Controller": "You",
                 "Zone": "Graveyard"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 86
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +59,49 @@
         "Kind": "manaCost",
         "Raw": "{5}{U}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 5 },
-          { "Kind": "colored", "Colors": ["U"] },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 5
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 7
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "6", "Value": 6 },
-        "Toughness": { "ValueType": "fixed", "Raw": "5", "Value": 5 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "6",
+          "Value": 6
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "5",
+          "Value": 5
+        }
       }
     ]
   }

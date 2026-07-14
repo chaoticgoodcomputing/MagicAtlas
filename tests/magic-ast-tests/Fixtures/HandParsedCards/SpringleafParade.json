@@ -4,8 +4,12 @@
     "ManaCost": "{X}{G}{G}",
     "TypeLine": "Enchantment",
     "OracleText": "When this enchantment enters, create X 1/1 colorless Shapeshifter creature tokens with changeling. (They're every creature type.)\nCreature tokens you control have \"{T}: Add one mana of any color.\"",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"],
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ],
     "Keywords": [],
     "Id": "44265489-645a-43b0-bc1f-726905b06876",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Springleaf Parade",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "When this enchantment enters, create X 1/1 colorless Shapeshifter creature tokens with changeling. (They're every creature type.)\nCreature tokens you control have \"{T}: Add one mana of any color.\"",
@@ -25,21 +31,34 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["enchantment"],
+              "CardTypes": [
+                "enchantment"
+              ],
               "IsSelf": true
             }
           },
           "Effects": [
             {
               "EffectType": "createToken",
-              "Player": { "Kind": "You" },
-              "Count": { "QuantityType": "variable", "Name": "X" },
+              "Player": {
+                "Kind": "You"
+              },
+              "Count": {
+                "QuantityType": "variable",
+                "Name": "X"
+              },
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["C"],
-                "Types": ["creature"],
-                "Subtypes": ["Shapeshifter"],
+                "Colors": [
+                  "C"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Shapeshifter"
+                ],
                 "Abilities": [
                   {
                     "Kind": "static",
@@ -49,7 +68,8 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Changeling"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 ],
                 "IsCopy": false
@@ -58,7 +78,12 @@
           ],
           "Reminder": {
             "Text": "They're every creature type."
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 129
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -68,7 +93,9 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["creature"],
+                  "CardTypes": [
+                    "creature"
+                  ],
                   "IsToken": true,
                   "Controller": "You"
                 }
@@ -76,7 +103,9 @@
               "GainedAbility": {
                 "Kind": "activated",
                 "Costs": [
-                  { "CostType": "tap" }
+                  {
+                    "CostType": "tap"
+                  }
                 ],
                 "Effects": [
                   {
@@ -85,10 +114,16 @@
                     "AnyColor": true
                   }
                 ],
-                "IsManaAbility": true
+                "IsManaAbility": true,
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 130,
+            "Length": 66
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -97,19 +132,35 @@
         "Kind": "manaCost",
         "Raw": "{X}{G}{G}",
         "Symbols": [
-          { "Kind": "variable" },
-          { "Kind": "colored", "Colors": ["G"] },
-          { "Kind": "colored", "Colors": ["G"] }
+          {
+            "Kind": "variable"
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "G"
+            ]
+          }
         ],
         "IsVariable": true
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       }
     ]
   }

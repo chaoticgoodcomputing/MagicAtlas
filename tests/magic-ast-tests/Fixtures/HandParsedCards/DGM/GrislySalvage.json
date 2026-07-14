@@ -6,14 +6,22 @@
     "OracleText": "Reveal the top five cards of your library. You may put a creature or land card from among them into your hand. Put the rest into your graveyard.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B", "G"],
-    "ColorIdentity": ["B", "G"]
+    "Colors": [
+      "B",
+      "G"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G"
+    ]
   },
   "Output": {
     "Name": "Grisly Salvage",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Reveal the top five cards of your library. You may put a creature or land card from among them into your hand. Put the rest into your graveyard.",
@@ -31,10 +39,18 @@
                 "Value": 5
               },
               "Filter": {
-                "CardTypes": ["creature", "land"]
+                "CardTypes": [
+                  "creature",
+                  "land"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 144
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -45,22 +61,32 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["B", "G"]
+        "Colors": [
+          "B",
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "G"]
+        "ColorIdentity": [
+          "B",
+          "G"
+        ]
       }
     ]
   }

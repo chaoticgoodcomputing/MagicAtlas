@@ -41,7 +41,12 @@
               "Keyword": "Haste"
             }
           ],
-          "KeywordSource": "Haste"
+          "KeywordSource": "Haste",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 5
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -59,7 +64,8 @@
                     "Timing": "First"
                   }
                 ],
-                "KeywordSource": "First strike"
+                "KeywordSource": "First strike",
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -69,7 +75,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 6,
+            "Length": 48
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -95,7 +106,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 55,
+            "Length": 75
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

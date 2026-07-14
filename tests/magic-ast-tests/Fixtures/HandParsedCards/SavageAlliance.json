@@ -48,7 +48,12 @@
           "KeywordSource": "Escalate",
           "Reminder": {
             "Text": "(Pay this cost for each mode chosen beyond the first.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "modal",
@@ -80,7 +85,8 @@
                           "Keyword": "Trample"
                         }
                       ],
-                      "KeywordSource": "Trample"
+                      "KeywordSource": "Trample",
+                      "OracleLineIndex": 0
                     },
                     "Duration": {
                       "DurationType": "untilTime",
@@ -90,7 +96,8 @@
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -115,7 +122,8 @@
                       "Kind": "Self"
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -141,11 +149,17 @@
                       "Kind": "Self"
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 68,
+            "Length": 20
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

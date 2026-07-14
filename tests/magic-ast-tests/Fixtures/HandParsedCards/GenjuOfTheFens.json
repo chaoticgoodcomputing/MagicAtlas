@@ -4,9 +4,15 @@
     "ManaCost": "{B}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant Swamp\n{2}: Until end of turn, enchanted Swamp becomes a 2/2 black Spirit creature with \"{B}: This creature gets +1/+1 until end of turn.\" It's still a land.\nWhen enchanted Swamp is put into a graveyard, you may return this card from your graveyard to your hand.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "d8e06ff3-5fdd-444d-916e-3764f795456e",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Genju of the Fens",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant Swamp\n{2}: Until end of turn, enchanted Swamp becomes a 2/2 black Spirit creature with \"{B}: This creature gets +1/+1 until end of turn.\" It's still a land.\nWhen enchanted Swamp is put into a graveyard, you may return this card from your graveyard to your hand.",
@@ -27,11 +37,20 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["land"],
-                "Subtypes": ["Swamp"]
+                "CardTypes": [
+                  "land"
+                ],
+                "Subtypes": [
+                  "Swamp"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -60,9 +79,16 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "Colors": ["B"],
-              "CardTypes": ["land", "creature"],
-              "AddedSubtypes": ["Spirit"],
+              "Colors": [
+                "B"
+              ],
+              "CardTypes": [
+                "land",
+                "creature"
+              ],
+              "AddedSubtypes": [
+                "Spirit"
+              ],
               "GainedAbilities": [
                 {
                   "Kind": "activated",
@@ -72,7 +98,9 @@
                       "Symbols": [
                         {
                           "Kind": "colored",
-                          "Colors": ["B"]
+                          "Colors": [
+                            "B"
+                          ]
                         }
                       ]
                     }
@@ -100,7 +128,8 @@
                       }
                     }
                   ],
-                  "IsManaAbility": false
+                  "IsManaAbility": false,
+                  "OracleLineIndex": 0
                 }
               ],
               "Duration": {
@@ -112,7 +141,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 150
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -120,8 +154,12 @@
             "Timing": "When",
             "Event": "PutIntoGraveyard",
             "Filter": {
-              "CardTypes": ["land"],
-              "Subtypes": ["Swamp"],
+              "CardTypes": [
+                "land"
+              ],
+              "Subtypes": [
+                "Swamp"
+              ],
               "IsEnchanted": true
             }
           },
@@ -138,7 +176,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 165,
+            "Length": 104
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -149,18 +192,24 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 1
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

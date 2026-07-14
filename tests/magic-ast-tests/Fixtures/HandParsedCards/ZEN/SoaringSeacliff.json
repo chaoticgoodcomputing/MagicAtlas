@@ -13,7 +13,9 @@
     "Name": "Soaring Seacliff",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "This land enters tapped.\nWhen this land enters, target creature gains flying until end of turn.\n{T}: Add {U}.",
@@ -28,7 +30,12 @@
               }
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -36,7 +43,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["land"],
+              "CardTypes": [
+                "land"
+              ],
               "IsSelf": true
             }
           },
@@ -46,7 +55,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "GainedAbility": {
@@ -56,7 +67,9 @@
                   {
                     "EffectType": "evasion",
                     "CanBeBlockedBy": {
-                      "CardTypes": ["creature"],
+                      "CardTypes": [
+                        "creature"
+                      ],
                       "Characteristics": [
                         {
                           "CharacteristicType": "keyword",
@@ -69,7 +82,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -79,7 +93,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 70
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -95,7 +114,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 96,
+            "Length": 13
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -106,7 +130,9 @@
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

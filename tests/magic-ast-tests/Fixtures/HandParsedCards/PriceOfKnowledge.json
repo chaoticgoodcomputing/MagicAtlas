@@ -4,8 +4,12 @@
     "ManaCost": "{6}{B}",
     "TypeLine": "Enchantment",
     "OracleText": "Players have no maximum hand size.\nAt the beginning of each opponent's upkeep, this enchantment deals damage to that player equal to the number of cards in that player's hand.",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
     "Keywords": [],
     "Id": "97f536be-7836-4c9a-befc-94590e602f26",
     "Layout": "normal"
@@ -26,9 +30,16 @@
           "Effects": [
             {
               "EffectType": "noMaxHandSize",
-              "Player": { "Kind": "EachPlayer" }
+              "Player": {
+                "Kind": "EachPlayer"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 34
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -60,7 +71,12 @@
                 "Kind": "Self"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 35,
+            "Length": 140
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

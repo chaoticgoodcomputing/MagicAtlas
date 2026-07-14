@@ -6,9 +6,18 @@
     "OracleText": "Flying\nWard—{3}, Pay 3 life.\nWhenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell. They gain haste until end of turn.",
     "Power": "6",
     "Toughness": "6",
-    "Colors": ["R", "U"],
-    "ColorIdentity": ["R", "U"],
-    "Keywords": ["Flying", "Ward"],
+    "Colors": [
+      "R",
+      "U"
+    ],
+    "ColorIdentity": [
+      "R",
+      "U"
+    ],
+    "Keywords": [
+      "Flying",
+      "Ward"
+    ],
     "Id": "54819d7a-eec6-49e6-a0bb-d9d07d42b4a6",
     "Layout": "normal"
   },
@@ -16,9 +25,16 @@
     "Name": "Ovika, Enigma Goliath",
     "TypeLine": {
       "Raw": "Legendary Creature — Phyrexian Nightmare",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Phyrexian", "Nightmare"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Phyrexian",
+        "Nightmare"
+      ]
     },
     "Oracle": {
       "RawText": "Flying\nWard—{3}, Pay 3 life.\nWhenever you cast a noncreature spell, create X 1/1 red Phyrexian Goblin creature tokens, where X is the mana value of that spell. They gain haste until end of turn.",
@@ -30,7 +46,9 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Characteristics": [
                   {
                     "CharacteristicType": "keyword",
@@ -43,7 +61,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -91,7 +114,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 21
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -99,8 +127,12 @@
             "Timing": "Whenever",
             "Event": "SpellCast",
             "Filter": {
-              "CardTypes": ["spell"],
-              "ExcludedCardTypes": ["creature"],
+              "CardTypes": [
+                "spell"
+              ],
+              "ExcludedCardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             }
           },
@@ -118,9 +150,16 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["R"],
-                "Types": ["creature"],
-                "Subtypes": ["Phyrexian", "Goblin"],
+                "Colors": [
+                  "R"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Phyrexian",
+                  "Goblin"
+                ],
                 "IsCopy": false
               }
             },
@@ -137,7 +176,8 @@
                     "EffectType": "keywordAbility",
                     "Keyword": "Haste"
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "untilTime",
@@ -147,7 +187,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 29,
+            "Length": 165
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -162,11 +207,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 7,
@@ -174,11 +223,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R", "U"]
+        "Colors": [
+          "R",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R", "U"]
+        "ColorIdentity": [
+          "R",
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",

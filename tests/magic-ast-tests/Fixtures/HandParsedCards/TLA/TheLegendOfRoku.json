@@ -6,15 +6,23 @@
     "OracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Exile the top three cards of your library. Until the end of your next turn, you may play those cards.\nII — Add one mana of any color.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "The Legend of Roku",
     "TypeLine": {
       "Raw": "Enchantment — Saga",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Saga"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Saga"
+      ]
     },
     "Oracle": {
       "RawText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Exile the top three cards of your library. Until the end of your next turn, you may play those cards.\nII — Add one mana of any color.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
@@ -23,24 +31,37 @@
           "Kind": "saga",
           "Chapters": [
             {
-              "Numbers": [1],
+              "Numbers": [
+                1
+              ],
               "Body": {
                 "Kind": "spell",
                 "Effects": [
                   {
                     "EffectType": "impulse",
-                    "Count": { "QuantityType": "literal", "Value": 3 },
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 3
+                    },
                     "RestDestination": "RemainExiled",
                     "Duration": {
                       "DurationType": "untilTime",
-                      "Until": { "Part": "Turn", "Edge": "End", "When": "Next", "Whose": "You" }
+                      "Until": {
+                        "Part": "Turn",
+                        "Edge": "End",
+                        "When": "Next",
+                        "Whose": "You"
+                      }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
-              "Numbers": [2],
+              "Numbers": [
+                2
+              ],
               "Body": {
                 "Kind": "spell",
                 "Effects": [
@@ -49,28 +70,43 @@
                     "Mana": "",
                     "AnyColor": true
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
-              "Numbers": [3],
+              "Numbers": [
+                3
+              ],
               "Body": {
                 "Kind": "spell",
                 "Effects": [
                   {
                     "EffectType": "exile",
-                    "Target": { "Kind": "Self" }
+                    "Target": {
+                      "Kind": "Self"
+                    }
                   },
                   {
                     "EffectType": "returnToBattlefield",
-                    "Target": { "Kind": "Self" },
-                    "UnderControl": { "Kind": "You" },
+                    "Target": {
+                      "Kind": "Self"
+                    },
+                    "UnderControl": {
+                      "Kind": "You"
+                    },
                     "Transformed": true
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 67
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -79,14 +115,37 @@
         "Kind": "manaCost",
         "Raw": "{2}{R}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["R"] },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 4
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
     ]
   }
 }

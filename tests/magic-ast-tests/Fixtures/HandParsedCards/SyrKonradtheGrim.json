@@ -78,7 +78,12 @@
                 "Kind": "EachOpponent"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 202
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -114,7 +119,12 @@
           "Reminder": {
             "Text": "They each put the top card of their library into their graveyard."
           },
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 203,
+            "Length": 101
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

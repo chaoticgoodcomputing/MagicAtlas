@@ -6,14 +6,20 @@
     "OracleText": "This spell costs {1} less to cast for each creature on the battlefield.\nBlasphemous Act deals 13 damage to each creature.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Blasphemous Act",
     "TypeLine": {
       "Raw": "Sorcery",
-      "Types": ["Sorcery"]
+      "Types": [
+        "Sorcery"
+      ]
     },
     "Oracle": {
       "RawText": "This spell costs {1} less to cast for each creature on the battlefield.\nBlasphemous Act deals 13 damage to each creature.",
@@ -23,27 +29,51 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "Zone": "Battlefield"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 71
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Amount": { "QuantityType": "literal", "Value": 13 },
-              "Source": { "Kind": "Self" },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 13
+              },
+              "Source": {
+                "Kind": "Self"
+              },
               "Target": {
                 "Kind": "Each",
-                "Filter": { "CardTypes": ["creature"] }
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 72,
+            "Length": 49
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -52,13 +82,31 @@
         "Kind": "manaCost",
         "Raw": "{8}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 8 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 8
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 9
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
     ]
   }
 }

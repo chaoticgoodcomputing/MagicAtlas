@@ -6,15 +6,24 @@
     "OracleText": "Whenever another creature you control enters, that creature gets +3/+3 until end of turn.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Primal Forcemage",
     "TypeLine": {
       "Raw": "Creature — Elf Shaman",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Shaman"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Shaman"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever another creature you control enters, that creature gets +3/+3 until end of turn.",
@@ -25,7 +34,9 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You",
               "ExcludeSelf": true
             }
@@ -52,7 +63,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 89
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -67,18 +83,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

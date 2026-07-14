@@ -46,7 +46,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 121
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -79,7 +84,12 @@
               "Count": 1
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 122,
+            "Length": 176
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

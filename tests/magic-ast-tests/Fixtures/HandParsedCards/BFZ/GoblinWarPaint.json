@@ -39,7 +39,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 16
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -74,12 +79,18 @@
                         "EffectType": "keywordAbility",
                         "Keyword": "Haste"
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 17,
+            "Length": 44
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

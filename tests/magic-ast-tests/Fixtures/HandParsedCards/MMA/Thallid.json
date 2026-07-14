@@ -49,7 +49,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 70
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -90,7 +95,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 71,
+            "Length": 92
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

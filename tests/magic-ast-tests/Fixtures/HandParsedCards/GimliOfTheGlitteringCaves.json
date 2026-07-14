@@ -45,7 +45,12 @@
               "EffectType": "combatDamageTiming",
               "Timing": "Both"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 13
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -75,7 +80,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 14,
+            "Length": 85
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -111,7 +121,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 72
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

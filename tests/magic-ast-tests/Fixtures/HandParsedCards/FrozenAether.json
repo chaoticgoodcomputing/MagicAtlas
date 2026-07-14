@@ -4,8 +4,12 @@
     "ManaCost": "{3}{U}",
     "TypeLine": "Enchantment",
     "OracleText": "Artifacts, creatures, and lands your opponents control enter tapped.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "e727bb9e-3510-4c8e-ac49-6d7217667a18",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Frozen Aether",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Artifacts, creatures, and lands your opponents control enter tapped.",
@@ -28,12 +34,21 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "CardTypes": ["artifact", "creature", "land"],
+                  "CardTypes": [
+                    "artifact",
+                    "creature",
+                    "land"
+                  ],
                   "Controller": "Opponent"
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 68
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -42,14 +57,32 @@
         "Kind": "manaCost",
         "Raw": "{3}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false
       },
-      { "Kind": "colors", "Colors": ["U"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["U"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "U"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "U"
+        ]
+      }
     ]
   }
 }

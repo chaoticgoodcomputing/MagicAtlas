@@ -54,7 +54,12 @@
                 "IsOptional": true
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 72
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -78,7 +83,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 73,
+            "Length": 6
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -108,7 +118,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 80,
+            "Length": 72
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

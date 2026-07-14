@@ -41,7 +41,12 @@
               "EffectType": "alternativeCast",
               "FromZone": "Exile"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 57
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

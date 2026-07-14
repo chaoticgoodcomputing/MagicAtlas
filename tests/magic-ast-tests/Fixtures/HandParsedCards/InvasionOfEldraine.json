@@ -94,7 +94,12 @@
               ],
               "Reminder": {
                 "Text": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)"
-              }
+              },
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 140
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -126,7 +131,12 @@
                   "RevealHand": false,
                   "Random": false
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 141,
+                "Length": 59
+              },
+              "OracleLineIndex": 1
             }
           ]
         },
@@ -193,7 +203,12 @@
                   }
                 }
               ],
-              "KeywordSource": "Flying"
+              "KeywordSource": "Flying",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 6
+              },
+              "OracleLineIndex": 0
             },
             {
               "Kind": "triggered",
@@ -233,7 +248,12 @@
                     "Kind": "Self"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 128
+              },
+              "OracleLineIndex": 1
             }
           ]
         },

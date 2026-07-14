@@ -38,7 +38,12 @@
           ],
           "Reminder": {
             "Text": "(This creature can deal excess combat damage to the player or planeswalker it's attacking.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 99
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -78,7 +83,12 @@
           ],
           "Reminder": {
             "Text": "It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 122
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

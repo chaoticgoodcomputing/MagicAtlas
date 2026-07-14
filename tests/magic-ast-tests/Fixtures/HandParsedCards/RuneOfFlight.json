@@ -4,9 +4,15 @@
     "ManaCost": "{1}{U}",
     "TypeLine": "Enchantment — Aura Rune",
     "OracleText": "Enchant permanent\nWhen this Aura enters, draw a card.\nAs long as enchanted permanent is a creature, it has flying.\nAs long as enchanted permanent is an Equipment, it has \"Equipped creature has flying.\"",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "d5c1a271-2107-462a-9d4a-9c7fbcfa8d77",
     "Layout": "normal"
   },
@@ -14,8 +20,13 @@
     "Name": "Rune of Flight",
     "TypeLine": {
       "Raw": "Enchantment — Aura Rune",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura", "Rune"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura",
+        "Rune"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant permanent\nWhen this Aura enters, draw a card.\nAs long as enchanted permanent is a creature, it has flying.\nAs long as enchanted permanent is an Equipment, it has \"Equipped creature has flying.\"",
@@ -27,10 +38,17 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["permanent"]
+                "CardTypes": [
+                  "permanent"
+                ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 17
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -38,7 +56,9 @@
             "Timing": "When",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["aura"],
+              "CardTypes": [
+                "aura"
+              ],
               "IsSelf": true
             }
           },
@@ -53,7 +73,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 18,
+            "Length": 35
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -70,7 +95,9 @@
                   {
                     "EffectType": "evasion",
                     "CanBeBlockedBy": {
-                      "CardTypes": ["creature"],
+                      "CardTypes": [
+                        "creature"
+                      ],
                       "Characteristics": [
                         {
                           "CharacteristicType": "keyword",
@@ -83,7 +110,8 @@
                       ]
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -94,7 +122,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 54,
+            "Length": 60
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "static",
@@ -119,7 +152,9 @@
                         {
                           "EffectType": "evasion",
                           "CanBeBlockedBy": {
-                            "CardTypes": ["creature"],
+                            "CardTypes": [
+                              "creature"
+                            ],
                             "Characteristics": [
                               {
                                 "CharacteristicType": "keyword",
@@ -132,10 +167,12 @@
                             ]
                           }
                         }
-                      ]
+                      ],
+                      "OracleLineIndex": 0
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               },
               "Duration": {
                 "DurationType": "asLongAs",
@@ -146,7 +183,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 115,
+            "Length": 86
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -161,7 +203,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -169,11 +213,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

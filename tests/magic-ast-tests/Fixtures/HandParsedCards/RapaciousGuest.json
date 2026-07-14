@@ -6,9 +6,16 @@
     "OracleText": "Menace\nWhenever one or more creatures you control deal combat damage to a player, create a Food token.\nWhenever you sacrifice a Food, put a +1/+1 counter on this creature.\nWhen this creature leaves the battlefield, target opponent loses life equal to its power.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["B"],
-    "ColorIdentity": ["B"],
-    "Keywords": ["Food", "Menace"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ],
+    "Keywords": [
+      "Food",
+      "Menace"
+    ],
     "Id": "ff9dfba4-07d2-4407-a441-88acc7284d43",
     "Layout": "normal"
   },
@@ -16,8 +23,13 @@
     "Name": "Rapacious Guest",
     "TypeLine": {
       "Raw": "Creature — Halfling Citizen",
-      "Types": ["Creature"],
-      "Subtypes": ["Halfling", "Citizen"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Halfling",
+        "Citizen"
+      ]
     },
     "Oracle": {
       "RawText": "Menace\nWhenever one or more creatures you control deal combat damage to a player, create a Food token.\nWhenever you sacrifice a Food, put a +1/+1 counter on this creature.\nWhen this creature leaves the battlefield, target opponent loses life equal to its power.",
@@ -29,11 +41,18 @@
             {
               "EffectType": "evasion",
               "CanBeBlockedBy": {
-                "CardTypes": ["creature"]
+                "CardTypes": [
+                  "creature"
+                ]
               },
               "MinimumBlockers": 2
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -41,7 +60,9 @@
             "Timing": "Whenever",
             "Event": "DealsCombatDamageToPlayer",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "Controller": "You"
             },
             "MinimumCount": 1
@@ -57,13 +78,24 @@
                 "Value": 1
               },
               "Token": {
-                "Types": ["artifact"],
-                "Subtypes": ["Food"],
-                "AbilityText": ["{2}, {T}, Sacrifice this artifact: You gain 3 life."],
+                "Types": [
+                  "artifact"
+                ],
+                "Subtypes": [
+                  "Food"
+                ],
+                "AbilityText": [
+                  "{2}, {T}, Sacrifice this artifact: You gain 3 life."
+                ],
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 95
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -71,7 +103,9 @@
             "Timing": "Whenever",
             "Event": "Sacrifices",
             "Filter": {
-              "Subtypes": ["Food"],
+              "Subtypes": [
+                "Food"
+              ],
               "Controller": "You"
             }
           },
@@ -87,7 +121,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 103,
+            "Length": 68
+          },
+          "OracleLineIndex": 2
         },
         {
           "Kind": "triggered",
@@ -95,7 +134,9 @@
             "Timing": "When",
             "Event": "LeavesTheBattlefield",
             "Filter": {
-              "CardTypes": ["creature"],
+              "CardTypes": [
+                "creature"
+              ],
               "IsSelf": true
             }
           },
@@ -111,7 +152,12 @@
                 "Source": "it"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 172,
+            "Length": 89
+          },
+          "OracleLineIndex": 3
         }
       ]
     },
@@ -120,24 +166,44 @@
         "Kind": "manaCost",
         "Raw": "{2}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 3,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 2, "Raw": "2" },
-        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
       }
     ]
   }

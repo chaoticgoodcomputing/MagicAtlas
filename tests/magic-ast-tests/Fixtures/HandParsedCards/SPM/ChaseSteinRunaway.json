@@ -6,16 +6,27 @@
     "OracleText": "{T}, Discard a card: Exile the top card of your library. Until the end of your next turn, you may play that card.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Chase Stein, Runaway",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Hero",
-      "Supertypes": ["Legendary"],
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Hero"]
+      "Supertypes": [
+        "Legendary"
+      ],
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Hero"
+      ]
     },
     "Oracle": {
       "RawText": "{T}, Discard a card: Exile the top card of your library. Until the end of your next turn, you may play that card.",
@@ -23,11 +34,15 @@
         {
           "Kind": "activated",
           "Costs": [
-            { "CostType": "tap" },
+            {
+              "CostType": "tap"
+            },
             {
               "CostType": "discard",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -54,7 +69,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 113
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -63,13 +83,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] },
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      },
       {
         "Kind": "creatureStats",
         "Power": {

@@ -56,7 +56,12 @@
               },
               "Random": false
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -72,7 +77,12 @@
           "KeywordSource": "Crew",
           "Reminder": {
             "Text": "(Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 137
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

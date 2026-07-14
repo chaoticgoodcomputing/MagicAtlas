@@ -6,9 +6,15 @@
     "OracleText": "As this creature enters, choose a player.\nIf a source would deal damage to the chosen player or a permanent they control, it deals double that damage instead.",
     "Power": "2",
     "Toughness": "4",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Double"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Double"
+    ],
     "Id": "29b33e43-ffd5-4697-8261-9b4f5de36a19",
     "Layout": "normal"
   },
@@ -16,8 +22,12 @@
     "Name": "Sawhorn Nemesis",
     "TypeLine": {
       "Raw": "Creature — Dinosaur",
-      "Types": ["Creature"],
-      "Subtypes": ["Dinosaur"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dinosaur"
+      ]
     },
     "Oracle": {
       "RawText": "As this creature enters, choose a player.\nIf a source would deal damage to the chosen player or a permanent they control, it deals double that damage instead.",
@@ -29,7 +39,12 @@
               "EffectType": "choosePlayer"
             }
           ],
-          "When": "asThisEnters"
+          "When": "asThisEnters",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 41
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -47,7 +62,12 @@
                 "Type": "double"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 42,
+            "Length": 116
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -62,7 +82,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -70,11 +92,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       },
       {
         "Kind": "creatureStats",

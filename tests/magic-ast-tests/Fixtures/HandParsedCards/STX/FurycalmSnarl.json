@@ -37,7 +37,12 @@
           "Condition": {
             "ConditionType": "other",
             "Text": "you reveal a Mountain or Plains card from your hand"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 116
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -52,7 +57,12 @@
               "Mana": "{R} or {W}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 117,
+            "Length": 20
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

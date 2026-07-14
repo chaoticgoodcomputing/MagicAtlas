@@ -6,15 +6,24 @@
     "OracleText": "This creature gets +1/+0 for each legendary creature you control.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"]
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ]
   },
   "Output": {
     "Name": "Benalish Honor Guard",
     "TypeLine": {
       "Raw": "Creature — Human Knight",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Knight"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Knight"
+      ]
     },
     "Oracle": {
       "RawText": "This creature gets +1/+0 for each legendary creature you control.",
@@ -24,17 +33,32 @@
           "Effects": [
             {
               "EffectType": "modifyPT",
-              "Target": { "Kind": "Self" },
+              "Target": {
+                "Kind": "Self"
+              },
               "PowerModifier": {
                 "QuantityType": "count",
-                "CountOf": { "CardTypes": ["creature"], "Supertypes": ["Legendary"], "Controller": "You" }
+                "CountOf": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Supertypes": [
+                    "Legendary"
+                  ],
+                  "Controller": "You"
+                }
               },
               "ToughnessModifier": {
                 "QuantityType": "literal",
                 "Value": 0
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 65
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,23 +67,43 @@
         "Kind": "manaCost",
         "Raw": "{1}{W}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["W"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "W"
+            ]
+          }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

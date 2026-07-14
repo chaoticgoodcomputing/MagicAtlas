@@ -6,15 +6,24 @@
     "OracleText": "Whenever another green creature you control enters, put a +1/+1 counter on target creature.",
     "Power": "2",
     "Toughness": "3",
-    "Colors": ["G"],
-    "ColorIdentity": ["G"]
+    "Colors": [
+      "G"
+    ],
+    "ColorIdentity": [
+      "G"
+    ]
   },
   "Output": {
     "Name": "Ivy Lane Denizen",
     "TypeLine": {
       "Raw": "Creature — Elf Warrior",
-      "Types": ["Creature"],
-      "Subtypes": ["Elf", "Warrior"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Elf",
+        "Warrior"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever another green creature you control enters, put a +1/+1 counter on target creature.",
@@ -25,8 +34,12 @@
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
-              "CardTypes": ["creature"],
-              "Colors": ["G"],
+              "CardTypes": [
+                "creature"
+              ],
+              "Colors": [
+                "G"
+              ],
               "Controller": "You",
               "ExcludeSelf": true
             }
@@ -37,7 +50,9 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["creature"]
+                  "CardTypes": [
+                    "creature"
+                  ]
                 }
               },
               "CounterType": "+1/+1",
@@ -46,7 +61,12 @@
                 "Value": 1
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 91
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -61,18 +81,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["G"]
+        "Colors": [
+          "G"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["G"]
+        "ColorIdentity": [
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

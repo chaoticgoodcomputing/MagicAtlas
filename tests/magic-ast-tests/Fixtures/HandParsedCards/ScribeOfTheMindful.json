@@ -6,15 +6,24 @@
     "OracleText": "{1}, {T}, Sacrifice this creature: Return target instant or sorcery card from your graveyard to your hand.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"]
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ]
   },
   "Output": {
     "Name": "Scribe of the Mindful",
     "TypeLine": {
       "Raw": "Creature — Human Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "{1}, {T}, Sacrifice this creature: Return target instant or sorcery card from your graveyard to your hand.",
@@ -25,7 +34,10 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             },
             {
@@ -34,7 +46,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["creature"],
+                "CardTypes": [
+                  "creature"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -49,14 +63,22 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "CardTypes": ["instant", "sorcery"],
+                  "CardTypes": [
+                    "instant",
+                    "sorcery"
+                  ],
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 106
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -65,23 +87,43 @@
         "Kind": "manaCost",
         "Raw": "{2}{U}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 2 },
-          { "Kind": "colored", "Colors": ["U"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 2
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "U"
+            ]
+          }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "2", "Value": 2 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        }
       }
     ]
   }

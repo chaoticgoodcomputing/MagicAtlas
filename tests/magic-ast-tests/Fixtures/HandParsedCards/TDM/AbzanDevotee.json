@@ -6,8 +6,14 @@
     "OracleText": "{1}: Add {W}, {B}, or {G}. Activate only once each turn.\n{2}{B}: Return this card from your graveyard to your hand.",
     "Power": "2",
     "Toughness": "1",
-    "Colors": ["B"],
-    "ColorIdentity": ["B", "G", "W"],
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B",
+      "G",
+      "W"
+    ],
     "Keywords": [],
     "Id": "66555946-e747-46fa-b1ac-b103a8edcd93",
     "Layout": "normal"
@@ -16,8 +22,13 @@
     "Name": "Abzan Devotee",
     "TypeLine": {
       "Raw": "Creature — Dog Cleric",
-      "Types": ["Creature"],
-      "Subtypes": ["Dog", "Cleric"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Dog",
+        "Cleric"
+      ]
     },
     "Oracle": {
       "RawText": "{1}: Add {W}, {B}, or {G}. Activate only once each turn.\n{2}{B}: Return this card from your graveyard to your hand.",
@@ -28,7 +39,10 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 1 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 1
+                }
               ]
             }
           ],
@@ -38,8 +52,15 @@
               "Mana": "{W}, {B}, or {G}"
             }
           ],
-          "Restrictions": ["OnlyOnceEachTurn"],
-          "IsManaAbility": true
+          "Restrictions": [
+            "OnlyOnceEachTurn"
+          ],
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 56
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -47,8 +68,16 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 },
-                { "Kind": "colored", "Colors": ["B"] }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                },
+                {
+                  "Kind": "colored",
+                  "Colors": [
+                    "B"
+                  ]
+                }
               ]
             }
           ],
@@ -63,7 +92,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 57,
+            "Length": 58
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -72,24 +106,46 @@
         "Kind": "manaCost",
         "Raw": "{1}{B}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["B"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "B"
+            ]
+          }
         ],
         "ManaValue": 2,
         "IsVariable": false
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B", "G", "W"]
+        "ColorIdentity": [
+          "B",
+          "G",
+          "W"
+        ]
       },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "2", "Value": 2 },
-        "Toughness": { "ValueType": "fixed", "Raw": "1", "Value": 1 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "2",
+          "Value": 2
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "1",
+          "Value": 1
+        }
       }
     ]
   }

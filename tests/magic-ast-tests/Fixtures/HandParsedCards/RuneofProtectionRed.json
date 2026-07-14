@@ -4,9 +4,15 @@
     "ManaCost": "{1}{W}",
     "TypeLine": "Enchantment",
     "OracleText": "{W}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.\nCycling {2} ({2}, Discard this card: Draw a card.)",
-    "Colors": ["W"],
-    "ColorIdentity": ["W"],
-    "Keywords": ["Cycling"],
+    "Colors": [
+      "W"
+    ],
+    "ColorIdentity": [
+      "W"
+    ],
+    "Keywords": [
+      "Cycling"
+    ],
     "Id": "2916023b-cf67-443f-9ac7-f03313f9d3b7",
     "Layout": "normal"
   },
@@ -14,7 +20,9 @@
     "Name": "Rune of Protection: Red",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "{W}: The next time a red source of your choice would deal damage to you this turn, prevent that damage.\nCycling {2} ({2}, Discard this card: Draw a card.)",
@@ -27,7 +35,9 @@
               "Symbols": [
                 {
                   "Kind": "colored",
-                  "Colors": ["W"]
+                  "Colors": [
+                    "W"
+                  ]
                 }
               ]
             }
@@ -39,7 +49,9 @@
               "Source": {
                 "Kind": "Designated",
                 "Filter": {
-                  "Colors": ["R"]
+                  "Colors": [
+                    "R"
+                  ]
                 }
               },
               "Target": {
@@ -54,7 +66,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 103
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -72,7 +89,9 @@
             {
               "CostType": "discard",
               "Filter": {
-                "CardTypes": ["card"]
+                "CardTypes": [
+                  "card"
+                ]
               },
               "Quantity": {
                 "QuantityType": "literal",
@@ -92,7 +111,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 104,
+            "Length": 50
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -107,18 +131,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["W"]
+            "Colors": [
+              "W"
+            ]
           }
         ],
         "ManaValue": 2
       },
       {
         "Kind": "colors",
-        "Colors": ["W"]
+        "Colors": [
+          "W"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["W"]
+        "ColorIdentity": [
+          "W"
+        ]
       }
     ]
   }

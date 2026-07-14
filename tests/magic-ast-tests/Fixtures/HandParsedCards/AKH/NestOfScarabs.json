@@ -6,14 +6,20 @@
     "OracleText": "Whenever you put one or more -1/-1 counters on a creature, create that many 1/1 black Insect creature tokens.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["B"],
-    "ColorIdentity": ["B"]
+    "Colors": [
+      "B"
+    ],
+    "ColorIdentity": [
+      "B"
+    ]
   },
   "Output": {
     "Name": "Nest of Scarabs",
     "TypeLine": {
       "Raw": "Enchantment",
-      "Types": ["Enchantment"]
+      "Types": [
+        "Enchantment"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you put one or more -1/-1 counters on a creature, create that many 1/1 black Insect creature tokens.",
@@ -26,7 +32,9 @@
             "CounterType": "-1/-1",
             "MinimumCount": 1,
             "Filter": {
-              "CardTypes": ["creature"]
+              "CardTypes": [
+                "creature"
+              ]
             }
           },
           "Effects": [
@@ -42,13 +50,24 @@
               "Token": {
                 "Power": "1",
                 "Toughness": "1",
-                "Colors": ["B"],
-                "Types": ["creature"],
-                "Subtypes": ["Insect"],
+                "Colors": [
+                  "B"
+                ],
+                "Types": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Insect"
+                ],
                 "IsCopy": false
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 109
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -63,18 +82,24 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["B"]
+            "Colors": [
+              "B"
+            ]
           }
         ],
         "ManaValue": 3
       },
       {
         "Kind": "colors",
-        "Colors": ["B"]
+        "Colors": [
+          "B"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["B"]
+        "ColorIdentity": [
+          "B"
+        ]
       }
     ]
   }

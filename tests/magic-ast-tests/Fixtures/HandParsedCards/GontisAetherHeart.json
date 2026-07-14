@@ -47,7 +47,12 @@
           ],
           "Reminder": {
             "Text": "two energy counters"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 107
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -82,7 +87,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 77
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

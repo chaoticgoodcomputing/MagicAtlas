@@ -4,8 +4,12 @@
     "ManaCost": "{2}{U}{U}",
     "TypeLine": "Instant",
     "OracleText": "This spell can't be copied.\nChoose one. If an opponent has eight or more cards in their graveyard, you may choose both instead.\n• Copy target spell. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)\n• Create a token that's a copy of target creature.",
-    "Colors": ["U"],
-    "ColorIdentity": ["U"],
+    "Colors": [
+      "U"
+    ],
+    "ColorIdentity": [
+      "U"
+    ],
     "Keywords": [],
     "Id": "41634103-7b58-4feb-84b7-90a07a7b474f",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "See Double",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "This spell can't be copied.\nChoose one. If an opponent has eight or more cards in their graveyard, you may choose both instead.\n• Copy target spell. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)\n• Create a token that's a copy of target creature.",
@@ -25,7 +31,12 @@
             {
               "EffectType": "cantBeCopied"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 27
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "modal",
@@ -36,7 +47,9 @@
               "Condition": {
                 "ConditionType": "count",
                 "Filter": {
-                  "CardTypes": ["card"],
+                  "CardTypes": [
+                    "card"
+                  ],
                   "Zone": "Graveyard",
                   "Owner": "Opponent"
                 },
@@ -61,13 +74,16 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["spell"],
+                        "CardTypes": [
+                          "spell"
+                        ],
                         "Zone": "Stack"
                       }
                     },
                     "MayChooseNewTargets": true
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             },
             {
@@ -79,15 +95,23 @@
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
-                        "CardTypes": ["creature"]
+                        "CardTypes": [
+                          "creature"
+                        ]
                       }
                     }
                   }
-                ]
+                ],
+                "OracleLineIndex": 0
               }
             }
           ],
-          "AllowDuplicates": false
+          "AllowDuplicates": false,
+          "SourceSpan": {
+            "Start": 28,
+            "Length": 99
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -102,11 +126,15 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 4,
@@ -114,11 +142,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["U"]
+        "Colors": [
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U"]
+        "ColorIdentity": [
+          "U"
+        ]
       }
     ]
   }

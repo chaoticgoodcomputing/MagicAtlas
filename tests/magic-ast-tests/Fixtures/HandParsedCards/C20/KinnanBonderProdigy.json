@@ -6,16 +6,29 @@
     "OracleText": "Whenever you tap a nonland permanent for mana, add one mana of any type that permanent produced.\n{5}{G}{U}: Look at the top five cards of your library. You may put a non-Human creature card from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
     "Power": "2",
     "Toughness": "2",
-    "Colors": ["G", "U"],
-    "ColorIdentity": ["G", "U"]
+    "Colors": [
+      "G",
+      "U"
+    ],
+    "ColorIdentity": [
+      "G",
+      "U"
+    ]
   },
   "Output": {
     "Name": "Kinnan, Bonder Prodigy",
     "TypeLine": {
       "Raw": "Legendary Creature — Human Druid",
-      "Types": ["Creature"],
-      "Subtypes": ["Human", "Druid"],
-      "Supertypes": ["Legendary"]
+      "Types": [
+        "Creature"
+      ],
+      "Subtypes": [
+        "Human",
+        "Druid"
+      ],
+      "Supertypes": [
+        "Legendary"
+      ]
     },
     "Oracle": {
       "RawText": "Whenever you tap a nonland permanent for mana, add one mana of any type that permanent produced.\n{5}{G}{U}: Look at the top five cards of your library. You may put a non-Human creature card from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
@@ -26,8 +39,12 @@
             "Timing": "Whenever",
             "Event": "TapsForMana",
             "Filter": {
-              "CardTypes": ["permanent"],
-              "ExcludedCardTypes": ["land"],
+              "CardTypes": [
+                "permanent"
+              ],
+              "ExcludedCardTypes": [
+                "land"
+              ],
               "Controller": "You"
             }
           },
@@ -37,7 +54,12 @@
               "Mana": "",
               "AnyType": true
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 96
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -51,11 +73,15 @@
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["G"]
+                  "Colors": [
+                    "G"
+                  ]
                 },
                 {
                   "Kind": "colored",
-                  "Colors": ["U"]
+                  "Colors": [
+                    "U"
+                  ]
                 }
               ]
             }
@@ -71,13 +97,22 @@
                 "Kind": "You"
               },
               "CardFilter": {
-                "CardTypes": ["creature"],
-                "ExcludedSubtypes": ["Human"]
+                "CardTypes": [
+                  "creature"
+                ],
+                "ExcludedSubtypes": [
+                  "Human"
+                ]
               },
               "Optional": true
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 97,
+            "Length": 192
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -88,11 +123,15 @@
         "Symbols": [
           {
             "Kind": "colored",
-            "Colors": ["G"]
+            "Colors": [
+              "G"
+            ]
           },
           {
             "Kind": "colored",
-            "Colors": ["U"]
+            "Colors": [
+              "U"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -100,11 +139,17 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["G", "U"]
+        "Colors": [
+          "G",
+          "U"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["U", "G"]
+        "ColorIdentity": [
+          "U",
+          "G"
+        ]
       },
       {
         "Kind": "creatureStats",

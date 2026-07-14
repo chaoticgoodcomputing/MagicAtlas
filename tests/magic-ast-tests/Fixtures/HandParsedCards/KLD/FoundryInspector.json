@@ -13,8 +13,13 @@
     "Name": "Foundry Inspector",
     "TypeLine": {
       "Raw": "Artifact Creature — Construct",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Construct"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Construct"
+      ]
     },
     "Oracle": {
       "RawText": "Artifact spells you cast cost {1} less to cast.",
@@ -24,13 +29,24 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 }
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              }
             }
           ],
           "AffectedObjects": {
-            "CardTypes": ["spell", "artifact"],
+            "CardTypes": [
+              "spell",
+              "artifact"
+            ],
             "Controller": "You"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 47
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -39,16 +55,33 @@
         "Kind": "manaCost",
         "Raw": "{3}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          }
         ],
         "ManaValue": 3
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Value": 3, "Raw": "3" },
-        "Toughness": { "ValueType": "fixed", "Value": 2, "Raw": "2" }
+        "Power": {
+          "ValueType": "fixed",
+          "Value": 3,
+          "Raw": "3"
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Value": 2,
+          "Raw": "2"
+        }
       }
     ]
   }

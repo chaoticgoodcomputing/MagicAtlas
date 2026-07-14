@@ -52,7 +52,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -79,7 +84,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 100
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "triggered",
@@ -108,7 +118,12 @@
               }
             }
           ],
-          "AbilityWord": "Void"
+          "AbilityWord": "Void",
+          "SourceSpan": {
+            "Start": 108,
+            "Length": 166
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

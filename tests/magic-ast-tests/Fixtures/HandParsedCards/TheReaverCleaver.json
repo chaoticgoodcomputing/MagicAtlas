@@ -61,7 +61,8 @@
                         "Keyword": "Trample"
                       }
                     ],
-                    "KeywordSource": "Trample"
+                    "KeywordSource": "Trample",
+                    "OracleLineIndex": 0
                   }
                 },
                 {
@@ -104,12 +105,18 @@
                           "Kind": "You"
                         }
                       }
-                    ]
+                    ],
+                    "OracleLineIndex": 0
                   }
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 156
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -142,7 +149,12 @@
           "Restrictions": [
             "OnlyAsSorcery"
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 157,
+            "Length": 9
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

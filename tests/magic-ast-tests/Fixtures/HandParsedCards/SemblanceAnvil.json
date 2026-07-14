@@ -6,7 +6,9 @@
     "OracleText": "Imprint — When this artifact enters, you may exile a nonland card from your hand.\nSpells you cast that share a card type with the exiled card cost {2} less to cast.",
     "Colors": [],
     "ColorIdentity": [],
-    "Keywords": ["Imprint"],
+    "Keywords": [
+      "Imprint"
+    ],
     "Id": "0380b46d-1660-404d-9d11-705d8809ea46",
     "Layout": "normal"
   },
@@ -54,7 +56,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 81
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -81,7 +88,12 @@
                 }
               }
             }
-          }
+          },
+          "SourceSpan": {
+            "Start": 82,
+            "Length": 82
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

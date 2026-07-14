@@ -34,7 +34,12 @@
                 "ConditionType": "beenAttackedThisStep"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 98
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -66,7 +71,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 99,
+            "Length": 50
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

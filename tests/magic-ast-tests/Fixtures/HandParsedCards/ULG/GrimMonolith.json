@@ -28,7 +28,12 @@
               "EffectType": "doesntUntap",
               "WhoseUntapStep": "your"
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -44,7 +49,12 @@
               "AnyColor": false
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 19
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "activated",
@@ -67,7 +77,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 72,
+            "Length": 25
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

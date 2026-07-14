@@ -53,7 +53,12 @@
               }
             }
           ],
-          "KeywordSource": "Flying"
+          "KeywordSource": "Flying",
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 6
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -96,7 +101,12 @@
           ],
           "Reminder": {
             "Text": "It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 7,
+            "Length": 211
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -109,7 +119,12 @@
           "KeywordSource": "Partner",
           "Reminder": {
             "Text": "(You can have two commanders if both have partner.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 219,
+            "Length": 59
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

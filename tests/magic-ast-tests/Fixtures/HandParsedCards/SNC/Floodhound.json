@@ -54,7 +54,12 @@
               "EffectType": "investigate"
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 109
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

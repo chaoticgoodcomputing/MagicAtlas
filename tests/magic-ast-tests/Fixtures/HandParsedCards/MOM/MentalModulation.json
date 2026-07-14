@@ -38,7 +38,12 @@
           "Condition": {
             "ConditionType": "other",
             "Text": "during your turn"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 51
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "spell",
@@ -55,7 +60,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 52,
+            "Length": 32
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "spell",
@@ -70,7 +80,12 @@
                 "Kind": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 85,
+            "Length": 12
+          },
+          "OracleLineIndex": 2
         }
       ]
     },

@@ -13,8 +13,13 @@
     "Name": "Myr Enforcer",
     "TypeLine": {
       "Raw": "Artifact Creature — Myr",
-      "Types": ["Artifact", "Creature"],
-      "Subtypes": ["Myr"]
+      "Types": [
+        "Artifact",
+        "Creature"
+      ],
+      "Subtypes": [
+        "Myr"
+      ]
     },
     "Oracle": {
       "RawText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)",
@@ -28,13 +33,23 @@
           "Effects": [
             {
               "EffectType": "costReduction",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "PerObject": {
-                "CardTypes": ["artifact"],
+                "CardTypes": [
+                  "artifact"
+                ],
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 89
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -43,16 +58,33 @@
         "Kind": "manaCost",
         "Raw": "{7}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 7 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 7
+          }
         ],
         "ManaValue": 7
       },
-      { "Kind": "colors", "Colors": [] },
-      { "Kind": "colorIdentity", "ColorIdentity": [] },
+      {
+        "Kind": "colors",
+        "Colors": []
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": []
+      },
       {
         "Kind": "creatureStats",
-        "Power": { "ValueType": "fixed", "Raw": "4", "Value": 4 },
-        "Toughness": { "ValueType": "fixed", "Raw": "4", "Value": 4 }
+        "Power": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        },
+        "Toughness": {
+          "ValueType": "fixed",
+          "Raw": "4",
+          "Value": 4
+        }
       }
     ]
   }

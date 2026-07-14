@@ -11,7 +11,9 @@
     "Name": "Exotic Orchard",
     "TypeLine": {
       "Raw": "Land",
-      "Types": ["Land"]
+      "Types": [
+        "Land"
+      ]
     },
     "Oracle": {
       "RawText": "{T}: Add one mana of any color that a land an opponent controls could produce.",
@@ -29,13 +31,20 @@
               "Mana": "",
               "AnyColor": false,
               "AnyColorProducibleBy": {
-                "CardTypes": ["land"],
+                "CardTypes": [
+                  "land"
+                ],
                 "Controller": "Opponent",
                 "Zone": "Battlefield"
               }
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 78
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

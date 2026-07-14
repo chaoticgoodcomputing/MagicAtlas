@@ -66,7 +66,12 @@
               "CantBeRegenerated": false
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 60
+          },
+          "OracleLineIndex": 0
         }
       ]
     },

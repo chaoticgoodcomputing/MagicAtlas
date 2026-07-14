@@ -37,7 +37,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 42
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -64,7 +69,12 @@
           ],
           "Reminder": {
             "Text": "(You may cast this spell for its overload cost. If you do, change \"target\" in its text to \"each.\")"
-          }
+          },
+          "SourceSpan": {
+            "Start": 43,
+            "Length": 114
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

@@ -44,7 +44,12 @@
           ],
           "Reminder": {
             "Text": "an energy counter"
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 72
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -76,7 +81,12 @@
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 73,
+            "Length": 65
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

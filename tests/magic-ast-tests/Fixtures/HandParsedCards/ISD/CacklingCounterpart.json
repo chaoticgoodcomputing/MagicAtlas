@@ -37,7 +37,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 60
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -71,7 +76,12 @@
           "KeywordSource": "Flashback",
           "Reminder": {
             "Text": "(You may cast this card from your graveyard for its flashback cost. Then exile it.)"
-          }
+          },
+          "SourceSpan": {
+            "Start": 61,
+            "Length": 103
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

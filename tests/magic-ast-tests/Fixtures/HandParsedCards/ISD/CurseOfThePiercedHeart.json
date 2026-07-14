@@ -6,15 +6,24 @@
     "OracleText": "Enchant player\nAt the beginning of enchanted player's upkeep, this Aura deals 1 damage to that player or a planeswalker that player controls.",
     "Power": null,
     "Toughness": null,
-    "Colors": ["R"],
-    "ColorIdentity": ["R"]
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ]
   },
   "Output": {
     "Name": "Curse of the Pierced Heart",
     "TypeLine": {
       "Raw": "Enchantment — Aura Curse",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura", "Curse"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura",
+        "Curse"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant player\nAt the beginning of enchanted player's upkeep, this Aura deals 1 damage to that player or a planeswalker that player controls.",
@@ -25,9 +34,16 @@
           "Effects": [
             {
               "EffectType": "enchantRestriction",
-              "LegalTargets": { "EntityType": "player" }
+              "LegalTargets": {
+                "EntityType": "player"
+              }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 14
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
@@ -42,19 +58,34 @@
           "Effects": [
             {
               "EffectType": "dealDamage",
-              "Amount": { "QuantityType": "literal", "Value": 1 },
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 1
+              },
               "Target": {
                 "Kind": "Choice",
                 "Options": [
-                  { "Kind": "EnchantedOrEquipped" },
+                  {
+                    "Kind": "EnchantedOrEquipped"
+                  },
                   {
                     "Kind": "Target",
-                    "Filter": { "CardTypes": ["planeswalker"], "Controller": "EnchantedPlayer" }
+                    "Filter": {
+                      "CardTypes": [
+                        "planeswalker"
+                      ],
+                      "Controller": "EnchantedPlayer"
+                    }
                   }
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 15,
+            "Length": 126
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -63,13 +94,31 @@
         "Kind": "manaCost",
         "Raw": "{1}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 1 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 1
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 2
       },
-      { "Kind": "colors", "Colors": ["R"] },
-      { "Kind": "colorIdentity", "ColorIdentity": ["R"] }
+      {
+        "Kind": "colors",
+        "Colors": [
+          "R"
+        ]
+      },
+      {
+        "Kind": "colorIdentity",
+        "ColorIdentity": [
+          "R"
+        ]
+      }
     ]
   }
 }

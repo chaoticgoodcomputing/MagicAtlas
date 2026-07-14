@@ -53,7 +53,12 @@
                 "Mana": "{R}{R}"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 43
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -68,7 +73,12 @@
               "Mana": "{G}"
             }
           ],
-          "IsManaAbility": true
+          "IsManaAbility": true,
+          "SourceSpan": {
+            "Start": 44,
+            "Length": 13
+          },
+          "OracleLineIndex": 1
         }
       ]
     },

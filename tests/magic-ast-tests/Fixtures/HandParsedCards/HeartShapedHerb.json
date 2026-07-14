@@ -14,7 +14,9 @@
     "Name": "Heart-Shaped Herb",
     "TypeLine": {
       "Raw": "Artifact",
-      "Types": ["Artifact"]
+      "Types": [
+        "Artifact"
+      ]
     },
     "Oracle": {
       "RawText": "If a source an opponent controls would deal damage to you, prevent 1 of that damage.\n{2}, {T}, Sacrifice this artifact: You may sacrifice a creature. If you do, return that card to the battlefield under its owner's control with three +1/+1 counters on it and you become the monarch.",
@@ -45,7 +47,12 @@
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 84
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "activated",
@@ -53,7 +60,10 @@
             {
               "CostType": "mana",
               "Symbols": [
-                { "Kind": "generic", "GenericAmount": 2 }
+                {
+                  "Kind": "generic",
+                  "GenericAmount": 2
+                }
               ]
             },
             {
@@ -62,7 +72,9 @@
             {
               "CostType": "sacrifice",
               "Filter": {
-                "CardTypes": ["artifact"],
+                "CardTypes": [
+                  "artifact"
+                ],
                 "IsSelf": true
               },
               "Quantity": {
@@ -76,31 +88,51 @@
               "EffectType": "optional",
               "Inner": {
                 "EffectType": "sacrifice",
-                "Target": { "Kind": "You" },
-                "Filter": { "CardTypes": ["creature"] }
+                "Target": {
+                  "Kind": "You"
+                },
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                }
               },
               "IfYouDo": {
                 "EffectType": "composite",
                 "Effects": [
                   {
                     "EffectType": "returnToBattlefield",
-                    "Target": { "Kind": "It" },
+                    "Target": {
+                      "Kind": "It"
+                    },
                     "Tapped": false,
-                    "UnderControl": { "Kind": "Owner" },
+                    "UnderControl": {
+                      "Kind": "Owner"
+                    },
                     "WithCounters": {
                       "CounterType": "+1/+1",
-                      "Count": { "QuantityType": "literal", "Value": 3 }
+                      "Count": {
+                        "QuantityType": "literal",
+                        "Value": 3
+                      }
                     }
                   },
                   {
                     "EffectType": "becomeMonarch",
-                    "Player": { "Kind": "You" }
+                    "Player": {
+                      "Kind": "You"
+                    }
                   }
                 ]
               }
             }
           ],
-          "IsManaAbility": false
+          "IsManaAbility": false,
+          "SourceSpan": {
+            "Start": 85,
+            "Length": 197
+          },
+          "OracleLineIndex": 1
         }
       ]
     },
@@ -109,7 +141,10 @@
         "Kind": "manaCost",
         "Raw": "{4}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 4 }
+          {
+            "Kind": "generic",
+            "GenericAmount": 4
+          }
         ],
         "ManaValue": 4,
         "IsVariable": false

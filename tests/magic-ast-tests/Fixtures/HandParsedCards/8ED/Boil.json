@@ -4,8 +4,12 @@
     "ManaCost": "{3}{R}",
     "TypeLine": "Instant",
     "OracleText": "Destroy all Islands.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
     "Keywords": [],
     "Id": "15a0087c-4e0f-4547-b441-b5a517c00b91",
     "Layout": "normal"
@@ -14,7 +18,9 @@
     "Name": "Boil",
     "TypeLine": {
       "Raw": "Instant",
-      "Types": ["Instant"]
+      "Types": [
+        "Instant"
+      ]
     },
     "Oracle": {
       "RawText": "Destroy all Islands.",
@@ -27,11 +33,18 @@
               "Target": {
                 "Kind": "Each",
                 "Filter": {
-                  "Subtypes": ["Island"]
+                  "Subtypes": [
+                    "Island"
+                  ]
                 }
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 20
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -40,18 +53,30 @@
         "Kind": "manaCost",
         "Raw": "{3}{R}",
         "Symbols": [
-          { "Kind": "generic", "GenericAmount": 3 },
-          { "Kind": "colored", "Colors": ["R"] }
+          {
+            "Kind": "generic",
+            "GenericAmount": 3
+          },
+          {
+            "Kind": "colored",
+            "Colors": [
+              "R"
+            ]
+          }
         ],
         "ManaValue": 4
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

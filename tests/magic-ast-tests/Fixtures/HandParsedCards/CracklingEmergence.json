@@ -4,9 +4,15 @@
     "ManaCost": "{1}{R}",
     "TypeLine": "Enchantment — Aura",
     "OracleText": "Enchant land you control\nEnchanted land is a 3/3 red Spirit creature with haste. It's still a land.\nIf enchanted land would be destroyed, instead sacrifice this Aura and that land gains indestructible until end of turn.",
-    "Colors": ["R"],
-    "ColorIdentity": ["R"],
-    "Keywords": ["Enchant"],
+    "Colors": [
+      "R"
+    ],
+    "ColorIdentity": [
+      "R"
+    ],
+    "Keywords": [
+      "Enchant"
+    ],
     "Id": "6f77f987-ebb7-4105-a67c-0987f50fc676",
     "Layout": "normal"
   },
@@ -14,8 +20,12 @@
     "Name": "Crackling Emergence",
     "TypeLine": {
       "Raw": "Enchantment — Aura",
-      "Types": ["Enchantment"],
-      "Subtypes": ["Aura"]
+      "Types": [
+        "Enchantment"
+      ],
+      "Subtypes": [
+        "Aura"
+      ]
     },
     "Oracle": {
       "RawText": "Enchant land you control\nEnchanted land is a 3/3 red Spirit creature with haste. It's still a land.\nIf enchanted land would be destroyed, instead sacrifice this Aura and that land gains indestructible until end of turn.",
@@ -27,11 +37,18 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "CardTypes": ["land"],
+                "CardTypes": [
+                  "land"
+                ],
                 "Controller": "You"
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 24
+          },
+          "OracleLineIndex": 0
         },
         {
           "Kind": "static",
@@ -49,9 +66,16 @@
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "Colors": ["R"],
-              "CardTypes": ["land", "creature"],
-              "AddedSubtypes": ["Spirit"],
+              "Colors": [
+                "R"
+              ],
+              "CardTypes": [
+                "land",
+                "creature"
+              ],
+              "AddedSubtypes": [
+                "Spirit"
+              ],
               "GainedAbilities": [
                 {
                   "Kind": "static",
@@ -61,11 +85,17 @@
                       "EffectType": "keywordAbility",
                       "Keyword": "Haste"
                     }
-                  ]
+                  ],
+                  "OracleLineIndex": 0
                 }
               ]
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 25,
+            "Length": 74
+          },
+          "OracleLineIndex": 1
         },
         {
           "Kind": "static",
@@ -75,7 +105,9 @@
               "Event": {
                 "EventType": "destruction",
                 "AffectedObjects": {
-                  "CardTypes": ["land"],
+                  "CardTypes": [
+                    "land"
+                  ],
                   "IsEnchanted": true
                 }
               },
@@ -102,7 +134,8 @@
                           "EffectType": "keywordAbility",
                           "Keyword": "Indestructible"
                         }
-                      ]
+                      ],
+                      "OracleLineIndex": 0
                     },
                     "Duration": {
                       "DurationType": "untilTime",
@@ -115,7 +148,12 @@
                 ]
               }
             }
-          ]
+          ],
+          "SourceSpan": {
+            "Start": 100,
+            "Length": 119
+          },
+          "OracleLineIndex": 2
         }
       ]
     },
@@ -130,7 +168,9 @@
           },
           {
             "Kind": "colored",
-            "Colors": ["R"]
+            "Colors": [
+              "R"
+            ]
           }
         ],
         "ManaValue": 2,
@@ -138,11 +178,15 @@
       },
       {
         "Kind": "colors",
-        "Colors": ["R"]
+        "Colors": [
+          "R"
+        ]
       },
       {
         "Kind": "colorIdentity",
-        "ColorIdentity": ["R"]
+        "ColorIdentity": [
+          "R"
+        ]
       }
     ]
   }

@@ -75,7 +75,12 @@
           ],
           "Reminder": {
             "Text": "It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\""
-          }
+          },
+          "SourceSpan": {
+            "Start": 0,
+            "Length": 191
+          },
+          "OracleLineIndex": 0
         }
       ]
     },
