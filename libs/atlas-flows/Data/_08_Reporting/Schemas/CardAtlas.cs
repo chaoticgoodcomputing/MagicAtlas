@@ -57,6 +57,15 @@ public partial record CardPortRow
   /// <summary><c>emit</c> (producer) or <c>consume</c> (cost/trigger).</summary>
   [SerializedLabel("side")]
   public required string Side { get; init; }
+
+  /// <summary>Index of the oracle-text line this port was minted from (§4 provenance).</summary>
+  [SerializedLabel("oracleLineIndex")]
+  public int OracleLineIndex { get; init; }
+
+  /// <summary>Source spans in the oracle text as half-open <c>[[start,end), …]</c> pairs (§4
+  /// provenance); <c>null</c> when the port carries no source span.</summary>
+  [SerializedLabel("spans")]
+  public int[][]? Spans { get; init; }
 }
 
 // ── D4 ComboInstances — per-combo reconstructed loops with named cards, tier, and result. ──────────

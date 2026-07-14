@@ -87,6 +87,10 @@ public static partial class CardPortsStep
             Label = p.Label,
             Family = ResourceFamilies.Of(p.Label),
             Side = p.Label.StartsWith("emit:", StringComparison.Ordinal) ? "emit" : "consume",
+            OracleLineIndex = p.OracleLineIndex,
+            Spans = p.SourceSpan is MagicAST.AST.TextSpan s
+              ? new[] { new[] { s.Start, s.End } }
+              : null,
           });
         metas.Add(new CardMetaRow
         {
