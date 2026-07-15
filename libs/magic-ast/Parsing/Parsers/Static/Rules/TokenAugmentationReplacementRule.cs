@@ -2,6 +2,7 @@ namespace MagicAST.Parsing.Parsers.Static;
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using MagicAST.AST;
 using MagicAST.AST.Abilities;
 
 [StaticRule(Priority = 978)]
@@ -13,8 +14,14 @@ public sealed class TokenAugmentationReplacementRule : IStaticRule
   // tokens would be created under your control") is fixed; per-event variation
   // (e.g. "twice that many" for Doubling Season) is intentionally NOT covered
   // here — that's a separate replacement-modifier shape.
+  //
+  // The `effect` group spans the "instead" half ("those tokens plus … are
+  // created instead") — the CREATE side. Carrying its span lets the port
+  // projection give the emit (the created Squirrels) and the intercept (the
+  // "if tokens would be created" condition, derived as the region before the
+  // effect) distinct, clause-accurate highlights instead of one whole-line span.
   private static readonly Regex _tokenAugmentationPattern = new(
-    @"^\s*If\s+one\s+or\s+more\s+tokens\s+would\s+be\s+created\s+under\s+your\s+control,\s+those\s+tokens\s+plus\s+that\s+many\s+(?<p>\d+)/(?<t>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens\s+are\s+created\s+instead\.?\s*$",
+    @"^\s*If\s+one\s+or\s+more\s+tokens\s+would\s+be\s+created\s+under\s+your\s+control,\s+(?<effect>those\s+tokens\s+plus\s+that\s+many\s+(?<p>\d+)/(?<t>\d+)\s+(?<color>white|blue|black|red|green)\s+(?<subtype>\w+)\s+creature\s+tokens\s+are\s+created\s+instead\.?)\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 
@@ -47,8 +54,17 @@ public sealed class TokenAugmentationReplacementRule : IStaticRule
     var subtypeRaw = match.Groups["subtype"].Value;
     var subtype = char.ToUpperInvariant(subtypeRaw[0]) + subtypeRaw[1..];
 
+    // The "instead" half's span in whole-oracle-text coordinates: the clause's
+    // own offset plus the group's offset within the clause. Threaded onto the
+    // replacement effect so the port projection can highlight the create side
+    // (emit) distinctly from the "if tokens would be created" condition
+    // (intercept), rather than one full-line span over both.
+    var effectGroup = match.Groups["effect"];
+    var effectSpan = new TextSpan(clause.SourceSpan.Start + effectGroup.Index, effectGroup.Length);
+
     var replacement = new MagicAST.AST.Effects.TokenCopy.CreateTokenEffect
     {
+      SourceSpan = effectSpan,
       Player = MagicAST.AST.References.ObjectReference.You(),
       Count = new MagicAST.AST.Quantities.CalculatedQuantity
       {
@@ -72,6 +88,11 @@ public sealed class TokenAugmentationReplacementRule : IStaticRule
       {
         Effects = [new MagicAST.AST.Effects.Replacement.ReplacementEffect
         {
+          // The effect node carries the CREATE-side span so the projection's
+          // trigger/effect boundary logic emits two clause-accurate ports: the
+          // create (emit) over this span, and the "if tokens would be created"
+          // condition (intercept) over the region before it.
+          SourceSpan = effectSpan,
           Event = new MagicAST.AST.Effects.Replacement.TokenCreationEvent
           {
             MinimumQuantity = 1,
