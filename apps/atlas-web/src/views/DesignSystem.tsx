@@ -2,7 +2,8 @@
 // oracle port highlighting (concept 05), and the token/component starter
 // (concept 07). This is the reference the other views are built against.
 
-import { FAM, FAMILY_KEYS, ORACLE, TIER, TIERS } from "../data/mock";
+import { ORACLE, TIER, TIERS } from "../data/mock";
+import { useFamilyGraph } from "../data/atlas";
 import { ConfidenceMeter, FamilyChip, SectionHead, TierChip } from "../components/primitives";
 import { OracleText } from "../components/OracleText";
 
@@ -28,6 +29,7 @@ function TierLine({ tierKey }: { tierKey: keyof typeof TIER }) {
 }
 
 export default function DesignSystem() {
+  const { data: fg } = useFamilyGraph();
   return (
     <div className="view-grid" style={{ gap: "var(--space-8)" }}>
       {/* 00 · Uncertainty language */}
@@ -91,22 +93,25 @@ export default function DesignSystem() {
       {/* 07 · Design-system starter */}
       <section>
         <SectionHead kicker="07 · Tokens" title="Design system">
-          The Nocturne dark ground, the four tier tokens, and the seventeen resource-family hues that key
+          The Nocturne dark ground, the four tier tokens, and the {fg.keys.length} resource-family hues that key
           every station, line, dot and underline in the atlas.
         </SectionHead>
 
         <div className="panel" style={{ marginBottom: "var(--space-4)" }}>
-          <h5 style={{ color: "var(--atlas-muted)", marginBottom: "var(--space-4)" }}>Seventeen family hues</h5>
+          <h5 style={{ color: "var(--atlas-muted)", marginBottom: "var(--space-4)" }}>{fg.keys.length} family hues</h5>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: "var(--space-2)" }}>
-            {FAMILY_KEYS.map((k) => (
-              <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 8px", borderRadius: 8, background: "var(--atlas-panel-2)" }}>
-                <span style={{ width: 16, height: 16, borderRadius: 5, background: FAM[k].hue, boxShadow: `0 0 10px ${FAM[k].hue}55`, flex: "none" }} />
-                <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-                  <span style={{ fontSize: 13 }}>{k}</span>
-                  <span style={{ fontSize: 10, color: "var(--atlas-muted)", fontFamily: "var(--font-mono)" }}>{FAM[k].cards.toLocaleString()} · {FAM[k].labels}</span>
-                </span>
-              </div>
-            ))}
+            {fg.keys.map((k) => {
+              const f = fg.families[k];
+              return (
+                <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 8px", borderRadius: 8, background: "var(--atlas-panel-2)" }}>
+                  <span style={{ width: 16, height: 16, borderRadius: 5, background: f.hue, boxShadow: `0 0 10px ${f.hue}55`, flex: "none" }} />
+                  <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                    <span style={{ fontSize: 13 }}>{k}</span>
+                    <span style={{ fontSize: 10, color: "var(--atlas-muted)", fontFamily: "var(--font-mono)" }}>{f.cards.toLocaleString()} · {f.labels}</span>
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 

@@ -133,7 +133,7 @@ export default function MetroMap() {
   return (
     <section>
       <SectionHead kicker="01 · Explorer" title="Metro Map">
-        The 17-family resource graph as a transit map — directional emit→consume tracks,
+        The {keys.length}-family resource graph as a transit map — directional emit→consume tracks,
         rules-vs-card origin, engine loops. Drag a station or a line to untangle.
       </SectionHead>
 

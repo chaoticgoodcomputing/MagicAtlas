@@ -1,7 +1,7 @@
 // Concept cover — the headline the whole atlas hangs off: what got parsed, the
 // four fidelity tiers as a sticky legend, and the realized archetypes.
 
-import { useArchetypes, useHeadlineStats, useTiers } from "../data/atlas";
+import { useArchetypes, useFamilyGraph, useHeadlineStats, useTiers } from "../data/atlas";
 import { FamilyDot, TierChip } from "../components/primitives";
 import type { ViewKey } from "../App";
 
@@ -9,6 +9,7 @@ export default function Overview({ onNavigate }: { onNavigate?: (v: ViewKey) => 
   const { data: stats } = useHeadlineStats();
   const { data: tiers } = useTiers();
   const { data: archetypes } = useArchetypes();
+  const { data: familyGraph } = useFamilyGraph();
 
   return (
     <div className="view-grid">
@@ -19,7 +20,7 @@ export default function Overview({ onNavigate }: { onNavigate?: (v: ViewKey) => 
         <h1 style={{ fontSize: 46, marginBottom: 12 }}>Magic Atlas</h1>
         <p style={{ color: "var(--atlas-muted-2)", fontSize: 17, lineHeight: 1.5 }}>
           Every card is a set of <strong style={{ color: "var(--color-text)" }}>ports</strong> — what it
-          consumes and what it emits, in one of seventeen resource families. The atlas is the graph those
+          consumes and what it emits, in one of {familyGraph.keys.length} resource families. The atlas is the graph those
           ports make: the families that feed each other, the combos that close into rings, and the decks
           that ride them. Every edge carries a fidelity tier, so you always know whether a mechanism was
           verified, reconstructed, inferred, or merely catalogued.
