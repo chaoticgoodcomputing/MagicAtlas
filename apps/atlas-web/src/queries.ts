@@ -295,7 +295,7 @@ export const ORACLE_SPANS_QUERY = gql`
   }
 `;
 
-// ── Card profile page (views/CardPage.tsx) ──────────────────────────────────
+// ── Card profile page (views/CardExplorer.tsx) ──────────────────────────────────
 // One card's full record by name (id/oracleId/type/mana/oracle/imagery/price/
 // meta) plus its live ports. `portRows.confidence` is a nullable Float — surface
 // it only for Inferred ports. `spans` is omitted here (the Oracle highlighting

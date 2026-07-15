@@ -1,7 +1,7 @@
 // A card name rendered as an inline, clickable link to its card page.
 //
 // Navigation is hash-only: setting `window.location.hash` fires the `hashchange`
-// listener in App, which routes to the CardPage for this name. Styling is
+// listener in App, which routes to the Card Explorer page for this name. Styling is
 // deliberately subtle — the link inherits its surrounding text colour/size and
 // only reveals itself (accent colour + underline) on hover/focus — so it drops
 // in wherever a bare name string sits today without disturbing layout.

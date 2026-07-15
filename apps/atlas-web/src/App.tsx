@@ -8,14 +8,14 @@ import DeckLens from "./views/DeckLens";
 import SynergyWeb from "./views/SynergyWeb";
 import DesignSystem from "./views/DesignSystem";
 import { Embedding } from "./views/Embedding";
-import CardPage from "./views/CardPage";
 
 export type ViewKey =
   | "overview" | "metro" | "station" | "explorer"
   | "deck" | "synergy" | "design" | "embedding";
 
 /** The two hash shapes: a flat concept view (`#/overview`) or a per-card page
- *  (`#/card/<url-encoded-name>`). A card page shows no active nav tab. */
+ *  (`#/card/<url-encoded-name>`). A card page IS the Card Explorer scoped to that
+ *  card, so the "Card Explorer" nav stays highlighted on it. */
 type Route = { kind: "view"; view: ViewKey } | { kind: "card"; name: string };
 
 interface NavItem { key: ViewKey; label: string; group: "explore" | "exploit" | "reference"; }
@@ -63,6 +63,8 @@ export function App() {
   };
 
   const view = route.kind === "view" ? route.view : null;
+  // A card page is the Card Explorer scoped to a card → keep that tab lit.
+  const navActive: ViewKey | null = route.kind === "card" ? "explorer" : route.view;
 
   return (
     <div className="atlas-shell">
@@ -75,7 +77,7 @@ export function App() {
           {NAV.map((n) => (
             <button
               key={n.key}
-              className={view === n.key ? "active" : ""}
+              className={navActive === n.key ? "active" : ""}
               onClick={() => navigate(n.key)}
             >
               {n.label}
@@ -85,7 +87,7 @@ export function App() {
       </nav>
 
       <main className="atlas-main">
-        {route.kind === "card" && <CardPage name={route.name} onNavigate={navigate} />}
+        {route.kind === "card" && <CardExplorer key={route.name} card={route.name} />}
         {view === "overview" && <Overview onNavigate={navigate} />}
         {view === "metro" && <MetroMap />}
         {view === "station" && <StationFocus />}

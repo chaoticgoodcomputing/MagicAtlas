@@ -346,7 +346,7 @@ export function useCardNeighbours(
   };
 }
 
-// ── Card profile page (views/CardPage.tsx) ───────────────────────────────────
+// ── Card profile page (views/CardExplorer.tsx) ───────────────────────────────────
 // LIVE. One card's full record by name + its live ports. Everything the card
 // page renders (header/imagery/oracle/ports/price/meta) flows from here; the
 // combo, anchor and ruling panels layer on the sibling hooks below.
@@ -435,7 +435,7 @@ export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
   return { data: profile, loading, error: error ?? null };
 }
 
-// ── Card combos (views/CardPage.tsx) ─────────────────────────────────────────
+// ── Card combos (views/CardExplorer.tsx) ─────────────────────────────────────────
 // LIVE. Named combos the card is in. `cards` is a " + "-joined string filtered
 // by substring `contains`, so we re-check the exact name after splitting to drop
 // substring false-positives (a shorter name embedded in another card's name).
@@ -480,7 +480,7 @@ export function useCardCombos(name: string): AtlasResult<CardCombo[]> {
   return { data: combos, loading, error: error ?? null };
 }
 
-// ── Card anchor (views/CardPage.tsx) ─────────────────────────────────────────
+// ── Card anchor (views/CardExplorer.tsx) ─────────────────────────────────────────
 // LIVE. Present only when the card is a blocker: how many combos it blocks / is
 // sole blocker for, plus its co-stars (cards it most often blocks alongside).
 
@@ -516,7 +516,7 @@ export function useCardAnchor(name: string): AtlasResult<CardAnchor | null> {
   return { data: anchor, loading, error: error ?? null };
 }
 
-// ── Card rulings (views/CardPage.tsx) ────────────────────────────────────────
+// ── Card rulings (views/CardExplorer.tsx) ────────────────────────────────────────
 // LIVE. Scryfall rulings for the card's oracle id, oldest first.
 
 export interface CardRuling { id: string; source: string; publishedAt: string; comment: string; }
