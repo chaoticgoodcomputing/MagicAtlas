@@ -344,7 +344,10 @@ textarea.input { min-height: 90px; resize: vertical; font-family: var(--font-mon
 }
 
 /* — oracle clause underlines — */
-.oracle-text { line-height: 1.85; font-size: 14px; }
+/* pre-line preserves the newlines between oracle abilities/paragraphs (breaks
+   on \n) while still collapsing incidental whitespace, so multi-ability cards
+   read one ability per line instead of one run-on blob. */
+.oracle-text { line-height: 1.85; font-size: 14px; white-space: pre-line; }
 .oracle-seg { position: relative; }
 .oracle-seg.port {
   border-bottom: 2px solid var(--seg-hue);
