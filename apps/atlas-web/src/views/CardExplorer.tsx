@@ -12,7 +12,7 @@
 import { useState } from "react";
 import { cardImage, famHue, type Side } from "../data/mock";
 import {
-  useCardNeighbours, useCardProfile, useOracle, primaryPortFamily,
+  useCardNeighbours, useCardProfile, useOracle,
   useCardCombos, useCardAnchor, useCardRulings,
 } from "../data/atlas";
 import { TierChip, FamilyDot, SectionHead } from "../components/primitives";
@@ -34,8 +34,8 @@ function CandidateRow({ c }: { c: Candidate }) {
         <CardLink name={c.card} />
       </span>
       {c.via && (
-        <span className="ws-mono" title="satisfied via supergroup match" style={{ fontSize: 9, color: famHue(c.port), whiteSpace: "nowrap" }}>
-          ⊃ via {c.port}
+        <span className="ws-mono" title={`bridged through the ${c.port} resource (combo-adjacent family), not a direct port match`} style={{ fontSize: 9, color: famHue(c.port), whiteSpace: "nowrap" }}>
+          ↝ {c.port}
         </span>
       )}
       <FamilyDot family={c.port} />
@@ -45,13 +45,23 @@ function CandidateRow({ c }: { c: Candidate }) {
 }
 
 function CandidatePanel({
-  title, fam, list, emptyHint, dim,
-}: { title: string; fam: string | null | undefined; list: Candidate[]; emptyHint: string; dim: boolean }) {
+  title, fams, list, emptyHint, dim,
+}: { title: string; fams: string[]; list: Candidate[]; emptyHint: string; dim: boolean }) {
   return (
     <div className="panel" style={{ opacity: dim ? 0.32 : 1, transition: "opacity .18s" }}>
-      <header className="section-head" style={{ marginBottom: "var(--space-3)", display: "flex", alignItems: "baseline", gap: 8 }}>
+      <header className="section-head" style={{ marginBottom: "var(--space-3)", display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
         <h3 style={{ fontSize: 14 }}>{title}</h3>
-        {fam && <span className="ws-mono" style={{ fontSize: 10.5, color: famHue(fam) }}>{fam} · {list.length}</span>}
+        {fams.length > 0 && (
+          <span className="ws-mono" style={{ fontSize: 10.5 }}>
+            {fams.map((f, i) => (
+              <span key={f}>
+                {i > 0 && <span style={{ color: "var(--atlas-muted)" }}> · </span>}
+                <span style={{ color: famHue(f) }}>{f}</span>
+              </span>
+            ))}
+            <span style={{ color: "var(--atlas-muted)" }}> · {list.length}</span>
+          </span>
+        )}
       </header>
       {list.length ? (
         // Cap the visible height so a long candidate list (a hub family can have
@@ -72,9 +82,7 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
 
   const oracle = useOracle(card).data;
   const profile = useCardProfile(card).data;
-  const inFam = primaryPortFamily(profile?.ports ?? [], "consume"); // consumed → left column feeds it
-  const outFam = primaryPortFamily(profile?.ports ?? [], "emit");   // emitted → right column drains it
-  const { emitters, consumers } = useCardNeighbours(inFam, outFam).data;
+  const { emitters, consumers, inFams, outFams } = useCardNeighbours(profile?.ports ?? [], card).data;
   const combos = useCardCombos(card).data;
   const anchor = useCardAnchor(card).data;
   const rulings = useCardRulings(profile?.oracleId).data;
@@ -85,8 +93,9 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
     <SymbolsProvider>
       <section>
         <SectionHead kicker="06 · Explore + Exploit" title="Card Explorer">
-          Left: cards that emit what this line consumes. Right: cards that consume what it emits
-          (⊃ = supergroup match). Click a clause to focus one side; click any card to open it here.
+          Left: cards that feed this card's consume side. Right: cards its emit side feeds. Matches are
+          direct (same resource) or flow-bridged along the combo graph (↝ = via an adjacent resource,
+          e.g. token↝sacrifice). Click a clause to focus one side; click any card to open it here.
         </SectionHead>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", marginBottom: 16 }}>
@@ -98,10 +107,10 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
 
         <div className="expl-grid">
           <CandidatePanel
-            title="Emits what this line consumes"
-            fam={inFam}
+            title="Feeds this card"
+            fams={inFams}
             list={emitters}
-            emptyHint="No consume port on this card"
+            emptyHint={inFams.length === 0 ? "This card consumes no tracked resource" : "Nothing emits what this card consumes"}
             dim={focus === "emit"}
           />
 
@@ -154,10 +163,10 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
           </div>
 
           <CandidatePanel
-            title="Consumes what this line emits"
-            fam={outFam}
+            title="This card feeds"
+            fams={outFams}
             list={consumers}
-            emptyHint="No emit port on this card"
+            emptyHint={outFams.length === 0 ? "This card emits no tracked resource" : "Nothing consumes what this card emits"}
             dim={focus === "consume"}
           />
         </div>

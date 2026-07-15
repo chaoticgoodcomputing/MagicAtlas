@@ -41,9 +41,9 @@ import {
   CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
 } from "../queries";
 import {
-  DECKS, FAMCARDS, GROUPS, HEADLINE_STATS, ORACLE,
+  DECKS, FAMCARDS, HEADLINE_STATS, ORACLE,
   TIERS, tierRank,
-  edgeKey, ensureFamily, supergroupsOf,
+  edgeKey, ensureFamily,
   type Archetype, type Candidate, type CoverRow, type CoverSide, type Edge,
   type Family, type NearMiss, type NearMissCand, type OracleCard, type OracleSeg,
   type Ring, type Side, type Tier,
@@ -215,10 +215,16 @@ function segsFromSpans(text: string, entries: SpanEntry[]): OracleSeg[] {
 }
 
 /** Build an OracleCard from live rows, or null if the card / its spans are not
- *  available yet (signals the caller to fall back to the mock ORACLE map). */
+ *  available yet (signals the caller to fall back to the mock ORACLE map). Only
+ *  canonical resource families are highlighted — non-flow projections (evasion,
+ *  modify, replacement, …) are not interaction clauses and would mislabel plain
+ *  keyword / rider text. Overlaps keep the earliest-starting span (ties → the
+ *  narrower one); genuinely coincident spans (e.g. mana+sacrifice on one cost)
+ *  are a data smell the pipeline's cost-span split resolves. */
 function oracleFromLive(
   card: OracleCardRow | undefined,
   ports: OraclePortRow[],
+  canonical: ReadonlySet<string>,
 ): OracleCard | null {
   const text = card?.oracleText;
   if (!text) return null; // no live card → fall back
@@ -226,18 +232,20 @@ function oracleFromLive(
   const entries: SpanEntry[] = [];
   for (const p of ports) {
     if (!p.spans) continue; // span-less port (dormant offsets) — nothing to draw
+    if (!canonical.has(p.family)) continue; // non-canonical projection — not an interaction clause
     const role: Side = p.side === "emit" ? "emit" : "consume";
     for (const span of p.spans) {
       if (!span || span.length < 2) continue;
       entries.push({ start: span[0], end: span[1], role, fam: p.family });
     }
   }
-  if (entries.length === 0) return null; // no spans anywhere → fall back
+  if (entries.length === 0) return null; // no canonical spans → fall back
 
   return { type: card.typeLine ?? "", segs: segsFromSpans(text, entries) };
 }
 
 export function useOracle(cardName: string): AtlasResult<OracleCard | null> {
+  const canonical = useCanonicalFamilies();
   const { data, loading, error } = useQuery(ORACLE_SPANS_QUERY, {
     variables: { card: cardName },
     skip: !cardName,
@@ -247,8 +255,8 @@ export function useOracle(cardName: string): AtlasResult<OracleCard | null> {
     const atlas = data?.discover?.atlas;
     const card: OracleCardRow | undefined = atlas?.cardRows?.nodes?.[0];
     const ports: OraclePortRow[] = atlas?.portRows?.nodes ?? [];
-    return oracleFromLive(card, ports) ?? ORACLE[cardName] ?? null;
-  }, [data, cardName]);
+    return oracleFromLive(card, ports, canonical) ?? ORACLE[cardName] ?? null;
+  }, [data, cardName, canonical]);
 
   return { data: oracle, loading, error: error ?? null };
 }
@@ -269,26 +277,29 @@ const KNOWN_TIERS = new Set<string>(["Green", "Amber", "Inferred", "Declared"]);
 const tierOf = (raw: string | null | undefined): Tier =>
   raw && KNOWN_TIERS.has(raw) ? (raw as Tier) : FALLBACK_TIER;
 
-/** Dedupe portRows into one Candidate per card, preferring an exact-family port
- *  over a super/subgroup one, and flagging lattice matches as `via`. Each
- *  candidate carries the live port `tier` (defensively coerced), and the list is
- *  sorted best-fidelity-first by tierRank, then the existing via/name tiebreak. */
+/** Dedupe portRows into one Candidate per card. A candidate is `via` (a flow
+ *  bridge) unless its port family is one the focus card touches directly on the
+ *  matching side (`directFams`); the focus card itself is never listed. Prefers
+ *  a direct-family port over a bridged one when a card offers both, carries the
+ *  coerced tier, and sorts best-fidelity-first, direct-before-bridged, by name. */
 function candidatesFrom(
   data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string; tier?: string | null }[] } } } } | undefined,
-  queriedFam: string,
+  directFams: ReadonlySet<string>,
+  self: string,
 ): Candidate[] {
   const nodes = data?.discover?.atlas?.portRows?.nodes ?? [];
   const byCard = new Map<string, { family: string; tier: string | null }>(); // card → chosen port
   for (const n of nodes) {
+    if (n.card === self) continue; // never list the focus card in its own columns
     const cur = byCard.get(n.card);
-    if (cur === undefined || (cur.family !== queriedFam && n.family === queriedFam)) {
+    if (cur === undefined || (!directFams.has(cur.family) && directFams.has(n.family))) {
       byCard.set(n.card, { family: n.family, tier: n.tier ?? null });
     }
   }
   return [...byCard.entries()]
     .map(([card, { family: port, tier }]): Candidate => ({
       card, in: null, out: null, tier: tierOf(tier),
-      via: port !== queriedFam, port,
+      via: !directFams.has(port), port,
     }))
     .sort(
       (a, b) =>
@@ -298,51 +309,101 @@ function candidatesFrom(
     );
 }
 
-/** Explorer left/right columns: emitters of what a card consumes, consumers of
- *  what it emits (supergroup matches flagged). Both the card's own consume/emit
- *  families (`inFam`/`outFam`, derived live from portRows by the caller — see
- *  `primaryPortFamily`) and the candidate lists are live portRows.
- *
- *  - emitters: ports on the EMIT side whose family is the card's consume family
- *    or a subgroup of it (a subgroup emit satisfies the supergroup consume).
- *  - consumers: ports on the CONSUME side whose family is the card's emit family
- *    or a supergroup of it.
- *  `via` marks a candidate matched through the super/subgroup lattice rather
- *  than the family itself. A null family resolves to an empty column. */
+/** The live canonical resource-family set — the resource-graph stations
+ *  (`resourceFamilyRows`), which the pipeline builds only for families in its
+ *  `ResourceFamilies.Canonical` taxonomy. Deriving it here (rather than
+ *  hardcoding) keeps the API the single source of truth: retune the taxonomy
+ *  upstream and every canonical gate in the UI follows with no frontend edit.
+ *  While the graph loads, this is the family skeleton (a rendering placeholder,
+ *  not an authority). */
+export function useCanonicalFamilies(): ReadonlySet<string> {
+  const graph = useFamilyGraph();
+  return useMemo(() => new Set(graph.data.keys), [graph.data.keys]);
+}
+
+/** The resource families a card touches on one side (dedup, in port order),
+ *  restricted to the live canonical set. Non-canonical projections (evasion,
+ *  modify, replacement, …) are dropped — they carry no flow, so they must not
+ *  drive the columns or the interaction highlight. */
+export function canonicalFamilies(
+  ports: CardPort[],
+  side: Side,
+  canonical: ReadonlySet<string>,
+): string[] {
+  const out: string[] = [];
+  for (const p of ports)
+    if (p.side === side && canonical.has(p.family) && !out.includes(p.family))
+      out.push(p.family);
+  return out;
+}
+
+const uniqStr = (xs: string[]): string[] => [...new Set(xs)];
+
+/** Explorer explore/exploit columns, resource-flow model. A card's canonical
+ *  emit/consume families are matched to neighbours two ways, unioned:
+ *   • direct — the same family on the opposite side (a mana emitter ↔ a mana
+ *     payer);
+ *   • flow-bridge — a combo-adjacent family from the live resource-edge graph,
+ *     so a token emitter reaches sacrifice outlets via the `token→sacrifice`
+ *     hop even though no card carries a `consume:token` port. Bridged candidates
+ *     are flagged `via` (and carry the bridge family in `port`).
+ *  Left = emitters that FEED this card's consume families ∪ their edge
+ *  predecessors; right = consumers that DRAIN its emit families ∪ their edge
+ *  successors. Non-canonical projections never participate. Returns the card's
+ *  own canonical families per side so the caller can label the columns. */
 export function useCardNeighbours(
-  inFam: string | null,
-  outFam: string | null,
+  ports: CardPort[],
+  self: string,
 ): AtlasResult<{
-  emitters: Candidate[]; // emit what this card consumes  → feed its consume side
-  consumers: Candidate[]; // consume what this card emits → drain its emit side
+  emitters: Candidate[]; // feed this card's consume side (left)
+  consumers: Candidate[]; // drain this card's emit side (right)
+  inFams: string[]; // canonical consume families of this card
+  outFams: string[]; // canonical emit families of this card
 }> {
-  // Emitters: EMIT-side ports in {inFam} ∪ subgroups(inFam).
-  const emitFamilies = inFam ? [inFam, ...(GROUPS[inFam] ?? [])] : [];
+  const graph = useFamilyGraph();
+  const edges = graph.data.edges;
+  const canonical = useMemo(() => new Set(graph.data.keys), [graph.data.keys]);
+
+  const inFams = useMemo(() => canonicalFamilies(ports, "consume", canonical), [ports, canonical]);
+  const outFams = useMemo(() => canonicalFamilies(ports, "emit", canonical), [ports, canonical]);
+
+  // Left query set: the consume families themselves (direct) ∪ their edge
+  // predecessors (families that flow INTO them) — matched on the EMIT side.
+  const feederFams = useMemo(() => {
+    const preds = edges.filter((e) => inFams.includes(e.to)).map((e) => e.from);
+    return uniqStr([...inFams, ...preds]);
+  }, [edges, inFams]);
+  // Right query set: the emit families (direct) ∪ their edge successors
+  // (families they flow INTO) — matched on the CONSUME side.
+  const drainFams = useMemo(() => {
+    const succs = edges.filter((e) => outFams.includes(e.from)).map((e) => e.to);
+    return uniqStr([...outFams, ...succs]);
+  }, [edges, outFams]);
+
   const emitQ = useQuery(PORT_CANDIDATES_QUERY, {
-    variables: { families: emitFamilies, side: "emit" },
-    skip: !inFam,
+    variables: { families: feederFams, side: "emit" },
+    skip: feederFams.length === 0,
   });
-
-  // Consumers: CONSUME-side ports in {outFam} ∪ supergroups(outFam).
-  const consumeFamilies = outFam ? supergroupsOf(outFam) : [];
   const consumeQ = useQuery(PORT_CANDIDATES_QUERY, {
-    variables: { families: consumeFamilies, side: "consume" },
-    skip: !outFam,
+    variables: { families: drainFams, side: "consume" },
+    skip: drainFams.length === 0,
   });
 
+  const inSet = useMemo(() => new Set(inFams), [inFams]);
+  const outSet = useMemo(() => new Set(outFams), [outFams]);
   const emitters = useMemo(
-    () => (inFam ? candidatesFrom(emitQ.data, inFam) : []),
-    [emitQ.data, inFam],
+    () => (feederFams.length ? candidatesFrom(emitQ.data, inSet, self) : []),
+    [emitQ.data, feederFams, inSet, self],
   );
   const consumers = useMemo(
-    () => (outFam ? candidatesFrom(consumeQ.data, outFam) : []),
-    [consumeQ.data, outFam],
+    () => (drainFams.length ? candidatesFrom(consumeQ.data, outSet, self) : []),
+    [consumeQ.data, drainFams, outSet, self],
   );
 
   return {
-    data: { emitters, consumers },
-    loading: emitQ.loading || consumeQ.loading,
-    error: emitQ.error ?? consumeQ.error ?? null,
+    data: { emitters, consumers, inFams, outFams },
+    loading: graph.loading || emitQ.loading || consumeQ.loading,
+    error: graph.error ?? emitQ.error ?? consumeQ.error ?? null,
   };
 }
 
@@ -350,11 +411,6 @@ export function useCardNeighbours(
 // LIVE. One card's full record by name + its live ports. Everything the card
 // page renders (header/imagery/oracle/ports/price/meta) flows from here; the
 // combo, anchor and ruling panels layer on the sibling hooks below.
-
-/** Families that are structural noise rather than a real resource port — a card
- *  whose only emit is "unstructured" has, for column-matching purposes, no emit
- *  family. Kept in sync with the parser's placeholder family names. */
-const NOISE_FAMILIES = new Set<string>(["unstructured", "unparsed", "other"]);
 
 export interface CardPort {
   family: string;
@@ -391,17 +447,6 @@ interface CardProfileCardRow {
 interface CardProfilePortRow {
   family: string; side: string; tier: string | null;
   confidence: number | null; label: string;
-}
-
-/** The card's primary consume/emit family for the Explorer columns: the first
- *  non-noise port on that side (ports arrive tier-ordered from the resolver, so
- *  "first" is the best-fidelity real family). Null when the card has no real
- *  port on that side — the caller renders a clean empty column. */
-export function primaryPortFamily(ports: CardPort[], side: Side): string | null {
-  for (const p of ports) {
-    if (p.side === side && !NOISE_FAMILIES.has(p.family)) return p.family;
-  }
-  return null;
 }
 
 export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
