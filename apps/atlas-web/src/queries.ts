@@ -336,6 +336,22 @@ export const CARD_ANCHOR_QUERY = gql`
   }
 `;
 
+// Deck Synergy Web: every port for a set of card names (the pasted decklist).
+// One row per (card, family, side); a card carries several rows. The view
+// aggregates these into per-card consume/emit family sets and wires the deck as
+// an emit→consume port graph. `tier`/`confidence` surface each card's fidelity.
+export const DECK_PORTS_QUERY = gql`
+  query DeckPorts($cards: [String!]!) {
+    discover {
+      atlas {
+        portRows(where: { card: { in: $cards } }, first: 1000) {
+          nodes { card family side tier confidence label }
+        }
+      }
+    }
+  }
+`;
+
 // Candidate ports on one side of a family set (Card Explorer emitter/consumer
 // columns). Family set already expanded to include super/subgroups.
 // `tier` is the port's fidelity tier (Green/Amber/Inferred/Declared); it is

@@ -149,6 +149,32 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
+/** A price / rank meta figure: a big tabular-aligned value over a small caps
+ *  label, so USD and EDHREC read as two clearly separated, labelled columns
+ *  (never "$14.50#132" run together). */
+function MetaStat({ value, label }: { value: string; label: string }) {
+  return (
+    <div style={{ minWidth: 72 }}>
+      <div
+        style={{
+          fontSize: 22, fontWeight: 600, lineHeight: 1.1, color: "var(--color-text)",
+          fontVariantNumeric: "tabular-nums",
+        }}
+      >
+        {value}
+      </div>
+      <div
+        style={{
+          fontSize: 10.5, marginTop: 3, color: "var(--atlas-muted)",
+          textTransform: "uppercase", letterSpacing: "0.06em",
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+}
+
 // ── Rulings ──────────────────────────────────────────────────────────────────
 function RulingsPanel({ rulings }: { rulings: CardRuling[] }) {
   if (!rulings.length) return null;
@@ -193,10 +219,21 @@ function Header({ profile }: { profile: CardProfile }) {
           <div style={{ color: "var(--atlas-muted-2)", fontSize: 15, marginBottom: 12 }}>{profile.typeLine}</div>
         )}
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-5)", marginBottom: 12 }}>
-          {profile.priceUsd != null && <Stat value={`$${Number(profile.priceUsd).toFixed(2)}`} label="USD" />}
-          {profile.edhrecRank != null && <Stat value={`#${profile.edhrecRank.toLocaleString()}`} label="EDHREC rank" />}
-        </div>
+        {(profile.priceUsd != null || profile.edhrecRank != null) && (
+          <div
+            style={{
+              display: "flex", flexWrap: "wrap", alignItems: "flex-start",
+              columnGap: 28, rowGap: 10, marginBottom: 12,
+            }}
+          >
+            {profile.priceUsd != null && (
+              <MetaStat value={`$${Number(profile.priceUsd).toFixed(2)}`} label="USD" />
+            )}
+            {profile.edhrecRank != null && (
+              <MetaStat value={`#${profile.edhrecRank.toLocaleString()}`} label="EDHREC rank" />
+            )}
+          </div>
+        )}
 
         {profile.keywords.length > 0 && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>

@@ -37,7 +37,7 @@ import {
   ANALYZE_DECK_QUERY,
   ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY,
   ORACLE_SPANS_QUERY,
-  PORT_CANDIDATES_QUERY,
+  PORT_CANDIDATES_QUERY, DECK_PORTS_QUERY,
   CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
 } from "../queries";
 import {
@@ -625,6 +625,50 @@ export function useDeckAnalysis(cards: string[]): AtlasResult<{
 }
 
 export const sampleDeck = (state: "full" | "sparse") => DECKS[state];
+
+// ── Deck ports (Deck Synergy web) ────────────────────────────────────────────
+// LIVE. Every port for a set of card names (a pasted decklist), one row per
+// (card, family, side). The Synergy view aggregates these into per-card
+// consume/emit family sets and wires the deck as an emit→consume port graph,
+// so every node carries a real full card name (a live CardLink, never a mock
+// short-form). `tier` is coerced defensively; `side` is passed through verbatim
+// ("emit" | "consume" | "" for a side-less inferred/backfill port).
+
+export interface DeckPortRow {
+  card: string;
+  family: string;
+  side: string; // "emit" | "consume" | "" (side-less inferred port)
+  tier: Tier;
+  confidence: number | null;
+  label: string;
+}
+
+interface RawDeckPortRow {
+  card: string; family: string; side: string | null;
+  tier: string | null; confidence: number | null; label: string | null;
+}
+
+export function useDeckPorts(cards: string[]): AtlasResult<DeckPortRow[]> {
+  const { data, loading, error } = useQuery(DECK_PORTS_QUERY, {
+    variables: { cards },
+    skip: cards.length === 0,
+  });
+
+  const ports = useMemo<DeckPortRow[]>(() => {
+    const rows: RawDeckPortRow[] | undefined = data?.discover?.atlas?.portRows?.nodes;
+    if (!rows) return [];
+    return rows.map((r): DeckPortRow => ({
+      card: r.card,
+      family: r.family,
+      side: r.side ?? "",
+      tier: tierOf(r.tier),
+      confidence: r.confidence,
+      label: r.label ?? "",
+    }));
+  }, [data]);
+
+  return { data: ports, loading, error: error ?? null };
+}
 
 // ── Archetypes + tiers + headline (Cover, Design system) ─────────────────────
 interface ArchetypeRow {
