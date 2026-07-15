@@ -185,8 +185,19 @@ export function useStation(family: string): AtlasResult<{
 interface OraclePortRow {
   family: string;
   side: string;
+  label: string;
   oracleLineIndex: number;
   spans: number[][] | null;
+}
+
+/** The resource an intercept (replacement) watches, from its label: a
+ *  `replace:token-creation` intercept is *about* tokens even though its own
+ *  family is the inert `replacement`. Returns the leading resource segment
+ *  (`replace:token-creation` → `token`, `replace:life-gain` → `life`) so the
+ *  clause can highlight in that resource's hue. Null when not a `replace:` label. */
+function interceptedFamily(label: string): string | null {
+  const m = /^replace:([a-z]+)/.exec(label);
+  return m ? m[1] : null;
 }
 interface OracleCardRow { oracleText: string | null; typeLine: string | null; }
 
@@ -232,11 +243,26 @@ function oracleFromLive(
   const entries: SpanEntry[] = [];
   for (const p of ports) {
     if (!p.spans) continue; // span-less port (dormant offsets) — nothing to draw
-    if (!canonical.has(p.family)) continue; // non-canonical projection — not an interaction clause
-    const role: Side = p.side === "emit" ? "emit" : "consume";
+    // An intercept (replacement) carries the inert `replacement` family, but the
+    // clause reads as consuming the resource it watches (a token doubler's "if
+    // one or more tokens would be created" is, in flow terms, a token input). Map
+    // it to a consume highlight on the intercepted resource so a doubler line
+    // shows two clauses — consume:token (the condition) + emit:token (the create).
+    let role: Side;
+    let fam: string;
+    if (p.side === "intercept") {
+      const watched = interceptedFamily(p.label);
+      if (!watched || !canonical.has(watched)) continue; // intercepts a non-flow event — skip
+      role = "consume";
+      fam = watched;
+    } else {
+      if (!canonical.has(p.family)) continue; // non-canonical projection — not an interaction clause
+      role = p.side === "emit" ? "emit" : "consume";
+      fam = p.family;
+    }
     for (const span of p.spans) {
       if (!span || span.length < 2) continue;
-      entries.push({ start: span[0], end: span[1], role, fam: p.family });
+      entries.push({ start: span[0], end: span[1], role, fam });
     }
   }
   if (entries.length === 0) return null; // no canonical spans → fall back

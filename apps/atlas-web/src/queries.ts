@@ -288,7 +288,7 @@ export const ORACLE_SPANS_QUERY = gql`
           nodes { oracleText typeLine }
         }
         portRows(where: { card: { eq: $card } }, first: 50) {
-          nodes { family side oracleLineIndex spans }
+          nodes { family side label oracleLineIndex spans }
         }
       }
     }
