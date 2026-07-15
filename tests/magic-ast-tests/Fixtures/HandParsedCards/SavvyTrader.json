@@ -41,6 +41,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -55,6 +59,10 @@
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 106
               }
             },
             {
@@ -74,6 +82,10 @@
                     "Zone": "Exile"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 106
               }
             }
           ],

@@ -140,6 +140,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 62,
+              "Length": 52
             }
           },
           "Effects": [
@@ -178,7 +182,11 @@
                     "Zombie"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 115,
+                "Length": 144
+              }
             }
           ],
           "SourceSpan": {

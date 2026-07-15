@@ -49,7 +49,11 @@
           "Trigger": {
             "Timing": "Whenever",
             "Event": "DiceRolled",
-            "DieResultThreshold": 4
+            "DieResultThreshold": 4,
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 40
+            }
           },
           "Effects": [
             {
@@ -61,6 +65,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 38
               }
             }
           ],
@@ -86,7 +94,11 @@
           "Effects": [
             {
               "EffectType": "rollDie",
-              "Sides": 6
+              "Sides": 6,
+              "SourceSpan": {
+                "Start": 90,
+                "Length": 22
+              }
             }
           ],
           "IsManaAbility": false,

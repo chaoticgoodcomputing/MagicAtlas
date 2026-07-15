@@ -37,6 +37,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 18
             }
           },
           "Effects": [
@@ -56,6 +60,10 @@
                 "QuantityType": "derived",
                 "DerivedFrom": "Other",
                 "Source": "its"
+              },
+              "SourceSpan": {
+                "Start": 19,
+                "Length": 49
               }
             }
           ],

@@ -60,7 +60,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{R}"
+              "Mana": "{R}",
+              "SourceSpan": {
+                "Start": 60,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -92,7 +96,11 @@
             {
               "EffectType": "addMana",
               "Mana": "",
-              "AnyColor": true
+              "AnyColor": true,
+              "SourceSpan": {
+                "Start": 114,
+                "Length": 27
+              }
             }
           ],
           "IsManaAbility": true,

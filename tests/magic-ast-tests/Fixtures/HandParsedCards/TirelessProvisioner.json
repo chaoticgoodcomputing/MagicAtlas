@@ -39,6 +39,10 @@
                 "land"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 11,
+              "Length": 34
             }
           },
           "Effects": [
@@ -110,7 +114,11 @@
                   }
                 }
               ],
-              "AllowDuplicates": false
+              "AllowDuplicates": false,
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 204
+              }
             }
           ],
           "Reminder": {

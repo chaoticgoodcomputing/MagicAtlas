@@ -38,6 +38,10 @@
                 "B"
               ],
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 48
             }
           },
           "Effects": [
@@ -66,6 +70,10 @@
                   ],
                   "IsCopy": false
                 }
+              },
+              "SourceSpan": {
+                "Start": 49,
+                "Length": 49
               }
             }
           ],

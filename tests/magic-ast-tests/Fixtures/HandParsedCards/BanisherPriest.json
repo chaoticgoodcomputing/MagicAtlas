@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -55,6 +59,10 @@
               "Duration": {
                 "DurationType": "untilLeavesBattlefield",
                 "Object": "this creature"
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 87
               }
             }
           ],

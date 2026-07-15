@@ -35,6 +35,10 @@
                 "sorcery"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
             }
           },
           "Effects": [
@@ -58,6 +62,10 @@
                   "Kind": "It"
                 },
                 "MayChooseNewTargets": true
+              },
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 86
               }
             }
           ],

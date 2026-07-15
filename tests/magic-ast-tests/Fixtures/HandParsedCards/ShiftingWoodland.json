@@ -61,7 +61,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{G}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 57,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -119,6 +123,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 77,
+                "Length": 180
               }
             }
           ],

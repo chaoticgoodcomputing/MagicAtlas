@@ -42,6 +42,10 @@
               "Part": "Combat",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 39
             }
           },
           "Effects": [
@@ -149,6 +153,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 374
               }
             }
           ],

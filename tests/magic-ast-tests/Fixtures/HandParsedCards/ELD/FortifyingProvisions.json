@@ -64,6 +64,10 @@
                 "enchantment"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 33,
+              "Length": 28
             }
           },
           "Effects": [
@@ -87,6 +91,10 @@
                 "AbilityText": [
                   "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 62,
+                "Length": 96
               }
             }
           ],

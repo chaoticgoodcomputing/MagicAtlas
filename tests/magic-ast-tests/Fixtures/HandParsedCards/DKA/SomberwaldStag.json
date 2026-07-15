@@ -37,6 +37,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -56,6 +60,10 @@
                     "Controller": "Opponent"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 57
               }
             }
           ],

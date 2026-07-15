@@ -48,6 +48,10 @@
             "Event": "CommitsACrime",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 27,
+              "Length": 27
             }
           },
           "Effects": [
@@ -77,6 +81,10 @@
                   }
                 },
                 "Tapped": false
+              },
+              "SourceSpan": {
+                "Start": 55,
+                "Length": 176
               }
             }
           ],

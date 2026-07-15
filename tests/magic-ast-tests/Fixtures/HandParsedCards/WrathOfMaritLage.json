@@ -35,6 +35,10 @@
                 "enchantment"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 28
             }
           },
           "Effects": [
@@ -50,6 +54,10 @@
                     "creature"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 23
               }
             }
           ],

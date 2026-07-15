@@ -37,6 +37,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 23
             }
           },
           "Effects": [
@@ -62,6 +66,10 @@
                   "Saproling"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 24,
+                "Length": 45
               }
             }
           ],

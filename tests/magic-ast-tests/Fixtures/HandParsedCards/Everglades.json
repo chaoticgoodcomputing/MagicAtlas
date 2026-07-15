@@ -47,6 +47,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 25,
+              "Length": 21
             }
           },
           "Effects": [
@@ -83,6 +87,10 @@
                     }
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 82
               }
             }
           ],
@@ -103,7 +111,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{C}{B}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 134,
+                "Length": 12
+              }
             }
           ],
           "IsManaAbility": true,

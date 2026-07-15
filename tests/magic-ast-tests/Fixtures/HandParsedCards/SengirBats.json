@@ -72,6 +72,10 @@
                 },
                 "Timeframe": "this turn"
               }
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 64
             }
           },
           "Effects": [
@@ -84,6 +88,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 72,
+                "Length": 38
               }
             }
           ],

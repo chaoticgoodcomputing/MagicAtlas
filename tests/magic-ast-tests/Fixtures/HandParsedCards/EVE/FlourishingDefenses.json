@@ -35,6 +35,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
                   ],
                   "IsCopy": false
                 }
+              },
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 55
               }
             }
           ],

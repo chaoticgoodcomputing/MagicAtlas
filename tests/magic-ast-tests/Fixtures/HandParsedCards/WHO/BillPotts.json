@@ -45,6 +45,10 @@
                 "sorcery"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 126
             }
           },
           "Effects": [

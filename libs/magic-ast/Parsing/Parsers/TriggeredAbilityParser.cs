@@ -94,12 +94,21 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // works generically; only a real ability word rides onto the output.
     string? abilityWord = classification.AbilityWord;
     var dashPrefix = classification.DashPrefix;
+    // Offset of the (post-em-dash-strip) `text`[0] within the ORIGINAL clause.RawText.
+    // Span computation adds this so trigger/effect boundaries stay absolute into the
+    // original oracle text even after the ability-word prefix is peeled.
+    var prefixShift = 0;
     if (dashPrefix is not null)
     {
       var emDashIndex = text.IndexOf('—');
       if (emDashIndex >= 0)
       {
-        text = text[(emDashIndex + 1)..].TrimStart();
+        var afterDash = text[(emDashIndex + 1)..];
+        var trimmed = afterDash.TrimStart();
+        // (emDashIndex + 1) skips up to and including the em-dash; the remainder is the
+        // count of leading whitespace TrimStart removed. text == clause.RawText[prefixShift..].
+        prefixShift = emDashIndex + 1 + (afterDash.Length - trimmed.Length);
+        text = trimmed;
         // Rebuild token list from the stripped text by dropping tokens before and including the em-dash.
         var emDashTokenIndex = tokens.FindIndex(t => t.Kind == OracleToken.EmDash);
         if (emDashTokenIndex >= 0 && emDashTokenIndex + 1 < tokens.Count)
@@ -136,7 +145,22 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       return null;
     }
 
-    var (triggerPart, effectPart) = parts.Value;
+    var (triggerPart, effectPart, commaIndex) = parts.Value;
+
+    // Clause-accurate spans (upstream-atlas-data-plan §4). The comma at `commaIndex`
+    // (within the post-prefix-strip `text`) is the trigger/effect boundary. Absolute
+    // offsets into the ORIGINAL oracle text add clause.SourceSpan.Start + prefixShift.
+    // Half-granularity: the trigger span covers the whole pre-comma region; the effect
+    // span covers the whole post-comma region (all emits of the ability share it). We
+    // fix these at the split BEFORE the trigger/effect strings are further mutated
+    // (intervening-if / while-cond / reminder stripping) so the spans stay faithful to
+    // the raw halves. Never null here: `parts != null` guarantees a comma exists.
+    var clauseStart = clause.SourceSpan.Start;
+    var triggerSpan = new MagicAST.AST.TextSpan(clauseStart + prefixShift, commaIndex);
+    var effectSpan = new MagicAST.AST.TextSpan(
+      clauseStart + prefixShift + commaIndex + 1,
+      Math.Max(0, clause.RawText.Length - prefixShift - commaIndex - 1)
+    );
 
     // Rule 603.4 intervening-if: "At/When/Whenever X, if Y, Z." The
     // trigger/effect split may swallow the "if Y" into the trigger half when
@@ -184,6 +208,11 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     {
       return null;
     }
+
+    // Stamp the clause-accurate trigger-half span. Only the SourceSpan changes; every
+    // semantic field the rule parsed is untouched, so the port graph's consume ports
+    // trace back to the pre-comma trigger substring.
+    trigger = trigger with { SourceSpan = triggerSpan };
 
     // Compound-trigger: if a TriggerConditionRule left a pending additional trigger
     // (e.g. EntersAndOpponentDrawsNotFirstConditionRule for Orcish Bowmasters), read
@@ -263,7 +292,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
         AdditionalTrigger = additionalTrigger,
         AdditionalTriggers = additionalTriggers,
         InterveningIf = interveningIf,
-        Effects = [modalEffect],
+        Effects = [modalEffect with { SourceSpan = effectSpan }],
         AbilityWord = abilityWord,
       };
     }
@@ -334,6 +363,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       effects = [.. effects, table];
     }
 
+    // Stamp the clause-accurate effect-half span on every top-level effect the ability
+    // produced (half-granularity: all emits share the post-comma region). Only SourceSpan
+    // changes; the parsed effect kinds/values are untouched.
+    var instructions = ExtractInstructions(effectPart, effects);
+    effects = effects.Select(e => e with { SourceSpan = effectSpan }).ToList();
+
     return new TriggeredAbility
     {
       Trigger = trigger,
@@ -341,7 +376,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       AdditionalTriggers = additionalTriggers,
       InterveningIf = interveningIf,
       Effects = effects,
-      Instructions = ExtractInstructions(effectPart, effects),
+      Instructions = instructions,
       Reminder = reminder,
       AbilityWord = abilityWord,
       Restrictions = triggeredRestrictions,
@@ -629,7 +664,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
   /// effects). This still bottoms out on the first comma if no later candidate
   /// looks like an effect — matching the previous behaviour for simple shapes.
   /// </summary>
-  private static (string Trigger, string Effect)? SplitTriggerAndEffect(string text)
+  private static (string Trigger, string Effect, int CommaIndex)? SplitTriggerAndEffect(string text)
   {
     var firstComma = text.IndexOf(',');
     if (firstComma < 0)
@@ -671,12 +706,12 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       var tail = text[(i + 1)..].TrimStart();
       if (LooksLikeEffectStart(tail))
       {
-        return (text[..i].Trim(), tail);
+        return (text[..i].Trim(), tail, i);
       }
     }
 
     // Fallback: first comma split.
-    return (text[..firstComma].Trim(), text[(firstComma + 1)..].Trim());
+    return (text[..firstComma].Trim(), text[(firstComma + 1)..].Trim(), firstComma);
   }
 
   /// <summary>

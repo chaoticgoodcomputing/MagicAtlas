@@ -98,6 +98,10 @@
               "EffectType": "destroy",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 121,
+                "Length": 88
               }
             }
           ],

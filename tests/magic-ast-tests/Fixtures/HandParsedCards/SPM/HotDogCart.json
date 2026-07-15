@@ -30,6 +30,10 @@
                 "artifact"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -53,6 +57,10 @@
                 "AbilityText": [
                   "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 96
               }
             }
           ],
@@ -76,7 +84,11 @@
             {
               "EffectType": "addMana",
               "Mana": "",
-              "AnyColor": true
+              "AnyColor": true,
+              "SourceSpan": {
+                "Start": 127,
+                "Length": 27
+              }
             }
           ],
           "IsManaAbility": true,

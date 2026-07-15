@@ -54,7 +54,11 @@
               "Mana": "{G}",
               "AnyColor": false,
               "AnyType": false,
-              "OfChosenColor": false
+              "OfChosenColor": false,
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -91,7 +95,11 @@
                     "Mana": "",
                     "AnyColor": true,
                     "AnyType": false,
-                    "OfChosenColor": false
+                    "OfChosenColor": false,
+                    "SourceSpan": {
+                      "Start": 4,
+                      "Length": 27
+                    }
                   }
                 ],
                 "IsManaAbility": true,
@@ -229,7 +237,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 195,
+                "Length": 94
+              }
             }
           ],
           "IsManaAbility": false,

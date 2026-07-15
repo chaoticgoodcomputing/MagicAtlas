@@ -50,6 +50,10 @@
               "EffectType": "regenerate",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 26
               }
             }
           ],
@@ -70,6 +74,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 31,
+              "Length": 54
             }
           },
           "Effects": [
@@ -82,7 +90,11 @@
               "Player": {
                 "Kind": "ThatPlayer"
               },
-              "Random": false
+              "Random": false,
+              "SourceSpan": {
+                "Start": 86,
+                "Length": 29
+              }
             }
           ],
           "SourceSpan": {

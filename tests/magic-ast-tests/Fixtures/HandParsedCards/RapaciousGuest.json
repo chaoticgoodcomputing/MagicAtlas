@@ -65,7 +65,11 @@
               ],
               "Controller": "You"
             },
-            "MinimumCount": 1
+            "MinimumCount": 1,
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 73
+            }
           },
           "Effects": [
             {
@@ -88,6 +92,10 @@
                   "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 81,
+                "Length": 21
               }
             }
           ],
@@ -107,6 +115,10 @@
                 "Food"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 103,
+              "Length": 29
             }
           },
           "Effects": [
@@ -119,6 +131,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 133,
+                "Length": 38
               }
             }
           ],
@@ -138,6 +154,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 172,
+              "Length": 41
             }
           },
           "Effects": [
@@ -150,6 +170,10 @@
                 "QuantityType": "derived",
                 "DerivedFrom": "Power",
                 "Source": "it"
+              },
+              "SourceSpan": {
+                "Start": 214,
+                "Length": 47
               }
             }
           ],

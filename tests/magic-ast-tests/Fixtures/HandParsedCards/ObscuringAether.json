@@ -74,6 +74,10 @@
               "EffectType": "turnFaceDown",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 65,
+                "Length": 62
               }
             }
           ],

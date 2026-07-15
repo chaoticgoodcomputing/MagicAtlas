@@ -45,6 +45,10 @@
                   "Description": "targeting this creature"
                 }
               ]
+            },
+            "SourceSpan": {
+              "Start": 9,
+              "Length": 52
             }
           },
           "Effects": [
@@ -56,6 +60,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 62,
+                "Length": 13
               }
             }
           ],

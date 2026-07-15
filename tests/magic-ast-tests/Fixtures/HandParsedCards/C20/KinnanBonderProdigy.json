@@ -46,13 +46,21 @@
                 "land"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
             }
           },
           "Effects": [
             {
               "EffectType": "addMana",
               "Mana": "",
-              "AnyType": true
+              "AnyType": true,
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 50
+              }
             }
           ],
           "SourceSpan": {
@@ -104,7 +112,11 @@
                   "Human"
                 ]
               },
-              "Optional": true
+              "Optional": true,
+              "SourceSpan": {
+                "Start": 107,
+                "Length": 182
+              }
             }
           ],
           "IsManaAbility": false,

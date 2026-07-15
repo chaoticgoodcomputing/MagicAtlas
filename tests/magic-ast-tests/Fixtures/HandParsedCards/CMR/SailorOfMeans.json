@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
                 "AbilityText": [
                   "{T}, Sacrifice this artifact: Add one mana of any color."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 105
               }
             }
           ],

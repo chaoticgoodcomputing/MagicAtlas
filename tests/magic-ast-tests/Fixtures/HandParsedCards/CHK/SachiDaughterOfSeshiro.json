@@ -91,7 +91,11 @@
                     "EffectType": "addMana",
                     "Mana": "{G}{G}",
                     "AnyColor": false,
-                    "OfChosenColor": false
+                    "OfChosenColor": false,
+                    "SourceSpan": {
+                      "Start": 4,
+                      "Length": 12
+                    }
                   }
                 ],
                 "IsManaAbility": true,

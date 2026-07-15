@@ -78,7 +78,11 @@
                 "B",
                 "R",
                 "G"
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 13,
+                "Length": 103
+              }
             }
           ],
           "IsManaAbility": true,

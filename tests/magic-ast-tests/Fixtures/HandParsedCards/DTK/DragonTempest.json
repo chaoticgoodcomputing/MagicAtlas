@@ -40,6 +40,10 @@
                   "Keyword": "Flying"
                 }
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 50
             }
           },
           "Effects": [
@@ -65,6 +69,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 51,
+                "Length": 34
               }
             }
           ],
@@ -84,6 +92,10 @@
                 "Dragon"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 86,
+              "Length": 36
             }
           },
           "Effects": [
@@ -103,6 +115,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 79
               }
             }
           ],

@@ -52,6 +52,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 130
               }
             },
             {
@@ -66,6 +70,10 @@
               },
               "Source": {
                 "Kind": "ThatCreature"
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 130
               }
             }
           ],

@@ -53,6 +53,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 25,
+              "Length": 21
             }
           },
           "Effects": [
@@ -67,6 +71,10 @@
               },
               "Target": {
                 "Kind": "Opponent"
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 38
               }
             }
           ],
@@ -86,7 +94,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{W} or {U}"
+              "Mana": "{W} or {U}",
+              "SourceSpan": {
+                "Start": 90,
+                "Length": 16
+              }
             }
           ],
           "IsManaAbility": true,

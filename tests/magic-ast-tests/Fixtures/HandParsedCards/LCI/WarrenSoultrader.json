@@ -73,6 +73,10 @@
                   "{T}, Sacrifice this artifact: Add one mana of any color."
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 108
               }
             }
           ],

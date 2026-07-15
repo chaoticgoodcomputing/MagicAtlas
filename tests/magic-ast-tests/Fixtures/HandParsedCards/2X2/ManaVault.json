@@ -42,6 +42,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 52,
+              "Length": 31
             }
           },
           "Effects": [
@@ -52,6 +56,10 @@
                 "Target": {
                   "Kind": "Self"
                 }
+              },
+              "SourceSpan": {
+                "Start": 84,
+                "Length": 49
               }
             }
           ],
@@ -72,6 +80,10 @@
               "Part": "Draw",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 134,
+              "Length": 34
             }
           },
           "InterveningIf": {
@@ -90,6 +102,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 169,
+                "Length": 54
               }
             }
           ],
@@ -109,7 +125,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{C}{C}{C}"
+              "Mana": "{C}{C}{C}",
+              "SourceSpan": {
+                "Start": 228,
+                "Length": 15
+              }
             }
           ],
           "IsManaAbility": true,

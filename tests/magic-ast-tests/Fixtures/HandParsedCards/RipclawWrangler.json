@@ -42,6 +42,10 @@
                 "vehicle"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 24
             }
           },
           "Effects": [
@@ -54,7 +58,11 @@
               "Player": {
                 "Kind": "EachOpponent"
               },
-              "Random": false
+              "Random": false,
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 31
+              }
             }
           ],
           "SourceSpan": {

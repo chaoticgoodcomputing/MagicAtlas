@@ -55,6 +55,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 100,
+              "Length": 25
             }
           },
           "Effects": [
@@ -71,6 +75,10 @@
                 "Subtypes": [
                   "Elf"
                 ]
+              },
+              "SourceSpan": {
+                "Start": 126,
+                "Length": 151
               }
             }
           ],

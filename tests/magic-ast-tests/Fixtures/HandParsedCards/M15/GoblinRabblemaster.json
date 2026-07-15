@@ -52,6 +52,10 @@
               "Part": "Combat",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 63,
+              "Length": 39
             }
           },
           "Effects": [
@@ -89,6 +93,10 @@
                     "OracleLineIndex": 0
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 103,
+                "Length": 51
               }
             }
           ],

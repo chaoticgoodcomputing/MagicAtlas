@@ -42,6 +42,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 20
             }
           },
           "Effects": [
@@ -50,6 +54,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 21,
+                "Length": 8
               }
             }
           ],
@@ -101,6 +109,10 @@
                     "player"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 62,
+                "Length": 74
               }
             },
             {
@@ -114,6 +126,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 62,
+                "Length": 74
               }
             }
           ],

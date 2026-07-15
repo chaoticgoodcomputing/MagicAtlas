@@ -39,6 +39,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 67
             }
           },
           "Effects": [
@@ -50,6 +54,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 68,
+                "Length": 17
               }
             }
           ],
@@ -69,6 +77,10 @@
                 "creature"
               ],
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 86,
+              "Length": 63
             }
           },
           "Effects": [
@@ -80,6 +92,10 @@
               },
               "Player": {
                 "Kind": "ThatPlayer"
+              },
+              "SourceSpan": {
+                "Start": 150,
+                "Length": 26
               }
             }
           ],

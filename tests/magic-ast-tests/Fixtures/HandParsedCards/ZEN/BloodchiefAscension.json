@@ -31,6 +31,10 @@
             "Event": {
               "Part": "End",
               "Edge": "Beginning"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 33
             }
           },
           "InterveningIf": {
@@ -50,6 +54,10 @@
                   "QuantityType": "literal",
                   "Value": 1
                 }
+              },
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 125
               }
             }
           ],
@@ -72,6 +80,10 @@
                 "card"
               ],
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 160,
+              "Length": 65
             }
           },
           "InterveningIf": {
@@ -111,6 +123,10 @@
                 "Player": {
                   "Kind": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 226,
+                "Length": 126
               }
             }
           ],

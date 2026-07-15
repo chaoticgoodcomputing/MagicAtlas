@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 38
             }
           },
           "Effects": [
@@ -50,7 +54,11 @@
               "Player": {
                 "Kind": "DefendingPlayer"
               },
-              "Random": false
+              "Random": false,
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 34
+              }
             }
           ],
           "SourceSpan": {

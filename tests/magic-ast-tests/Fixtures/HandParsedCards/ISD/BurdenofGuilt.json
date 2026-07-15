@@ -69,6 +69,10 @@
               "EffectType": "tap",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
+              },
+              "SourceSpan": {
+                "Start": 21,
+                "Length": 24
               }
             }
           ],

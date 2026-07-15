@@ -73,7 +73,11 @@
                   "Controller": "You"
                 }
               },
-              "MayChooseNewTargets": true
+              "MayChooseNewTargets": true,
+              "SourceSpan": {
+                "Start": 163,
+                "Length": 91
+              }
             }
           ],
           "IsManaAbility": false,

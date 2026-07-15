@@ -35,6 +35,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 67
             }
           },
           "Effects": [
@@ -42,6 +46,10 @@
               "EffectType": "putOnTopOfLibrary",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 68,
+                "Length": 38
               }
             }
           ],

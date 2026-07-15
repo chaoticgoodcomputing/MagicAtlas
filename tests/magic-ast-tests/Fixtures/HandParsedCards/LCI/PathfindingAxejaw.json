@@ -37,6 +37,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -44,6 +48,10 @@
               "EffectType": "explore",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 200
               }
             }
           ],

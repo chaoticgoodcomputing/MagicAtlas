@@ -134,6 +134,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 29,
+              "Length": 37
             }
           },
           "Effects": [
@@ -161,6 +165,10 @@
                   "Goblin"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 67,
+                "Length": 127
               }
             },
             {
@@ -185,6 +193,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 67,
+                "Length": 127
               }
             }
           ],

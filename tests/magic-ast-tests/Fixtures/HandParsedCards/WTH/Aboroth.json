@@ -57,6 +57,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 47,
+              "Length": 31
             }
           },
           "Effects": [
@@ -69,6 +73,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 79,
+                "Length": 37
               }
             }
           ],

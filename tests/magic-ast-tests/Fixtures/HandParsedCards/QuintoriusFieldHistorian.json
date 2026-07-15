@@ -77,7 +77,11 @@
               ],
               "Controller": "You"
             },
-            "MinimumCount": 1
+            "MinimumCount": 1,
+            "SourceSpan": {
+              "Start": 31,
+              "Length": 47
+            }
           },
           "Effects": [
             {
@@ -103,6 +107,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 79,
+                "Length": 50
               }
             }
           ],

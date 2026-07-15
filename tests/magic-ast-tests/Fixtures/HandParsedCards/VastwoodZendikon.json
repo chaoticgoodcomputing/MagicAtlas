@@ -94,6 +94,10 @@
                 "land"
               ],
               "IsEnchanted": true
+            },
+            "SourceSpan": {
+              "Start": 82,
+              "Length": 24
             }
           },
           "Effects": [
@@ -101,6 +105,10 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 107,
+                "Length": 38
               }
             }
           ],

@@ -29,6 +29,10 @@
             "Event": "DrawsCard",
             "Filter": {
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 33
             }
           },
           "Effects": [
@@ -70,6 +74,10 @@
                     "{T}, Sacrifice this artifact: Add one mana of any color."
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 157
               }
             }
           ],

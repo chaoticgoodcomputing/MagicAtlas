@@ -10,6 +10,17 @@ using MagicAST.AST.References;
 public sealed record TriggerCondition
 {
   /// <summary>
+  /// The span in the card's oracle text that produced this trigger condition — the
+  /// TRIGGER-half region of a triggered ability (before the resolution comma).
+  /// Clause-accurate provenance (upstream-atlas-data-plan §4): the consume ports the
+  /// port graph projects from this trigger trace back to exactly this substring.
+  /// <c>null</c> when the parser cannot attribute a boundary (e.g. no comma split);
+  /// never fabricated. Serialized when non-null (the global <c>WhenWritingNull</c>
+  /// policy), matching <see cref="MagicAST.AST.Abilities.Ability.SourceSpan"/>.
+  /// </summary>
+  public MagicAST.AST.TextSpan? SourceSpan { get; init; }
+
+  /// <summary>
   /// The timing word: When, Whenever, or At.
   /// </summary>
   public required TriggerTiming Timing { get; init; }

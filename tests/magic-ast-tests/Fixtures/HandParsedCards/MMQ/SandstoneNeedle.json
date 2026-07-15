@@ -72,7 +72,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{R}{R}. If there are no depletion counters on this land, sacrifice it",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 106,
+                "Length": 75
+              }
             }
           ],
           "IsManaAbility": true,

@@ -58,6 +58,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 39
               }
             }
           ],
@@ -103,6 +107,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 48,
+                "Length": 97
               }
             }
           ],

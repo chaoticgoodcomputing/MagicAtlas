@@ -64,6 +64,10 @@
                     },
                     "Source": {
                       "Kind": "Self"
+                    },
+                    "SourceSpan": {
+                      "Start": 9,
+                      "Length": 43
                     }
                   }
                 ],
@@ -85,6 +89,10 @@
                     "CardTypes": [
                       "creature"
                     ]
+                  },
+                  "SourceSpan": {
+                    "Start": 0,
+                    "Length": 24
                   }
                 },
                 "Effects": [
@@ -92,6 +100,10 @@
                     "EffectType": "untap",
                     "Target": {
                       "Kind": "Self"
+                    },
+                    "SourceSpan": {
+                      "Start": 25,
+                      "Length": 21
                     }
                   }
                 ],
@@ -117,6 +129,10 @@
               "Subtypes": [
                 "Shaman"
               ]
+            },
+            "SourceSpan": {
+              "Start": 130,
+              "Length": 33
             }
           },
           "Effects": [
@@ -127,6 +143,10 @@
                 "Target": {
                   "Kind": "It"
                 }
+              },
+              "SourceSpan": {
+                "Start": 164,
+                "Length": 37
               }
             }
           ],

@@ -27,7 +27,24 @@ using MagicAST.Serialization;
 /// </summary>
 [PolymorphicBase("EffectType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Effect>))]
-public abstract record Effect;
+public abstract record Effect
+{
+  /// <summary>
+  /// The span in the card's oracle text this effect was parsed from — for a
+  /// triggered/activated ability, the EFFECT-half region (after the trigger comma /
+  /// the cost colon). All the effects an ability produces share this half-granular
+  /// span (clause-accurate provenance — upstream-atlas-data-plan §4); MAST does not
+  /// thread per-individual-effect offsets. <c>null</c> when a parser cannot attribute
+  /// a span; never fabricated.
+  /// <para>
+  /// Serialized when non-null (the global <c>WhenWritingNull</c> policy), matching
+  /// <see cref="MagicAST.AST.Abilities.Ability.SourceSpan"/>. The <see cref="Core.UnparsedEffect"/>
+  /// and <see cref="Core.UnstructuredEffect"/> spans ride on this single base property —
+  /// there is no separate serialized copy.
+  /// </para>
+  /// </summary>
+  public TextSpan? SourceSpan { get; init; }
+}
 
 /// <summary>
 /// Represents an "unless [player] pays [cost]" clause.

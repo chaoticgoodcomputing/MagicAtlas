@@ -65,7 +65,11 @@
                   ]
                 }
               },
-              "CantBeRegenerated": false
+              "CantBeRegenerated": false,
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 35
+              }
             }
           ],
           "IsManaAbility": false,

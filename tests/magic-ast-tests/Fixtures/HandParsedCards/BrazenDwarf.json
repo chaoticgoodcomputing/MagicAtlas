@@ -32,7 +32,11 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "Whenever",
-            "Event": "DiceRolled"
+            "Event": "DiceRolled",
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 34
+            }
           },
           "Effects": [
             {
@@ -46,6 +50,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 35,
+                "Length": 47
               }
             }
           ],

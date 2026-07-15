@@ -34,6 +34,10 @@
                 "artifact"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -58,6 +62,10 @@
               "Duration": {
                 "DurationType": "untilLeavesBattlefield",
                 "Object": "this artifact"
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 122
               }
             }
           ],

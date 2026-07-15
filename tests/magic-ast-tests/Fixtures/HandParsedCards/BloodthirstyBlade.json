@@ -83,6 +83,10 @@
                   ],
                   "Controller": "Opponent"
                 }
+              },
+              "SourceSpan": {
+                "Start": 126,
+                "Length": 91
               }
             }
           ],

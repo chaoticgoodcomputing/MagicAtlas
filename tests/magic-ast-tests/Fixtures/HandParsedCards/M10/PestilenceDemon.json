@@ -106,7 +106,11 @@
                     "Kind": "EachPlayer"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 11,
+                "Length": 63
+              }
             }
           ],
           "IsManaAbility": false,

@@ -31,7 +31,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{C}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -64,7 +68,11 @@
                   "Zone": "Graveyard"
                 }
               },
-              "Tapped": true
+              "Tapped": true,
+              "SourceSpan": {
+                "Start": 18,
+                "Length": 64
+              }
             }
           ],
           "IsManaAbility": false,

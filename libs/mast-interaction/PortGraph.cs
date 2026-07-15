@@ -336,14 +336,27 @@ public sealed class PortWalk
       // every port it produced, so a port traces back to the exact oracle substring.
       // Null-safe: when the ability JSON carries no span (the default until MAST span
       // serialization is enabled) this is a no-op and the ports keep null/0.
+      // Clause-accurate provenance (upstream-atlas-data-plan §4): consume ports trace to
+      // the TRIGGER-half span, emit ports to the EFFECT-half span. Each falls back to the
+      // whole-ability span when its half is absent — activated-ability cost/cast/combat
+      // consumes have no Trigger node, spell effects carry no per-effect span, etc.
       var abilitySpan = ReadSpan(ability);
       var abilityLine = ability["OracleLineIndex"]?.GetValue<int>() ?? 0;
-      if (abilitySpan is not null || abilityLine != 0)
+      var triggerSpan = (ability["Trigger"] is JsonObject trigObj ? ReadSpan(trigObj) : null) ?? abilitySpan;
+      MagicAST.AST.TextSpan? effectSpan = null;
+      foreach (var eff in ability["Effects"] as JsonArray ?? [])
+        if (eff is JsonObject effObj && ReadSpan(effObj) is { } es)
+        {
+          effectSpan = es;
+          break;
+        }
+      effectSpan ??= abilitySpan;
+      if (triggerSpan is not null || effectSpan is not null || abilityLine != 0)
       {
         for (var i = 0; i < consumes.Count; i++)
-          consumes[i] = consumes[i] with { SourceSpan = abilitySpan, OracleLineIndex = abilityLine };
+          consumes[i] = consumes[i] with { SourceSpan = triggerSpan, OracleLineIndex = abilityLine };
         for (var i = 0; i < emits.Count; i++)
-          emits[i] = emits[i] with { SourceSpan = abilitySpan, OracleLineIndex = abilityLine };
+          emits[i] = emits[i] with { SourceSpan = effectSpan, OracleLineIndex = abilityLine };
       }
 
       ports.AddRange(consumes);

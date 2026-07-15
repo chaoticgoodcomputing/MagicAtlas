@@ -74,6 +74,10 @@
                     "player"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 33
               }
             }
           ],
@@ -95,6 +99,10 @@
               ],
               "IsMulticolored": true,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 63,
+              "Length": 38
             }
           },
           "Effects": [
@@ -108,6 +116,10 @@
                     "Zone": "Graveyard"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 102,
+                "Length": 59
               }
             }
           ],

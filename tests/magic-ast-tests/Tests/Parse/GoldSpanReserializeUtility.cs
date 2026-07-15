@@ -121,27 +121,34 @@ public class GoldSpanReserializeUtility
 
   /// <summary>
   /// Walk <paramref name="gold"/> in lockstep with <paramref name="canon"/> (the current parser's
-  /// serialized output for the same card). Whenever the canonical node marks an ability (it carries an
-  /// <c>OracleLineIndex</c> — a property unique to <see cref="MagicAST.AST.Abilities.Ability"/>), copy
-  /// <c>SourceSpan</c> and <c>OracleLineIndex</c> onto the gold object. Recurse only through keys/indices
-  /// present in gold, so canonical-only keys (e.g. reparse-emitted default fields) are never introduced.
+  /// serialized output for the same card) and copy provenance keys onto the gold object:
+  /// <list type="bullet">
+  ///   <item><c>SourceSpan</c> — copied whenever the canonical node carries one. This covers
+  ///   <see cref="MagicAST.AST.Abilities.Ability"/> nodes (which also carry <c>OracleLineIndex</c>)
+  ///   AND the newer clause-accurate <see cref="MagicAST.AST.Triggers.TriggerCondition"/> and
+  ///   <see cref="MagicAST.AST.Effects.Effect"/> nodes (which do NOT carry <c>OracleLineIndex</c>) —
+  ///   so the key on the trigger/effect nodes is the discriminator here, not <c>OracleLineIndex</c>.</item>
+  ///   <item><c>OracleLineIndex</c> — copied whenever present (Ability nodes only).</item>
+  /// </list>
+  /// Recurse only through keys/indices present in gold, so canonical-only keys (e.g. reparse-emitted
+  /// default fields, or SourceSpans on nested effects the parser leaves null) are never introduced.
   /// </summary>
   private static void InjectSpans(JsonNode? gold, JsonNode? canon, string path, List<string> conflicts)
   {
     if (gold is JsonObject go && canon is JsonObject co)
     {
-      if (co.ContainsKey("OracleLineIndex"))
+      if (co["SourceSpan"] is JsonNode span)
       {
-        if (co["SourceSpan"] is JsonNode span)
+        if (go["SourceSpan"] is JsonNode existing
+          && !JsonComparer.AreEqual(existing, span))
         {
-          if (go["SourceSpan"] is JsonNode existing
-            && !JsonComparer.AreEqual(existing, span))
-          {
-            conflicts.Add($"{path}: SourceSpan {existing.ToJsonString()} != parser {span.ToJsonString()}");
-          }
-          go["SourceSpan"] = span.DeepClone();
+          conflicts.Add($"{path}: SourceSpan {existing.ToJsonString()} != parser {span.ToJsonString()}");
         }
-        go["OracleLineIndex"] = co["OracleLineIndex"]!.DeepClone();
+        go["SourceSpan"] = span.DeepClone();
+      }
+      if (co["OracleLineIndex"] is JsonNode oli)
+      {
+        go["OracleLineIndex"] = oli.DeepClone();
       }
 
       foreach (var kvp in go)

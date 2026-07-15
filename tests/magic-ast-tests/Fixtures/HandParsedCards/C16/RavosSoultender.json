@@ -101,6 +101,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 46,
+              "Length": 31
             }
           },
           "Effects": [
@@ -116,6 +120,10 @@
                     ]
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 78,
+                "Length": 70
               }
             }
           ],

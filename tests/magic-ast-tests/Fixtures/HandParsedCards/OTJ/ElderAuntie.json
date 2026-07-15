@@ -43,6 +43,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -69,6 +73,10 @@
                   "Goblin"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 50
               }
             }
           ],

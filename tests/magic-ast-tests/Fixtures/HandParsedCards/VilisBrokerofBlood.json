@@ -106,6 +106,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 23,
+                "Length": 46
               }
             }
           ],
@@ -123,6 +127,10 @@
             "Event": "LosesLife",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 70,
+              "Length": 22
             }
           },
           "Effects": [
@@ -134,6 +142,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 93,
+                "Length": 52
               }
             }
           ],

@@ -111,6 +111,10 @@
                     "EffectType": "untap",
                     "Target": {
                       "Kind": "Self"
+                    },
+                    "SourceSpan": {
+                      "Start": 7,
+                      "Length": 21
                     }
                   }
                 ],

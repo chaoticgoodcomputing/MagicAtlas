@@ -70,7 +70,11 @@
                   "Zone": "Library"
                 }
               },
-              "IsFaceDown": true
+              "IsFaceDown": true,
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 183
+              }
             },
             {
               "EffectType": "lookAtCards",
@@ -81,7 +85,11 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "Zone": "Exile"
+              "Zone": "Exile",
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 183
+              }
             },
             {
               "EffectType": "createToken",
@@ -103,6 +111,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 183
               }
             },
             {
@@ -130,6 +142,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 183
               }
             }
           ],
@@ -160,6 +176,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 239,
+                "Length": 52
               }
             }
           ],

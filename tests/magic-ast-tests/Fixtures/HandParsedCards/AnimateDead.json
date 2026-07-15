@@ -55,6 +55,10 @@
                 "aura"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 37,
+              "Length": 21
             }
           },
           "InterveningIf": {
@@ -108,7 +112,11 @@
                     "Kind": "It"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 324
+              }
             },
             {
               "EffectType": "createDelayedTrigger",
@@ -131,6 +139,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 324
               }
             }
           ],

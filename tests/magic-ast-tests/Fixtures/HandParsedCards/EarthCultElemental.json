@@ -37,12 +37,20 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 16,
+              "Length": 25
             }
           },
           "Effects": [
             {
               "EffectType": "rollDie",
-              "Sides": 20
+              "Sides": 20,
+              "SourceSpan": {
+                "Start": 42,
+                "Length": 12
+              }
             },
             {
               "EffectType": "rollResultsTable",
@@ -102,7 +110,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 42,
+                "Length": 12
+              }
             }
           ],
           "SourceSpan": {

@@ -46,6 +46,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 39
               }
             }
           ],
@@ -88,6 +92,10 @@
                   "Name": "X"
                 },
                 "Operation": "add"
+              },
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 42
               }
             }
           ],

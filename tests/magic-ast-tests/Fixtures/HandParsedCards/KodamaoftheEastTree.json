@@ -56,6 +56,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 45
             }
           },
           "InterveningIf": {
@@ -81,6 +85,10 @@
                     "RelativeCharacteristic": "ManaValue"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 155
               }
             }
           ],

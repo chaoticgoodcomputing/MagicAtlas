@@ -57,6 +57,10 @@
                 "CardTypes": [
                   "creature"
                 ]
+              },
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 130
               }
             }
           ],

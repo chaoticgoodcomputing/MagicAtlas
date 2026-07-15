@@ -46,6 +46,10 @@
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 44
               }
             }
           ],
@@ -73,6 +77,10 @@
                     "permanent"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 53,
+                "Length": 72
               }
             }
           ],

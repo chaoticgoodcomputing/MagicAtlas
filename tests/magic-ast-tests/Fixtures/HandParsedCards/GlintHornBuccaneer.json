@@ -50,6 +50,10 @@
             "Event": "DiscardsCard",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 27
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
               },
               "Target": {
                 "Kind": "EachOpponent"
+              },
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 47
               }
             }
           ],
@@ -113,6 +121,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 105,
+                "Length": 58
               }
             }
           ],

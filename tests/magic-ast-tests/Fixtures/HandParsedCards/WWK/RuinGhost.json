@@ -56,6 +56,10 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 85
               }
             },
             {
@@ -71,6 +75,10 @@
               },
               "UnderControl": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 85
               }
             }
           ],

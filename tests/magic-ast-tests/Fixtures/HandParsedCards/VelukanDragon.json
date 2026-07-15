@@ -66,12 +66,20 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 40
             }
           },
           "Effects": [
             {
               "EffectType": "rollDie",
-              "Sides": 6
+              "Sides": 6,
+              "SourceSpan": {
+                "Start": 48,
+                "Length": 97
+              }
             },
             {
               "EffectType": "modifyPT",
@@ -96,6 +104,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 48,
+                "Length": 97
               }
             }
           ],

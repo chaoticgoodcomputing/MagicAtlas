@@ -43,6 +43,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 22
             }
           },
           "Effects": [
@@ -51,6 +55,10 @@
               "Inner": {
                 "EffectType": "addMana",
                 "Mana": "{R}{R}"
+              },
+              "SourceSpan": {
+                "Start": 23,
+                "Length": 20
               }
             }
           ],
@@ -70,7 +78,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{G}"
+              "Mana": "{G}",
+              "SourceSpan": {
+                "Start": 48,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,

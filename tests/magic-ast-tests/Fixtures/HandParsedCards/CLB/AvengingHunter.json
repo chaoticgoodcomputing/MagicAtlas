@@ -53,12 +53,20 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 8,
+              "Length": 25
             }
           },
           "Effects": [
             {
               "EffectType": "keywordAbility",
-              "Keyword": "TakeInitiative"
+              "Keyword": "TakeInitiative",
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 25
+              }
             }
           ],
           "SourceSpan": {

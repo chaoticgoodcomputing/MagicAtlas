@@ -84,6 +84,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 64,
+              "Length": 37
             }
           },
           "Effects": [
@@ -118,12 +122,20 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 102,
+                "Length": 84
               }
             },
             {
               "EffectType": "untap",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 102,
+                "Length": 84
               }
             }
           ],

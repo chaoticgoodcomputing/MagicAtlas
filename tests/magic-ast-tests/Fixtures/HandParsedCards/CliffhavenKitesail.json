@@ -33,6 +33,10 @@
                 "equipment"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 26
             }
           },
           "Effects": [
@@ -46,6 +50,10 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 27,
+                "Length": 42
               }
             }
           ],

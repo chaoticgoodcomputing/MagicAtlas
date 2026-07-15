@@ -41,6 +41,10 @@
                 "sorcery"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 12,
+              "Length": 53
             }
           },
           "Effects": [
@@ -52,6 +56,10 @@
               },
               "Player": {
                 "Kind": "EachOpponent"
+              },
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 48
               }
             },
             {
@@ -62,6 +70,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 48
               }
             }
           ],
@@ -83,6 +95,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 118,
+                "Length": 127
               }
             },
             {
@@ -91,7 +107,11 @@
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "RestDestination": "Graveyard"
+              "RestDestination": "Graveyard",
+              "SourceSpan": {
+                "Start": 118,
+                "Length": 127
+              }
             }
           ],
           "IsManaAbility": false,
@@ -121,6 +141,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 249,
+                "Length": 98
               }
             }
           ],
@@ -162,7 +186,11 @@
                   }
                 }
               },
-              "AdditionalTimes": 6
+              "AdditionalTimes": 6,
+              "SourceSpan": {
+                "Start": 351,
+                "Length": 103
+              }
             }
           ],
           "IsManaAbility": false,

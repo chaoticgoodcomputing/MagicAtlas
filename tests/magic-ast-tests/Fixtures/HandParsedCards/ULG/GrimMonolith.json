@@ -46,7 +46,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{C}{C}{C}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 56,
+                "Length": 15
+              }
             }
           ],
           "IsManaAbility": true,
@@ -74,6 +78,10 @@
               "EffectType": "untap",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 76,
+                "Length": 21
               }
             }
           ],

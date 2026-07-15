@@ -51,7 +51,11 @@
           ],
           "Effects": [
             {
-              "EffectType": "investigate"
+              "EffectType": "investigate",
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 100
+              }
             }
           ],
           "IsManaAbility": false,

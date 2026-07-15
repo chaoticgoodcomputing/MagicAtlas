@@ -78,6 +78,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 122,
+              "Length": 33
             }
           },
           "Effects": [
@@ -86,6 +90,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 156,
+                "Length": 188
               }
             }
           ],

@@ -38,6 +38,10 @@
             "Event": "GainsLife",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 22
             }
           },
           "Effects": [
@@ -49,6 +53,10 @@
               },
               "Player": {
                 "Kind": "Opponent"
+              },
+              "SourceSpan": {
+                "Start": 23,
+                "Length": 38
               }
             }
           ],
@@ -111,6 +119,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 72,
+                "Length": 55
               }
             }
           ],

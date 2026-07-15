@@ -88,6 +88,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 103
               }
             }
           ],
@@ -137,6 +141,10 @@
                     "player"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 124,
+                "Length": 31
               }
             }
           ],

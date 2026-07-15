@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 35
             }
           },
           "Effects": [
@@ -49,6 +53,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 36,
+                "Length": 25
               }
             }
           ],

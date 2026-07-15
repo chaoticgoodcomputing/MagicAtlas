@@ -63,6 +63,10 @@
                       "creature"
                     ],
                     "IsSelf": true
+                  },
+                  "SourceSpan": {
+                    "Start": 0,
+                    "Length": 37
                   }
                 },
                 "Effects": [
@@ -91,7 +95,11 @@
                         "RevealHand": false,
                         "Random": false
                       }
-                    ]
+                    ],
+                    "SourceSpan": {
+                      "Start": 38,
+                      "Length": 34
+                    }
                   }
                 ],
                 "OracleLineIndex": 0
@@ -173,6 +181,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 167,
+                "Length": 189
               }
             },
             {
@@ -195,6 +207,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 167,
+                "Length": 189
               }
             }
           ],

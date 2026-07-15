@@ -42,6 +42,10 @@
               "Part": "Combat",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 39
             }
           },
           "Effects": [
@@ -126,7 +130,11 @@
                     "OracleLineIndex": 0
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 175
+              }
             },
             {
               "EffectType": "conditional",
@@ -188,6 +196,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 175
               }
             }
           ],

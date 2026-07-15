@@ -41,11 +41,19 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
             {
-              "EffectType": "investigate"
+              "EffectType": "investigate",
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 100
+              }
             }
           ],
           "Reminder": {

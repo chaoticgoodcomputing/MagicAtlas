@@ -34,6 +34,10 @@
               "Part": "Combat",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 39
             }
           },
           "Effects": [
@@ -53,7 +57,11 @@
                   "ModificationType": "abilityAdder",
                   "AbilityText": "haste"
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 109
+              }
             }
           ],
           "SourceSpan": {

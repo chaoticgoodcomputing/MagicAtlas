@@ -37,6 +37,10 @@
               "Subtypes": [
                 "Forest"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 36
             }
           },
           "Effects": [
@@ -45,6 +49,10 @@
               "Mana": "{G}",
               "Player": {
                 "Kind": "Controller"
+              },
+              "SourceSpan": {
+                "Start": 37,
+                "Length": 39
               }
             }
           ],

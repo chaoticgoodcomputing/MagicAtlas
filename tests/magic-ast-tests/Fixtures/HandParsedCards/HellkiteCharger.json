@@ -81,6 +81,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 14,
+              "Length": 30
             }
           },
           "Effects": [
@@ -134,6 +138,10 @@
                     "EffectType": "additionalCombatPhase"
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 123
               }
             }
           ],

@@ -51,12 +51,20 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 89,
+              "Length": 36
             }
           },
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{G}"
+              "Mana": "{G}",
+              "SourceSpan": {
+                "Start": 126,
+                "Length": 23
+              }
             }
           ],
           "SourceSpan": {
@@ -106,6 +114,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 160,
+                "Length": 50
               }
             }
           ],

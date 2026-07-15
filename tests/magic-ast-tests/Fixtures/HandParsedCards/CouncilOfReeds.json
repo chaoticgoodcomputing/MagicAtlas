@@ -65,6 +65,10 @@
               "Part": "Combat",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 58,
+              "Length": 39
             }
           },
           "InterveningIf": {
@@ -92,6 +96,10 @@
               "EffectType": "copy",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 96
               }
             }
           ],

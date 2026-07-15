@@ -55,6 +55,10 @@
               },
               "Target": {
                 "Kind": "EachPlayer"
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 102
               }
             }
           ],

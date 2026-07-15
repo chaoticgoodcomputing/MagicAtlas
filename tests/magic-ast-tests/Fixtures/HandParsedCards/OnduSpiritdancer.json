@@ -38,6 +38,10 @@
                 "enchantment"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 42
             }
           },
           "Effects": [
@@ -48,6 +52,10 @@
                 "Target": {
                   "Kind": "It"
                 }
+              },
+              "SourceSpan": {
+                "Start": 43,
+                "Length": 73
               }
             }
           ],

@@ -79,7 +79,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 117
+              }
             }
           ],
           "IsManaAbility": false,

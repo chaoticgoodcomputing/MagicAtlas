@@ -58,6 +58,10 @@
               ],
               "IsColorless": true,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 151,
+              "Length": 35
             }
           },
           "Effects": [
@@ -66,7 +70,11 @@
               "Target": {
                 "Kind": "It"
               },
-              "MayChooseNewTargets": true
+              "MayChooseNewTargets": true,
+              "SourceSpan": {
+                "Start": 187,
+                "Length": 97
+              }
             }
           ],
           "Reminder": {

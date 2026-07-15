@@ -54,6 +54,10 @@
               ],
               "Controller": "Opponent",
               "ChosenCharacteristic": "BasicLandType"
+            },
+            "SourceSpan": {
+              "Start": 52,
+              "Length": 70
             }
           },
           "Effects": [
@@ -65,6 +69,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 17
               }
             }
           ],

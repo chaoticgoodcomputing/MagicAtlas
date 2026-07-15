@@ -34,6 +34,10 @@
                 "artifact"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 10,
+              "Length": 25
             }
           },
           "Effects": [
@@ -54,6 +58,10 @@
                     "Zone": "Hand"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 36,
+                "Length": 45
               }
             }
           ],

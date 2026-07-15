@@ -118,6 +118,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 182,
+              "Length": 36
             }
           },
           "Effects": [
@@ -140,6 +144,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 219,
+                "Length": 63
               }
             }
           ],

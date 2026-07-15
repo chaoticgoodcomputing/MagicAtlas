@@ -62,6 +62,10 @@
               ],
               "IsToken": false,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
             }
           },
           "InterveningIf": {
@@ -109,6 +113,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 33
             }
           },
           "InterveningIf": {

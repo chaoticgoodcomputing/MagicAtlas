@@ -28,6 +28,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 21
             }
           },
           "Effects": [
@@ -35,6 +39,10 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 22,
+                "Length": 160
               }
             },
             {
@@ -90,6 +98,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 22,
+                "Length": 160
               }
             }
           ],

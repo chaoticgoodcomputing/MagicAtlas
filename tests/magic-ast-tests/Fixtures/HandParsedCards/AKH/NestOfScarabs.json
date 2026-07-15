@@ -35,6 +35,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 57
             }
           },
           "Effects": [
@@ -60,6 +64,10 @@
                   "Insect"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 58,
+                "Length": 51
               }
             }
           ],

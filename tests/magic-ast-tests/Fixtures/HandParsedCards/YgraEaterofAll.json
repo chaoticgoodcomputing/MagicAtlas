@@ -147,6 +147,10 @@
                     },
                     "Player": {
                       "Kind": "You"
+                    },
+                    "SourceSpan": {
+                      "Start": 35,
+                      "Length": 17
                     }
                   }
                 ],
@@ -170,6 +174,10 @@
               "Subtypes": [
                 "Food"
               ]
+            },
+            "SourceSpan": {
+              "Start": 155,
+              "Length": 60
             }
           },
           "Effects": [
@@ -182,6 +190,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 216,
+                "Length": 32
               }
             }
           ],

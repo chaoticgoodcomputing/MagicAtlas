@@ -85,6 +85,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 14,
+              "Length": 37
             }
           },
           "Effects": [
@@ -107,6 +111,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 44
               }
             }
           ],

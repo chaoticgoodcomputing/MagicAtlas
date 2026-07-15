@@ -119,7 +119,11 @@
                   ]
                 }
               },
-              "CantBeRegenerated": false
+              "CantBeRegenerated": false,
+              "SourceSpan": {
+                "Start": 130,
+                "Length": 40
+              }
             }
           ],
           "IsManaAbility": false,

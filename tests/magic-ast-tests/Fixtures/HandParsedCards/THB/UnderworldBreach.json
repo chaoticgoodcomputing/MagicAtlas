@@ -75,6 +75,10 @@
             "Event": {
               "Part": "End",
               "Edge": "Beginning"
+            },
+            "SourceSpan": {
+              "Start": 211,
+              "Length": 32
             }
           },
           "Effects": [
@@ -82,6 +86,10 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 244,
+                "Length": 28
               }
             }
           ],

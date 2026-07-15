@@ -81,6 +81,10 @@
               "Part": "PostcombatMain",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 49,
+              "Length": 55
             }
           },
           "Effects": [
@@ -99,6 +103,10 @@
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 105,
+                "Length": 78
               }
             }
           ],

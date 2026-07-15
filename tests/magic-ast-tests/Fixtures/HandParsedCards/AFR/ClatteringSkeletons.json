@@ -38,11 +38,19 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 23
             }
           },
           "Effects": [
             {
-              "EffectType": "ventureIntoTheDungeon"
+              "EffectType": "ventureIntoTheDungeon",
+              "SourceSpan": {
+                "Start": 24,
+                "Length": 78
+              }
             }
           ],
           "Reminder": {

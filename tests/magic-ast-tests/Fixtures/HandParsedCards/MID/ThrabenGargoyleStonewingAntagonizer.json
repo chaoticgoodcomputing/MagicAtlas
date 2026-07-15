@@ -116,6 +116,10 @@
                   "EffectType": "transform",
                   "Target": {
                     "Kind": "Self"
+                  },
+                  "SourceSpan": {
+                    "Start": 13,
+                    "Length": 25
                   }
                 }
               ],

@@ -39,6 +39,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 64
             }
           },
           "Effects": [
@@ -50,6 +54,10 @@
               },
               "Player": {
                 "Kind": "EachOpponent"
+              },
+              "SourceSpan": {
+                "Start": 65,
+                "Length": 48
               }
             },
             {
@@ -60,6 +68,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 65,
+                "Length": 48
               }
             }
           ],

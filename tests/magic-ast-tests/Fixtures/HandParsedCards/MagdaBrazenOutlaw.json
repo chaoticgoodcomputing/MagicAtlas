@@ -80,6 +80,10 @@
                 "Dwarf"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 37,
+              "Length": 43
             }
           },
           "Effects": [
@@ -103,6 +107,10 @@
                 "AbilityText": [
                   "{T}, Sacrifice this artifact: Add one mana of any color."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 81,
+                "Length": 25
               }
             }
           ],
@@ -155,7 +163,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 132,
+                "Length": 102
+              }
             }
           ],
           "IsManaAbility": false,

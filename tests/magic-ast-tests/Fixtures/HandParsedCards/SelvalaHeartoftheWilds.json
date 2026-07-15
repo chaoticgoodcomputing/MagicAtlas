@@ -41,6 +41,10 @@
                 "creature"
               ],
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 32
             }
           },
           "Effects": [
@@ -62,6 +66,10 @@
                     "Kind": "ThatPlayer"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 33,
+                "Length": 89
               }
             }
           ],
@@ -105,7 +113,11 @@
                 "B",
                 "R",
                 "G"
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 132,
+                "Length": 100
+              }
             }
           ],
           "IsManaAbility": true,

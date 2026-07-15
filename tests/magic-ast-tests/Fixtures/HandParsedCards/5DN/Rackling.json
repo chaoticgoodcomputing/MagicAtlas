@@ -33,6 +33,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 42
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 43,
+                "Length": 99
               }
             }
           ],

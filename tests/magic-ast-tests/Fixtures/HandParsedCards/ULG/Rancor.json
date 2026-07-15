@@ -102,6 +102,10 @@
                 "aura"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 64,
+              "Length": 59
             }
           },
           "Effects": [
@@ -109,6 +113,10 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 124,
+                "Length": 31
               }
             }
           ],

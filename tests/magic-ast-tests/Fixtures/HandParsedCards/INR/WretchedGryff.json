@@ -65,6 +65,10 @@
             "Event": "SpellCast",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 132,
+              "Length": 24
             }
           },
           "Effects": [
@@ -76,6 +80,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 157,
+                "Length": 13
               }
             }
           ],

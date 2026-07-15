@@ -33,6 +33,10 @@
                 "R"
               ],
               "Controller": "Any"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 35
             }
           },
           "Effects": [
@@ -60,6 +64,10 @@
                     ]
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 36,
+                "Length": 52
               }
             }
           ],

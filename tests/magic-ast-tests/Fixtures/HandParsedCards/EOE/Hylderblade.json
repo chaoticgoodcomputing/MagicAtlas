@@ -59,6 +59,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 37,
+              "Length": 33
             }
           },
           "InterveningIf": {

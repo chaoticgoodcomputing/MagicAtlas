@@ -34,13 +34,21 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 23
             }
           },
           "Effects": [
             {
               "EffectType": "addMana",
               "Mana": "{C}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 24,
+                "Length": 9
+              }
             }
           ],
           "SourceSpan": {

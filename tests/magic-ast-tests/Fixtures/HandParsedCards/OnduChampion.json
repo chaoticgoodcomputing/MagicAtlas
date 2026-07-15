@@ -43,6 +43,10 @@
                 "Ally"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 8,
+              "Length": 57
             }
           },
           "Effects": [
@@ -74,6 +78,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 54
               }
             }
           ],

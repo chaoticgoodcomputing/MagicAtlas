@@ -38,6 +38,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 36
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
                 "AbilityText": [
                   "{T}, Sacrifice this artifact: Add one mana of any color."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 37,
+                "Length": 25
               }
             }
           ],

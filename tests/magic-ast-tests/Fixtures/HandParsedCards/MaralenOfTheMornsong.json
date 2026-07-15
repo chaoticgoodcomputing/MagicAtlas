@@ -58,6 +58,10 @@
               "Part": "Draw",
               "Edge": "Beginning",
               "Whose": "Any"
+            },
+            "SourceSpan": {
+              "Start": 26,
+              "Length": 43
             }
           },
           "Effects": [
@@ -87,7 +91,11 @@
                   "Destination": "Hand",
                   "Revealed": false
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 70,
+                "Length": 101
+              }
             }
           ],
           "SourceSpan": {

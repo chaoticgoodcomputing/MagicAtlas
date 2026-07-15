@@ -59,6 +59,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 17
               }
             }
           ],
@@ -79,6 +83,10 @@
                 "artifact"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 47,
+              "Length": 63
             }
           },
           "Effects": [
@@ -90,6 +98,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 111,
+                "Length": 13
               }
             }
           ],

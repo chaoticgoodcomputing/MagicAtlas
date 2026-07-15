@@ -89,6 +89,10 @@
                 "Aura"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 55,
+              "Length": 31
             }
           },
           "Effects": [
@@ -103,6 +107,10 @@
                 "Player": {
                   "Kind": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 87,
+                "Length": 21
               }
             }
           ],

@@ -37,6 +37,10 @@
                 "creature"
               ],
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 30
             }
           },
           "Effects": [
@@ -44,6 +48,10 @@
               "EffectType": "tap",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 31,
+                "Length": 19
               }
             }
           ],

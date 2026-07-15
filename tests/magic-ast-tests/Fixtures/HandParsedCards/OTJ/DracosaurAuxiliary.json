@@ -83,6 +83,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 14,
+              "Length": 44
             }
           },
           "InterveningIf": {
@@ -101,6 +105,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 33
               }
             }
           ],

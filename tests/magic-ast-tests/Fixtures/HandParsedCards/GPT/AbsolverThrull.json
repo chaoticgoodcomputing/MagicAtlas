@@ -52,6 +52,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 68,
+              "Length": 56
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
                     "enchantment"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 125,
+                "Length": 28
               }
             }
           ],

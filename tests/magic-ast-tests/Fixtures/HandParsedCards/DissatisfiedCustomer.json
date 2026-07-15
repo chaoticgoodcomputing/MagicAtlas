@@ -82,12 +82,20 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 14,
+              "Length": 25
             }
           },
           "Effects": [
             {
               "EffectType": "rollDie",
-              "Sides": 6
+              "Sides": 6,
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 75
+              }
             },
             {
               "EffectType": "conditional",
@@ -110,6 +118,10 @@
                 "Player": {
                   "Kind": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 75
               }
             }
           ],

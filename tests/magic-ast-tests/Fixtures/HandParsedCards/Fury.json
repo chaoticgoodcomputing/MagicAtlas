@@ -59,6 +59,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 14,
+              "Length": 25
             }
           },
           "Effects": [
@@ -83,7 +87,11 @@
                   "QuantityType": "anyAmount"
                 }
               },
-              "Divided": true
+              "Divided": true,
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 99
+              }
             }
           ],
           "SourceSpan": {

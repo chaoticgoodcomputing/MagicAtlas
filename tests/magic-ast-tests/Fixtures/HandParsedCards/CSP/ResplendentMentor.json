@@ -61,6 +61,10 @@
                     },
                     "Player": {
                       "Kind": "You"
+                    },
+                    "SourceSpan": {
+                      "Start": 4,
+                      "Length": 17
                     }
                   }
                 ],

@@ -34,6 +34,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 31
             }
           },
           "Effects": [
@@ -42,6 +46,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 32,
+                "Length": 11
               }
             }
           ],
@@ -106,6 +114,10 @@
                   ],
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 84,
+                "Length": 107
               }
             }
           ],

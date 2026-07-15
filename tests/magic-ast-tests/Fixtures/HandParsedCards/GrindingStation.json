@@ -53,6 +53,10 @@
                     "player"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 27,
+                "Length": 33
               }
             }
           ],
@@ -72,6 +76,10 @@
               "CardTypes": [
                 "artifact"
               ]
+            },
+            "SourceSpan": {
+              "Start": 61,
+              "Length": 27
             }
           },
           "Effects": [
@@ -82,6 +90,10 @@
                 "Target": {
                   "Kind": "Self"
                 }
+              },
+              "SourceSpan": {
+                "Start": 89,
+                "Length": 29
               }
             }
           ],

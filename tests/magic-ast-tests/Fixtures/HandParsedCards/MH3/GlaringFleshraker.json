@@ -35,6 +35,10 @@
               ],
               "IsColorless": true,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 35
             }
           },
           "Effects": [
@@ -92,6 +96,10 @@
                   }
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 36,
+                "Length": 90
               }
             }
           ],
@@ -113,6 +121,10 @@
               "IsColorless": true,
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 127,
+              "Length": 54
             }
           },
           "Effects": [
@@ -127,6 +139,10 @@
               },
               "Target": {
                 "Kind": "EachOpponent"
+              },
+              "SourceSpan": {
+                "Start": 182,
+                "Length": 47
               }
             }
           ],

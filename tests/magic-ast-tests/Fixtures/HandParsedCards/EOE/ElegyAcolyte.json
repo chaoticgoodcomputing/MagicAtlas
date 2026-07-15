@@ -53,7 +53,11 @@
               ],
               "Controller": "You"
             },
-            "MinimumCount": 1
+            "MinimumCount": 1,
+            "SourceSpan": {
+              "Start": 9,
+              "Length": 73
+            }
           },
           "Effects": [
             {
@@ -79,7 +83,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 83,
+                "Length": 33
+              }
             }
           ],
           "SourceSpan": {
@@ -96,6 +104,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 124,
+              "Length": 33
             }
           },
           "InterveningIf": {
@@ -126,6 +138,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 158,
+                "Length": 141
               }
             }
           ],

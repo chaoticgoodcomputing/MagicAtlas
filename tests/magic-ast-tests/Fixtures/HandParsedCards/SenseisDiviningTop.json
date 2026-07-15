@@ -45,7 +45,11 @@
               },
               "Zone": "Library",
               "Location": "Top",
-              "PutBackInAnyOrder": true
+              "PutBackInAnyOrder": true,
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 78
+              }
             }
           ],
           "IsManaAbility": false,
@@ -71,12 +75,20 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 87,
+                "Length": 67
               }
             },
             {
               "EffectType": "putOnTopOfLibrary",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 87,
+                "Length": 67
               }
             }
           ],

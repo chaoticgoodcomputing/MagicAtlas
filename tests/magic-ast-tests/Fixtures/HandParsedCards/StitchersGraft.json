@@ -60,6 +60,10 @@
                 "creature"
               ],
               "IsEquipped": true
+            },
+            "SourceSpan": {
+              "Start": 30,
+              "Length": 34
             }
           },
           "Effects": [
@@ -68,7 +72,11 @@
               "Target": {
                 "Kind": "It"
               },
-              "WhoseUntapStep": "its controller's next"
+              "WhoseUntapStep": "its controller's next",
+              "SourceSpan": {
+                "Start": 65,
+                "Length": 58
+              }
             }
           ],
           "SourceSpan": {
@@ -86,6 +94,10 @@
               "CardTypes": [
                 "permanent"
               ]
+            },
+            "SourceSpan": {
+              "Start": 124,
+              "Length": 59
             }
           },
           "Effects": [
@@ -93,6 +105,10 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "ThatPermanent"
+              },
+              "SourceSpan": {
+                "Start": 184,
+                "Length": 26
               }
             }
           ],

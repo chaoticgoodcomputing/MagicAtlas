@@ -31,6 +31,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 35
             }
           },
           "Effects": [
@@ -45,6 +49,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 36,
+                "Length": 71
               }
             }
           ],

@@ -73,7 +73,11 @@
                   "ModificationType": "abilityAdder",
                   "AbilityText": "haste"
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 147
+              }
             },
             {
               "EffectType": "createDelayedTrigger",
@@ -94,6 +98,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 147
               }
             }
           ],

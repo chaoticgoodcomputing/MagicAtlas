@@ -75,7 +75,11 @@
                   "Kind": "triggered",
                   "Trigger": {
                     "Timing": "Whenever",
-                    "Event": "DiceRolled"
+                    "Event": "DiceRolled",
+                    "SourceSpan": {
+                      "Start": 172,
+                      "Length": 34
+                    }
                   },
                   "Effects": [
                     {
@@ -103,6 +107,10 @@
                           "Part": "Turn",
                           "Edge": "End"
                         }
+                      },
+                      "SourceSpan": {
+                        "Start": 207,
+                        "Length": 75
                       }
                     },
                     {
@@ -132,6 +140,10 @@
                           "Part": "Turn",
                           "Edge": "End"
                         }
+                      },
+                      "SourceSpan": {
+                        "Start": 207,
+                        "Length": 75
                       }
                     }
                   ],

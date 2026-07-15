@@ -119,6 +119,10 @@
                     "planeswalker"
                   ],
                   "Controller": "Opponent"
+                },
+                "SourceSpan": {
+                  "Start": 8,
+                  "Length": 89
                 }
               },
               "Effects": [
@@ -133,6 +137,10 @@
                   },
                   "Source": {
                     "Kind": "Self"
+                  },
+                  "SourceSpan": {
+                    "Start": 98,
+                    "Length": 81
                   }
                 }
               ],
@@ -253,12 +261,20 @@
                         },
                         "Source": {
                           "Kind": "Self"
+                        },
+                        "SourceSpan": {
+                          "Start": 38,
+                          "Length": 77
                         }
                       },
                       {
                         "EffectType": "returnToHand",
                         "Target": {
                           "Kind": "Self"
+                        },
+                        "SourceSpan": {
+                          "Start": 38,
+                          "Length": 77
                         }
                       }
                     ],

@@ -60,10 +60,18 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 158
               }
             },
             {
-              "EffectType": "additionalCombatAndMainPhase"
+              "EffectType": "additionalCombatAndMainPhase",
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 158
+              }
             }
           ],
           "Restrictions": [

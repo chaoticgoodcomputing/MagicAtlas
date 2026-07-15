@@ -79,6 +79,10 @@
             "Event": "LosesLife",
             "Filter": {
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 19,
+              "Length": 31
             }
           },
           "Effects": [
@@ -90,6 +94,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 51,
+                "Length": 55
               }
             }
           ],

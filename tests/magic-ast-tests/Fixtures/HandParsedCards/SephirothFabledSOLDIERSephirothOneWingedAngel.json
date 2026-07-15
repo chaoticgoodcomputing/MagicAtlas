@@ -104,6 +104,10 @@
                     "creature"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 0,
+                  "Length": 36
                 }
               },
               "Effects": [
@@ -130,6 +134,10 @@
                     "Player": {
                       "Kind": "You"
                     }
+                  },
+                  "SourceSpan": {
+                    "Start": 37,
+                    "Length": 60
                   }
                 }
               ],
@@ -149,6 +157,10 @@
                     "creature"
                   ],
                   "ExcludeSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 98,
+                  "Length": 30
                 }
               },
               "Effects": [
@@ -160,6 +172,10 @@
                   },
                   "Player": {
                     "Kind": "Opponent"
+                  },
+                  "SourceSpan": {
+                    "Start": 129,
+                    "Length": 135
                   }
                 },
                 {
@@ -170,6 +186,10 @@
                   },
                   "Player": {
                     "Kind": "You"
+                  },
+                  "SourceSpan": {
+                    "Start": 129,
+                    "Length": 135
                   }
                 },
                 {
@@ -183,6 +203,10 @@
                     "Target": {
                       "Kind": "Self"
                     }
+                  },
+                  "SourceSpan": {
+                    "Start": 129,
+                    "Length": 135
                   }
                 }
               ],
@@ -292,6 +316,10 @@
                     "creature"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 20,
+                  "Length": 60
                 }
               },
               "Effects": [
@@ -308,6 +336,10 @@
                             "CardTypes": [
                               "creature"
                             ]
+                          },
+                          "SourceSpan": {
+                            "Start": 0,
+                            "Length": 24
                           }
                         },
                         "Effects": [
@@ -319,6 +351,10 @@
                             },
                             "Player": {
                               "Kind": "Opponent"
+                            },
+                            "SourceSpan": {
+                              "Start": 25,
+                              "Length": 50
                             }
                           },
                           {
@@ -329,6 +365,10 @@
                             },
                             "Player": {
                               "Kind": "You"
+                            },
+                            "SourceSpan": {
+                              "Start": 25,
+                              "Length": 50
                             }
                           }
                         ],
@@ -339,6 +379,10 @@
                         "OracleLineIndex": 0
                       }
                     ]
+                  },
+                  "SourceSpan": {
+                    "Start": 81,
+                    "Length": 101
                   }
                 }
               ],
@@ -358,6 +402,10 @@
                     "creature"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 183,
+                  "Length": 26
                 }
               },
               "Effects": [
@@ -387,6 +435,10 @@
                     "Player": {
                       "Kind": "You"
                     }
+                  },
+                  "SourceSpan": {
+                    "Start": 210,
+                    "Length": 82
                   }
                 }
               ],

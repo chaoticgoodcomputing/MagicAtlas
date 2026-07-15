@@ -35,6 +35,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 31
             }
           },
           "Effects": [
@@ -47,6 +51,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 32,
+                "Length": 38
               }
             }
           ],
@@ -93,6 +101,10 @@
                 "Subtypes": [
                   "Saproling"
                 ]
+              },
+              "SourceSpan": {
+                "Start": 118,
+                "Length": 45
               }
             }
           ],
@@ -127,6 +139,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 186,
+                "Length": 17
               }
             }
           ],

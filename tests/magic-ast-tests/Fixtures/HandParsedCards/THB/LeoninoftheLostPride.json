@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 23
             }
           },
           "Effects": [
@@ -52,6 +56,10 @@
                   "Owner": "Opponent",
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 24,
+                "Length": 48
               }
             }
           ],

@@ -39,11 +39,19 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
             {
-              "EffectType": "openAttraction"
+              "EffectType": "openAttraction",
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 85
+              }
             }
           ],
           "Reminder": {
@@ -62,7 +70,11 @@
             "Event": "DiceRolled",
             "DieResultValues": [
               1
-            ]
+            ],
+            "SourceSpan": {
+              "Start": 112,
+              "Length": 21
+            }
           },
           "Effects": [
             {
@@ -89,6 +101,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 134,
+                "Length": 56
               }
             }
           ],

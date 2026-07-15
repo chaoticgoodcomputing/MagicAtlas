@@ -39,6 +39,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -62,6 +66,10 @@
                 "AbilityText": [
                   "{2}, Sacrifice this artifact: Draw a card."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 87
               }
             }
           ],

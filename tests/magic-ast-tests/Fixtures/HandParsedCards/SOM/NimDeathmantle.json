@@ -101,6 +101,10 @@
               ],
               "IsToken": false,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 189,
+              "Length": 76
             }
           },
           "Effects": [
@@ -134,6 +138,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 266,
+                "Length": 97
               }
             }
           ],

@@ -82,6 +82,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 13,
+              "Length": 25
             }
           },
           "InterveningIf": {
@@ -98,7 +102,11 @@
                   ]
                 }
               },
-              "ExileInsteadOfGraveyard": true
+              "ExileInsteadOfGraveyard": true,
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 185
+              }
             },
             {
               "EffectType": "optional",
@@ -107,6 +115,10 @@
                 "Target": {
                   "Kind": "It"
                 }
+              },
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 185
               }
             }
           ],

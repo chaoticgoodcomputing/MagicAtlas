@@ -43,6 +43,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 48
             }
           },
           "Effects": [
@@ -63,6 +67,10 @@
                   "QuantityType": "literal",
                   "Value": 1
                 }
+              },
+              "SourceSpan": {
+                "Start": 49,
+                "Length": 48
               }
             }
           ],
@@ -83,6 +91,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 98,
+              "Length": 57
             }
           },
           "Effects": [
@@ -121,6 +133,10 @@
                     "OracleLineIndex": 0
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 156,
+                "Length": 57
               }
             }
           ],

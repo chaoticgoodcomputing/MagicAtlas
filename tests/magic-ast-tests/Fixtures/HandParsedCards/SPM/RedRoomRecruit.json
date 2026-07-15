@@ -39,6 +39,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -46,6 +50,10 @@
               "EffectType": "connive",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 120
               }
             }
           ],

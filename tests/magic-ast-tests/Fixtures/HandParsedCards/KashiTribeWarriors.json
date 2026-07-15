@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 56
             }
           },
           "Effects": [
@@ -57,7 +61,11 @@
                   },
                   "WhoseUntapStep": "its controller's next"
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 57,
+                "Length": 80
+              }
             }
           ],
           "SourceSpan": {

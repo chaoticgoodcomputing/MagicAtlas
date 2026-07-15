@@ -78,11 +78,19 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 90,
+              "Length": 54
             }
           },
           "Effects": [
             {
-              "EffectType": "proliferate"
+              "EffectType": "proliferate",
+              "SourceSpan": {
+                "Start": 145,
+                "Length": 122
+              }
             }
           ],
           "Reminder": {

@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -58,6 +62,10 @@
                     "planeswalker"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 52
               }
             }
           ],

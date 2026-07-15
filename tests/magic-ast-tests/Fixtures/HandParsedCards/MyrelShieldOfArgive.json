@@ -92,6 +92,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 115,
+              "Length": 22
             }
           },
           "Effects": [
@@ -123,6 +127,10 @@
                   "Soldier"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 138,
+                "Length": 104
               }
             }
           ],

@@ -150,6 +150,10 @@
                   }
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 164,
+                "Length": 92
               }
             }
           ],

@@ -111,6 +111,10 @@
                     "siege"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 141,
+                  "Length": 22
                 }
               },
               "Effects": [
@@ -153,7 +157,11 @@
                         "Kind": "It"
                       }
                     }
-                  ]
+                  ],
+                  "SourceSpan": {
+                    "Start": 164,
+                    "Length": 58
+                  }
                 }
               ],
               "SourceSpan": {
@@ -257,6 +265,10 @@
                 "Event": "SpellCast",
                 "Filter": {
                   "Controller": "You"
+                },
+                "SourceSpan": {
+                  "Start": 17,
+                  "Length": 25
                 }
               },
               "Effects": [
@@ -271,6 +283,10 @@
                   },
                   "Source": {
                     "Kind": "Self"
+                  },
+                  "SourceSpan": {
+                    "Start": 43,
+                    "Length": 47
                   }
                 }
               ],

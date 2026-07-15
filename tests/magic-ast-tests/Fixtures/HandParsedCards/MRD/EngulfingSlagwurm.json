@@ -36,6 +36,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 62
             }
           },
           "Effects": [
@@ -43,6 +47,10 @@
               "EffectType": "destroy",
               "Target": {
                 "Kind": "ThatCreature"
+              },
+              "SourceSpan": {
+                "Start": 63,
+                "Length": 73
               }
             },
             {
@@ -54,6 +62,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 63,
+                "Length": 73
               }
             }
           ],

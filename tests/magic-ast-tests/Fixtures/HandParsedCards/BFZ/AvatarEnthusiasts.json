@@ -41,6 +41,10 @@
                 "Ally"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 40
             }
           },
           "Effects": [
@@ -53,6 +57,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 41,
+                "Length": 38
               }
             }
           ],

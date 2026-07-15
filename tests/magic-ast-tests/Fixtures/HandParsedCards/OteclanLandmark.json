@@ -95,6 +95,10 @@
                     "artifact"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 0,
+                  "Length": 25
                 }
               },
               "Effects": [
@@ -103,6 +107,10 @@
                   "Count": {
                     "QuantityType": "literal",
                     "Value": 2
+                  },
+                  "SourceSpan": {
+                    "Start": 26,
+                    "Length": 8
                   }
                 }
               ],
@@ -266,6 +274,10 @@
                     "creature"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 7,
+                  "Length": 30
                 }
               },
               "Effects": [

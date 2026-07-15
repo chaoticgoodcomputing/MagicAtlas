@@ -46,6 +46,10 @@
                   ],
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 32
               }
             }
           ],
@@ -114,6 +118,10 @@
             "Event": "Cycled",
             "Filter": {
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 94,
+              "Length": 24
             }
           },
           "Effects": [
@@ -126,6 +134,10 @@
                     "permanent"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 119,
+                "Length": 24
               }
             }
           ],

@@ -49,6 +49,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 25,
+              "Length": 21
             }
           },
           "Effects": [
@@ -63,6 +67,10 @@
                   "Owner": "Target",
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 33
               }
             }
           ],
@@ -83,7 +91,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{B}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 85,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,

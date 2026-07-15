@@ -82,6 +82,10 @@
                 "Ninja"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 148,
+              "Length": 60
             }
           },
           "Effects": [
@@ -93,6 +97,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 209,
+                "Length": 13
               }
             }
           ],

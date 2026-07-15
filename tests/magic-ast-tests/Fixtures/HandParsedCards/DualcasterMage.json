@@ -54,6 +54,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 25
             }
           },
           "Effects": [
@@ -69,7 +73,11 @@
                   "Zone": "Stack"
                 }
               },
-              "MayChooseNewTargets": true
+              "MayChooseNewTargets": true,
+              "SourceSpan": {
+                "Start": 32,
+                "Length": 79
+              }
             }
           ],
           "SourceSpan": {

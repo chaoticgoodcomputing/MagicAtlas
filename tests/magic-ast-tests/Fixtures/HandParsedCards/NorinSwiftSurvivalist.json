@@ -57,6 +57,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 19,
+              "Length": 47
             }
           },
           "Effects": [
@@ -67,6 +71,10 @@
                 "Target": {
                   "Kind": "It"
                 }
+              },
+              "SourceSpan": {
+                "Start": 67,
+                "Length": 63
               }
             },
             {
@@ -83,6 +91,10 @@
                     "Edge": "End"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 67,
+                "Length": 63
               }
             }
           ],

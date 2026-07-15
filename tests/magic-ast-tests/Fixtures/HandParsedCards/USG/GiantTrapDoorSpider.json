@@ -64,6 +64,10 @@
               "EffectType": "exile",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 15,
+                "Length": 77
               }
             },
             {
@@ -85,6 +89,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 15,
+                "Length": 77
               }
             }
           ],

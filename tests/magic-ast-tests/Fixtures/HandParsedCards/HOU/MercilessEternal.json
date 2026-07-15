@@ -112,6 +112,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 106,
+                "Length": 44
               }
             }
           ],

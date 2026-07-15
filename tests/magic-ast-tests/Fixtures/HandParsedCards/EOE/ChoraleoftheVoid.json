@@ -57,6 +57,10 @@
                 "creature"
               ],
               "IsEnchanted": true
+            },
+            "SourceSpan": {
+              "Start": 29,
+              "Length": 35
             }
           },
           "Effects": [
@@ -83,6 +87,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 194,
+              "Length": 33
             }
           },
           "Effects": [

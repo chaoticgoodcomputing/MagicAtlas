@@ -47,7 +47,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{C}{C}",
-              "SpendRestriction": "cast artifact spells or activate abilities of artifacts"
+              "SpendRestriction": "cast artifact spells or activate abilities of artifacts",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 93
+              }
             }
           ],
           "IsManaAbility": true,

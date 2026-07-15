@@ -57,6 +57,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 71
               }
             }
           ],
@@ -86,6 +90,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 80,
+                "Length": 44
               }
             }
           ],

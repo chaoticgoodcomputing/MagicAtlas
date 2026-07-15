@@ -140,6 +140,10 @@
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 113,
+                "Length": 51
               }
             }
           ],

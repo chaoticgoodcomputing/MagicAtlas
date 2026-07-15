@@ -80,6 +80,10 @@
                 "AbilityText": [
                   "{T}, Sacrifice this artifact: Add one mana of any color."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 112
               }
             }
           ],
@@ -115,6 +119,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 168,
+                "Length": 13
               }
             }
           ],

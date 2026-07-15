@@ -31,6 +31,10 @@
                 "artifact"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 68
             }
           },
           "Effects": [
@@ -42,6 +46,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 69,
+                "Length": 38
               }
             }
           ],
@@ -84,6 +92,10 @@
               "EffectType": "takeExtraTurn",
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 150,
+                "Length": 35
               }
             }
           ],

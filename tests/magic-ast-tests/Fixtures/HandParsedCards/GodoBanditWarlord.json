@@ -41,6 +41,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 16
             }
           },
           "Effects": [
@@ -70,6 +74,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 17,
+                "Length": 94
               }
             }
           ],
@@ -91,7 +99,11 @@
               "IsSelf": true
             },
             "Ordinal": 1,
-            "PerTurn": true
+            "PerTurn": true,
+            "SourceSpan": {
+              "Start": 112,
+              "Length": 50
+            }
           },
           "Effects": [
             {
@@ -115,10 +127,18 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 163,
+                "Length": 93
+              }
             },
             {
-              "EffectType": "additionalCombatPhase"
+              "EffectType": "additionalCombatPhase",
+              "SourceSpan": {
+                "Start": 163,
+                "Length": 93
+              }
             }
           ],
           "SourceSpan": {

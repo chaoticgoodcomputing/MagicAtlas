@@ -30,6 +30,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 21
             }
           },
           "Effects": [
@@ -38,6 +42,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 22,
+                "Length": 8
               }
             }
           ],
@@ -57,7 +65,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{C}"
+              "Mana": "{C}",
+              "SourceSpan": {
+                "Start": 35,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -87,7 +99,11 @@
             {
               "EffectType": "addMana",
               "Mana": "",
-              "AnyColor": true
+              "AnyColor": true,
+              "SourceSpan": {
+                "Start": 54,
+                "Length": 27
+              }
             }
           ],
           "IsManaAbility": true,

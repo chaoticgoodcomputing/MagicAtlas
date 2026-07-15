@@ -42,6 +42,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 44
             }
           },
           "Effects": [
@@ -68,7 +72,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 49
+              }
             }
           ],
           "Reminder": {
@@ -90,6 +98,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 95,
+              "Length": 19
             }
           },
           "Effects": [
@@ -151,6 +163,10 @@
                     ]
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 115,
+                "Length": 162
               }
             }
           ],

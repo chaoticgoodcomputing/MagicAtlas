@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -53,6 +57,10 @@
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 72
               }
             }
           ],

@@ -73,6 +73,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 40,
+              "Length": 25
             }
           },
           "Effects": [
@@ -91,6 +95,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 52
               }
             }
           ],
@@ -110,6 +118,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 119,
+              "Length": 59
             }
           },
           "InterveningIf": {
@@ -152,6 +164,10 @@
                     "OracleLineIndex": 0
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 179,
+                "Length": 90
               }
             }
           ],

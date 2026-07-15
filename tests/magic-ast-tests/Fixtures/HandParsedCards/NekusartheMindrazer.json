@@ -43,6 +43,10 @@
               "Part": "Draw",
               "Edge": "Beginning",
               "Whose": "Any"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 43
             }
           },
           "Effects": [
@@ -54,6 +58,10 @@
               },
               "Player": {
                 "Kind": "ThatPlayer"
+              },
+              "SourceSpan": {
+                "Start": 44,
+                "Length": 38
               }
             }
           ],
@@ -70,6 +78,10 @@
             "Event": "DrawsCard",
             "Filter": {
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 83,
+              "Length": 33
             }
           },
           "Effects": [
@@ -84,6 +96,10 @@
               },
               "Target": {
                 "Kind": "ThatPlayer"
+              },
+              "SourceSpan": {
+                "Start": 117,
+                "Length": 39
               }
             }
           ],

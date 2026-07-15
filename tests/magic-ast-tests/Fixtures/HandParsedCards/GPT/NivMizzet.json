@@ -69,6 +69,10 @@
             "Event": "DrawsCard",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 24
             }
           },
           "Effects": [
@@ -83,6 +87,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 32,
+                "Length": 41
               }
             }
           ],
@@ -108,6 +116,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 78,
+                "Length": 13
               }
             }
           ],

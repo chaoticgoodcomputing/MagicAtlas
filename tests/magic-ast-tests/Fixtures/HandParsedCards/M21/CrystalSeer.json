@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -52,7 +56,11 @@
               },
               "Zone": "Library",
               "Location": "Top",
-              "PutBackInAnyOrder": true
+              "PutBackInAnyOrder": true,
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 77
+              }
             }
           ],
           "SourceSpan": {
@@ -85,6 +93,10 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 111,
+                "Length": 42
               }
             }
           ],

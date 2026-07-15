@@ -74,6 +74,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 20,
+              "Length": 30
             }
           },
           "Effects": [
@@ -112,6 +116,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 51,
+                "Length": 74
               }
             }
           ],

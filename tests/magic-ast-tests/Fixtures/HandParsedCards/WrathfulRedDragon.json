@@ -71,6 +71,10 @@
                 "Dragon"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 45
             }
           },
           "Effects": [
@@ -90,6 +94,10 @@
                     "Dragon"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 53,
+                "Length": 61
               }
             }
           ],

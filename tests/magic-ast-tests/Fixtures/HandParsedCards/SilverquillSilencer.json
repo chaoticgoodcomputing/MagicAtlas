@@ -66,6 +66,10 @@
               ],
               "Controller": "Opponent",
               "ChosenCharacteristic": "CardName"
+            },
+            "SourceSpan": {
+              "Start": 53,
+              "Length": 55
             }
           },
           "Effects": [
@@ -77,6 +81,10 @@
               },
               "Player": {
                 "Kind": "ThatPlayer"
+              },
+              "SourceSpan": {
+                "Start": 109,
+                "Length": 38
               }
             },
             {
@@ -87,6 +95,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 109,
+                "Length": 38
               }
             }
           ],

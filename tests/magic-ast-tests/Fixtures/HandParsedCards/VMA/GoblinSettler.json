@@ -37,6 +37,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -49,6 +53,10 @@
                     "land"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 21
               }
             }
           ],

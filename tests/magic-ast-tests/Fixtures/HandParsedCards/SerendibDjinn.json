@@ -69,6 +69,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 31
             }
           },
           "Effects": [
@@ -81,6 +85,10 @@
                     "land"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 92
               }
             },
             {
@@ -101,6 +109,10 @@
                 "Target": {
                   "Kind": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 92
               }
             }
           ],
@@ -120,6 +132,10 @@
                 "land"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 132,
+              "Length": 25
             }
           },
           "Effects": [
@@ -127,6 +143,10 @@
               "EffectType": "sacrifice",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 158,
+                "Length": 25
               }
             }
           ],

@@ -32,6 +32,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 31
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 32,
+                "Length": 50
               }
             }
           ],
@@ -81,6 +89,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 83,
+              "Length": 33
             }
           },
           "Effects": [
@@ -106,6 +118,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 117,
+                "Length": 42
               }
             }
           ],

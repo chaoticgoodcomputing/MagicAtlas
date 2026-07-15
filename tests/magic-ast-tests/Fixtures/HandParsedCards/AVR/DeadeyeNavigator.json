@@ -77,6 +77,10 @@
                     "EffectType": "exile",
                     "Target": {
                       "Kind": "Self"
+                    },
+                    "SourceSpan": {
+                      "Start": 7,
+                      "Length": 75
                     }
                   },
                   {
@@ -93,6 +97,10 @@
                     "Tapped": false,
                     "UnderControl": {
                       "Kind": "You"
+                    },
+                    "SourceSpan": {
+                      "Start": 7,
+                      "Length": 75
                     }
                   }
                 ],

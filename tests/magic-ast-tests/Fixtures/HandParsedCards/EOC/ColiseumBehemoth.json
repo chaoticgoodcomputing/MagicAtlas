@@ -52,6 +52,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 8,
+              "Length": 25
             }
           },
           "Effects": [
@@ -101,7 +105,11 @@
                   }
                 }
               ],
-              "AllowDuplicates": false
+              "AllowDuplicates": false,
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 13
+              }
             }
           ],
           "SourceSpan": {

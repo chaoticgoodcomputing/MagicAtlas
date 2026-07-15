@@ -68,6 +68,10 @@
                     "artifact"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 25
               }
             }
           ],

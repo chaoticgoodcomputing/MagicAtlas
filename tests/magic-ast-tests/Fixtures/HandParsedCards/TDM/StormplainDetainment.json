@@ -34,6 +34,10 @@
                 "enchantment"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 28
             }
           },
           "Effects": [
@@ -54,6 +58,10 @@
               "Duration": {
                 "DurationType": "untilLeavesBattlefield",
                 "Object": "this enchantment"
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 99
               }
             }
           ],

@@ -37,6 +37,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 33
             }
           },
           "InterveningIf": {
@@ -67,7 +71,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 41,
+                "Length": 120
+              }
             }
           ],
           "AbilityWord": "Void",

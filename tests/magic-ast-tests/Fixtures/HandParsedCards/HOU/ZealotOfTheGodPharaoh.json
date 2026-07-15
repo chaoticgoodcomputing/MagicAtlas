@@ -65,6 +65,10 @@
                     "planeswalker"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 65
               }
             }
           ],

@@ -93,6 +93,10 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 38
               }
             }
           ],

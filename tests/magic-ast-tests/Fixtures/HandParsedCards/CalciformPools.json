@@ -35,7 +35,11 @@
               "EffectType": "addMana",
               "Mana": "{C}",
               "AnyColor": false,
-              "OfChosenColor": false
+              "OfChosenColor": false,
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -71,6 +75,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 23,
+                "Length": 36
               }
             }
           ],
@@ -118,7 +126,11 @@
               "AnyCombinationOf": [
                 "W",
                 "U"
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 106,
+                "Length": 49
+              }
             }
           ],
           "IsManaAbility": true,

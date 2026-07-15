@@ -29,6 +29,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 33
             }
           },
           "InterveningIf": {
@@ -44,6 +48,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 87
               }
             }
           ],
@@ -81,7 +89,11 @@
                   "Controller": "You"
                 }
               },
-              "Count": 1
+              "Count": 1,
+              "SourceSpan": {
+                "Start": 131,
+                "Length": 167
+              }
             }
           ],
           "IsManaAbility": false,

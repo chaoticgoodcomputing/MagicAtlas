@@ -41,7 +41,11 @@
                 "Costs": [],
                 "Effects": [
                   {
-                    "EffectType": "proliferate"
+                    "EffectType": "proliferate",
+                    "SourceSpan": {
+                      "Start": 4,
+                      "Length": 12
+                    }
                   }
                 ],
                 "IsManaAbility": false,
@@ -68,6 +72,10 @@
                     "EffectType": "takeExtraTurn",
                     "Player": {
                       "Kind": "You"
+                    },
+                    "SourceSpan": {
+                      "Start": 6,
+                      "Length": 35
                     }
                   }
                 ],
@@ -96,6 +104,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 98,
+              "Length": 37
             }
           },
           "Effects": [
@@ -103,6 +115,10 @@
               "EffectType": "putAdditionalCounterOfChosenKind",
               "Target": {
                 "Kind": "Target"
+              },
+              "SourceSpan": {
+                "Start": 136,
+                "Length": 96
               }
             }
           ],

@@ -56,6 +56,10 @@
                   "Controller": "You",
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 104
               }
             },
             {
@@ -72,6 +76,10 @@
               "Tapped": false,
               "UnderControl": {
                 "Kind": "Owner"
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 104
               }
             }
           ],
@@ -93,6 +101,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 109,
+              "Length": 44
             }
           },
           "Effects": [
@@ -142,6 +154,10 @@
                   },
                   "CounterType": "+1/+1"
                 }
+              },
+              "SourceSpan": {
+                "Start": 154,
+                "Length": 158
               }
             }
           ],

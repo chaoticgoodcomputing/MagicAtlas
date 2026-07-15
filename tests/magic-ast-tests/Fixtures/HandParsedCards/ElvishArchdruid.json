@@ -83,6 +83,10 @@
                   "Controller": "You",
                   "Zone": "Battlefield"
                 }
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 34
               }
             }
           ],

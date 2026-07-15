@@ -76,6 +76,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 21,
+              "Length": 41
             }
           },
           "Effects": [
@@ -100,6 +104,10 @@
                 "Subtypes": [
                   "Monkey"
                 ]
+              },
+              "SourceSpan": {
+                "Start": 63,
+                "Length": 144
               }
             },
             {
@@ -121,6 +129,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 63,
+                "Length": 144
               }
             }
           ],

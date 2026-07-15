@@ -44,7 +44,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{C}"
+              "Mana": "{C}",
+              "SourceSpan": {
+                "Start": 49,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -66,7 +70,11 @@
               "EffectType": "addMana",
               "Mana": "",
               "AnyColor": true,
-              "SpendRestriction": "cast a creature spell of the chosen type"
+              "SpendRestriction": "cast a creature spell of the chosen type",
+              "SourceSpan": {
+                "Start": 63,
+                "Length": 93
+              }
             }
           ],
           "IsManaAbility": true,

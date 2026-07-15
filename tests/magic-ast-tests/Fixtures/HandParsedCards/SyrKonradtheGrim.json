@@ -41,6 +41,10 @@
                 "creature"
               ],
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 157
             }
           },
           "AdditionalTrigger": {
@@ -76,6 +80,10 @@
               },
               "Target": {
                 "Kind": "EachOpponent"
+              },
+              "SourceSpan": {
+                "Start": 158,
+                "Length": 44
               }
             }
           ],
@@ -113,6 +121,10 @@
               },
               "Player": {
                 "Kind": "EachPlayer"
+              },
+              "SourceSpan": {
+                "Start": 210,
+                "Length": 94
               }
             }
           ],

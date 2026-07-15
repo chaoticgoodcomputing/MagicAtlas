@@ -56,6 +56,10 @@
                 "enchantment"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 13,
+              "Length": 28
             }
           },
           "Effects": [
@@ -67,6 +71,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 42,
+                "Length": 13
               }
             }
           ],

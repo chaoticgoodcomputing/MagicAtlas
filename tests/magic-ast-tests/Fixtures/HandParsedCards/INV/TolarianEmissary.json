@@ -100,6 +100,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 80,
+              "Length": 25
             }
           },
           "InterveningIf": {
@@ -116,6 +120,10 @@
                     "enchantment"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 106,
+                "Length": 46
               }
             }
           ],

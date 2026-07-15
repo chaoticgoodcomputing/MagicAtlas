@@ -56,6 +56,10 @@
                 "land"
               ],
               "IsEnchanted": true
+            },
+            "SourceSpan": {
+              "Start": 13,
+              "Length": 42
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
               "Mana": "{G}",
               "Player": {
                 "Kind": "Controller"
+              },
+              "SourceSpan": {
+                "Start": 56,
+                "Length": 39
               }
             }
           ],

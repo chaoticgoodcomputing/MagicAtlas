@@ -69,6 +69,10 @@
                     "creature"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 38
               }
             }
           ],

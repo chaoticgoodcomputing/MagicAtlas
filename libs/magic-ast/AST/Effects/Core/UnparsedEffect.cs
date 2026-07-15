@@ -14,9 +14,15 @@ using MagicAST.AST.Effects.Traits;
 public sealed record UnparsedEffect : Effect, IUnparsed
 {
   /// <summary>
-  /// Location of this unparsed effect in the original oracle text.
+  /// Non-null projection of the inherited <see cref="Effect.SourceSpan"/> for the
+  /// <see cref="IUnparsed"/> contract, which needs a concrete span to attribute the
+  /// failure to its oracle line. Every unparsed node is constructed with a span, so
+  /// this is effectively always the real span; the <c>?? Empty</c> is a defensive
+  /// floor. An explicit interface implementation — NOT a serialized property, so the
+  /// single serialized SourceSpan remains the inherited <see cref="Effect.SourceSpan"/>
+  /// and there is no duplicate key.
   /// </summary>
-  public required TextSpan SourceSpan { get; init; }
+  TextSpan IUnparsed.SourceSpan => SourceSpan ?? TextSpan.Empty;
 
   public required string RawText { get; init; }
 }

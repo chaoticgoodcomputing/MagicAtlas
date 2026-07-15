@@ -68,6 +68,10 @@
                   ],
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 132
               }
             },
             {
@@ -84,6 +88,10 @@
               "Tapped": true,
               "UnderControl": {
                 "Kind": "Owner"
+              },
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 132
               }
             }
           ],

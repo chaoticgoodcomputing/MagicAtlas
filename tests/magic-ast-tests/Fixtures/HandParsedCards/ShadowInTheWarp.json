@@ -71,7 +71,11 @@
               "Controller": "Opponent"
             },
             "Ordinal": 1,
-            "PerTurn": true
+            "PerTurn": true,
+            "SourceSpan": {
+              "Start": 68,
+              "Length": 66
+            }
           },
           "Effects": [
             {
@@ -85,6 +89,10 @@
               },
               "Target": {
                 "Kind": "ThatPlayer"
+              },
+              "SourceSpan": {
+                "Start": 135,
+                "Length": 48
               }
             }
           ],

@@ -41,6 +41,10 @@
                 "Vampire"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 58
             }
           },
           "Effects": [
@@ -89,6 +93,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 76
               }
             }
           ],

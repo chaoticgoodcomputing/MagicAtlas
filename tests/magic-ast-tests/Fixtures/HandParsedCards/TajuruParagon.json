@@ -91,6 +91,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 72,
+              "Length": 25
             }
           },
           "InterveningIf": {
@@ -111,6 +115,10 @@
                 "SharesCreatureTypeWith": {
                   "Kind": "Self"
                 }
+              },
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 209
               }
             }
           ],

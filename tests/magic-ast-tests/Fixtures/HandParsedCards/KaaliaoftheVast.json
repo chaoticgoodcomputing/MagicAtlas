@@ -74,6 +74,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 35
             }
           },
           "Effects": [
@@ -95,6 +99,10 @@
                 },
                 "Tapped": true,
                 "AttackingThatOpponent": true
+              },
+              "SourceSpan": {
+                "Start": 43,
+                "Length": 125
               }
             }
           ],

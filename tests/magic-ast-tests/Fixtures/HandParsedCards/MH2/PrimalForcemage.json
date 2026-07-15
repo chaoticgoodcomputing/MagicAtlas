@@ -39,6 +39,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 44
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 44
               }
             }
           ],

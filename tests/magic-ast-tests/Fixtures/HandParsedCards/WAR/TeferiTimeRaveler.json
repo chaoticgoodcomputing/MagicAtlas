@@ -76,6 +76,10 @@
                   "When": "Next",
                   "Whose": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 74,
+                "Length": 76
               }
             }
           ],
@@ -107,6 +111,10 @@
                   "Maximum": 1,
                   "Minimum": 0
                 }
+              },
+              "SourceSpan": {
+                "Start": 154,
+                "Length": 93
               }
             },
             {
@@ -117,6 +125,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 154,
+                "Length": 93
               }
             }
           ],

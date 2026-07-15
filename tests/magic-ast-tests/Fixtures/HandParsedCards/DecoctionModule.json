@@ -28,6 +28,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 38
             }
           },
           "Effects": [
@@ -39,6 +43,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 33
               }
             }
           ],
@@ -78,6 +86,10 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 82,
+                "Length": 56
               }
             }
           ],

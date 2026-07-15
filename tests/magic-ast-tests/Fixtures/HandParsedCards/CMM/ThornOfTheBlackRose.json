@@ -53,6 +53,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 11,
+              "Length": 25
             }
           },
           "Effects": [
@@ -60,6 +64,10 @@
               "EffectType": "becomeMonarch",
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 37,
+                "Length": 24
               }
             }
           ],

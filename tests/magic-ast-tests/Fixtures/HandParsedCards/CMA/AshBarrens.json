@@ -30,7 +30,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{C}"
+              "Mana": "{C}",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,

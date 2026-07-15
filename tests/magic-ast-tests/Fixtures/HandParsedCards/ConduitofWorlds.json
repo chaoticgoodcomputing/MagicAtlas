@@ -86,6 +86,10 @@
                 "IfYouDo": {
                   "EffectType": "cantCastAdditionalSpellsThisTurn"
                 }
+              },
+              "SourceSpan": {
+                "Start": 44,
+                "Length": 202
               }
             }
           ],

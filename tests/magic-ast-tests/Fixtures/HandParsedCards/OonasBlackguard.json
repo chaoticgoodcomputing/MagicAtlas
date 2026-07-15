@@ -110,6 +110,10 @@
                   "CounterType": "+1/+1"
                 }
               ]
+            },
+            "SourceSpan": {
+              "Start": 92,
+              "Length": 90
             }
           },
           "Effects": [
@@ -123,7 +127,11 @@
                 "Kind": "ThatPlayer"
               },
               "RevealHand": false,
-              "Random": false
+              "Random": false,
+              "SourceSpan": {
+                "Start": 183,
+                "Length": 29
+              }
             }
           ],
           "SourceSpan": {

@@ -63,6 +63,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "Any"
+            },
+            "SourceSpan": {
+              "Start": 57,
+              "Length": 40
             }
           },
           "Effects": [
@@ -76,6 +80,10 @@
                   ],
                   "Controller": "ThatPlayer"
                 }
+              },
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 40
               }
             }
           ],

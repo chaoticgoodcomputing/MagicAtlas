@@ -90,6 +90,10 @@
             "Event": {
               "Part": "Upkeep",
               "Edge": "Beginning"
+            },
+            "SourceSpan": {
+              "Start": 103,
+              "Length": 31
             }
           },
           "InterveningIf": {
@@ -105,6 +109,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 135,
+                "Length": 93
               }
             }
           ],

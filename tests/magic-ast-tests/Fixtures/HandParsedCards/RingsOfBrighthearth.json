@@ -27,6 +27,10 @@
             "Event": "AbilityActivated",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 32
             }
           },
           "InterveningIf": {
@@ -54,6 +58,10 @@
                   "Kind": "TriggeringAbility"
                 },
                 "MayChooseNewTargets": true
+              },
+              "SourceSpan": {
+                "Start": 33,
+                "Length": 116
               }
             }
           ],

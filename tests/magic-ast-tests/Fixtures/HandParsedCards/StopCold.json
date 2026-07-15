@@ -77,6 +77,10 @@
                 "aura"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 35,
+              "Length": 21
             }
           },
           "Effects": [
@@ -84,6 +88,10 @@
               "EffectType": "tap",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
+              },
+              "SourceSpan": {
+                "Start": 57,
+                "Length": 25
               }
             }
           ],

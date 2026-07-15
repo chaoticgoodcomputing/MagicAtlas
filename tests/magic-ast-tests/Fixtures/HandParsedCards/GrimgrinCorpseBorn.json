@@ -86,6 +86,10 @@
               "EffectType": "untap",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 92,
+                "Length": 46
               }
             },
             {
@@ -97,6 +101,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 92,
+                "Length": 46
               }
             }
           ],
@@ -117,6 +125,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 139,
+              "Length": 25
             }
           },
           "Effects": [
@@ -146,7 +158,11 @@
                     "Value": 1
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 165,
+                "Length": 89
+              }
             }
           ],
           "SourceSpan": {

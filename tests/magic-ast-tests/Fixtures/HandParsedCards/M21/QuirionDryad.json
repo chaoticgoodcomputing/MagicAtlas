@@ -43,6 +43,10 @@
                 "R"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 59
             }
           },
           "Effects": [
@@ -55,6 +59,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 60,
+                "Length": 38
               }
             }
           ],

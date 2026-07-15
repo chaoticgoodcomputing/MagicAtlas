@@ -49,6 +49,10 @@
               ],
               "Controller": "Opponent",
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 35,
+              "Length": 80
             }
           },
           "Effects": [
@@ -56,6 +60,10 @@
               "EffectType": "exile",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 116,
+                "Length": 21
               }
             }
           ],

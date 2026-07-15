@@ -62,6 +62,10 @@
                 "sorcery"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 69,
+              "Length": 53
             }
           },
           "Effects": [
@@ -75,7 +79,11 @@
                 "Kind": "You"
               },
               "RevealHand": false,
-              "Random": false
+              "Random": false,
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 212
+              }
             },
             {
               "EffectType": "drawCards",
@@ -85,6 +93,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 212
               }
             },
             {
@@ -129,6 +141,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 212
               }
             },
             {
@@ -143,6 +159,10 @@
                 "AnyColor": false,
                 "AnyType": false,
                 "OfChosenColor": false
+              },
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 212
               }
             }
           ],

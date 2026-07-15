@@ -97,6 +97,10 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 95,
+              "Length": 44
             }
           },
           "Effects": [
@@ -112,6 +116,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 140,
+                "Length": 73
               }
             }
           ],

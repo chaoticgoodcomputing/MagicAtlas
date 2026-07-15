@@ -55,6 +55,10 @@
                   "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 96
               }
             }
           ],
@@ -78,6 +82,10 @@
                 "Food"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 106,
+              "Length": 29
             }
           },
           "Effects": [
@@ -102,6 +110,10 @@
                 ],
                 "IsCopy": false,
                 "EntersTapped": true
+              },
+              "SourceSpan": {
+                "Start": 136,
+                "Length": 112
               }
             }
           ],

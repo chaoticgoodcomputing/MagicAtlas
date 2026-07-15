@@ -41,6 +41,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 24
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
                 "AbilityText": [
                   "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                 ]
+              },
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 96
               }
             }
           ],
@@ -83,6 +91,10 @@
             "Event": "TokenCreated",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 122,
+              "Length": 27
             }
           },
           "Effects": [
@@ -102,6 +114,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 150,
+                "Length": 76
               }
             }
           ],

@@ -37,6 +37,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -64,6 +68,10 @@
                     "Value": 1
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 45
               }
             }
           ],

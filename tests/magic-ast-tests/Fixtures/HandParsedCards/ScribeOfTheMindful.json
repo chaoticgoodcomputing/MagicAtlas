@@ -70,6 +70,10 @@
                   "Zone": "Graveyard",
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 72
               }
             }
           ],

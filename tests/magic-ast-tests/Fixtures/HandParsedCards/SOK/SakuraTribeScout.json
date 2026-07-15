@@ -48,6 +48,10 @@
                   "Zone": "Hand",
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 61
               }
             }
           ],

@@ -38,12 +38,20 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
             {
               "EffectType": "rollDie",
-              "Sides": 6
+              "Sides": 6,
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 57
+              }
             },
             {
               "EffectType": "gainLife",
@@ -52,6 +60,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 57
               }
             }
           ],

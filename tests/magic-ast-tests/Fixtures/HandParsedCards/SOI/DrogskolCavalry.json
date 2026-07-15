@@ -70,6 +70,10 @@
                 "Spirit"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 42
             }
           },
           "Effects": [
@@ -81,6 +85,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 50,
+                "Length": 17
               }
             }
           ],
@@ -159,6 +167,10 @@
                   }
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 75,
+                "Length": 54
               }
             }
           ],

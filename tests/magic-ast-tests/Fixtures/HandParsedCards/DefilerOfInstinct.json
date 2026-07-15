@@ -123,6 +123,10 @@
                 "R"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 204,
+              "Length": 39
             }
           },
           "Effects": [
@@ -137,6 +141,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 244,
+                "Length": 44
               }
             }
           ],

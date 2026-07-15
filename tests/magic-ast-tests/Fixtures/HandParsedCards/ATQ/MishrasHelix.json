@@ -49,6 +49,10 @@
               "Count": {
                 "QuantityType": "variable",
                 "Name": "X"
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 20
               }
             }
           ],

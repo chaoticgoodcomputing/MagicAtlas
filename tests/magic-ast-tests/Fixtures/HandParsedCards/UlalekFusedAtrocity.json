@@ -60,6 +60,10 @@
                 "Eldrazi"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 33,
+              "Length": 34
             }
           },
           "Effects": [
@@ -113,6 +117,10 @@
                     "MayChooseNewTargets": true
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 68,
+                "Length": 204
               }
             }
           ],

@@ -36,6 +36,10 @@
                 "sorcery"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
             }
           },
           "Effects": [
@@ -60,7 +64,11 @@
                   }
                 }
               },
-              "MayChooseNewTargets": true
+              "MayChooseNewTargets": true,
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 125
+              }
             }
           ],
           "SourceSpan": {

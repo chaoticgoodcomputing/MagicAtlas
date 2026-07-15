@@ -67,6 +67,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 67,
+              "Length": 25
             }
           },
           "InterveningIf": {
@@ -89,6 +93,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 93,
+                "Length": 70
               }
             }
           ],

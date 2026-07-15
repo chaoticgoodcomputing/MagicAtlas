@@ -34,6 +34,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 39
             }
           },
           "Effects": [
@@ -46,6 +50,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 27
               }
             }
           ],

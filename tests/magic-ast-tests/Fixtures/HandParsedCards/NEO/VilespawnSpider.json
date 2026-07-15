@@ -55,6 +55,10 @@
                 "artifact"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 35
             }
           },
           "Effects": [
@@ -63,6 +67,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 42,
+                "Length": 11
               }
             }
           ],

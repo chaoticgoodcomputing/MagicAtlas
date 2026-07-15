@@ -111,6 +111,10 @@
                     "siege"
                   ],
                   "IsSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 141,
+                  "Length": 22
                 }
               },
               "Effects": [
@@ -129,7 +133,11 @@
                     }
                   },
                   "RevealHand": false,
-                  "Random": false
+                  "Random": false,
+                  "SourceSpan": {
+                    "Start": 164,
+                    "Length": 36
+                  }
                 }
               ],
               "SourceSpan": {
@@ -218,6 +226,10 @@
                   "Part": "Upkeep",
                   "Edge": "Beginning",
                   "Whose": "Opponent"
+                },
+                "SourceSpan": {
+                  "Start": 7,
+                  "Length": 42
                 }
               },
               "InterveningIf": {
@@ -246,6 +258,10 @@
                   },
                   "Source": {
                     "Kind": "Self"
+                  },
+                  "SourceSpan": {
+                    "Start": 50,
+                    "Length": 85
                   }
                 }
               ],

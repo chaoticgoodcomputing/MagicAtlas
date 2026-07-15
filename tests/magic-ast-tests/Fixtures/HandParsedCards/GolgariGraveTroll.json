@@ -92,6 +92,10 @@
               "EffectType": "regenerate",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 137,
+                "Length": 26
               }
             }
           ],

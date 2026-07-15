@@ -95,12 +95,20 @@
                 "Event": "SpellCast",
                 "Filter": {
                   "Controller": "You"
+                },
+                "SourceSpan": {
+                  "Start": 0,
+                  "Length": 25
                 }
               },
               "Effects": [
                 {
                   "EffectType": "addMana",
-                  "Mana": "{R}"
+                  "Mana": "{R}",
+                  "SourceSpan": {
+                    "Start": 26,
+                    "Length": 78
+                  }
                 },
                 {
                   "EffectType": "manaPersists",
@@ -110,6 +118,10 @@
                       "Part": "Turn",
                       "Edge": "End"
                     }
+                  },
+                  "SourceSpan": {
+                    "Start": 26,
+                    "Length": 78
                   }
                 }
               ],
@@ -228,6 +240,10 @@
                       "Part": "Turn",
                       "Edge": "End"
                     }
+                  },
+                  "SourceSpan": {
+                    "Start": 15,
+                    "Length": 77
                   }
                 }
               ],

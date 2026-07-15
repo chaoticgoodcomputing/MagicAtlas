@@ -31,7 +31,11 @@
             {
               "EffectType": "addMana",
               "Mana": "",
-              "AnyColor": true
+              "AnyColor": true,
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 27
+              }
             }
           ],
           "IsManaAbility": true,
@@ -51,6 +55,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 32,
+              "Length": 21
             }
           },
           "Effects": [
@@ -75,6 +83,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 54,
+                "Length": 33
               }
             }
           ],

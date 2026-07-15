@@ -45,6 +45,10 @@
                 "land"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 11,
+              "Length": 34
             }
           },
           "Effects": [
@@ -101,6 +105,10 @@
                   ],
                   "IsCopy": false
                 }
+              },
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 148
               }
             }
           ],

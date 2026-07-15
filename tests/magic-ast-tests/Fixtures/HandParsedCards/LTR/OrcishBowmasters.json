@@ -54,6 +54,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 122
             }
           },
           "AdditionalTrigger": {
@@ -76,6 +80,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 129,
+                "Length": 63
               }
             },
             {
@@ -84,7 +92,11 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "ArmySubtype": "Orcs"
+              "ArmySubtype": "Orcs",
+              "SourceSpan": {
+                "Start": 129,
+                "Length": 63
+              }
             }
           ],
           "SourceSpan": {

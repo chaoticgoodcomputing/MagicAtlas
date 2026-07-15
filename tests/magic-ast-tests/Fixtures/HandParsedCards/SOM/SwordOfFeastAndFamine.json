@@ -88,6 +88,10 @@
                 "creature"
               ],
               "IsEquipped": true
+            },
+            "SourceSpan": {
+              "Start": 75,
+              "Length": 58
             }
           },
           "Effects": [
@@ -117,7 +121,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 134,
+                "Length": 65
+              }
             }
           ],
           "SourceSpan": {

@@ -74,6 +74,10 @@
                   "ConditionType": "other",
                   "Text": "this artifact remains tapped"
                 }
+              },
+              "SourceSpan": {
+                "Start": 75,
+                "Length": 72
               }
             }
           ],

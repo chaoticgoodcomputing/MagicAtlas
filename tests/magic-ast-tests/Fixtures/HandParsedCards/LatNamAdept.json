@@ -37,7 +37,11 @@
               "Controller": "You"
             },
             "Ordinal": 2,
-            "PerTurn": true
+            "PerTurn": true,
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 44
+            }
           },
           "Effects": [
             {
@@ -49,6 +53,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 38
               }
             }
           ],

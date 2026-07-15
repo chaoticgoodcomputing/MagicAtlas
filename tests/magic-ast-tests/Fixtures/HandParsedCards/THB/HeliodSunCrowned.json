@@ -87,6 +87,10 @@
             "Event": "GainsLife",
             "Filter": {
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 93,
+              "Length": 22
             }
           },
           "Effects": [
@@ -106,6 +110,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 116,
+                "Length": 67
               }
             }
           ],
@@ -162,6 +170,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 191,
+                "Length": 58
               }
             }
           ],

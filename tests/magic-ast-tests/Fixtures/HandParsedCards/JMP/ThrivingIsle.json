@@ -54,7 +54,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{U}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 75,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -76,7 +80,11 @@
               "EffectType": "addMana",
               "Mana": "",
               "AnyColor": false,
-              "OfChosenColor": true
+              "OfChosenColor": true,
+              "SourceSpan": {
+                "Start": 89,
+                "Length": 34
+              }
             }
           ],
           "IsManaAbility": true,

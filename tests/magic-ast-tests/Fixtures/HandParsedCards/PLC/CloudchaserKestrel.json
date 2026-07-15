@@ -71,6 +71,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 25
             }
           },
           "Effects": [
@@ -83,6 +87,10 @@
                     "enchantment"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 33,
+                "Length": 28
               }
             }
           ],
@@ -127,6 +135,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 50
               }
             }
           ],

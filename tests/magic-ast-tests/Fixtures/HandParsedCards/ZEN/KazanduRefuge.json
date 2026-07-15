@@ -50,6 +50,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 25,
+              "Length": 21
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 17
               }
             }
           ],
@@ -80,7 +88,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{R} or {G}"
+              "Mana": "{R} or {G}",
+              "SourceSpan": {
+                "Start": 69,
+                "Length": 16
+              }
             }
           ],
           "IsManaAbility": true,

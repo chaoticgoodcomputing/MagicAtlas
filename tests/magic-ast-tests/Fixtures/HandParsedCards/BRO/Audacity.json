@@ -102,6 +102,10 @@
                 "aura"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 145,
+              "Length": 59
             }
           },
           "Effects": [
@@ -113,6 +117,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 205,
+                "Length": 13
               }
             }
           ],

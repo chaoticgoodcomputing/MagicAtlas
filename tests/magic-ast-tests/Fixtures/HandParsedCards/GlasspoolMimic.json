@@ -198,7 +198,11 @@
                 {
                   "EffectType": "addMana",
                   "Mana": "{U}",
-                  "AnyColor": false
+                  "AnyColor": false,
+                  "SourceSpan": {
+                    "Start": 29,
+                    "Length": 9
+                  }
                 }
               ],
               "IsManaAbility": true,

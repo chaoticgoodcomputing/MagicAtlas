@@ -60,6 +60,10 @@
                     "player"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 28
               }
             }
           ],

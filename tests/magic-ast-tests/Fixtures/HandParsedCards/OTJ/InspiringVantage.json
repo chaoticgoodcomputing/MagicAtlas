@@ -63,7 +63,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{R} or {W}"
+              "Mana": "{R} or {W}",
+              "SourceSpan": {
+                "Start": 73,
+                "Length": 16
+              }
             }
           ],
           "IsManaAbility": true,

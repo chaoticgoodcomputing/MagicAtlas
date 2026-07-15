@@ -52,6 +52,10 @@
                   "Owner": "Target",
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 33
               }
             }
           ],

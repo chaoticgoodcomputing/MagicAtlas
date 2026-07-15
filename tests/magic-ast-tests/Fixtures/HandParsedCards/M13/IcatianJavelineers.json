@@ -80,6 +80,10 @@
               },
               "Target": {
                 "Kind": "AnyTarget"
+              },
+              "SourceSpan": {
+                "Start": 100,
+                "Length": 33
               }
             }
           ],

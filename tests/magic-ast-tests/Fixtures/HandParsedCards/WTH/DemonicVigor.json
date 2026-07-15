@@ -78,6 +78,10 @@
                 "creature"
               ],
               "IsEnchanted": true
+            },
+            "SourceSpan": {
+              "Start": 48,
+              "Length": 28
             }
           },
           "Effects": [
@@ -85,6 +89,10 @@
               "EffectType": "returnToHand",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 77,
+                "Length": 38
               }
             }
           ],

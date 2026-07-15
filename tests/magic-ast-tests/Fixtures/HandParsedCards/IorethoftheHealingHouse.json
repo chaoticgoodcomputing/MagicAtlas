@@ -49,6 +49,10 @@
                   ],
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 32
               }
             }
           ],
@@ -84,6 +88,10 @@
                   ],
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 41,
+                "Length": 44
               }
             }
           ],

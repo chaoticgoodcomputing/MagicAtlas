@@ -33,6 +33,10 @@
                 "U"
               ],
               "Controller": "Any"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 36
             }
           },
           "Effects": [
@@ -60,6 +64,10 @@
                     ]
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 37,
+                "Length": 52
               }
             }
           ],

@@ -38,7 +38,11 @@
               "Controller": "You"
             },
             "MinimumCount": 1,
-            "DuringYourTurn": true
+            "DuringYourTurn": true,
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 89
+            }
           },
           "Effects": [
             {
@@ -56,6 +60,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 90,
+                "Length": 52
               }
             }
           ],

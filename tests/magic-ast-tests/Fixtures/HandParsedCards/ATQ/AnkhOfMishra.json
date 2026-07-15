@@ -29,6 +29,10 @@
               "CardTypes": [
                 "land"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 22
             }
           },
           "Effects": [
@@ -43,6 +47,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 23,
+                "Length": 56
               }
             }
           ],

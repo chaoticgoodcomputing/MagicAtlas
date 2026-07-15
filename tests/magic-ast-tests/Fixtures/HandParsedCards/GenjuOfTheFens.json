@@ -138,6 +138,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 18,
+                "Length": 146
               }
             }
           ],
@@ -161,6 +165,10 @@
                 "Swamp"
               ],
               "IsEnchanted": true
+            },
+            "SourceSpan": {
+              "Start": 165,
+              "Length": 44
             }
           },
           "Effects": [
@@ -174,6 +182,10 @@
                     "Zone": "Graveyard"
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 210,
+                "Length": 59
               }
             }
           ],

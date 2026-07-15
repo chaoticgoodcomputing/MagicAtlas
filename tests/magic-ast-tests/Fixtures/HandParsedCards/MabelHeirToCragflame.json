@@ -80,6 +80,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 34,
+              "Length": 17
             }
           },
           "Effects": [
@@ -214,6 +218,10 @@
                   }
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 154
               }
             }
           ],

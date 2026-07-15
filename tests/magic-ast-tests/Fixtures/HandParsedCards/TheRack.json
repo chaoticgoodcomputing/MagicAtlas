@@ -44,6 +44,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "ChosenPlayer"
+            },
+            "SourceSpan": {
+              "Start": 45,
+              "Length": 46
             }
           },
           "Effects": [
@@ -72,6 +76,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 92,
+                "Length": 99
               }
             }
           ],

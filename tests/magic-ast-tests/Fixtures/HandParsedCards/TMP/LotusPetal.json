@@ -44,7 +44,11 @@
             {
               "EffectType": "addMana",
               "Mana": "",
-              "AnyColor": true
+              "AnyColor": true,
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 27
+              }
             }
           ],
           "IsManaAbility": true,

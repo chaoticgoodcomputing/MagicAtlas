@@ -47,6 +47,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 25,
+              "Length": 21
             }
           },
           "Effects": [
@@ -91,6 +95,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 48
               }
             }
           ],
@@ -111,7 +119,11 @@
             {
               "EffectType": "addMana",
               "Mana": "{U}",
-              "AnyColor": false
+              "AnyColor": false,
+              "SourceSpan": {
+                "Start": 100,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,

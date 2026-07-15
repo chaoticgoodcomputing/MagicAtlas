@@ -39,6 +39,10 @@
                 "land"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 11,
+              "Length": 34
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 44
               }
             }
           ],

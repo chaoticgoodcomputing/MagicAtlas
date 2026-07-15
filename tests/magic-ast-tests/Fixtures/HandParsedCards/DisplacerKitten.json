@@ -41,6 +41,10 @@
                 "creature"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 12,
+              "Length": 37
             }
           },
           "Effects": [
@@ -83,7 +87,11 @@
                     "Kind": "Owner"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 50,
+                "Length": 122
+              }
             }
           ],
           "SourceSpan": {

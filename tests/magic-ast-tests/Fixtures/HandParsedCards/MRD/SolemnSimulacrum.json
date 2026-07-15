@@ -34,6 +34,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -55,6 +59,10 @@
                 },
                 "Destination": "BattlefieldTapped",
                 "Revealed": false
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 108
               }
             }
           ],
@@ -74,6 +82,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 135,
+              "Length": 23
             }
           },
           "Effects": [
@@ -88,6 +100,10 @@
                 "Player": {
                   "Kind": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 159,
+                "Length": 21
               }
             }
           ],

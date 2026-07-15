@@ -67,7 +67,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 150
+              }
             },
             {
               "EffectType": "conditional",
@@ -89,6 +93,10 @@
                 "Target": {
                   "Kind": "It"
                 }
+              },
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 150
               }
             }
           ],

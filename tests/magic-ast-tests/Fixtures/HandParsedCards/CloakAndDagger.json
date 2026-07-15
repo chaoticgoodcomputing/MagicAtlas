@@ -86,6 +86,10 @@
               "Subtypes": [
                 "Rogue"
               ]
+            },
+            "SourceSpan": {
+              "Start": 94,
+              "Length": 32
             }
           },
           "Effects": [
@@ -96,6 +100,10 @@
                 "Target": {
                   "Kind": "It"
                 }
+              },
+              "SourceSpan": {
+                "Start": 127,
+                "Length": 37
               }
             }
           ],

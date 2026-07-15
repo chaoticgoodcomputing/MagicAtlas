@@ -45,6 +45,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -54,7 +58,11 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "ArmySubtype": "Zombies"
+              "ArmySubtype": "Zombies",
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 166
+              }
             }
           ],
           "Reminder": {

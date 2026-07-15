@@ -88,7 +88,11 @@
               "Controller": "Opponent"
             },
             "Ordinal": 2,
-            "PerTurn": true
+            "PerTurn": true,
+            "SourceSpan": {
+              "Start": 13,
+              "Length": 54
+            }
           },
           "Effects": [
             {
@@ -99,6 +103,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 68,
+                "Length": 17
               }
             }
           ],
@@ -136,6 +144,10 @@
               },
               "Player": {
                 "Kind": "EachPlayer"
+              },
+              "SourceSpan": {
+                "Start": 93,
+                "Length": 26
               }
             }
           ],

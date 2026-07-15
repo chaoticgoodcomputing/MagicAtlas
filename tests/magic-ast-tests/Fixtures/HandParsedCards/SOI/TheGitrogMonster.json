@@ -56,6 +56,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 11,
+              "Length": 31
             }
           },
           "Effects": [
@@ -83,6 +87,10 @@
                     "Value": 1
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 43,
+                "Length": 58
               }
             }
           ],
@@ -118,6 +126,10 @@
                 "land"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 157,
+              "Length": 73
             }
           },
           "Effects": [
@@ -129,6 +141,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 231,
+                "Length": 13
               }
             }
           ],

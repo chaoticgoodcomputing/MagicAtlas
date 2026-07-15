@@ -44,12 +44,20 @@
                 "Swamp"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 33
             }
           },
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{B}"
+              "Mana": "{B}",
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 23
+              }
             }
           ],
           "SourceSpan": {
@@ -93,6 +101,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 62,
+                "Length": 44
               }
             }
           ],

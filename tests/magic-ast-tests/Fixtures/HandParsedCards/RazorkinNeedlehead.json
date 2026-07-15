@@ -54,6 +54,10 @@
             "Event": "DrawsCard",
             "Filter": {
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 49,
+              "Length": 33
             }
           },
           "Effects": [
@@ -68,6 +72,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 83,
+                "Length": 38
               }
             }
           ],

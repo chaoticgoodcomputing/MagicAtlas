@@ -53,6 +53,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 82,
+              "Length": 25
             }
           },
           "Effects": [
@@ -74,6 +78,10 @@
                 },
                 "Destination": "TopOfLibrary",
                 "Revealed": true
+              },
+              "SourceSpan": {
+                "Start": 108,
+                "Length": 101
               }
             }
           ],

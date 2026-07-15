@@ -66,6 +66,10 @@
                   "Goblin"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 87
               }
             }
           ],

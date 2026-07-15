@@ -87,6 +87,10 @@
                     ]
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 16,
+                "Length": 38
               }
             }
           ],

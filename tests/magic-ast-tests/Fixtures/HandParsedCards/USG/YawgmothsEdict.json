@@ -37,6 +37,10 @@
                 "W"
               ],
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 40
             }
           },
           "Effects": [
@@ -63,7 +67,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 41,
+                "Length": 46
+              }
             }
           ],
           "SourceSpan": {

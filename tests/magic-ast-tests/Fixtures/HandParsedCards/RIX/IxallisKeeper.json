@@ -117,7 +117,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 37,
+                "Length": 64
+              }
             }
           ],
           "IsManaAbility": false,

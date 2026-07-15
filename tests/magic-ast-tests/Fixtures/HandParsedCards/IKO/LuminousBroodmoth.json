@@ -72,6 +72,10 @@
                   "Description": "withoutFlying"
                 }
               ]
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 51
             }
           },
           "Effects": [
@@ -90,6 +94,10 @@
                   "QuantityType": "literal",
                   "Value": 1
                 }
+              },
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 84
               }
             }
           ],

@@ -59,6 +59,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 80,
+              "Length": 33
             }
           },
           "InterveningIf": {
@@ -75,6 +79,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 114,
+                "Length": 125
               }
             }
           ],

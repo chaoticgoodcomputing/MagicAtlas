@@ -70,6 +70,10 @@
               },
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 62
               }
             }
           ],

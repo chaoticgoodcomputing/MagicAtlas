@@ -103,6 +103,10 @@
                 "Operator": "GreaterThanOrEqual",
                 "Value": 6
               }
+            },
+            "SourceSpan": {
+              "Start": 64,
+              "Length": 51
             }
           },
           "Effects": [
@@ -128,6 +132,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 116,
+                "Length": 91
               }
             }
           ],

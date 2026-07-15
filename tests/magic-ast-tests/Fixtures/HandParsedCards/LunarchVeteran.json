@@ -104,6 +104,10 @@
                   ],
                   "Controller": "You",
                   "ExcludeSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 0,
+                  "Length": 44
                 }
               },
               "Effects": [
@@ -115,6 +119,10 @@
                   },
                   "Player": {
                     "Kind": "You"
+                  },
+                  "SourceSpan": {
+                    "Start": 45,
+                    "Length": 17
                   }
                 }
               ],
@@ -251,6 +259,10 @@
                   ],
                   "Controller": "You",
                   "ExcludeSelf": true
+                },
+                "SourceSpan": {
+                  "Start": 7,
+                  "Length": 60
                 }
               },
               "Effects": [
@@ -262,6 +274,10 @@
                   },
                   "Player": {
                     "Kind": "You"
+                  },
+                  "SourceSpan": {
+                    "Start": 68,
+                    "Length": 17
                   }
                 }
               ],

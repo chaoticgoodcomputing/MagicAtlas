@@ -48,6 +48,10 @@
                   ],
                   "Zone": "Battlefield"
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 41
               }
             }
           ],

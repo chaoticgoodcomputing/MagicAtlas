@@ -53,6 +53,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "EnchantedPlayer"
+            },
+            "SourceSpan": {
+              "Start": 15,
+              "Length": 45
             }
           },
           "Effects": [
@@ -78,6 +82,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 61,
+                "Length": 80
               }
             }
           ],

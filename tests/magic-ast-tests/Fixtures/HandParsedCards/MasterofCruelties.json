@@ -83,6 +83,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 62,
+              "Length": 57
             }
           },
           "InterveningIf": {
@@ -95,12 +99,20 @@
               "Player": {
                 "Kind": "ThatPlayer"
               },
-              "Total": 1
+              "Total": 1,
+              "SourceSpan": {
+                "Start": 120,
+                "Length": 88
+              }
             },
             {
               "EffectType": "noCombatDamage",
               "Source": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 120,
+                "Length": 88
               }
             }
           ],

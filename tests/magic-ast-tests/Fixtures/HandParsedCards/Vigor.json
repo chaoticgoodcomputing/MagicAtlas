@@ -105,6 +105,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 162,
+              "Length": 48
             }
           },
           "Effects": [
@@ -112,6 +116,10 @@
               "EffectType": "shuffleIntoLibrary",
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 211,
+                "Length": 37
               }
             }
           ],

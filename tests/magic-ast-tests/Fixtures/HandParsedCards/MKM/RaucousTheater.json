@@ -37,7 +37,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{B} or {R}"
+              "Mana": "{B} or {R}",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 18
+              }
             }
           ],
           "IsManaAbility": true,
@@ -74,6 +78,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 48,
+              "Length": 21
             }
           },
           "Effects": [
@@ -82,6 +90,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 70,
+                "Length": 87
               }
             }
           ],

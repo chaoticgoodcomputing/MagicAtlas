@@ -71,6 +71,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 114,
+              "Length": 40
             }
           },
           "Effects": [
@@ -106,6 +110,10 @@
                 },
                 "RevealHand": false,
                 "Random": false
+              },
+              "SourceSpan": {
+                "Start": 155,
+                "Length": 120
               }
             }
           ],

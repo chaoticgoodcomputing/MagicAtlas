@@ -68,6 +68,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 21,
+              "Length": 30
             }
           },
           "Effects": [
@@ -79,6 +83,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 170
               }
             },
             {
@@ -112,6 +120,10 @@
                     "EffectType": "additionalCombatPhase"
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 170
               }
             }
           ],

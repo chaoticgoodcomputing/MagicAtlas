@@ -65,12 +65,20 @@
               ],
               "Controller": "You"
             },
-            "ProducedMana": "{C}"
+            "ProducedMana": "{C}",
+            "SourceSpan": {
+              "Start": 43,
+              "Length": 36
+            }
           },
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{C}"
+              "Mana": "{C}",
+              "SourceSpan": {
+                "Start": 80,
+                "Length": 23
+              }
             }
           ],
           "SourceSpan": {
@@ -90,6 +98,10 @@
               ],
               "IsColorless": true,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 104,
+              "Length": 35
             }
           },
           "Effects": [
@@ -101,6 +113,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 140,
+                "Length": 17
               }
             }
           ],

@@ -74,6 +74,10 @@
               "Edge": "Beginning",
               "When": "Next",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 149,
+              "Length": 36
             }
           },
           "Effects": [
@@ -110,6 +114,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 186,
+                "Length": 48
               }
             }
           ],

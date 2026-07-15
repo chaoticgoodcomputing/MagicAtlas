@@ -52,6 +52,10 @@
                   ],
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 36
               }
             }
           ],

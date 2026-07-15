@@ -32,6 +32,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 31
             }
           },
           "Effects": [
@@ -47,7 +51,11 @@
                   "Controller": "You"
                 }
               },
-              "Tapped": true
+              "Tapped": true,
+              "SourceSpan": {
+                "Start": 32,
+                "Length": 71
+              }
             }
           ],
           "SourceSpan": {

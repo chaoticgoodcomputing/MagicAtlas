@@ -103,6 +103,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 181,
+              "Length": 33
             }
           },
           "Effects": [
@@ -130,7 +134,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 215,
+                "Length": 40
+              }
             }
           ],
           "SourceSpan": {

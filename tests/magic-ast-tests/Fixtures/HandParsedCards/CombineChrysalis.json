@@ -135,6 +135,10 @@
                   "Beast"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 75,
+                "Length": 69
               }
             }
           ],

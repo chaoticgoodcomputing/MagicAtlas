@@ -60,6 +60,10 @@
               "Part": "Upkeep",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 87,
+              "Length": 31
             }
           },
           "InterveningIf": {
@@ -76,6 +80,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 119,
+                "Length": 53
               }
             }
           ],
@@ -111,6 +119,10 @@
               "Amount": {
                 "QuantityType": "countersRemovedThisWay",
                 "CounterType": "storage"
+              },
+              "SourceSpan": {
+                "Start": 231,
+                "Length": 51
               }
             }
           ],

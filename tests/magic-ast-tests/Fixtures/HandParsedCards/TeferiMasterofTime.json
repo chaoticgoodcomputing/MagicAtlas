@@ -62,6 +62,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 105,
+                "Length": 34
               }
             },
             {
@@ -74,7 +78,11 @@
                 "Kind": "You"
               },
               "RevealHand": false,
-              "Random": false
+              "Random": false,
+              "SourceSpan": {
+                "Start": 105,
+                "Length": 34
+              }
             }
           ],
           "IsManaAbility": false,
@@ -99,6 +107,10 @@
                   ],
                   "Controller": "Opponent"
                 }
+              },
+              "SourceSpan": {
+                "Start": 143,
+                "Length": 146
               }
             }
           ],
@@ -119,7 +131,11 @@
               "Player": {
                 "Kind": "You"
               },
-              "Count": 2
+              "Count": 2,
+              "SourceSpan": {
+                "Start": 294,
+                "Length": 37
+              }
             }
           ],
           "IsManaAbility": false,

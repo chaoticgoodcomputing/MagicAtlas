@@ -105,6 +105,17 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     var costPart = text[..colonIndex].Trim();
     var effectPart = text[(colonIndex + 1)..].Trim();
 
+    // Clause-accurate effect-half span (upstream-atlas-data-plan §4): the region after
+    // the cost colon, absolute into the original oracle text. Half-granularity — every
+    // effect the ability produces shares it. Mirrors the precedent already used for the
+    // L1 UnstructuredEffect fallback below; hoisted here so the success path stamps it
+    // onto each parsed effect too. (An em-dash ability-word prefix, if present, is not
+    // reflected in colonIndex — a pre-existing limitation shared with the fallback.)
+    var effectSpan = new MagicAST.AST.TextSpan(
+      clause.SourceSpan.Start + colonIndex + 1,
+      Math.Max(0, clause.RawText.Length - (colonIndex + 1))
+    );
+
     // Parse costs
     var costs = ParseCosts(costPart, classification);
     if (costs == null)
@@ -162,10 +173,6 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       // drop. Upgraded from UnparsedEffect (L0) to UnstructuredEffect (L1) as part
       // of the fidelity ladder; the parsed cost gives the interaction graph its
       // consume-side ports.
-      var effectSpan = new MagicAST.AST.TextSpan(
-        clause.SourceSpan.Start + colonIndex + 1,
-        Math.Max(0, clause.RawText.Length - (colonIndex + 1))
-      );
       var unparsedEffect = new MagicAST.AST.Effects.Core.UnstructuredEffect
       {
         SourceSpan = effectSpan,
@@ -208,6 +215,13 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       var existing = restrictions ?? [];
       restrictions = [..existing, ActivationRestriction.OnlyOnce];
     }
+
+    // Stamp the clause-accurate effect-half span on every parsed effect (half-granularity:
+    // all emits share the post-colon region). Only SourceSpan changes; parsed effect
+    // kinds/values are untouched, so the port graph's emit ports trace back to the
+    // post-colon effect substring while the cost-derived consumes fall back to the whole
+    // ability span (cost-span threading is out of scope — see PortGraph consume fallback).
+    effects = effects.Select(e => e with { SourceSpan = effectSpan }).ToList();
 
     // Build the activated ability
     return new ActivatedAbility

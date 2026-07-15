@@ -38,7 +38,11 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "RestDestination": "BottomOfLibrary"
+              "RestDestination": "BottomOfLibrary",
+              "SourceSpan": {
+                "Start": 3,
+                "Length": 119
+              }
             }
           ],
           "IsManaAbility": false,
@@ -67,6 +71,10 @@
                     "permanent"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 126,
+                "Length": 36
               }
             }
           ],
@@ -108,6 +116,10 @@
                     "OracleLineIndex": 0
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 167,
+                "Length": 146
               }
             }
           ],

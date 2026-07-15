@@ -55,6 +55,10 @@
                 "Quantity": {
                   "QuantityType": "anyAmount"
                 }
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 127
               }
             }
           ],
@@ -117,6 +121,10 @@
                 "Quantity": {
                   "QuantityType": "anyAmount"
                 }
+              },
+              "SourceSpan": {
+                "Start": 152,
+                "Length": 147
               }
             }
           ],

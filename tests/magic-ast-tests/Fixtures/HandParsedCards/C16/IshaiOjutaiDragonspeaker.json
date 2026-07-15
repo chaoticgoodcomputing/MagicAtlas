@@ -69,6 +69,10 @@
             "Event": "SpellCast",
             "Filter": {
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 34
             }
           },
           "Effects": [
@@ -81,6 +85,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 42,
+                "Length": 30
               }
             }
           ],

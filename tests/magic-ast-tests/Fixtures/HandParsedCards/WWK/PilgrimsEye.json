@@ -63,6 +63,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 25
             }
           },
           "Effects": [
@@ -84,6 +88,10 @@
                 },
                 "Destination": "Hand",
                 "Revealed": true
+              },
+              "SourceSpan": {
+                "Start": 33,
+                "Length": 99
               }
             }
           ],

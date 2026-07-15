@@ -58,6 +58,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 129,
+                "Length": 46
               }
             },
             {
@@ -68,10 +72,18 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 129,
+                "Length": 46
               }
             },
             {
-              "EffectType": "proliferate"
+              "EffectType": "proliferate",
+              "SourceSpan": {
+                "Start": 129,
+                "Length": 46
+              }
             }
           ],
           "IsManaAbility": false,
@@ -98,7 +110,11 @@
               },
               "CardTypes": [
                 "artifact"
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 179,
+                "Length": 153
+              }
             },
             {
               "EffectType": "changeSubtype",
@@ -107,7 +123,11 @@
               },
               "Subtypes": [
                 "Treasure"
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 179,
+                "Length": 153
+              }
             },
             {
               "EffectType": "gainAbility",
@@ -145,6 +165,10 @@
                 ],
                 "IsManaAbility": true,
                 "OracleLineIndex": 0
+              },
+              "SourceSpan": {
+                "Start": 179,
+                "Length": 153
               }
             },
             {
@@ -152,7 +176,11 @@
               "Target": {
                 "Kind": "It"
               },
-              "AbilityText": "all other abilities"
+              "AbilityText": "all other abilities",
+              "SourceSpan": {
+                "Start": 179,
+                "Length": 153
+              }
             }
           ],
           "IsManaAbility": false,
@@ -183,6 +211,10 @@
                   "QuantityType": "calculated",
                   "Expression": "the difference"
                 }
+              },
+              "SourceSpan": {
+                "Start": 336,
+                "Length": 116
               }
             }
           ],

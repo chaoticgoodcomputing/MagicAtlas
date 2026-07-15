@@ -108,6 +108,10 @@
                   ],
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 60,
+                "Length": 112
               }
             },
             {
@@ -141,6 +145,10 @@
                   ],
                   "IsCopy": false
                 }
+              },
+              "SourceSpan": {
+                "Start": 60,
+                "Length": 112
               }
             }
           ],

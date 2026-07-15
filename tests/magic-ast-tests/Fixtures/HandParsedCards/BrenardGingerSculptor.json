@@ -113,6 +113,10 @@
               "IsToken": false,
               "Controller": "You",
               "ExcludeSelf": true
+            },
+            "SourceSpan": {
+              "Start": 79,
+              "Length": 51
             }
           },
           "Effects": [
@@ -196,6 +200,10 @@
                     }
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 131,
+                "Length": 216
               }
             }
           ],

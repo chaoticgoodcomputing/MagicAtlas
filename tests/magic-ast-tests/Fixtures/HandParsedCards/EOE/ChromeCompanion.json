@@ -34,6 +34,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 37
             }
           },
           "Effects": [
@@ -45,6 +49,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 38,
+                "Length": 17
               }
             }
           ],
@@ -81,6 +89,10 @@
                   ],
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 65,
+                "Length": 71
               }
             }
           ],

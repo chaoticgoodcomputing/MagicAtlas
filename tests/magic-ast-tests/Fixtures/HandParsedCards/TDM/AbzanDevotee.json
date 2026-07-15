@@ -49,7 +49,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{W}, {B}, or {G}"
+              "Mana": "{W}, {B}, or {G}",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 52
+              }
             }
           ],
           "Restrictions": [
@@ -89,6 +93,10 @@
                 "Filter": {
                   "Zone": "Graveyard"
                 }
+              },
+              "SourceSpan": {
+                "Start": 64,
+                "Length": 51
               }
             }
           ],

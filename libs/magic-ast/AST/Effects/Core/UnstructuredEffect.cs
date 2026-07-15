@@ -29,10 +29,8 @@ public sealed record UnstructuredEffect : Effect, IResidual
   [FreeTextField]
   public required string Text { get; init; }
 
-  /// <summary>
-  /// Location of this residual in the original oracle text — used to attribute it
-  /// back to its oracle line(s) and to account its character mass against the
-  /// card's total (the residual-mass fidelity metric).
-  /// </summary>
-  public required TextSpan SourceSpan { get; init; }
+  // Location of this residual in the original oracle text — used to attribute it back
+  // to its oracle line(s) and to account its character mass against the card's total
+  // (the residual-mass fidelity metric). Rides on the inherited <see cref="Effect.SourceSpan"/>
+  // (always constructed with a concrete span), so there is a single serialized copy.
 }

@@ -82,6 +82,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 13,
+              "Length": 25
             }
           },
           "Effects": [
@@ -103,6 +107,10 @@
                 ],
                 "IsCopy": false,
                 "EntersTapped": true
+              },
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 128
               }
             }
           ],

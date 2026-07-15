@@ -39,6 +39,10 @@
                 "enchantment"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 16,
+              "Length": 42
             }
           },
           "Effects": [
@@ -55,6 +59,10 @@
                     "player"
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 31
               }
             }
           ],

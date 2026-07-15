@@ -34,6 +34,10 @@
                 "artifact"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 51
             }
           },
           "Effects": [
@@ -54,6 +58,10 @@
                     }
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 103
               }
             }
           ],

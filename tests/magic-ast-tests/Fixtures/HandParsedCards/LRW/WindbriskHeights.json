@@ -56,7 +56,11 @@
               "Mana": "{W}",
               "AnyColor": false,
               "AnyType": false,
-              "OfChosenColor": false
+              "OfChosenColor": false,
+              "SourceSpan": {
+                "Start": 156,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,

@@ -48,6 +48,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 9,
+                "Length": 39
               }
             }
           ],
@@ -99,7 +103,11 @@
                     "CounterType": "charge"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 110,
+                "Length": 78
+              }
             }
           ],
           "IsManaAbility": true,

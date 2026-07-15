@@ -33,6 +33,10 @@
                 "G"
               ],
               "Controller": "Any"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 37
             }
           },
           "Effects": [
@@ -60,6 +64,10 @@
                     ]
                   }
                 }
+              },
+              "SourceSpan": {
+                "Start": 38,
+                "Length": 52
               }
             }
           ],

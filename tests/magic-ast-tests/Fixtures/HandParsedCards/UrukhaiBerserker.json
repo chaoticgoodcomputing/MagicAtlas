@@ -38,11 +38,19 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
             {
-              "EffectType": "ringTemptsYou"
+              "EffectType": "ringTemptsYou",
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 21
+              }
             }
           ],
           "SourceSpan": {

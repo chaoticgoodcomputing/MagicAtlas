@@ -36,6 +36,10 @@
               "CardTypes": [
                 "creature"
               ]
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 47
             }
           },
           "Effects": [
@@ -67,7 +71,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 48,
+                "Length": 48
+              }
             }
           ],
           "SourceSpan": {

@@ -76,6 +76,10 @@
                 "B"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 126,
+              "Length": 31
             }
           },
           "Effects": [
@@ -88,6 +92,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 158,
+                "Length": 31
               }
             }
           ],

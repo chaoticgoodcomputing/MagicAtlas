@@ -55,7 +55,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{R} or {G}"
+              "Mana": "{R} or {G}",
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 16
+              }
             }
           ],
           "IsManaAbility": true,
@@ -87,6 +91,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 55,
+                "Length": 87
               }
             }
           ],

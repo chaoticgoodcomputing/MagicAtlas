@@ -106,7 +106,11 @@
               ],
               "Controller": "You"
             },
-            "MinimumCount": 1
+            "MinimumCount": 1,
+            "SourceSpan": {
+              "Start": 48,
+              "Length": 40
+            }
           },
           "Effects": [
             {
@@ -131,6 +135,10 @@
                   "Squirrel"
                 ],
                 "IsCopy": false
+              },
+              "SourceSpan": {
+                "Start": 89,
+                "Length": 44
               }
             }
           ],
@@ -176,6 +184,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 146,
+                "Length": 128
               }
             }
           ],

@@ -48,6 +48,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 25,
+              "Length": 21
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 47,
+                "Length": 47
               }
             }
           ],
@@ -82,7 +90,11 @@
               "EffectType": "addMana",
               "Mana": "{W}{U}",
               "AnyColor": false,
-              "OfChosenColor": false
+              "OfChosenColor": false,
+              "SourceSpan": {
+                "Start": 99,
+                "Length": 12
+              }
             }
           ],
           "IsManaAbility": true,

@@ -57,6 +57,10 @@
                           "permanent"
                         ]
                       }
+                    },
+                    "SourceSpan": {
+                      "Start": 4,
+                      "Length": 22
                     }
                   }
                 ],

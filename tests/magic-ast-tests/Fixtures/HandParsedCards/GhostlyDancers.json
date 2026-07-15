@@ -66,6 +66,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 25
             }
           },
           "Effects": [
@@ -121,7 +125,11 @@
                   }
                 }
               ],
-              "AllowDuplicates": false
+              "AllowDuplicates": false,
+              "SourceSpan": {
+                "Start": 33,
+                "Length": 107
+              }
             }
           ],
           "SourceSpan": {
@@ -141,6 +149,10 @@
                 "enchantment"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 149,
+              "Length": 79
             }
           },
           "AdditionalTrigger": {
@@ -206,6 +218,10 @@
                     "OracleLineIndex": 0
                   }
                 ]
+              },
+              "SourceSpan": {
+                "Start": 229,
+                "Length": 54
               }
             }
           ],

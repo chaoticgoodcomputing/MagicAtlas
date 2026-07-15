@@ -41,6 +41,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -61,6 +65,10 @@
                 "Subtypes": [
                   "Dragon"
                 ]
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 199
               }
             }
           ],

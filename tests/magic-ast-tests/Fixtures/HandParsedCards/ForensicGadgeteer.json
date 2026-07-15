@@ -40,11 +40,19 @@
                 "artifact"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 35
             }
           },
           "Effects": [
             {
-              "EffectType": "investigate"
+              "EffectType": "investigate",
+              "SourceSpan": {
+                "Start": 36,
+                "Length": 100
+              }
             }
           ],
           "Reminder": {

@@ -57,7 +57,11 @@
               "Mana": "{G}{G}",
               "AnyColor": false,
               "AnyType": false,
-              "OfChosenColor": false
+              "OfChosenColor": false,
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 29
+              }
             },
             {
               "EffectType": "gainLife",
@@ -67,6 +71,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 98,
+                "Length": 29
               }
             }
           ],
@@ -88,6 +96,10 @@
               ],
               "IsToken": false,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 128,
+              "Length": 47
             }
           },
           "Effects": [
@@ -115,7 +127,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 176,
+                "Length": 43
+              }
             }
           ],
           "SourceSpan": {

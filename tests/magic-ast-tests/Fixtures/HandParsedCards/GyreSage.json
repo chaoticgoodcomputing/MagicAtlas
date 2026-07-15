@@ -65,6 +65,10 @@
                 "On": {
                   "Kind": "Self"
                 }
+              },
+              "SourceSpan": {
+                "Start": 159,
+                "Length": 49
               }
             }
           ],

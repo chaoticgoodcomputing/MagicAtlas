@@ -102,6 +102,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 28,
+              "Length": 30
             }
           },
           "Effects": [
@@ -120,6 +124,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 59,
+                "Length": 61
               }
             }
           ],

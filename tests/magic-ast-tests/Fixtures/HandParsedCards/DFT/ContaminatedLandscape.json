@@ -39,7 +39,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{C}"
+              "Mana": "{C}",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 9
+              }
             }
           ],
           "IsManaAbility": true,
@@ -101,7 +105,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 39,
+                "Length": 113
+              }
             }
           ],
           "IsManaAbility": false,

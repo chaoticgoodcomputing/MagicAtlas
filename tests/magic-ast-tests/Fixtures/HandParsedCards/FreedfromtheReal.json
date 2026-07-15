@@ -69,6 +69,10 @@
               "EffectType": "tap",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
+              },
+              "SourceSpan": {
+                "Start": 21,
+                "Length": 24
               }
             }
           ],
@@ -99,6 +103,10 @@
               "EffectType": "untap",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
+              },
+              "SourceSpan": {
+                "Start": 50,
+                "Length": 26
               }
             }
           ],

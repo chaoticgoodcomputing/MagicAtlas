@@ -52,7 +52,11 @@
               "EffectType": "addMana",
               "Mana": "{B} or {R}",
               "AnyColor": false,
-              "OfChosenColor": false
+              "OfChosenColor": false,
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 16
+              }
             }
           ],
           "IsManaAbility": true,
@@ -136,6 +140,10 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 56,
+                "Length": 105
               }
             }
           ],
@@ -156,6 +164,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 162,
+              "Length": 26
             }
           },
           "Effects": [
@@ -181,6 +193,10 @@
                 "Player": {
                   "Kind": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 189,
+                "Length": 48
               }
             }
           ],

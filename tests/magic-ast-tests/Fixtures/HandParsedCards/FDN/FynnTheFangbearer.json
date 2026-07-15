@@ -65,6 +65,10 @@
                   "Keyword": "Deathtouch"
                 }
               ]
+            },
+            "SourceSpan": {
+              "Start": 84,
+              "Length": 79
             }
           },
           "Effects": [
@@ -77,6 +81,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 164,
+                "Length": 98
               }
             }
           ],

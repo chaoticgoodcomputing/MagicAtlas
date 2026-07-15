@@ -87,6 +87,10 @@
                     "Count": {
                       "QuantityType": "literal",
                       "Value": 1
+                    },
+                    "SourceSpan": {
+                      "Start": 9,
+                      "Length": 40
                     }
                   }
                 ],

@@ -96,6 +96,10 @@
                     }
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 151,
+                "Length": 36
               }
             }
           ],

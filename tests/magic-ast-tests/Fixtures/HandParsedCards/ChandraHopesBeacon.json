@@ -44,6 +44,10 @@
                 "sorcery"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
             }
           },
           "Effects": [
@@ -52,7 +56,11 @@
               "Target": {
                 "Kind": "It"
               },
-              "MayChooseNewTargets": true
+              "MayChooseNewTargets": true,
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 93
+              }
             }
           ],
           "Restrictions": [
@@ -81,7 +89,11 @@
                 "B",
                 "R",
                 "G"
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 143,
+                "Length": 43
+              }
             }
           ],
           "IsManaAbility": false,
@@ -117,6 +129,10 @@
                   "When": "Next",
                   "Whose": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 190,
+                "Length": 147
               }
             }
           ],
@@ -148,6 +164,10 @@
                   "Maximum": 2,
                   "Minimum": 0
                 }
+              },
+              "SourceSpan": {
+                "Start": 341,
+                "Length": 53
               }
             }
           ],

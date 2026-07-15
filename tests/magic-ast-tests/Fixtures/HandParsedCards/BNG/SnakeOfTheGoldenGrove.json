@@ -55,6 +55,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 100,
+              "Length": 25
             }
           },
           "InterveningIf": {
@@ -70,6 +74,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 126,
+                "Length": 41
               }
             }
           ],

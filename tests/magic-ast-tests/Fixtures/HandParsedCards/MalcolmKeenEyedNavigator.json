@@ -73,6 +73,10 @@
                 "Pirate"
               ],
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 7,
+              "Length": 70
             }
           },
           "Effects": [
@@ -96,6 +100,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 78,
+                "Length": 140
               }
             }
           ],

@@ -58,7 +58,11 @@
                 },
                 "Operation": "add"
               },
-              "SpendRestriction": "cast creature spells"
+              "SpendRestriction": "cast creature spells",
+              "SourceSpan": {
+                "Start": 29,
+                "Length": 127
+              }
             }
           ],
           "IsManaAbility": true,

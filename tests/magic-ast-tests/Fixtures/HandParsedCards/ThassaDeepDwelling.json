@@ -88,6 +88,10 @@
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
+            },
+            "SourceSpan": {
+              "Start": 92,
+              "Length": 33
             }
           },
           "Effects": [
@@ -127,7 +131,11 @@
                     "Kind": "You"
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 126,
+                "Length": 112
+              }
             }
           ],
           "SourceSpan": {
@@ -166,6 +174,10 @@
                   ],
                   "ExcludeSelf": true
                 }
+              },
+              "SourceSpan": {
+                "Start": 246,
+                "Length": 29
               }
             }
           ],

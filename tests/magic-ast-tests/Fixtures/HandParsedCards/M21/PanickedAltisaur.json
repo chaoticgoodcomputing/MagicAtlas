@@ -66,6 +66,10 @@
               },
               "Target": {
                 "Kind": "EachOpponent"
+              },
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 47
               }
             }
           ],

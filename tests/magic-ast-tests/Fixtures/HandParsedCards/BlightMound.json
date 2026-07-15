@@ -112,6 +112,10 @@
               ],
               "IsToken": false,
               "Controller": "You"
+            },
+            "SourceSpan": {
+              "Start": 55,
+              "Length": 45
             }
           },
           "Effects": [
@@ -166,6 +170,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 101,
+                "Length": 95
               }
             }
           ],

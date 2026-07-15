@@ -33,7 +33,11 @@
           "Effects": [
             {
               "EffectType": "addMana",
-              "Mana": "{R}{W}"
+              "Mana": "{R}{W}",
+              "SourceSpan": {
+                "Start": 4,
+                "Length": 12
+              }
             }
           ],
           "IsManaAbility": true,
@@ -70,6 +74,10 @@
                 "land"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 42,
+              "Length": 21
             }
           },
           "Effects": [
@@ -83,6 +91,10 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 64,
+                "Length": 47
               }
             }
           ],

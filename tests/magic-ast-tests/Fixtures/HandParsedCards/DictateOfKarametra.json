@@ -53,6 +53,10 @@
                 "land"
               ],
               "Controller": "Any"
+            },
+            "SourceSpan": {
+              "Start": 6,
+              "Length": 38
             }
           },
           "Effects": [
@@ -62,6 +66,10 @@
               "AnyType": true,
               "Player": {
                 "Kind": "ThatPlayer"
+              },
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 58
               }
             }
           ],

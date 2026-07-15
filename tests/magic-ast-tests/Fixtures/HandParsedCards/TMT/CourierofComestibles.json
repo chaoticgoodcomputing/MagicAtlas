@@ -38,6 +38,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -78,6 +82,10 @@
                     "{2}, {T}, Sacrifice this artifact: You gain 3 life."
                   ]
                 }
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 238
               }
             }
           ],

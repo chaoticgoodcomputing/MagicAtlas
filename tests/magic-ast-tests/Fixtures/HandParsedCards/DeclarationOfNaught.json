@@ -65,6 +65,10 @@
                   ],
                   "ChosenCharacteristic": "CardName"
                 }
+              },
+              "SourceSpan": {
+                "Start": 52,
+                "Length": 43
               }
             }
           ],

@@ -82,7 +82,11 @@
               "Target": {
                 "Kind": "Self"
               },
-              "ChosenSubtype": "CreatureType"
+              "ChosenSubtype": "CreatureType",
+              "SourceSpan": {
+                "Start": 11,
+                "Length": 74
+              }
             }
           ],
           "IsManaAbility": false,

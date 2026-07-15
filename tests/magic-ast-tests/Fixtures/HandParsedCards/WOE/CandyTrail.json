@@ -32,6 +32,10 @@
                 "artifact"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 25
             }
           },
           "Effects": [
@@ -40,6 +44,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 8
               }
             }
           ],
@@ -87,6 +95,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 69,
+                "Length": 33
               }
             },
             {
@@ -97,6 +109,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 69,
+                "Length": 33
               }
             }
           ],

@@ -188,6 +188,10 @@
                 "permanent"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 216,
+              "Length": 41
             }
           },
           "Effects": [
@@ -224,7 +228,11 @@
                     }
                   }
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 258,
+                "Length": 121
+              }
             }
           ],
           "SourceSpan": {

@@ -59,7 +59,11 @@
           "Kind": "triggered",
           "Trigger": {
             "Timing": "Whenever",
-            "Event": "DiceRolled"
+            "Event": "DiceRolled",
+            "SourceSpan": {
+              "Start": 101,
+              "Length": 34
+            }
           },
           "Effects": [
             {
@@ -71,6 +75,10 @@
               "Count": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 136,
+                "Length": 29
               }
             }
           ],

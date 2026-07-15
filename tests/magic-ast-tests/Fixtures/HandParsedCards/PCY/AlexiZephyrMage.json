@@ -78,6 +78,10 @@
                   "QuantityType": "variable",
                   "Name": "X"
                 }
+              },
+              "SourceSpan": {
+                "Start": 31,
+                "Length": 50
               }
             }
           ],

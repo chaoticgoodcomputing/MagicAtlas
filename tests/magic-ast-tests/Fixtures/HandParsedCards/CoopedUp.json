@@ -95,6 +95,10 @@
               "EffectType": "exile",
               "Target": {
                 "Kind": "EnchantedOrEquipped"
+              },
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 26
               }
             }
           ],

@@ -94,6 +94,10 @@
                 "creature"
               ],
               "IsSelf": true
+            },
+            "SourceSpan": {
+              "Start": 96,
+              "Length": 17
             }
           },
           "Effects": [
@@ -105,6 +109,10 @@
               },
               "Player": {
                 "Kind": "You"
+              },
+              "SourceSpan": {
+                "Start": 114,
+                "Length": 91
               }
             },
             {
@@ -119,7 +127,11 @@
                   "Controller": "You"
                 }
               },
-              "Tapped": true
+              "Tapped": true,
+              "SourceSpan": {
+                "Start": 114,
+                "Length": 91
+              }
             }
           ],
           "SourceSpan": {

@@ -53,6 +53,10 @@
             "Event": "SpellCast",
             "Filter": {
               "Controller": "Opponent"
+            },
+            "SourceSpan": {
+              "Start": 10,
+              "Length": 34
             }
           },
           "InterveningIf": {
@@ -64,6 +68,10 @@
               "EffectType": "counterSpell",
               "Target": {
                 "Kind": "It"
+              },
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 53
               }
             }
           ],
@@ -116,10 +124,18 @@
                   "Part": "Turn",
                   "Edge": "End"
                 }
+              },
+              "SourceSpan": {
+                "Start": 117,
+                "Length": 82
               }
             },
             {
-              "EffectType": "ringTemptsYou"
+              "EffectType": "ringTemptsYou",
+              "SourceSpan": {
+                "Start": 117,
+                "Length": 82
+              }
             }
           ],
           "IsManaAbility": false,
