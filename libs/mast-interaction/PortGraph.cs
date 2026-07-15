@@ -342,21 +342,43 @@ public sealed class PortWalk
       // consumes have no Trigger node, spell effects carry no per-effect span, etc.
       var abilitySpan = ReadSpan(ability);
       var abilityLine = ability["OracleLineIndex"]?.GetValue<int>() ?? 0;
-      var triggerSpan = (ability["Trigger"] is JsonObject trigObj ? ReadSpan(trigObj) : null) ?? abilitySpan;
-      MagicAST.AST.TextSpan? effectSpan = null;
+      var rawTrigger = ability["Trigger"] is JsonObject trigObj ? ReadSpan(trigObj) : null;
+      MagicAST.AST.TextSpan? rawEffect = null;
       foreach (var eff in ability["Effects"] as JsonArray ?? [])
         if (eff is JsonObject effObj && ReadSpan(effObj) is { } es)
         {
-          effectSpan = es;
+          rawEffect = es;
           break;
         }
-      effectSpan ??= abilitySpan;
-      if (triggerSpan is not null || effectSpan is not null || abilityLine != 0)
+
+      // A child span only helps if it genuinely NARROWS the ability — an unstructured
+      // effect (or a trigger with no parsed span) re-carries the whole-ability span, which
+      // tells us nothing. When the specific span is absent we DERIVE the half from the
+      // boundary between trigger and effect: emit region = after the trigger; consume/cost
+      // region (activated, no trigger) = before the effect.
+      bool Narrows(MagicAST.AST.TextSpan? child) =>
+        child is { } c && abilitySpan is { } a && (c.Start != a.Start || c.Length != a.Length);
+      var triggerNarrows = Narrows(rawTrigger);
+      var effectNarrows = Narrows(rawEffect);
+
+      MagicAST.AST.TextSpan? consumeSpan =
+        rawTrigger is { } trg ? trg
+        : effectNarrows && abilitySpan is { } ac && rawEffect is { } reC
+          ? MagicAST.AST.TextSpan.FromBounds(ac.Start, reC.Start)
+          : abilitySpan;
+
+      MagicAST.AST.TextSpan? emitSpan =
+        effectNarrows ? rawEffect
+        : triggerNarrows && abilitySpan is { } ae && rawTrigger is { } rtE
+          ? MagicAST.AST.TextSpan.FromBounds(rtE.End, ae.End)
+          : abilitySpan;
+
+      if (consumeSpan is not null || emitSpan is not null || abilityLine != 0)
       {
         for (var i = 0; i < consumes.Count; i++)
-          consumes[i] = consumes[i] with { SourceSpan = triggerSpan, OracleLineIndex = abilityLine };
+          consumes[i] = consumes[i] with { SourceSpan = consumeSpan, OracleLineIndex = abilityLine };
         for (var i = 0; i < emits.Count; i++)
-          emits[i] = emits[i] with { SourceSpan = effectSpan, OracleLineIndex = abilityLine };
+          emits[i] = emits[i] with { SourceSpan = emitSpan, OracleLineIndex = abilityLine };
       }
 
       ports.AddRange(consumes);
