@@ -38,9 +38,10 @@ import {
   ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY,
   ORACLE_SPANS_QUERY,
   PORT_CANDIDATES_QUERY,
+  CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
 } from "../queries";
 import {
-  CARDPOOL, DECKS, FAMCARDS, GROUPS, HEADLINE_STATS, ORACLE,
+  DECKS, FAMCARDS, GROUPS, HEADLINE_STATS, ORACLE,
   TIERS, tierRank,
   edgeKey, ensureFamily, supergroupsOf,
   type Archetype, type Candidate, type CoverRow, type CoverSide, type Edge,
@@ -300,27 +301,23 @@ function candidatesFrom(
 }
 
 /** Explorer left/right columns: emitters of what a card consumes, consumers of
- *  what it emits (supergroup matches flagged). The card's own consume/emit
- *  families come from the mock CARDPOOL; the candidate lists are live portRows.
+ *  what it emits (supergroup matches flagged). Both the card's own consume/emit
+ *  families (`inFam`/`outFam`, derived live from portRows by the caller — see
+ *  `primaryPortFamily`) and the candidate lists are live portRows.
  *
  *  - emitters: ports on the EMIT side whose family is the card's consume family
  *    or a subgroup of it (a subgroup emit satisfies the supergroup consume).
  *  - consumers: ports on the CONSUME side whose family is the card's emit family
  *    or a supergroup of it.
  *  `via` marks a candidate matched through the super/subgroup lattice rather
- *  than the family itself. (Mock CARDPOOL families with no live equivalent —
- *  e.g. "card" — resolve to empty lists.) */
-// TODO(api:portRows for the queried card): source the card's own in/out ports
-// live too, replacing the CARDPOOL lookup.
-export function useCardNeighbours(cardName: string): AtlasResult<{
-  card: (typeof CARDPOOL)[number] | undefined;
+ *  than the family itself. A null family resolves to an empty column. */
+export function useCardNeighbours(
+  inFam: string | null,
+  outFam: string | null,
+): AtlasResult<{
   emitters: Candidate[]; // emit what this card consumes  → feed its consume side
   consumers: Candidate[]; // consume what this card emits → drain its emit side
 }> {
-  const card = CARDPOOL.find((c) => c.card === cardName);
-  const inFam = card?.in ?? null; // family this card consumes
-  const outFam = card?.out ?? null; // family this card emits
-
   // Emitters: EMIT-side ports in {inFam} ∪ subgroups(inFam).
   const emitFamilies = inFam ? [inFam, ...(GROUPS[inFam] ?? [])] : [];
   const emitQ = useQuery(PORT_CANDIDATES_QUERY, {
@@ -345,10 +342,201 @@ export function useCardNeighbours(cardName: string): AtlasResult<{
   );
 
   return {
-    data: { card, emitters, consumers },
+    data: { emitters, consumers },
     loading: emitQ.loading || consumeQ.loading,
     error: emitQ.error ?? consumeQ.error ?? null,
   };
+}
+
+// ── Card profile page (views/CardPage.tsx) ───────────────────────────────────
+// LIVE. One card's full record by name + its live ports. Everything the card
+// page renders (header/imagery/oracle/ports/price/meta) flows from here; the
+// combo, anchor and ruling panels layer on the sibling hooks below.
+
+/** Families that are structural noise rather than a real resource port — a card
+ *  whose only emit is "unstructured" has, for column-matching purposes, no emit
+ *  family. Kept in sync with the parser's placeholder family names. */
+const NOISE_FAMILIES = new Set<string>(["unstructured", "unparsed", "other"]);
+
+export interface CardPort {
+  family: string;
+  side: Side;
+  tier: Tier;
+  confidence: number | null;
+  label: string;
+}
+
+export interface CardProfile {
+  id: string;
+  oracleId: string | null;
+  name: string;
+  typeLine: string | null;
+  manaCost: string | null;
+  oracleText: string | null;
+  imageUriNormal: string | null;
+  imageUriLarge: string | null;
+  priceUsd: number | null;
+  edhrecRank: number | null;
+  scryfallUri: string | null;
+  colors: string[];
+  keywords: string[];
+  ports: CardPort[];
+}
+
+interface CardProfileCardRow {
+  id: string; oracleId: string | null; name: string;
+  typeLine: string | null; manaCost: string | null; oracleText: string | null;
+  imageUriNormal: string | null; imageUriLarge: string | null;
+  priceUsd: number | null; edhrecRank: number | null; scryfallUri: string | null;
+  colors: string[] | null; keywords: string[] | null;
+}
+interface CardProfilePortRow {
+  family: string; side: string; tier: string | null;
+  confidence: number | null; label: string;
+}
+
+/** The card's primary consume/emit family for the Explorer columns: the first
+ *  non-noise port on that side (ports arrive tier-ordered from the resolver, so
+ *  "first" is the best-fidelity real family). Null when the card has no real
+ *  port on that side — the caller renders a clean empty column. */
+export function primaryPortFamily(ports: CardPort[], side: Side): string | null {
+  for (const p of ports) {
+    if (p.side === side && !NOISE_FAMILIES.has(p.family)) return p.family;
+  }
+  return null;
+}
+
+export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
+  const { data, loading, error } = useQuery(CARD_PROFILE_QUERY, {
+    variables: { name },
+    skip: !name,
+  });
+
+  const profile = useMemo<CardProfile | null>(() => {
+    const atlas = data?.discover?.atlas;
+    const row: CardProfileCardRow | undefined = atlas?.cardRows?.nodes?.[0];
+    if (!row) return null;
+    const portRows: CardProfilePortRow[] = atlas?.portRows?.nodes ?? [];
+    const ports: CardPort[] = portRows.map((p) => ({
+      family: p.family,
+      side: p.side === "emit" ? "emit" : "consume",
+      tier: tierOf(p.tier),
+      confidence: p.confidence,
+      label: p.label,
+    }));
+    return {
+      id: row.id, oracleId: row.oracleId, name: row.name,
+      typeLine: row.typeLine, manaCost: row.manaCost, oracleText: row.oracleText,
+      imageUriNormal: row.imageUriNormal, imageUriLarge: row.imageUriLarge,
+      priceUsd: row.priceUsd, edhrecRank: row.edhrecRank, scryfallUri: row.scryfallUri,
+      colors: row.colors ?? [], keywords: row.keywords ?? [],
+      ports,
+    };
+  }, [data]);
+
+  return { data: profile, loading, error: error ?? null };
+}
+
+// ── Card combos (views/CardPage.tsx) ─────────────────────────────────────────
+// LIVE. Named combos the card is in. `cards` is a " + "-joined string filtered
+// by substring `contains`, so we re-check the exact name after splitting to drop
+// substring false-positives (a shorter name embedded in another card's name).
+
+export interface CardCombo {
+  comboId: string;
+  cards: string[];
+  familyRing: string;
+  tier: Tier;
+  popularity: number;
+}
+
+interface CardComboRow {
+  comboId: string; cards: string; familyRing: string; tier: string; popularity: number;
+}
+
+const splitComboCards = (cards: string): string[] =>
+  cards.split(" + ").map((c) => c.trim()).filter(Boolean);
+
+export function useCardCombos(name: string): AtlasResult<CardCombo[]> {
+  const { data, loading, error } = useQuery(CARD_COMBOS_QUERY, {
+    variables: { name },
+    skip: !name,
+  });
+
+  const combos = useMemo<CardCombo[]>(() => {
+    const rows: CardComboRow[] | undefined = data?.discover?.atlas?.comboRows?.nodes;
+    if (!rows) return [];
+    return rows
+      .map((r): CardCombo => ({
+        comboId: r.comboId,
+        cards: splitComboCards(r.cards),
+        familyRing: r.familyRing,
+        tier: r.tier as Tier,
+        popularity: r.popularity,
+      }))
+      // Drop substring false-positives: keep only combos that actually list the
+      // exact card name as one of their parts.
+      .filter((c) => c.cards.includes(name));
+  }, [data, name]);
+
+  return { data: combos, loading, error: error ?? null };
+}
+
+// ── Card anchor (views/CardPage.tsx) ─────────────────────────────────────────
+// LIVE. Present only when the card is a blocker: how many combos it blocks / is
+// sole blocker for, plus its co-stars (cards it most often blocks alongside).
+
+export interface CardCoStar {
+  card: string; sharedCombos: number; sharedPopularity: number; alsoUnparsed: boolean;
+}
+export interface CardAnchor {
+  card: string;
+  blockedComboCount: number;
+  soleBlockerCount: number;
+  popularityMass: number;
+  maxComboPopularity: number;
+  coStars: CardCoStar[];
+}
+
+interface CardAnchorRow {
+  card: string; blockedComboCount: number; soleBlockerCount: number;
+  popularityMass: number; maxComboPopularity: number; coStars: CardCoStar[] | null;
+}
+
+export function useCardAnchor(name: string): AtlasResult<CardAnchor | null> {
+  const { data, loading, error } = useQuery(CARD_ANCHOR_QUERY, {
+    variables: { name },
+    skip: !name,
+  });
+
+  const anchor = useMemo<CardAnchor | null>(() => {
+    const row: CardAnchorRow | undefined = data?.discover?.atlas?.comboAnchorRows?.nodes?.[0];
+    if (!row) return null;
+    return { ...row, coStars: row.coStars ?? [] };
+  }, [data]);
+
+  return { data: anchor, loading, error: error ?? null };
+}
+
+// ── Card rulings (views/CardPage.tsx) ────────────────────────────────────────
+// LIVE. Scryfall rulings for the card's oracle id, oldest first.
+
+export interface CardRuling { id: string; source: string; publishedAt: string; comment: string; }
+
+interface CardRulingRow { id: string; source: string; publishedAt: string; comment: string; }
+
+export function useCardRulings(oracleId: string | null | undefined): AtlasResult<CardRuling[]> {
+  const { data, loading, error } = useQuery(RULINGS_QUERY, {
+    variables: { oracleId },
+    skip: !oracleId,
+  });
+
+  const rulings = useMemo<CardRuling[]>(() => {
+    const rows: CardRulingRow[] | undefined = data?.discover?.atlas?.rulingRows?.nodes;
+    return rows ?? [];
+  }, [data]);
+
+  return { data: rulings, loading, error: error ?? null };
 }
 
 // ── Deck resolver (Deck lens) ────────────────────────────────────────────────

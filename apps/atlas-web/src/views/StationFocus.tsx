@@ -13,6 +13,7 @@ import { useState } from "react";
 import { FAMILY_KEYS, FAM, famHue, TIER, type Edge } from "../data/mock";
 import { useStation } from "../data/atlas";
 import { FamilyChip, TierChip, FamilyDot, SectionHead } from "../components/primitives";
+import { CardLink } from "../components/CardLink";
 import { arrowHeadPath, rotate, pointAt, type Pt } from "../lib/ortho";
 
 const CX = 300;
@@ -117,7 +118,7 @@ export default function StationFocus() {
             {topCards.map((c) => (
               <div className="list-row" key={c}>
                 <FamilyDot family={focused} />
-                <span style={{ flex: 1 }}>{c}</span>
+                <span style={{ flex: 1 }}><CardLink name={c} /></span>
               </div>
             ))}
           </div>

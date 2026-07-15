@@ -17,6 +17,26 @@ import {
 } from "../data/mock";
 import { sampleDeck, useDeckAnalysis } from "../data/atlas";
 import { FamilyDot, SectionHead, SegControl, TierChip } from "../components/primitives";
+import { CardLink } from "../components/CardLink";
+
+/** Render a " + "-joined ring card list with each name a CardLink. */
+function RingCards({ cards }: { cards: string }) {
+  const parts = cards.split(" + ");
+  return (
+    <>
+      {parts.map((p, i) => {
+        const name = p.trim();
+        const linkable = name.length > 0 && !name.startsWith("…") && !name.startsWith("...");
+        return (
+          <span key={`${name}-${i}`}>
+            {i > 0 && <span style={{ color: "var(--atlas-muted)" }}> + </span>}
+            {linkable ? <CardLink name={name} /> : name}
+          </span>
+        );
+      })}
+    </>
+  );
+}
 
 /** Parse a pasted decklist into bare card names: strip leading counts ("1x ",
  *  "3 "), drop blank lines and placeholder rows ("… 87 more"). */
@@ -294,7 +314,7 @@ export default function DeckLens() {
                     </span>
                   </div>
                   <div style={{ fontSize: 12.5, color: "var(--color-text)", lineHeight: 1.35, marginBottom: 4 }}>
-                    {r.cards}
+                    <RingCards cards={r.cards} />
                   </div>
                   <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color }}>{r.ring}</div>
                 </div>
@@ -321,7 +341,7 @@ export default function DeckLens() {
                   <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color, marginBottom: 6 }}>{nm.ring}</div>
                   {nm.cands.map((cd) => (
                     <div className="list-row" key={cd.name}>
-                      <span style={{ flex: 1, fontSize: 12 }}>{cd.name}</span>
+                      <span style={{ flex: 1, fontSize: 12 }}><CardLink name={cd.name} /></span>
                       <span style={{ fontSize: 10, color: "var(--atlas-muted)" }}>{cd.evidence}</span>
                       <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--atlas-muted)" }}>{cd.price}</span>
                       <span className="tag tag-accent" style={{ marginLeft: 4 }}>{cd.score}</span>

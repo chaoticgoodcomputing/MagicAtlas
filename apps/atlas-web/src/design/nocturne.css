@@ -115,6 +115,19 @@ img { display: block; max-width: 100%; }
 .text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
 .ws-mono { font-family: var(--font-mono); }
 
+/* Inline clickable card name — inherits the surrounding text, reveals itself
+   (accent + underline) only on hover/focus so it drops in wherever a bare name
+   string sits without disturbing layout. */
+.card-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color .14s ease;
+}
+.card-link:hover { color: var(--color-accent-300); text-decoration: underline; text-underline-offset: 3px; }
+.card-link:focus-visible { color: var(--color-accent-300); }
+
 :focus { outline: none; }
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 ::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }

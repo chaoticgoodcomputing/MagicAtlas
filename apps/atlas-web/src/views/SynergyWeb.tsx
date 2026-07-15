@@ -22,6 +22,7 @@ import {
   type Port,
 } from "../data/mock";
 import { SegControl, SectionHead } from "../components/primitives";
+import { CardLink } from "../components/CardLink";
 import {
   orthoPath,
   arrowHeadPath,
@@ -612,7 +613,7 @@ export default function SynergyWeb() {
                               textOverflow: "ellipsis",
                             }}
                           >
-                            {p.card}
+                            <CardLink name={p.card} />
                           </span>
                           <span style={{ display: "flex", alignItems: "center", gap: 3, flex: "none" }}>
                             {dot(p.in)}

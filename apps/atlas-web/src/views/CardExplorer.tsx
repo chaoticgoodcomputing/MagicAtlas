@@ -10,9 +10,10 @@
 
 import { useState } from "react";
 import { EXPLORER_CARDS, cardImage, famHue, type Side } from "../data/mock";
-import { useCardNeighbours, useOracle } from "../data/atlas";
+import { useCardNeighbours, useCardProfile, useOracle, primaryPortFamily } from "../data/atlas";
 import { TierChip, FamilyDot, SectionHead } from "../components/primitives";
 import { OracleText } from "../components/OracleText";
+import { CardLink } from "../components/CardLink";
 import type { Candidate } from "../data/mock";
 
 type Focus = Side | "both";
@@ -29,7 +30,7 @@ function CandidateRow({ c }: { c: Candidate }) {
           whiteSpace: "nowrap",
         }}
       >
-        {c.card}
+        <CardLink name={c.card} />
       </span>
       {c.via && (
         <span
@@ -91,10 +92,12 @@ export default function CardExplorer() {
   const [focus, setFocus] = useState<Focus>("both");
 
   const oracle = useOracle(card).data;
-  const { card: pool, emitters, consumers } = useCardNeighbours(card).data;
-
-  const inFam = pool?.in ?? null; // family this card consumes → left column feeds it
-  const outFam = pool?.out ?? null; // family this card emits → right column drains it
+  // The card's own consume/emit families come live from its ports (not the mock
+  // pool): the primary non-noise port on each side.
+  const profile = useCardProfile(card).data;
+  const inFam = primaryPortFamily(profile?.ports ?? [], "consume"); // consumed → left column feeds it
+  const outFam = primaryPortFamily(profile?.ports ?? [], "emit");   // emitted → right column drains it
+  const { emitters, consumers } = useCardNeighbours(inFam, outFam).data;
 
   const onFocus = (side: Side) => setFocus((f) => (f === side ? "both" : side));
 
@@ -136,7 +139,7 @@ export default function CardExplorer() {
         <div className="panel">
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <img
-              src={cardImage(card)}
+              src={profile?.imageUriNormal ?? cardImage(card)}
               alt={card}
               style={{
                 width: "100%",
@@ -147,15 +150,21 @@ export default function CardExplorer() {
               }}
             />
             <div>
-              <h4 style={{ margin: 0 }}>{card}</h4>
-              {oracle && (
+              <h4 style={{ margin: 0 }}><CardLink name={card} /></h4>
+              {(profile?.typeLine ?? oracle?.type) && (
                 <div style={{ color: "var(--atlas-muted)", fontSize: 12, marginTop: 2 }}>
-                  {oracle.type}
+                  {profile?.typeLine ?? oracle?.type}
                 </div>
               )}
             </div>
             {oracle ? (
               <OracleText oracle={oracle} focus={focus} onFocus={onFocus} />
+            ) : profile?.oracleText ? (
+              <div className="oracle-text">
+                {profile.oracleText.split("\n").map((line, i) => (
+                  <p key={i} style={{ margin: "0 0 0.4em" }}>{line}</p>
+                ))}
+              </div>
             ) : (
               <div style={{ color: "var(--atlas-muted)", fontSize: 13 }}>
                 oracle text unavailable

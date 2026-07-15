@@ -261,6 +261,81 @@ export const ORACLE_SPANS_QUERY = gql`
   }
 `;
 
+// ── Card profile page (views/CardPage.tsx) ──────────────────────────────────
+// One card's full record by name (id/oracleId/type/mana/oracle/imagery/price/
+// meta) plus its live ports. `portRows.confidence` is a nullable Float — surface
+// it only for Inferred ports. `spans` is omitted here (the Oracle highlighting
+// path uses ORACLE_SPANS_QUERY / useOracle instead).
+export const CARD_PROFILE_QUERY = gql`
+  query CardProfile($name: String!) {
+    discover {
+      atlas {
+        cardRows(where: { name: { eq: $name } }, first: 1) {
+          nodes {
+            id
+            oracleId
+            name
+            typeLine
+            manaCost
+            oracleText
+            imageUriNormal
+            imageUriLarge
+            priceUsd
+            edhrecRank
+            scryfallUri
+            colors
+            keywords
+          }
+        }
+        portRows(where: { card: { eq: $name } }, first: 50) {
+          nodes { family side tier confidence label }
+        }
+      }
+    }
+  }
+`;
+
+// Named combos this card appears in. `cards` is a " + "-joined string; the
+// filter is a substring `contains`, so callers re-check the exact name after
+// splitting. Ordered by popularity, capped for the panel.
+export const CARD_COMBOS_QUERY = gql`
+  query CardCombos($name: String!) {
+    discover {
+      atlas {
+        comboRows(
+          where: { cards: { contains: $name } }
+          order: { popularity: DESC }
+          first: 30
+        ) {
+          totalCount
+          nodes { comboId cards familyRing tier popularity }
+        }
+      }
+    }
+  }
+`;
+
+// Anchor profile for a card (only present when the card is a blocker): how many
+// combos it blocks / is the sole blocker for, plus its co-stars.
+export const CARD_ANCHOR_QUERY = gql`
+  query CardAnchor($name: String!) {
+    discover {
+      atlas {
+        comboAnchorRows(where: { card: { eq: $name } }, first: 1) {
+          nodes {
+            card
+            blockedComboCount
+            soleBlockerCount
+            popularityMass
+            maxComboPopularity
+            coStars { card sharedCombos sharedPopularity alsoUnparsed }
+          }
+        }
+      }
+    }
+  }
+`;
+
 // Candidate ports on one side of a family set (Card Explorer emitter/consumer
 // columns). Family set already expanded to include super/subgroups.
 // `tier` is the port's fidelity tier (Green/Amber/Inferred/Declared); it is
