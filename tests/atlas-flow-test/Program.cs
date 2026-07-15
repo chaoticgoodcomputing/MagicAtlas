@@ -1,6 +1,7 @@
 using Flowthru.Caching;
 using Flowthru.Cli;
 using Flowthru.Data.Catalog;
+using Flowthru.Data.Storage.Http;
 using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
@@ -11,6 +12,7 @@ using MagicAtlas.Flows.FineTune;
 using MagicAtlas.Flows.FineTuneEval;
 using MagicAtlas.Flows.Ingest;
 using MagicAtlas.Flows.InteractionTriage;
+using MagicAtlas.Flows.MagicAstTriage;
 using MagicAtlas.Flows.OracleEmbedding;
 using MagicAtlas.Flows.Reporting;
 using Microsoft.Extensions.Configuration;
@@ -177,6 +179,22 @@ public class Program
         python.VenvPath = venvPath;
       });
 
+      // HTTP storage medium: lets the Commander Spellbook variants.json dump load as a plain https://
+      // catalog item (CsbVariantsRaw → FetchCombos). The conditional-GET disk cache means a fresh clone
+      // fetches the ~510 MB dump once and reuses it WITHOUT a network round-trip for the MaxAge window;
+      // only after that does it revalidate (a cheap conditional GET → 304 unless CSB actually changed).
+      // CSB combos churn slowly, so the window is WEEKLY. Its cache lives in its OWN directory so it
+      // never collides with the closure-httpClient's FilesystemHttpCacheHandler cache above.
+      flowthru.UseHttp(http =>
+      {
+        http.UserAgent = "MagicAtlas/0.1";
+        http.Cache = new HttpCacheOptions
+        {
+          Directory = Path.Combine(dataPath, "_01_Raw", "Datasets", "External", ".http-cache-medium"),
+          MaxAge = TimeSpan.FromDays(7),
+        };
+      });
+
       // Ingest is the only flow that takes HttpClient — it's the dedicated HTTP boundary.
       // Downstream flows read whatever Ingest persisted into the _01_Raw layer.
       flowthru
@@ -256,6 +274,33 @@ public class Program
         .WithDescription(
           "The combo-anchored pick surface (combo-anchor-report): unparsed hub cards ranked by the "
             + "combo-popularity value each gates. Needs a parse-records.json file-drop."
+        );
+
+      // Promoted producer chains (upstream-atlas-data-plan §0/§6 P0) that regenerate the CardAtlas
+      // file-drop inputs the flows above consume — so a fresh clone is self-sufficient from this
+      // library, not tests/magic-ast-tests. CorpusParse fetches the Scryfall bulk and parses the whole
+      // corpus → card-inputs.json + parse-records.json; FetchCombos projects the CSB variants.json dump
+      // → combos.json. Run CorpusParse + FetchCombos, then CardAtlas, to rebuild every dump end-to-end.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "CorpusParse",
+          catalog => CorpusParseFlow.Create(catalog, httpClient)
+        )
+        .WithDescription(
+          "Fetches the Scryfall oracle-cards bulk and runs MagicAST over every commander-legal card → "
+            + "_02_Intermediate/card-inputs.json + _07_ModelOutput/parse-records.json (the CardAtlas + "
+            + "ComboAnchors inputs). Promoted from tests/magic-ast-tests's MagicAstTriageFlow."
+        );
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "FetchCombos",
+          FetchCombosFlow.Create
+        )
+        .WithDescription(
+          "Projects Commander Spellbook's variants.json dump (CsbVariantsRaw https catalog item, "
+            + "conditional-GET cached) → _02_Intermediate/combos.json (the CardAtlas D4 reconstruction "
+            + "input). Promoted from tests/magic-ast-tests's InteractionTriage FetchCombos step."
         );
     });
   }

@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Flowthru.Core" Version="0.28.0" />
     <PackageReference Include="Flowthru.Cli" Version="0.28.0" />
+    <PackageReference Include="Flowthru.Extensions.Http" Version="0.28.0" />
     <PackageReference Include="Flowthru.Extensions.Python" Version="0.28.0" />
     <PackageReference Include="Flowthru.Extensions.Metadata.Json" Version="0.28.0" />
     <PackageReference Include="Flowthru.Extensions.Metadata.Mermaid" Version="0.28.0" />

@@ -30,4 +30,38 @@ public partial class Catalog
         .AtPath($"{_basePath}/_01_Raw/Datasets/External/oracle-cards.json")
         .Build()
     );
+
+  // ── Corpus-parse inputs — promoted from tests/magic-ast-tests so this library can regenerate the
+  //    CardAtlas file-drop inputs (card-inputs.json / parse-records.json / combos.json). ────────────
+
+  /// <summary>
+  /// Scryfall oracle-cards bulk projected to the NARROW <see cref="MastRawScryfallCard"/> — fetched by
+  /// <c>FetchScryfallBulkStep</c> in the <c>CorpusParse</c> flow. Kept on a distinct filename from
+  /// <see cref="RawCards"/> (which holds the richer <c>RawScryfallCard</c> Ingest projection) so the two
+  /// fetches never clobber each other's on-disk cache. Consumed by <c>ProjectToCardInputStep</c>.
+  /// </summary>
+  public IItem<IEnumerable<MastRawScryfallCard>> RawScryfallCards =>
+    CreateItem(() =>
+      Item.Of<IEnumerable<MastRawScryfallCard>>("RawScryfallCards")
+        .Json()
+        .AtPath($"{_basePath}/_01_Raw/Datasets/External/mast-oracle-cards.json")
+        .Build()
+    );
+
+  /// <summary>
+  /// Commander Spellbook's combo dump (<c>variants.json</c>, ~510 MB) as a plain HTTP catalog item — the
+  /// <c>.Json()</c> singleton builder routes the <c>https://</c> URI through <c>UseHttp</c>'s
+  /// <c>HttpStorageMedium</c>. <c>FetchCombosStep</c> reads this and projects it to the lean
+  /// <see cref="MagicAtlas.Data._02_Intermediate.Schemas.Combo"/> work-list; the host's <c>UseHttp</c>
+  /// conditional-GET cache (under <c>_01_Raw/Datasets/External/.http-cache</c>) means a fresh clone
+  /// fetches the dump once and reuses it — no manual curl. The narrow <see cref="CsbVariantsDump"/> schema
+  /// drops CSB's bloat (image URIs, prices, card-state) on read; the raw bytes are never committed.
+  /// </summary>
+  public IItem<CsbVariantsDump> CsbVariantsRaw =>
+    CreateItem(() =>
+      Item.Of<CsbVariantsDump>("CsbVariantsRaw")
+        .Json()
+        .AtPath("https://json.commanderspellbook.com/variants.json")
+        .Build()
+    );
 }
