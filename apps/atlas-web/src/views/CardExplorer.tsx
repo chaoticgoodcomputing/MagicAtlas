@@ -54,7 +54,11 @@ function CandidatePanel({
         {fam && <span className="ws-mono" style={{ fontSize: 10.5, color: famHue(fam) }}>{fam} · {list.length}</span>}
       </header>
       {list.length ? (
-        list.map((c) => <CandidateRow key={c.card} c={c} />)
+        // Cap the visible height so a long candidate list (a hub family can have
+        // 100+) scrolls in place instead of burying the profile panels below.
+        <div style={{ maxHeight: "62vh", overflowY: "auto", margin: "0 -4px", padding: "0 4px" }}>
+          {list.map((c) => <CandidateRow key={c.card} c={c} />)}
+        </div>
       ) : (
         <div style={{ color: "var(--atlas-muted)", fontSize: 12, padding: "10px 2px" }}>{emptyHint}</div>
       )}
