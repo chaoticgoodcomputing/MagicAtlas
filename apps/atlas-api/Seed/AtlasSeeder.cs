@@ -649,10 +649,29 @@ public sealed class AtlasSeeder
     }
 
     /// <summary>
-    /// The family super/subgroup lattice is authored (the family grammar in
-    /// <c>libs/mast-interaction/FamilyGrammar.cs</c>), not a pipeline dump — so it ships as the small
-    /// containment set the client currently hardcodes (<c>GROUPS = { death:["sacrifice"], card:["mill"] }</c>),
-    /// now served as data. Extend as the grammar's containment is promoted.
+    /// The family super/subgroup lattice — the containment set the client currently hardcodes
+    /// (<c>GROUPS = { death:["sacrifice"], card:["mill"] }</c>), now served as data.
+    /// <para>
+    /// <b>Deferred — the lattice is NOT derivable from the family grammar today (ledger-W2 Track B finding).</b>
+    /// <c>FamilyGrammar</c>/<c>FamilyEdge</c> (<c>libs/mast-interaction/Interaction.cs</c>) encode
+    /// <em>directional flow/modifier edges</em> — <c>from → to</c> on a <c>ResourceKind</c>, tagged
+    /// <c>EdgeFamily.Flow</c> ("A emits R, B consumes R") or <c>EdgeFamily.Modifier</c> ("A rewrites B's
+    /// emission"). Those are resource HANDOFFS between labels, not super/sub CONTAINMENTS ("every
+    /// sacrifice counts-as a death"). Likewise <c>ResourceFamilies</c>
+    /// (<c>libs/atlas-flows/Flows/Shared/ResourceFamilies.cs</c>) is a <em>flat</em> label→family map with
+    /// no super/sub axis, and neither <c>"card"</c> nor <c>"mill"</c> is even a family in its canonical set —
+    /// so the two hardcoded containments cannot be projected from it either. No file in the grammar or the
+    /// taxonomy authors a sub⊇super / counts-as relation, so promoting one would be fabrication.
+    /// </para>
+    /// <para>
+    /// <b>To make it real:</b> author sub→super containments declaratively (either a new
+    /// <c>counts-as</c>/<c>subFamily→superFamily</c> facet on <c>ResourceFamilies</c>, or a sibling JSON
+    /// grammar next to the family-edge JSON — e.g. rows <c>{ subFamily, superFamily }</c>), emit them from
+    /// the CardAtlas / FamilyRollup path as <c>_08_Reporting/family-lattice.json</c>
+    /// (<c>FamilyLatticeRow</c>-shaped: <c>id "family&gt;subFamily"</c>, <c>family</c>, <c>subFamily</c>),
+    /// then read that here via config key <c>Atlas:FamilyLatticePath</c> with the hardcode below as the
+    /// absent-file fallback. Kept hardcoded until the containment taxonomy is authored upstream.
+    /// </para>
     /// </summary>
     private async Task SeedFamilyLatticeAsync(CancellationToken ct)
     {
