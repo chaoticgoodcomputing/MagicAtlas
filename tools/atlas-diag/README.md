@@ -37,7 +37,7 @@ nx run atlas-diag:find -- --query squirrel
 nx run atlas-diag:find -- --family sacrifice --side emit --tier Green
 ```
 
-Flags: `--no-api`, `--api <url>` (default `http://localhost:55250/graphql`, or
+Flags: `--no-api`, `--api <url>` (default `http://localhost:55250/trax/graphql`, or
 `$ATLAS_API_URL`), `--data <Data dir>` (default `tests/magic-ast-tests/Data`, or
 `$ATLAS_DATA_DIR`), `--limit N`, `--side`, `--tier`, `--family`.
 

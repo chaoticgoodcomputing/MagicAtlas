@@ -219,7 +219,8 @@ async function cmdCard(flags: Record<string, string | boolean>, positional: stri
     const flagsStr =
       (wholeLine ? " " + yellow("⚠ whole-line") : "") + (shared ? " " + yellow("⚠ shared-span") : "");
     const tierC = p.tier === "Green" ? green(p.tier) : p.tier === "Amber" ? yellow(p.tier) : dim(p.tier);
-    const sideC = p.side === "emit" ? cyan("emit   ") : p.side === "consume" ? "consume" : dim("infer  ");
+    const sideC = p.side === "emit" ? cyan("emit   ") : p.side === "consume" ? "consume"
+      : p.side === "intercept" ? dim("intcpt ") : dim("infer  ");
     console.log(
       `  L${p.oracleLineIndex} ${sideC} ${p.label.padEnd(38)} ${tierC.padEnd(useColor ? 14 : 6)} ${dim(
         s ? `[${s[0]},${s[1]}]` : "no-span",
@@ -240,7 +241,7 @@ async function cmdCard(flags: Record<string, string | boolean>, positional: stri
 
   // api diff
   if (flags["no-api"]) return;
-  const apiUrl = (flags.api as string) ?? process.env.ATLAS_API_URL ?? "http://localhost:55250/graphql";
+  const apiUrl = (flags.api as string) ?? process.env.ATLAS_API_URL ?? "http://localhost:55250/trax/graphql";
   const api = await apiPorts(apiUrl, exact);
   console.log("\n" + bold("API diff") + dim(`  (${apiUrl})`));
   if (!api.ok) {
