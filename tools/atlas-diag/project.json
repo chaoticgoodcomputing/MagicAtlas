@@ -1,0 +1,25 @@
+{
+  "name": "atlas-diag",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "tools/atlas-diag/src",
+  "targets": {
+    "card": {
+      "//": "Diagnose one card off the committed CardAtlas dumps: ports + spans sliced against oracle text, combos, tier/presence, and a diff vs the live GraphQL API. Usage: nx run atlas-diag:card -- --name \"Chatterfang, Squirrel General\" [--no-api]",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["node --experimental-strip-types --disable-warning=ExperimentalWarning src/diag.mts card"],
+        "cwd": "tools/atlas-diag"
+      }
+    },
+    "find": {
+      "//": "Search/filter cards in the dataset. Usage: nx run atlas-diag:find -- --family sacrifice --side emit  |  -- --query squirrel",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["node --experimental-strip-types --disable-warning=ExperimentalWarning src/diag.mts find"],
+        "cwd": "tools/atlas-diag"
+      }
+    }
+  },
+  "tags": ["type:tool", "scope:diag"]
+}
