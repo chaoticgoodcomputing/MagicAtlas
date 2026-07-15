@@ -35,7 +35,7 @@ import { useQuery } from "@apollo/client";
 
 import {
   ANALYZE_DECK_QUERY,
-  ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY,
+  ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY, TIER_COUNTS_QUERY,
   ORACLE_SPANS_QUERY,
   PORT_CANDIDATES_QUERY, DECK_PORTS_QUERY,
   CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
@@ -56,8 +56,6 @@ export interface AtlasResult<T> {
   loading: boolean;
   error: Error | null;
 }
-
-const ready = <T,>(data: T): AtlasResult<T> => ({ data, loading: false, error: null });
 
 // ── Family graph (Metro map, Station focus) ──────────────────────────────────
 // resourceFamilyRows { family cards labels } + resourceEdgeRows
@@ -694,7 +692,26 @@ export function useArchetypes(): AtlasResult<Archetype[]> {
 }
 
 // Display metadata, not corpus data — stays local.
-export function useTiers(): AtlasResult<typeof TIERS> { return ready(TIERS); }
+// The four tier tokens are static design metadata, but their `vol` (legend
+// volume) is live: the count of ports at each fidelity. Falls back to the
+// authored placeholder volumes only while the query is in flight.
+export function useTiers(): AtlasResult<typeof TIERS> {
+  const { data, loading, error } = useQuery(TIER_COUNTS_QUERY);
+
+  const tiers = useMemo(() => {
+    const a = data?.discover?.atlas;
+    if (!a) return TIERS;
+    const count: Record<Tier, number | undefined> = {
+      Green: a.green?.totalCount,
+      Amber: a.amber?.totalCount,
+      Inferred: a.inferred?.totalCount,
+      Declared: a.declared?.totalCount,
+    };
+    return TIERS.map((t) => ({ ...t, vol: fmt(count[t.key]) }));
+  }, [data]);
+
+  return { data: tiers, loading, error: error ?? null };
+}
 
 const fmt = (n: number | undefined): string => (n ?? 0).toLocaleString();
 

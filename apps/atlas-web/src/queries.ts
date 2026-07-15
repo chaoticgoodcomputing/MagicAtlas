@@ -200,6 +200,20 @@ export const HEADLINE_STATS_QUERY = gql`
   }
 `;
 
+// Live port counts per fidelity tier — powers the tier legend volumes.
+export const TIER_COUNTS_QUERY = gql`
+  query TierCounts {
+    discover {
+      atlas {
+        green: portRows(first: 1, where: { tier: { eq: "Green" } }) { totalCount }
+        amber: portRows(first: 1, where: { tier: { eq: "Amber" } }) { totalCount }
+        inferred: portRows(first: 1, where: { tier: { eq: "Inferred" } }) { totalCount }
+        declared: portRows(first: 1, where: { tier: { eq: "Declared" } }) { totalCount }
+      }
+    }
+  }
+`;
+
 // Top cards for a single family (Station Focus rail). Distinct card names are
 // derived client-side from the returned ports.
 export const FAMILY_CARDS_QUERY = gql`
