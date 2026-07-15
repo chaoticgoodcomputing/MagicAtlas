@@ -9,11 +9,12 @@
 // candidate column dims with it.
 
 import { useState } from "react";
-import { EXPLORER_CARDS, cardImage, famHue, type Side } from "../data/mock";
+import { cardImage, famHue, type Side } from "../data/mock";
 import { useCardNeighbours, useCardProfile, useOracle, primaryPortFamily } from "../data/atlas";
 import { TierChip, FamilyDot, SectionHead } from "../components/primitives";
 import { OracleText } from "../components/OracleText";
 import { CardLink } from "../components/CardLink";
+import { CardSearch } from "../components/CardSearch";
 import type { Candidate } from "../data/mock";
 
 type Focus = Side | "both";
@@ -88,7 +89,7 @@ function CandidatePanel({
 }
 
 export default function CardExplorer() {
-  const [card, setCard] = useState<string>(EXPLORER_CARDS[0] ?? "Midnight Reaper");
+  const [card, setCard] = useState<string>("Ashnod's Altar");
   const [focus, setFocus] = useState<Focus>("both");
 
   const oracle = useOracle(card).data;
@@ -108,23 +109,11 @@ export default function CardExplorer() {
         (⊃ = supergroup match). Click a clause to focus one side.
       </SectionHead>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
-        {EXPLORER_CARDS.map((name) => {
-          const on = name === card;
-          return (
-            <button
-              key={name}
-              type="button"
-              className={`btn ${on ? "btn-primary" : "btn-secondary"}`}
-              onClick={() => {
-                setCard(name);
-                setFocus("both");
-              }}
-            >
-              {name}
-            </button>
-          );
-        })}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", marginBottom: 16 }}>
+        <CardSearch onSelect={(name) => { setCard(name); setFocus("both"); }} />
+        <span style={{ fontSize: 12, color: "var(--atlas-muted)" }}>
+          Viewing <strong style={{ color: "var(--color-text)" }}><CardLink name={card} /></strong>
+        </span>
       </div>
 
       <div className="expl-grid">

@@ -200,6 +200,26 @@ export const HEADLINE_STATS_QUERY = gql`
   }
 `;
 
+// Card-name search for the Card Explorer. `contains` is case-sensitive and there
+// is no icontains, so the caller passes the raw text (q) AND a title-cased
+// variant (q2) — MTG names are Title Case — and we OR them. edhrecRank ASC
+// surfaces the most-played match first.
+export const CARD_SEARCH_QUERY = gql`
+  query CardSearch($q: String!, $q2: String!) {
+    discover {
+      atlas {
+        cardRows(
+          where: { or: [{ name: { contains: $q } }, { name: { contains: $q2 } }] }
+          order: { edhrecRank: ASC }
+          first: 12
+        ) {
+          nodes { name typeLine }
+        }
+      }
+    }
+  }
+`;
+
 // Live port counts per fidelity tier — powers the tier legend volumes.
 export const TIER_COUNTS_QUERY = gql`
   query TierCounts {
