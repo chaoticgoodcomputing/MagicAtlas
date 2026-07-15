@@ -52,8 +52,8 @@ export default function Overview({ onNavigate }: { onNavigate?: (v: ViewKey) => 
       <section>
         <div className="section-head">
           <div className="kicker">Realized archetypes</div>
-          <h3>51 / 3,286 family signatures with a real deck behind them</h3>
-          <p>The recurring family triples the combo corpus actually produces, ranked by how many combos realize them.</p>
+          <h3>{archetypes.length.toLocaleString()} realized family signatures with a real deck behind them</h3>
+          <p>The recurring family signatures the combo corpus actually produces, ranked by how many combos realize them.</p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "var(--space-3)" }}>
           {archetypes.map((a) => (
