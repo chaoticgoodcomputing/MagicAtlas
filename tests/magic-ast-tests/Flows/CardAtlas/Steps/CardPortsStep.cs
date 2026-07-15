@@ -85,7 +85,18 @@ public static partial class CardPortsStep
             Card = name,
             Label = p.Label,
             Family = ResourceFamilies.Of(p.Label),
-            Side = p.Label.StartsWith("emit:", StringComparison.Ordinal) ? "emit" : "consume",
+            // Side is the PortNode's structural role, NOT a label-prefix guess. Most
+            // labels agree with their prefix, but inert emit projections carry no
+            // "emit:" prefix (evasion:forestwalk, modify:pt, switch:pt, set:pt) and a
+            // replacement is an Intercept — a label-prefix read mislabelled all of
+            // these as "consume". Emit/Consume/Intercept map straight through.
+            Side = p.Side switch
+            {
+              PortSide.Emit => "emit",
+              PortSide.Consume => "consume",
+              PortSide.Intercept => "intercept",
+              _ => "consume",
+            },
             Tier = TierOf(g),
             OracleLineIndex = p.OracleLineIndex,
             Spans = p.SourceSpan is MagicAST.AST.TextSpan s

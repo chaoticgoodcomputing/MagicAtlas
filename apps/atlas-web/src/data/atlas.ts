@@ -414,7 +414,10 @@ export function useCardNeighbours(
 
 export interface CardPort {
   family: string;
-  side: Side;
+  /** The port's structural role. `intercept` (a replacement) is a real third
+   *  role beyond emit/consume — kept distinct so the Ports listing is honest;
+   *  it matches neither column side, so it never joins the explore/exploit set. */
+  side: Side | "intercept";
   tier: Tier;
   confidence: number | null;
   label: string;
@@ -462,7 +465,7 @@ export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
     const portRows: CardProfilePortRow[] = atlas?.portRows?.nodes ?? [];
     const ports: CardPort[] = portRows.map((p) => ({
       family: p.family,
-      side: p.side === "emit" ? "emit" : "consume",
+      side: p.side === "emit" ? "emit" : p.side === "intercept" ? "intercept" : "consume",
       tier: tierOf(p.tier),
       confidence: p.confidence,
       label: p.label,
