@@ -343,6 +343,36 @@ Match check: Blood Artist / Pitiless (`consume:removal:creature[]`, any creature
 because their `[]` ⊆ its attributes; the spurious `emit:cast` rows (Aang) never arise. `X` binds across the sac
 cost, the removal qty, and the +X/−X magnitude (§8); `that-many` binds the doubler emit to the intercept.
 
+## The flagship gold, redefined (Chatterfang × Pitiless Plunderer under O1–O17)
+
+The ADR-0001 canonical gold, re-derived end-to-end — it exercises every decision, including all three
+O17.1 residual rules. Loop: sac a Squirrel → Pitiless makes a Treasure → the doubler adds a Squirrel to
+that creation → the Treasure pays the `{B}`. Ports (`•choice` = producer-choice polarity, `•derived` =
+over-approximated provenance, `•fodder` = O11 alias):
+
+**Pitiless Plunderer:** P1 consume `removal:creature[control=you, from=battlefield, to=graveyard,
+exclude=self]` · P2 emit `deployment:artifact[token, subtype=treasure, control=you, qty=1]`.
+**Treasure token:** T1 consume `tap[self]` (the O17.3 orphan) · T2 consume `artifact[subtype=treasure,
+token, self, qty=1]` · T3 emit `removal:artifact[…, manner=sacrificed]` · T4 emit
+`mana[color=any•choice, qty=1]`. **Chatterfang:** C1–C6 as tabled above (C4 = fodder consume, C5 =
+removal emit with `to=graveyard•derived`).
+
+| Edge | Match | Certifying mechanism |
+|---|---|---|
+| E1 C5→P1 | stems equal; P1 attrs ⊆ C5; Squirrels ≠ Pitiless | **subsumption (bridge retired)** + identity guard; `•derived` caps Reliability (Rest-in-Peace prune) |
+| E2 P2→C1 | `deployment ⊇ deployment:artifact`; `[token, control=you] ⊆` P2 | **Modifier edge** — never closes a loop alone (CR 614.5) |
+| E3 C1⇒C2 | `qty=that-many` bound to intercepted count | card-defined |
+| E4 C2→C4 | at-creation types `creature[squirrel, token]` **cover** C4's filter | **per-role match policy** (cover, not Intersects) |
+| E5 T4→C3 | `[color=black]` vs `[color=any•choice]`: producer picks black, GREEN | **polarity** (existential on choice values) |
+
+§8 per iteration (X=1): Squirrels −1(C4) +1(C2) = 0 · mana −{B}(C3) +1-chosen-black(T4) = 0 · Treasures
++1−1 = 0 · no hard gates; T1's tap is not cross-iteration (fresh token each loop). Free loop.
+
+Deltas vs the ADR-0002 gold: E1 flips from a curated consume→consume bridge to a real emit→consume flow
+edge (the O17.4 topology change, on the gold itself); the sac is dual (C4+C5 — §8 reads off C4); the three
+GREEN-preserving judgments (polarity/cover/identity) move from buried engine arms to declared schema; the
+over-approximation becomes visible provenance; the modifier edge survives untouched.
+
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
   (O14 leans `creature` — the object — with `token` as an attribute.)
