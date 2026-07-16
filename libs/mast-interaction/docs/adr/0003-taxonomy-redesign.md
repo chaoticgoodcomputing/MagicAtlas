@@ -185,7 +185,30 @@ sac cost, the removal qty, and the +X/−X magnitude share one `X`) are first-cl
 
 ## Migration (staged, gated)
 
-- **Stage 0 — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
+**Strategy: aim the taxonomy, accrete the rules ("Path 2, amended").** Two candidate strategies were
+weighed: (1) *decentralized transliteration* — encode the current interaction knowledge into the new
+format as-is, recompile, and judge the resulting topology; (2) *scaffold-first* — sketch the target
+topology (from the slang corpus + CR glossary), then migrate rules toward it, adjusting in-flight. The
+decision is (2), amended by three findings: **(a)** there is no rule-shard corpus to transliterate — the
+current knowledge is ~15 engine arms + guards + bridges and a handful of snapshots, so every per-gold
+fixture is written fresh regardless, making the scaffold nearly free; **(b)** the current shape is known
+insufficient (the frontend's topology-shape bugs; unparsed staples like Deadeye's blink; ~38% L2
+coverage), so faithful transliteration would reproduce an inadequate map and the post-hoc judge sweep
+would lack a null hypothesis to falsify; **(c)** scaffolding does NOT reintroduce central authority —
+the shared **vocabulary/shape** (Decision §1–§4) was always centrally designed and judged, while the
+**rules** stay evidence-accreted per §8: no rule exists without a witnessing gold. Derivation runs
+**re-derive each combo fresh against the scaffold — never transliterate the old arms** (the arms' own
+fidelity is separately checked by Stage 3 shadow mode). Evaluation is **dual-loop**: per-gold judges
+(§8) plus periodic **rollup-vs-scaffold topology sweeps**, where a divergence either falsifies the
+scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivation.
+
+- **Stage 0a — the topology scaffold (target map).** A hypothesis-status, versioned fixture: the
+  systematic slang-page + CR-glossary sweep (each term → an AST-derivable view/alias over
+  stems+attributes, or explicitly rejected as non-derivable); the enumerated vocabularies (manner
+  tokens, zone lattice, licensed-attribute matrix per stem); and falsifiable connectivity predictions
+  (e.g. every sac outlet reaches all three trigger rungs; token emitters reach sac outlets) — the null
+  hypotheses for the topology sweeps. *Gate:* a judge pass over the scaffold's derivability claims.
+- **Stage 0b — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
   generator with loud conflict detection; seed from the two golds. *Gate:* rollup builds; both golds'
   assertions pass.
 - **Stage 1 — parser asks.** `manner` attribute, `Sacrificed` trigger event, per-cost spans, the Deadeye
@@ -209,10 +232,13 @@ sac cost, the removal qty, and the +X/−X magnitude share one `X`) are first-cl
 - **Duality scope (O3):** which cost/effect families after sacrifice get the consume+event-emit dual
   first (destroy, exile, mill, discard) — resolved incrementally, one gold at a time, through the §8 loop.
 - **Naming:** *Deployment* vs *Arrival*; *Structure* vs *Tempo/Sequencing*. Bikeshed-class; settle at
-  Stage 0.
+  Stage 0a.
 - **Bridge audit (O6):** completes empirically — each bridge either falls to subsumption during a gold
   derivation or earns its registry entry with witnesses.
 - **Stage-0 file formats:** the concrete fixture/rollup schemas (execution detail, first work item).
+- ~~Migration strategy (transliterate-then-judge vs scaffold-first)~~ — **decided**: scaffold-first,
+  amended ("aim the taxonomy, accrete the rules") — see the Migration section's strategy preamble and
+  Stage 0a.
 
 ## Provenance
 
