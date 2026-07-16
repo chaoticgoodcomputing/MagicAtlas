@@ -1,39 +1,242 @@
-# Taxonomy redesign — a resource/event ontology, subsumption over bridges
+# Taxonomy redesign — an Event/State/Behavior kind system with typed-feature-structure ports
 
 ## Status
 
-**Draft — accumulating observations (opened 2026-07-16). NOT a decision.** This document is an
-observations log toward an eventual taxonomy-redesign ADR that will refine (and in places supersede)
-[ADR 0002](0002-port-labels-are-deterministic-ast-projections.md) §3 (the colon-ontology) and §6
-(curated bridges). It exists to collect grounded notes as they surface — mostly driven, so far, by the
-**atlas-web card explorer** exposing taxonomy questions the union graph alone never forced. Append
-observations here; promote to a Decision section only once a thread is settled and rules-checked.
+**Proposed (2026-07-16).** Refines [ADR 0001](0001-the-interaction-line.md) (ports and the edge families
+survive intact) and supersedes [ADR 0002](0002-port-labels-are-deterministic-ast-projections.md) **§3**
+(the single ordered colon-chain) and **§6's** bridge-primacy; ADR 0002's foundational principles —
+deterministic projection, label-as-query, totality, the §8 accounting axes, the collision-lint — all
+carry forward. **Grilled twice:** an interaction-judge pass returned the sacrifice event hierarchy
+CR-correct (6/6 PASS, PROCEED, with two conditions folded into §5/§6); an independent fresh-context
+design review verified the draft against the code and returned ADJUST with five amendments, all adopted
+(§6, §7, §9, Migration). Grounded on **two worked golds** — Chatterfang × Pitiless Plunderer (GREEN) and
+Deadeye Navigator × Peregrine Drake (AMBER) — which between them exercise every decision below (Appendix).
 
-Do not implement from this doc. The projection, engine, and gold fixtures still reflect ADR 0002.
+**Not yet implemented.** The projection, engine, and fixtures still reflect ADR 0002 until the Migration
+stages complete; nothing ships from this document before its Stage gates pass.
 
-## Context — why reopen the ontology
+## Context — why the ontology reopened
 
 ADR 0002 fixed labels as deterministic AST projections over a soft (hierarchical) colon-vocabulary, with
-the query as the projection read backwards, and made two axes explicit (action/object + resource-kind).
-It has held well for the union-graph reconstruction. Two pressures reopened it:
+the query as the projection read backwards. It held well for union-graph reconstruction. Two pressures
+reopened it:
 
 1. **The frontend is a taxonomy oracle.** The card explorer's "what feeds X / what X feeds" columns are a
    *direct* rendering of the emit↔consume relation. Where the union graph tolerated a coarse family edge
    (a combo either reconstructs or it doesn't), the explorer surfaces every family adjacency as a
-   user-visible claim — so a coarse `token→cast` combo-ring edge shows as "Chatterfang feeds Aang," which
-   is plainly wrong. The frontend makes taxonomy imprecision *legible* in a way the batch pipeline did not.
+   user-visible claim — a coarse `token→cast` combo-ring edge renders as "Chatterfang feeds Aang," which
+   is plainly wrong. The frontend made taxonomy imprecision *legible* in a way the batch pipeline never did.
 2. **A single worked case (Chatterfang's sacrifice) cracked open the event model.** Deciding how "Sacrifice
-   X Squirrels" should render forced the question of whether a sacrifice is a *consume* (current: `sac:` cost
-   + curated `sac→ltb` bridge) or an *emit of an event* sitting in a subsumption hierarchy. An
-   interaction-judge pass (2026-07-16, below) returned that hierarchy CR-correct, which generalizes well
-   past sacrifice.
+   X Squirrels" should render forced the question of whether a sacrifice is a *consume* (`sac:` cost + a
+   curated `sac→ltb` bridge) or an *emit of an event* in a subsumption hierarchy — and the answer
+   generalized far past sacrifice.
 
-The through-line: **ADR 0002 names ports by mechanism/role; the redesign should lean harder on naming by
-the resource/event that flows, so that subsumption (not curation) carries most cross-resource matching.**
+The through-line: ADR 0002 names ports by **mechanism/role**; this redesign names them by the
+**event/state/behavior that flows**, so that subsumption — not curation — carries most cross-resource
+matching. The deepest finding (design review, confirmed in code): **the AST already carries a
+typed-feature-structure system** (`ObjectFilter` = attribute set; `ObjectFilterRelations` + `TypeOntology`
+= per-facet lattice matching with trilean open-world semantics); the colon-*string* was the lossy step —
+structure was serialized to text too early, and everything since has been fighting the strings.
+
+## Decision
+
+### 1. The kind system: Event / State / Behavior
+
+The taxonomy root is a three-kind system (FRP lineage — Elliott & Hudak):
+- **EVENT** — discrete occurrences with payloads: zone-changes (the primitive, `from→to`), cast,
+  damage-dealt, dice-rolled, combat-presence, life-change. Events are what triggers subscribe to.
+- **STATE** — pools/stores folded over event streams (`state = fold(events)`): mana, life, cards,
+  counters, and per-permanent **availability** (tap/untap).
+- **BEHAVIOR** — continuous time-varying values: modifications, statics, keyword grants, evasion,
+  "as long as" effects.
+
+The ability layer maps onto it exactly: an **activated ability is a function** (costs = arguments, pull);
+a **triggered ability is a subscription** (an event filter, push); a **static ability is a behavior**; a
+**replacement is middleware** on the event stream — CR 614.5's applies-once is the standard interceptor
+invariant, so the no-self-bootstrap property is a theorem of the pattern, not a house rule.
+**Push vs pull consumption is first-class**: argument-consumes (costs; §8 conjunction) and
+subscription-consumes (triggers; any-match) are distinct kinds, which the engine already treats
+differently and the model now names. Control-flow wrappers (`conditional`/`optional`/`composite`/
+`rollResultsTable`/`becomesPermanent`) are **combinators** — the §8 gating layer, not root members.
+
+### 2. Port shape: an is-a stem plus an unordered attribute set
+
+A port is `side : stem [attribute-set]`:
+- The **stem** is reserved for genuine is-a descent — `<side>:<supergroup>:<card-type>` (e.g.
+  `emit:removal:creature`), plus keyword chains where is-a truly holds
+  (`modification:evasion:forestwalk`).
+- **Everything else is an unordered attribute set on the leaf** — `subtype`, `control`, `from`/`to` zone,
+  `manner`, `p/t`, `color`, `token`, `qty`, `duration`, … orthogonal axes, never colon-nested. Each stem
+  **licenses** a declared key set (TFS appropriateness; `mana[toughness=1]` is ill-typed).
+- **Derived categories are named attribute-constraints**, never stem nodes: `fodder := [p/t=1/1]` (or
+  `[toughness=1]`), each pinned to exactly one query. Slang is first-class exactly when AST-derivable.
+- **One oracle clause may project several ports** (a port is a query over the AST); dual
+  consume+emit projections are the norm for costs that raise events (§5).
+
+### 3. Matching: per-facet lattice subsumption with implicit subtree capture
+
+`captures(Q, E)` holds iff Q's stem is an ancestor-or-equal of E's stem in the is-a lattice, **and** every
+attribute constraint in Q subsumes E's value in that attribute's own value lattice (`control: self ⊆
+controlled ⊆ any`; zones; the TypeOntology for types/subtypes). Unconstrained attributes capture
+everything; absent attributes are **open-world unknowns** resolved by the operator trilean
+(Subsumes/Intersects/Overlaps), never boolean failures. Querying `removal:creature` therefore captures its
+entire subtree — every deeper stem and every attribute combination — by construction; ADR 0002's
+positional `**` glob is retired. **Matching operates on the structured port; the colon-label becomes a
+generated serialization/display format** (determinism and the collision-lint transfer to
+(stem, attribute-set) identity).
+
+### 4. Supergroups are slang-anchored views; the root is complete
+
+**Removal / Deployment / Modification** are named filters over the event stream, anchored on the
+battlefield/stack endpoint of the zone-change primitive (Removal = it's the FROM; Deployment = it's the
+TO; both carry explicit `from`/`to` — graveyard hate, discard, and mill are Removal with non-play
+endpoints). Resources (Mana/Cards/Life/Counters) are STATE stores; Structure (phases, extra
+turns/combats, availability) is the clock. Every canonical family and every `PortWalkProjection`
+discriminator has a placement: dice-rolled and combat-presence are Events; tap/untap is the availability
+store; a counter is a store whose P/T effect is a derived Behavior; a copy is a deployment event with
+provenance. Damage is a Life-store verb whose *lethality* is a derived edge into Removal.
+
+### 5. Events vs objects; dual ports; the sacrifice remodel
+
+Objects (creatures, permanents, tokens) **flow**; events **happen to them** — and a cost that removes an
+object raises an event. A sacrifice cost projects **both**:
+`consume: creature[subtype=…, control=you, qty=…]` (the fodder — retained, because the §8
+balance/conjunction reads off it; the event's subject is a type descriptor, not a pool decrement) **and**
+`emit: removal:creature[from=battlefield, to=graveyard, manner=sacrificed, …]`. The event sits at the
+narrowest rung of **sacrifice ⊂ dies ⊂ leaves-the-battlefield** (CR 701.21a · 700.4 · 603.6/603.10a),
+expressed by facets — `to=graveyard` = dies, bare = LTB, `manner=sacrificed` = sacrifice — so all three
+consumer rungs (LTB-, dies-, and "when sacrificed"-triggers) match by subsumption and **the curated
+sac→dies bridge is retired**. Parser asks: the `manner` attribute and a `Sacrificed` trigger event.
+
+### 6. The residual layer — subsumption replaces the arms' structural half only
+
+Generic `captures(Q,E)` absorbs the *structural* content of the engine's per-arm switch (blink/cast/
+reanimate unify as `deployment → deployment-consume`), but three knowledge classes cannot live in a
+filter lattice and are **declared residual rules**:
+1. **Attribute polarity** — per-attribute, fixed vs **producer-chooses**; choice values match
+   existentially (`emit:mana[color=any•choice]` pays `[color=black]` → GREEN).
+2. **Match policy per consume kind** — argument-consumes demand **cover** (the supplied object must
+   provably satisfy the parameter: sac, recast; CR 400.7 token-can't-be-self refusals live here);
+   subscription-consumes accept **intersect**, with the operator tiering.
+3. **Identity guards** — the same-card/`:self` witnesses (self-watching triggers, self-blink, spell
+   self-copy/recast). Implementations stay in code; every guard is registered with its witnessing golds.
+Plus **4. irreducible cross-resource bridges** — edges no lattice relates (untap→mana, AMBER ceiling,
+CR 107.4) — which remain curated, tier-ceilinged, and cited.
+Standing acceptance tests: the Chatterfang×Pitiless mana hop stays GREEN; the four same-card false-loop
+classes stay dead; Deadeye×Peregrine's E1/E2 stay AMBER.
+
+### 7. Provenance and certainty
+
+Every projected attribute instance carries **asserted vs derived (over-approximated)** provenance. A
+derived attribute (`to=graveyard` under CR-614 redirects; the subtype→type lift) may gate feasibility but
+**caps Reliability at Unknown** — over-approximation stays principled: the projection over-proposes, the
+operator/board prunes. The **null-Subject default-GREEN is dead**: a port with no subject filter has an
+*unknown* subject — the edge may be proposed, but it floors AMBER unless a confirmed rule (§8) or a
+same-card witness certifies it. Nothing uncited is GREEN.
+
+### 8. The schema is a derived rollup — schema-by-accretion
+
+There is no centrally-authored rule file. **Per-gold interaction fixtures are the only hand-authored
+artifact**: each derivation run (one combo → one gold, subagent-parallel) records its edges with their
+certifying mechanisms, declares any *new* rules with itself as witness, and asserts its own acceptance
+tests. **The central fixture is a generated, content-hashed rollup** unioning all declared rules —
+polarity table, match policies, guard registry, bridges — every entry carrying `witnesses:`. The loop:
+**(a)** read the rollup (reuse known rules, never re-derive) → **(b)** derive the gold, declare only the
+new → **(c)** regenerate the rollup. Conflicts **fail the build** (judge resolves; the resolution is
+itself an evidence-cited entry). Rules climb a **promotion ladder** — `observed` (1 witness) →
+`corroborated` (N) → `confirmed` (rules-judge) — and the ladder feeds tiering: an edge certified only by
+an observed rule caps at AMBER; only confirmed rules participate in GREEN. The rollup is the runtime rule
+source for novel pairs, and a rule-miss is the discovery-prioritization signal for which combo to derive
+next. Bootstrap: the two worked golds.
+
+### 9. Tractability guardrail
+
+Matching stays in the polynomial **EL profile**: conjunctive attribute-subset + per-value lattices; no
+disjunction and no general negation in the query language. The **closed negation vocabulary** is exactly
+the filter model's atomic, per-axis, decider-confined family: `ExcludedCardTypes` · `ExcludedSubtypes` ·
+`ExcludedSupertypes` · `ExcludedColors` · `IsColorless` · `ComparisonOperator.NotEqual` (deciders return
+Unknown when present on either side) · `:another`/exclude-self (handled by the §6 guard layer, not the
+lattice). At corpus scale, candidate generation is **stem-bucketed** (the is-a lattice yields finite
+bucket keys) before structured matching enters the emits×consumes hot loop.
+
+### 10. Accounting: §8 is (parameterized) synchronous dataflow
+
+The resource accounting is formally SDF balance (Lee & Messerschmitt): per edge
+`q(src)·p(e) = q(snk)·c(e)`; the smallest solution is the repetition vector; an infinite combo is a
+consistent cycle with unbounded repetition — Chatterfang's free loop is a balance solution with q = 1.
+Variable rates (`X`, `that-many`) make this **parameterized** SDF; quantity bindings across ports (the
+sac cost, the removal qty, and the +X/−X magnitude share one `X`) are first-class.
+
+## Consequences
+
+- **Engine:** the `FlowFeasible` per-arm switch shrinks to `captures(Q,E)` + the §6 residual registry;
+  blink/cast/reanimate-specific arms retire into the generic deployment match; the sac→dies bridge
+  retires into §5 subsumption. This is a **topology change** (today's bridge is consume→consume; the
+  event emit moves edge endpoints) — every reconstruction snapshot regenerates, and the two-layer cycle
+  engine's label-string quotient must be re-proven over (stem, attribute-set) identity.
+- **Parser:** four asks — the `manner` attribute (§5), a `Sacrificed` trigger event (§5), per-cost-component
+  spans (logged), and the Deadeye blink slice (`deployment[manner=blink]`).
+- **Dumps/API/frontend:** `CardPortRow` gains structured attributes (jsonb, like spans); atlas-web
+  matches by attribute-subset (fixing the Aang-class column imprecision at the root) and consumes the
+  taxonomy + rollup live — extending the existing derive-canonicality-from-the-API pattern, retiring the
+  last hardcoded frontend duplicate.
+- **Docs:** the rollup is the single machine-readable source; a doc generator emits the taxonomy
+  reference (stems, licensed keys, lattices, aliases, rules-with-witnesses).
+
+## Migration (staged, gated)
+
+- **Stage 0 — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
+  generator with loud conflict detection; seed from the two golds. *Gate:* rollup builds; both golds'
+  assertions pass.
+- **Stage 1 — parser asks.** `manner` attribute, `Sacrificed` trigger event, per-cost spans, the Deadeye
+  blink slice — vertical slices via the mast-tdd loop. *Gate:* gold-fixture suite green; span-only regen
+  discipline.
+- **Stage 2 — structured PortNode.** Stem + attributes + provenance emitted **alongside** the string label
+  (dual-emit); the label becomes a generated serialization. *Gate:* label round-trip —
+  serialize(structure) reproduces today's labels byte-for-byte across the corpus.
+- **Stage 3 — engine shadow mode.** `captures(Q,E)` + residual registry runs in parallel with the old arms
+  on the full corpus; diff edges + tiers. Stem-bucketed candidates; quotient re-proof. *Gate:*
+  reconstruction golds + bench:recall + a judged sweep of **every tier change** (including the §7
+  null-Subject GREEN drops); the corpus-edge-diff gate is explicitly non-authoritative.
+- **Stage 4 — cutover.** Retire subsumption-expressible arms; guards/bridges remain as the registry.
+  Regenerate resource graph + D1–D4 dumps; reseed the API. *Gate:* CardAtlas contract tests + atlas-diag
+  spot-checks on both golds' cards.
+- **Stage 5 — frontend.** Structured attributes + rollup consumption; attribute-subset column matching.
+  *Gate:* the Chatterfang and Deadeye card pages render the worked-gold edge sets exactly.
+
+## Open questions
+
+- **Duality scope (O3):** which cost/effect families after sacrifice get the consume+event-emit dual
+  first (destroy, exile, mill, discard) — resolved incrementally, one gold at a time, through the §8 loop.
+- **Naming:** *Deployment* vs *Arrival*; *Structure* vs *Tempo/Sequencing*. Bikeshed-class; settle at
+  Stage 0.
+- **Bridge audit (O6):** completes empirically — each bridge either falls to subsumption during a gold
+  derivation or earns its registry entry with witnesses.
+- **Stage-0 file formats:** the concrete fixture/rollup schemas (execution detail, first work item).
+
+## Provenance
+
+- **interaction-judge** (2026-07-16): sacrifice⊂dies⊂LTB 6/6 PASS, PROCEED — conditions (fodder consume
+  retained; manner facet; over-approximation posture) folded into §5–§7. CR: 701.21a, 700.4, 603.6,
+  603.10a, 614.5/614.6, 111.1, 205.3m, 400.7, 107.4.
+- **Fresh-context design review** (Fable, 2026-07-16): ADJUST — five amendments, all adopted (§6 residual
+  layer, §7 provenance, §4 root completeness, Migration Stage 3, §9 negation inventory).
+- **Prior art:** typed feature structures / HPSG (stem+attributes, appropriateness, open-world);
+  description logics (EL vs ALC tractability boundary); Ranganathan's Colon Classification (faceted vs
+  enumerative); FRP — Elliott & Hudak (Event/Behavior kinds); event sourcing (state-as-fold);
+  pub-sub/interceptor patterns (subscription filters, middleware applies-once); synchronous dataflow —
+  Lee & Messerschmitt (balance equations, repetition vectors; PSDF for variable rates).
+- **Origin:** the atlas-web Card Explorer flow-adjacency work (the Chatterfang "renders/connects wrong"
+  investigation) — see the atlas-diag session artifacts.
 
 ---
 
-## Observations log
+## Appendix — observations log (chronological grounding)
+
+The unedited accumulation this Decision was promoted from, kept verbatim for provenance — including the
+worked golds and the review verdicts in the order they landed. Where an entry conflicts with the Decision
+sections above, **the Decision governs** (e.g. O12's colon-nested qualifier sketch predates O14's
+attribute-set split; O18's "fourth axis" lean predates O19's kind system).
 
 ### O1 — Event subsumption: `sacrifice ⊂ dies ⊂ leaves-the-battlefield` (judge-PASSED)
 An interaction-judge review (all 6 claims PASS, PROCEED) grounded the hierarchy in CR:
@@ -324,7 +527,7 @@ D(sacrifice) PASS w/ two notes · E(mesh) ADJUST. The five amendments, now adopt
 
 ---
 
-## The triggering case (worked, for reference)
+### The triggering case (worked, for reference)
 
 Chatterfang, Squirrel General — full-text labeling under O10–O14 (stem `side:supergroup:card-type` +
 attribute set `[…]`; labels illustrative pending final facet names):
@@ -343,7 +546,7 @@ Match check: Blood Artist / Pitiless (`consume:removal:creature[]`, any creature
 because their `[]` ⊆ its attributes; the spurious `emit:cast` rows (Aang) never arise. `X` binds across the sac
 cost, the removal qty, and the +X/−X magnitude (§8); `that-many` binds the doubler emit to the intercept.
 
-## The flagship gold, redefined (Chatterfang × Pitiless Plunderer under O1–O17)
+### The flagship gold, redefined (Chatterfang × Pitiless Plunderer under O1–O17)
 
 The ADR-0001 canonical gold, re-derived end-to-end — it exercises every decision, including all three
 O17.1 residual rules. Loop: sac a Squirrel → Pitiless makes a Treasure → the doubler adds a Squirrel to
@@ -373,7 +576,7 @@ edge (the O17.4 topology change, on the gold itself); the sac is dual (C4+C5 —
 GREEN-preserving judgments (polarity/cover/identity) move from buried engine arms to declared schema; the
 over-approximation becomes visible provenance; the modifier edge survives untouched.
 
-## Second gold — Deadeye Navigator + Peregrine Drake (orthogonal validation)
+### Second gold — Deadeye Navigator + Peregrine Drake (orthogonal validation)
 
 A mechanically-unrelated U(/W control-flicker) combo, chosen to stress the axes the aristocrats gold never
 touches. Infinite ETBs + mana-positive: Deadeye (soulbonded to Drake) pays `{1}{U}` → blinks Drake → Drake's
@@ -538,42 +741,7 @@ Closes the three bounded O17 items that needed only enumeration or a decision:
   shadow-mode diff (O22) must list every edge that drops from GREEN, each re-judged rather than waved through.
 
 ### O22 — Migration staging (O17.4), gated
-- **Stage 0 — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
-  generator with loud conflict detection (O20); seed from the two golds. *Gate:* rollup builds; both golds'
-  assertions pass.
-- **Stage 1 — parser asks.** `manner` facet (O4), `Sacrificed` trigger event (O17.3), per-cost spans
-  (logged), Deadeye blink slice (`deployment[manner=blink]`). Vertical slices via the mast-tdd loop.
-  *Gate:* gold-fixture suite green; span-only regen discipline.
-- **Stage 2 — structured PortNode.** Stem + attribute set + provenance emitted ALONGSIDE the string label
-  (dual-emit); the label becomes a generated serialization; collision-lint transfers to (stem, attrs).
-  *Gate:* label round-trip — serialize(structure) reproduces today's labels byte-for-byte on the corpus.
-- **Stage 3 — engine shadow mode.** Generic `captures(Q,E)` + residual registry runs IN PARALLEL with the
-  old arms on the full corpus; diff edges + tiers. Stem-bucketed candidate generation for the hot loop;
-  re-prove the two-layer cycle-engine quotient over (stem + attribute-set) identity. *Gate:* reconstruction
-  golds + bench:recall + a judged sweep of every tier CHANGE (incl. the O21 null-Subject drops); the
-  corpus-edge-diff gate is explicitly non-authoritative.
-- **Stage 4 — cutover.** Retire subsumption-expressible arms (blink→etb, sac→dies bridge, …); guards/bridges
-  remain as the registry. Regenerate resource graph + D1–D4 dumps; reseed the API. *Gate:* CardAtlas
-  contract tests + atlas-diag spot-checks on both golds' cards.
-- **Stage 5 — frontend.** atlas-web consumes structured attributes (jsonb) + the rollup; column matching
-  becomes attribute-subset; the live-canonical derivation extends to the taxonomy schema. *Gate:* the
-  Chatterfang & Deadeye card pages render the worked-gold edge sets exactly.
-
-## Open questions (to resolve before the Decision)
-- **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
-  (O14 leans `creature` — the object — with `token` as an attribute.)
-- **O3 scope:** how event-centric to go — reframe all costs as consume+event-emit, or only the LTB family?
-- **O6 audit:** which curated bridges become subsumption rungs; which are genuinely cross-resource — now
-  extended by O17.1 to the full residual-layer schema (polarity, match policy, identity guards).
-- **O9/O17.3:** root completeness — place `dice`/`tap`/combat-presence; zone-change axis vs flat families.
-- **O17.2:** attribute provenance (asserted vs over-approximated) representation + the null-Subject
-  default-GREEN keep/kill.
-- **Migration (O17.4):** topology change; two-layer quotient re-proof; promotion gate = reconstruction golds
-  + bench:recall + judged GREEN sweep; stem-bucketed candidate generation for the hot loop.
-- **Parser asks:** O4 `manner` facet · `Sacrificed` trigger event (O17.3) · per-cost spans (logged earlier).
-
-## Provenance
-- interaction-judge taxonomy verdict, 2026-07-16 (6/6 PASS, PROCEED with: keep fodder consume; re-root
-  emit under `ltb` with a `manner` facet; `to-graveyard` stays over-approximate). CR: 701.21a, 700.4,
-  603.6, 603.10a, 614.6, 111.1/205.3m.
-- Driven by the atlas-web Card Explorer flow-adjacency work (see the atlas-diag / Chatterfang session).
+*(Promoted verbatim into the body's **Migration** section; see above. The historical open-questions and
+provenance lists that closed out the log were likewise promoted into the body's **Open questions** and
+**Provenance** sections — the O5 fork resolved as `creature`-with-`[token]`-attribute per O14, and the
+O9/O17.2/O17.3/O17.4 items resolved per O19/O21/O22.)*
