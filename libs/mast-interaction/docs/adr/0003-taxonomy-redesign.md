@@ -192,22 +192,40 @@ P/T) and Resources (proliferate/energy pool) — likely own supergroup + a modif
 = a Removal emit that also decrements the object pool (the O2 duality restated). **Open naming:** Deployment
 vs Arrival/Development; Structure vs Sequencing/Tempo.
 
+### O13 — Removal needs a source-zone facet; zone-change (from→to) is the primitive
+Removal's first cut ("an object in play will no longer be in play," O12) is battlefield/stack-anchored, but
+graveyard hate removes an object from a NON-play zone — **Soul-Guide Lantern** ("When this artifact enters,
+exile target card from a graveyard") is `removal:card:from-graveyard:to-exile`. Generalize: a Removal leaf
+carries an explicit **from-zone** facet — `removal:<object>:from-<zone>:to-<zone>:<manner>:<scope>` — covering
+battlefield→graveyard (dies), battlefield→exile, battlefield→hand (bounce), graveyard→exile (gy hate),
+hand→graveyard (discard), library→graveyard (mill), stack→graveyard (countered). Deeper: **zone-change
+(from → to) is the primitive event**; Removal and Deployment (O12) are slang supergroups anchored on the
+battlefield/stack endpoint — Removal = battlefield/stack is the FROM, Deployment = it's the TO — and
+non-play-endpoint zone-changes (gy hate, discard, mill) are Removal in the broad "answer/disrupt" sense.
+**Open:** do Removal/Deployment stay separate supergroups sharing a from/to facet pair, or collapse into one
+Zone-change supergroup with the slang as derived views?
+
 ---
 
 ## The triggering case (worked, for reference)
 
-Chatterfang, Squirrel General — the reconciled model the redesign would produce (labels illustrative,
-pending O4/O5):
+Chatterfang, Squirrel General — full-text labeling under the O10–O13 supergroup model (labels illustrative;
+facet order + names pending O4/O5/O13). Reads `<side> : <supergroup> : <subject[:derived]> : <qualifiers> :
+<quantity>`.
 
-| Clause | Consume | Emit |
+| Oracle text | Side | Label |
 |---|---|---|
-| `If one or more tokens would be created…` / `…Squirrels are created instead.` | `replace:token-creation` (intercept) | `emit:token:squirrel:controlled` |
-| `{B},` | `pay:mana:black` | — |
-| `Sacrifice X Squirrels` | `sac:creature:squirrel:controlled` (fodder — **kept for §8**) | `ltb:creature:squirrel:to-graveyard:sacrificed:controlled` |
-| `Target creature gets +X/-X…` | — | `modify:pt` (inert) |
+| `Forestwalk (…reminder…)` | emit | `modification:evasion:forestwalk:self` (inert; reminder text carries no port) |
+| `If one or more tokens would be created under your control,` | intercept | `deployment:token:controlled` (the replaced creation event) |
+| `those tokens plus that many 1/1 green Squirrel creature tokens are created instead.` | emit | `deployment:token:creature:squirrel:fodder:controlled` · qty `that-many` (1/1 → **fodder**) |
+| `{B},` | consume | `mana:black` · qty 1 |
+| `Sacrifice X Squirrels` (dual, O2) | consume | `creature:squirrel:fodder:controlled` · qty `X` (fodder pool decrement — **kept for §8**, retains `sac:` role) |
+| `Sacrifice X Squirrels` | emit | `removal:creature:squirrel:from-battlefield:to-graveyard:sacrificed:controlled` · qty `X` (feeds dies/LTB/sacrifice payoffs by subsumption) |
+| `Target creature gets +X/-X until end of turn.` | emit | `modification:pt:+X/-X:target:creature:eot` · qty `X` (the −X toughness carries a **lethal edge** → derived Removal, cf. Skullclamp) |
 
-Right column ("this card feeds") then reaches `consume:death` / `consume:ltb` payoffs (Blood Artist,
-Pitiless Plunderer) by subsumption, and the spurious `emit:cast`-bridged rows (Aang) disappear.
+Right column ("this card feeds") then reaches `consume:removal:…:to-graveyard` (Blood Artist, Pitiless
+Plunderer) by subsumption; the spurious `emit:cast`-bridged rows (Aang) disappear. Note the `X` binding
+across the sac cost and the +X/-X effect (§8 quantity), and the `that-many` binding from the intercept.
 
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
