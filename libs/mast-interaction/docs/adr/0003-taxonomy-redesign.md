@@ -373,6 +373,43 @@ edge (the O17.4 topology change, on the gold itself); the sac is dual (C4+C5 —
 GREEN-preserving judgments (polarity/cover/identity) move from buried engine arms to declared schema; the
 over-approximation becomes visible provenance; the modifier edge survives untouched.
 
+## Second gold — Deadeye Navigator + Peregrine Drake (orthogonal validation)
+
+A mechanically-unrelated U(/W control-flicker) combo, chosen to stress the axes the aristocrats gold never
+touches. Infinite ETBs + mana-positive: Deadeye (soulbonded to Drake) pays `{1}{U}` → blinks Drake → Drake's
+ETB untaps 5 lands → repeat. Current parse state (real data): Peregrine parses clean (`etb:creature:self` +
+`emit:untap`, 19 combos); **Deadeye's blink is UNPARSED** (`emit:gainability`, 0 combos) — a live parse gap the
+taxonomy gives a target for. Worked on the correct mechanics:
+
+**Deadeye:** `consume:mana[blue,1]+[generic,1]` · emit `removal:creature[from=battlefield, to=exile,
+manner=blink, exclude=self]` (exile half) · emit `deployment:creature[manner=blink, exclude=self]` (return
+half — load-bearing). **Peregrine:** consume `deployment:creature[self]` (ETB) · emit
+`structure:untap[subtype=land, control=you, qty=up-to-5]`.
+
+| Edge | Match | Arm kind |
+|---|---|---|
+| E1 Deadeye `deployment:creature[blink]` → Drake `consume:deployment:creature[self]` | stems equal (blink *is* a deployment); structural half = subsumption; Drake self-watches, Deadeye blinks "a creature" → Overlaps → **AMBER** | **subsumption + identity-guard residual** |
+| E2 Drake `structure:untap[land]` → Deadeye `consume:mana[{1}{U}]` | untap ≠ mana, no lattice relates them → **AMBER** ("up to five"→firability; colors unknown, CR 107.4) | **irreducible cross-resource bridge (stays curated)** |
+
+**Why it validates the model:**
+- **E1 splits an existing arm exactly as O16.1/O17.1 predicted.** `BlinkSatisfiesEnter` collapses: its structural
+  half becomes the generic `deployment → deployment-consume` match (which ALSO covers cast/reanimate — the
+  blink-specific arm is *retired* and blink/cast/reanimate unify under `deployment`); its residual half (is the
+  blinked object the ETB's self-watched object?) cannot collapse and correctly floors to AMBER. Structural →
+  subsumption; residual → stays.
+- **E2 is the other arm kind** — a genuinely cross-resource bridge (Structure enabling Resource) subsumption
+  can't express; it stays curated and AMBER-by-construction. The two edges together exhibit BOTH residual kinds
+  the review named (O17.1), on one combo.
+- **Object/event symmetry (O10)** in the flesh: `dies` = consume-a-removal ↔ `etb` = consume-a-deployment.
+- **The untap orphan (O17.3) appears on a real combo** — `structure:untap` is exactly the unplaced family; the
+  gold confirms the orphan is real, not hypothetical, and belongs to a Structure/tap sub-axis.
+- **Tier outcome differs correctly**: both edges AMBER → soundly-conditional loop (works with blue sources, not
+  card-certifiable), reached by the SAME machinery that GREENs Chatterfang. Color never touches the stem
+  (mono-U here, B/G there) — the structural evidence that the taxonomy is color-agnostic.
+
+Caveat: mono-blue, not literally U/W; the UW two-color / combat-blink variant is Brago, King Eternal (which
+would also exercise the combat-presence orphan).
+
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
   (O14 leans `creature` — the object — with `token` as an attribute.)
