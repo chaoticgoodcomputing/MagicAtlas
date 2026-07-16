@@ -9,8 +9,10 @@ deterministic projection, label-as-query, totality, the §8 accounting axes, the
 carry forward. **Grilled twice:** an interaction-judge pass returned the sacrifice event hierarchy
 CR-correct (6/6 PASS, PROCEED, with two conditions folded into §5/§6); an independent fresh-context
 design review verified the draft against the code and returned ADJUST with five amendments, all adopted
-(§6, §7, §9, Migration). Grounded on **two worked golds** — Chatterfang × Pitiless Plunderer (GREEN) and
-Deadeye Navigator × Peregrine Drake (AMBER) — which between them exercise every decision below (Appendix).
+(§6, §7, §9, Migration). Grounded on **two fully-worked golds** — Chatterfang × Pitiless Plunderer (GREEN)
+and Deadeye Navigator × Peregrine Drake (AMBER) — which between them exercise every decision below
+(Appendix); a third, Ruthless Knave × Blood Artist, is absorbed from the existing fixtures as a GREEN
+cover-policy seed-witness (§8 bootstraps from all three).
 
 **Not yet implemented.** The projection, engine, and fixtures still reflect ADR 0002 until the Migration
 stages complete; nothing ships from this document before its Stage gates pass.
