@@ -293,12 +293,34 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
   (Ruthless Knave × Blood Artist from `blood-artist-engine.json` — the GREEN cover-policy witness); retire
   `known-families.json`/`families.json` once their content is witnessed in the rollup. *Gate:* rollup
   builds; all three golds' assertions pass.
-- **Stage 1 — parser asks.** `manner` attribute, `Sacrificed` trigger event, per-cost spans, the Deadeye
-  blink slice — vertical slices via the mast-tdd loop. *Gate:* gold-fixture suite green; span-only regen
-  discipline.
+- **Stage 1 — parser asks.** *Re-scoped 2026-07-16 after a code-grounded gap analysis — the original
+  four asks split by real layer; only the genuinely parse-layer ones remain here (the rest moved to their
+  true layer):*
+  - **per-cost spans** *(parse, KEPT).* Base `Cost` subtypes carry no `SourceSpan` (only `AdditionalCost`
+    does); add one + populate in `ActivatedAbilityParser.ParseCosts` so a compound cost (`{B}, Sacrifice a
+    creature`) splits into spanned components. Value is clause-accurate consume-port provenance (frontend
+    highlighting) — it creates no edge and unblocks no witness. *Gate:* gold-fixture round-trip green;
+    span-only regen via the `GoldSpanReserializeUtility` (walks `Costs`).
+  - **Deadeye blink slice** *(RE-SCOPED to projection, DONE 2026-07-16).* The blink already parses
+    (`exile` + `returnToBattlefield[ExiledWith:Self]`); it was blocked in PortWalk, not the parser — its
+    soulbond-granted ability sat inside a `gainAbility` that `ProjectAbility` didn't recurse, so it
+    projected the coarse `emit:gainability`. Fixed by recursing activated/triggered `gainAbility` grants
+    (mirroring `becomesPermanent`); Deadeye now projects `emit:blink` and the ×Peregrine loop reconstructs
+    AMBER matching the gold. (The composite-normalization half was unnecessary — the standalone
+    `returnToBattlefield[ExiledWith:Self]` handler already covers the flat sibling shape.)
+  - **`manner` attribute** *(MOVED → Stage 2).* Derivable from the effect node TYPE (`SacrificeEffect`,
+    blink, `DestroyEffect` are already distinct nodes); it is a projection dual-emit facet, not a parse
+    field.
+  - **`Sacrificed` trigger event** *(STRUCK as a parse ask; folded into the Stage-2 `manner` facet).* The
+    passive "when X is sacrificed" watcher form is **one corpus card** (Jaws, L0 for an unrelated
+    residual); MTG phrases sacrifice triggers actively ("you sacrifice", 91 cards, already parsing). The
+    real ADR ask is the emit-side `manner=sacrificed` facet — identical to `manner`, driven by the
+    already-parsing active cards, not a passive-oracle-text parser slice.
 - **Stage 2 — structured PortNode.** Stem + attributes + provenance emitted **alongside** the string label
-  (dual-emit); the label becomes a generated serialization. *Gate:* label round-trip —
-  serialize(structure) reproduces today's labels byte-for-byte across the corpus.
+  (dual-emit); the label becomes a generated serialization. **Includes the `manner` facet + the
+  `Sacrificed`/blink emit-side manner values** (moved here from Stage 1 — they are projection, derived
+  from effect node type). *Gate:* label round-trip — serialize(structure) reproduces today's labels
+  byte-for-byte across the corpus.
 - **Stage 3 — engine shadow mode.** `captures(Q,E)` + residual registry runs in parallel with the old arms
   on the full corpus; diff edges + tiers. Stem-bucketed candidates; quotient re-proof. *Gate:*
   reconstruction golds + bench:recall + a judged sweep of **every tier change** (including the §7
