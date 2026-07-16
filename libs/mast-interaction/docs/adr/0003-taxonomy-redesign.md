@@ -516,6 +516,49 @@ code, R4 bridges, R5 provenance/defaults) as the rollup's SECTIONS. Bootstrap: s
 existing worked golds (Chatterfang×Pitiless: polarity may-be-choice + argument-cover; Deadeye×Peregrine:
 self-watch guard + untap→mana bridge).
 
+### O21 — Review closeout: combat-presence, the negation inventory, the null-Subject decision
+Closes the three bounded O17 items that needed only enumeration or a decision:
+
+- **Combat-presence (O17.3, last root straggler):** under O19 it is simply an **Event** —
+  `event:combat-presence` (a permanent attacks or blocks; today's `attacksorblocks` consume is a
+  subscription to it; `emit:additionalcombat` re-raises the phase that produces it). Root is now complete:
+  every canonical family and every `PortWalkProjection` discriminator has a placement.
+- **Negation inventory (O17.5), enumerated from `ObjectFilter`/`ObjectFilterRelations`:**
+  `ExcludedCardTypes` · `ExcludedSubtypes` · `ExcludedSupertypes` · `ExcludedColors` (each a per-axis
+  exclusion list with its own decider) · `IsColorless` (boolean "no colors") · `ComparisonOperator.NotEqual`
+  (deciders return **Unknown** when NotEqual is on either side — safely non-committal) · the `:another` /
+  exclude-self facet (an identity-flavored exclusion, handled by the O17.1 guard layer, not the filter
+  lattice). All are **atomic, per-axis, decider-confined** — none introduces general boolean structure, so
+  the EL-profile guarantee (O15) holds. The Decision lists exactly this set as the closed negation vocabulary.
+- **Null-Subject default-GREEN (O17.2): KILL.** Decision: a port with no subject filter is an *unknown*
+  subject, not a universally-compatible one — feasibility may still propose the edge, but Reliability caps
+  at Unknown (→ AMBER floor) unless a confirmed rollup rule (O20) or a same-card witness certifies it.
+  Rationale: consistent with open-world semantics (O15), with attribute provenance (O17.2), and with the
+  O20 ladder ("nothing uncited is GREEN"). Migration note: this is a deliberate tier-tightening; the
+  shadow-mode diff (O22) must list every edge that drops from GREEN, each re-judged rather than waved through.
+
+### O22 — Migration staging (O17.4), gated
+- **Stage 0 — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
+  generator with loud conflict detection (O20); seed from the two golds. *Gate:* rollup builds; both golds'
+  assertions pass.
+- **Stage 1 — parser asks.** `manner` facet (O4), `Sacrificed` trigger event (O17.3), per-cost spans
+  (logged), Deadeye blink slice (`deployment[manner=blink]`). Vertical slices via the mast-tdd loop.
+  *Gate:* gold-fixture suite green; span-only regen discipline.
+- **Stage 2 — structured PortNode.** Stem + attribute set + provenance emitted ALONGSIDE the string label
+  (dual-emit); the label becomes a generated serialization; collision-lint transfers to (stem, attrs).
+  *Gate:* label round-trip — serialize(structure) reproduces today's labels byte-for-byte on the corpus.
+- **Stage 3 — engine shadow mode.** Generic `captures(Q,E)` + residual registry runs IN PARALLEL with the
+  old arms on the full corpus; diff edges + tiers. Stem-bucketed candidate generation for the hot loop;
+  re-prove the two-layer cycle-engine quotient over (stem + attribute-set) identity. *Gate:* reconstruction
+  golds + bench:recall + a judged sweep of every tier CHANGE (incl. the O21 null-Subject drops); the
+  corpus-edge-diff gate is explicitly non-authoritative.
+- **Stage 4 — cutover.** Retire subsumption-expressible arms (blink→etb, sac→dies bridge, …); guards/bridges
+  remain as the registry. Regenerate resource graph + D1–D4 dumps; reseed the API. *Gate:* CardAtlas
+  contract tests + atlas-diag spot-checks on both golds' cards.
+- **Stage 5 — frontend.** atlas-web consumes structured attributes (jsonb) + the rollup; column matching
+  becomes attribute-subset; the live-canonical derivation extends to the taxonomy schema. *Gate:* the
+  Chatterfang & Deadeye card pages render the worked-gold edge sets exactly.
+
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
   (O14 leans `creature` — the object — with `token` as an attribute.)
