@@ -123,6 +123,23 @@ LTB; `etb` is the enter dual of LTB; `recur` (return-to-battlefield/hand) is zon
 a zone-change umbrella (`ltb` / `etb` / `recur` as directions of one axis) may collapse several "families"
 into one hierarchy, which would also fix the explorer's family membership questions at the root.
 
+### O10 — "Fodder" is a strategic gloss, not a resource: separate OBJECTS from EVENTS
+"Fodder" (what a sacrifice consumes) is Magic slang for expendable creatures — **not AST-derivable** (a
+creature's fodder-ness is a game-plan judgment, absent from the card text) and not a 1/1-specific notion.
+What a sacrifice actually consumes is a **creature** (the permanent named by the `sac:` subject filter —
+Ashnod's `creature`, Chatterfang `creature:squirrel`); what the doubler emits is **creature tokens**
+(`emit:token:creature:squirrel`), never `emit:fodder`. The label names what an object *is*, not the role a
+player assigns it. This exposes a cleaner cut: distinguish **object-resources** (the things that flow around a
+loop — creatures/permanents, mana, tokens, counters) from **events** (what happens to them — enters,
+leaves-battlefield / dies / sacrificed, cast). A sacrifice = `consume(object: creature)` + `emit(event: LTB)`;
+the creature flows, the sacrifice/death is the event feeding payoffs. **Refines** O2 (the duality is
+object-consume + event-emit), O3 (name by object *and* by event, on separate axes), O5 (the fodder-consume
+family is `creature`, the object — reframing the fork), and O9 (`creature`/`permanent` is an object-resource
+the canonical family set omits; `sacrifice`/`death`/`etb` are events, not peer object-families). Corollary
+(the enabling principle, ADR 0002 §2): a single oracle clause legitimately projects **multiple** ports —
+Chatterfang's one sacrifice clause is a consume AND an emit — because a port is a *query* against the AST, and
+one sub-tree satisfies many queries. The many-to-one (text → labels) is the design, not a smell.
+
 ---
 
 ## The triggering case (worked, for reference)
