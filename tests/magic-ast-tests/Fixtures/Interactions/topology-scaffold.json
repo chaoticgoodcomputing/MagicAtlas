@@ -73,7 +73,7 @@
     "counter-type": { "enum": ["+1/+1", "loyalty", "charge", "energy", "experience", "poison"], "licensed_by": ["counters"] },
     "keyword":      { "lattice": "keyword ontology (forestwalk ⊂ landwalk ⊂ evasion)", "licensed_by": ["modification:keyword"] },
     "target":       { "enum": ["self", "any", "chosen"], "licensed_by": ["*"] },
-    "exclude-self":  { "enum": [true], "note": "identity exclusion (:another); handled by the §6 guard layer, not the lattice", "licensed_by": ["removal:*", "deployment:*"] },
+    "exclude_self":  { "enum": [true], "note": "identity exclusion (:another); the attribute-axis key (matches the golds' attrs); the §6 guard rule id is guard:exclude-self (kebab, a different namespace)", "licensed_by": ["removal:*", "deployment:*"] },
     "self":         { "enum": [true], "note": "the port's subject is the source object itself", "licensed_by": ["*"] }
   },
 

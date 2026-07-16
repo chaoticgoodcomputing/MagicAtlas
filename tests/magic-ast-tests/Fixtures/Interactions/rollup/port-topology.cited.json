@@ -389,19 +389,6 @@
         "your-next-turn"
       ]
     },
-    "exclude-self": {
-      "stems": [],
-      "values_seen": [],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "removal:*",
-        "deployment:*"
-      ],
-      "enum": [
-        "True"
-      ],
-      "note": "identity exclusion (:another); handled by the \u00A76 guard layer, not the lattice"
-    },
     "exclude_self": {
       "stems": [
         "creature",
@@ -411,7 +398,15 @@
       "values_seen": [
         "True"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "removal:*",
+        "deployment:*"
+      ],
+      "enum": [
+        "True"
+      ],
+      "note": "identity exclusion (:another); the attribute-axis key (matches the golds\u0027 attrs); the \u00A76 guard rule id is guard:exclude-self (kebab, a different namespace)"
     },
     "from": {
       "stems": [
