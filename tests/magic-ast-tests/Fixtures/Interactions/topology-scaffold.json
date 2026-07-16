@@ -1,0 +1,120 @@
+{
+  "$scaffold": "port-topology target map (ADR-0003 Stage 0a)",
+  "$status": "hypothesis — versioned; the DECLARED half of port-topology (golds provide the WITNESSED half). Revised as golds land.",
+  "$version": 1,
+  "$provenance": "4-panelist blind sweep (3 Opus + 1 full-slang), 2026-07-16; unanimous kinds/supergroups/axes; forks F1/F2/F3 human-ruled.",
+  "$forks_resolved": {
+    "F1": "a stem has ONE intrinsic kind; a supergroup is a VIEW that may span kinds (Structure spans EVENT+STATE). No orthogonal kind×supergroup matrix.",
+    "F2": "a new Objects State supergroup homes bare object-consumes; Objects = fold(deployment − removal) = the §10 SDF-balance substrate.",
+    "F3": "dice-rolled / damage-dealt / combat-presence are bare EVENT verbs, no supergroup."
+  },
+
+  "kinds": {
+    "EVENT":    "discrete occurrences with payloads — what subscriptions (triggered abilities) fire on.",
+    "STATE":    "pools/stores folded over the event stream (state = fold(events)).",
+    "BEHAVIOR": "continuous time-varying values — statics, anthems, keyword grants, 'as long as'."
+  },
+
+  "supergroups": {
+    "removal":      { "kind_view": "EVENT",       "def": "a zone-change whose FROM endpoint is play (battlefield/stack): an object leaves play. Carries from/to/manner." },
+    "deployment":   { "kind_view": "EVENT",       "def": "a zone-change whose TO endpoint is play: an object enters play (cast/ETB/token/reanimate/blink-return/copy)." },
+    "modification": { "kind_view": "BEHAVIOR",    "def": "an object altered in place: P/T, keyword/ability grant, type/color/control change." },
+    "resources":    { "kind_view": "STATE",       "def": "fungible pools: mana, cards, life, counters." },
+    "objects":      { "kind_view": "STATE",       "def": "addressable permanents on the battlefield (F2). Objects = fold(deployment − removal). Bare object-consumes (a sac's fodder decrement) live here; the §10 balance substrate." },
+    "structure":   { "kind_view": "EVENT+STATE",  "def": "the clock — a VIEW spanning phase/combat/extra-turn Events and tap/untap availability State (F1: a supergroup may span kinds)." }
+  },
+
+  "event_verbs_no_supergroup": {
+    "dice-rolled":     { "kind": "EVENT", "def": "a die roll produces a numeric payload; feeds 'whenever you roll one or more dice' (O19 — dice dissolved, no fourth axis)." },
+    "damage-dealt":    { "kind": "EVENT", "def": "damage as an event; edges into resources:life (loss) and, when lethal, removal (state-based death)." },
+    "combat-presence": { "kind": "EVENT", "def": "a permanent attacks or blocks (O21; the attacksorblocks subscription; emit:additionalcombat re-raises the phase that produces it)." }
+  },
+
+  "stems_representative": {
+    "$note": "The is-a spine accretes via golds (status=witnessed there). These are the anchors per supergroup; parent derived by dropping the last ':' segment (permanent ⊃ creature).",
+    "removal:permanent":       { "kind": "EVENT" },
+    "removal:creature":        { "kind": "EVENT", "parent": "removal:permanent", "witnessed": ["chatterfang-x-pitiless-plunderer", "deadeye-x-peregrine-drake", "ruthless-knave-x-blood-artist"] },
+    "removal:artifact":        { "kind": "EVENT", "parent": "removal:permanent", "witnessed": ["chatterfang-x-pitiless-plunderer"] },
+    "deployment":              { "kind": "EVENT", "witnessed": ["chatterfang-x-pitiless-plunderer"] },
+    "deployment:creature":     { "kind": "EVENT", "witnessed": ["chatterfang-x-pitiless-plunderer", "deadeye-x-peregrine-drake"] },
+    "deployment:artifact":     { "kind": "EVENT", "witnessed": ["chatterfang-x-pitiless-plunderer", "ruthless-knave-x-blood-artist"] },
+    "modification:creature":   { "kind": "BEHAVIOR", "witnessed": ["chatterfang-x-pitiless-plunderer"] },
+    "modification:keyword":    { "kind": "BEHAVIOR", "witnessed": ["deadeye-x-peregrine-drake"] },
+    "modification:evasion":    { "kind": "BEHAVIOR", "parent": "modification:keyword" },
+    "modification:evasion:flying": { "kind": "BEHAVIOR", "parent": "modification:evasion", "witnessed": ["deadeye-x-peregrine-drake"] },
+    "mana":                    { "kind": "STATE", "supergroup": "resources", "witnessed": ["chatterfang-x-pitiless-plunderer", "deadeye-x-peregrine-drake", "ruthless-knave-x-blood-artist"] },
+    "life":                    { "kind": "STATE", "supergroup": "resources", "witnessed": ["ruthless-knave-x-blood-artist"] },
+    "cards":                   { "kind": "STATE", "supergroup": "resources" },
+    "counters":                { "kind": "STATE", "supergroup": "resources" },
+    "creature":                { "kind": "STATE", "supergroup": "objects", "witnessed": ["chatterfang-x-pitiless-plunderer", "ruthless-knave-x-blood-artist"] },
+    "artifact":                { "kind": "STATE", "supergroup": "objects", "witnessed": ["chatterfang-x-pitiless-plunderer"] },
+    "tap":                     { "kind": "STATE", "supergroup": "structure", "witnessed": ["chatterfang-x-pitiless-plunderer"] },
+    "structure:untap":         { "kind": "STATE", "supergroup": "structure", "witnessed": ["deadeye-x-peregrine-drake"] }
+  },
+
+  "attribute_axes": {
+    "$note": "Closed key set (unordered per port). value = the observed lattice/enum; licensed_by = stems that may carry it (TFS appropriateness). 'provenance' (asserted|derived) and 'polarity' (fixed|producer-choice) are per-VALUE modifiers, not axes.",
+    "subtype":      { "lattice": "type-ontology (creature:squirrel ⊆ creature)", "licensed_by": ["objects:*", "removal:*", "deployment:*"] },
+    "control":      { "lattice": "self ⊆ controlled ⊆ any ; opponent ⊆ any", "licensed_by": ["*"] },
+    "owner":        { "lattice": "owned (ownership, orthogonal to control)", "licensed_by": ["objects:*", "removal:*", "deployment:*"] },
+    "from":         { "lattice": "zones", "licensed_by": ["removal:*", "deployment:*"] },
+    "to":           { "lattice": "zones", "licensed_by": ["removal:*", "deployment:*"] },
+    "manner":       { "enum": ["sacrificed", "destroyed", "combat", "state-based", "blink", "cast", "copied"], "licensed_by": ["removal:*", "deployment:*"] },
+    "pt":           { "lattice": "power/toughness comparisons", "licensed_by": ["objects:*", "modification:*"] },
+    "stat":         { "enum": ["pt"], "licensed_by": ["modification:*"] },
+    "delta":        { "lattice": "signed magnitude (+X/-X)", "licensed_by": ["modification:*"] },
+    "color":        { "enum": ["W", "U", "B", "R", "G", "C", "any"], "licensed_by": ["mana", "objects:*"] },
+    "token":        { "enum": [true, false], "licensed_by": ["objects:*", "deployment:*"] },
+    "qty":          { "kind": "numeric|symbolic", "bindable": ["X", "that-many", "up-to-N"], "licensed_by": ["*"] },
+    "duration":     { "enum": ["eot", "permanent", "your-next-turn"], "licensed_by": ["modification:*"] },
+    "recipient":    { "enum": ["you", "opponent", "any", "player", "creature", "planeswalker"], "licensed_by": ["life", "damage-dealt"] },
+    "direction":    { "enum": ["gain", "loss"], "licensed_by": ["life"] },
+    "combat":       { "enum": ["combat", "noncombat", "any"], "licensed_by": ["damage-dealt", "combat-presence"] },
+    "counter-type": { "enum": ["+1/+1", "loyalty", "charge", "energy", "experience", "poison"], "licensed_by": ["counters"] },
+    "keyword":      { "lattice": "keyword ontology (forestwalk ⊂ landwalk ⊂ evasion)", "licensed_by": ["modification:keyword"] },
+    "target":       { "enum": ["self", "any", "chosen"], "licensed_by": ["*"] },
+    "exclude-self":  { "enum": [true], "note": "identity exclusion (:another); handled by the §6 guard layer, not the lattice", "licensed_by": ["removal:*", "deployment:*"] },
+    "self":         { "enum": [true], "note": "the port's subject is the source object itself", "licensed_by": ["*"] }
+  },
+
+  "aliases": {
+    "$note": "named attribute-constraints (O11); each pinned to exactly one query.",
+    "fodder":  "creature[pt=1/1]  (Skullclamp reading: creature[toughness=1])",
+    "dies":    "removal:*[to=graveyard]",
+    "sacrifice": "removal:*[manner=sacrificed]",
+    "edict":   "removal:creature[control=opponent, manner=sacrificed]",
+    "bounce":  "removal:*[from=battlefield, to=hand]",
+    "mill":    "removal:*[from=library, to=graveyard]",
+    "gy-hate": "removal:*[from=graveyard, to=exile]",
+    "counter-spell": "removal:*[from=stack, to=graveyard]",
+    "reanimate": "deployment:*[from=graveyard, to=battlefield]",
+    "blink":   "removal:*[to=exile, manner=blink] + deployment:*[manner=blink]"
+  },
+
+  "reject": {
+    "$note": "NOT AST-derivable — a game-plan/quality/social judgment, never a port. (A rejected archetype's MECHANISMS still map; the LABEL does not.)",
+    "archetypes": ["aggro", "control", "combo", "midrange", "tempo", "aristocrats", "voltron", "superfriends", "pillowfort", "group-hug", "stax"],
+    "judgments":  ["value", "engine", "payoff", "inevitability", "tech", "gas", "jank", "pile", "goodstuff", "bomb", "haymaker", "threat", "answer", "clock", "out", "win-con", "finisher"],
+    "social":     ["durdle", "brew", "netdeck", "spike/timmy/johnny", "lucksack", "whale", "misplay"]
+  },
+
+  "holes": {
+    "$note": "DECLARED, status=witness:sought — the targeted-witnessing backlog (§8; ADR Migration Stage 0a). All six found blind by every panelist ⇒ structural, not slang-coverage artifacts. Ordered by corroboration; each seeds a search for a single-card/pairwise/combo witness for the first post-migration derivation run.",
+    "cost-modification":  { "priority": 1, "kind": "BEHAVIOR", "proposed_stem": "modification:spell", "attrs": ["cost-delta"], "slang": ["tax", "cost-reduction", "cheat-out"], "note": "no cost-delta stem; both directions (↑ tax / ↓ reduction) homeless. Most corroborated (panel + full-slang + checklist)." },
+    "restriction-grant":  { "priority": 2, "kind": "BEHAVIOR", "proposed_stem": "modification:restriction", "attrs": ["restrict=attack|block"], "slang": ["pacifism", "prison", "lock"], "note": "'can't attack/block' grant — a Behavior with no stem." },
+    "prevention":         { "priority": 3, "kind": "BEHAVIOR", "proposed_stem": "modification:prevention", "attrs": ["prevents=combat-damage"], "slang": ["fog"], "note": "a shield/replacement on the damage event." },
+    "library-search":     { "priority": 4, "kind": "STATE",    "proposed_stem": "cards:search", "attrs": ["from=library", "to=hand", "by=criteria"], "slang": ["tutor", "fetch"], "note": "library→hand by criteria; distinct from draw. A Cards-STATE op." },
+    "library-selection":  { "priority": 5, "kind": "STATE",    "proposed_stem": "cards:select", "attrs": ["peek=N", "reorder"], "slang": ["dig", "scry", "surveil", "impulse"], "note": "peek/reorder top-N; a Cards-STATE op." },
+    "non-play-zone-move":  { "priority": 6, "kind": "EVENT",    "proposed_stem": "zonechange (neither removal nor deployment)", "attrs": ["from", "to"], "slang": ["reclamation (gy→hand)", "bounce-recur"], "note": "the from→to primitive is play-anchored; hidden-zone↔hidden-zone moves fit neither Removal (from=play) nor Deployment (to=play). Do NOT force into Removal. Opus-3's 'real hole'." }
+  },
+
+  "connectivity_predictions": {
+    "$note": "falsifiable null hypotheses for the topology sweeps (rollup-vs-scaffold).",
+    "P1": "every emit:removal:*[manner=sacrificed] (sac outlet) reaches all three consumer rungs — 'when sacrificed', 'when dies' (removal:*[to=graveyard]), 'when leaves battlefield' (removal:*) — by subsumption.",
+    "P2": "every emit:deployment:creature[token] (token maker) reaches every consume:objects:creature (sac/fodder consumer) via the object store.",
+    "P3": "color is topology-invariant — it never appears on a stem, only as an attribute; a mono-U and a B/G combo have the same supergroup shape.",
+    "P4": "irreducible cross-resource bridges (structure:untap → mana) stay AMBER by ceiling.",
+    "P5": "a self-watching subscription (subject=self) fed by a broad emit ('a creature') tiers AMBER (Overlaps), never GREEN.",
+    "P6": "every one of the six holes has ≥1 witnessable card in the corpus (else the hole is a taxonomy error, not a coverage gap)."
+  }
+}

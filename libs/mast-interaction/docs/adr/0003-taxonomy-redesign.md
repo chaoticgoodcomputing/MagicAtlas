@@ -279,11 +279,15 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
   5. **library-selection** (dig/scry/surveil/impulse — peek/reorder top-N);
   6. **non-play zone moves / recur** (reclamation gy→hand, bounce-recur — the `from→to` primitive is
      play-anchored, so hidden-zone moves fit neither Removal nor Deployment; do NOT force into Removal).
-  Three forks referred to human adjudication: (F1) kind×supergroup orthogonal-matrix vs views-under-kinds
-  [lean: views + matrix as derived lookup]; (F2) a 6th `Objects` supergroup vs another home for the
-  golds' bare object-consumes [the gap is real regardless — it is the §10 balance substrate]; (F3)
-  dice/damage/combat-presence as bare Event verbs vs a 6th "Stochastic" bucket [lean: bare Event verbs,
-  per O19/O21]. Panel artifacts + difference map under the session `stage0a/` scratch.
+  Three forks, **resolved by human adjudication (2026-07-16)**: **(F1)** a stem has ONE intrinsic kind and a
+  supergroup is a *view* that may span kinds (Structure = phase/combat Events + tap/untap availability
+  State) — no orthogonal matrix; **(F2)** a new **`Objects`** State supergroup homes bare object-consumes
+  (`Objects = fold(deployment − removal)` — the §10 SDF-balance substrate; addressable objects kept distinct
+  from fungible pools); **(F3)** dice-rolled / damage-dealt / combat-presence are **bare EVENT verbs** with
+  no supergroup (per O19/O21; damage additionally edges into resources:life + removal). The negotiated
+  scaffold — `tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json` — merges the panel
+  consensus + these rulings and declares the six holes as the `witness: sought` backlog. Panel artifacts +
+  difference map under the session `stage0a/` scratch.
 - **Stage 0b — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
   generator with loud conflict detection; seed from the two worked golds **plus the absorbed third**
   (Ruthless Knave × Blood Artist from `blood-artist-engine.json` — the GREEN cover-policy witness); retire
