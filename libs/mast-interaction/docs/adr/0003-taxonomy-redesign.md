@@ -282,6 +282,46 @@ changes the redesign implies:
    little: filters/zones/quantities are already typed fields; the main parser asks are the O4 manner facet and
    per-cost spans (already logged).
 
+### O17 — Fresh-context review verdict: ADJUST (five bounded amendments)
+An independent fresh-context review (Fable, 2026-07-16) verified O1–O16 against the actual code and rendered
+**ADJUST** — central diagnosis confirmed (the AST is already a TFS; the colon-string is the lossy step;
+label re-parsing/positional facet reads in the engine are the evidence), but one systematic over-claim and
+several gaps block a PASS. Verdicts: A(root) ADJUST · B(grammar) ADJUST · C(prior art) PASS w/ correction ·
+D(sacrifice) PASS w/ two notes · E(mesh) ADJUST. The five amendments, now adopted into this log:
+
+1. **`captures(Q,E)` needs a declared RESIDUAL layer — subsumption replaces the arms' *structural* half
+   only** (amends O16.1). Reading the engine arms shows three knowledge classes a filter lattice cannot
+   express, each purchased with a judged false-positive class:
+   (i) **producer-choice attribute polarity** — `emit:mana[color=any]` feeds `pay:mana[color=black]` GREEN
+   because the *producer chooses* the color (`ManaColorFeeds`); naive constraint-⊆-value floors the
+   Chatterfang × Pitiless mana hop to AMBER. Per-attribute polarity (fixed vs producer-chooses, existential
+   matching for choice values) must be declared in the schema.
+   (ii) **per-role match policy** — sac/recast require type-*cover* (deliberately stricter than Intersects),
+   etb is deliberately lenient, CR 400.7 token-can't-be-self refusals.
+   (iii) **object-identity guards** — the same-card + `:self` checks (self-watching damage, self-blink,
+   spell self-copy/recast) that killed the recurring 1-card false-loop class.
+   Acceptance tests: Chatterfang × Pitiless mana hop stays GREEN; the four same-card-guard false loops stay dead.
+2. **Restate ADR-0002 §6's invariant for attribute data** (amends O7/O14): every projected attribute carries
+   **asserted vs over-approximated provenance**; an over-approximated attribute (`to=graveyard` under CR-614
+   redirects; the subtype→type lift) may gate feasibility but **caps Reliability at Unknown** — otherwise
+   generic matching GREEN-certifies over-assertions (the 644-false-GREEN class by a data-shaped door). Fold
+   the null-Subject default-GREEN keep/kill decision into the same section.
+3. **The supergroup root has orphans** (amends O12): `dice` fits no meta-axis; `tap` and combat-presence
+   (`attacksorblocks`) are only implicitly Structure. Place them (or declare a named fourth bucket —
+   candidate: a "Stochastic/Presence" review against `ResourceFamilies.Canonical` + all three
+   `PortWalkProjection` discriminator sets, line-by-line, before Decision). Parser ask: **no `Sacrificed`
+   trigger event exists** — the O1 "when sacrificed" rung is parser-gated; add it beside the O4 manner facet.
+4. **Migration is a topology change, not a relabel** (amends O16.5): today's sac→dies bridge is
+   **consume→consume**; the emit-side removal event moves edge *endpoints*, so every reconstruction
+   gold/cycle shape regenerates, the two-layer cycle engine's label-string quotient (byte-identical
+   equivalence gate) must be **re-proven** over stem+attribute-set identity, and the corpus-edge-diff gate is
+   known non-authoritative on broad changes. Promotion gate = reconstruction golds + bench:recall + a judged
+   GREEN sweep. Perf: the emits×consumes product needs **stem-bucketed candidate generation** (the is-a
+   lattice gives finite bucket keys — strictly better than globs) before structured matching enters the hot loop.
+5. **O15 negation-inventory correction**: `:another` is not the only negation — the filter model carries an
+   atomic-negation family (`ExcludedCardTypes/Subtypes/Supertypes/Colors`, `IsColorless`, `NotEqual`
+   comparisons), each per-axis-decided and in-profile. The Decision inventories these, not just `:another`.
+
 ---
 
 ## The triggering case (worked, for reference)
@@ -305,10 +345,16 @@ cost, the removal qty, and the +X/−X magnitude (§8); `that-many` binds the do
 
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
+  (O14 leans `creature` — the object — with `token` as an attribute.)
 - **O3 scope:** how event-centric to go — reframe all costs as consume+event-emit, or only the LTB family?
-- **O6 audit:** which curated bridges become subsumption rungs; which are genuinely cross-resource.
-- **O9:** collapse `sacrifice`/`death`/`etb`/`recur` into a zone-change axis, or keep flat families?
-- **Migration:** every sacrifice/death gold fixture + the resource graph regenerate; staging plan TBD.
+- **O6 audit:** which curated bridges become subsumption rungs; which are genuinely cross-resource — now
+  extended by O17.1 to the full residual-layer schema (polarity, match policy, identity guards).
+- **O9/O17.3:** root completeness — place `dice`/`tap`/combat-presence; zone-change axis vs flat families.
+- **O17.2:** attribute provenance (asserted vs over-approximated) representation + the null-Subject
+  default-GREEN keep/kill.
+- **Migration (O17.4):** topology change; two-layer quotient re-proof; promotion gate = reconstruction golds
+  + bench:recall + judged GREEN sweep; stem-bucketed candidate generation for the hot loop.
+- **Parser asks:** O4 `manner` facet · `Sacrificed` trigger event (O17.3) · per-cost spans (logged earlier).
 
 ## Provenance
 - interaction-judge taxonomy verdict, 2026-07-16 (6/6 PASS, PROCEED with: keep fodder consume; re-root
