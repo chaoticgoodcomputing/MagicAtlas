@@ -189,9 +189,18 @@ sac cost, the removal qty, and the +X/−X magnitude share one `X`) are first-cl
 weighed: (1) *decentralized transliteration* — encode the current interaction knowledge into the new
 format as-is, recompile, and judge the resulting topology; (2) *scaffold-first* — sketch the target
 topology (from the slang corpus + CR glossary), then migrate rules toward it, adjusting in-flight. The
-decision is (2), amended by three findings: **(a)** there is no rule-shard corpus to transliterate — the
-current knowledge is ~15 engine arms + guards + bridges and a handful of snapshots, so every per-gold
-fixture is written fresh regardless, making the scaffold nearly free; **(b)** the current shape is known
+decision is (2), amended by three findings: **(a)** the existing fixture corpus
+(`tests/magic-ast-tests/Fixtures`, ~1,760 files) stratifies by layer, and almost none of it transliterates:
+~96% is **parse-layer substrate** (`HandParsedCards`/`KeywordExpansions`/quarantines — the ASTs the new
+ports project FROM; preserved, touched only by the named parser asks, span-only) plus the **lattice-decider
+golds** (`FilterRelations` — carried forward, they test exactly the §3 machinery); the interaction-grammar
+content that actually transforms is THREE small files (`known-families.json`, `families.json`,
+`blood-artist-engine.json`), whose content is **absorbed as witnesses** — the first two encode the
+Chatterfang ring (in ADR-0002 glob syntax and in the even older pre-0002 recognizer vocabulary — proof this
+corpus already survived one taxonomy migration by content-absorption, not format-porting), and the third IS
+a ready-made third gold (Ruthless Knave × Blood Artist, the GREEN `creature ⊆ creature` cover-policy
+witness contrasting the Squirrel-straddle AMBER). So per-gold fixtures are written fresh regardless, making
+the scaffold nearly free; **(b)** the current shape is known
 insufficient (the frontend's topology-shape bugs; unparsed staples like Deadeye's blink; ~38% L2
 coverage), so faithful transliteration would reproduce an inadequate map and the post-hoc judge sweep
 would lack a null hypothesis to falsify; **(c)** scaffolding does NOT reintroduce central authority —
@@ -209,8 +218,10 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
   (e.g. every sac outlet reaches all three trigger rungs; token emitters reach sac outlets) — the null
   hypotheses for the topology sweeps. *Gate:* a judge pass over the scaffold's derivability claims.
 - **Stage 0b — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
-  generator with loud conflict detection; seed from the two golds. *Gate:* rollup builds; both golds'
-  assertions pass.
+  generator with loud conflict detection; seed from the two worked golds **plus the absorbed third**
+  (Ruthless Knave × Blood Artist from `blood-artist-engine.json` — the GREEN cover-policy witness); retire
+  `known-families.json`/`families.json` once their content is witnessed in the rollup. *Gate:* rollup
+  builds; all three golds' assertions pass.
 - **Stage 1 — parser asks.** `manner` attribute, `Sacrificed` trigger event, per-cost spans, the Deadeye
   blink slice — vertical slices via the mast-tdd loop. *Gate:* gold-fixture suite green; span-only regen
   discipline.
