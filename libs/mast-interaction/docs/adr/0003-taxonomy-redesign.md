@@ -17,6 +17,12 @@ stages complete; nothing ships from this document before its Stage gates pass.
 
 ## Context — why the ontology reopened
 
+This ADR governs layers 2–3 (port projection, interactions) of the end-to-end system topology — see
+[docs/design/system-topology.md](../../../../docs/design/system-topology.md) for the full pipeline
+(sources → parse → ports → interactions → Flowthru/seed → API → website), the accretion loop's place
+beside it, and the shared anchor-by-hand/generalize-by-structure/gate-by-judges architecture the parse
+and interaction layers have in common.
+
 ADR 0002 fixed labels as deterministic AST projections over a soft (hierarchical) colon-vocabulary, with
 the query as the projection read backwards. It held well for union-graph reconstruction. Two pressures
 reopened it:
