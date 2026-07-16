@@ -205,27 +205,47 @@ non-play-endpoint zone-changes (gy hate, discard, mill) are Removal in the broad
 **Open:** do Removal/Deployment stay separate supergroups sharing a from/to facet pair, or collapse into one
 Zone-change supergroup with the slang as derived views?
 
+### O14 — `:` is is-a taxonomy; attributes are an unordered qualification set (not colon-nested)
+ADR 0002 §3 flattens everything into one ordered colon-chain (`role:subject:[destination]:[scope]:[exclusion]`),
+conflating genuine hierarchy with orthogonal filters and forcing a canonical order + glob to match subsets.
+Split them:
+- **Taxonomy stem (`:`, ordered, genuine is-a):** `<side>:<supergroup>:<card-type>` — e.g. `emit:removal:creature`,
+  `emit:deployment:creature`. Card TYPE (permanent ⊃ creature/artifact/…) is the is-a spine; a bare
+  `removal:permanent` really is a prefix of `removal:creature`. Keyword grants may nest here where is-a holds
+  (`modification:evasion:forestwalk`; forestwalk ⊂ landwalk ⊂ evasion).
+- **Attributes (an unordered qualification SET on the leaf):** `subtype`, `control`, `from-zone`, `to-zone`,
+  `manner`, `p/t`, `color`, `token`, `qty`, … ORTHOGONAL axes, not deeper taxonomy. A Squirrel is-a creature in
+  the *general* tree, but in a *port* "creature" is the type and "squirrel" filters *which* creature, alongside
+  "controlled." Notate as a set — `emit:removal:creature[subtype=squirrel, control=you, from=battlefield,
+  to=graveyard, manner=sacrificed]` — never `removal:creature:squirrel:…:controlled`.
+- **Matching = attribute-subset, order-free:** an emit satisfies a consume iff the consume's constraints ⊆ the
+  emit's attributes (Blood Artist `consume:removal:creature[]` matches `emit:removal:creature[subtype=squirrel,
+  manner=sacrificed]`). Cleaner and more robust than ADR 0002's positional glob.
+- **Derived categories (O11) are named attribute-constraints, NOT stem nodes:** `fodder` := `[p/t=1/1]` (or
+  `[toughness=1]`). This also **corrects the O13 table**: the sac consumes ANY controlled Squirrel, so its
+  filter is `[subtype=squirrel, control=you]` with *no* fodder constraint; `fodder` is an attribute of the
+  *emitted* tokens (and of what Skullclamp *wants*), not a requirement of the sac.
+
 ---
 
 ## The triggering case (worked, for reference)
 
-Chatterfang, Squirrel General — full-text labeling under the O10–O13 supergroup model (labels illustrative;
-facet order + names pending O4/O5/O13). Reads `<side> : <supergroup> : <subject[:derived]> : <qualifiers> :
-<quantity>`.
+Chatterfang, Squirrel General — full-text labeling under O10–O14 (stem `side:supergroup:card-type` +
+attribute set `[…]`; labels illustrative pending final facet names):
 
-| Oracle text | Side | Label |
-|---|---|---|
-| `Forestwalk (…reminder…)` | emit | `modification:evasion:forestwalk:self` (inert; reminder text carries no port) |
-| `If one or more tokens would be created under your control,` | intercept | `deployment:token:controlled` (the replaced creation event) |
-| `those tokens plus that many 1/1 green Squirrel creature tokens are created instead.` | emit | `deployment:token:creature:squirrel:fodder:controlled` · qty `that-many` (1/1 → **fodder**) |
-| `{B},` | consume | `mana:black` · qty 1 |
-| `Sacrifice X Squirrels` (dual, O2) | consume | `creature:squirrel:fodder:controlled` · qty `X` (fodder pool decrement — **kept for §8**, retains `sac:` role) |
-| `Sacrifice X Squirrels` | emit | `removal:creature:squirrel:from-battlefield:to-graveyard:sacrificed:controlled` · qty `X` (feeds dies/LTB/sacrifice payoffs by subsumption) |
-| `Target creature gets +X/-X until end of turn.` | emit | `modification:pt:+X/-X:target:creature:eot` · qty `X` (the −X toughness carries a **lethal edge** → derived Removal, cf. Skullclamp) |
+| Oracle text | Side | Stem | Attributes |
+|---|---|---|---|
+| `Forestwalk (…reminder…)` | emit | `modification:evasion:forestwalk` | `[subject=self]` — inert; reminder text = no port |
+| `If one or more tokens would be created under your control,` | intercept | `deployment` | `[token, control=you]` — the replaced creation event |
+| `those tokens plus that many 1/1 green Squirrel creature tokens are created instead.` | emit | `deployment:creature` | `[token, subtype=squirrel, color=green, p/t=1/1, control=you, qty=that-many]` (p/t=1/1 ⇒ **fodder**) |
+| `{B},` | consume | `mana` | `[color=black, qty=1]` |
+| `Sacrifice X Squirrels` (dual, O2) | consume | `creature` | `[subtype=squirrel, control=you, qty=X]` — fodder pool decrement (**§8**; **no** fodder attr — any Squirrel) |
+| `Sacrifice X Squirrels` | emit | `removal:creature` | `[subtype=squirrel, control=you, from=battlefield, to=graveyard, manner=sacrificed, qty=X]` |
+| `Target creature gets +X/-X until end of turn.` | emit | `modification:creature` | `[stat=p/t, delta=+X/-X, target=any, duration=eot, qty=X]` — −X toughness ⇒ **lethal edge** → derived Removal (cf. Skullclamp) |
 
-Right column ("this card feeds") then reaches `consume:removal:…:to-graveyard` (Blood Artist, Pitiless
-Plunderer) by subsumption; the spurious `emit:cast`-bridged rows (Aang) disappear. Note the `X` binding
-across the sac cost and the +X/-X effect (§8 quantity), and the `that-many` binding from the intercept.
+Match check: Blood Artist / Pitiless (`consume:removal:creature[]`, any creature death) satisfy the sac emit
+because their `[]` ⊆ its attributes; the spurious `emit:cast` rows (Aang) never arise. `X` binds across the sac
+cost, the removal qty, and the +X/−X magnitude (§8); `that-many` binds the doubler emit to the intercept.
 
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
