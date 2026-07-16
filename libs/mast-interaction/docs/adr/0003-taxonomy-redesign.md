@@ -143,17 +143,38 @@ same-card witness certifies it. Nothing uncited is GREEN.
 ### 8. The schema is a derived rollup — schema-by-accretion
 
 There is no centrally-authored rule file. **Per-gold interaction fixtures are the only hand-authored
-artifact**: each derivation run (one combo → one gold, subagent-parallel) records its edges with their
-certifying mechanisms, declares any *new* rules with itself as witness, and asserts its own acceptance
-tests. **The central fixture is a generated, content-hashed rollup** unioning all declared rules —
-polarity table, match policies, guard registry, bridges — every entry carrying `witnesses:`. The loop:
-**(a)** read the rollup (reuse known rules, never re-derive) → **(b)** derive the gold, declare only the
-new → **(c)** regenerate the rollup. Conflicts **fail the build** (judge resolves; the resolution is
-itself an evidence-cited entry). Rules climb a **promotion ladder** — `observed` (1 witness) →
-`corroborated` (N) → `confirmed` (rules-judge) — and the ladder feeds tiering: an edge certified only by
-an observed rule caps at AMBER; only confirmed rules participate in GREEN. The rollup is the runtime rule
-source for novel pairs, and a rule-miss is the discovery-prioritization signal for which combo to derive
-next. Bootstrap: the two worked golds.
+artifact**: each derivation run records its edges with their certifying mechanisms, declares any *new*
+rules with itself as witness, and asserts its own acceptance tests.
+
+**The witnessing unit is an *interaction gold*, not necessarily a combo.** A gold may be:
+- a **single card** — its port derivation (like a parse-layer hand fixture): witnesses that a stem /
+  attribute / derived alias exists and is AST-derivable + CR-correct;
+- a **non-loop pairwise interaction** — one card's emit satisfying another's consume without closing a
+  cycle: witnesses a subsumption edge or a residual rule (polarity / match-policy / guard / bridge);
+- a **loop combo** — additionally exercises §10 SDF balance (the repetition-vector GREEN/AMBER *cycle*
+  tiering, which only a cycle has).
+
+All three are **rules-judge-gated** and climb the same promotion ladder — the verifier was always the
+judge, never "CSB says this combo works," so a single-card derivation is as valid a witness as a combo.
+This mirrors the parse layer's anchor-by-hand epistemics (single-card gold fixtures) — the interaction
+layer now anchors identically. Relaxing the unit is what makes the corroborated capability holes (cost-
+modification, restriction-grant, prevention, library-search/selection, non-play zone moves) *witnessable
+at all* — they are rarely combo pieces, so a combo-only rule would leave exactly those holes unfilled.
+
+**The central fixture is a generated, content-hashed rollup** unioning all declared rules — polarity
+table, match policies, guard registry, bridges — every entry carrying `witnesses:`. The loop: **(a)** read
+the rollup (reuse known rules, never re-derive) → **(b)** derive the gold, declare only the new → **(c)**
+regenerate the rollup. Conflicts **fail the build** (judge resolves; the resolution is itself an
+evidence-cited entry). Rules climb a **promotion ladder** — `observed` (1 witness) → `corroborated` (N) →
+`confirmed` (rules-judge) — and the ladder feeds tiering: an edge certified only by an observed rule caps
+at AMBER; only confirmed rules participate in GREEN. The rollup is the runtime rule source for novel pairs.
+
+**Holes are actively sought, not passively marked.** A declared stem/rule with no witness carries
+`witness: sought` (not a dead `witness: none`). Each seeds a **targeted witnessing task** — search the
+corpus for a single card, a pairwise interaction, or a combo that exercises the missing interaction — and
+these are **prioritized for the first post-migration derivation run**. This inverts O20's passive
+miss-as-signal into active hole-filling: the Stage-0a scaffold's corroborated holes (§Migration) *are*
+the initial targeted backlog, ordered by corroboration. Bootstrap: the three worked golds.
 
 **The rollup's artifacts.** One generation pass over (scaffold + golds) builds a single internal model
 and emits four content-hashed files; the lean pair is a **projection** (`strip(provenance)`) of the
@@ -243,6 +264,24 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
   tokens, zone lattice, licensed-attribute matrix per stem); and falsifiable connectivity predictions
   (e.g. every sac outlet reaches all three trigger rungs; token emitters reach sac outlets) — the null
   hypotheses for the topology sweeps. *Gate:* a judge pass over the scaffold's derivability claims.
+  *Run (2026-07-16):* a 4-panelist blind sweep (3 Opus + 1 Fable; one full-slang) LOCKED unanimously
+  the Event/State/Behavior kinds, the five supergroups (Removal/Deployment/Modification/Resources/
+  Structure), and ~16 core attribute axes, and — critically — **all four independently flagged the SAME
+  six capability holes** (evidence they are structural, not slang-coverage artifacts). Those holes seed
+  the initial **targeted-witnessing backlog** (§8: `witness: sought`, prioritized for the first
+  post-migration run), ordered by corroboration:
+  1. **cost-modification** (`tax`↑ + `cost-reduction`/`cheat-out`↓) — most corroborated;
+  2. **restriction-grant** (pacifism/prison/lock — "can't attack/block");
+  3. **prevention** (fog — a shield on the damage event);
+  4. **library-search** (tutor/fetch — library→hand by criteria, ≠ draw);
+  5. **library-selection** (dig/scry/surveil/impulse — peek/reorder top-N);
+  6. **non-play zone moves / recur** (reclamation gy→hand, bounce-recur — the `from→to` primitive is
+     play-anchored, so hidden-zone moves fit neither Removal nor Deployment; do NOT force into Removal).
+  Three forks referred to human adjudication: (F1) kind×supergroup orthogonal-matrix vs views-under-kinds
+  [lean: views + matrix as derived lookup]; (F2) a 6th `Objects` supergroup vs another home for the
+  golds' bare object-consumes [the gap is real regardless — it is the §10 balance substrate]; (F3)
+  dice/damage/combat-presence as bare Event verbs vs a 6th "Stochastic" bucket [lean: bare Event verbs,
+  per O19/O21]. Panel artifacts + difference map under the session `stage0a/` scratch.
 - **Stage 0b — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
   generator with loud conflict detection; seed from the two worked golds **plus the absorbed third**
   (Ruthless Knave × Blood Artist from `blood-artist-engine.json` — the GREEN cover-policy witness); retire
