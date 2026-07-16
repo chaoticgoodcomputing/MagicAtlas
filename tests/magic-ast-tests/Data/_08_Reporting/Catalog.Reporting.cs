@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using Flowthru.Data.Catalog;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 
@@ -170,6 +171,42 @@ public partial class Catalog
     CreateItem(() => Item.Of<string>("FamilyGraphHtml")
       .Text()
       .AtPath($"{_basePath}/_08_Reporting/family-graph.html")
+      .Build());
+
+  // ── Interaction-rollup (ADR-0003 §8, Stage 0b): golds → four rollup artifacts. ──
+
+  /// <summary>The hand-authored interaction golds, loaded semi-structured as <see cref="JsonNode"/>s
+  /// (port attr values are scalar-OR-object; declared-rule shapes vary per section). In-memory hand-off
+  /// from the source step to the two rollup steps.</summary>
+  public IItem<IEnumerable<JsonNode>> InteractionGolds =>
+    CreateItem(() => Item.Of<IEnumerable<JsonNode>>("InteractionGolds").Memory().Build());
+
+  /// <summary>Artifact 1 (lean) — the port universe: kinds map, stems, attribute axes.</summary>
+  public IItem<PortTopology> PortTopology =>
+    CreateItem(() => Item.Of<PortTopology>("PortTopology")
+      .Json()
+      .AtPath($"{_basePath}/../Fixtures/Interactions/rollup/port-topology.json")
+      .Build());
+
+  /// <summary>Artifact 1 (cited) — the port universe with per-stem witnesses.</summary>
+  public IItem<PortTopology> PortTopologyCited =>
+    CreateItem(() => Item.Of<PortTopology>("PortTopologyCited")
+      .Json()
+      .AtPath($"{_basePath}/../Fixtures/Interactions/rollup/port-topology.cited.json")
+      .Build());
+
+  /// <summary>Artifact 2 (lean) — the residual connection rules (polarity / match_policy / guards / bridges) + statuses.</summary>
+  public IItem<PortInteractions> PortInteractions =>
+    CreateItem(() => Item.Of<PortInteractions>("PortInteractions")
+      .Json()
+      .AtPath($"{_basePath}/../Fixtures/Interactions/rollup/port-interactions.json")
+      .Build());
+
+  /// <summary>Artifact 2 (cited) — the residual rules with witnesses + descriptions + CR citations + corroborations.</summary>
+  public IItem<PortInteractions> PortInteractionsCited =>
+    CreateItem(() => Item.Of<PortInteractions>("PortInteractionsCited")
+      .Json()
+      .AtPath($"{_basePath}/../Fixtures/Interactions/rollup/port-interactions.cited.json")
       .Build());
 
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>

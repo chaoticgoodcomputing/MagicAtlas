@@ -30,7 +30,6 @@
   "stems": {
     "artifact": {
       "kind": "STATE",
-      "parent": null,
       "status": "witnessed",
       "attrs": [
         "qty",
@@ -41,7 +40,6 @@
     },
     "creature": {
       "kind": "STATE",
-      "parent": null,
       "status": "witnessed",
       "attrs": [
         "control",
@@ -52,7 +50,6 @@
     },
     "deployment": {
       "kind": "EVENT",
-      "parent": null,
       "status": "witnessed",
       "attrs": [
         "control",
@@ -88,7 +85,6 @@
     },
     "life": {
       "kind": "STATE",
-      "parent": null,
       "status": "witnessed",
       "attrs": [
         "direction",
@@ -98,7 +94,6 @@
     },
     "mana": {
       "kind": "STATE",
-      "parent": null,
       "status": "witnessed",
       "attrs": [
         "color",
@@ -170,7 +165,6 @@
     },
     "tap": {
       "kind": "STATE",
-      "parent": null,
       "status": "witnessed",
       "attrs": [
         "self"
@@ -212,7 +206,7 @@
         "modification:creature"
       ],
       "values_seen": [
-        "+X/-X"
+        "\u002BX/-X"
       ],
       "carries_provenance_or_polarity": false
     },

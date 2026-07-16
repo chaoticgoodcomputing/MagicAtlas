@@ -19,8 +19,7 @@
       "desc": "a mana emit whose color is producer-chosen matches any specific-color consume it can pay",
       "cr": [
         "105.2"
-      ],
-      "corroborates": null
+      ]
     }
   ],
   "match_policy": [
@@ -32,11 +31,10 @@
       "witnesses": [
         "chatterfang-x-pitiless-plunderer"
       ],
-      "desc": "an argument-consume (a cost) demands the supplied object's at-creation type provably COVER the parameter filter (stricter than intersect)",
+      "desc": "an argument-consume (a cost) demands the supplied object\u0027s at-creation type provably COVER the parameter filter (stricter than intersect)",
       "cr": [
         "601.2b"
-      ],
-      "corroborates": null
+      ]
     },
     {
       "id": "policy:subscription:subject-intersect",
@@ -46,11 +44,10 @@
       "witnesses": [
         "deadeye-x-peregrine-drake"
       ],
-      "desc": "a subscription-consume (a trigger) matches on intersect; the operator tiers Subsumes→GREEN / Overlaps→AMBER",
+      "desc": "a subscription-consume (a trigger) matches on intersect; the operator tiers Subsumes\u2192GREEN / Overlaps\u2192AMBER",
       "cr": [
         "603.2"
-      ],
-      "corroborates": null
+      ]
     },
     {
       "id": "policy:subscription:subject-subsumes-green",
@@ -60,7 +57,7 @@
       "witnesses": [
         "ruthless-knave-x-blood-artist"
       ],
-      "desc": "corroborates policy:subscription:subject-intersect (Deadeye) with the GREEN branch: when the emit subject provably Subsumes the subscription filter (creature ⊆ creature), the edge is GREEN",
+      "desc": "corroborates policy:subscription:subject-intersect (Deadeye) with the GREEN branch: when the emit subject provably Subsumes the subscription filter (creature \u2286 creature), the edge is GREEN",
       "cr": [
         "603.2",
         "111.1"
@@ -81,8 +78,7 @@
       "cr": [
         "400.7",
         "603"
-      ],
-      "corroborates": null
+      ]
     },
     {
       "id": "guard:self-watch",
@@ -91,12 +87,11 @@
       "witnesses": [
         "deadeye-x-peregrine-drake"
       ],
-      "desc": "a self-watching trigger (subject=self) requires a same-card witness that the emitted object IS the watcher; object identity the operator can't see → Overlaps floors AMBER",
+      "desc": "a self-watching trigger (subject=self) requires a same-card witness that the emitted object IS the watcher; object identity the operator can\u0027t see \u2192 Overlaps floors AMBER",
       "cr": [
         "603.6e",
         "400.7"
-      ],
-      "corroborates": null
+      ]
     }
   ],
   "bridges": [
@@ -112,11 +107,10 @@
       "witnesses": [
         "deadeye-x-peregrine-drake"
       ],
-      "desc": "untapping lands enables (does not produce) mana; irreducible cross-resource — untapped lands' colors/count are unknown",
+      "desc": "untapping lands enables (does not produce) mana; irreducible cross-resource \u2014 untapped lands\u0027 colors/count are unknown",
       "cr": [
         "107.4"
-      ],
-      "corroborates": null
+      ]
     }
   ]
 }

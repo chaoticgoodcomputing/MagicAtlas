@@ -5,6 +5,7 @@ using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
 using MagicAtlas.Ast.Tests.Flows.DiceComboReport;
+using MagicAtlas.Ast.Tests.Flows.InteractionRollup;
 using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
 using MagicAtlas.Ast.Tests.Flows.LabelCensus;
 using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
@@ -87,6 +88,7 @@ public class Program
     // Interaction-graph inputs: the canonical known-families grammar (committed fixture) and the
     // vendored type ontology (Curated). Both feed the InteractionTriage reconstruction + viz.
     var knownFamiliesPath = Path.Combine(basePath, "Fixtures", "Interactions", "known-families.json");
+    var interactionGoldsDir = Path.Combine(basePath, "Fixtures", "Interactions", "golds");
     var ontologyPath = Path.Combine(
       dataPath,
       "_01_Raw",
@@ -228,6 +230,18 @@ public class Program
             + "+ metadata (card-ports.json / card-meta.json), D4 per-combo reconstructed loops "
             + "(combo-instances.json), D2 realized-annotated family subway map (resource-graph.json), and "
             + "D3 realized combo-shape catalog (archetype-catalog.json). The 'shape → buildable' bridge."
+        );
+
+      flowthru
+        .RegisterFlow<Catalog>(
+          "InteractionRollup",
+          catalog => InteractionRollupFlow.Create(catalog, interactionGoldsDir)
+        )
+        .WithDescription(
+          "Generates the interaction-rollup artifacts (ADR-0003 §8, Stage 0b) from the hand-authored "
+            + "interaction golds: unions declared rules with loud conflict detection + ladder coherence and "
+            + "writes Fixtures/Interactions/rollup/{port-topology,port-interactions}{,.cited}.json. Supersedes "
+            + "the retired tools/interaction-rollup Python prototype."
         );
 
       flowthru.ConfigureMetadata(meta =>
