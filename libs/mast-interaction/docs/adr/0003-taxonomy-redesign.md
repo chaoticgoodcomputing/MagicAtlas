@@ -149,6 +149,26 @@ an observed rule caps at AMBER; only confirmed rules participate in GREEN. The r
 source for novel pairs, and a rule-miss is the discovery-prioritization signal for which combo to derive
 next. Bootstrap: the two worked golds.
 
+**The rollup's artifacts.** One generation pass over (scaffold + golds) builds a single internal model
+and emits four content-hashed files; the lean pair is a **projection** (`strip(provenance)`) of the
+verbose pair, so they cannot drift:
+1. **`port-topology.json`** — the port universe: stems (is-a parent + Event/State/Behavior kind), the
+   licensed-attribute matrix, value lattices, derived-category aliases, slang views. Every entry carries
+   `status: declared | witnessed` — declared-only entries come from the Stage-0a scaffold, so this file
+   doubles as the scaffold-vs-reality diff the topology sweeps consume ("which declared ports have no
+   witness; which witnessed ports were never predicted").
+2. **`port-interactions.json`** — the generalized connection rules for novel pairs: the residual layer
+   (polarity, match policies, guards-by-name, bridges + tier ceilings) with each rule's promotion status
+   (`observed`/`corroborated`/`confirmed` — the tier cap). Subsumption itself is not listed — it is
+   derivable from artifact 1's lattices. This is also the artifact the frontend's explorer columns
+   ultimately consume (exact port-to-port matching, retiring coarse family adjacency).
+3. **`port-topology.cited.json` / `port-interactions.cited.json`** — the verbose twins: identical
+   entries + provenance (`witnesses: [gold-id#edge]`, judge verdicts, CR citations, conflict-resolution
+   records). The diagnostics surface — consumed by atlas-diag ("why does this edge exist?" → witness →
+   verdict in one trace) and by the doc generator.
+Entry IDs are stable across regeneration (name-derived, never positional) so citations, judge records,
+and diagnostics survive rebuilds; a non-empty conflict set fails the generation pass.
+
 ### 9. Tractability guardrail
 
 Matching stays in the polynomial **EL profile**: conjunctive attribute-subset + per-value lattices; no
