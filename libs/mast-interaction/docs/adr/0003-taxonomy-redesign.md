@@ -226,6 +226,62 @@ Split them:
   filter is `[subtype=squirrel, control=you]` with *no* fodder constraint; `fodder` is an attribute of the
   *emitted* tokens (and of what Skullclamp *wants*), not a requirement of the sac.
 
+### O15 — Prior art: the design is a typed-feature-structure system; stay in the tractable profile
+Research pass (2026-07-16) against three literatures, to catch down-the-road issues:
+
+1. **Typed feature structures / unification grammars (HPSG).** O14's design — a type hierarchy (the is-a
+   stem) + attribute-value pairs, matched by subsumption — IS the TFS formalism: types ordered by
+   information content, attributes inherited down the hierarchy, matching = unification/subsumption. Two
+   TFS lessons to adopt: **(a) appropriateness conditions** — each stem type licenses a declared set of
+   attribute keys (`removal:*` licenses `from/to/manner`; `mana` licenses `color/qty`; nonsense like
+   `mana[toughness=1]` is ill-typed) — this is the machine-readable schema O8's doc-generator should emit;
+   **(b) absent-attribute semantics** — an unspecified attribute means *unknown/any*, and matching against
+   it is an OPEN-world judgment, not a failed lookup. (The operator's Subsumes/Intersects/Overlaps trilean
+   already implements exactly this — e.g. the Squirrel⊄creature straddle floors to AMBER.)
+2. **Description logics.** Subsumption in EL-family logics (conjunction + existential only) is
+   **polynomial**; adding general boolean operators (ALC) makes it **EXPTIME**. Our matching — conjunctive
+   attribute-subset + per-value lattices, no disjunction/negation in queries — sits in the tractable EL
+   profile. **Guardrail:** keep it there. The one existing negation (`:another` / exclude-self) is a bounded
+   exception to confine; resist general boolean attribute constraints in the query language.
+3. **Faceted classification.** Ranganathan's **Colon Classification** (1933!) is the ancestor of the
+   colon-label idea, and its core finding is O14's split: rigid enumerative hierarchies pigeonhole subjects;
+   orthogonal facets compose. ADR-0002's single ordered chain was drifting enumerative; O14's stem+facets is
+   the analytico-synthetic correction.
+
+**Answer to the prefix-capture question:** yes — by construction, once capture is defined per-facet, not as
+string prefix. `query(Q) captures emit(E)` iff (stem of Q is an ancestor-or-equal of stem of E in the is-a
+lattice) ∧ (each attribute constraint in Q subsumes E's value in that attribute's own value lattice —
+`control: self ⊆ controlled ⊆ any`, zones, the TypeOntology for subtypes; unconstrained = captures all).
+So `removal:creature` implicitly captures every deeper stem and every attribute combination — `removal:
+creature:*` for free — and ADR-0002's positional `**` glob (needed only because attributes sat inside the
+ordered chain) is retired. Unknown-vs-constrained mismatches resolve by trilean, not boolean.
+
+### O16 — The AST already carries the feature structure; the label string is the lossy step
+Mesh check against current code: the O14/O15 model is *closer* to the existing machinery than ADR-0002's
+strings are. `ObjectFilter` (Subtypes, Controller, IsToken, …) **is** the attribute set;
+`ObjectFilterRelations.Subsumes/Intersects` over the `TypeOntology` **is** the per-facet lattice matching with
+trilean open-world semantics; `PortNode` already carries the filter as its `Subject`. The lossy step is
+`PortLabel` **flattening** the filter into an ordered colon-string (`LiftCardTypes`, facet joins) and then
+*re-matching on the string* with globs — projecting structure down to text and parsing it back. Structural
+changes the redesign implies:
+1. **Match on the structured port, not the string.** PortNode grows explicit stem + attribute fields (subject
+   filter, from/to zone, manner, qty binding); `FlowFeasible`/the engine's arms become instances of ONE generic
+   `captures(Q,E)` (O15) plus the §8 accounting — the per-arm switch shrinks to the genuinely cross-resource
+   bridges (O6).
+2. **The colon-label becomes a serialization/display format** (and the dump/query surface), generated FROM the
+   structure — never the matching substrate. Collision-lint and determinism guarantees transfer unchanged.
+3. **Appropriateness schema as data** (O15): a single machine-readable taxonomy file — stems, licensed
+   attribute keys per stem, per-attribute value lattices, derived-category aliases (O11), slang supergroup
+   views (O12) — consumed by the projection, the engine, the doc generator (O8), AND the frontend (which
+   already derives canonicality live from the API; this replaces the last hardcoded frontend duplicate).
+4. **Dumps/API**: CardPortRow gains structured attributes (jsonb, like spans) so atlas-web matches by
+   attribute-subset instead of family-string equality — fixing the column-precision problems (Aang) at the
+   root.
+5. **Migration posture**: projection + engine first behind the existing gold-fixture gates (labels regenerate
+   deterministically from structure), resource-graph/dumps regen after, frontend last. The AST itself needs
+   little: filters/zones/quantities are already typed fields; the main parser asks are the O4 manner facet and
+   per-cost spans (already logged).
+
 ---
 
 ## The triggering case (worked, for reference)
