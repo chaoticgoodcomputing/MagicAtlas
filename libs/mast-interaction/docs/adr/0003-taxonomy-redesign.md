@@ -140,6 +140,25 @@ the canonical family set omits; `sacrifice`/`death`/`etb` are events, not peer o
 Chatterfang's one sacrifice clause is a consume AND an emit — because a port is a *query* against the AST, and
 one sub-tree satisfies many queries. The many-to-one (text → labels) is the design, not a smell.
 
+### O11 — Slang categories are first-class when AST-derivable: `fodder` as a P/T-derived subset
+**Corrects O10's over-dismissal.** The bar for a port term is **AST-derivability, not CR-canonicity** — MAST
+is a *categorization* system, so a slang category earns its place if it's a definable **query**, not a
+game-plan judgment. "Fodder" fails only as vague "creatures you'd sacrifice"; pinned to structure it is
+legitimate and useful: `fodder` := a **1/1 creature** (or, for the Skullclamp reading, a **toughness-1**
+creature — one a −1-toughness effect kills), read off the `createToken`/creature P/T the AST already carries.
+It is a **subset leaf** on the object axis (`emit:token:creature:squirrel:…:fodder ⊆ emit:token`), consistent
+with the soft hierarchy (a port satisfies its prefixes), so it adds precision without breaking coarse
+`emit:token` matching. **Motivating case — Skullclamp** ("+1/−1; whenever equipped creature dies, draw two
+cards; Equip {1}") is a `consume:fodder` engine: it turns toughness-1 creatures into cards. **Chatterfang's
+1/1 Squirrels are `emit:…:fodder`**, so the taxonomy surfaces **Chatterfang × Skullclamp** structurally —
+which bare `emit:token`/`consume:creature` labels miss, being too coarse to know these are the *small*
+creatures Skullclamp wants. **Caveat — polysemy:** a sac outlet wants *any* creature, Skullclamp wants
+*toughness-1*, an aristocrat wants *anything that dies*; so each derived category must be **pinned to exactly
+one query** (or carry a small family: `fodder` = 1/1, `fodder:t1` = toughness-1), never a catch-all.
+**Implication:** the object axis (O10) carries **derivable sub-categories** (P/T, subtype) as subset leaves —
+this is a primary source of the taxonomy's synergy-surfacing value, and the redesign should treat such
+categories as named, singly-defined query aliases layered under the structural labels.
+
 ---
 
 ## The triggering case (worked, for reference)
