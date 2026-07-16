@@ -305,6 +305,37 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
 - **Stage 5 — frontend.** Structured attributes + rollup consumption; attribute-subset column matching.
   *Gate:* the Chatterfang and Deadeye card pages render the worked-gold edge sets exactly.
 
+### Skill changes (the TDD loop forks in two)
+
+The migration splits the loop by layer; the `mast-tdd-loop` skill must be updated and a sibling authored.
+
+- **`mast-tdd-loop` (parser) is unchanged for Stage 1.** The parser asks — the `manner` attribute, the
+  `Sacrificed` trigger event, per-cost-component spans, the Deadeye blink slice (`deployment[manner=blink]`)
+  — are ordinary parse-family / new-node batches; the skill's invariants (gold = eventual truth, fixtures
+  immutable to parser work, `Input` seeded from the corpus, no-ratchet) apply as-is.
+- **A NEW sibling skill, `mast-interaction-loop`,** clones that harness onto the interaction layer to drive
+  §8's derivation loop. Same shape, different substrate:
+
+  | | `mast-tdd-loop` (parse) | `mast-interaction-loop` (interactions) |
+  |---|---|---|
+  | Unit | a card *family* | an *interaction gold* — single card / pairwise / combo (§8) |
+  | Pick surface | combo-anchor hubs by `popularityMass` | the **targeted-witnessing backlog** (declared holes) + novel-pair misses |
+  | Worker output | gold AST fixture + parser rule | interaction fixture (edges + newly-declared rules + assertions) |
+  | Judge gate | **mast-judge** (AST/CR correctness) | **interaction-judge** (edge/tier/CR correctness) |
+  | Ladder | fidelity L0→L1→L2 | promotion `observed→corroborated→confirmed` (feeds tiering, §8) |
+  | End-of-batch regen (orchestrator-only) | `GLOSSARY.md` | the **rollup** (content-hashed; conflicts FAIL the pass) |
+  | Shared harness | — | worktree isolation, fixture-immutability gate, `seed-gold-input` (the gold `Input` still comes from the corpus), corpus-edge-diff explicitly non-authoritative |
+
+- **`mast-tdd-loop`'s three-effort-kinds section is superseded in part.** Post-cutover, the
+  **projection-slice** kind (lighting up a dark `emit:` label) is no longer "hand-write a PortWalk C# flow
+  arm" — it becomes "derive an interaction gold that declares the rule," since the generic `captures(Q,E)`
+  + rollup replace the per-arm switch (§6, Consequences). The **precision-fix** kind (AMBER→GREEN, kill a
+  false-GREEN) becomes rule-promotion on the ladder (§8) rather than an operator-code edit. Parse-family is
+  unchanged. Update the skill's Step-1 pick guidance accordingly.
+- **Authoring point:** the `mast-interaction-loop` skill file is written at **Stage 0b** (alongside the
+  fixture/rollup formats it drives), and the `mast-tdd-loop` edits land at **Stage 4** (cutover, when the
+  arms actually retire) so the parser loop's docs never describe machinery that still exists.
+
 ## Open questions
 
 - **Duality scope (O3):** which cost/effect families after sacrifice get the consume+event-emit dual
