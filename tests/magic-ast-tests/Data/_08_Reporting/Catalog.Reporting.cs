@@ -188,6 +188,12 @@ public partial class Catalog
   public IItem<JsonNode> InteractionScaffold =>
     CreateItem(() => Item.Of<JsonNode>("InteractionScaffold").Memory().Build());
 
+  /// <summary>The interaction golds loaded for the SEPARATE corpus-gated <c>TopologyDemand</c> flow — a
+  /// distinct memory slot from <see cref="InteractionGolds"/> so the two flows' merged DAGs keep unique
+  /// step labels + item producers (Flowthru validates both globally). Reuses the same golds loader.</summary>
+  public IItem<IEnumerable<JsonNode>> InteractionGoldsForDemand =>
+    CreateItem(() => Item.Of<IEnumerable<JsonNode>>("InteractionGoldsForDemand").Memory().Build());
+
   /// <summary>Artifact 1 (lean) — the port universe: kinds map, stems, attribute axes.</summary>
   public IItem<PortTopology> PortTopology =>
     CreateItem(() => Item.Of<PortTopology>("PortTopology")
@@ -214,6 +220,16 @@ public partial class Catalog
     CreateItem(() => Item.Of<PortInteractions>("PortInteractionsCited")
       .Json()
       .AtPath($"{_basePath}/../Fixtures/Interactions/rollup/port-interactions.cited.json")
+      .Build());
+
+  /// <summary>The value-ranked demand overlay for the ADR-3 topology (corpus-gated DIAGNOSTIC): witnessed
+  /// stems / sought holes / supergroups ranked by combo demand (gold popularity + combo-anchor payoff mass).
+  /// Output of the <c>TopologyDemand</c> flow; corpus-derived, gitignored, never committed. Lives WITH the
+  /// other corpus reports (not in the hermetic <c>Fixtures/Interactions/rollup/</c> dir).</summary>
+  public IItem<PortTopologyDemand> PortTopologyDemand =>
+    CreateItem(() => Item.Of<PortTopologyDemand>("PortTopologyDemand")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/port-topology-demand.json")
       .Build());
 
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>

@@ -4,6 +4,11 @@ Metadata/
 # Flowthru triage layers: the generated data artifacts are not committed. Only the pipeline's
 # code (catalog/schema .cs), curated raw inputs, and the vendored type ontology are kept.
 # (Hand-authored NUnit golds live under Fixtures/, NOT here — see below.)
+#
+# Corpus-derived, corpus-gated reports live under _08_Reporting and are covered by this rule —
+# they are regenerated on demand and NEVER committed. Notably:
+#   Data/_08_Reporting/combo-anchor-report.json   (nx run mast:combo-anchors)
+#   Data/_08_Reporting/port-topology-demand.json  (dotnet run -- --flow TopologyDemand)
 Data/**
 
 # Un-ignore layer directories and their Schemas subdirectories so git can traverse them

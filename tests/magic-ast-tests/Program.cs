@@ -12,6 +12,7 @@ using MagicAtlas.Ast.Tests.Flows.MagicAstSmoke;
 using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
 using MagicAtlas.Ast.Tests.Flows.CardAtlas;
 using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
+using MagicAtlas.Ast.Tests.Flows.TopologyDemand;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -249,6 +250,39 @@ public class Program
             + "interaction golds: unions declared rules with loud conflict detection + ladder coherence and "
             + "writes Fixtures/Interactions/rollup/{port-topology,port-interactions}{,.cited}.json. Supersedes "
             + "the retired tools/interaction-rollup Python prototype."
+        );
+
+      // The value-ranked demand overlay — a SEPARATE, corpus-gated flow (NEVER folded into the hermetic
+      // InteractionRollup). Reads the committed topology + golds + the gitignored combo-anchor report.
+      var comboAnchorReportPath = Path.Combine(
+        dataPath,
+        "_08_Reporting",
+        "combo-anchor-report.json"
+      );
+      var portTopologyCitedPath = Path.Combine(
+        basePath,
+        "Fixtures",
+        "Interactions",
+        "rollup",
+        "port-topology.cited.json"
+      );
+      flowthru
+        .RegisterFlow<Catalog>(
+          "TopologyDemand",
+          catalog =>
+            TopologyDemandFlow.Create(
+              catalog,
+              interactionGoldsDir,
+              portTopologyCitedPath,
+              topologyScaffoldPath,
+              comboAnchorReportPath
+            )
+        )
+        .WithDescription(
+          "Value-ranked demand overlay for the ADR-3 topology (corpus-gated diagnostic): ranks witnessed "
+            + "stems (by gold popularity), the six sought holes (by combo-anchor payoff mass, tiebreak hand "
+            + "priority), and the supergroups → Data/_08_Reporting/port-topology-demand.json. Degrades "
+            + "gracefully when combo-anchor-report.json is absent (corpus=null). Never touches InteractionRollup."
         );
 
       flowthru.ConfigureMetadata(meta =>
