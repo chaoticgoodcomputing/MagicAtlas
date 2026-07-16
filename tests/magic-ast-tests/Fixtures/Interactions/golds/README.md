@@ -1,8 +1,9 @@
 # Interaction golds — the schema-by-accretion source (ADR-0003 §8, Stage 0b)
 
 Each file here is one **hand-authored interaction gold** — the ONLY hand-authored artifact in the
-interaction layer. The `../rollup/` artifacts are GENERATED from these by `tools/interaction-rollup`
-(never hand-edited). Loop: read the rollup → derive a gold, declare only new rules → regenerate the rollup.
+interaction layer. The `../rollup/` artifacts are GENERATED from these by the **`InteractionRollup`
+Flowthru flow** (`Flows/InteractionRollup/`; `dotnet run -- --flow InteractionRollup`), never hand-edited.
+Loop: read the rollup → derive a gold, declare only new rules → regenerate the rollup.
 
 ## The witnessing unit (`unit`)
 
@@ -67,7 +68,7 @@ All three are rules-judge-gated and climb the same promotion ladder (`observed`�
 }
 ```
 
-## What the generator validates (Stage 0b gate)
+## What the flow validates (Stage 0b gate)
 
 1. Every gold parses and is well-formed (required keys, unique port ids per card, unique edge ids).
 2. Every edge `from`/`to` resolves to a declared port; every non-structural `mechanism` cites a rule that
