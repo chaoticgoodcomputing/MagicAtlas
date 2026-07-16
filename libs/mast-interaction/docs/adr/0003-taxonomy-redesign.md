@@ -444,6 +444,43 @@ they belong to firability, orthogonal to the resource/event root.
   +judged-GREEN gate); not staged.
 - **O17.5 negation inventory** — correction noted; `Excluded*`/`IsColorless`/`NotEqual` not yet enumerated per-axis.
 
+### O19 — Event-FP re-derivation of the top layer: Event / State / Behavior kinds
+Research pass (2026-07-16) mapping event-based functional programming onto the root; three literatures land:
+1. **FRP (Elliott & Hudak)** — two primitives: **Events** (discrete occurrences with payloads) and
+   **Behaviors** (continuous time-varying values). This is the missing KIND system: Events = zone-changes,
+   cast, damage-dealt, **dice-rolled** (the O18 orphan DISSOLVES — a roll is just an event with a numeric
+   payload and no object; the "fourth axis" was Events all along), combat-presence. Behaviors = the
+   Modification supergroup precisely (statics/anthems/"as long as"/P-T layers).
+2. **Event sourcing** — state = `fold(initial, events)`; state is derived, never primitive. Resources are
+   **Stores/accumulators** folded over event streams. Places two O18 stragglers: **tap/untap** = an
+   availability store on a permanent (untap = a state-restoration event); **counter** = a store whose P/T
+   effect is a derived Behavior (the straddle resolves into store + projection).
+3. **Stream processing / pub-sub** — the port sides map one-to-one: emit = publish; trigger-consume =
+   **subscription with a content filter** (our attribute matching IS content-based filtering); cost-consume =
+   **function argument** (an activated ability is a function call: args=costs, return=effects); intercept =
+   **middleware** — and CR 614.5's applies-once is the standard interceptor invariant, so no-self-bootstrap is
+   a known theorem of the pattern, not a house rule. **Push vs pull consumption becomes first-class**: costs
+   (pull/conjunction — §8 function application) vs triggers (push/any-match) are structurally distinct kinds
+   of Consume, which the engine already treats differently but the model never named.
+4. **SDF balance equations (Lee & Messerschmitt) = §8's formal home.** `q(src)·p(e) = q(snk)·c(e)` per edge;
+   smallest solution = the repetition vector; a consistent cycle = a schedulable loop. An infinite combo IS a
+   consistent SDF cycle with unbounded repetition — Chatterfang's free loop is a balance solution with q=1.
+   Rank/deadlock/scheduling theory applies directly. Caveat: X-costs and `that-many` are variable rates →
+   **parameterized SDF** (PSDF), cite the extension honestly.
+
+**Re-derived top layer:** a KIND system above (not replacing) the O12 supergroups —
+`EVENT` (zone-change, cast, damage, dice, combat) / `STATE` (mana, life, cards, counters, availability) /
+`BEHAVIOR` (modification). The O12 slang supergroups survive as **named filters over the event stream**
+(Removal/Deployment = views over zone-change — answering O13's open collapse question: one zone-change event
+type, supergroups as views). Ability layer: activated=function(pull) · triggered=subscription(push) ·
+static=behavior · replacement=middleware. The O18 gating layer = stream **combinators**
+(conditional/optional/composite). §8 = (P)SDF balance over the cycle.
+
+**Resolves from O18:** dice (event, no new axis) · tap/untap (availability store) · counter (store + behavior
+projection) · copy (a deployment event with provenance=copy) · control-flow wrappers (combinators, named).
+**Remaining from O18:** combat-presence naming (an event — trivial now) · the residual-layer schema (O17.1,
+unchanged) · provenance/default-GREEN (O17.2) · migration staging (O17.4) · negation enumeration (O17.5).
+
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
   (O14 leans `creature` — the object — with `token` as an attribute.)
