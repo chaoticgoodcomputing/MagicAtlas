@@ -76,6 +76,10 @@
               },
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 71,
+                "Length": 46
               }
             }
           ],
@@ -127,6 +131,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 164,
+                "Length": 21
               }
             }
           ],

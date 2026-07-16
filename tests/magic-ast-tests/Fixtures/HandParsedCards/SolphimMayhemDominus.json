@@ -82,7 +82,11 @@
                   ],
                   "IsPhyrexian": true
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 169,
+                "Length": 13
+              }
             },
             {
               "CostType": "discard",
@@ -94,6 +98,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 184,
+                "Length": 17
               }
             }
           ],

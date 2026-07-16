@@ -43,10 +43,18 @@
                   "Kind": "generic",
                   "GenericAmount": 2
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 66,
+                "Length": 3
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 71,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

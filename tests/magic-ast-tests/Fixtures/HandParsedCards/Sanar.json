@@ -164,7 +164,11 @@
               "Kind": "activated",
               "Costs": [
                 {
-                  "CostType": "tap"
+                  "CostType": "tap",
+                  "SourceSpan": {
+                    "Start": 104,
+                    "Length": 3
+                  }
                 }
               ],
               "Effects": [

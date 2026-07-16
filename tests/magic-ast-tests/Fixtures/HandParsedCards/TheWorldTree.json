@@ -45,7 +45,11 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 3
+              }
             }
           ],
           "Effects": [
@@ -86,7 +90,11 @@
                 "Kind": "activated",
                 "Costs": [
                   {
-                    "CostType": "tap"
+                    "CostType": "tap",
+                    "SourceSpan": {
+                      "Start": 0,
+                      "Length": 3
+                    }
                   }
                 ],
                 "Effects": [
@@ -195,10 +203,18 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 138,
+                "Length": 30
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 170,
+                "Length": 3
+              }
             },
             {
               "CostType": "sacrifice",
@@ -211,6 +227,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 175,
+                "Length": 19
               }
             }
           ],

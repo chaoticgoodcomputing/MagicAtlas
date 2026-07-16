@@ -81,10 +81,18 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 44,
+                "Length": 9
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 55,
+                "Length": 3
+              }
             },
             {
               "CostType": "sacrifice",
@@ -97,6 +105,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 60,
+                "Length": 23
               }
             }
           ],

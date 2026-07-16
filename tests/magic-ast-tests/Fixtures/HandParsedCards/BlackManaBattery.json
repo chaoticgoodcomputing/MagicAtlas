@@ -32,10 +32,18 @@
                   "Kind": "generic",
                   "GenericAmount": 2
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 3
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 5,
+                "Length": 3
+              }
             }
           ],
           "Effects": [
@@ -66,7 +74,11 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 49,
+                "Length": 3
+              }
             },
             {
               "CostType": "removeCounters",
@@ -76,6 +88,10 @@
               },
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 54,
+                "Length": 55
               }
             }
           ],

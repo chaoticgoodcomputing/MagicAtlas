@@ -160,7 +160,11 @@
                     "U"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 239,
+                "Length": 6
+              }
             }
           ],
           "Effects": [

@@ -61,7 +61,11 @@
                   "Kind": "generic",
                   "GenericAmount": 1
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 17,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

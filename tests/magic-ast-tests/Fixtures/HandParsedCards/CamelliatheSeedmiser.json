@@ -158,10 +158,18 @@
                   "Kind": "generic",
                   "GenericAmount": 2
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 134,
+                "Length": 3
+              }
             },
             {
-              "CostType": "forage"
+              "CostType": "forage",
+              "SourceSpan": {
+                "Start": 139,
+                "Length": 6
+              }
             }
           ],
           "Effects": [

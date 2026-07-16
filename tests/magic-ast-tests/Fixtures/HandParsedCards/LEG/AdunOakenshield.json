@@ -59,10 +59,18 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 9
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 11,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

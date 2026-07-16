@@ -116,8 +116,12 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       Math.Max(0, clause.RawText.Length - (colonIndex + 1))
     );
 
-    // Parse costs
-    var costs = ParseCosts(costPart, classification);
+    // Parse costs — thread the absolute start of the (trimmed) cost half so ParseCosts can stamp each
+    // comma-split component's SourceSpan (same clause.SourceSpan.Start basis as effectSpan; shares the
+    // em-dash/paren caveat noted above).
+    var rawCostPart = text[..colonIndex];
+    var costPartStart = clause.SourceSpan.Start + (rawCostPart.Length - rawCostPart.TrimStart().Length);
+    var costs = ParseCosts(costPart, classification, costPartStart);
     if (costs == null)
     {
       return null;
@@ -449,7 +453,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   /// Parses the cost portion of an activated ability.
   /// Returns null if parsing fails.
   /// </summary>
-  private List<Cost>? ParseCosts(string costPart, ClauseClassification classification)
+  private List<Cost>? ParseCosts(string costPart, ClauseClassification classification, int costPartStart)
   {
     var costs = new List<Cost>();
 
@@ -461,12 +465,24 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       return costs;
     }
 
-    // Split by comma to get individual cost components
-    var costComponents = costPart.Split(',').Select(c => c.Trim()).ToList();
+    // Split by comma to get individual cost components, tracking each component's absolute char offset
+    // in the original oracle text (costPartStart + its position within costPart) so we can stamp a
+    // per-component SourceSpan (upstream-atlas-data-plan §4; ADR-0003 Stage 1).
     var hasParsedAnyCost = false;
+    var cursor = 0;
 
-    foreach (var component in costComponents)
+    foreach (var rawComponent in costPart.Split(','))
     {
+      var leading = rawComponent.Length - rawComponent.TrimStart().Length;
+      var component = rawComponent.Trim();
+      var componentStart = costPartStart + cursor + leading;
+      cursor += rawComponent.Length + 1; // advance past this segment + the comma delimiter
+
+      if (component.Length == 0)
+      {
+        continue;
+      }
+
       // Registry-first dispatch (Phase 5): try reflection-discovered cost rules in
       // priority order; first non-null wins. Shapes not yet extracted fall through
       // to the legacy chain below.
@@ -481,7 +497,7 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       }
       if (registryCost is not null)
       {
-        costs.Add(registryCost);
+        costs.Add(registryCost with { SourceSpan = new MagicAST.AST.TextSpan(componentStart, component.Length) });
         hasParsedAnyCost = true;
         continue;
       }

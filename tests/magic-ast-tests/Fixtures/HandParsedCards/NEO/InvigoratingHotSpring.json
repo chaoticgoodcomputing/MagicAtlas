@@ -94,6 +94,10 @@
               },
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 163,
+                "Length": 44
               }
             }
           ],

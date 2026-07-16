@@ -61,7 +61,11 @@
                     "U"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 17,
+                "Length": 3
+              }
             }
           ],
           "Effects": [
@@ -95,7 +99,11 @@
                     "U"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 46,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

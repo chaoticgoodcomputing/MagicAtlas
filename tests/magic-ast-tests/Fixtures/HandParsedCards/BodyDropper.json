@@ -88,7 +88,11 @@
                     "R"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 79,
+                "Length": 6
+              }
             },
             {
               "CostType": "sacrifice",
@@ -101,6 +105,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 87,
+                "Length": 26
               }
             }
           ],

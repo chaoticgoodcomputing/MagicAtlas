@@ -97,7 +97,11 @@
                     "R"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 82,
+                "Length": 6
+              }
             },
             {
               "CostType": "discard",
@@ -109,6 +113,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 90,
+                "Length": 14
               }
             }
           ],

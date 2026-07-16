@@ -44,6 +44,10 @@
                   ],
                   "Controller": "You"
                 }
+              },
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 47
               }
             }
           ],

@@ -54,6 +54,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 22,
+                "Length": 16
               }
             }
           ],

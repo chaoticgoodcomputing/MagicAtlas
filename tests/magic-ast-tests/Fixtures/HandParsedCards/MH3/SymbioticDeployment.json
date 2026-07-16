@@ -53,7 +53,11 @@
                   "Kind": "generic",
                   "GenericAmount": 1
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 21,
+                "Length": 3
+              }
             },
             {
               "CostType": "tapPermanents",
@@ -66,6 +70,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 26,
+                "Length": 38
               }
             }
           ],

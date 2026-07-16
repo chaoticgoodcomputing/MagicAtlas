@@ -65,7 +65,11 @@
                     "R"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 10,
+                "Length": 6
+              }
             }
           ],
           "Effects": [

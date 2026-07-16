@@ -39,7 +39,11 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "FromZone": "Battlefield"
+              "FromZone": "Battlefield",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 28
+              }
             }
           ],
           "Effects": [

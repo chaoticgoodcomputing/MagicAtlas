@@ -54,7 +54,11 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 11,
+                "Length": 3
+              }
             },
             {
               "CostType": "discard",
@@ -66,6 +70,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 16,
+                "Length": 17
               }
             }
           ],

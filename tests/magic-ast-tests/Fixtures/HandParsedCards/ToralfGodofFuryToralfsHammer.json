@@ -239,14 +239,26 @@
                               "R"
                             ]
                           }
-                        ]
+                        ],
+                        "SourceSpan": {
+                          "Start": 0,
+                          "Length": 6
+                        }
                       },
                       {
-                        "CostType": "tap"
+                        "CostType": "tap",
+                        "SourceSpan": {
+                          "Start": 8,
+                          "Length": 3
+                        }
                       },
                       {
                         "CostType": "unattachNamed",
-                        "CardName": "Toralf's Hammer"
+                        "CardName": "Toralf's Hammer",
+                        "SourceSpan": {
+                          "Start": 13,
+                          "Length": 24
+                        }
                       }
                     ],
                     "Effects": [

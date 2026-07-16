@@ -33,7 +33,11 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 3
+              }
             }
           ],
           "Effects": [
@@ -57,7 +61,11 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 14,
+                "Length": 3
+              }
             },
             {
               "CostType": "sacrifice",
@@ -70,6 +78,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 19,
+                "Length": 19
               }
             }
           ],

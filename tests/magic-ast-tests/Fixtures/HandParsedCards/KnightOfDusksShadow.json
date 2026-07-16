@@ -88,7 +88,11 @@
                     "B"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 105,
+                "Length": 6
+              }
             }
           ],
           "Effects": [

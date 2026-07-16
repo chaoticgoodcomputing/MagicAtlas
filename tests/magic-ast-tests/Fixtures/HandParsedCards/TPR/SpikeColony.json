@@ -59,7 +59,11 @@
                   "Kind": "generic",
                   "GenericAmount": 2
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 53,
+                "Length": 3
+              }
             },
             {
               "CostType": "removeCounters",
@@ -70,6 +74,10 @@
               },
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 58,
+                "Length": 41
               }
             }
           ],

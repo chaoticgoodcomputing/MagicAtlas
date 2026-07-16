@@ -64,7 +64,11 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 6,
+                "Length": 6
+              }
             }
           ],
           "Effects": [

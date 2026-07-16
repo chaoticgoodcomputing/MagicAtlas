@@ -54,7 +54,11 @@
                 {
                   "Kind": "colorless"
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 33,
+                "Length": 6
+              }
             }
           ],
           "Effects": [

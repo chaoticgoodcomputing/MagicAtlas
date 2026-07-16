@@ -67,10 +67,18 @@
                   "Kind": "generic",
                   "GenericAmount": 2
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 35,
+                "Length": 3
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 40,
+                "Length": 3
+              }
             },
             {
               "CostType": "sacrifice",
@@ -83,6 +91,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 45,
+                "Length": 23
               }
             }
           ],

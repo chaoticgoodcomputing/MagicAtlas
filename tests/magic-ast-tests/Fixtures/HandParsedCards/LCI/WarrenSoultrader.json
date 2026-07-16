@@ -36,6 +36,10 @@
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 10
               }
             },
             {
@@ -49,6 +53,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 12,
+                "Length": 26
               }
             }
           ],

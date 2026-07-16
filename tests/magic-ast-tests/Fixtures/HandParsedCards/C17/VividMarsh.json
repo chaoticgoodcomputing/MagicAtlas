@@ -54,7 +54,11 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 56,
+                "Length": 3
+              }
             }
           ],
           "Effects": [
@@ -79,7 +83,11 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 70,
+                "Length": 3
+              }
             },
             {
               "CostType": "removeCounters",
@@ -90,6 +98,10 @@
               },
               "Target": {
                 "Kind": "Self"
+              },
+              "SourceSpan": {
+                "Start": 75,
+                "Length": 38
               }
             }
           ],

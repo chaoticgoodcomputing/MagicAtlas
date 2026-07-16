@@ -99,10 +99,18 @@
                     "W"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 108,
+                "Length": 9
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 119,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

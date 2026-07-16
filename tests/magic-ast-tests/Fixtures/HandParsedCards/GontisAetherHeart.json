@@ -70,6 +70,10 @@
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 8
+              },
+              "SourceSpan": {
+                "Start": 108,
+                "Length": 13
               }
             },
             {
@@ -84,7 +88,11 @@
                 "QuantityType": "literal",
                 "Value": 1
               },
-              "FromZone": "Battlefield"
+              "FromZone": "Battlefield",
+              "SourceSpan": {
+                "Start": 123,
+                "Length": 26
+              }
             }
           ],
           "Effects": [

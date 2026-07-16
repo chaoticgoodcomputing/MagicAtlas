@@ -83,7 +83,11 @@
                     "R"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 34,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

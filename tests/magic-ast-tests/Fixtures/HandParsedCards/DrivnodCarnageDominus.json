@@ -82,7 +82,11 @@
                   ],
                   "IsPhyrexian": true
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 128,
+                "Length": 10
+              }
             },
             {
               "CostType": "exile",
@@ -96,7 +100,11 @@
                 "QuantityType": "literal",
                 "Value": 3
               },
-              "FromZone": "Graveyard"
+              "FromZone": "Graveyard",
+              "SourceSpan": {
+                "Start": 140,
+                "Length": 46
+              }
             }
           ],
           "Effects": [

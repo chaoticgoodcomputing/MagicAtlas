@@ -85,7 +85,11 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 108,
+                "Length": 6
+              }
             },
             {
               "CostType": "sacrifice",
@@ -98,6 +102,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 116,
+                "Length": 23
               }
             }
           ],

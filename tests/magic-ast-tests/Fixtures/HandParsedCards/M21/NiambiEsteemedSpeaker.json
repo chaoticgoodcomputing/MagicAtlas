@@ -126,10 +126,18 @@
                     "U"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 160,
+                "Length": 9
+              }
             },
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 171,
+                "Length": 3
+              }
             },
             {
               "CostType": "discard",
@@ -144,6 +152,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 176,
+                "Length": 24
               }
             }
           ],

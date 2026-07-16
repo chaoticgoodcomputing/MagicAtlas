@@ -45,6 +45,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 14
               }
             }
           ],
@@ -97,7 +101,11 @@
                 "QuantityType": "literal",
                 "Value": 2
               },
-              "FromZone": "Graveyard"
+              "FromZone": "Graveyard",
+              "SourceSpan": {
+                "Start": 60,
+                "Length": 35
+              }
             }
           ],
           "Effects": [

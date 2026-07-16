@@ -12,7 +12,18 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// </summary>
 [PolymorphicBase("CostType")]
 [JsonConverter(typeof(PolymorphicReflectionConverter<Cost>))]
-public abstract record Cost;
+public abstract record Cost
+{
+  /// <summary>
+  /// The span of this cost component in the original oracle text — the per-component split of an
+  /// activation cost clause (so "{B}, Sacrifice a creature" yields a "{B}" span and a "Sacrifice a
+  /// creature" span). Null when the parser did not thread a position (cost construction sites other than
+  /// the activated-ability path). Provenance plumbing for clause-accurate consume-port spans
+  /// (upstream-atlas-data-plan §4; ADR-0003 Stage 1); mirrors <see cref="AdditionalCost"/>.SourceSpan.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public MagicAST.AST.TextSpan? SourceSpan { get; init; }
+}
 
 /// <summary>
 /// A mana cost like "{2}{G}{G}" or "{X}{R}".

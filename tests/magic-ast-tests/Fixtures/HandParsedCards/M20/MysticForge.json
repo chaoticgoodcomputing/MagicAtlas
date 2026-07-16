@@ -68,13 +68,21 @@
           "Kind": "activated",
           "Costs": [
             {
-              "CostType": "tap"
+              "CostType": "tap",
+              "SourceSpan": {
+                "Start": 135,
+                "Length": 3
+              }
             },
             {
               "CostType": "payLife",
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 140,
+                "Length": 10
               }
             }
           ],

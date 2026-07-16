@@ -38,7 +38,11 @@
                 {
                   "Kind": "variable"
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

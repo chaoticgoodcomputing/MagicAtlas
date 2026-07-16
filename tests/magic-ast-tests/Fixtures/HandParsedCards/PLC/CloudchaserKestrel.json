@@ -112,7 +112,11 @@
                     "W"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 62,
+                "Length": 3
+              }
             }
           ],
           "Effects": [

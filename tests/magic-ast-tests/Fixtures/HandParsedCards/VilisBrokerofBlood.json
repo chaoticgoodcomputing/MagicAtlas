@@ -71,13 +71,21 @@
                     "B"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 7,
+                "Length": 3
+              }
             },
             {
               "CostType": "payLife",
               "Amount": {
                 "QuantityType": "literal",
                 "Value": 2
+              },
+              "SourceSpan": {
+                "Start": 12,
+                "Length": 10
               }
             }
           ],

@@ -55,7 +55,11 @@
                   "Kind": "generic",
                   "GenericAmount": 1
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 100,
+                "Length": 3
+              }
             },
             {
               "CostType": "sacrifice",
@@ -68,6 +72,10 @@
               "Quantity": {
                 "QuantityType": "literal",
                 "Value": 1
+              },
+              "SourceSpan": {
+                "Start": 105,
+                "Length": 26
               }
             }
           ],

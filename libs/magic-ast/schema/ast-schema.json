@@ -836,7 +836,8 @@
           "Discriminator": "abundanceReveal",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -844,7 +845,8 @@
           "Discriminator": "activateAbilitiesAsThoughHaste",
           "IsUnparsed": false,
           "Fields": [
-            "AppliesTo"
+            "AppliesTo",
+            "SourceSpan"
           ]
         },
         {
@@ -852,6 +854,7 @@
           "Discriminator": "activateLoyaltyAbilityAsThough",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -860,7 +863,8 @@
           "Discriminator": "adapt",
           "IsUnparsed": false,
           "Fields": [
-            "Count"
+            "Count",
+            "SourceSpan"
           ]
         },
         {
@@ -869,6 +873,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Colors",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -880,7 +885,8 @@
             "AnyColor",
             "AnyType",
             "Mana",
-            "OfChosenColor"
+            "OfChosenColor",
+            "SourceSpan"
           ]
         },
         {
@@ -888,6 +894,7 @@
           "Discriminator": "addType",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -896,26 +903,32 @@
           "Discriminator": "additionalCastCost",
           "IsUnparsed": false,
           "Fields": [
-            "AdditionalCost"
+            "AdditionalCost",
+            "SourceSpan"
           ]
         },
         {
           "Type": "AdditionalCombatAndMainPhaseEffect",
           "Discriminator": "additionalCombatAndMainPhase",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "AdditionalCombatPhaseEffect",
           "Discriminator": "additionalCombatPhase",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "AllMustBlockEffect",
           "Discriminator": "allMustBlock",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -924,7 +937,8 @@
           "Discriminator": "alternativeCast",
           "IsUnparsed": false,
           "Fields": [
-            "FromZone"
+            "FromZone",
+            "SourceSpan"
           ]
         },
         {
@@ -933,7 +947,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Method",
-            "Pays"
+            "Pays",
+            "SourceSpan"
           ]
         },
         {
@@ -941,7 +956,8 @@
           "Discriminator": "amass",
           "IsUnparsed": false,
           "Fields": [
-            "Count"
+            "Count",
+            "SourceSpan"
           ]
         },
         {
@@ -949,6 +965,7 @@
           "Discriminator": "amplify",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -956,25 +973,32 @@
           "Type": "AnyNumberInDeckEffect",
           "Discriminator": "anyNumberInDeck",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "AssignDamageAsToughnessEffect",
           "Discriminator": "assignDamageAsToughness",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "AssignDamageAsUnblockedEffect",
           "Discriminator": "assignDamageAsUnblocked",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "AttachEffect",
           "Discriminator": "attach",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -983,7 +1007,8 @@
           "Discriminator": "awaken",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -991,6 +1016,7 @@
           "Discriminator": "backup",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -999,7 +1025,8 @@
           "Discriminator": "becomeMonarch",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1008,6 +1035,7 @@
           "IsUnparsed": false,
           "Fields": [
             "CopyTarget",
+            "SourceSpan",
             "Subject"
           ]
         },
@@ -1021,6 +1049,7 @@
             "Colors",
             "GainedAbilities",
             "Power",
+            "SourceSpan",
             "Subject",
             "Toughness"
           ]
@@ -1035,6 +1064,7 @@
             "Colors",
             "GainedAbilities",
             "Power",
+            "SourceSpan",
             "Subject",
             "Toughness"
           ]
@@ -1045,84 +1075,107 @@
           "IsUnparsed": false,
           "Fields": [
             "Amount",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
           "Type": "BlockAdditionalEffect",
           "Discriminator": "blockAdditional",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CanAttackIgnoringDefenderEffect",
           "Discriminator": "canAttackIgnoringDefender",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CanBlockOnlyEffect",
           "Discriminator": "canBlockOnly",
           "IsUnparsed": false,
           "Fields": [
-            "Filter"
+            "Filter",
+            "SourceSpan"
           ]
         },
         {
           "Type": "CantActivateAbilitiesEffect",
           "Discriminator": "cantActivateAbilities",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantAttackEffect",
           "Discriminator": "cantAttack",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantBeBlockedEffect",
           "Discriminator": "cantBeBlocked",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantBeCastEffect",
           "Discriminator": "cantBeCast",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantBeCopiedEffect",
           "Discriminator": "cantBeCopied",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantBeCounteredEffect",
           "Discriminator": "cantBeCountered",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantBeRegeneratedEffect",
           "Discriminator": "cantBeRegenerated",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantBlockEffect",
           "Discriminator": "cantBlock",
           "IsUnparsed": false,
           "Fields": [
-            "Blocks"
+            "Blocks",
+            "SourceSpan"
           ]
         },
         {
           "Type": "CantCastAdditionalSpellsThisTurnEffect",
           "Discriminator": "cantCastAdditionalSpellsThisTurn",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantCastMoreThanNSpellsEffect",
@@ -1131,7 +1184,8 @@
           "Fields": [
             "MaxPerPeriod",
             "Period",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1139,7 +1193,8 @@
           "Discriminator": "cantDrawCards",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1147,14 +1202,17 @@
           "Discriminator": "cantGainLife",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
           "Type": "CantHaveCountersEffect",
           "Discriminator": "cantHaveCounters",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantHaveOrGainKeywordEffect",
@@ -1162,6 +1220,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Keyword",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1170,7 +1229,8 @@
           "Discriminator": "cantLoseGame",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1178,7 +1238,8 @@
           "Discriminator": "cantLoseGameForZeroLife",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1186,21 +1247,25 @@
           "Discriminator": "cantPlayLands",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
           "Type": "CantPreventDamageEffect",
           "Discriminator": "cantPreventDamage",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CantWinGameEffect",
           "Discriminator": "cantWinGame",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1208,6 +1273,7 @@
           "Discriminator": "castWithoutPaying",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1216,7 +1282,8 @@
           "Discriminator": "champion",
           "IsUnparsed": false,
           "Fields": [
-            "CreatureType"
+            "CreatureType",
+            "SourceSpan"
           ]
         },
         {
@@ -1225,6 +1292,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Colors",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1233,6 +1301,7 @@
           "Discriminator": "changeSubtype",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1241,6 +1310,7 @@
           "Discriminator": "changeTarget",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Spell"
           ]
         },
@@ -1249,52 +1319,65 @@
           "Discriminator": "chooseBasicLandType",
           "IsUnparsed": false,
           "Fields": [
-            "Options"
+            "Options",
+            "SourceSpan"
           ]
         },
         {
           "Type": "ChooseCardNameEffect",
           "Discriminator": "chooseCardName",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ChooseCardTypeEffect",
           "Discriminator": "chooseCardType",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ChooseColorEffect",
           "Discriminator": "chooseColor",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ChooseCreatureTypeEffect",
           "Discriminator": "chooseCreatureType",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ChooseNamedOptionEffect",
           "Discriminator": "chooseNamedOption",
           "IsUnparsed": false,
           "Fields": [
-            "Options"
+            "Options",
+            "SourceSpan"
           ]
         },
         {
           "Type": "ChoosePlayerEffect",
           "Discriminator": "choosePlayer",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CombatDamageTimingEffect",
           "Discriminator": "combatDamageTiming",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Timing"
           ]
         },
@@ -1302,14 +1385,17 @@
           "Type": "CommanderDesignationEffect",
           "Discriminator": "commanderDesignation",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "CompositeEffect",
           "Discriminator": "composite",
           "IsUnparsed": false,
           "Fields": [
-            "Effects"
+            "Effects",
+            "SourceSpan"
           ]
         },
         {
@@ -1318,6 +1404,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Condition",
+            "SourceSpan",
             "Then"
           ]
         },
@@ -1326,7 +1413,8 @@
           "Discriminator": "conditionalPay",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1334,6 +1422,7 @@
           "Discriminator": "connive",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1342,6 +1431,7 @@
           "Discriminator": "copy",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1350,7 +1440,8 @@
           "Discriminator": "costIncrease",
           "IsUnparsed": false,
           "Fields": [
-            "Amount"
+            "Amount",
+            "SourceSpan"
           ]
         },
         {
@@ -1358,7 +1449,8 @@
           "Discriminator": "costReduction",
           "IsUnparsed": false,
           "Fields": [
-            "Amount"
+            "Amount",
+            "SourceSpan"
           ]
         },
         {
@@ -1366,6 +1458,7 @@
           "Discriminator": "counterSpell",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1374,7 +1467,8 @@
           "Discriminator": "createDelayedTrigger",
           "IsUnparsed": false,
           "Fields": [
-            "DelayedTrigger"
+            "DelayedTrigger",
+            "SourceSpan"
           ]
         },
         {
@@ -1382,7 +1476,8 @@
           "Discriminator": "createEmblem",
           "IsUnparsed": false,
           "Fields": [
-            "Emblem"
+            "Emblem",
+            "SourceSpan"
           ]
         },
         {
@@ -1392,6 +1487,7 @@
           "Fields": [
             "Count",
             "Player",
+            "SourceSpan",
             "Token"
           ]
         },
@@ -1400,7 +1496,8 @@
           "Discriminator": "crew",
           "IsUnparsed": false,
           "Fields": [
-            "Power"
+            "Power",
+            "SourceSpan"
           ]
         },
         {
@@ -1408,7 +1505,8 @@
           "Discriminator": "cumulativeUpkeep",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1416,7 +1514,8 @@
           "Discriminator": "damageCantBePrevented",
           "IsUnparsed": false,
           "Fields": [
-            "Source"
+            "Source",
+            "SourceSpan"
           ]
         },
         {
@@ -1424,7 +1523,8 @@
           "Discriminator": "dayNight",
           "IsUnparsed": false,
           "Fields": [
-            "Phase"
+            "Phase",
+            "SourceSpan"
           ]
         },
         {
@@ -1433,6 +1533,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Amount",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1442,6 +1543,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Characteristic",
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1451,6 +1553,7 @@
           "IsUnparsed": false,
           "Fields": [
             "CantBeRegenerated",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1459,6 +1562,7 @@
           "Discriminator": "devour",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1470,7 +1574,8 @@
             "Count",
             "Player",
             "Random",
-            "RevealHand"
+            "RevealHand",
+            "SourceSpan"
           ]
         },
         {
@@ -1478,21 +1583,25 @@
           "Discriminator": "disguise",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
           "Type": "DoesntUntapEffect",
           "Discriminator": "doesntUntap",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "DoubleLifeTotalEffect",
           "Discriminator": "doubleLifeTotal",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1501,7 +1610,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Count",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1509,6 +1619,7 @@
           "Discriminator": "dredge",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1517,7 +1628,8 @@
           "Discriminator": "earthbend",
           "IsUnparsed": false,
           "Fields": [
-            "Count"
+            "Count",
+            "SourceSpan"
           ]
         },
         {
@@ -1525,7 +1637,8 @@
           "Discriminator": "emerge",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1533,7 +1646,8 @@
           "Discriminator": "enchantRestriction",
           "IsUnparsed": false,
           "Fields": [
-            "LegalTargets"
+            "LegalTargets",
+            "SourceSpan"
           ]
         },
         {
@@ -1541,7 +1655,8 @@
           "Discriminator": "encore",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1549,14 +1664,17 @@
           "Discriminator": "escape",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
           "Type": "EvasionEffect",
           "Discriminator": "evasion",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ExchangeCharacteristicEffect",
@@ -1565,20 +1683,24 @@
           "Fields": [
             "Characteristic",
             "First",
-            "Second"
+            "Second",
+            "SourceSpan"
           ]
         },
         {
           "Type": "ExertEffect",
           "Discriminator": "exert",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ExileEffect",
           "Discriminator": "exile",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1587,6 +1709,7 @@
           "Discriminator": "explore",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1595,6 +1718,7 @@
           "Discriminator": "fabricate",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1603,6 +1727,7 @@
           "Discriminator": "fading",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1612,7 +1737,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Controlled",
-            "Opposed"
+            "Opposed",
+            "SourceSpan"
           ]
         },
         {
@@ -1620,7 +1746,8 @@
           "Discriminator": "foretell",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1630,6 +1757,7 @@
           "Fields": [
             "AbilityKind",
             "SourceFilter",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1639,6 +1767,7 @@
           "IsUnparsed": false,
           "Fields": [
             "GainedAbility",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1647,6 +1776,7 @@
           "Discriminator": "gainControl",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1656,7 +1786,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Amount",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1665,7 +1796,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Amount",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1673,7 +1805,8 @@
           "Discriminator": "gift",
           "IsUnparsed": false,
           "Fields": [
-            "Gifted"
+            "Gifted",
+            "SourceSpan"
           ]
         },
         {
@@ -1681,6 +1814,7 @@
           "Discriminator": "goaded",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1689,6 +1823,7 @@
           "Discriminator": "graft",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1698,7 +1833,8 @@
           "IsUnparsed": false,
           "Fields": [
             "AdditionalCost",
-            "AffectedSpells"
+            "AffectedSpells",
+            "SourceSpan"
           ]
         },
         {
@@ -1707,7 +1843,8 @@
           "IsUnparsed": false,
           "Fields": [
             "AffectedSpells",
-            "AlternativeCost"
+            "AlternativeCost",
+            "SourceSpan"
           ]
         },
         {
@@ -1715,7 +1852,8 @@
           "Discriminator": "harmonize",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1725,6 +1863,7 @@
           "Fields": [
             "AbilityKind",
             "SourceFilter",
+            "SourceSpan",
             "Subject"
           ]
         },
@@ -1733,7 +1872,8 @@
           "Discriminator": "hideaway",
           "IsUnparsed": false,
           "Fields": [
-            "Amount"
+            "Amount",
+            "SourceSpan"
           ]
         },
         {
@@ -1742,48 +1882,59 @@
           "IsUnparsed": false,
           "Fields": [
             "Count",
-            "RestDestination"
+            "RestDestination",
+            "SourceSpan"
           ]
         },
         {
           "Type": "IncrementEffect",
           "Discriminator": "increment",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "IncubateEffect",
           "Discriminator": "incubate",
           "IsUnparsed": false,
           "Fields": [
-            "Count"
+            "Count",
+            "SourceSpan"
           ]
         },
         {
           "Type": "InvestigateEffect",
           "Discriminator": "investigate",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "KeywordAbilityEffect",
           "Discriminator": "keywordAbility",
           "IsUnparsed": false,
           "Fields": [
-            "Keyword"
+            "Keyword",
+            "SourceSpan"
           ]
         },
         {
           "Type": "LegendRuleSuppressionEffect",
           "Discriminator": "legendRuleSuppression",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "LifelinkEffect",
           "Discriminator": "lifelink",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "LookAtCardsEffect",
@@ -1792,6 +1943,7 @@
           "Fields": [
             "Count",
             "Player",
+            "SourceSpan",
             "Zone"
           ]
         },
@@ -1799,7 +1951,9 @@
           "Type": "LookAtTopCardAnyTimeEffect",
           "Discriminator": "lookAtTopCardAnyTime",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "LookAtTopMayRevealMatchingRestToBottomEffect",
@@ -1808,7 +1962,8 @@
           "Fields": [
             "Count",
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1816,6 +1971,7 @@
           "Discriminator": "loseAbility",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1825,7 +1981,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Amount",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1833,7 +1990,8 @@
           "Discriminator": "loseTheGame",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1842,6 +2000,7 @@
           "IsUnparsed": false,
           "Fields": [
             "LostType",
+            "SourceSpan",
             "Subject"
           ]
         },
@@ -1849,7 +2008,9 @@
           "Type": "ManaPersistsUntilEndOfTurnEffect",
           "Discriminator": "manaPersists",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "MaxHandSizeEffect",
@@ -1857,6 +2018,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Player",
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1864,7 +2026,9 @@
           "Type": "MayCastTargetFromGraveyardEffect",
           "Discriminator": "mayCastTargetFromGraveyard",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "MayPlayFromExileEffect",
@@ -1872,7 +2036,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Actions",
-            "Cards"
+            "Cards",
+            "SourceSpan"
           ]
         },
         {
@@ -1880,7 +2045,8 @@
           "Discriminator": "mayPlayFromGraveyard",
           "IsUnparsed": false,
           "Fields": [
-            "Cards"
+            "Cards",
+            "SourceSpan"
           ]
         },
         {
@@ -1888,7 +2054,8 @@
           "Discriminator": "mayPlayFromLibrary",
           "IsUnparsed": false,
           "Fields": [
-            "Cards"
+            "Cards",
+            "SourceSpan"
           ]
         },
         {
@@ -1896,21 +2063,25 @@
           "Discriminator": "mayPlayFromTopOfLibrary",
           "IsUnparsed": false,
           "Fields": [
-            "Actions"
+            "Actions",
+            "SourceSpan"
           ]
         },
         {
           "Type": "MayPlayTargetFromExileEffect",
           "Discriminator": "mayPlayTargetFromExile",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "MegamorphEffect",
           "Discriminator": "megamorph",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1919,7 +2090,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Count",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -1927,7 +2099,8 @@
           "Discriminator": "miracle",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1935,7 +2108,8 @@
           "Discriminator": "mobilize",
           "IsUnparsed": false,
           "Fields": [
-            "Amount"
+            "Amount",
+            "SourceSpan"
           ]
         },
         {
@@ -1945,7 +2119,8 @@
           "Fields": [
             "AllowDuplicates",
             "ModeSelection",
-            "Modes"
+            "Modes",
+            "SourceSpan"
           ]
         },
         {
@@ -1954,6 +2129,7 @@
           "IsUnparsed": false,
           "Fields": [
             "NewLimit",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -1963,6 +2139,7 @@
           "IsUnparsed": false,
           "Fields": [
             "PowerModifier",
+            "SourceSpan",
             "Target",
             "ToughnessModifier"
           ]
@@ -1972,6 +2149,7 @@
           "Discriminator": "monstrosity",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -1980,7 +2158,8 @@
           "Discriminator": "morph",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -1991,6 +2170,7 @@
             "Count",
             "CounterType",
             "From",
+            "SourceSpan",
             "To"
           ]
         },
@@ -1999,6 +2179,7 @@
           "Discriminator": "mustAttack",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2007,6 +2188,7 @@
           "Discriminator": "mustBeBlocked",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2016,6 +2198,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Blocks",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2024,7 +2207,8 @@
           "Discriminator": "mutate",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2032,7 +2216,8 @@
           "Discriminator": "ninjutsu",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2040,7 +2225,8 @@
           "Discriminator": "noCombatDamage",
           "IsUnparsed": false,
           "Fields": [
-            "Source"
+            "Source",
+            "SourceSpan"
           ]
         },
         {
@@ -2048,7 +2234,8 @@
           "Discriminator": "noMaxHandSize",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2056,27 +2243,33 @@
           "Discriminator": "offspring",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
           "Type": "OpenAttractionEffect",
           "Discriminator": "openAttraction",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "OpeningHandEffect",
           "Discriminator": "openingHand",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "OptionalEffect",
           "Discriminator": "optional",
           "IsUnparsed": false,
           "Fields": [
-            "Inner"
+            "Inner",
+            "SourceSpan"
           ]
         },
         {
@@ -2085,7 +2278,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Count",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2093,7 +2287,8 @@
           "Discriminator": "overload",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2101,7 +2296,8 @@
           "Discriminator": "pair",
           "IsUnparsed": false,
           "Fields": [
-            "Partner"
+            "Partner",
+            "SourceSpan"
           ]
         },
         {
@@ -2109,7 +2305,8 @@
           "Discriminator": "partner",
           "IsUnparsed": false,
           "Fields": [
-            "PartnerType"
+            "PartnerType",
+            "SourceSpan"
           ]
         },
         {
@@ -2117,7 +2314,8 @@
           "Discriminator": "payLife",
           "IsUnparsed": false,
           "Fields": [
-            "Amount"
+            "Amount",
+            "SourceSpan"
           ]
         },
         {
@@ -2126,7 +2324,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Colors",
-            "LifePerMana"
+            "LifePerMana",
+            "SourceSpan"
           ]
         },
         {
@@ -2134,6 +2333,7 @@
           "Discriminator": "phaseOut",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2141,28 +2341,34 @@
           "Type": "PlayAdditionalLandEffect",
           "Discriminator": "playAdditionalLand",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "PlayWithHandsRevealedEffect",
           "Discriminator": "playWithHandsRevealed",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
           "Type": "PlayWithTopRevealedEffect",
           "Discriminator": "playWithTopRevealed",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "PlotEffect",
           "Discriminator": "plot",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2170,7 +2376,8 @@
           "Discriminator": "preventDamage",
           "IsUnparsed": false,
           "Fields": [
-            "All"
+            "All",
+            "SourceSpan"
           ]
         },
         {
@@ -2179,6 +2386,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Inner",
+            "SourceSpan",
             "Unless"
           ]
         },
@@ -2186,14 +2394,17 @@
           "Type": "ProliferateEffect",
           "Discriminator": "proliferate",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "ProtectionEffect",
           "Discriminator": "protection",
           "IsUnparsed": false,
           "Fields": [
-            "From"
+            "From",
+            "SourceSpan"
           ]
         },
         {
@@ -2203,6 +2414,7 @@
           "Fields": [
             "Cost",
             "Power",
+            "SourceSpan",
             "Toughness"
           ]
         },
@@ -2211,6 +2423,7 @@
           "Discriminator": "putAdditionalCounterOfChosenKind",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2221,6 +2434,7 @@
           "Fields": [
             "Count",
             "CounterType",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2230,6 +2444,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Filter",
+            "SourceSpan",
             "Tapped"
           ]
         },
@@ -2239,7 +2454,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Card",
-            "Position"
+            "Position",
+            "SourceSpan"
           ]
         },
         {
@@ -2247,6 +2463,7 @@
           "Discriminator": "putOnBottomOfLibrary",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2255,6 +2472,7 @@
           "Discriminator": "putOnTopOfLibrary",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2263,7 +2481,8 @@
           "Discriminator": "recover",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2272,6 +2491,7 @@
           "IsUnparsed": false,
           "Fields": [
             "From",
+            "SourceSpan",
             "To"
           ]
         },
@@ -2280,6 +2500,7 @@
           "Discriminator": "regenerate",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2290,6 +2511,7 @@
           "Fields": [
             "Count",
             "CounterType",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2298,6 +2520,7 @@
           "Discriminator": "renown",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -2307,7 +2530,8 @@
           "IsUnparsed": false,
           "Fields": [
             "AdditionalTimes",
-            "Inner"
+            "Inner",
+            "SourceSpan"
           ]
         },
         {
@@ -2316,7 +2540,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Event",
-            "OriginalEventOccurs"
+            "OriginalEventOccurs",
+            "SourceSpan"
           ]
         },
         {
@@ -2324,7 +2549,8 @@
           "Discriminator": "retainUnspentMana",
           "IsUnparsed": false,
           "Fields": [
-            "Color"
+            "Color",
+            "SourceSpan"
           ]
         },
         {
@@ -2332,6 +2558,7 @@
           "Discriminator": "returnToBattlefield",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Tapped",
             "Target"
           ]
@@ -2341,6 +2568,7 @@
           "Discriminator": "returnToGraveyard",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2349,6 +2577,7 @@
           "Discriminator": "returnToHand",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2359,6 +2588,7 @@
           "Fields": [
             "Count",
             "Player",
+            "SourceSpan",
             "Zone"
           ]
         },
@@ -2368,7 +2598,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2378,7 +2609,8 @@
           "Fields": [
             "Count",
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2388,7 +2620,8 @@
           "Fields": [
             "Count",
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2398,7 +2631,8 @@
           "Fields": [
             "Count",
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2407,7 +2641,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2416,20 +2651,24 @@
           "IsUnparsed": false,
           "Fields": [
             "Filter",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
           "Type": "RingTemptsEffect",
           "Discriminator": "ringTemptsYou",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "RippleEffect",
           "Discriminator": "ripple",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -2438,7 +2677,8 @@
           "Discriminator": "rollDie",
           "IsUnparsed": false,
           "Fields": [
-            "Sides"
+            "Sides",
+            "SourceSpan"
           ]
         },
         {
@@ -2446,7 +2686,8 @@
           "Discriminator": "rollResultsTable",
           "IsUnparsed": false,
           "Fields": [
-            "Rows"
+            "Rows",
+            "SourceSpan"
           ]
         },
         {
@@ -2454,6 +2695,7 @@
           "Discriminator": "sacrifice",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2462,6 +2704,7 @@
           "Discriminator": "saddle",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -2470,7 +2713,8 @@
           "Discriminator": "scry",
           "IsUnparsed": false,
           "Fields": [
-            "Count"
+            "Count",
+            "SourceSpan"
           ]
         },
         {
@@ -2481,7 +2725,8 @@
             "Count",
             "Destination",
             "Filter",
-            "Revealed"
+            "Revealed",
+            "SourceSpan"
           ]
         },
         {
@@ -2490,6 +2735,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Power",
+            "SourceSpan",
             "Target",
             "Toughness"
           ]
@@ -2500,6 +2746,7 @@
           "IsUnparsed": false,
           "Fields": [
             "CardTypes",
+            "SourceSpan",
             "Subject"
           ]
         },
@@ -2509,6 +2756,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Player",
+            "SourceSpan",
             "Total"
           ]
         },
@@ -2517,7 +2765,8 @@
           "Discriminator": "shuffle",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2526,7 +2775,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Cards",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2534,7 +2784,8 @@
           "Discriminator": "shuffleGraveyardIntoLibrary",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2542,6 +2793,7 @@
           "Discriminator": "shuffleIntoLibrary",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2549,20 +2801,25 @@
           "Type": "SiegeEffect",
           "Discriminator": "siege",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "SkipUntapEffect",
           "Discriminator": "skipUntap",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "SneakEffect",
           "Discriminator": "sneak",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2570,7 +2827,8 @@
           "Discriminator": "spendManaAsAnyColor",
           "IsUnparsed": false,
           "Fields": [
-            "Beneficiary"
+            "Beneficiary",
+            "SourceSpan"
           ]
         },
         {
@@ -2579,7 +2837,8 @@
           "IsUnparsed": false,
           "Fields": [
             "Cost",
-            "Onto"
+            "Onto",
+            "SourceSpan"
           ]
         },
         {
@@ -2587,20 +2846,24 @@
           "Discriminator": "surveil",
           "IsUnparsed": false,
           "Fields": [
-            "Count"
+            "Count",
+            "SourceSpan"
           ]
         },
         {
           "Type": "SuspendEffect",
           "Discriminator": "suspend",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "SwitchPTEffect",
           "Discriminator": "switchPT",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2609,7 +2872,8 @@
           "Discriminator": "takeExtraTurn",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2617,6 +2881,7 @@
           "Discriminator": "tap",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2625,6 +2890,7 @@
           "Discriminator": "tapOrUntap",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2636,6 +2902,7 @@
             "AppliesWhen",
             "Condition",
             "Restriction",
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2645,6 +2912,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Modification",
+            "SourceSpan",
             "Timing"
           ]
         },
@@ -2655,7 +2923,8 @@
           "Fields": [
             "CardFilter",
             "Count",
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2663,6 +2932,7 @@
           "Discriminator": "toxic",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -2671,6 +2941,7 @@
           "Discriminator": "transform",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2679,7 +2950,8 @@
           "Discriminator": "transmute",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2687,6 +2959,7 @@
           "Discriminator": "tribute",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -2695,6 +2968,7 @@
           "Discriminator": "turnFaceDown",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2704,6 +2978,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Cost",
+            "SourceSpan",
             "Type"
           ]
         },
@@ -2711,14 +2986,17 @@
           "Type": "UnattachEffect",
           "Discriminator": "unattach",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "UnearthEffect",
           "Discriminator": "unearth",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2726,6 +3004,7 @@
           "Discriminator": "unlockDoor",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2752,6 +3031,7 @@
           "Discriminator": "untap",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Target"
           ]
         },
@@ -2760,6 +3040,7 @@
           "Discriminator": "vanishing",
           "IsUnparsed": false,
           "Fields": [
+            "SourceSpan",
             "Value"
           ]
         },
@@ -2767,14 +3048,17 @@
           "Type": "VentureIntoTheDungeonEffect",
           "Discriminator": "ventureIntoTheDungeon",
           "IsUnparsed": false,
-          "Fields": []
+          "Fields": [
+            "SourceSpan"
+          ]
         },
         {
           "Type": "WarpEffect",
           "Discriminator": "warp",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2782,7 +3066,8 @@
           "Discriminator": "webSlinging",
           "IsUnparsed": false,
           "Fields": [
-            "Cost"
+            "Cost",
+            "SourceSpan"
           ]
         },
         {
@@ -2790,7 +3075,8 @@
           "Discriminator": "winTheGame",
           "IsUnparsed": false,
           "Fields": [
-            "Player"
+            "Player",
+            "SourceSpan"
           ]
         },
         {
@@ -2799,6 +3085,7 @@
           "IsUnparsed": false,
           "Fields": [
             "CardFilter",
+            "SourceSpan",
             "Sources"
           ]
         }
@@ -3133,5 +3420,5 @@
       ]
     }
   ],
-  "SchemaHash": "e8f0c92e62f8c832e19b87a5102bf264c99cb1d8bfb99779c04d9bfd672156ab"
+  "SchemaHash": "f6cddb1d6dc3dadc03b32d9ccb301a907a780b5be33a6023797738708fcdce5e"
 }

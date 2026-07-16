@@ -133,7 +133,11 @@
                     "G"
                   ]
                 }
-              ]
+              ],
+              "SourceSpan": {
+                "Start": 127,
+                "Length": 15
+              }
             }
           ],
           "Effects": [

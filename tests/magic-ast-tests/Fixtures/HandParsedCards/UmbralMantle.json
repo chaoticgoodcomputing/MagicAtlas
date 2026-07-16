@@ -39,10 +39,18 @@
                         "Kind": "generic",
                         "GenericAmount": 3
                       }
-                    ]
+                    ],
+                    "SourceSpan": {
+                      "Start": 0,
+                      "Length": 3
+                    }
                   },
                   {
-                    "CostType": "untap"
+                    "CostType": "untap",
+                    "SourceSpan": {
+                      "Start": 5,
+                      "Length": 3
+                    }
                   }
                 ],
                 "Effects": [
