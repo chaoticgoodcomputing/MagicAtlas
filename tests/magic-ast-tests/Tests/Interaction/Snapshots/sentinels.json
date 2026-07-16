@@ -127,6 +127,30 @@
       ]
     },
     {
+      "name": "Deadeye Navigator (soulbond-granted blink via gainAbility -> emit:blink)",
+      "kind": "card",
+      "cards": [
+        {
+          "path": "HandParsedCards/AVR/DeadeyeNavigator.json",
+          "card": "Deadeye Navigator"
+        }
+      ]
+    },
+    {
+      "name": "Deadeye Navigator x Peregrine Drake (granted-blink -> ETB untap-land loop, AMBER)",
+      "kind": "combo",
+      "cards": [
+        {
+          "path": "HandParsedCards/AVR/DeadeyeNavigator.json",
+          "card": "Deadeye Navigator"
+        },
+        {
+          "path": "HandParsedCards/PeregrineDrake.json",
+          "card": "Peregrine Drake"
+        }
+      ]
+    },
+    {
       "name": "Vivid Marsh",
       "kind": "card",
       "cards": [

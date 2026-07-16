@@ -672,6 +672,22 @@ public sealed class PortWalk
         if (ga is JsonObject gao)
           ProjectAbility(gao, card, ports, edges, manaCostSymbols);
 
+    // A "gains [ability]" continuous grant (gainAbility, CR 611/113.6) gives the affected permanent an
+    // ability. Like becomesPermanent, project a granted ACTIVATED or TRIGGERED ability as its own port
+    // unit attributed to the GRANTING card — the grant is what makes that flow reachable (Deadeye
+    // Navigator's soulbond-granted blink: each paired creature has "{1}{U}: Exile this creature, then
+    // return it to the battlefield", whose returnToBattlefield[ExiledWith:Self] projects emit:blink). This
+    // is the deferred case the scope note above named ("until a combo needs a granted triggered ability")
+    // — the Deadeye blink combo. SCOPE: only activated/triggered grants recurse; an inert keyword grant
+    // (gains flying/dredge) is NOT recursed — it would add inert ports with no edge (broad snapshot churn
+    // for zero arms). The grant still projects its coarse inert emit:gainability below (totality, §4).
+    if (
+      effectType == "gainAbility"
+      && e["GainedAbility"] is JsonObject granted
+      && granted["Kind"]?.ToString() is "activated" or "triggered"
+    )
+      ProjectAbility(granted, card, ports, edges, manaCostSymbols);
+
     if (effectType == "replacement")
     {
       // Intercept side: the replaced event (ADR-0002 §3, CR 614). Scope rides only if the event carries it.
