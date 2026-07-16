@@ -432,6 +432,65 @@ public class PortWalkSentinelSnapshotTest
     });
   }
 
+  /// <summary>
+  /// ADR-0003 Stage 2 gate — the byte-for-byte losslessness proof. For every projected port that carries a
+  /// structured <see cref="PortStructure"/>, the compat shim <see cref="LegacyLabel.ToLegacyLabel"/> must
+  /// reproduce the port's ADR-0002 <c>Label</c> exactly. A mismatch means the structure lost or distorted
+  /// information relative to today's label — the one thing Stage 2 must not do (Stages 3–4 switch matching
+  /// onto the structure). Covers whatever families are converted so far (incremental — unconverted ports
+  /// have a null Structure and are skipped); it is a REAL check because the Label is produced by the
+  /// ADR-0002 generator while the Structure is built on the new path, so the two must independently agree.
+  /// </summary>
+  [Test]
+  public void Structured_ports_round_trip_to_their_legacy_label()
+  {
+    var walk = new PortWalk(Ontology);
+    var cards = LoadManifest().SelectMany(s => s.Cards).DistinctBy(c => c.Path).ToList();
+
+    var checkedCount = 0;
+    var failures = new List<string>();
+    foreach (var c in cards)
+    {
+      var gold = JsonNode.Parse(File.ReadAllText(Path.Combine(FixturesDir(), c.Path)));
+      var manaCost = (gold!["Output"]?["Attributes"] as JsonArray)
+        ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "manaCost")
+        ?["Symbols"];
+      var graph = walk.Project(c.Card, gold!["Output"]!["Oracle"]!["Abilities"], manaCost);
+      foreach (var p in graph.Ports.Where(p => p.Structure is not null))
+      {
+        checkedCount++;
+        string legacy;
+        try
+        {
+          legacy = LegacyLabel.ToLegacyLabel(p.Structure!, p.Subject, Ontology);
+        }
+        catch (Exception ex)
+        {
+          failures.Add($"{c.Card} :: {p.Structure!.Canonical()} — threw: {ex.Message}");
+          continue;
+        }
+        if (!string.Equals(legacy, p.Label, StringComparison.Ordinal))
+        {
+          failures.Add($"{c.Card} :: structure {p.Structure!.Canonical()} → legacy '{legacy}' != label '{p.Label}'");
+        }
+      }
+    }
+
+    Assert.Multiple(() =>
+    {
+      Assert.That(
+        checkedCount,
+        Is.GreaterThan(0),
+        "expected at least one structured port across the sentinels (the blink family is converted)"
+      );
+      Assert.That(
+        failures,
+        Is.Empty,
+        "structured ports must round-trip to their legacy label:\n" + string.Join("\n", failures)
+      );
+    });
+  }
+
   [Test, Explicit("Writes all sentinel snapshot files to the source tree.")]
   public void Regenerate_snapshots()
   {

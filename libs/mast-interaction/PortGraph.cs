@@ -85,6 +85,15 @@ public sealed record PortNode
   public int OracleLineIndex { get; init; }
 
   /// <summary>
+  /// ADR-0003 Stage 2 — the structured (stem + attribute-set) form of this port, emitted alongside
+  /// <see cref="Label"/> (dual-emit). <c>null</c> for families not yet converted (Stage 2 is incremental).
+  /// The Stage-2 gate asserts <c>LegacyLabel.ToLegacyLabel(Structure, Subject) == Label</c> for every
+  /// non-null Structure — the losslessness proof. Not part of <see cref="Identity"/> (matching still runs
+  /// on the label until Stage 3), so it never affects port de-duplication.
+  /// </summary>
+  public PortStructure? Structure { get; init; }
+
+  /// <summary>
   /// Copy-token inheritance (copy-inheritance-scope.md, Decision 1/2): the parsed
   /// <see cref="MagicAST.AST.Effects.TokenCopy.CopyModification"/>s an <c>emit:copy</c> applies to the
   /// copy it creates — Kiki's <c>abilityAdder:haste</c>, Helm's <c>supertypeRemover:[Legendary]</c>,
@@ -891,7 +900,7 @@ public sealed class PortWalk
       // graveyard) and reanimation (return a card from a graveyard) — falls through to the coarse
       // emit:returntobattlefield, PRESERVING the §8-B one-shot-self-removal carve-out that keys on it.
       var blinked = new ObjectFilter { CardTypes = ["creature"] };
-      return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, subject: blinked);
+      return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, subject: blinked, structure: BlinkStructure());
     }
     if (effectType == "dealDamage")
     {
@@ -963,7 +972,7 @@ public sealed class PortWalk
     if (blinked is null)
       return null; // an under-specified blink target — no Subject to tier; don't manufacture a blink port
 
-    return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, Qty(exile["Target"]?["Quantity"]), blinked);
+    return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, Qty(exile["Target"]?["Quantity"]), blinked, BlinkStructure());
   }
 
   /// <summary>
@@ -993,12 +1002,19 @@ public sealed class PortWalk
 
   // --- helpers ---
 
+  /// <summary>ADR-0003 Stage 2 structure for a blink emit — <c>deployment:creature[manner=blink]</c> (the
+  /// re-entry half of the exile-then-return; the blinked object rides as the port Subject, from which
+  /// <see cref="LegacyLabel"/> reproduces the <c>emit:blink:&lt;subject&gt;</c> string).</summary>
+  private static PortStructure BlinkStructure() =>
+    PortStructure.Of(PortSide.Emit, "deployment:creature", ("manner", "blink"));
+
   private static PortNode Port(
     string card,
     string label,
     PortSide side,
     int? quantity = 1,
-    ObjectFilter? subject = null
+    ObjectFilter? subject = null,
+    PortStructure? structure = null
   ) =>
     new()
     {
@@ -1008,6 +1024,7 @@ public sealed class PortWalk
       Quantity = quantity,
       Subject = subject,
       Identity = $"{card}::{label}",
+      Structure = structure,
     };
 
   // Restrictions that gate firability (ADR-0002 §8): a rate limit or a board-state condition. Timing
