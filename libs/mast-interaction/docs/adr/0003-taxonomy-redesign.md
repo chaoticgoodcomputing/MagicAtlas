@@ -481,6 +481,41 @@ projection) · copy (a deployment event with provenance=copy) · control-flow wr
 **Remaining from O18:** combat-presence naming (an event — trivial now) · the residual-layer schema (O17.1,
 unchanged) · provenance/default-GREEN (O17.2) · migration staging (O17.4) · negation enumeration (O17.5).
 
+### O20 — The residual-layer schema is a DERIVED ROLLUP, not a central authority (schema-by-accretion)
+Decision-shaped (user-directed, 2026-07-16). Interactions are captured by deriving combos into flagship
+golds across many subagent runs — so a centrally-authored schema is both a fan-out bottleneck and
+philosophically wrong (speculative rules, written before evidence). Instead:
+
+- **Per-gold interaction fixtures are the only hand-authored artifact.** Each derivation run writes one
+  gold: its edges (each naming its certifying mechanism — subsumption / polarity / match-policy / guard /
+  bridge), any NEW rules it introduces (with itself as witness), and machine-checkable assertions (the gold
+  IS its own acceptance test).
+- **The central fixture is a generated rollup** (content-hashed, never hand-edited): the union of all
+  declared rules across golds — polarity table, match-policy table, guard registry (impl stays code, but
+  every entry cites witnessing golds), bridge list — each entry carrying `witnesses:` provenance.
+- **The loop:** (a) a new derivation READS the rollup first (known mechanisms are reused, never re-derived);
+  (b) it writes its gold + declares only genuinely new interactions; (c) the rollup REGENERATES. Repeat.
+  Subagent-parallel by construction — workers touch only their own fixture; the rollup is the union step
+  (merge conflicts land only on the generated file, which regenerates).
+
+Three load-bearing semantics:
+1. **Conflicts fail loudly.** Contradictory rules across golds → the rollup build FAILS (never
+   last-writer-wins), forcing a judge pass whose resolution is recorded as an evidence-cited entry
+   (stateless-invariants-over-ratchets, applied to the schema itself).
+2. **Promotion ladder — rules are earned:** `observed` (1 witness) → `corroborated` (N) → `confirmed`
+   (rules-judge pass). Integrates with tiering: an edge certified only by an observed rule CAPS AT AMBER;
+   only confirmed rules participate in GREEN certification. The schema's own certainty feeds tier assignment.
+3. **The rollup is the runtime rule source for novel pairs** (MAST's purpose is unreported combos): novel
+   edges matched via corroborated/confirmed rules tier normally; an edge needing a rule that doesn't exist
+   falls back coarse/AMBER — and that miss is the SIGNAL for which combo to derive next. Step (a) doubles as
+   the discovery prioritizer.
+
+Supersedes the central-authority options (pure data file / typed-central-C#) from the earlier schema
+discussion; retains their content model (R1 polarity, R2 match-policy keyed by consume kind, R3 guards-in-
+code, R4 bridges, R5 provenance/defaults) as the rollup's SECTIONS. Bootstrap: seed the rollup from the two
+existing worked golds (Chatterfang×Pitiless: polarity may-be-choice + argument-cover; Deadeye×Peregrine:
+self-watch guard + untap→mana bridge).
+
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
   (O14 leans `creature` — the object — with `token` as an attribute.)
