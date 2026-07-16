@@ -159,6 +159,39 @@ one query** (or carry a small family: `fodder` = 1/1, `fodder:t1` = toughness-1)
 this is a primary source of the taxonomy's synergy-surfacing value, and the redesign should treat such
 categories as named, singly-defined query aliases layered under the structural labels.
 
+### O12 — Initial top-level supergroups (slang-anchored)
+First structural scaffold for the taxonomy root. Slang supplies the equivalence classes players reason in
+(mtg.fandom.com/wiki/List_of_Magic_slang); "removal" is the flagship — a broad class no single CR term names.
+The supergroups sit on the event axis + the resource axis (O10) plus a clock axis, and the **object axis
+(subject + derived categories, O11) crosses through them** — a full leaf is roughly
+`<side> : <supergroup> : <object-subject> : <qualifiers(destination/manner/scope)> : <quantity>`.
+
+**A · Object zone-transitions (events on objects):**
+1. **Removal** — an object in play (battlefield OR stack) will no longer be in play. Subsumes by
+   **destination** (`→graveyard` = *dies* / `→exile` / `→hand` = *bounce* / `→library` / *off-stack* =
+   *countered*) and **manner** (*sacrificed*, *destroyed*, *combat*, *state-based*). **This tree IS O1**:
+   `removal:creature:…:to-graveyard:sacrificed` = Chatterfang's sac; bare `removal:creature` (LTB) /
+   `…:to-graveyard` (dies) match it by glob. Sacrifice⊂dies⊂LTB is a slice of Removal.
+2. **Deployment** — an object enters play (→battlefield/stack). Subsumes cast, ETB, token-creation,
+   reanimation/recursion, blink-return, copy. Removal's dual (flicker = Removal→Deployment; recursion =
+   removal-then-redeployment).
+3. **Modification** — an object altered in place (stays in play): P/T (modify/set/switch), keyword/ability
+   grants, type/color/control change. (Slang: pump, anthems.)
+
+**B · Resources (fungible pools):**
+4. **Mana** (ramp/fixing/rituals) · 5. **Cards** (draw/dig/tutor/mill/discard — the hidden hand/library/
+   graveyard resource) · 6. **Life** (gain/loss/drain; **damage** resolves here as life/toughness loss) ·
+   7. **Counters** (+1/+1, proliferate, energy).
+
+**C · Structure (the clock):**
+8. **Structure** — phases, steps, extra turns, extra combats, untap, priority (tempo/untappers/time-walk).
+
+**Known straddles (edges, to resolve — not blockers):** *Damage* is a Life verb whose *lethality* is a
+derived edge into Removal, not its own supergroup. *Counters* straddle Modification (a +1/+1 counter changes
+P/T) and Resources (proliferate/energy pool) — likely own supergroup + a modification edge. *Sacrifice-as-cost*
+= a Removal emit that also decrements the object pool (the O2 duality restated). **Open naming:** Deployment
+vs Arrival/Development; Structure vs Sequencing/Tempo.
+
 ---
 
 ## The triggering case (worked, for reference)
