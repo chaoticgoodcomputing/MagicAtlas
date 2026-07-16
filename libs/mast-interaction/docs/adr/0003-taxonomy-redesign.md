@@ -410,6 +410,40 @@ half — load-bearing). **Peregrine:** consume `deployment:creature[self]` (ETB)
 Caveat: mono-blue, not literally U/W; the UW two-color / combat-blink variant is Brago, King Eternal (which
 would also exercise the combat-presence orphan).
 
+### O18 — Root-completeness sweep (O17.3) + open-items ledger
+All 17 `ResourceFamilies.Canonical` mapped against the O12 root:
+
+**Clean (11):** mana/life→Resources; damage→Resources·Life (+lethal edge→Removal); token→attribute `[token]`
+on a Deployment (not a family); sacrifice→Removal`[manner=sacrificed]`; death→Removal`[to=graveyard]`;
+etb→Deployment(consume); recur→Deployment`[from=graveyard]`; blink→Removal`[to=exile]`+Deployment; cast→
+Deployment`[to=stack]`; phase→Structure.
+
+**Needs a decision (6):**
+- **dice → TRUE ORPHAN.** Neither zone-transition nor fungible pool — a roll is an *ephemeral event* producing
+  a number, feeding "whenever you roll" triggers. Candidate: a **fourth meta-axis, Events/Occurrences** (roll;
+  arguably damage-as-event, combat-damage-dealt) for triggerable happenings that move no object and bank no
+  pool; alternative is modeling a roll as a transient Resource (loses the occurrence nature). LEAN: fourth axis.
+- **tap / untap** — Structure · *availability* sub-axis (surfaced on the Deadeye gold; place it).
+- **combat** — Structure (phase/extra-combat) + a **combat-presence** event (`attacksorblocks`); name the
+  presence event.
+- **counter** — straddle: Modification (`+1/+1`→P/T) vs Resources (proliferate/energy pool). LEAN: own Resource
+  with a Modification edge.
+- **copy** — mostly Deployment (a copy enters); spell-copy is a stack event (place explicitly).
+
+**Not root members — the §8 gating layer (name, don't file):** the projection's control-flow wrappers
+`conditional`/`composite`/`optional`/`rollResultsTable`/`becomesPermanent` gate/fan-out/grant over OTHER ports;
+they belong to firability, orthogonal to the resource/event root.
+
+### Open-items ledger (review amendments by state, honest)
+- **O17.1 residual-layer schema** — VALIDATED by both golds (polarity, cover-policy, identity-guard, irreducible
+  bridge all appeared), NOT drafted as machine-readable data. *The largest creative work remaining.*
+- **O17.2 provenance + null-Subject default-GREEN** — noted (`•derived` on golds); representation unspecified and
+  the default-GREEN keep/kill is a LIVE decision.
+- **O17.3 root completeness** — this sweep; dice/tap-untap/combat-presence/copy/counter decisions above.
+- **O17.4 migration harness** — shape named (topology change, quotient re-proof, reconstruction-gold+bench:recall
+  +judged-GREEN gate); not staged.
+- **O17.5 negation inventory** — correction noted; `Excluded*`/`IsColorless`/`NotEqual` not yet enumerated per-axis.
+
 ## Open questions (to resolve before the Decision)
 - **O5 fork:** fodder-consume family = `creature` or `token`? (Needs the family/role decoupling first.)
   (O14 leans `creature` — the object — with `token` as an attribute.)
