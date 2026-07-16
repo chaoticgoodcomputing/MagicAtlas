@@ -1,0 +1,54 @@
+{
+  "id": "chatterfang-x-pitiless-plunderer",
+  "unit": "combo",
+  "cards": ["Chatterfang, Squirrel General", "Pitiless Plunderer", "Treasure"],
+  "source": { "csb": true, "popularity": 61668 },
+  "loop_tier": "GREEN",
+  "judge": { "verdict": "PASS", "ref": "interaction-judge 2026-07-16 (ADR-0003 §5 provenance)" },
+  "ports": {
+    "Chatterfang, Squirrel General": [
+      { "id": "C1", "side": "intercept", "kind": "EVENT",    "stem": "deployment",       "attrs": { "token": true, "control": "you" } },
+      { "id": "C2", "side": "emit",      "kind": "EVENT",    "stem": "deployment:creature", "attrs": { "token": true, "subtype": "squirrel", "color": "green", "pt": "1/1", "control": "you", "qty": "that-many" } },
+      { "id": "C3", "side": "consume",   "kind": "STATE",    "stem": "mana",             "attrs": { "color": "black", "qty": 1 } },
+      { "id": "C4", "side": "consume",   "kind": "STATE",    "stem": "creature",         "attrs": { "subtype": "squirrel", "control": "you", "qty": "X" } },
+      { "id": "C5", "side": "emit",      "kind": "EVENT",    "stem": "removal:creature", "attrs": { "subtype": "squirrel", "control": "you", "from": "battlefield", "to": { "value": "graveyard", "provenance": "derived" }, "manner": "sacrificed", "qty": "X" } },
+      { "id": "C6", "side": "emit",      "kind": "BEHAVIOR", "stem": "modification:creature", "attrs": { "stat": "pt", "delta": "+X/-X", "duration": "eot" } }
+    ],
+    "Pitiless Plunderer": [
+      { "id": "P1", "side": "consume", "kind": "EVENT", "stem": "removal:creature", "attrs": { "control": "you", "from": "battlefield", "to": "graveyard", "exclude_self": true } },
+      { "id": "P2", "side": "emit",    "kind": "EVENT", "stem": "deployment:artifact", "attrs": { "token": true, "subtype": "treasure", "control": "you", "qty": 1 } }
+    ],
+    "Treasure": [
+      { "id": "T1", "side": "consume", "kind": "STATE", "stem": "tap",              "attrs": { "self": true } },
+      { "id": "T2", "side": "consume", "kind": "STATE", "stem": "artifact",         "attrs": { "subtype": "treasure", "token": true, "self": true, "qty": 1 } },
+      { "id": "T3", "side": "emit",    "kind": "EVENT", "stem": "removal:artifact", "attrs": { "subtype": "treasure", "token": true, "from": "battlefield", "to": "graveyard", "manner": "sacrificed" } },
+      { "id": "T4", "side": "emit",    "kind": "STATE", "stem": "mana",             "attrs": { "color": { "value": "any", "polarity": "producer-choice" }, "qty": 1 } }
+    ]
+  },
+  "edges": [
+    { "id": "E1", "from": "Chatterfang, Squirrel General.C5", "to": "Pitiless Plunderer.P1", "mechanism": "subsumption", "residuals": ["guard:exclude-self"], "tier": "GREEN", "notes": ["stems equal; P1 attrs ⊆ C5; Squirrels ≠ Pitiless (exclude_self); to=graveyard derived → Reliability capped (Rest-in-Peace prune)"] },
+    { "id": "E2", "from": "Pitiless Plunderer.P2", "to": "Chatterfang, Squirrel General.C1", "mechanism": "modifier", "tier": "GREEN", "notes": ["deployment ⊇ deployment:artifact; intercept never closes a loop alone (CR 614.5)"] },
+    { "id": "E3", "from": "Chatterfang, Squirrel General.C1", "to": "Chatterfang, Squirrel General.C2", "mechanism": "card-defined", "tier": "GREEN", "notes": ["qty=that-many bound to intercepted count"] },
+    { "id": "E4", "from": "Chatterfang, Squirrel General.C2", "to": "Chatterfang, Squirrel General.C4", "mechanism": "match_policy", "rule": "policy:argument:subject-cover", "tier": "GREEN", "notes": ["at-creation types creature[squirrel,token] cover C4's filter (cover, not intersect)"] },
+    { "id": "E5", "from": "Treasure.T4", "to": "Chatterfang, Squirrel General.C3", "mechanism": "polarity", "rule": "polarity:color:emit-mana", "tier": "GREEN", "notes": ["color=any•choice: producer picks black → GREEN (existential)"] }
+  ],
+  "declares": {
+    "polarity": [
+      { "id": "polarity:color:emit-mana", "attr": "color", "context": "emit:mana", "value": "producer-choice", "desc": "a mana emit whose color is producer-chosen matches any specific-color consume it can pay", "cr": ["105.2"] }
+    ],
+    "match_policy": [
+      { "id": "policy:argument:subject-cover", "consume_kind": "argument", "subject": "cover", "desc": "an argument-consume (a cost) demands the supplied object's at-creation type provably COVER the parameter filter (stricter than intersect)", "cr": ["601.2b"] }
+    ],
+    "guards": [
+      { "id": "guard:exclude-self", "impl": "code", "desc": "the another-object / exclude=self identity guard: a self-excluding consume must not match the same object (Pitiless watches ANOTHER creature)", "cr": ["400.7", "603"] }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    { "claim": "loop_tier == GREEN" },
+    { "claim": "edge.E5.tier == GREEN", "because": "producer-choice polarity lets any•choice pay black" },
+    { "claim": "edge.E1.reliability_capped", "because": "C5.to has provenance=derived (Rest-in-Peace over-approximation)" },
+    { "claim": "edge.E4.mechanism == match_policy:argument-cover" }
+  ],
+  "cr": ["701.21a", "700.4", "603.10a", "614.5", "107.4", "601.2b"]
+}

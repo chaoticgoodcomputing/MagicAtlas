@@ -1,0 +1,45 @@
+{
+  "id": "deadeye-x-peregrine-drake",
+  "unit": "combo",
+  "cards": ["Deadeye Navigator", "Peregrine Drake"],
+  "source": { "csb": true, "note": "Deadeye's blink is currently unparsed (emit:gainability) — this gold is the parser target for deployment[manner=blink]" },
+  "loop_tier": "AMBER",
+  "judge": { "verdict": "PASS", "ref": "ADR-0003 second-gold analysis 2026-07-16" },
+  "ports": {
+    "Deadeye Navigator": [
+      { "id": "D0", "side": "emit",    "kind": "BEHAVIOR", "stem": "modification:keyword", "attrs": { "keyword": "soulbond", "subject": "self" } },
+      { "id": "D1", "side": "consume", "kind": "STATE",    "stem": "mana", "attrs": { "color": "blue", "qty": 1 } },
+      { "id": "D2", "side": "consume", "kind": "STATE",    "stem": "mana", "attrs": { "color": "generic", "qty": 1 } },
+      { "id": "D3", "side": "emit",    "kind": "EVENT",    "stem": "removal:creature",    "attrs": { "control": "you", "from": "battlefield", "to": "exile", "manner": "blink", "exclude_self": true }, "note": "the exile half of the blink" },
+      { "id": "D4", "side": "emit",    "kind": "EVENT",    "stem": "deployment:creature", "attrs": { "control": "you", "manner": "blink", "exclude_self": true, "qty": 1 }, "note": "the return half — load-bearing (re-triggers ETB)" }
+    ],
+    "Peregrine Drake": [
+      { "id": "PD0", "side": "emit",    "kind": "BEHAVIOR", "stem": "modification:evasion:flying", "attrs": { "subject": "self" } },
+      { "id": "PD1", "side": "consume", "kind": "EVENT",    "stem": "deployment:creature", "attrs": { "subject": "self" }, "note": "the ETB trigger — a self-watching subscription" },
+      { "id": "PD2", "side": "emit",    "kind": "STATE",    "stem": "structure:untap",     "attrs": { "subtype": "land", "control": "you", "qty": "up-to-5" } }
+    ]
+  },
+  "edges": [
+    { "id": "E1", "from": "Deadeye Navigator.D4", "to": "Peregrine Drake.PD1", "mechanism": "subsumption", "residuals": ["guard:self-watch"], "tier": "AMBER", "notes": ["blink IS a deployment (structural half = subsumption); PD1 self-watches, Deadeye blinks 'a creature' → Overlaps not Subsumes → AMBER"] },
+    { "id": "E2", "from": "Peregrine Drake.PD2", "to": "Deadeye Navigator.D1", "mechanism": "bridge", "rule": "bridge:untap-land-to-mana", "tier": "AMBER", "notes": ["untap ≠ mana; irreducible cross-resource bridge; 'up to five' → firability, colors unknown (CR 107.4) → AMBER ceiling"] }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      { "id": "policy:subscription:subject-intersect", "consume_kind": "subscription", "subject": "intersect", "desc": "a subscription-consume (a trigger) matches on intersect; the operator tiers Subsumes→GREEN / Overlaps→AMBER", "cr": ["603.2"] }
+    ],
+    "guards": [
+      { "id": "guard:self-watch", "impl": "code", "desc": "a self-watching trigger (subject=self) requires a same-card witness that the emitted object IS the watcher; object identity the operator can't see → Overlaps floors AMBER", "cr": ["603.6e", "400.7"] }
+    ],
+    "bridges": [
+      { "id": "bridge:untap-land-to-mana", "from_stem": "structure:untap", "from_attrs": { "subtype": "land" }, "to_stem": "mana", "ceiling": "AMBER", "desc": "untapping lands enables (does not produce) mana; irreducible cross-resource — untapped lands' colors/count are unknown", "cr": ["107.4"] }
+    ]
+  },
+  "assertions": [
+    { "claim": "loop_tier == AMBER" },
+    { "claim": "edge.E1.tier == AMBER", "because": "self-watch guard: blink-of-a-creature Overlaps the self-watcher" },
+    { "claim": "edge.E2.tier == AMBER", "because": "untap→mana bridge ceiling" },
+    { "claim": "edge.E1.mechanism == subsumption", "because": "blink structural half unifies with cast/reanimate under deployment→deployment-consume" }
+  ],
+  "cr": ["603.6e", "400.7", "603.2", "107.4", "500.8"]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "ruthless-knave-x-blood-artist",
+  "unit": "pairwise",
+  "cards": ["Ruthless Knave", "Blood Artist"],
+  "source": { "absorbed_from": "Fixtures/Interactions/blood-artist-engine.json", "note": "the GREEN creature ⊆ creature cover witness; a value engine, NOT a loop — demonstrates the pairwise (non-combo) witnessing unit (§8)" },
+  "judge": { "verdict": "PASS", "ref": "blood-artist-engine.json (pre-existing interaction fixture)" },
+  "ports": {
+    "Ruthless Knave": [
+      { "id": "R1", "side": "consume", "kind": "STATE", "stem": "mana",             "attrs": { "color": "black", "qty": 1 } },
+      { "id": "R2", "side": "consume", "kind": "STATE", "stem": "creature",         "attrs": { "control": "you", "exclude_self": true, "qty": 1 }, "note": "the fodder — 'sacrifice another creature'" },
+      { "id": "R3", "side": "emit",    "kind": "EVENT", "stem": "removal:creature", "attrs": { "control": "you", "from": "battlefield", "to": { "value": "graveyard", "provenance": "derived" }, "manner": "sacrificed", "exclude_self": true } },
+      { "id": "R4", "side": "emit",    "kind": "EVENT", "stem": "deployment:artifact", "attrs": { "token": true, "subtype": "treasure", "control": "you", "qty": 2 } }
+    ],
+    "Blood Artist": [
+      { "id": "B1", "side": "consume", "kind": "EVENT", "stem": "removal:creature", "attrs": { "control": "any", "from": "battlefield", "to": "graveyard" }, "note": "'whenever THIS or another creature dies' — any creature, any controller" },
+      { "id": "B2", "side": "emit",    "kind": "STATE", "stem": "life",            "attrs": { "direction": "loss", "recipient": "opponent", "qty": 1 } },
+      { "id": "B3", "side": "emit",    "kind": "STATE", "stem": "life",            "attrs": { "direction": "gain", "recipient": "you", "qty": 1 } }
+    ]
+  },
+  "edges": [
+    { "id": "E1", "from": "Ruthless Knave.R3", "to": "Blood Artist.B1", "mechanism": "subsumption", "tier": "GREEN", "notes": ["removal:creature = removal:creature; B1's [control=any, to=graveyard] ⊆ R3; subject creature ⊆ creature EXACTLY (no straddle) and control=you ⊆ any → Subsumes → GREEN. The sound contrast to Chatterfang's Squirrel⊄creature AMBER."] }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      { "id": "policy:subscription:subject-subsumes-green", "consume_kind": "subscription", "subject": "intersect", "tiering": "Subsumes→GREEN, Overlaps→AMBER", "desc": "corroborates policy:subscription:subject-intersect (Deadeye) with the GREEN branch: when the emit subject provably Subsumes the subscription filter (creature ⊆ creature), the edge is GREEN", "corroborates": "policy:subscription:subject-intersect", "cr": ["603.2", "111.1"] }
+    ],
+    "guards": [
+      { "id": "guard:exclude-self", "impl": "code", "desc": "Ruthless sacrifices ANOTHER creature; corroborates the Chatterfang exclude-self guard", "corroborates": "guard:exclude-self", "cr": ["400.7"] }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    { "claim": "edge.E1.tier == GREEN", "because": "creature ⊆ creature exactly (cover with no subtype straddle), control=you ⊆ any" },
+    { "claim": "edge.E1.mechanism == subsumption" },
+    { "claim": "no_loop", "because": "unit=pairwise: a one-shot drain-per-sacrifice value engine, not a repeating cycle — no §10 SDF balance" }
+  ],
+  "cr": ["701.21a", "700.4", "603.10a", "111.1"]
+}

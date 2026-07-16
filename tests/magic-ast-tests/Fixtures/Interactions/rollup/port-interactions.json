@@ -1,0 +1,62 @@
+{
+  "$generated": "tools/interaction-rollup",
+  "$golds": [
+    "chatterfang-x-pitiless-plunderer",
+    "deadeye-x-peregrine-drake",
+    "ruthless-knave-x-blood-artist"
+  ],
+  "conflicts": [],
+  "polarity": [
+    {
+      "id": "polarity:color:emit-mana",
+      "attr": "color",
+      "context": "emit:mana",
+      "value": "producer-choice",
+      "status": "confirmed"
+    }
+  ],
+  "match_policy": [
+    {
+      "id": "policy:argument:subject-cover",
+      "consume_kind": "argument",
+      "subject": "cover",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:subscription:subject-intersect",
+      "consume_kind": "subscription",
+      "subject": "intersect",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:subscription:subject-subsumes-green",
+      "consume_kind": "subscription",
+      "subject": "intersect",
+      "status": "confirmed"
+    }
+  ],
+  "guards": [
+    {
+      "id": "guard:exclude-self",
+      "impl": "code",
+      "status": "confirmed"
+    },
+    {
+      "id": "guard:self-watch",
+      "impl": "code",
+      "status": "confirmed"
+    }
+  ],
+  "bridges": [
+    {
+      "id": "bridge:untap-land-to-mana",
+      "from_stem": "structure:untap",
+      "to_stem": "mana",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "subtype": "land"
+      }
+    }
+  ]
+}

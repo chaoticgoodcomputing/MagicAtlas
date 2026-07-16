@@ -1,0 +1,25 @@
+{
+  "name": "interaction-rollup",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "tools/interaction-rollup",
+  "targets": {
+    "build": {
+      "//": "ADR-0003 §8 / Stage 0b: generate the rollup artifacts (port-topology + port-interactions, each with a .cited twin) from the hand-authored interaction golds. Fails loudly on rule conflicts.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["python3 tools/interaction-rollup/generate.py"],
+        "cwd": "."
+      }
+    },
+    "check": {
+      "//": "Validate the golds + rollup consistency WITHOUT writing files (the Stage 0b gate; suitable for CI). Nonzero exit on any validation error or conflict.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["python3 tools/interaction-rollup/generate.py --check"],
+        "cwd": "."
+      }
+    }
+  },
+  "tags": ["type:tool", "scope:interactions"]
+}

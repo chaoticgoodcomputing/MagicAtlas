@@ -1,0 +1,440 @@
+{
+  "$generated": "tools/interaction-rollup",
+  "$golds": [
+    "chatterfang-x-pitiless-plunderer",
+    "deadeye-x-peregrine-drake",
+    "ruthless-knave-x-blood-artist"
+  ],
+  "kinds": {
+    "EVENT": [
+      "deployment",
+      "deployment:artifact",
+      "deployment:creature",
+      "removal:artifact",
+      "removal:creature"
+    ],
+    "STATE": [
+      "artifact",
+      "creature",
+      "life",
+      "mana",
+      "structure:untap",
+      "tap"
+    ],
+    "BEHAVIOR": [
+      "modification:creature",
+      "modification:evasion:flying",
+      "modification:keyword"
+    ]
+  },
+  "stems": {
+    "artifact": {
+      "kind": "STATE",
+      "parent": null,
+      "status": "witnessed",
+      "attrs": [
+        "qty",
+        "self",
+        "subtype",
+        "token"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer"
+      ]
+    },
+    "creature": {
+      "kind": "STATE",
+      "parent": null,
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "exclude_self",
+        "qty",
+        "subtype"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer",
+        "ruthless-knave-x-blood-artist"
+      ]
+    },
+    "deployment": {
+      "kind": "EVENT",
+      "parent": null,
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "token"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer"
+      ]
+    },
+    "deployment:artifact": {
+      "kind": "EVENT",
+      "parent": "deployment",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "qty",
+        "subtype",
+        "token"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer",
+        "ruthless-knave-x-blood-artist"
+      ]
+    },
+    "deployment:creature": {
+      "kind": "EVENT",
+      "parent": "deployment",
+      "status": "witnessed",
+      "attrs": [
+        "color",
+        "control",
+        "exclude_self",
+        "manner",
+        "pt",
+        "qty",
+        "subject",
+        "subtype",
+        "token"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer",
+        "deadeye-x-peregrine-drake"
+      ]
+    },
+    "life": {
+      "kind": "STATE",
+      "parent": null,
+      "status": "witnessed",
+      "attrs": [
+        "direction",
+        "qty",
+        "recipient"
+      ],
+      "witnesses": [
+        "ruthless-knave-x-blood-artist"
+      ]
+    },
+    "mana": {
+      "kind": "STATE",
+      "parent": null,
+      "status": "witnessed",
+      "attrs": [
+        "color",
+        "qty"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer",
+        "deadeye-x-peregrine-drake",
+        "ruthless-knave-x-blood-artist"
+      ]
+    },
+    "modification:creature": {
+      "kind": "BEHAVIOR",
+      "parent": "modification",
+      "status": "witnessed",
+      "attrs": [
+        "delta",
+        "duration",
+        "stat"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer"
+      ]
+    },
+    "modification:evasion:flying": {
+      "kind": "BEHAVIOR",
+      "parent": "modification:evasion",
+      "status": "witnessed",
+      "attrs": [
+        "subject"
+      ],
+      "witnesses": [
+        "deadeye-x-peregrine-drake"
+      ]
+    },
+    "modification:keyword": {
+      "kind": "BEHAVIOR",
+      "parent": "modification",
+      "status": "witnessed",
+      "attrs": [
+        "keyword",
+        "subject"
+      ],
+      "witnesses": [
+        "deadeye-x-peregrine-drake"
+      ]
+    },
+    "removal:artifact": {
+      "kind": "EVENT",
+      "parent": "removal",
+      "status": "witnessed",
+      "attrs": [
+        "from",
+        "manner",
+        "subtype",
+        "to",
+        "token"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer"
+      ]
+    },
+    "removal:creature": {
+      "kind": "EVENT",
+      "parent": "removal",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "exclude_self",
+        "from",
+        "manner",
+        "qty",
+        "subtype",
+        "to"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer",
+        "deadeye-x-peregrine-drake",
+        "ruthless-knave-x-blood-artist"
+      ]
+    },
+    "structure:untap": {
+      "kind": "STATE",
+      "parent": "structure",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "qty",
+        "subtype"
+      ],
+      "witnesses": [
+        "deadeye-x-peregrine-drake"
+      ]
+    },
+    "tap": {
+      "kind": "STATE",
+      "parent": null,
+      "status": "witnessed",
+      "attrs": [
+        "self"
+      ],
+      "witnesses": [
+        "chatterfang-x-pitiless-plunderer"
+      ]
+    }
+  },
+  "attribute_axes": {
+    "color": {
+      "stems": [
+        "deployment:creature",
+        "mana"
+      ],
+      "values_seen": [
+        "any",
+        "black",
+        "blue",
+        "generic",
+        "green"
+      ],
+      "carries_provenance_or_polarity": true
+    },
+    "control": {
+      "stems": [
+        "creature",
+        "deployment",
+        "deployment:artifact",
+        "deployment:creature",
+        "removal:creature",
+        "structure:untap"
+      ],
+      "values_seen": [
+        "any",
+        "you"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "delta": {
+      "stems": [
+        "modification:creature"
+      ],
+      "values_seen": [
+        "+X/-X"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "direction": {
+      "stems": [
+        "life"
+      ],
+      "values_seen": [
+        "gain",
+        "loss"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "duration": {
+      "stems": [
+        "modification:creature"
+      ],
+      "values_seen": [
+        "eot"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "exclude_self": {
+      "stems": [
+        "creature",
+        "deployment:creature",
+        "removal:creature"
+      ],
+      "values_seen": [
+        "True"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "from": {
+      "stems": [
+        "removal:artifact",
+        "removal:creature"
+      ],
+      "values_seen": [
+        "battlefield"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "keyword": {
+      "stems": [
+        "modification:keyword"
+      ],
+      "values_seen": [
+        "soulbond"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "manner": {
+      "stems": [
+        "deployment:creature",
+        "removal:artifact",
+        "removal:creature"
+      ],
+      "values_seen": [
+        "blink",
+        "sacrificed"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "pt": {
+      "stems": [
+        "deployment:creature"
+      ],
+      "values_seen": [
+        "1/1"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "qty": {
+      "stems": [
+        "artifact",
+        "creature",
+        "deployment:artifact",
+        "deployment:creature",
+        "life",
+        "mana",
+        "removal:creature",
+        "structure:untap"
+      ],
+      "values_seen": [
+        "1",
+        "2",
+        "X",
+        "that-many",
+        "up-to-5"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "recipient": {
+      "stems": [
+        "life"
+      ],
+      "values_seen": [
+        "opponent",
+        "you"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "self": {
+      "stems": [
+        "artifact",
+        "tap"
+      ],
+      "values_seen": [
+        "True"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "stat": {
+      "stems": [
+        "modification:creature"
+      ],
+      "values_seen": [
+        "pt"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "subject": {
+      "stems": [
+        "deployment:creature",
+        "modification:evasion:flying",
+        "modification:keyword"
+      ],
+      "values_seen": [
+        "self"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "subtype": {
+      "stems": [
+        "artifact",
+        "creature",
+        "deployment:artifact",
+        "deployment:creature",
+        "removal:artifact",
+        "removal:creature",
+        "structure:untap"
+      ],
+      "values_seen": [
+        "land",
+        "squirrel",
+        "treasure"
+      ],
+      "carries_provenance_or_polarity": false
+    },
+    "to": {
+      "stems": [
+        "removal:artifact",
+        "removal:creature"
+      ],
+      "values_seen": [
+        "exile",
+        "graveyard"
+      ],
+      "carries_provenance_or_polarity": true
+    },
+    "token": {
+      "stems": [
+        "artifact",
+        "deployment",
+        "deployment:artifact",
+        "deployment:creature",
+        "removal:artifact"
+      ],
+      "values_seen": [
+        "True"
+      ],
+      "carries_provenance_or_polarity": false
+    }
+  }
+}
