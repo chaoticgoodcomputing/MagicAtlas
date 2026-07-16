@@ -187,11 +187,15 @@ public sealed class PortWalk
     // the card already declares (Ruthless Knave sacs Treasures in its own draw ability too); collapse
     // the duplicate so the engine sees one node, not parallel edges.
     var distinctPorts = ports.GroupBy(p => p.Identity).Select(g => g.First()).ToList();
+    // ADR-0003 Stage 2: attach the structured (stem + attribute-set) form to each port (dual-emit) via the
+    // reflection-discovered family registry. Additive — the Label/Identity are untouched, so matching and
+    // dedup are unchanged until Stage 3 moves onto the structure.
+    var structuredPorts = distinctPorts.Select(p => PortFamilyRegistry.Annotate(p, _ontology)).ToList();
     var distinctEdges = edges
       .GroupBy(e => (e.From.Identity, e.To.Identity))
       .Select(g => g.First())
       .ToList();
-    return new PortGraph { Ports = distinctPorts, CardDefinedEdges = distinctEdges };
+    return new PortGraph { Ports = structuredPorts, CardDefinedEdges = distinctEdges };
   }
 
   /// <summary>
@@ -900,7 +904,7 @@ public sealed class PortWalk
       // graveyard) and reanimation (return a card from a graveyard) — falls through to the coarse
       // emit:returntobattlefield, PRESERVING the §8-B one-shot-self-removal carve-out that keys on it.
       var blinked = new ObjectFilter { CardTypes = ["creature"] };
-      return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, subject: blinked, structure: BlinkStructure());
+      return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, subject: blinked);
     }
     if (effectType == "dealDamage")
     {
@@ -972,7 +976,7 @@ public sealed class PortWalk
     if (blinked is null)
       return null; // an under-specified blink target — no Subject to tier; don't manufacture a blink port
 
-    return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, Qty(exile["Target"]?["Quantity"]), blinked, BlinkStructure());
+    return Port(card, PortLabel.BlinkEmit(blinked, _ontology), PortSide.Emit, Qty(exile["Target"]?["Quantity"]), blinked);
   }
 
   /// <summary>
@@ -1002,19 +1006,12 @@ public sealed class PortWalk
 
   // --- helpers ---
 
-  /// <summary>ADR-0003 Stage 2 structure for a blink emit — <c>deployment:creature[manner=blink]</c> (the
-  /// re-entry half of the exile-then-return; the blinked object rides as the port Subject, from which
-  /// <see cref="LegacyLabel"/> reproduces the <c>emit:blink:&lt;subject&gt;</c> string).</summary>
-  private static PortStructure BlinkStructure() =>
-    PortStructure.Of(PortSide.Emit, "deployment:creature", ("manner", "blink"));
-
   private static PortNode Port(
     string card,
     string label,
     PortSide side,
     int? quantity = 1,
-    ObjectFilter? subject = null,
-    PortStructure? structure = null
+    ObjectFilter? subject = null
   ) =>
     new()
     {
@@ -1024,7 +1021,6 @@ public sealed class PortWalk
       Quantity = quantity,
       Subject = subject,
       Identity = $"{card}::{label}",
-      Structure = structure,
     };
 
   // Restrictions that gate firability (ADR-0002 §8): a rate limit or a board-state condition. Timing

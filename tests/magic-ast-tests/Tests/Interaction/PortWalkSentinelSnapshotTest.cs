@@ -462,7 +462,7 @@ public class PortWalkSentinelSnapshotTest
         string legacy;
         try
         {
-          legacy = LegacyLabel.ToLegacyLabel(p.Structure!, p.Subject, Ontology);
+          legacy = PortFamilyRegistry.ToLegacyLabel(p.Structure!, p.Subject, Ontology);
         }
         catch (Exception ex)
         {
