@@ -6,26 +6,49 @@
     "ruthless-knave-x-blood-artist"
   ],
   "kinds": {
-    "EVENT": [
-      "deployment",
-      "deployment:artifact",
-      "deployment:creature",
-      "removal:artifact",
-      "removal:creature"
-    ],
-    "STATE": [
-      "artifact",
-      "creature",
-      "life",
-      "mana",
-      "structure:untap",
-      "tap"
-    ],
-    "BEHAVIOR": [
-      "modification:creature",
-      "modification:evasion:flying",
-      "modification:keyword"
-    ]
+    "EVENT": "discrete occurrences with payloads \u2014 what subscriptions (triggered abilities) fire on.",
+    "STATE": "pools/stores folded over the event stream (state = fold(events)).",
+    "BEHAVIOR": "continuous time-varying values \u2014 statics, anthems, keyword grants, \u0027as long as\u0027."
+  },
+  "supergroups": {
+    "removal": {
+      "kind_view": "EVENT",
+      "def": "a zone-change whose FROM endpoint is play (battlefield/stack): an object leaves play. Carries from/to/manner."
+    },
+    "deployment": {
+      "kind_view": "EVENT",
+      "def": "a zone-change whose TO endpoint is play: an object enters play (cast/ETB/token/reanimate/blink-return/copy)."
+    },
+    "modification": {
+      "kind_view": "BEHAVIOR",
+      "def": "an object altered in place: P/T, keyword/ability grant, type/color/control change."
+    },
+    "resources": {
+      "kind_view": "STATE",
+      "def": "fungible pools: mana, cards, life, counters."
+    },
+    "objects": {
+      "kind_view": "STATE",
+      "def": "addressable permanents on the battlefield (F2). Objects = fold(deployment \u2212 removal). Bare object-consumes (a sac\u0027s fodder decrement) live here; the \u00A710 balance substrate."
+    },
+    "structure": {
+      "kind_view": "EVENT\u002BSTATE",
+      "def": "the clock \u2014 a VIEW spanning phase/combat/extra-turn Events and tap/untap availability State (F1: a supergroup may span kinds)."
+    }
+  },
+  "event_verbs": {
+    "dice-rolled": {
+      "kind": "EVENT",
+      "def": "a die roll produces a numeric payload; feeds \u0027whenever you roll one or more dice\u0027 (O19 \u2014 dice dissolved, no fourth axis)."
+    },
+    "damage-dealt": {
+      "kind": "EVENT",
+      "def": "damage as an event; edges into resources:life (loss) and, when lethal, removal (state-based death)."
+    },
+    "combat-presence": {
+      "kind": "EVENT",
+      "def": "a permanent attacks or blocks (O21; the attacksorblocks subscription; emit:additionalcombat re-raises the phase that produces it)."
+    }
   },
   "stems": {
     "artifact": {
@@ -40,6 +63,16 @@
       "witnesses": [
         "chatterfang-x-pitiless-plunderer"
       ]
+    },
+    "cards": {
+      "kind": "STATE",
+      "status": "declared",
+      "attrs": []
+    },
+    "counters": {
+      "kind": "STATE",
+      "status": "declared",
+      "attrs": []
     },
     "creature": {
       "kind": "STATE",
@@ -139,6 +172,12 @@
         "chatterfang-x-pitiless-plunderer"
       ]
     },
+    "modification:evasion": {
+      "kind": "BEHAVIOR",
+      "parent": "modification:keyword",
+      "status": "declared",
+      "attrs": []
+    },
     "modification:evasion:flying": {
       "kind": "BEHAVIOR",
       "parent": "modification:evasion",
@@ -164,7 +203,7 @@
     },
     "removal:artifact": {
       "kind": "EVENT",
-      "parent": "removal",
+      "parent": "removal:permanent",
       "status": "witnessed",
       "attrs": [
         "from",
@@ -179,7 +218,7 @@
     },
     "removal:creature": {
       "kind": "EVENT",
-      "parent": "removal",
+      "parent": "removal:permanent",
       "status": "witnessed",
       "attrs": [
         "control",
@@ -195,6 +234,12 @@
         "deadeye-x-peregrine-drake",
         "ruthless-knave-x-blood-artist"
       ]
+    },
+    "removal:permanent": {
+      "kind": "EVENT",
+      "parent": "removal",
+      "status": "declared",
+      "attrs": []
     },
     "structure:untap": {
       "kind": "STATE",
@@ -233,7 +278,34 @@
         "generic",
         "green"
       ],
-      "carries_provenance_or_polarity": true
+      "carries_provenance_or_polarity": true,
+      "licensed_by": [
+        "mana",
+        "objects:*"
+      ],
+      "enum": [
+        "W",
+        "U",
+        "B",
+        "R",
+        "G",
+        "C",
+        "any"
+      ]
+    },
+    "combat": {
+      "stems": [],
+      "values_seen": [],
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "damage-dealt",
+        "combat-presence"
+      ],
+      "enum": [
+        "combat",
+        "noncombat",
+        "any"
+      ]
     },
     "control": {
       "stems": [
@@ -248,7 +320,27 @@
         "any",
         "you"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "*"
+      ],
+      "lattice": "self \u2286 controlled \u2286 any ; opponent \u2286 any"
+    },
+    "counter-type": {
+      "stems": [],
+      "values_seen": [],
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "counters"
+      ],
+      "enum": [
+        "\u002B1/\u002B1",
+        "loyalty",
+        "charge",
+        "energy",
+        "experience",
+        "poison"
+      ]
     },
     "delta": {
       "stems": [
@@ -257,7 +349,11 @@
       "values_seen": [
         "\u002BX/-X"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "modification:*"
+      ],
+      "lattice": "signed magnitude (\u002BX/-X)"
     },
     "direction": {
       "stems": [
@@ -267,7 +363,14 @@
         "gain",
         "loss"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "life"
+      ],
+      "enum": [
+        "gain",
+        "loss"
+      ]
     },
     "duration": {
       "stems": [
@@ -276,7 +379,28 @@
       "values_seen": [
         "eot"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "modification:*"
+      ],
+      "enum": [
+        "eot",
+        "permanent",
+        "your-next-turn"
+      ]
+    },
+    "exclude-self": {
+      "stems": [],
+      "values_seen": [],
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "removal:*",
+        "deployment:*"
+      ],
+      "enum": [
+        "True"
+      ],
+      "note": "identity exclusion (:another); handled by the \u00A76 guard layer, not the lattice"
     },
     "exclude_self": {
       "stems": [
@@ -297,7 +421,12 @@
       "values_seen": [
         "battlefield"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "removal:*",
+        "deployment:*"
+      ],
+      "lattice": "zones"
     },
     "keyword": {
       "stems": [
@@ -306,7 +435,11 @@
       "values_seen": [
         "soulbond"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "modification:keyword"
+      ],
+      "lattice": "keyword ontology (forestwalk \u2282 landwalk \u2282 evasion)"
     },
     "manner": {
       "stems": [
@@ -318,7 +451,31 @@
         "blink",
         "sacrificed"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "removal:*",
+        "deployment:*"
+      ],
+      "enum": [
+        "sacrificed",
+        "destroyed",
+        "combat",
+        "state-based",
+        "blink",
+        "cast",
+        "copied"
+      ]
+    },
+    "owner": {
+      "stems": [],
+      "values_seen": [],
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "objects:*",
+        "removal:*",
+        "deployment:*"
+      ],
+      "lattice": "owned (ownership, orthogonal to control)"
     },
     "pt": {
       "stems": [
@@ -327,7 +484,12 @@
       "values_seen": [
         "1/1"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "objects:*",
+        "modification:*"
+      ],
+      "lattice": "power/toughness comparisons"
     },
     "qty": {
       "stems": [
@@ -347,7 +509,16 @@
         "that-many",
         "up-to-5"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "*"
+      ],
+      "bindable": [
+        "X",
+        "that-many",
+        "up-to-N"
+      ],
+      "kind": "numeric|symbolic"
     },
     "recipient": {
       "stems": [
@@ -357,7 +528,19 @@
         "opponent",
         "you"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "life",
+        "damage-dealt"
+      ],
+      "enum": [
+        "you",
+        "opponent",
+        "any",
+        "player",
+        "creature",
+        "planeswalker"
+      ]
     },
     "self": {
       "stems": [
@@ -367,7 +550,14 @@
       "values_seen": [
         "True"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "*"
+      ],
+      "enum": [
+        "True"
+      ],
+      "note": "the port\u0027s subject is the source object itself"
     },
     "stat": {
       "stems": [
@@ -376,7 +566,13 @@
       "values_seen": [
         "pt"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "modification:*"
+      ],
+      "enum": [
+        "pt"
+      ]
     },
     "subject": {
       "stems": [
@@ -404,7 +600,26 @@
         "squirrel",
         "treasure"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "objects:*",
+        "removal:*",
+        "deployment:*"
+      ],
+      "lattice": "type-ontology (creature:squirrel \u2286 creature)"
+    },
+    "target": {
+      "stems": [],
+      "values_seen": [],
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "*"
+      ],
+      "enum": [
+        "self",
+        "any",
+        "chosen"
+      ]
     },
     "to": {
       "stems": [
@@ -415,7 +630,12 @@
         "exile",
         "graveyard"
       ],
-      "carries_provenance_or_polarity": true
+      "carries_provenance_or_polarity": true,
+      "licensed_by": [
+        "removal:*",
+        "deployment:*"
+      ],
+      "lattice": "zones"
     },
     "token": {
       "stems": [
@@ -428,7 +648,120 @@
       "values_seen": [
         "True"
       ],
-      "carries_provenance_or_polarity": false
+      "carries_provenance_or_polarity": false,
+      "licensed_by": [
+        "objects:*",
+        "deployment:*"
+      ],
+      "enum": [
+        "True",
+        "False"
+      ]
+    }
+  },
+  "aliases": {
+    "fodder": "creature[pt=1/1]  (Skullclamp reading: creature[toughness=1])",
+    "dies": "removal:*[to=graveyard]",
+    "sacrifice": "removal:*[manner=sacrificed]",
+    "edict": "removal:creature[control=opponent, manner=sacrificed]",
+    "bounce": "removal:*[from=battlefield, to=hand]",
+    "mill": "removal:*[from=library, to=graveyard]",
+    "gy-hate": "removal:*[from=graveyard, to=exile]",
+    "counter-spell": "removal:*[from=stack, to=graveyard]",
+    "reanimate": "deployment:*[from=graveyard, to=battlefield]",
+    "blink": "removal:*[to=exile, manner=blink] \u002B deployment:*[manner=blink]"
+  },
+  "holes": {
+    "cost-modification": {
+      "priority": 1,
+      "kind": "BEHAVIOR",
+      "proposed_stem": "modification:spell",
+      "attrs": [
+        "cost-delta"
+      ],
+      "slang": [
+        "tax",
+        "cost-reduction",
+        "cheat-out"
+      ],
+      "note": "no cost-delta stem; both directions (\u2191 tax / \u2193 reduction) homeless. Most corroborated (panel \u002B full-slang \u002B checklist).",
+      "status": "sought"
+    },
+    "restriction-grant": {
+      "priority": 2,
+      "kind": "BEHAVIOR",
+      "proposed_stem": "modification:restriction",
+      "attrs": [
+        "restrict=attack|block"
+      ],
+      "slang": [
+        "pacifism",
+        "prison",
+        "lock"
+      ],
+      "note": "\u0027can\u0027t attack/block\u0027 grant \u2014 a Behavior with no stem.",
+      "status": "sought"
+    },
+    "prevention": {
+      "priority": 3,
+      "kind": "BEHAVIOR",
+      "proposed_stem": "modification:prevention",
+      "attrs": [
+        "prevents=combat-damage"
+      ],
+      "slang": [
+        "fog"
+      ],
+      "note": "a shield/replacement on the damage event.",
+      "status": "sought"
+    },
+    "library-search": {
+      "priority": 4,
+      "kind": "STATE",
+      "proposed_stem": "cards:search",
+      "attrs": [
+        "from=library",
+        "to=hand",
+        "by=criteria"
+      ],
+      "slang": [
+        "tutor",
+        "fetch"
+      ],
+      "note": "library\u2192hand by criteria; distinct from draw. A Cards-STATE op.",
+      "status": "sought"
+    },
+    "library-selection": {
+      "priority": 5,
+      "kind": "STATE",
+      "proposed_stem": "cards:select",
+      "attrs": [
+        "peek=N",
+        "reorder"
+      ],
+      "slang": [
+        "dig",
+        "scry",
+        "surveil",
+        "impulse"
+      ],
+      "note": "peek/reorder top-N; a Cards-STATE op.",
+      "status": "sought"
+    },
+    "non-play-zone-move": {
+      "priority": 6,
+      "kind": "EVENT",
+      "proposed_stem": "zonechange (neither removal nor deployment)",
+      "attrs": [
+        "from",
+        "to"
+      ],
+      "slang": [
+        "reclamation (gy\u2192hand)",
+        "bounce-recur"
+      ],
+      "note": "the from\u2192to primitive is play-anchored; hidden-zone\u2194hidden-zone moves fit neither Removal (from=play) nor Deployment (to=play). Do NOT force into Removal. Opus-3\u0027s \u0027real hole\u0027.",
+      "status": "sought"
     }
   }
 }

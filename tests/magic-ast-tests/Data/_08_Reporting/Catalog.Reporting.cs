@@ -181,6 +181,13 @@ public partial class Catalog
   public IItem<IEnumerable<JsonNode>> InteractionGolds =>
     CreateItem(() => Item.Of<IEnumerable<JsonNode>>("InteractionGolds").Memory().Build());
 
+  /// <summary>The negotiated topology SCAFFOLD (ADR-0003 Stage 0a) — the DECLARED half of
+  /// <c>port-topology</c> (kinds, supergroups, event verbs, the is-a spine, the closed attribute-axis set,
+  /// aliases, and the six witness:sought holes). Loaded as a single semi-structured <see cref="JsonNode"/>;
+  /// merged with the gold-witnessed half by the topology step.</summary>
+  public IItem<JsonNode> InteractionScaffold =>
+    CreateItem(() => Item.Of<JsonNode>("InteractionScaffold").Memory().Build());
+
   /// <summary>Artifact 1 (lean) — the port universe: kinds map, stems, attribute axes.</summary>
   public IItem<PortTopology> PortTopology =>
     CreateItem(() => Item.Of<PortTopology>("PortTopology")

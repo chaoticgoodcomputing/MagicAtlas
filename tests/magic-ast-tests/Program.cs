@@ -89,6 +89,12 @@ public class Program
     // vendored type ontology (Curated). Both feed the InteractionTriage reconstruction + viz.
     var knownFamiliesPath = Path.Combine(basePath, "Fixtures", "Interactions", "known-families.json");
     var interactionGoldsDir = Path.Combine(basePath, "Fixtures", "Interactions", "golds");
+    var topologyScaffoldPath = Path.Combine(
+      basePath,
+      "Fixtures",
+      "Interactions",
+      "topology-scaffold.json"
+    );
     var ontologyPath = Path.Combine(
       dataPath,
       "_01_Raw",
@@ -235,7 +241,8 @@ public class Program
       flowthru
         .RegisterFlow<Catalog>(
           "InteractionRollup",
-          catalog => InteractionRollupFlow.Create(catalog, interactionGoldsDir)
+          catalog =>
+            InteractionRollupFlow.Create(catalog, interactionGoldsDir, topologyScaffoldPath)
         )
         .WithDescription(
           "Generates the interaction-rollup artifacts (ADR-0003 §8, Stage 0b) from the hand-authored "

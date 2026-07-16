@@ -23,7 +23,7 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionRollup;
 /// </summary>
 public static class InteractionRollupFlow
 {
-  public static BuiltFlow Create(Catalog catalog, string goldsDir) =>
+  public static BuiltFlow Create(Catalog catalog, string goldsDir, string scaffoldPath) =>
     FlowBuilder.CreateFlow(
       "InteractionRollup",
       pipeline =>
@@ -35,11 +35,18 @@ public static class InteractionRollupFlow
           outputs: catalog.InteractionGolds
         );
 
-        // Artifact 1 — the port topology (lean + cited).
-        pipeline.AddStep<IEnumerable<JsonNode>, PortTopology, PortTopology>(
+        // Source: load the negotiated topology scaffold (the DECLARED half).
+        pipeline.AddStep<JsonNode>(
+          label: "LoadTopologyScaffold",
+          transform: LoadTopologyScaffoldStep.Create(scaffoldPath),
+          outputs: catalog.InteractionScaffold
+        );
+
+        // Artifact 1 — the port topology (lean + cited): scaffold (declared) ∪ golds (witnessed).
+        pipeline.AddStep<IEnumerable<JsonNode>, JsonNode, PortTopology, PortTopology>(
           label: "Topology",
           transform: TopologyStep.Create(),
-          inputs: catalog.InteractionGolds,
+          inputs: (catalog.InteractionGolds, catalog.InteractionScaffold),
           outputs: (catalog.PortTopology, catalog.PortTopologyCited)
         );
 

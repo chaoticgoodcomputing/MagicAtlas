@@ -29,30 +29,98 @@ public partial record PortTopology
   [SerializedLabel("$golds")]
   public required IReadOnlyList<string> Golds { get; init; }
 
-  /// <summary>Event/State/Behavior kind → the stems seen carrying that kind (sorted).</summary>
+  /// <summary>Event/State/Behavior kind → its definition (pass-through from the topology scaffold).</summary>
   [SerializedLabel("kinds")]
-  public required IReadOnlyDictionary<string, IReadOnlyList<string>> Kinds { get; init; }
+  public required IReadOnlyDictionary<string, string> Kinds { get; init; }
 
-  /// <summary>Stem → its topology entry, keyed by the is-a-spine stem name (sorted).</summary>
+  /// <summary>The six supergroups (kind-view + definition) — the DECLARED half from the scaffold.</summary>
+  [SerializedLabel("supergroups")]
+  public required IReadOnlyDictionary<string, SupergroupEntry> Supergroups { get; init; }
+
+  /// <summary>Bare EVENT verbs with no supergroup (dice/damage/combat-presence) — scaffold pass-through.</summary>
+  [SerializedLabel("event_verbs")]
+  public required IReadOnlyDictionary<string, EventVerbEntry> EventVerbs { get; init; }
+
+  /// <summary>Stem → its topology entry, keyed by the is-a-spine stem name (sorted). The DECLARED half
+  /// (scaffold <c>stems_representative</c>) unioned with the WITNESSED half (gold-projected stems).</summary>
   [SerializedLabel("stems")]
   public required IReadOnlyDictionary<string, StemEntry> Stems { get; init; }
 
-  /// <summary>Attribute axis → where it is seen and its value lattice (sorted).</summary>
+  /// <summary>Attribute axis → its scaffold-declared licensing/lattice unioned with the gold-witnessed
+  /// value lattice (sorted).</summary>
   [SerializedLabel("attribute_axes")]
   public required IReadOnlyDictionary<string, AxisEntry> AttributeAxes { get; init; }
+
+  /// <summary>Named attribute-constraints (aliases / slang views) — scaffold pass-through.</summary>
+  [SerializedLabel("aliases")]
+  public required IReadOnlyDictionary<string, string> Aliases { get; init; }
+
+  /// <summary>The six declared holes — the <c>witness:sought</c> targeted-witnessing backlog (scaffold).</summary>
+  [SerializedLabel("holes")]
+  public required IReadOnlyDictionary<string, HoleEntry> Holes { get; init; }
 }
 
-/// <summary>One stem's topology entry (is-a parent + kind + observed attribute set).</summary>
+/// <summary>A supergroup — a VIEW over stems that may span kinds (scaffold-declared).</summary>
+[FlowthruSchema]
+public partial record SupergroupEntry
+{
+  [SerializedLabel("kind_view")]
+  public required string KindView { get; init; }
+
+  [SerializedLabel("def")]
+  public required string Def { get; init; }
+}
+
+/// <summary>A bare EVENT verb with no supergroup (dice-rolled / damage-dealt / combat-presence).</summary>
+[FlowthruSchema]
+public partial record EventVerbEntry
+{
+  [SerializedLabel("kind")]
+  public required string Kind { get; init; }
+
+  [SerializedLabel("def")]
+  public required string Def { get; init; }
+}
+
+/// <summary>A declared hole — a proposed stem with no witness yet (<c>status: sought</c>).</summary>
+[FlowthruSchema]
+public partial record HoleEntry
+{
+  [SerializedLabel("priority")]
+  public required int Priority { get; init; }
+
+  [SerializedLabel("kind")]
+  public required string Kind { get; init; }
+
+  [SerializedLabel("proposed_stem")]
+  public required string ProposedStem { get; init; }
+
+  [SerializedLabel("attrs")]
+  public IReadOnlyList<string>? Attrs { get; init; }
+
+  [SerializedLabel("slang")]
+  public IReadOnlyList<string>? Slang { get; init; }
+
+  [SerializedLabel("note")]
+  public string? Note { get; init; }
+
+  /// <summary>Always <c>sought</c> — the hole is declared but not yet witnessed (ADR-0003 §8).</summary>
+  [SerializedLabel("status")]
+  public required string Status { get; init; }
+}
+
+/// <summary>One stem's topology entry (is-a parent + kind + observed attribute set + declared|witnessed status).</summary>
 [FlowthruSchema]
 public partial record StemEntry
 {
   [SerializedLabel("kind")]
   public required string Kind { get; init; }
 
-  /// <summary>The is-a parent (stem up to the last <c>:</c>), or null for a top-level stem (omitted when null).</summary>
+  /// <summary>The is-a parent (scaffold-declared, else stem up to the last <c>:</c>), or null for a top-level stem.</summary>
   [SerializedLabel("parent")]
   public string? Parent { get; init; }
 
+  /// <summary><c>witnessed</c> if any gold projects this stem, else <c>declared</c> (scaffold-only).</summary>
   [SerializedLabel("status")]
   public required string Status { get; init; }
 
@@ -60,24 +128,52 @@ public partial record StemEntry
   [SerializedLabel("attrs")]
   public required IReadOnlyList<string> Attrs { get; init; }
 
-  /// <summary>Provenance (cited only): the golds that witnessed this stem (sorted). Null → omitted in the lean file.</summary>
+  /// <summary>A gold projects this stem but the scaffold never predicted it (the "witnessed but never
+  /// predicted" diff). Omitted (null) when the stem was predicted.</summary>
+  [SerializedLabel("unpredicted")]
+  public bool? Unpredicted { get; init; }
+
+  /// <summary>Provenance (cited only): the golds that witnessed this stem (sorted). Null → omitted (lean,
+  /// and any declared-only stem with no witnesses).</summary>
   [SerializedLabel("witnesses")]
   public IReadOnlyList<string>? Witnesses { get; init; }
 }
 
-/// <summary>One attribute axis' rollup: the stems that carry it, its value lattice, and whether any value
-/// carried provenance or a polarity (an object-valued attribute).</summary>
+/// <summary>One attribute axis: the scaffold-declared closed-set licensing/lattice unioned with the
+/// gold-witnessed stems + value lattice.</summary>
 [FlowthruSchema]
 public partial record AxisEntry
 {
+  /// <summary>Stems that carry this axis in the golds (witnessed; empty for a declared-only axis).</summary>
   [SerializedLabel("stems")]
   public required IReadOnlyList<string> Stems { get; init; }
 
+  /// <summary>The value lattice actually witnessed in the golds (empty for a declared-only axis).</summary>
   [SerializedLabel("values_seen")]
   public required IReadOnlyList<string> ValuesSeen { get; init; }
 
   [SerializedLabel("carries_provenance_or_polarity")]
   public required bool CarriesProvenanceOrPolarity { get; init; }
+
+  // ── scaffold-declared licensing / lattice (pass-through; omitted when absent) ──
+
+  [SerializedLabel("licensed_by")]
+  public IReadOnlyList<string>? LicensedBy { get; init; }
+
+  [SerializedLabel("lattice")]
+  public string? Lattice { get; init; }
+
+  [SerializedLabel("enum")]
+  public IReadOnlyList<string>? Enum { get; init; }
+
+  [SerializedLabel("bindable")]
+  public IReadOnlyList<string>? Bindable { get; init; }
+
+  [SerializedLabel("kind")]
+  public string? Kind { get; init; }
+
+  [SerializedLabel("note")]
+  public string? Note { get; init; }
 }
 
 /// <summary>
