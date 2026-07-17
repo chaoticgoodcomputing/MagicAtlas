@@ -13,6 +13,7 @@ using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
 using MagicAtlas.Ast.Tests.Flows.CardAtlas;
 using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
 using MagicAtlas.Ast.Tests.Flows.TopologyDemand;
+using MagicAtlas.Ast.Tests.Flows.SpanWitness;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -283,6 +284,22 @@ public class Program
             + "stems (by gold popularity), the six sought holes (by combo-anchor payoff mass, tiebreak hand "
             + "priority), and the supergroups → Data/_08_Reporting/port-topology-demand.json. Degrades "
             + "gracefully when combo-anchor-report.json is absent (corpus=null). Never touches InteractionRollup."
+        );
+
+      // The span-witness error-check — the mast-loop Error-check track entry. Reads the D1 card-ports
+      // (spans + stems) + card oracle text, flags ports whose claimed span lacks their label's anchor, and
+      // routes each suspect to the golds witnessing its stem via the committed cited topology.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "SpanWitness",
+          catalog => SpanWitnessFlow.Create(catalog, portTopologyCitedPath)
+        )
+        .WithDescription(
+          "Span-witness error-check (corpus-gated diagnostic; mast-loop Error-check track): a port's "
+            + "SourceSpan is a witness — flags parsed ports whose claimed oracle text lacks the anchor their "
+            + "label asserts (a false-positive port or a span mis-attribution), and routes each to the golds "
+            + "that witness its ADR-3 stem → Data/_08_Reporting/span-witness-report.json. Run after --flow "
+            + "CardAtlas so the ports are current."
         );
 
       flowthru.ConfigureMetadata(meta =>

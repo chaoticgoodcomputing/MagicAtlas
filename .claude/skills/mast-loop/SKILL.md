@@ -9,15 +9,18 @@ One loop, three tracks. Every track is TDD: a **gold is a committed failing test
 
 **The entry is always the reporting layer.** You come in with an *objective* (raw coverage / product recall / taxonomy build-out), not a card. The `_08_Reporting` Flowthru artifacts are the triage surface; the objective picks the track, the track picks the report, the report picks the work. Never start from a card you have in mind — start from what the reports say is highest-value *for the current objective*.
 
-## The three tracks
+## The four tracks
+
+Three tracks ADD coverage (Parse / Legacy-engine / Accretion); the fourth, **Error-check**, FIXES what's wrong (false positives, span mis-attributions) — a quality dimension, not a coverage one. Same spine for all four: **entry report → artifact → gate**.
 
 | Track | Objective | Entry report(s) | Gold artifact | Gate | Vocabulary | Detail |
 |---|---|---|---|---|---|---|
 | **Parse** | Extend the AST — more cards/oracle text parse to structure | `triage-report.json` (`topYieldClusters` = L0, `topResidualClusters` = L1→L2) + `combo-anchor-report.json` (demand-first hubs) | `Fixtures/HandParsedCards/**` AST gold | `nx run mast:test` + `mast-judge` | **taxonomy-neutral** | [mast-tdd-loop/SKILL.md](../mast-tdd-loop/SKILL.md) |
 | **Legacy-engine** | Lift ADR-2 ports/edges to GREEN; cover popular combos | `combo-anchor-report.json` / `bench:recall` / `port-label-census.json` (`topProjectionGaps`) | PortWalk flow arm + `combo-expected-tiers.json` pin | `nx run bench:recall` + `interaction-judge` | **ADR-2** (mechanism labels: `sac`/`ltb`/`etb`) | [LEGACY-ENGINE.md](LEGACY-ENGINE.md) |
 | **Accretion** | Witness an ADR-3 stem / edge / hole; grow the taxonomy | **`port-topology-demand.json`** (value-ranked) + `port-topology.cited.json` (status) + `port-interactions.cited.json` (rules/ladder) | interaction gold under `Fixtures/Interactions/golds/` | `InteractionRollup` flow (conflict + ladder) + `interaction-judge` | **ADR-3** (event stems: `removal:creature`) | [ACCRETION.md](ACCRETION.md) |
+| **Error-check** | Fix a WRONG port/gold — false positives + span mis-attributions (a port's span-witness contradicts its label) | **`span-witness-report.json`** (`nx run mast:span-witness`): suspects ranked, each routed to the golds witnessing its stem | the refined **parser slice** (span mint) OR **interaction gold** the suspect's stem routes to | `nx run mast:test` (span-provenance invariants) + re-run `mast:span-witness` (the suspect clears) | **cross-cutting** — routes via the ADR-3 `stem` | [ERROR-CHECK.md](ERROR-CHECK.md) |
 
-Pick by where the marginal return is highest — the same triage discipline the Parse track already uses across its three currencies, lifted up a level. Raw coverage bottleneck → **Parse**. A popular combo reconstructs AMBER-that-should-be-GREEN, or a false-GREEN poisons the product → **Legacy-engine** (an untrustworthy GREEN outranks any coverage gain). Building out the ADR-3 taxonomy toward Migration cutover → **Accretion**, picking the highest-demand sought hole / most-witnessed stem from `port-topology-demand.json`.
+Pick by where the marginal return is highest — the same triage discipline the Parse track already uses across its three currencies, lifted up a level. Raw coverage bottleneck → **Parse**. A popular combo reconstructs AMBER-that-should-be-GREEN, or a false-GREEN poisons the product → **Legacy-engine** (an untrustworthy GREEN outranks any coverage gain). Building out the ADR-3 taxonomy toward Migration cutover → **Accretion**, picking the highest-demand sought hole / most-witnessed stem from `port-topology-demand.json`. A port that lies about its own text — a false-positive edge or a chip on the wrong clause → **Error-check** (a wrong port outranks a missing one; the same "untrustworthy GREEN > coverage" logic, one layer down at the port).
 
 ## Two cross-cutting facts (true for every run)
 
@@ -74,6 +77,7 @@ Do every step yourself, single-threaded. The parallel dispatch collapses but the
 | Parse track (full doctrine) | [.claude/skills/mast-tdd-loop/SKILL.md](../mast-tdd-loop/SKILL.md) · [PIPELINE.md](../mast-tdd-loop/PIPELINE.md) · [FANOUT.md](../mast-tdd-loop/FANOUT.md) |
 | Legacy-engine track | [LEGACY-ENGINE.md](LEGACY-ENGINE.md) |
 | Accretion track (ADR-3) | [ACCRETION.md](ACCRETION.md) |
+| Error-check track (span-witness QA) | [ERROR-CHECK.md](ERROR-CHECK.md) · `nx run mast:span-witness` · `docs/design/span-witness-triage.md` |
 | The taxonomy ADR | `libs/mast-interaction/docs/adr/0003-taxonomy-redesign.md` |
 | End-to-end pipeline topology | `docs/design/system-topology.md` |
 | Interaction gold schema | `tests/magic-ast-tests/Fixtures/Interactions/golds/README.md` |

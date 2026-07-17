@@ -33,6 +33,15 @@
         "parallel": false
       }
     },
+    "span-witness": {
+      "//": "The span-witness error-check (mast-loop Error-check track entry): flags parsed ports whose SourceSpan text lacks the anchor their label asserts (a false-positive port or a span mis-attribution) and routes each suspect to the golds that witness its ADR-3 stem via the cited topology — emits span-witness-report.json (gitignored). Run after 'run'/CardAtlas has refreshed card-ports.json so the ports checked are current. Never a gate; the NUnit span-provenance invariants are the gate.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow SpanWitness"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
     "interaction-triage": {
       "//": "Fast data-triage: the InteractionTriage flow sliced (Flowthru --only auto-includes upstream) to ClassifyCombos + MaterializeCardEdges — emits interaction-triage-report.json (worklist) + card-edges.json + port-graph-metrics.json, EXCLUDING the intractable MaterializeCycles/PortNodes/PlotInteractionGraph viz tail (union cycle enumeration over a ~1.1M-edge graph). The canonical re-triage for the loop + the input to the corpus-edge-diff gate. Use 'interaction-graph' (full flow) only when the viz HTML is wanted.",
       "executor": "nx:run-commands",

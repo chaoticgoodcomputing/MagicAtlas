@@ -115,6 +115,15 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/card-ports.json")
       .Build());
 
+  /// <summary>The span-witness error-check (mast-loop Error-check track entry): parsed ports whose span
+  /// text lacks the anchor its label asserts, routed to the golds that witness their stem. Corpus report
+  /// (gitignored, never committed).</summary>
+  public IItem<SpanWitnessReport> SpanWitnessReport =>
+    CreateItem(() => Item.Of<SpanWitnessReport>("SpanWitnessReport")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/span-witness-report.json")
+      .Build());
+
   /// <summary>D4 — per-combo reconstructed loops (named cards, family-signature, tier, result).</summary>
   public IItem<IEnumerable<ComboInstanceRow>> ComboInstances =>
     CreateItem(() => Item.Of<IEnumerable<ComboInstanceRow>>("ComboInstances")
