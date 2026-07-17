@@ -12,7 +12,7 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { cardImage, famHue } from "../data/mock";
 import {
-  useCardNeighbours, useCardProfile, useOracle,
+  useCardNeighbours, useCardProfile, useOracle, useCardForward,
   useCardCombos, useCardAnchor, useCardRulings,
   type CardPort,
 } from "../data/atlas";
@@ -34,28 +34,57 @@ function CandidateRow({ c }: { c: Candidate }) {
   const from = c.linkEmit ?? c.port;
   const to = c.linkConsume ?? c.port;
   const cross = from !== to;
+  // Third degree (lazy): expand to fetch what THIS neighbour then feeds — the
+  // `C` in `from → to → C`. The query fires only while open.
+  const [open, setOpen] = useState(false);
+  const fwd = useCardForward(open ? c.card : null);
   return (
-    <div className="list-row">
-      <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        <CardLink name={c.card} />
-      </span>
-      <span
-        className="ws-mono"
-        title={cross
-          ? `${from} feeds ${to}${c.via ? " — via a combo-adjacent family bridge" : ""}`
-          : `direct ${from} match`}
-        style={{ fontSize: 9.5, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}
-      >
-        <span style={{ color: famHue(from) }}>{from}</span>
-        {cross && (
-          <>
-            <span style={{ color: "var(--atlas-muted)" }}>{c.via ? "↝" : "→"}</span>
-            <span style={{ color: famHue(to) }}>{to}</span>
-          </>
-        )}
-      </span>
-      <FamilyDot family={c.port} />
-      <TierChip tier={c.tier} conf={c.conf} />
+    <div>
+      <div className="list-row">
+        <button
+          onClick={() => setOpen((o) => !o)}
+          title={`show what ${c.card} feeds next (third degree)`}
+          className="ws-mono"
+          style={{ background: "none", border: "none", cursor: "pointer", color: open ? "var(--atlas-accent, #6c8cff)" : "var(--atlas-muted)", fontSize: 10, padding: "0 4px 0 0", lineHeight: 1 }}
+        >
+          {open ? "▾" : "▸"}
+        </button>
+        <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          <CardLink name={c.card} />
+        </span>
+        <span
+          className="ws-mono"
+          title={cross
+            ? `${from} feeds ${to}${c.via ? " — via a combo-adjacent family bridge" : ""}`
+            : `direct ${from} match`}
+          style={{ fontSize: 9.5, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}
+        >
+          <span style={{ color: famHue(from) }}>{from}</span>
+          {cross && (
+            <>
+              <span style={{ color: "var(--atlas-muted)" }}>{c.via ? "↝" : "→"}</span>
+              <span style={{ color: famHue(to) }}>{to}</span>
+            </>
+          )}
+        </span>
+        <FamilyDot family={c.port} />
+        <TierChip tier={c.tier} conf={c.conf} />
+      </div>
+      {open && (
+        <div className="ws-mono" style={{ fontSize: 9.5, padding: "1px 0 4px 20px", display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
+          <span style={{ color: "var(--atlas-muted)" }}>{fwd.loading ? "…" : "→"}</span>
+          {!fwd.loading && (fwd.data.length ? (
+            fwd.data.map((f, i) => (
+              <span key={f}>
+                {i > 0 && <span style={{ color: "var(--atlas-muted)" }}>· </span>}
+                <span style={{ color: famHue(f) }}>{f}</span>
+              </span>
+            ))
+          ) : (
+            <span style={{ color: "var(--atlas-muted)" }}>feeds nothing tracked</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

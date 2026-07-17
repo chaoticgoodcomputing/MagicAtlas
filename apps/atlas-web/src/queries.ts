@@ -403,3 +403,18 @@ export const PORT_CANDIDATES_QUERY = gql`
     }
   }
 `;
+
+// One card's forward (emit-side) families — the third-degree hop for the Card
+// Explorer: given a neighbour reached as `A → B`, what that neighbour then emits
+// (`… → B → C`). Canonical filtering happens client-side in useCardForward.
+export const CARD_FORWARD_QUERY = gql`
+  query CardForward($name: String!) {
+    discover {
+      atlas {
+        portRows(where: { card: { eq: $name }, side: { eq: "emit" } }, first: 60) {
+          nodes { family }
+        }
+      }
+    }
+  }
+`;

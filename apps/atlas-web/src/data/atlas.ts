@@ -37,7 +37,7 @@ import {
   ANALYZE_DECK_QUERY,
   ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY, TIER_COUNTS_QUERY,
   ORACLE_SPANS_QUERY,
-  PORT_CANDIDATES_QUERY, DECK_PORTS_QUERY,
+  PORT_CANDIDATES_QUERY, DECK_PORTS_QUERY, CARD_FORWARD_QUERY,
   CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
 } from "../queries";
 import {
@@ -449,6 +449,22 @@ export function useCardNeighbours(
     loading: graph.loading || emitQ.loading || consumeQ.loading,
     error: graph.error ?? emitQ.error ?? consumeQ.error ?? null,
   };
+}
+
+/** Third-degree hop — one card's forward (emit-side) canonical families: what it
+ *  emits, i.e. what it feeds NEXT. Given a neighbour reached as `A → B`, this is
+ *  the `C` in `A → B → C`. Lazy: pass `null` to skip the query (the Explorer
+ *  fires it only when a neighbour row is expanded), so the third degree costs one
+ *  query per opened row, not per listed card. */
+export function useCardForward(name: string | null): AtlasResult<string[]> {
+  const graph = useFamilyGraph();
+  const canonical = useMemo(() => new Set(graph.data.keys), [graph.data.keys]);
+  const q = useQuery(CARD_FORWARD_QUERY, { variables: { name }, skip: !name });
+  const fams = useMemo(() => {
+    const nodes: { family: string }[] = q.data?.discover?.atlas?.portRows?.nodes ?? [];
+    return uniqStr(nodes.map((n) => n.family).filter((f) => canonical.has(f)));
+  }, [q.data, canonical]);
+  return { data: fams, loading: graph.loading || q.loading, error: q.error ?? null };
 }
 
 // ── Card profile page (views/CardExplorer.tsx) ───────────────────────────────────
