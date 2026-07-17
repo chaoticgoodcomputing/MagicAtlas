@@ -4,8 +4,6 @@
     "ManaCost": "{C}",
     "TypeLine": "Instant",
     "OracleText": "Choose one —\n• Counter target multicolored spell.\n• Destroy target multicolored permanent.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [],
     "ColorIdentity": []
   },
@@ -44,7 +42,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 34
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -61,10 +63,15 @@
                         ],
                         "IsMulticolored": true
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 52,
+                  "Length": 38
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -86,7 +93,8 @@
             "Kind": "colorless"
           }
         ],
-        "ManaValue": 1
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

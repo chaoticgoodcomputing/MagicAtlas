@@ -69,7 +69,11 @@ public sealed class ClassAbilityParser : IAbilityParser
     foreach (var body in clauses)
     {
       var bodyClassification = _classifier.Classify(body);
-      result.AddRange(_registry.GetParser(bodyClassification.Kind).Parse(body, bodyClassification));
+      // Per-body provenance: carry each base/level body clause's span onto its ability, so a Class
+      // level's ports trace to that level's text, not line 0 (OracleParser only span-stamps top-level
+      // clauses; its recursion fills OracleLineIndex from this span).
+      foreach (var ability in _registry.GetParser(bodyClassification.Kind).Parse(body, bodyClassification))
+        result.Add(ability with { SourceSpan = ability.SourceSpan ?? body.SourceSpan });
     }
     return result;
   }

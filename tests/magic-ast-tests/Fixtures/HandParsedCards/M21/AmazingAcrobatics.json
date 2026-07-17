@@ -45,7 +45,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 23,
+                  "Length": 21
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -64,12 +68,16 @@
                     },
                     "Count": {
                       "QuantityType": "upTo",
-                      "Minimum": 1,
-                      "Maximum": 2
+                      "Maximum": 2,
+                      "Minimum": 1
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 47,
+                  "Length": 32
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -104,7 +112,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

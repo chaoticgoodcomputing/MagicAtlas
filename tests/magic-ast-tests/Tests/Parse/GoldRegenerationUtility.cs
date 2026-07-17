@@ -81,18 +81,24 @@ public class GoldRegenerationUtility
 
       var goldNode = JsonNode.Parse(File.ReadAllText(goldPath))!.AsObject();
       var name = goldNode["Input"]?["Name"]?.ToString();
-      if (name is null || !corpus!.TryGetValue(name, out var cinput))
+      // Prefer the corpus record (re-points the gold to current corpus text); fall back to the gold's OWN
+      // Input for a self-contained hand-parsed gold not in the combo corpus (e.g. a Saga used only as a
+      // parser fixture) — those are still regenerable from the input they already carry.
+      JsonObject? source =
+        name is not null && corpus!.TryGetValue(name, out var cinput) ? cinput
+        : goldNode["Input"] as JsonObject;
+      if (source is null)
       {
-        report.Add($"SKIP {rel}: '{name}' not in corpus");
+        report.Add($"SKIP {rel}: '{name}' has no input (not in corpus, no gold Input)");
         continue;
       }
 
-      // Build the canonical 8-field gold Input from the corpus record (drop Keywords/Id/Layout to
-      // match the existing gold convention; the snapshot stays self-consistent because we parse THIS).
+      // Build the canonical 8-field gold Input (drop Keywords/Id/Layout to match the existing gold
+      // convention; the snapshot stays self-consistent because we parse THIS).
       var inputObj = new JsonObject();
       foreach (var key in GoldInputFields)
       {
-        if (cinput[key] is JsonNode v)
+        if (source[key] is JsonNode v)
         {
           inputObj[key] = v.DeepClone();
         }

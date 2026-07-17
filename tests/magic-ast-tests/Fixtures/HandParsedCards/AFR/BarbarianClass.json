@@ -9,10 +9,7 @@
     ],
     "ColorIdentity": [
       "R"
-    ],
-    "Keywords": [],
-    "Id": "647c2269-bdc7-4455-9158-73abbff6e50e",
-    "Layout": "class"
+    ]
   },
   "Output": {
     "Name": "Barbarian Class",
@@ -49,7 +46,11 @@
                   }
                 }
               ],
-              "OracleLineIndex": 0
+              "SourceSpan": {
+                "Start": 55,
+                "Length": 100
+              },
+              "OracleLineIndex": 1
             }
           ],
           "Levels": [
@@ -74,12 +75,12 @@
                 {
                   "Kind": "triggered",
                   "Trigger": {
-                    "Timing": "Whenever",
-                    "Event": "DiceRolled",
                     "SourceSpan": {
                       "Start": 172,
                       "Length": 34
-                    }
+                    },
+                    "Timing": "Whenever",
+                    "Event": "DiceRolled"
                   },
                   "Effects": [
                     {
@@ -147,7 +148,11 @@
                       }
                     }
                   ],
-                  "OracleLineIndex": 0
+                  "SourceSpan": {
+                    "Start": 172,
+                    "Length": 110
+                  },
+                  "OracleLineIndex": 3
                 }
               ]
             },
@@ -196,7 +201,11 @@
                       }
                     }
                   ],
-                  "OracleLineIndex": 0
+                  "SourceSpan": {
+                    "Start": 299,
+                    "Length": 33
+                  },
+                  "OracleLineIndex": 5
                 }
               ]
             }
@@ -235,10 +244,6 @@
         "ColorIdentity": [
           "R"
         ]
-      },
-      {
-        "Kind": "layout",
-        "Layout": "class"
       }
     ]
   }

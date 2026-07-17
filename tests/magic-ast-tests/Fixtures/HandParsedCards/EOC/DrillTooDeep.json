@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Drill Too Deep",
     "ManaCost": "{1}{R}",
-    "TypeLine": "Sorcery",
+    "TypeLine": "Instant",
     "OracleText": "Choose one —\n• Put five charge counters on target Spacecraft or Planet you control.\n• Destroy target artifact.",
     "Colors": [
       "R"
@@ -14,9 +14,9 @@
   "Output": {
     "Name": "Drill Too Deep",
     "TypeLine": {
-      "Raw": "Sorcery",
+      "Raw": "Instant",
       "Types": [
-        "Sorcery"
+        "Instant"
       ]
     },
     "Oracle": {
@@ -52,7 +52,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 68
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -68,10 +72,15 @@
                           "artifact"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 86,
+                  "Length": 24
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -100,7 +109,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

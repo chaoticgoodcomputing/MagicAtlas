@@ -9,12 +9,7 @@
     ],
     "ColorIdentity": [
       "B"
-    ],
-    "Keywords": [
-      "Entwine"
-    ],
-    "Id": "e2b054a9-7565-4fdd-b6a5-2786c5bb5b7e",
-    "Layout": "normal"
+    ]
   },
   "Output": {
     "Name": "Gravedig",
@@ -68,7 +63,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 56
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -89,7 +88,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 74,
+                  "Length": 61
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -102,7 +105,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Entwine",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -121,6 +123,10 @@
               }
             }
           ],
+          "KeywordSource": "Entwine",
+          "Reminder": {
+            "Text": "(Choose both if you pay the entwine cost.)"
+          },
           "SourceSpan": {
             "Start": 136,
             "Length": 54

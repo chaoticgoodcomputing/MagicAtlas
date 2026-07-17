@@ -76,9 +76,12 @@ public sealed class ModalAbilityParser : IAbilityParser
       // siblings (e.g. comma-separated keywords), wrap the first; the rest
       // would be lost. That's a follow-up gap, not a regression — surface it
       // by attaching all of them as separate modes for now.
+      // Per-mode provenance: carry each option clause's span onto its ability, so a mode's ports trace to
+      // THAT mode's text, not the "choose ..." preamble or the wrong mode (OracleParser only span-stamps
+      // top-level clauses; its recursion fills OracleLineIndex from this span).
       foreach (var ability in optionAbilities)
       {
-        modes.Add(new ModalOption { Ability = ability });
+        modes.Add(new ModalOption { Ability = ability with { SourceSpan = ability.SourceSpan ?? optionClause.SourceSpan } });
       }
     }
 

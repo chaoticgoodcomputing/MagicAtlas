@@ -67,15 +67,9 @@ public sealed class OracleParser
       // already attributed a base span keeps it; UnparsedAbility's own serialized
       // span is untouched (the `with` binds the base, in-memory SourceSpan). These
       // fields are [JsonIgnore], so this does not perturb the parser gold fixtures.
-      var lineIndex = OracleLineIndexFor(oracleText, clause.SourceSpan.Start);
       foreach (var ability in clauseAbilities)
       {
-        var stamped = ability with
-        {
-          SourceSpan = ability.SourceSpan ?? clause.SourceSpan,
-          OracleLineIndex = lineIndex,
-        };
-        abilities.Add(stamped);
+        abilities.Add(StampProvenance(ability, oracleText, clause.SourceSpan));
       }
       diagnostics.AddRange(clauseDiagnostics);
 
@@ -157,6 +151,54 @@ public sealed class OracleParser
       }
     }
     return lines;
+  }
+
+  /// <summary>
+  /// Recursively stamps oracle-text provenance (<see cref="Ability.SourceSpan"/> +
+  /// <see cref="Ability.OracleLineIndex"/>) onto an ability AND its nested container bodies — Class
+  /// base/level abilities, Saga chapter bodies, Modal option abilities. Top-level clauses carry their own
+  /// clause span; a nested body carries the sub-clause span its container parser attached (falling back to
+  /// the parent's span), and the line index is computed from that span's start. Without the recursion a
+  /// nested body defaults to line 0 / the parent's span — the mis-attribution the span-witness triage
+  /// surfaced (a Class level, Saga chapter, or Siege mode landing on the wrong oracle line). Provenance
+  /// only: the nested body's parse (effects/triggers) is untouched.
+  /// </summary>
+  private Ability StampProvenance(Ability ability, string oracleText, TextSpan fallback)
+  {
+    var span = ability.SourceSpan ?? fallback;
+    ability = ability with
+    {
+      SourceSpan = span,
+      OracleLineIndex = OracleLineIndexFor(oracleText, span.Start),
+    };
+    return ability switch
+    {
+      ClassAbility c => c with
+      {
+        BaseAbilities = c.BaseAbilities.Select(a => StampProvenance(a, oracleText, span)).ToList(),
+        Levels = c
+          .Levels.Select(l =>
+            l with
+            {
+              Abilities = l.Abilities.Select(a => StampProvenance(a, oracleText, span)).ToList(),
+            }
+          )
+          .ToList(),
+      },
+      SagaAbility s => s with
+      {
+        Chapters = s
+          .Chapters.Select(ch => ch with { Body = StampProvenance(ch.Body, oracleText, span) })
+          .ToList(),
+      },
+      ModalAbility m => m with
+      {
+        Modes = m
+          .Modes.Select(o => o with { Ability = StampProvenance(o.Ability, oracleText, span) })
+          .ToList(),
+      },
+      _ => ability,
+    };
   }
 
   /// <summary>

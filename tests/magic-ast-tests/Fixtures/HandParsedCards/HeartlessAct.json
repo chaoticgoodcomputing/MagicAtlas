@@ -9,10 +9,7 @@
     ],
     "ColorIdentity": [
       "B"
-    ],
-    "Keywords": [],
-    "Id": "b57c57a8-d72b-4c6c-a2db-a7ef61190f42",
-    "Layout": "normal"
+    ]
   },
   "Output": {
     "Name": "Heartless Act",
@@ -55,10 +52,15 @@
                           }
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 47
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -78,11 +80,16 @@
                     "CounterType": "any",
                     "Count": {
                       "QuantityType": "upTo",
-                      "Maximum": 3
+                      "Maximum": 3,
+                      "Minimum": 0
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 65,
+                  "Length": 49
+                },
+                "OracleLineIndex": 2
               }
             }
           ],

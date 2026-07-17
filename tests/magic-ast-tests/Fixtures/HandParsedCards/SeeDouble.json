@@ -9,10 +9,7 @@
     ],
     "ColorIdentity": [
       "U"
-    ],
-    "Keywords": [],
-    "Id": "41634103-7b58-4feb-84b7-90a07a7b474f",
-    "Layout": "normal"
+    ]
   },
   "Output": {
     "Name": "See Double",
@@ -50,8 +47,8 @@
                   "CardTypes": [
                     "card"
                   ],
-                  "Zone": "Graveyard",
-                  "Owner": "Opponent"
+                  "Owner": "Opponent",
+                  "Zone": "Graveyard"
                 },
                 "Count": {
                   "Operator": "GreaterThanOrEqual",
@@ -83,7 +80,11 @@
                     "MayChooseNewTargets": true
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 130,
+                  "Length": 106
+                },
+                "OracleLineIndex": 2
               }
             },
             {
@@ -102,7 +103,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 239,
+                  "Length": 48
+                },
+                "OracleLineIndex": 3
               }
             }
           ],

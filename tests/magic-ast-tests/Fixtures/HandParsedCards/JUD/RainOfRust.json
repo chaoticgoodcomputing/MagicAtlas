@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Rain of Rust",
     "ManaCost": "{3}{R}{R}",
-    "TypeLine": "Sorcery",
+    "TypeLine": "Instant",
     "OracleText": "Choose one —\n• Destroy target artifact.\n• Destroy target land.\nEntwine {3}{R} (Choose both if you pay the entwine cost.)",
     "Colors": [
       "R"
@@ -14,9 +14,9 @@
   "Output": {
     "Name": "Rain of Rust",
     "TypeLine": {
-      "Raw": "Sorcery",
+      "Raw": "Instant",
       "Types": [
-        "Sorcery"
+        "Instant"
       ]
     },
     "Oracle": {
@@ -42,10 +42,15 @@
                           "artifact"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 24
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -61,10 +66,15 @@
                           "land"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 42,
+                  "Length": 20
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -77,7 +87,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Entwine",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -102,6 +111,10 @@
               }
             }
           ],
+          "KeywordSource": "Entwine",
+          "Reminder": {
+            "Text": "(Choose both if you pay the entwine cost.)"
+          },
           "SourceSpan": {
             "Start": 63,
             "Length": 57
@@ -132,7 +145,8 @@
             ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

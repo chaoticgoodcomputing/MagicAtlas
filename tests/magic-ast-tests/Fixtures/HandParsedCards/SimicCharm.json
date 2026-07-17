@@ -11,10 +11,7 @@
     "ColorIdentity": [
       "G",
       "U"
-    ],
-    "Keywords": [],
-    "Id": "3384ee4e-738f-4442-bccd-4f96022b7219",
-    "Layout": "normal"
+    ]
   },
   "Output": {
     "Name": "Simic Charm",
@@ -65,7 +62,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 45
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -85,13 +86,13 @@
                     },
                     "GainedAbility": {
                       "Kind": "static",
-                      "KeywordSource": "Hexproof",
                       "Effects": [
                         {
                           "EffectType": "keywordAbility",
                           "Keyword": "Hexproof"
                         }
                       ],
+                      "KeywordSource": "Hexproof",
                       "OracleLineIndex": 0
                     },
                     "Duration": {
@@ -103,7 +104,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 63,
+                  "Length": 55
+                },
+                "OracleLineIndex": 2
               }
             },
             {
@@ -122,7 +127,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 121,
+                  "Length": 43
+                },
+                "OracleLineIndex": 3
               }
             }
           ],
@@ -153,7 +162,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -165,8 +175,8 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
-          "G",
-          "U"
+          "U",
+          "G"
         ]
       }
     ]

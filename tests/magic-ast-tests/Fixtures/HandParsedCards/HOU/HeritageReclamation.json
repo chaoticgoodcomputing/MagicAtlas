@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Heritage Reclamation",
     "ManaCost": "{1}{G}",
-    "TypeLine": "Sorcery",
+    "TypeLine": "Instant",
     "OracleText": "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.\n• Exile up to one target card from a graveyard. Draw a card.",
     "Colors": [
       "G"
@@ -14,9 +14,9 @@
   "Output": {
     "Name": "Heritage Reclamation",
     "TypeLine": {
-      "Raw": "Sorcery",
+      "Raw": "Instant",
       "Types": [
-        "Sorcery"
+        "Instant"
       ]
     },
     "Oracle": {
@@ -42,10 +42,15 @@
                           "artifact"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 24
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -61,10 +66,15 @@
                           "enchantment"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 42,
+                  "Length": 27
+                },
+                "OracleLineIndex": 2
               }
             },
             {
@@ -99,7 +109,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 72,
+                  "Length": 58
+                },
+                "OracleLineIndex": 3
               }
             }
           ],
@@ -128,7 +142,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

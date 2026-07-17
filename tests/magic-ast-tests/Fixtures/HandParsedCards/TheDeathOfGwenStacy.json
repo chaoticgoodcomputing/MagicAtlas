@@ -9,10 +9,7 @@
     ],
     "ColorIdentity": [
       "B"
-    ],
-    "Keywords": [],
-    "Id": "690f1f31-f8c5-4336-9ec9-72ff761e3adc",
-    "Layout": "saga"
+    ]
   },
   "Output": {
     "Name": "The Death of Gwen Stacy",
@@ -47,10 +44,15 @@
                           "creature"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 93,
+                  "Length": 24
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -70,7 +72,9 @@
                       },
                       "Player": {
                         "Kind": "EachPlayer"
-                      }
+                      },
+                      "RevealHand": false,
+                      "Random": false
                     },
                     "IfYouDoNot": {
                       "EffectType": "loseLife",
@@ -84,7 +88,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 123,
+                  "Length": 69
+                },
+                "OracleLineIndex": 2
               }
             },
             {
@@ -102,18 +110,22 @@
                         "CardTypes": [
                           "card"
                         ],
-                        "Zone": "Graveyard",
                         "Characteristics": [
                           {
                             "CharacteristicType": "other",
                             "Description": "in any number of target players' graveyards"
                           }
-                        ]
+                        ],
+                        "Zone": "Graveyard"
                       }
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 199,
+                  "Length": 47
+                },
+                "OracleLineIndex": 3
               }
             }
           ],
@@ -155,10 +167,6 @@
         "ColorIdentity": [
           "B"
         ]
-      },
-      {
-        "Kind": "layout",
-        "Layout": "saga"
       }
     ]
   }

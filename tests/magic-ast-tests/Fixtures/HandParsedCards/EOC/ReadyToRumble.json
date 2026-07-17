@@ -39,9 +39,6 @@
                       "QuantityType": "literal",
                       "Value": 5
                     },
-                    "Source": {
-                      "Kind": "Self"
-                    },
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
@@ -50,10 +47,17 @@
                           "planeswalker"
                         ]
                       }
+                    },
+                    "Source": {
+                      "Kind": "Self"
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 66
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -69,10 +73,15 @@
                           "artifact"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 84,
+                  "Length": 24
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -101,7 +110,8 @@
             ]
           }
         ],
-        "ManaValue": 5
+        "ManaValue": 5,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

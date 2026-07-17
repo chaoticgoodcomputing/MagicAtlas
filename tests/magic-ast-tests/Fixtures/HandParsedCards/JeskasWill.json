@@ -58,19 +58,26 @@
                   {
                     "EffectType": "addMana",
                     "Mana": "{R}",
+                    "AnyColor": false,
+                    "AnyType": false,
+                    "OfChosenColor": false,
                     "Amount": {
                       "QuantityType": "count",
                       "CountOf": {
                         "CardTypes": [
                           "card"
                         ],
-                        "Zone": "Hand",
-                        "Controller": "Target"
+                        "Controller": "Target",
+                        "Zone": "Hand"
                       }
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 94,
+                  "Length": 48
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -93,7 +100,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 145,
+                  "Length": 71
+                },
+                "OracleLineIndex": 2
               }
             }
           ],

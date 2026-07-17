@@ -42,10 +42,15 @@
                           "artifact"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 24
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -61,10 +66,15 @@
                           "enchantment"
                         ]
                       }
-                    }
+                    },
+                    "CantBeRegenerated": false
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 42,
+                  "Length": 27
+                },
+                "OracleLineIndex": 2
               }
             },
             {
@@ -84,7 +94,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 72,
+                  "Length": 35
+                },
+                "OracleLineIndex": 3
               }
             }
           ],
@@ -97,7 +111,6 @@
         },
         {
           "Kind": "activated",
-          "KeywordSource": "Reinforce",
           "Costs": [
             {
               "CostType": "mana",
@@ -142,6 +155,7 @@
             }
           ],
           "IsManaAbility": false,
+          "KeywordSource": "Reinforce",
           "Reminder": {
             "Text": "({W}, Discard this card: Put a +1/+1 counter on target creature.)"
           },
@@ -169,7 +183,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

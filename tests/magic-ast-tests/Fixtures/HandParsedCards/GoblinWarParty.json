@@ -9,12 +9,7 @@
     ],
     "ColorIdentity": [
       "R"
-    ],
-    "Keywords": [
-      "Entwine"
-    ],
-    "Id": "2b4155d1-0a87-4d2c-a1a0-06b2553eaae4",
-    "Layout": "normal"
+    ]
   },
   "Output": {
     "Name": "Goblin War Party",
@@ -40,9 +35,6 @@
                 "Effects": [
                   {
                     "EffectType": "createToken",
-                    "Player": {
-                      "Kind": "You"
-                    },
                     "Count": {
                       "QuantityType": "literal",
                       "Value": 3
@@ -60,10 +52,17 @@
                         "Goblin"
                       ],
                       "IsCopy": false
+                    },
+                    "Player": {
+                      "Kind": "You"
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 44
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -113,13 +112,13 @@
                         },
                         "GainedAbility": {
                           "Kind": "static",
-                          "KeywordSource": "Haste",
                           "Effects": [
                             {
                               "EffectType": "keywordAbility",
                               "Keyword": "Haste"
                             }
                           ],
+                          "KeywordSource": "Haste",
                           "OracleLineIndex": 0
                         },
                         "Duration": {
@@ -133,7 +132,11 @@
                     ]
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 62,
+                  "Length": 65
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -146,7 +149,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Entwine",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -171,6 +173,10 @@
               }
             }
           ],
+          "KeywordSource": "Entwine",
+          "Reminder": {
+            "Text": "(Choose both if you pay the entwine cost.)"
+          },
           "SourceSpan": {
             "Start": 128,
             "Length": 57
@@ -195,7 +201,8 @@
             ]
           }
         ],
-        "ManaValue": 4
+        "ManaValue": 4,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

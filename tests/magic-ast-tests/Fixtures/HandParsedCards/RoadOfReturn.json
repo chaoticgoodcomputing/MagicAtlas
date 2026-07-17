@@ -47,7 +47,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 62
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -70,7 +74,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 80,
+                  "Length": 56
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -83,7 +91,6 @@
         },
         {
           "Kind": "static",
-          "KeywordSource": "Entwine",
           "Effects": [
             {
               "EffectType": "additionalCastCost",
@@ -102,6 +109,10 @@
               }
             }
           ],
+          "KeywordSource": "Entwine",
+          "Reminder": {
+            "Text": "(Choose both if you pay the entwine cost.)"
+          },
           "SourceSpan": {
             "Start": 137,
             "Length": 54

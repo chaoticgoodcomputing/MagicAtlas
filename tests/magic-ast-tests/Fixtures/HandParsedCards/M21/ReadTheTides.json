@@ -4,8 +4,6 @@
     "ManaCost": "{5}{U}",
     "TypeLine": "Sorcery",
     "OracleText": "Choose one —\n• Draw three cards.\n• Return up to two target creatures to their owners' hands.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "U"
     ],
@@ -46,7 +44,11 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 17
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -68,10 +70,15 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 35,
+                  "Length": 57
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
+          "AllowDuplicates": false,
           "SourceSpan": {
             "Start": 0,
             "Length": 12
@@ -96,7 +103,8 @@
             ]
           }
         ],
-        "ManaValue": 6
+        "ManaValue": 6,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

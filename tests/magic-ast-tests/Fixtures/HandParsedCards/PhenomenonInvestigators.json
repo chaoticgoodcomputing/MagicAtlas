@@ -13,10 +13,7 @@
     "ColorIdentity": [
       "B",
       "U"
-    ],
-    "Keywords": [],
-    "Id": "57195155-6bdf-43c3-9f2e-11c31aef6b9c",
-    "Layout": "normal"
+    ]
   },
   "Output": {
     "Name": "Phenomenon Investigators",
@@ -35,7 +32,6 @@
       "Abilities": [
         {
           "Kind": "static",
-          "When": "asThisEnters",
           "Effects": [
             {
               "EffectType": "chooseNamedOption",
@@ -45,6 +41,7 @@
               ]
             }
           ],
+          "When": "asThisEnters",
           "SourceSpan": {
             "Start": 0,
             "Length": 49
@@ -54,6 +51,10 @@
         {
           "Kind": "triggered",
           "Trigger": {
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 45
+            },
             "Timing": "Whenever",
             "Event": "Dies",
             "Filter": {
@@ -62,10 +63,6 @@
               ],
               "IsToken": false,
               "Controller": "You"
-            },
-            "SourceSpan": {
-              "Start": 0,
-              "Length": 45
             }
           },
           "InterveningIf": {
@@ -103,20 +100,20 @@
             "Start": 0,
             "Length": 100
           },
-          "OracleLineIndex": 1
+          "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
           "Trigger": {
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 33
+            },
             "Timing": "At",
             "Event": {
               "Part": "End",
               "Edge": "Beginning",
               "Whose": "You"
-            },
-            "SourceSpan": {
-              "Start": 0,
-              "Length": 33
             }
           },
           "InterveningIf": {
@@ -157,7 +154,7 @@
             "Start": 0,
             "Length": 115
           },
-          "OracleLineIndex": 2
+          "OracleLineIndex": 0
         }
       ]
     },
@@ -196,8 +193,8 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
-          "B",
-          "U"
+          "U",
+          "B"
         ]
       },
       {

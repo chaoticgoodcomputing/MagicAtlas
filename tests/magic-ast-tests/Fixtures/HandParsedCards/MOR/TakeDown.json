@@ -2,10 +2,8 @@
   "Input": {
     "Name": "Take Down",
     "ManaCost": "{G}",
-    "TypeLine": "Instant",
+    "TypeLine": "Sorcery",
     "OracleText": "Choose one —\n• Take Down deals 4 damage to target creature with flying.\n• Take Down deals 1 damage to each creature with flying.",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "G"
     ],
@@ -16,9 +14,9 @@
   "Output": {
     "Name": "Take Down",
     "TypeLine": {
-      "Raw": "Instant",
+      "Raw": "Sorcery",
       "Types": [
-        "Instant"
+        "Sorcery"
       ]
     },
     "Oracle": {
@@ -41,9 +39,6 @@
                       "QuantityType": "literal",
                       "Value": 4
                     },
-                    "Source": {
-                      "Kind": "Self"
-                    },
                     "Target": {
                       "Kind": "Target",
                       "Filter": {
@@ -57,10 +52,17 @@
                           }
                         ]
                       }
+                    },
+                    "Source": {
+                      "Kind": "Self"
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 15,
+                  "Length": 56
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -72,9 +74,6 @@
                     "Amount": {
                       "QuantityType": "literal",
                       "Value": 1
-                    },
-                    "Source": {
-                      "Kind": "Self"
                     },
                     "Target": {
                       "Kind": "Each",
@@ -89,10 +88,17 @@
                           }
                         ]
                       }
+                    },
+                    "Source": {
+                      "Kind": "Self"
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 74,
+                  "Length": 54
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
@@ -117,7 +123,8 @@
             ]
           }
         ],
-        "ManaValue": 1
+        "ManaValue": 1,
+        "IsVariable": false
       },
       {
         "Kind": "colors",

@@ -37,9 +37,6 @@
                 "Effects": [
                   {
                     "EffectType": "dealDamage",
-                    "Source": {
-                      "Kind": "Self"
-                    },
                     "Amount": {
                       "QuantityType": "literal",
                       "Value": 3
@@ -51,10 +48,17 @@
                           "creature"
                         ]
                       }
+                    },
+                    "Source": {
+                      "Kind": "Self"
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 23,
+                  "Length": 50
+                },
+                "OracleLineIndex": 1
               }
             },
             {
@@ -74,12 +78,12 @@
                     },
                     "GainedAbility": {
                       "Kind": "static",
-                      "KeywordSource": "Lifelink",
                       "Effects": [
                         {
                           "EffectType": "lifelink"
                         }
                       ],
+                      "KeywordSource": "Lifelink",
                       "OracleLineIndex": 0
                     },
                     "Duration": {
@@ -91,10 +95,15 @@
                     }
                   }
                 ],
-                "OracleLineIndex": 0
+                "SourceSpan": {
+                  "Start": 76,
+                  "Length": 54
+                },
+                "OracleLineIndex": 2
               }
             }
           ],
+          "AllowDuplicates": false,
           "SourceSpan": {
             "Start": 0,
             "Length": 20
@@ -125,7 +134,8 @@
             ]
           }
         ],
-        "ManaValue": 3
+        "ManaValue": 3,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -137,8 +147,8 @@
       {
         "Kind": "colorIdentity",
         "ColorIdentity": [
-          "R",
-          "W"
+          "W",
+          "R"
         ]
       }
     ]
