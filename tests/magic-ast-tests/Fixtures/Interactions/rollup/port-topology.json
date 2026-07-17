@@ -4,12 +4,16 @@
     "aang-the-last-airbender",
     "ancient-copper-dragon",
     "archaeomancer",
+    "boggart-brute",
     "brazen-dwarf",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "divination",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
-    "ruthless-knave-x-blood-artist"
+    "ruthless-knave-x-blood-artist",
+    "spine-of-ish-sah",
+    "titanias-boon"
   ],
   "kinds": {
     "EVENT": "discrete occurrences with payloads \u2014 what subscriptions (triggered abilities) fire on.",
@@ -69,8 +73,11 @@
     },
     "cards": {
       "kind": "STATE",
-      "status": "declared",
-      "attrs": []
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "qty"
+      ]
     },
     "cast": {
       "kind": "EVENT",
@@ -97,8 +104,12 @@
     },
     "counters": {
       "kind": "STATE",
-      "status": "declared",
-      "attrs": []
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "counter-type",
+        "qty"
+      ]
     },
     "creature": {
       "kind": "STATE",
@@ -135,6 +146,7 @@
       "attrs": [
         "control",
         "qty",
+        "subject",
         "subtype",
         "token"
       ]
@@ -193,8 +205,10 @@
     "modification:evasion": {
       "kind": "BEHAVIOR",
       "parent": "modification:keyword",
-      "status": "declared",
-      "attrs": []
+      "status": "witnessed",
+      "attrs": [
+        "subject"
+      ]
     },
     "modification:evasion:flying": {
       "kind": "BEHAVIOR",
@@ -252,8 +266,13 @@
     "removal:permanent": {
       "kind": "EVENT",
       "parent": "removal",
-      "status": "declared",
-      "attrs": []
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "from",
+        "manner",
+        "to"
+      ]
     },
     "structure:untap": {
       "kind": "STATE",
@@ -322,7 +341,9 @@
     },
     "control": {
       "stems": [
+        "cards",
         "cast",
+        "counters",
         "creature",
         "deployment",
         "deployment:artifact",
@@ -330,6 +351,7 @@
         "dice-rolled",
         "recur",
         "removal:creature",
+        "removal:permanent",
         "structure:untap"
       ],
       "values_seen": [
@@ -343,8 +365,12 @@
       "lattice": "self \u2286 controlled \u2286 any ; opponent \u2286 any"
     },
     "counter-type": {
-      "stems": [],
-      "values_seen": [],
+      "stems": [
+        "counters"
+      ],
+      "values_seen": [
+        "\u002B1/\u002B1"
+      ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "counters"
@@ -428,7 +454,8 @@
       "stems": [
         "recur",
         "removal:artifact",
-        "removal:creature"
+        "removal:creature",
+        "removal:permanent"
       ],
       "values_seen": [
         "battlefield",
@@ -458,10 +485,12 @@
       "stems": [
         "deployment:creature",
         "removal:artifact",
-        "removal:creature"
+        "removal:creature",
+        "removal:permanent"
       ],
       "values_seen": [
         "blink",
+        "destroyed",
         "sacrificed"
       ],
       "carries_provenance_or_polarity": false,
@@ -507,6 +536,8 @@
     "qty": {
       "stems": [
         "artifact",
+        "cards",
+        "counters",
         "creature",
         "deployment:artifact",
         "deployment:creature",
@@ -593,7 +624,9 @@
       "stems": [
         "combat-presence",
         "damage-dealt",
+        "deployment:artifact",
         "deployment:creature",
+        "modification:evasion",
         "modification:evasion:flying",
         "modification:keyword"
       ],
@@ -645,7 +678,8 @@
       "stems": [
         "recur",
         "removal:artifact",
-        "removal:creature"
+        "removal:creature",
+        "removal:permanent"
       ],
       "values_seen": [
         "exile",

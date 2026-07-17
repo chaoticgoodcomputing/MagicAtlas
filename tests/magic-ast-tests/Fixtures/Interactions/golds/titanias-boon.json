@@ -1,0 +1,68 @@
+{
+  "id": "titanias-boon",
+  "unit": "single-card",
+  "cards": [
+    "Titania's Boon"
+  ],
+  "source": {
+    "note": "single-card witness of the STATE resource stem 'counters' (CR 122 \u2014 the +1/+1 counter as a fungible battlefield-state resource, resources supergroup). Oracle (whole card): 'Put a +1/+1 counter on each creature you control.' The card is a single spell ability whose sole effect is putCounters, so the counters emit is THE witness with no incidental context. AST is faithful, not a wish: Ability.Kind=spell, one Effect EffectType=putCounters with CounterType='+1/+1', Count={QuantityType:literal, Value:1}, Target={Kind:Each, Filter:{CardTypes:[creature], Controller:You}} (hand-parsed gold at Fixtures/HandParsedCards/TitaniasBoon.json). ADR-3 canonical: side=emit, kind=STATE, stem=counters; the +1/+1 kind maps to the declared-but-never-witnessed 'counter-type' axis (licensed_by counters; enum includes '+1/+1'), so this gold also first-witnesses that axis on a stem. No edhrec_rank in the testbed source \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-4 \u2014 counters/+1/+1 faithful (CR 122.1); PROCEED"
+  },
+  "ports": {
+    "Titania's Boon": [
+      {
+        "id": "T0",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "+1/+1",
+          "qty": 1,
+          "control": "you"
+        },
+        "note": "THE WITNESS \u2014 'put a +1/+1 counter on each creature you control' emits the counters STATE resource (CR 122). counter-type='+1/+1' is AST-derivable from PutCountersEffect.CounterType; qty=1 from Count (literal 1); control='you' from Target.Filter.Controller=You (the counters land on objects you control). A STATE emit like mana/life (fungible resource added to game state), not an EVENT."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.counters.witnessed",
+      "because": "T0 projects the bare STATE stem 'counters' (resources supergroup, CR 122), turning the scaffold's declared prediction into a witnessed fact. Already declared \u2192 not unpredicted."
+    },
+    {
+      "claim": "T0.counter-type == +1/+1",
+      "because": "PutCountersEffect.CounterType='+1/+1'; the counter-type axis (licensed_by counters, enum contains '+1/+1') was declared with stems=[] \u2014 this gold is its first stem witness. CR 122.1: a counter is a marker of a given kind; '+1/+1' is such a kind."
+    },
+    {
+      "claim": "T0.qty == 1",
+      "because": "Count={QuantityType:literal, Value:1} \u2014 one +1/+1 counter per creature. qty axis licensed_by * (values_seen already contains 1)."
+    },
+    {
+      "claim": "T0.control == you",
+      "because": "Target.Filter.Controller=You \u2014 'each creature YOU control'; the affected objects are yours (control axis, licensed_by *; lattice self \u2286 controlled \u2286 any). AST-derivable, explicit Filter (not implicit)."
+    },
+    {
+      "claim": "T0.kind == STATE",
+      "because": "a +1/+1 counter is a persistent fungible resource on game objects (CR 122), not a discrete occurrence; stems.counters.kind = STATE, mirroring mana/life."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + counter-type/qty/control facets, no cycle closed (edges=[])."
+    }
+  ],
+  "cr": [
+    "122",
+    "122.1",
+    "122.6"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "divination",
+  "unit": "single-card",
+  "cards": [
+    "Divination"
+  ],
+  "source": {
+    "note": "single-card witness of the cards STATE resource stem (the hand/library card pool; CR 121 Drawing a Card) via the bare spell effect 'Draw two cards.'. Live engine parses Oracle.Abilities[0] (Kind=spell) -> Effects[0]: EffectType=drawCards, Count={QuantityType:literal, Value:2}, Player={Kind:You}. The ADR-2 projection is the COARSE label emit:drawcards (known-coarse-projections.json line 79: 'baseline coarse fallback ... no flow rule consumes it yet'), the exact interim ADR-2 stem this gold hand-maps up to the ADR-3 STATE stem 'cards', with attrs qty (from Count.Value=2) and control=you (from Player.Kind=You) -- both AST-derivable, so a faithful witness, not a wish. No edhrec_rank in the testbed source -- popularity omitted (not fabricated). SCAFFOLD SURFACE (surfaced, not invented): the draw-vs-discard/mill polarity of a cards delta has no home in the closed axis set -- the 'direction' axis is life-scoped (enum gain|loss, licensed_by [life] only). Modelling the cards-flow polarity would need an analogous axis licensed for 'cards' (a taxonomy decision), so it is left off this witness rather than fabricated; a positive draw delta is all the closed axes honestly express here.",
+    "cr": "121"
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-4 \u2014 cards/qty=2 faithful (CR 121); direction correctly omitted (no cards-polarity axis); PROCEED"
+  },
+  "ports": {
+    "Divination": [
+      {
+        "id": "D1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards",
+        "attrs": {
+          "control": "you",
+          "qty": 2
+        },
+        "note": "THE WITNESS -- 'Draw two cards.' -- a positive delta to the cards STATE pool (your hand). stem=cards (resources supergroup, sibling of mana/life/counters). qty=2 from Count={QuantityType:literal, Value:2}; control=you from Player={Kind:You} (the caster is the drawer). Both facets AST-derivable. The draw/discard polarity has no closed axis (scaffold surface) -- omitted, not invented."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.cards.witnessed",
+      "because": "D1 projects the cards STATE resource stem (supergroup=resources), turning the scaffold's declared 'cards' -> witnessed. The stem is literally 'cards', hand-mapped up from the ADR-2 coarse label emit:drawcards; cards is already a declared scaffold stem, so this is NOT unpredicted."
+    },
+    {
+      "claim": "D1.qty == 2",
+      "because": "Count={QuantityType:literal, Value:2} -- 'draw TWO cards'. qty axis licensed_by * (applies to cards); '2' is already in qty.values_seen. Cards are drawn one at a time (CR 121.2), but the effect's requested count is 2."
+    },
+    {
+      "claim": "D1.control == you",
+      "because": "Player={Kind:You} -- the caster is the drawer. control axis licensed_by * (applies to cards), value 'you' on the lattice self <= controlled <= any; 'you' already in control.values_seen."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: one port derivation witnessing the cards STATE stem + its qty/control facets, no cycle closed (edges=[])."
+    }
+  ],
+  "cr": [
+    "121",
+    "121.1",
+    "121.2"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "spine-of-ish-sah",
+  "unit": "single-card",
+  "cards": [
+    "Spine of Ish Sah"
+  ],
+  "source": {
+    "note": "single-card witness of the removal:permanent stem (the removal supergroup at PERMANENT breadth \u2014 any permanent type, broader than removal:creature/removal:artifact). Oracle: 'When this artifact enters, destroy target permanent. When this artifact is put into a graveyard from the battlefield, return it to its owner's hand.' The witness is line-0's destroy. Live engine (portRows, spans [26,52]) projects emit:destroy (family=destroy, tier=Green, stem=null) \u2014 the ADR-2 shadow projection does NOT yet map destroy \u2192 removal:permanent (stem is null on all 55 emit:destroy rows), the Stage-3 engine-catch-up gap. But the destroy PARSES faithfully: the AST is EffectType=destroy on Target.Filter.CardTypes=['permanent'] (byte-identical effect node to the committed HandParsedCards/UMA/AngelOfDespair.json and UgintheIneffable.json 'destroy target permanent' fixtures). The gold hand-maps that parsed AST to removal:permanent \u2014 a faithful witness, not a wish. No edhrec_rank in the testbed source \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-4 \u2014 removal:permanent (destroy-any, to=graveyard derived) faithful; PROCEED (cr 701.7->701.8 per repo rules dataset)"
+  },
+  "ports": {
+    "Spine of Ish Sah": [
+      {
+        "id": "S0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:artifact",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "incidental card context \u2014 'When this artifact enters' \u2014 the self-ETB subscription that fires the destroy. Live engine projects consume etb:artifact:self (family=etb, isSelf=true). Not the witness; the S0 \u2192 S1 (ETB fires destroy) binding is card-defined/internal, not an inter-card edge."
+      },
+      {
+        "id": "S1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:permanent",
+        "attrs": {
+          "from": "battlefield",
+          "to": {
+            "value": "graveyard",
+            "provenance": "derived"
+          },
+          "manner": "destroyed",
+          "control": "any"
+        },
+        "note": "THE WITNESS \u2014 'destroy target permanent' \u2014 a permanent leaving play by destruction, at PERMANENT breadth (Filter.CardTypes=['permanent'], no card-type narrowing \u2014 genuinely removal:permanent, not removal:creature/removal:artifact). from=battlefield (a destroyed permanent moves off the battlefield, CR 701.7a); manner=destroyed (EffectType=destroy \u2192 the 'destroyed' rung of the manner axis); to=graveyard is derived (destroy sends to the owner's graveyard, CR 701.7a, but regeneration/replacement can alter the destination \u2192 over-approximated, caps Reliability); control=any ('destroy target permanent' has no Controller restriction \u2014 the target may be any player's permanent). Live ADR-2 label: emit:destroy (stem=null; the destroy\u2192removal:permanent stem-map is the Stage-3 shadow-projection gap)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.removal:permanent.witnessed",
+      "because": "S1 projects the removal supergroup at PERMANENT breadth \u2014 destroy target permanent (Filter.CardTypes=['permanent'], any permanent type, broader than the already-witnessed removal:creature/removal:artifact children). Turns the scaffold-declared removal:permanent stem declared \u2192 witnessed. Already declared, so NOT unpredicted."
+    },
+    {
+      "claim": "S1.from == battlefield",
+      "because": "removal = a zone-change whose FROM endpoint is play; a destroyed permanent leaves the battlefield (CR 701.7a). from axis, licensed_by removal:*."
+    },
+    {
+      "claim": "S1.manner == destroyed",
+      "because": "EffectType=destroy maps to the 'destroyed' rung of the manner axis (enum includes destroyed; licensed_by removal:*) \u2014 the manner distinction from the sacrificed/blink siblings."
+    },
+    {
+      "claim": "S1.to.provenance == derived",
+      "because": "destroy sends the permanent to its owner's graveyard (CR 701.7a), but a regeneration or 'if it would be destroyed/die, exile/... instead' replacement (CR 614) can redirect the destination \u2014 the parser cannot prove to=graveyard, so it is over-approximated and caps the port's Reliability (a Rest-in-Peace / replacement prune)."
+    },
+    {
+      "claim": "S1.control == any",
+      "because": "'destroy target permanent' imposes no Controller restriction on the target (Filter has no Controller) \u2014 it may hit any player's permanent. control axis lattice self \u2286 controlled \u2286 any; the widest, any."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + facets, no cycle closed. The internal ETB \u2192 destroy binding (S0 \u2192 S1) is card-defined, not an inter-card interaction edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "701.8",
+    "110.1",
+    "603.2",
+    "614"
+  ]
+}

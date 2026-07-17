@@ -1,0 +1,60 @@
+{
+  "id": "boggart-brute",
+  "unit": "single-card",
+  "cards": [
+    "Boggart Brute"
+  ],
+  "source": {
+    "note": "single-card witness of the BARE modification:evasion stem (BEHAVIOR: granting an evasion ability), the rung above the already-witnessed modification:evasion:flying leaf. Boggart Brute's only ability is Menace (oracle: 'Menace (This creature can't be blocked except by two or more creatures.)'). The parser derives it cleanly (no diagnostics): StaticAbility{ KeywordSource=Menace, Effects=[EvasionEffect{ CanBeBlockedBy=creature, MinimumBlockers=2 }] }. The live engine (PortGraph: keyword=KeywordSource -> evasion:<keyword>) projects the ADR-2 port evasion:menace; ADR-3 canonical stem = the bare modification:evasion (menace is a NON-flying evasion with no dedicated stem leaf, so it collapses to the parent, unlike flying which was promoted to modification:evasion:flying). A faithful witness, not a wish. AXIS QUESTION: there is no closed attribute axis for the evasion sub-kind (menace / fear / intimidate / can't-be-blocked). Following the modification:evasion:flying sibling convention (it carries only subject; the kind lives in the stem), this gold witnesses the bare stem with subject:self only and does NOT invent an evasion-kind key. The scaffold question (should evasion sub-kinds get stem leaves like :flying, or a closed axis?) is surfaced, not decided."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-4 \u2014 modification:evasion (Menace, CR 702.111a) bare-stem faithful; PROCEED"
+  },
+  "ports": {
+    "Boggart Brute": [
+      {
+        "id": "M0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:evasion",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE WITNESS \u2014 Menace (CR 702.111a: 'Menace is an evasion ability'). A self-modification static keyword: the creature grants itself the evasion. AST-derivable: StaticAbility.KeywordSource=Menace + EvasionEffect{MinimumBlockers=2} -> engine emits evasion:menace -> hand-maps to the bare modification:evasion (no :menace stem leaf, no closed evasion-kind axis)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:evasion.witnessed",
+      "because": "M0 projects the bare BEHAVIOR stem modification:evasion (parent of the witnessed modification:evasion:flying leaf), derived from the Menace static keyword; menace is a non-flying evasion with no dedicated stem leaf, so it is the smallest honest witness of the parent rung"
+    },
+    {
+      "claim": "M0.subject == self",
+      "because": "menace is the creature's OWN static keyword (a self-modification); subject axis, value self \u2014 matching the modification:evasion:flying sibling convention"
+    },
+    {
+      "claim": "M0.evasion_kind == menace (unaxised)",
+      "because": "the live engine projects ADR-2 evasion:menace, but the evasion sub-kind (menace) is captured by neither a stem leaf nor a closed attribute axis; recorded in the note as an open scaffold question, not invented as an ad-hoc attrs key"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + subject facet, no cycle closed and no edge"
+    }
+  ],
+  "cr": [
+    "702.111",
+    "702.111a",
+    "702.111b",
+    "509.1",
+    "604.1"
+  ]
+}
