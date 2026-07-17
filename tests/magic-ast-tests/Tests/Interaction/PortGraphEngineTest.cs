@@ -146,8 +146,11 @@ public class PortGraphEngineTest
     var edges = new PortGraphEngine(Ontology).Materialize(
       [new PortGraph { Ports = [any, green, payBlack, payGeneric] }]
     );
+    // Match by Identity, not reference: the engine may structure (annotate) a label-only port into a new
+    // record (ADR-0003 Stage 4 — Captures needs PortStructure), so edges can reference an annotated copy
+    // that carries the same Identity.
     bool Flow(PortNode f, PortNode t) =>
-      edges.Any(e => ReferenceEquals(e.From, f) && ReferenceEquals(e.To, t));
+      edges.Any(e => e.From.Identity == f.Identity && e.To.Identity == t.Identity);
 
     Assert.That(Flow(any, payBlack), Is.True, "any-colour mana pays a black cost (producer choice)");
     Assert.That(Flow(any, payGeneric), Is.True, "any-colour mana pays a generic cost");
@@ -204,8 +207,9 @@ public class PortGraphEngineTest
         },
       ]
     );
+    // Identity, not reference — see the note in the sibling Flow helper (annotation may copy the port).
     bool Flow(PortNode from, PortNode to) =>
-      edges.Any(e => ReferenceEquals(e.From, from) && ReferenceEquals(e.To, to));
+      edges.Any(e => e.From.Identity == from.Identity && e.To.Identity == to.Identity);
 
     // At-creation type match → the token refuels the sac.
     Assert.That(Flow(squirrelTok, creatureSac), Is.True, "a Squirrel refuels a creature-sac");

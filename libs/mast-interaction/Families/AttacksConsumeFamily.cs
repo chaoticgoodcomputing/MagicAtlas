@@ -5,23 +5,36 @@ using MagicAST.AST.References;
 /// <summary>
 /// ADR-0003 Stage 2 — the <b>attacks-or-blocks</b> CONSUME (a creature's combat-presence opportunity, CR
 /// 508/509). Bare EVENT stem <c>combat</c> (shared with <see cref="CombatEmitFamily"/>) on the
-/// <see cref="PortSide.Consume"/> side with <c>scope=self</c> — the extra-combat arm satisfies it to
-/// re-drive combat damage / re-fire a card's own "whenever this attacks" trigger. The label is the constant
-/// <c>attacksorblocks:self</c> (<see cref="PortLabel.AttacksConsume"/>).
+/// <see cref="PortSide.Consume"/> side, in two <c>scope</c> forms the projection produces: <c>self</c>
+/// ("whenever THIS creature attacks", <see cref="PortLabel.AttacksConsume"/> = <c>attacksorblocks:self</c>)
+/// and <c>creature</c> ("whenever A creature attacks", the coarse <c>attacksorblocks:creature</c> trigger
+/// path in <see cref="PortGraph"/>.Trigger). Both are satisfied by the extra-combat arm — an additional
+/// combat phase re-drives combat damage / re-fires the attacks trigger. The label oracle
+/// (<c>("additionalcombat","attacksorblocks")</c>) accepts either scope, so both must carry Structure.
 /// </summary>
 public sealed class AttacksConsumeFamily : IPortFamily
 {
   public PortStructure? Recognize(PortNode port, TypeOntology ontology)
   {
-    if (port.Side != PortSide.Consume || port.Label != "attacksorblocks:self")
+    if (port.Side != PortSide.Consume)
       return null;
-    return PortStructure.Of(PortSide.Consume, "combat", ("scope", "self"));
+    return port.Label switch
+    {
+      "attacksorblocks:self" => PortStructure.Of(PortSide.Consume, "combat", ("scope", "self")),
+      "attacksorblocks:creature" => PortStructure.Of(PortSide.Consume, "combat", ("scope", "creature")),
+      _ => null,
+    };
   }
 
   public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
   {
-    if (structure.Side != PortSide.Consume || structure.Stem != "combat" || structure.Attr("scope") != "self")
+    if (structure.Side != PortSide.Consume || structure.Stem != "combat")
       return null;
-    return "attacksorblocks:self";
+    return structure.Attr("scope") switch
+    {
+      "self" => "attacksorblocks:self",
+      "creature" => "attacksorblocks:creature",
+      _ => null,
+    };
   }
 }

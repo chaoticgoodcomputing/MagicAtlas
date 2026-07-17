@@ -77,8 +77,14 @@ public sealed class PortFlowMatcher
     // damage dealt → a damage trigger (manner/recipient/self-source in the guard).
     if (E("damage") && C("damage"))
       return FlowArm.DamageToTrigger;
-    // an extra combat phase → a creature's re-attack opportunity.
-    if (E("combat") && emit.Attr("phase") == "additional" && C("combat") && consume.Attr("scope") == "self")
+    // an extra combat phase → a creature's re-attack opportunity (either scope the attacksorblocks consume
+    // projects: "this creature" self or the coarse "a creature" — the label oracle accepts both).
+    if (
+      E("combat")
+      && emit.Attr("phase") == "additional"
+      && C("combat")
+      && (consume.Attr("scope") == "self" || consume.Attr("scope") == "creature")
+    )
       return FlowArm.AdditionalCombatToAttacks;
     // a re-cast spell → a "whenever you cast" trigger (type compatibility in the guard).
     if (E("cast") && C("cast") && consume.Attr("role") == "trigger")

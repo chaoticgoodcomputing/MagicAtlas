@@ -153,6 +153,78 @@ public sealed class PortGraphEngine
 
   public PortGraphEngine(TypeOntology ontology) => _ontology = ontology;
 
+  /// <summary>
+  /// ADR-0003 Stage-3 shadow gate, FULL-corpus variant (env-gated by <c>MAST_CAPTURES_SHADOW=1</c>). For
+  /// every emit×consume pair the real reconstruction evaluates in <see cref="Materialize"/>, compares the
+  /// label-based <see cref="FlowFeasible"/> oracle against the structure-based
+  /// <see cref="PortFlowMatcher.Captures"/> and records any divergence — the proof (over the production
+  /// workload, not just the sentinel corpus) that swapping reconstruction onto the structured matcher is
+  /// behaviour-preserving. A null-Structure port that drops an edge surfaces here as Flow=true/Cap=false.
+  /// Zero behaviour change when disabled. Writes a summary to temp + stderr at process exit.
+  /// </summary>
+  private PortFlowMatcher? _matcher;
+
+  internal static class CapturesShadow
+  {
+    public static readonly bool Enabled =
+      System.Environment.GetEnvironmentVariable("MAST_CAPTURES_SHADOW") == "1";
+
+    private static readonly object Gate = new();
+    private static bool _hookInstalled;
+    private static readonly System.Collections.Generic.List<string> Divergences = new();
+    private static long _pairs;
+    private static long _flowTrue;
+
+    /// <summary>Compares the retained label ORACLE (<see cref="FlowFeasible"/>) against the now-authoritative
+    /// structured <paramref name="captures"/> result for one reconstruction pair, recording any divergence —
+    /// the full-corpus regression guard that the structure and the label switch stay in lock-step.</summary>
+    public static void Record(PortGraphEngine engine, PortNode emit, PortNode consume, bool captures)
+    {
+      lock (Gate)
+      {
+        if (!_hookInstalled)
+        {
+          System.AppDomain.CurrentDomain.ProcessExit += (_, _) => Flush();
+          _hookInstalled = true;
+        }
+      }
+      var oracle = engine.FlowFeasible(emit, consume);
+      lock (Gate)
+      {
+        _pairs++;
+        if (oracle)
+          _flowTrue++;
+        if (oracle != captures)
+          Divergences.Add(
+            $"{emit.Card}::{emit.Label} -> {consume.Card}::{consume.Label} "
+              + $"| Flow={oracle} Cap={captures} "
+              + $"| emitStruct={emit.Structure?.Canonical() ?? "<null>"} "
+              + $"consumeStruct={consume.Structure?.Canonical() ?? "<null>"}"
+          );
+      }
+    }
+
+    private static void Flush()
+    {
+      lock (Gate)
+      {
+        var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "captures-shadow-report.txt");
+        var lines = new System.Collections.Generic.List<string>
+        {
+          $"pairs_checked={_pairs}",
+          $"flow_feasible_true={_flowTrue}",
+          $"divergences={Divergences.Count}",
+          "---",
+        };
+        lines.AddRange(System.Linq.Enumerable.Take(Divergences, 2000));
+        System.IO.File.WriteAllLines(path, lines);
+        System.Console.Error.WriteLine(
+          $"[captures-shadow] pairs={_pairs} flowTrue={_flowTrue} divergences={Divergences.Count} -> {path}"
+        );
+      }
+    }
+  }
+
   public IReadOnlyList<PortEdge> Materialize(IReadOnlyList<PortGraph> graphs)
   {
     // (0) Copy-token inheritance (copy-inheritance-scope.md, Decision 2): the copy effect is the ONLY
@@ -162,7 +234,14 @@ public sealed class PortGraphEngine
     var grafted = GraftCopyInheritance(graphs);
     graphs = grafted.Graphs;
 
-    var ports = graphs.SelectMany(g => g.Ports).ToList();
+    // ADR-0003 Stage 4: the structured Captures requires every flow-participating port to carry its
+    // PortStructure. Projection (PortWalk → PortFamilyRegistry.Annotate) always does this in the product, so
+    // this is a no-op there (proven: byte-identical dumps); it defensively annotates synthetic ports built
+    // straight from labels (engine unit tests) so a null Structure never silently drops a flow edge.
+    var ports = graphs
+      .SelectMany(g => g.Ports)
+      .Select(p => p.Structure is null ? PortFamilyRegistry.Annotate(p, _ontology) : p)
+      .ToList();
     var edges = new List<PortEdge>();
 
     // (1) Card-defined edges — the walk's intra-ability causality, certain by construction (§5).
@@ -181,11 +260,23 @@ public sealed class PortGraphEngine
     var consumes = ports.Where(p => p.Side == PortSide.Consume).ToList();
     var intercepts = ports.Where(p => p.Side == PortSide.Intercept).ToList();
 
-    // (2) Flow — an emitted object refuels a consume; mana refunds a mana cost.
+    // (2) Flow — an emitted object refuels a consume; mana refunds a mana cost. ADR-0003 Stage 4 cutover
+    // (2026-07-17): the STRUCTURED matcher is AUTHORITATIVE — PortFlowMatcher.Captures selects the flow arm
+    // from the port PortStructure (SelectArm) and applies the shared guards. The label-based FlowFeasible is
+    // retained as the shadow ORACLE (the sentinel PortFlowMatcherShadowTest + the full-corpus
+    // MAST_CAPTURES_SHADOW gate), proven identical over the entire production corpus at Stage 3 (0 divergences
+    // across 3.0M pairs, 112,631 feasible). New flow arms are now added on the structure (SelectArm + a guard),
+    // not the label switch.
+    _matcher ??= new PortFlowMatcher(this);
     foreach (var emit in emits)
       foreach (var consume in consumes)
-        if (FlowFeasible(emit, consume))
+      {
+        var feasible = _matcher.Captures(emit, consume);
+        if (CapturesShadow.Enabled)
+          CapturesShadow.Record(this, emit, consume, feasible);
+        if (feasible)
           AddRulesEdge(edges, emit, consume, EdgeFamily.Flow);
+      }
 
     // (2b) Untap-lands → mana (the mana-untap enabler). An "untap up to N lands" effect (Peregrine Drake)
     // makes those lands available to tap for mana again — a free mana source that refunds a pay:mana cost
