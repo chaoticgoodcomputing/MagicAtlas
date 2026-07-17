@@ -14,4 +14,10 @@
     <ProjectReference Include="../mast-query/MagicAST.Query.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- ADR-0003 Stage 3 shadow gate: the test assembly compares PortFlowMatcher.Captures against
+         the engine's internal FlowFeasible + guards (the "engine is oracle" equivalence proof). -->
+    <InternalsVisibleTo Include="MagicAtlas.Ast.Tests" />
+  </ItemGroup>
+
 </Project>

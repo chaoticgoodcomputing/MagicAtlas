@@ -572,7 +572,7 @@ public sealed class PortGraphEngine
     };
 
   /// <summary>The minimal derived flow grammar (§6) the gold needs: a created token refuels a sac; mana refunds a mana cost.</summary>
-  private bool FlowFeasible(PortNode emit, PortNode consume) =>
+  internal bool FlowFeasible(PortNode emit, PortNode consume) =>
     (ResourceKind(emit.Label), Role(consume.Label)) switch
     {
       ("token", "sac") => TokenSatisfiesAtCreation(emit, consume),
@@ -644,7 +644,7 @@ public sealed class PortGraphEngine
   /// spell copying itself (a spell can't target itself on the stack). Feasibility only — <see cref="AddRulesEdge"/>
   /// tiers GREEN vs AMBER on the Subjects (Subsumes vs Intersects).
   /// </summary>
-  private bool SpellCopyReFiresEffects(PortNode emit, PortNode consume)
+  internal bool SpellCopyReFiresEffects(PortNode emit, PortNode consume)
   {
     if (!emit.Label.StartsWith("emit:copy:spell", StringComparison.Ordinal))
       return false; // a permanent token-copy (emit:copy) has no spell effects to re-fire
@@ -665,7 +665,7 @@ public sealed class PortGraphEngine
   /// Subjects. A returned filter that provably can't be the cast spell's type is pruned by the operator's
   /// Disjoint.
   /// </summary>
-  private bool SpellRecursionSatisfiesCast(PortNode emit, PortNode consume)
+  internal bool SpellRecursionSatisfiesCast(PortNode emit, PortNode consume)
   {
     // A SELF-recast (cast:spell:self, the spell re-firing its OWN effects) re-fueled by the SAME card's
     // return-to-hand is genuine only if that card returns ITSELF to a castable zone. A card whose
@@ -697,7 +697,7 @@ public sealed class PortGraphEngine
   /// here — this is the feasibility gate only (the structural twin of <see cref="TokenSatisfiesAtCreation"/>).
   /// A consume scoped to a DIFFERENT specific object (a non-overlapping type) is pruned by the operator.
   /// </summary>
-  private bool RecastSatisfies(PortNode emit, PortNode consume)
+  internal bool RecastSatisfies(PortNode emit, PortNode consume)
   {
     // A SAC is type-specific (CR 701.21 — you sacrifice a permanent of the named type), so a re-entered
     // object feeds it only when its card types CONFIRMABLY cover the sac's required types. This is the
@@ -747,7 +747,7 @@ public sealed class PortGraphEngine
   /// permanent" only Intersects "this creature" enters ⇒ AMBER; a self-targeting blink could Subsume).
   /// A consume scoped to a provably different type is pruned by the operator's Disjoint.
   /// </summary>
-  private bool BlinkSatisfiesEnter(PortNode emit, PortNode consume)
+  internal bool BlinkSatisfiesEnter(PortNode emit, PortNode consume)
   {
     if (emit.Subject is null || consume.Subject is null)
       return true;
@@ -775,7 +775,7 @@ public sealed class PortGraphEngine
   /// tiers GREEN vs AMBER on the Subjects (a bare "a spell" recast against a "NONcreature spell" trigger is
   /// Overlaps-but-not-Subsumes → AMBER), and the recast's <c>pay:mana</c> co-cost floors the loop via §8.
   /// </summary>
-  private bool CastSatisfiesTrigger(PortNode emit, PortNode consume)
+  internal bool CastSatisfiesTrigger(PortNode emit, PortNode consume)
   {
     if (ResourceKind(consume.Label) != "cast")
       return false; // a non-cast trigger of the same role token — not this arm
@@ -803,7 +803,7 @@ public sealed class PortGraphEngine
   /// <see cref="BlinkSatisfiesEnter"/>'s same-card guard). For a non-self watched source, feasibility is
   /// type-overlap and <see cref="AddRulesEdge"/>'s operator sets GREEN vs AMBER on the source Subjects.</para>
   /// </summary>
-  private bool DamageSatisfiesTrigger(PortNode emit, PortNode consume)
+  internal bool DamageSatisfiesTrigger(PortNode emit, PortNode consume)
   {
     if (ResourceKind(consume.Label) != "damage")
       return false; // a non-damage trigger of the same Role token — not this arm
@@ -855,7 +855,7 @@ public sealed class PortGraphEngine
   /// watches) is the operator's job via the port Subjects (ADR-0002 §7: the label names, the operator
   /// decides), so "you gain → whenever you gain" certifies GREEN while "a player loses → whenever an
   /// opponent loses" is a sound AMBER.</summary>
-  private static bool LifeFlowFeasible(PortNode emit, PortNode consume) =>
+  internal static bool LifeFlowFeasible(PortNode emit, PortNode consume) =>
     LifeDirection(emit.Label) is { } dir && dir == LifeDirection(consume.Label);
 
   /// <summary>The gain/loss facet of a <c>emit:life:&lt;dir&gt;</c> / <c>trigger:life:&lt;dir&gt;</c> label.</summary>
@@ -866,7 +866,7 @@ public sealed class PortGraphEngine
   }
 
   /// <summary>The colour facet of a mana label (<c>emit:mana:&lt;colour&gt;</c> / <c>pay:mana:&lt;colour&gt;</c>); <c>null</c> for a generic <c>pay:mana</c>.</summary>
-  private static string? ManaColor(string label)
+  internal static string? ManaColor(string label)
   {
     var parts = label.Split(':');
     return parts.Length >= 3 ? parts[2] : null;
@@ -878,7 +878,7 @@ public sealed class PortGraphEngine
   /// producer choice, ADR-0002 §3b†); a generic <c>{N}</c> cost takes any colour; otherwise the colours
   /// must match — so <c>emit:mana:green</c> does NOT pay <c>pay:mana:black</c> (no false-GREEN).
   /// </summary>
-  private static bool ManaColorFeeds(string? emitColor, string? payColor) =>
+  internal static bool ManaColorFeeds(string? emitColor, string? payColor) =>
     string.Equals(emitColor, "any", StringComparison.OrdinalIgnoreCase)
     || payColor is null
     || string.Equals(emitColor, payColor, StringComparison.OrdinalIgnoreCase);
@@ -898,7 +898,7 @@ public sealed class PortGraphEngine
   /// operator subtype→cardtype exclusivity is UNSOUND — Vehicles CR 301.7, Equipment CR 301.5c — so the
   /// fix belongs here, not in the operator.) Removes the corpus's creature-token ↔ artifact-sac junk.
   /// </summary>
-  private bool TokenSatisfiesAtCreation(PortNode emit, PortNode consume)
+  internal bool TokenSatisfiesAtCreation(PortNode emit, PortNode consume)
   {
     if (emit.Subject is null || consume.Subject is null)
       return true;
