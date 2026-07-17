@@ -799,14 +799,31 @@ Deployment`[to=stack]`; phase→Structure.
 they belong to firability, orthogonal to the resource/event root.
 
 ### Open-items ledger (review amendments by state, honest)
-- **O17.1 residual-layer schema** — VALIDATED by both golds (polarity, cover-policy, identity-guard, irreducible
-  bridge all appeared), NOT drafted as machine-readable data. *The largest creative work remaining.*
-- **O17.2 provenance + null-Subject default-GREEN** — noted (`•derived` on golds); representation unspecified and
-  the default-GREEN keep/kill is a LIVE decision.
+- **O17.1 residual-layer schema** — **REALIZED** as the accreted rollup (2026-07-17): the §8 targeted-witnessing
+  loop ran to 57 interaction golds → **29 confirmed residual rules** (1 polarity / 13 match_policy / 7 guards /
+  8 bridges), topology **29/29 stems witnessed**, zero false GREENs. This is the machine-readable data the item
+  called for: `Fixtures/Interactions/rollup/port-interactions.cited.json` (+ `port-topology.cited.json`). *Remaining:*
+  wire the rollup as the engine's *live* residual registry (replacing the hardcoded `PortGraphEngine` guards) at
+  the Stage 3→4 cutover.
+- **O17.2 provenance + null-Subject default-GREEN** — **CLOSED** (decided O21/§7, owner-ratified 2026-07-17):
+  null-Subject default-GREEN = **KILL** (an absent subject filter is *unknown*, floors AMBER unless a confirmed
+  rollup rule or same-card witness certifies — "nothing uncited is GREEN"). Already enforced by the engine: a
+  non-null Subject is emitted everywhere and `null-default-GREEN` is a named anti-pattern in `PortLabel.cs`/
+  `PortGraph.cs` (the mechanism that killed the Chatterfang→Aang / Barrage→Copper false-GREENs). *Remaining —
+  implementation, not decision:* the asserted-vs-derived provenance flag is carried on golds (`provenance: derived`)
+  but not yet on the engine's `PortStructure`; fold into the Stage 3→4 cutover.
 - **O17.3 root completeness** — this sweep; dice/tap-untap/combat-presence/copy/counter decisions above.
-- **O17.4 migration harness** — shape named (topology change, quotient re-proof, reconstruction-gold+bench:recall
-  +judged-GREEN gate); not staged.
-- **O17.5 negation inventory** — correction noted; `Excluded*`/`IsColorless`/`NotEqual` not yet enumerated per-axis.
+- **O17.4 migration harness** — **BUILT + RUN.** The `mast-interaction-loop` (folded into the `mast-loop` umbrella
+  as its Accretion track) drove the §8 loop to completion via worktree-isolated fan-out + `interaction-judge` gate +
+  content-hashed rollup regen. Stages 0a/0b/1/2 done; Stage 3 shadow (`captures == FlowFeasible`) proven over the
+  sentinel corpus. *Remaining:* full-corpus Stage 3 diff (judged sweep of every tier change) + Stage 4 cutover.
+- **O17.5 negation inventory** — **CLOSED** (enumerated O21, owner-ratified 2026-07-17 as the final closed
+  negation vocabulary): `ExcludedCardTypes`/`ExcludedSubtypes`/`ExcludedSupertypes`/`ExcludedColors` +
+  `IsColorless` + `ComparisonOperator.NotEqual` (deciders return **Unknown** — safely non-committal) +
+  the `:another`/exclude-self facet handled in the O17.1 guard layer (not the filter lattice). All atomic,
+  per-axis, decider-confined — no general boolean structure, so the EL-profile guarantee (O15) holds. Already
+  implemented in `libs/magic-ast/AST/References/ObjectFilter.cs` + `ObjectFilterRelations.cs` (NotEqual→Unknown,
+  IsColorless, per-axis excluded-list unions).
 
 ### O19 — Event-FP re-derivation of the top layer: Event / State / Behavior kinds
 Research pass (2026-07-16) mapping event-based functional programming onto the root; three literatures land:
