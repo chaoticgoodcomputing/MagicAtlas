@@ -1,0 +1,140 @@
+{
+  "id": "captain-rex-nebula",
+  "unit": "combo",
+  "cards": [
+    "Captain Rex Nebula"
+  ],
+  "source": {
+    "note": "1-card self-loop witnessing the damage-dealt -> damage-dealt EDGE: a self-source noncombat damage emit re-satisfies a self-watching general-damage subscription (the Crash Land trigger the card grants a Vehicle). Oracle: 'At the beginning of combat on your turn, choose target nonland permanent you control. Until end of turn, it becomes a Vehicle artifact ... and it gains crew 2 and \"Crash Land - Whenever this Vehicle deals damage, roll a six-sided die. If the result is equal to this Vehicle's mana value, sacrifice this Vehicle, then it deals that much damage to any target.\"' Live engine ports (portRows, verified 2026-07-17): emit:damage:noncombat:any (family=damage, stem=damage, manner=noncombat, isSelf=true, tier=Amber) and trigger:damage:any:any (family=damage, stem=damage, manner=any, isSelf=true, tier=Green) + emit:rolldice:controlled (stem=dice). combat facet (noncombat vs any-general), recipient (any), and self-source (isSelf=true) are all AST-derivable -> a faithful witness, not a wish. edhrec_rank=17732 (a RANK, not a popularity count) -> source.popularity omitted (not fabricated). The self-sacrifice + die-result threshold are the card-defined loop-breakers behind the AMBER loop_tier; the sacrifice port is projected coarse (emit:sacrifice, stem=null) so it is not modeled as a facted removal port here (would over-claim)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b6 \u2014 damage-dealt->damage-dealt AMBER (self-watch+non-firable); policy:damage-manner-feeds CR-sound (510v120); PROCEED"
+  },
+  "ports": {
+    "Captain Rex Nebula": [
+      {
+        "id": "R1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "any",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "THE SELF-WATCH TRIGGER - 'Whenever this Vehicle deals damage' - a self-source subscription (isSelf=true). combat=any: a GENERAL damage trigger (no 'combat' qualifier) fires on either combat or noncombat damage (CR 120). Live label trigger:damage:any:any."
+      },
+      {
+        "id": "R2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "dice-rolled",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "'roll a six-sided die' - the roll payoff of the trigger. Live label emit:rolldice:controlled (control=you). Not the witness; the card-defined bridge from the trigger to the damage payoff."
+      },
+      {
+        "id": "R3",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "THE SELF-SOURCE DAMAGE EMIT - 'then it deals that much damage to any target' - the Vehicle ('it') is the source (isSelf=true). combat=noncombat: a triggered-ability damage, NOT the combat damage step (CR 120, not CR 510). recipient=any ('any target'). Live label emit:damage:noncombat:any (tier=Amber - 'that much' = die result = mana value, an unknown quantity, and gated by the threshold)."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Captain Rex Nebula.R3",
+      "to": "Captain Rex Nebula.R1",
+      "mechanism": "match_policy",
+      "rule": "policy:damage-manner-feeds",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESSED EDGE: a damage-dealt emit satisfies a damage-dealt subscription. Manner-feeds: R3.combat=noncombat feeds R1.combat=any because a general trigger fires on either kind (policy:damage-manner-feeds); a noncombat emit would NOT feed a combat-specific trigger (CR 510 vs 120) - the pruned direction.",
+        "self-watch guard (reused, confirmed): R1 is self-watching (subject=self); the emit must be the SAME object's own damage. Same-card (R3.subject=self on Captain Rex Nebula) so it feeds - but object identity the operator can't see -> Overlaps floors AMBER. A DIFFERENT card's self-source damage (Brazen Dwarf) never feeds this trigger."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Captain Rex Nebula.R1",
+      "to": "Captain Rex Nebula.R2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the trigger resolves into the roll: 'Whenever this Vehicle deals damage, roll a six-sided die' - intra-ability causality, GREEN by construction (CR 603.2 -> the roll effect)"
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Captain Rex Nebula.R2",
+      "to": "Captain Rex Nebula.R3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the roll leads to the damage payoff: 'If the result is equal to this Vehicle's mana value, sacrifice this Vehicle, then it deals that much damage to any target' - card-defined GREEN, but the intervening-if die-result threshold and the self-sacrifice are the card-defined firability gates that FLOOR the cycle to AMBER (CR 706.2 die result; the sacrifice removes the source, breaking continuity)"
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:damage-manner-feeds",
+        "consume_kind": "subscription",
+        "subject": "facet-feeds",
+        "axis": "combat",
+        "lattice": "combat |= any ; noncombat |= any (a general 'deals damage' trigger accepts either kind; a combat- or noncombat-specific trigger is fed only by an emit of that same kind)",
+        "desc": "a damage-dealt emit feeds a damage-dealt subscription only when the combat facets are compatible: a general trigger (combat=any, CR 120) fires on either combat or noncombat damage; a combat-specific trigger (CR 510) is fed ONLY by a combat emit; a noncombat emit NEVER feeds a combat-specific trigger. Directional on the combat axis (the manner-feeds constraint the combat-damage-modeling blocker named; engine CombatFacetFeeds).",
+        "cr": [
+          "120",
+          "510",
+          "510.1"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the closing edge E1 is AMBER (self-watch guard) AND the cycle is not firable: the die-result threshold (result == mana value) is an intervening-if gate and the self-sacrifice removes the source (CR 706.2, 603.2) - a finite, gated loop, never a certified GREEN infinite"
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "guard:self-watch: R1 self-watches (subject=self); object identity the operator can't see -> Overlaps floors AMBER even though the same-card self-source is satisfied"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "the emit->subscription match is certified by policy:damage-manner-feeds (the combat-facet feeds relation), not a structural subsumption"
+    },
+    {
+      "claim": "manner_feeds_prune",
+      "because": "R3.combat=noncombat feeds R1.combat=any (general trigger accepts either), but a noncombat emit must NEVER feed a combat-specific (combat) trigger - policy:damage-manner-feeds, CR 510 vs 120"
+    },
+    {
+      "claim": "self_source_prune",
+      "because": "guard:self-watch matches same-card only: R3 and R1 are the same card (Captain Rex Nebula's Vehicle), so the emit feeds; a DIFFERENT card's self-source damage (Brazen Dwarf's 'this creature deals 1 to each opponent') does not trigger Rex's Crash Land (CR 400.7)"
+    }
+  ],
+  "cr": [
+    "120",
+    "510",
+    "510.1",
+    "603.2",
+    "706.2",
+    "400.7"
+  ]
+}

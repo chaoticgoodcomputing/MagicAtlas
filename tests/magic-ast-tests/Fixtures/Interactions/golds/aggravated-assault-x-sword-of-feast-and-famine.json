@@ -1,0 +1,251 @@
+{
+  "id": "aggravated-assault-x-sword-of-feast-and-famine",
+  "unit": "combo",
+  "cards": [
+    "Aggravated Assault",
+    "Sword of Feast and Famine",
+    "Equipped Creature"
+  ],
+  "source": {
+    "csb": true,
+    "id": "900-3750",
+    "popularity": 33167,
+    "note": "THE extra-combat EDGE witness (CR 500.8, the Aggravated Assault / Breath of Fury infinite-combat family). Commander Spellbook combo 900-3750 (popularity 33167, colour identity R, result 'Infinite combat phases'), which lists the two named enablers; the third piece is the prerequisite EQUIPPED CREATURE (any creature \u2014 its ports are the UNIVERSAL combat-presence projection, PortGraph.ProjectCombatPresence: an attacksorblocks:self consume + a Gated emit:damage:combat:any, both derived for every creature with a P/T profile). All ports are AST-derivable (live engine): Aggravated Assault -> EffectType additionalCombatAndMainPhase -> emit:additionalcombat (subject {Controller:You}); Sword -> Trigger.Event DealsCombatDamageToPlayer + EffectType untap {land, Controller:You} -> emit:untap(land). The ADR-2 interim stem is 'combat' with phase=additional (emit) / scope=self (consume) (CombatEmitFamily / AttacksConsumeFamily); the phase/scope facets have NO ADR-3 licensed axis and are DELIBERATELY folded into the bare event verb combat-presence (O21 / event_verbs def: 'emit:additionalcombat re-raises the phase that produces it') \u2014 the emit vs consume distinction is carried by side + the control (you) / subject (self) axes, not lost. TRUE self-loop: the same equipped creature re-attacks, deals combat damage, untaps lands, refunds {3}{R}{R}, and attacks again \u2014 no sacrifice/swap (unlike Breath of Fury), so the combat-presence[self] subscription stays on ONE object."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b6 \u2014 combat->attacks AMBER (control!=subsumes self + Gated choice); guard:extra-combat-gated sound; PROCEED"
+  },
+  "ports": {
+    "Aggravated Assault": [
+      {
+        "id": "AA1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "red",
+          "qty": 2
+        },
+        "note": "the {R}{R} colour-critical pips of the {3}{R}{R} activation cost; the untap\u2192mana bridge target (E2). The bridge tiers AMBER precisely because untapped lands' colours are unknown \u2014 it cannot certify they cover RR (CR 107.4)"
+      },
+      {
+        "id": "AA2",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "generic",
+          "qty": 3
+        },
+        "note": "the {3} generic remainder of the cost (any colour pays it); shown for cost totality"
+      },
+      {
+        "id": "AA3",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "combat-presence",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE ADDITIONAL-COMBAT DRIVER \u2014 'after this main phase, there is an additional combat phase' (EffectType additionalCombatAndMainPhase; the extra MAIN phase is irrelevant to the loop and collapses away). Live label emit:additionalcombat, subject {Controller:You}. Modelled as an emit on the bare event verb combat-presence: an additional combat phase re-raises the combat-presence of the creatures YOU control (control=you). This is the EMIT-side witness of combat-presence (Kari Zev witnessed the consume side only)."
+      },
+      {
+        "id": "AA4",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "subtype": "creature",
+          "control": "you"
+        },
+        "note": "incidental / enabler \u2014 'untap all creatures you control' discharges the attacker's tapped-from-attacking state (CR 508.1g) so it can attack in the extra combat. NOT load-bearing for engine closure: ProjectCombatPresence's re-attack consume (EC1) is Gated but not tap-gated, so the loop closes through E3 without this port; shown for card faithfulness"
+      }
+    ],
+    "Sword of Feast and Famine": [
+      {
+        "id": "SW1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "combat",
+          "recipient": "player",
+          "subject": "attached"
+        },
+        "note": "'whenever equipped creature deals combat damage to a player' \u2014 a combat-damage subscription (AST Trigger.Event=DealsCombatDamageToPlayer, Filter {creature, IsEquipped}). subject=attached: Sword watches the creature ATTACHED to it (the equipped creature); combat + player facets both AST-derivable. damage-dealt already witnessed by ancient-copper-dragon"
+      },
+      {
+        "id": "SW2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "subtype": "land",
+          "control": "you"
+        },
+        "note": "'you untap all lands you control' (EffectType untap, Target Each, Filter {land, Controller:You}) \u2014 the mana source. Same shape as deadeye-x-peregrine-drake PD2 (structure:untap subtype=land); the untapped lands can be tapped again for mana (CR 305.4/605) \u2014 the untap\u2192mana bridge"
+      },
+      {
+        "id": "SW3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards",
+        "attrs": {
+          "control": "opponent",
+          "qty": 1
+        },
+        "note": "incidental \u2014 'that player discards a card' (the punisher half); not part of the loop, shown for card faithfulness"
+      }
+    ],
+    "Equipped Creature": [
+      {
+        "id": "EC1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "combat-presence",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the RE-ATTACK subscription \u2014 the universal combat-presence consume ProjectCombatPresence projects for every creature (live label attacksorblocks:self, Gated, subject {IsSelf}). THE consume the additional-combat driver satisfies (E3). Identical stem+facet to the Kari Zev combat-presence[subject=self] witness"
+      },
+      {
+        "id": "EC2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "combat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "the Gated combat-damage emit ProjectCombatPresence projects for every creature (live label emit:damage:combat:any, Gated, subject {IsSelf}). recipient=any (combat damage hits the blocking creature OR the defending player, CR 510.1). GATED: attacking is once per combat \u2014 this is the \u00a78 soundness floor that keeps every extra-combat loop AMBER, never a false GREEN"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Equipped Creature.EC2",
+      "to": "Sword of Feast and Famine.SW1",
+      "mechanism": "match_policy",
+      "rule": "policy:subscription:subject-intersect",
+      "residuals": [],
+      "tier": "AMBER",
+      "notes": [
+        "the equipped creature's combat damage feeds Sword's 'deals combat damage to a player' subscription. Facets compatible: combat\u2192combat (CR 510); recipient any\u2192player (any overlaps player, CR 510.1). subject self intersects attached (the attacker IS the equipped creature) \u2192 Overlaps not Subsumes \u2192 AMBER. Reuses policy:subscription:subject-intersect (confirmed, deadeye)"
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Sword of Feast and Famine.SW2",
+      "to": "Aggravated Assault.AA1",
+      "mechanism": "bridge",
+      "rule": "bridge:untap-land-to-mana",
+      "residuals": [],
+      "tier": "AMBER",
+      "notes": [
+        "untapping all your lands refunds Aggravated Assault's {3}{R}{R}. Reuses bridge:untap-land-to-mana (confirmed, deadeye-x-peregrine-drake) \u2014 CORROBORATES it with a second witness. AMBER ceiling: untapped lands' colours/count are unknown, so the engine cannot certify they cover the RR pips (CR 107.4)"
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Aggravated Assault.AA3",
+      "to": "Equipped Creature.EC1",
+      "mechanism": "match_policy",
+      "rule": "policy:subscription:subject-intersect",
+      "residuals": [
+        "guard:extra-combat-gated"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE HEADLINE WITNESS \u2014 emit:additionalcombat (combat-presence, control=you) satisfies the re-attack subscription (combat-presence, subject=self): the additional combat phase lets this creature attack AGAIN (CR 500.8), re-driving its Gated combat-damage emit and closing the infinite-combat loop. control=you covers subject=self (this creature is one you control), which alone would read Subsumes\u2192GREEN \u2014 but re-attacking is a CHOICE (CR 508.1a 'if any') and the combat-damage it re-drives is Gated, so guard:extra-combat-gated floors it AMBER, never a false GREEN. Live arm: PortGraphEngine.FlowFeasible (\"additionalcombat\",\"attacksorblocks\") + ExtraCombatArmScopeTest"
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Equipped Creature.EC1",
+      "to": "Equipped Creature.EC2",
+      "mechanism": "card-defined",
+      "tier": "AMBER",
+      "notes": [
+        "ProjectCombatPresence's card-defined edge: attacking (the combat-presence re-attack) deterministically leads to dealing combat damage (CR 510) \u2014 but the combat-damage emit is Gated (attacking is a choice / may be blocked), so the hop carries the AMBER floor"
+      ]
+    },
+    {
+      "id": "E5",
+      "from": "Sword of Feast and Famine.SW1",
+      "to": "Sword of Feast and Famine.SW2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the triggered ability's own causality: the combat-damage-to-a-player trigger deterministically untaps all your lands (structural, self-certifying)"
+      ]
+    },
+    {
+      "id": "E6",
+      "from": "Aggravated Assault.AA1",
+      "to": "Aggravated Assault.AA3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the activated ability's own causality: paying {3}{R}{R} (AA1/AA2) deterministically produces the additional combat phase (structural, self-certifying). OnlyAsSorcery is a timing restriction, not a \u00a78 hard gate \u2014 the extra MAIN phase re-enables sorcery-speed activation, so it never floors the loop"
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:extra-combat-gated",
+        "impl": "code",
+        "desc": "an additional-combat driver (an emit on combat-presence, control=you \u2014 'there is an additional combat phase', CR 500.8) that satisfies a creature's re-attack subscription (combat-presence, subject=self) can NEVER certify GREEN, even though control=you covers subject=self: re-attacking is a CHOICE (CR 508.1a 'if any' \u2014 attackers are declared, never forced), the attacker may be blocked, and the combat-damage it re-drives is Gated (once per combat, CR 510). So any loop through the extra-combat re-attack floors to AMBER \u2014 the \u00a78 soundness floor for the extra-combat arm, mirroring how the Gated combat-damage emit prevents a false GREEN",
+        "cr": [
+          "500.8",
+          "508.1a",
+          "510"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER"
+    },
+    {
+      "claim": "edge.E3.tier == AMBER",
+      "because": "guard:extra-combat-gated: re-attacking is a choice (CR 508.1a) and the re-driven combat-damage is Gated \u2014 the extra-combat edge never certifies GREEN"
+    },
+    {
+      "claim": "edge.E3 witnesses combat-presence emit -> combat-presence:self consume",
+      "because": "AA3 (emit combat-presence, control=you \u2014 the additional-combat driver) feeds EC1 (consume combat-presence, subject=self \u2014 the re-attack subscription): the CR 500.8 extra-combat re-attack edge, closing the infinite-combat loop"
+    },
+    {
+      "claim": "stem.combat-presence.emit.witnessed",
+      "because": "AA3 projects combat-presence on the EMIT side (the additional-combat driver) \u2014 kari-zev-skyship-raider witnessed only the consume side; this turns the bare event verb's emit half into a witnessed fact"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "bridge:untap-land-to-mana ceiling (untapped lands' colours/count unknown, CR 107.4); this gold is a second witness \u2014 corroborates deadeye-x-peregrine-drake"
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "policy:subscription:subject-intersect: the combat-damage emit (subject=self) Overlaps Sword's equipped-creature subscription (subject=attached), and recipient any\u2192player is an over-approximation (CR 510.1)"
+    },
+    {
+      "claim": "no_false_green",
+      "because": "the loop passes through EC2 (Gated combat-damage) and E3 (guard:extra-combat-gated) \u2014 both floor the cycle to AMBER; a true self-loop that is nonetheless UNcertifiable as reliably infinite (re-attacking is a choice, the attacker may be blocked)"
+    }
+  ],
+  "cr": [
+    "500.8",
+    "508.1a",
+    "510.1",
+    "107.4",
+    "603.2",
+    "601.2b"
+  ]
+}

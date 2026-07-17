@@ -2,18 +2,24 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
+    "archaeomancer-x-ghostly-flicker",
     "boggart-brute",
     "brazen-dwarf",
+    "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "diabolic-tutor",
+    "displacer-kitten-x-conviction",
     "divination",
+    "dualcaster-mage-x-ghostly-flicker",
     "fog",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "pacifism",
+    "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
     "serum-visions",
     "spine-of-ish-sah",
@@ -38,6 +44,18 @@
       "status": "confirmed"
     },
     {
+      "id": "policy:damage-manner-feeds",
+      "consume_kind": "subscription",
+      "subject": "facet-feeds",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:recast:spell-recursion",
+      "consume_kind": "recast-driver",
+      "subject": "intersect",
+      "status": "confirmed"
+    },
+    {
       "id": "policy:subscription:subject-intersect",
       "consume_kind": "subscription",
       "subject": "intersect",
@@ -57,12 +75,37 @@
       "status": "confirmed"
     },
     {
+      "id": "guard:extra-combat-gated",
+      "impl": "code",
+      "status": "confirmed"
+    },
+    {
+      "id": "guard:recast-pays-mana",
+      "impl": "code",
+      "status": "confirmed"
+    },
+    {
+      "id": "guard:self-recast-samecard",
+      "impl": "code",
+      "status": "confirmed"
+    },
+    {
       "id": "guard:self-watch",
       "impl": "code",
       "status": "confirmed"
     }
   ],
   "bridges": [
+    {
+      "id": "bridge:spell-copy-to-cast-driver",
+      "from_stem": "copy",
+      "to_stem": "cast",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "resource": "spell"
+      }
+    },
     {
       "id": "bridge:untap-land-to-mana",
       "from_stem": "structure:untap",

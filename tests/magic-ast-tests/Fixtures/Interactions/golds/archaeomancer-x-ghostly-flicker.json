@@ -1,0 +1,188 @@
+{
+  "id": "archaeomancer-x-ghostly-flicker",
+  "unit": "combo",
+  "cards": [
+    "Archaeomancer",
+    "Ghostly Flicker"
+  ],
+  "source": {
+    "csb": true,
+    "note": "combo witness of the recur -> recast EDGE (CR 601.2): a spell-recursion emit:returntohand:spell refueling a cast:spell:self recast driver, closing the Archaeomancer x Ghostly Flicker blink loop the repo reconstructs. Both cards' load-bearing ports are AST-derivable and served GREEN by the live engine (curled 2026-07-17, http://localhost:55250/trax/graphql, portRows): Archaeomancer -> emit:returntohand:spell:instant+sorcery (family=recur) + etb:creature:self (family=etb, consume); Ghostly Flicker -> cast:spell:self (family=cast, consume \u2014 the recast driver, isSelf=true) + emit:blink:artifact+creature+land (family=blink). NO parse gap \u2014 unlike Deadeye Navigator (whose ACTIVATED blink is unparsed emit:gainability), Ghostly Flicker's SPELL blink parses cleanly (returnToBattlefield ExiledWith:Self -> emit:blink), and the recur emit is the already-landed Archaeomancer witness (golds/archaeomancer.json). The loop: cast Ghostly Flicker (G0) -> blink Archaeomancer (G1, the return half re-enters it) -> Archaeomancer ETB (A0) -> return Ghostly Flicker gy->hand (A1, the recur emit) -> recast Ghostly Flicker (G0), closing the cycle. SCAFFOLD SURFACE: Ghostly Flicker's cast:spell:self carries isSelf=true, modeled subject=self \u2014 the `subject` attribute axis (values_seen already includes 'self') does not yet list the `cast` stem in its licensed stems; this witness accretes `cast` to the subject axis (the exact precedent archaeomancer.json set by extending the from/to axes to the `recur` stem). The axis KEY and VALUE are both in the closed set, so no new axis is invented; only the licensed-stem list accretes. No popularity COUNT is available in the testbed corpus (edhrec/price absent) so source.popularity is omitted (not fabricated from a rank); csb=true records that this is a documented Commander Spellbook combo (Archaeomancer + Ghostly Flicker + a third blinkable permanent = infinite ETB/blink)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b6 \u2014 recur->cast AMBER (target-return Overlaps); policy:recast + guard:self-recast-samecard engine-faithful; PROCEED"
+  },
+  "ports": {
+    "Archaeomancer": [
+      {
+        "id": "A0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the ETB driver \u2014 'When Archaeomancer enters' (live etb:creature:self; family=etb, consume). A self-watching ETB subscription; grounds the card-defined flow into the recur emit. Mirrors archaeomancer.json R0 and deadeye PD1."
+      },
+      {
+        "id": "A1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "hand",
+          "control": "you"
+        },
+        "note": "THE EMIT SIDE OF THE WITNESSED EDGE \u2014 'return target instant or sorcery card from your graveyard to your hand' (live emit:returntohand:spell:instant+sorcery; family=recur, GREEN). from=graveyard (proven by the target filter) and to=hand (definitional to returnToHand) are both AST-proven; the returned card being a chosen instant/sorcery is producer-choice (a TARGET). In this loop the player returns Ghostly Flicker -> hand, refueling its recast. Mirrors archaeomancer.json R1."
+      }
+    ],
+    "Ghostly Flicker": [
+      {
+        "id": "G0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE CONSUME SIDE OF THE WITNESSED EDGE \u2014 the recast driver (live cast:spell:self; family=cast, consume, isSelf=true). The spell watches for ITSELF being cast: it needs Ghostly Flicker in a castable zone (hand) + its mana. subject=self encodes isSelf ('spell' is implicit in the cast verb, per aang.json A1); this accretes the `cast` stem to the `subject` axis (scaffold surface, see source.note). Refueled by Archaeomancer's recur emit (edge E4)."
+      },
+      {
+        "id": "G1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "control": "you",
+          "manner": "blink",
+          "qty": 2
+        },
+        "note": "the load-bearing RETURN half of Ghostly Flicker's blink (live emit:blink:artifact+creature+land; blink = exile-then-return, this is the 'return those cards to the battlefield' half). Re-enters the two targets as NEW objects -> retriggers their ETBs; in this loop it re-enters Archaeomancer, re-firing A0. Live filter is artifact+creature+land; modeled at the creature rung (Archaeomancer, the loop's blinked creature) so E2 mirrors deadeye D4->PD1. The exile half (removal[manner=blink]) is incidental to the loop and omitted for focus."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Ghostly Flicker.G0",
+      "to": "Ghostly Flicker.G1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "casting Ghostly Flicker (its cast:spell:self driver satisfied) deterministically resolves its blink (exile-then-return) \u2014 a self-certifying card-defined flow from the cast consume to the blink emit, no rule dependency. Mirrors archaeomancer.json E1 (etb consume -> recur emit)."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Ghostly Flicker.G1",
+      "to": "Archaeomancer.A0",
+      "mechanism": "subsumption",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "blink IS a deployment re-entry (structural half = subsumption); A0 self-watches (subject=self), Ghostly Flicker blinks 'artifact/creature/land you control' -> the entering creature Overlaps 'this creature enters' but does not Subsume it -> AMBER. Reuses guard:self-watch + policy:subscription:subject-intersect; mirrors deadeye E1 (D4->PD1)."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Archaeomancer.A0",
+      "to": "Archaeomancer.A1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "Archaeomancer's ETB deterministically fires the recursion (return an instant/sorcery gy->hand) \u2014 a self-certifying card-defined flow from the ETB subscription to the recur emit, no rule dependency. Mirrors archaeomancer.json E1."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Archaeomancer.A1",
+      "to": "Ghostly Flicker.G0",
+      "mechanism": "match_policy",
+      "rule": "policy:recast:spell-recursion",
+      "residuals": [
+        "guard:self-recast-samecard"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESSED EDGE (recur -> recast, CR 601.2). Archaeomancer's emit:returntohand:spell:instant+sorcery lands the returned card in HAND (to=hand, a castable zone) -> it refuels Ghostly Flicker's cast:spell:self recast driver, re-firing the spell's blink. The returned filter {instant,sorcery} Intersects Ghostly Flicker's self-type (an instant) -> feasible; but 'return TARGET instant or sorcery' is producer-choice (the player could return a different spell), so the returned card Overlaps the specific Ghostly Flicker rather than Subsumes it -> Overlaps->AMBER (policy:recast:spell-recursion). Mirrors the live SpellRecursionSatisfiesCast arm (Intersects feasibility + AddRulesEdge tiering). The guard:self-recast-samecard residual passes trivially here \u2014 Archaeomancer != Ghostly Flicker (cross-card), so the same-card self-recast prune does not fire; it is the rule the arm carries to kill the spurious 1-card self-loop."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:recast:spell-recursion",
+        "consume_kind": "recast-driver",
+        "subject": "intersect",
+        "desc": "a cast:spell recast-driver consume (a spell watching to be re-cast, isSelf) is refueled by a returntohand:spell emit whose returned card lands in a castable zone (to=hand, CR 601.2); the match is feasible when the returned-object type Intersects the cast self-type, and the operator tiers the certainty Subsumes->GREEN / Overlaps->AMBER (a targeted 'return an instant or sorcery' is producer-choice -> Overlaps the specific recast spell -> AMBER). The recast/refuel-side analogue of policy:subscription:subject-intersect; implements the SpellRecursionSatisfiesCast arm's Intersects feasibility.",
+        "cr": [
+          "601.2",
+          "400.7"
+        ]
+      }
+    ],
+    "guards": [
+      {
+        "id": "guard:self-recast-samecard",
+        "impl": "code",
+        "desc": "the SpellRecursionSatisfiesCast same-card self-recast prune: a card whose return-to-hand returns OTHER cards (emit subject not self) can NEVER satisfy its OWN cast:spell:self driver \u2014 a spell is cast from where it is (CR 601.2), and an other-card / exile return is not THIS spell in hand (Pair o' Dice Lost returns other graveyard cards and exiles itself, so it is not its own recast subject). Prunes the spurious 1-card self-loop; the CROSS-card recursion (Archaeomancer returns Ghostly Flicker) is a different card and unaffected. The recast dual of guard:self-watch (both same-card object-identity guards, CR 400.7).",
+        "cr": [
+          "601.2",
+          "400.7"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the recast has a mana co-cost (Ghostly Flicker is {2}{U}, 3 mana per recast) so the repetition vector is mana-NEGATIVE (\u00a710 SDF: the loop cannot refuel its own mana), AND E4 is producer-choice (Archaeomancer returns a CHOSEN instant/sorcery, not necessarily Ghostly Flicker), AND Ghostly Flicker needs a SECOND blink target (a third permanent) \u2014 any one floors the cycle below GREEN"
+    },
+    {
+      "claim": "edge.E4.witnesses recur_to_cast",
+      "because": "E4 is Archaeomancer.A1 (emit:returntohand:spell, stem=recur) -> Ghostly Flicker.G0 (cast:spell:self, stem=cast) \u2014 the spell-recursion -> recast-driver edge (CR 601.2), closing the loop"
+    },
+    {
+      "claim": "edge.E4.tier == AMBER",
+      "because": "the returned 'target instant or sorcery' is producer-choice and Overlaps (not Subsumes) the specific Ghostly Flicker recast spell -> policy:recast:spell-recursion's Overlaps->AMBER branch"
+    },
+    {
+      "claim": "edge.E4.mechanism == match_policy",
+      "because": "a non-structural recast-refuel certified by policy:recast:spell-recursion (the recur->cast type-Intersect match); not subsumption/card-defined/modifier, so it cites a rule id"
+    },
+    {
+      "claim": "rule.policy:recast:spell-recursion.witnessed",
+      "because": "E4 is the recast-refuel this gold introduces; a returntohand:spell emit refueling a cast:spell recast driver \u2014 the SpellRecursionSatisfiesCast arm, not previously in the rollup"
+    },
+    {
+      "claim": "guard:self-recast-samecard.inapplicable_here",
+      "because": "the same-card self-recast prune fires only for a 1-card self-loop; Archaeomancer != Ghostly Flicker (cross-card), so E4 passes it trivially \u2014 the guard is declared to document the arm's prune, not to cap this edge"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "the self-watch guard: blink-of-'artifact/creature/land' Overlaps Archaeomancer's self-watching ETB -> AMBER (reuses guard:self-watch, mirrors deadeye E1)"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined (self-certifying): casting Ghostly Flicker deterministically fires its blink, no over-approximation to cap"
+    },
+    {
+      "claim": "edge.E3.tier == GREEN",
+      "because": "card-defined (self-certifying): Archaeomancer's ETB deterministically fires the recur emit"
+    }
+  ],
+  "cr": [
+    "601.2",
+    "400.7",
+    "603.6e",
+    "603.2",
+    "400.1"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "pair-o-dice-lost-x-brazen-dwarf",
+  "unit": "pairwise",
+  "cards": [
+    "Pair o' Dice Lost",
+    "Brazen Dwarf"
+  ],
+  "source": {
+    "note": "Pairwise witness of the dice-rolled EMIT -> dice-rolled CONSUME edge (the DiceToTrigger flow arm, CR 706.2): a 'roll N dice' emit refuels a 'whenever you roll one or more dice' trigger. Pair o' Dice Lost ('Roll two six-sided dice. ...') projects emit:rolldice:controlled (family=dice, stem=dice, tier=Green, isSelf=false, oracleLineIndex 0) -> ADR-3 stem dice-rolled, control=you. Brazen Dwarf ('Whenever you roll one or more dice, ...') projects trigger:rolldice:controlled (family=dice, stem=dice, tier=Green) -> the dice-rolled subscription, control=you, a BARE any-roll (no result qualifier). Both ports AST-derivable in the current parser (verified via dumps/card-ports.json). This is the emit-side witness of dice-rolled (brazen-dwarf.json witnessed only the consume side); the edge is the You<->You roller-scope match. NOT a closed loop: Pair o' Dice Lost rolls once and exiles itself, and no derivable card RE-rolls on a roll, so a pure-dice self-feeding engine cannot be closed as a combo today (see the no_loop assertion + the parse-gap note in the batch report). No edhrec_rank / popularity in the testbed source for this pair -- popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b6 \u2014 dice->dice GREEN CR-GUARANTEED (You subsumes You, bare any-roll, no threshold); PROCEED"
+  },
+  "ports": {
+    "Pair o' Dice Lost": [
+      {
+        "id": "P0",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "dice-rolled",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE ROLLER (emit-side witness) -- 'Roll two six-sided dice' -- an unconditional roll emit on the bare EVENT verb dice-rolled. ADR-2 label emit:rolldice:controlled; the 'controlled' segment maps to the control axis value 'you' (you roll). AST-derivable: family=dice, stem=dice, tier=Green, isSelf=false. Rolls two dice (>= one), satisfying a 'one or more dice' watch; qty omitted (the label carries no count and the trigger is any-qty, so it does not narrow the match)."
+      },
+      {
+        "id": "P1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "to": "hand",
+          "control": "you"
+        },
+        "note": "incidental one-shot context -- 'Return any number of cards ... from your graveyard to your hand' (emit:returntohand:card). The roll's payoff, not the witness. Establishes Pair o' Dice Lost as a one-shot value spell, not a repeatable roller."
+      }
+    ],
+    "Brazen Dwarf": [
+      {
+        "id": "B0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "dice-rolled",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE SUBSCRIPTION -- 'whenever you roll one or more dice' -- a player-action subscription on the bare EVENT verb dice-rolled (trigger:rolldice:controlled -> control=you, the roller's scope). A BARE any-roll trigger: no DieResultThreshold / result facet, so nothing narrows the watched-roll filter. Identical port to brazen-dwarf.json B0."
+      },
+      {
+        "id": "B1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "opponent",
+          "subject": "self"
+        },
+        "note": "incidental roll payoff -- 'this creature deals 1 damage to each opponent' (emit:damage:noncombat:opponent, isSelf=true). damage-dealt already witnessed by ancient-copper-dragon / brazen-dwarf; this damage does NOT roll dice, so it cannot re-drive B0 -- the pairwise stays acyclic."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Pair o' Dice Lost.P0",
+      "to": "Brazen Dwarf.B0",
+      "mechanism": "match_policy",
+      "rule": "policy:subscription:subject-subsumes-green",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "The DiceToTrigger arm (CR 706.2): a 'roll N dice' emit refuels a 'whenever you roll one or more dice' trigger. Stems equal (dice-rolled = dice-rolled).",
+        "Roller-scope match on the CONTROL axis: emit control=you is provably subsumed by the subscription's watched scope control=you (you subset-eq you) -> Subsumes -> GREEN. This REUSES policy:subscription:subject-subsumes-green (confirmed via ruthless-knave over the creature-subtype axis), generalizing it to the control/roller axis -- the axis is a port attr; the subscription-subsumption tiering is axis-agnostic.",
+        "GREEN is honest because Brazen Dwarf is a BARE any-roll subscription (no result-threshold facet). A 'whenever you roll a [specific result]' trigger would narrow the filter so the emit no longer provably subsumes it -> AMBER via section 8 firability (not witnessed here; Pair o' Dice Lost x Brazen Dwarf is the no-threshold GREEN branch)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.dice-rolled.emit_witnessed",
+      "because": "P0 projects the bare EVENT verb dice-rolled on the EMIT (roller) side ('Roll two six-sided dice') -- brazen-dwarf.json witnessed only the consume side; this turns the emit side of dice-rolled from predicted to witnessed"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "dice-rolled emit -> dice-rolled subscription is the DiceToTrigger arm; the roller-scope subsumption is certified by the reused subscription policy, not a structural stem-cover alone"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "roller scope control=you subset-eq control=you (Subsumes) AND B0 is a bare any-roll subscription with no result-threshold facet -> clean subsumption -> GREEN (You<->You)"
+    },
+    {
+      "claim": "edge.E1.reuses == policy:subscription:subject-subsumes-green",
+      "because": "the subscription-subsumption GREEN branch (confirmed by ruthless-knave-x-blood-artist) governs the roller-scope match over the control axis; reused, not re-declared"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: Pair o' Dice Lost rolls once and exiles itself (P1 one-shot), and Brazen Dwarf's payoff (B1 damage-dealt) does not roll dice, so no cycle closes. A self-feeding roll engine needs a re-roll payoff no derivable card provides today -- left for when a re-roller parses (parse gap: Swarming Goblins' ETB roll no longer projects emit:rolldice)"
+    }
+  ],
+  "cr": [
+    "706",
+    "706.2",
+    "603.2",
+    "603.10a"
+  ]
+}

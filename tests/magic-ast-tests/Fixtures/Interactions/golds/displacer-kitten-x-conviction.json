@@ -1,0 +1,224 @@
+{
+  "id": "displacer-kitten-x-conviction",
+  "unit": "combo",
+  "cards": [
+    "Displacer Kitten",
+    "Conviction",
+    "Peregrine Drake"
+  ],
+  "source": {
+    "csb": true,
+    "popularity": 9,
+    "note": "combo witness of the cast -> cast-trigger EDGE (CR 603.2). Displacer Kitten (oracle: 'Whenever you cast a noncreature spell, exile up to one target nonland permanent you control, then return that card to the battlefield ...') projects the cast TRIGGER consume (live label trigger:cast:spell:controlled -> stem cast, control=you) + emit:blink:permanent. Conviction (oracle: '{W}: Return this Aura to its owner's hand.') is a self-bouncing NONCREATURE spell whose return-to-hand is projected emit:cast:spell (the recast) + a pay:mana:white activation cost. Peregrine Drake ('When this creature enters, untap up to five lands.') is the blink target that refunds mana. Loop: cast Conviction -> Displacer's cast trigger blinks Peregrine Drake -> Drake's ETB untaps up to five lands -> mana pays {W} to bounce Conviction -> recast Conviction -> re-fires the cast trigger. All ports AST-derivable (Displacer's cast trigger, Conviction's emit:cast:spell, Drake's etb+untap all served Green in the CardAtlas dump). PARSE OVER-APPROXIMATION recorded honestly: the live cast-trigger label drops 'noncreature' (widened to any cast you make); the recast emit is bare emit:cast:spell (loses that Conviction is a specific noncreature Aura). Neither approximation is relied on for the tier -- the AMBER floor is the recast mana co-cost (guard:recast-pays-mana, ADR-0003 \u00a78), which is sound regardless of the dropped type facets. popularity 9 is the reconstructed combo popularity COUNT from the dump (a demand.witnessed count, not an edhrec rank)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b6 \u2014 cast->cast AMBER (recast mana co-cost floor, 601.2f); guard:recast-pays-mana sound; PROCEED"
+  },
+  "ports": {
+    "Displacer Kitten": [
+      {
+        "id": "DK1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE CAST TRIGGER (consume side of the witnessed edge) - 'Whenever you cast a noncreature spell' (CR 603.2), a player-action subscription on the bare EVENT verb cast. Live label trigger:cast:spell:controlled decodes to stem cast + control=you. The 'noncreature' narrowing is NOT in the served label (a lossy parse that widens the watched scope to every cast you make); carried as an over-approximation note, not as a subtype attr, so the gold does not claim a facet the parser cannot derive."
+      },
+      {
+        "id": "DK2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment",
+        "attrs": {
+          "control": "you",
+          "manner": "blink"
+        },
+        "note": "the load-bearing RETURN half of the blink ('return that card to the battlefield'), stem=deployment (permanent-level: Displacer blinks any nonland permanent, so it is not narrowed to deployment:creature). manner=blink mirrors deadeye-x-peregrine-drake.D4. The exile half is its removal[manner=blink] twin (Deadeye-witnessed), omitted as non-load-bearing for this gold's cast witness."
+      }
+    ],
+    "Conviction": [
+      {
+        "id": "CV1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "white",
+          "qty": 1
+        },
+        "note": "the {W} activation cost of the return ability ('{W}: Return this Aura...'). This is the mana co-cost the loop must refill each iteration (the \u00a78 balance target)."
+      },
+      {
+        "id": "CV2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE RE-CAST (emit side of the witnessed edge). '{W}: Return this Aura to its owner's hand' bounces Conviction to hand so it can be cast again; the parser projects this self-bounce as emit:cast:spell (Green in the dump - the recast projection, a known-thin area that IS derivable here). Subject is self (this Aura, a specific noncreature) but the served label is bare 'spell'; control=you (you recast your own returned Aura -> the caster is you). Carries the pay:mana co-cost (CV1 + the {1}{W} recast cost) that guard:recast-pays-mana caps."
+      }
+    ],
+    "Peregrine Drake": [
+      {
+        "id": "PD0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:evasion:flying",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "Flying - incidental context (an already-witnessed stem); mirrors deadeye-x-peregrine-drake.PD0."
+      },
+      {
+        "id": "PD1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the ETB trigger 'When this creature enters' - a self-watching subscription (mirrors deadeye-x-peregrine-drake.PD1)."
+      },
+      {
+        "id": "PD2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "subtype": "land",
+          "control": "you",
+          "qty": "up-to-5"
+        },
+        "note": "'untap up to five lands' (mirrors deadeye-x-peregrine-drake.PD2); the mana enabler feeding Conviction's {W} co-cost."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "CE1",
+      "from": "Displacer Kitten.DK1",
+      "to": "Displacer Kitten.DK2",
+      "mechanism": "card-defined",
+      "tier": "AMBER",
+      "notes": [
+        "internal: the cast trigger's payoff IS the blink of a nonland permanent"
+      ]
+    },
+    {
+      "id": "CE2",
+      "from": "Peregrine Drake.PD1",
+      "to": "Peregrine Drake.PD2",
+      "mechanism": "card-defined",
+      "tier": "AMBER",
+      "notes": [
+        "internal: the ETB untaps up to five lands"
+      ]
+    },
+    {
+      "id": "CE3",
+      "from": "Conviction.CV1",
+      "to": "Conviction.CV2",
+      "mechanism": "card-defined",
+      "tier": "AMBER",
+      "notes": [
+        "internal: paying {W} returns the Aura to hand, enabling the recast (CV2)"
+      ]
+    },
+    {
+      "id": "E1",
+      "from": "Conviction.CV2",
+      "to": "Displacer Kitten.DK1",
+      "mechanism": "subsumption",
+      "residuals": [
+        "guard:recast-pays-mana"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESS: emit:cast (a re-cast noncreature spell) -> trigger:cast ('whenever you cast a noncreature spell', CR 603.2). A recast IS structurally a cast event feeding a cast-watching subscription (subsumption); control=you on both sides.",
+        "AMBER floor = guard:recast-pays-mana: the recast re-pays Conviction's mana cost each iteration (\u00a78 mana balance); the loop can only refill it through the AMBER untap->mana bridge (E3), so the repetition vector is not provably >= break-even.",
+        "Additionally over-approximated (not relied on for the tier): the served labels dropped 'noncreature' from the trigger and narrow the recast to bare 'spell' -> bare spell does not provably Subsume 'noncreature spell' either (Overlaps)."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Displacer Kitten.DK2",
+      "to": "Peregrine Drake.PD1",
+      "mechanism": "subsumption",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "blink IS a deployment (structural half = subsumption); PD1 self-watches and Displacer blinks 'a nonland permanent' -> Overlaps not Subsumes -> AMBER. Reuses the deadeye-x-peregrine-drake blink->etb shape."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Peregrine Drake.PD2",
+      "to": "Conviction.CV1",
+      "mechanism": "bridge",
+      "rule": "bridge:untap-land-to-mana",
+      "tier": "AMBER",
+      "notes": [
+        "untap != mana; irreducible cross-resource bridge; untapped lands' colors/count unknown (CR 107.4) -> AMBER ceiling. Reuses deadeye-x-peregrine-drake.E2."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:recast-pays-mana",
+        "impl": "code",
+        "desc": "a recast emit (emit:cast - a spell bounced/returned to a castable zone and cast again, CR 601) re-pays the spell's full mana cost every iteration. A cast-loop that is closed BY a recast therefore carries an irreducible mana co-cost: the loop is sound (GREEN-eligible) only if it provably refills that cost; unrefilled - or refilled only through an AMBER mana bridge (untap->mana) - the loop floors to AMBER (ADR-0003 \u00a78 mana balance). Caps the cast->cast-trigger edge that the recast closes.",
+        "cr": [
+          "601.2f",
+          "601.2h",
+          "603.2"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the recast mana co-cost (guard:recast-pays-mana) is refilled only through the AMBER untap->mana bridge (E3) -> \u00a78 repetition vector not provably >= break-even"
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "guard:recast-pays-mana: the recast re-pays mana each iteration; sound floor independent of the dropped-noncreature parse over-approximation"
+    },
+    {
+      "claim": "edge.E1.mechanism == subsumption",
+      "because": "a re-cast IS structurally a cast event feeding a 'whenever you cast' subscription (CR 603.2); control=you on both sides"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "self-watch guard: blink of a nonland permanent Overlaps Peregrine Drake's self-watching ETB"
+    },
+    {
+      "claim": "edge.E3.tier == AMBER",
+      "because": "untap->mana bridge ceiling (colors/count unknown)"
+    },
+    {
+      "claim": "stem.cast.emit_witnessed",
+      "because": "CV2 projects the EMIT side of the cast verb (a recast), complementing aang-the-last-airbender's consume-side (trigger) witness; the cast->cast-trigger edge is now witnessed end to end"
+    }
+  ],
+  "cr": [
+    "601",
+    "601.2f",
+    "601.2h",
+    "603.2",
+    "603.6e",
+    "400.7",
+    "107.4"
+  ]
+}

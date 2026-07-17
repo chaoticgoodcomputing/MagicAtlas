@@ -2,18 +2,24 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
+    "archaeomancer-x-ghostly-flicker",
     "boggart-brute",
     "brazen-dwarf",
+    "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "diabolic-tutor",
+    "displacer-kitten-x-conviction",
     "divination",
+    "dualcaster-mage-x-ghostly-flicker",
     "fog",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "pacifism",
+    "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
     "serum-visions",
     "spine-of-ish-sah",
@@ -49,6 +55,35 @@
       "desc": "an argument-consume (a cost) demands the supplied object\u0027s at-creation type provably COVER the parameter filter (stricter than intersect)",
       "cr": [
         "601.2b"
+      ]
+    },
+    {
+      "id": "policy:damage-manner-feeds",
+      "consume_kind": "subscription",
+      "subject": "facet-feeds",
+      "status": "confirmed",
+      "witnesses": [
+        "captain-rex-nebula"
+      ],
+      "desc": "a damage-dealt emit feeds a damage-dealt subscription only when the combat facets are compatible: a general trigger (combat=any, CR 120) fires on either combat or noncombat damage; a combat-specific trigger (CR 510) is fed ONLY by a combat emit; a noncombat emit NEVER feeds a combat-specific trigger. Directional on the combat axis (the manner-feeds constraint the combat-damage-modeling blocker named; engine CombatFacetFeeds).",
+      "cr": [
+        "120",
+        "510",
+        "510.1"
+      ]
+    },
+    {
+      "id": "policy:recast:spell-recursion",
+      "consume_kind": "recast-driver",
+      "subject": "intersect",
+      "status": "confirmed",
+      "witnesses": [
+        "archaeomancer-x-ghostly-flicker"
+      ],
+      "desc": "a cast:spell recast-driver consume (a spell watching to be re-cast, isSelf) is refueled by a returntohand:spell emit whose returned card lands in a castable zone (to=hand, CR 601.2); the match is feasible when the returned-object type Intersects the cast self-type, and the operator tiers the certainty Subsumes-\u003EGREEN / Overlaps-\u003EAMBER (a targeted \u0027return an instant or sorcery\u0027 is producer-choice -\u003E Overlaps the specific recast spell -\u003E AMBER). The recast/refuel-side analogue of policy:subscription:subject-intersect; implements the SpellRecursionSatisfiesCast arm\u0027s Intersects feasibility.",
+      "cr": [
+        "601.2",
+        "400.7"
       ]
     },
     {
@@ -96,11 +131,53 @@
       ]
     },
     {
+      "id": "guard:extra-combat-gated",
+      "impl": "code",
+      "status": "confirmed",
+      "witnesses": [
+        "aggravated-assault-x-sword-of-feast-and-famine"
+      ],
+      "desc": "an additional-combat driver (an emit on combat-presence, control=you \u2014 \u0027there is an additional combat phase\u0027, CR 500.8) that satisfies a creature\u0027s re-attack subscription (combat-presence, subject=self) can NEVER certify GREEN, even though control=you covers subject=self: re-attacking is a CHOICE (CR 508.1a \u0027if any\u0027 \u2014 attackers are declared, never forced), the attacker may be blocked, and the combat-damage it re-drives is Gated (once per combat, CR 510). So any loop through the extra-combat re-attack floors to AMBER \u2014 the \u00A78 soundness floor for the extra-combat arm, mirroring how the Gated combat-damage emit prevents a false GREEN",
+      "cr": [
+        "500.8",
+        "508.1a",
+        "510"
+      ]
+    },
+    {
+      "id": "guard:recast-pays-mana",
+      "impl": "code",
+      "status": "confirmed",
+      "witnesses": [
+        "displacer-kitten-x-conviction"
+      ],
+      "desc": "a recast emit (emit:cast - a spell bounced/returned to a castable zone and cast again, CR 601) re-pays the spell\u0027s full mana cost every iteration. A cast-loop that is closed BY a recast therefore carries an irreducible mana co-cost: the loop is sound (GREEN-eligible) only if it provably refills that cost; unrefilled - or refilled only through an AMBER mana bridge (untap-\u003Emana) - the loop floors to AMBER (ADR-0003 \u00A78 mana balance). Caps the cast-\u003Ecast-trigger edge that the recast closes.",
+      "cr": [
+        "601.2f",
+        "601.2h",
+        "603.2"
+      ]
+    },
+    {
+      "id": "guard:self-recast-samecard",
+      "impl": "code",
+      "status": "confirmed",
+      "witnesses": [
+        "archaeomancer-x-ghostly-flicker"
+      ],
+      "desc": "the SpellRecursionSatisfiesCast same-card self-recast prune: a card whose return-to-hand returns OTHER cards (emit subject not self) can NEVER satisfy its OWN cast:spell:self driver \u2014 a spell is cast from where it is (CR 601.2), and an other-card / exile return is not THIS spell in hand (Pair o\u0027 Dice Lost returns other graveyard cards and exiles itself, so it is not its own recast subject). Prunes the spurious 1-card self-loop; the CROSS-card recursion (Archaeomancer returns Ghostly Flicker) is a different card and unaffected. The recast dual of guard:self-watch (both same-card object-identity guards, CR 400.7).",
+      "cr": [
+        "601.2",
+        "400.7"
+      ]
+    },
+    {
       "id": "guard:self-watch",
       "impl": "code",
       "status": "confirmed",
       "witnesses": [
-        "deadeye-x-peregrine-drake"
+        "deadeye-x-peregrine-drake",
+        "dualcaster-mage-x-ghostly-flicker"
       ],
       "desc": "a self-watching trigger (subject=self) requires a same-card witness that the emitted object IS the watcher; object identity the operator can\u0027t see \u2192 Overlaps floors AMBER",
       "cr": [
@@ -110,6 +187,26 @@
     }
   ],
   "bridges": [
+    {
+      "id": "bridge:spell-copy-to-cast-driver",
+      "from_stem": "copy",
+      "to_stem": "cast",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "resource": "spell"
+      },
+      "witnesses": [
+        "dualcaster-mage-x-ghostly-flicker"
+      ],
+      "desc": "a STACK spell-copy (emit:copy:spell, CR 707.10 -- the copy is put on the stack and is NOT cast) reproduces the copied spell\u0027s OWN effects, re-firing a type-compatible spell\u0027s cast:spell:self effect-DRIVER (never a cast trigger). Irreducible ceiling AMBER: the copied \u0027instant or sorcery\u0027 filter only Intersects the driver\u0027s IsSelf self-type (the IsSelf Subsumes=No floor). NOTE: from_attrs.resource=spell is the load-bearing variant discriminator (only a spell-copy, not a permanent token-copy, re-fires a cast driver) but resource is NOT yet a licensed attribute_axis -- surfaced as an axis decision, not an authored port attr.",
+      "cr": [
+        "707.10",
+        "707",
+        "601.2",
+        "608"
+      ]
+    },
     {
       "id": "bridge:untap-land-to-mana",
       "from_stem": "structure:untap",

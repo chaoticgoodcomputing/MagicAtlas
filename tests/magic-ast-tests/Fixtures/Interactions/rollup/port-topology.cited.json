@@ -2,18 +2,24 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
+    "archaeomancer-x-ghostly-flicker",
     "boggart-brute",
     "brazen-dwarf",
+    "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "diabolic-tutor",
+    "displacer-kitten-x-conviction",
     "divination",
+    "dualcaster-mage-x-ghostly-flicker",
     "fog",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "pacifism",
+    "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
     "serum-visions",
     "spine-of-ish-sah",
@@ -87,6 +93,7 @@
         "qty"
       ],
       "witnesses": [
+        "aggravated-assault-x-sword-of-feast-and-famine",
         "divination"
       ]
     },
@@ -123,21 +130,27 @@
       "status": "witnessed",
       "attrs": [
         "control",
+        "subject",
         "subtype"
       ],
       "unpredicted": true,
       "witnesses": [
-        "aang-the-last-airbender"
+        "aang-the-last-airbender",
+        "archaeomancer-x-ghostly-flicker",
+        "displacer-kitten-x-conviction",
+        "dualcaster-mage-x-ghostly-flicker"
       ]
     },
     "combat-presence": {
       "kind": "EVENT",
       "status": "witnessed",
       "attrs": [
+        "control",
         "subject"
       ],
       "unpredicted": true,
       "witnesses": [
+        "aggravated-assault-x-sword-of-feast-and-famine",
         "kari-zev-skyship-raider"
       ]
     },
@@ -147,6 +160,7 @@
       "attrs": [],
       "unpredicted": true,
       "witnesses": [
+        "dualcaster-mage-x-ghostly-flicker",
         "kiki-jiki-mirror-breaker"
       ]
     },
@@ -186,8 +200,11 @@
       ],
       "unpredicted": true,
       "witnesses": [
+        "aggravated-assault-x-sword-of-feast-and-famine",
         "ancient-copper-dragon",
-        "brazen-dwarf"
+        "brazen-dwarf",
+        "captain-rex-nebula",
+        "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
     "deployment": {
@@ -195,10 +212,12 @@
       "status": "witnessed",
       "attrs": [
         "control",
+        "manner",
         "token"
       ],
       "witnesses": [
-        "chatterfang-x-pitiless-plunderer"
+        "chatterfang-x-pitiless-plunderer",
+        "displacer-kitten-x-conviction"
       ]
     },
     "deployment:artifact": {
@@ -235,8 +254,11 @@
       ],
       "witnesses": [
         "archaeomancer",
+        "archaeomancer-x-ghostly-flicker",
         "chatterfang-x-pitiless-plunderer",
         "deadeye-x-peregrine-drake",
+        "displacer-kitten-x-conviction",
+        "dualcaster-mage-x-ghostly-flicker",
         "kari-zev-skyship-raider"
       ]
     },
@@ -248,7 +270,9 @@
       ],
       "unpredicted": true,
       "witnesses": [
-        "brazen-dwarf"
+        "brazen-dwarf",
+        "captain-rex-nebula",
+        "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
     "life": {
@@ -271,8 +295,10 @@
         "qty"
       ],
       "witnesses": [
+        "aggravated-assault-x-sword-of-feast-and-famine",
         "chatterfang-x-pitiless-plunderer",
         "deadeye-x-peregrine-drake",
+        "displacer-kitten-x-conviction",
         "ruthless-knave-x-blood-artist"
       ]
     },
@@ -310,7 +336,8 @@
       "witnesses": [
         "aang-the-last-airbender",
         "ancient-copper-dragon",
-        "deadeye-x-peregrine-drake"
+        "deadeye-x-peregrine-drake",
+        "displacer-kitten-x-conviction"
       ]
     },
     "modification:keyword": {
@@ -371,7 +398,9 @@
       ],
       "unpredicted": true,
       "witnesses": [
-        "archaeomancer"
+        "archaeomancer",
+        "archaeomancer-x-ghostly-flicker",
+        "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
     "removal:artifact": {
@@ -432,7 +461,9 @@
         "subtype"
       ],
       "witnesses": [
-        "deadeye-x-peregrine-drake"
+        "aggravated-assault-x-sword-of-feast-and-famine",
+        "deadeye-x-peregrine-drake",
+        "displacer-kitten-x-conviction"
       ]
     },
     "tap": {
@@ -457,7 +488,9 @@
         "black",
         "blue",
         "generic",
-        "green"
+        "green",
+        "red",
+        "white"
       ],
       "carries_provenance_or_polarity": true,
       "licensed_by": [
@@ -479,6 +512,7 @@
         "damage-dealt"
       ],
       "values_seen": [
+        "any",
         "combat",
         "noncombat"
       ],
@@ -499,6 +533,7 @@
         "cards:search",
         "cards:select",
         "cast",
+        "combat-presence",
         "counters",
         "creature",
         "deployment",
@@ -513,6 +548,7 @@
       ],
       "values_seen": [
         "any",
+        "opponent",
         "you"
       ],
       "carries_provenance_or_polarity": false,
@@ -643,6 +679,7 @@
     },
     "manner": {
       "stems": [
+        "deployment",
         "deployment:creature",
         "removal:artifact",
         "removal:creature",
@@ -711,6 +748,7 @@
       "values_seen": [
         "1",
         "2",
+        "3",
         "X",
         "that-many",
         "up-to-5"
@@ -732,6 +770,7 @@
         "life"
       ],
       "values_seen": [
+        "any",
         "opponent",
         "player",
         "you"
@@ -784,6 +823,7 @@
     },
     "subject": {
       "stems": [
+        "cast",
         "combat-presence",
         "damage-dealt",
         "deployment:artifact",
@@ -811,6 +851,7 @@
         "structure:untap"
       ],
       "values_seen": [
+        "creature",
         "land",
         "lesson",
         "monkey",

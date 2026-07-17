@@ -2,18 +2,24 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
+    "archaeomancer-x-ghostly-flicker",
     "boggart-brute",
     "brazen-dwarf",
+    "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "diabolic-tutor",
+    "displacer-kitten-x-conviction",
     "divination",
+    "dualcaster-mage-x-ghostly-flicker",
     "fog",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "pacifism",
+    "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
     "serum-visions",
     "spine-of-ish-sah",
@@ -111,6 +117,7 @@
       "status": "witnessed",
       "attrs": [
         "control",
+        "subject",
         "subtype"
       ],
       "unpredicted": true
@@ -119,6 +126,7 @@
       "kind": "EVENT",
       "status": "witnessed",
       "attrs": [
+        "control",
         "subject"
       ],
       "unpredicted": true
@@ -163,6 +171,7 @@
       "status": "witnessed",
       "attrs": [
         "control",
+        "manner",
         "token"
       ]
     },
@@ -357,7 +366,9 @@
         "black",
         "blue",
         "generic",
-        "green"
+        "green",
+        "red",
+        "white"
       ],
       "carries_provenance_or_polarity": true,
       "licensed_by": [
@@ -379,6 +390,7 @@
         "damage-dealt"
       ],
       "values_seen": [
+        "any",
         "combat",
         "noncombat"
       ],
@@ -399,6 +411,7 @@
         "cards:search",
         "cards:select",
         "cast",
+        "combat-presence",
         "counters",
         "creature",
         "deployment",
@@ -413,6 +426,7 @@
       ],
       "values_seen": [
         "any",
+        "opponent",
         "you"
       ],
       "carries_provenance_or_polarity": false,
@@ -543,6 +557,7 @@
     },
     "manner": {
       "stems": [
+        "deployment",
         "deployment:creature",
         "removal:artifact",
         "removal:creature",
@@ -611,6 +626,7 @@
       "values_seen": [
         "1",
         "2",
+        "3",
         "X",
         "that-many",
         "up-to-5"
@@ -632,6 +648,7 @@
         "life"
       ],
       "values_seen": [
+        "any",
         "opponent",
         "player",
         "you"
@@ -684,6 +701,7 @@
     },
     "subject": {
       "stems": [
+        "cast",
         "combat-presence",
         "damage-dealt",
         "deployment:artifact",
@@ -711,6 +729,7 @@
         "structure:untap"
       ],
       "values_seen": [
+        "creature",
         "land",
         "lesson",
         "monkey",

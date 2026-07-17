@@ -1,0 +1,156 @@
+{
+  "id": "dualcaster-mage-x-ghostly-flicker",
+  "unit": "pairwise",
+  "cards": [
+    "Dualcaster Mage",
+    "Ghostly Flicker"
+  ],
+  "source": {
+    "csb": true,
+    "note": "PAIRWISE witness of the copy -> cast-DRIVER edge (CR 707.10): a stack spell-copy re-fires the copied spell's OWN effects (the copy is NOT cast) into a type-compatible spell's cast:spell:self driver. bench 147-1987 (Ghostly Flicker + Dualcaster Mage) is the combo this edge belongs to, but the FULL loop is deliberately not closed here: the loop needs the copy of Ghostly Flicker to reproduce Ghostly Flicker's blink and re-flicker Dualcaster (the blink->etb graft is still pending per SpellCopyFlowArmScopeTest.Ghostly_flicker_x_dualcaster_reconstructs_green_pending_the_spell_copy_graft), so no loop_tier is claimed. REAL PORTS (grounded, not a wish): Dualcaster Mage's ETB 'copy target instant or sorcery spell' (Target.Zone:Stack) projects emit:copy:spell:instant+sorcery -- CopyFamily.Recognize returns PortStructure.Of(Emit, 'copy', ('resource','spell')), Subject={instant,sorcery} (isSelf empty); see the live dualcaster-mage.json interaction snapshot. Ghostly Flicker is a Kind:spell instant with flow emits (exile+return blink), so PortGraph projects the cast:spell:self driver -- CastDriverFamily.Recognize returns PortStructure.Of(Consume, 'cast', ('role','driver')), Subject=SpellSelf {instant,sorcery} IsSelf=true (byte-identical to the live reiterate.json snapshot's cast:spell:self). The ('copy','cast') arm (PortGraphEngine.SpellCopyReFiresEffects) materializes the edge; AddRulesEdge tiers it AMBER via the IsSelf Subsumes=No floor. RESOURCE-AXIS SURFACE: the spell-copy carries a resource=spell facet (the load-bearing distinction -- only a spell-copy, never a permanent token-copy like Kiki-Jiki's bare emit:copy, re-fires a cast driver, CR 707.10) that is NOT in the closed attribute_axes set. Per the kiki-jiki-mirror-breaker precedent, resource is surfaced as a taxonomy/axis decision, NOT authored as a port attr; the copied-type {instant,sorcery} rides in the port note (no card-type axis for the copy target exists in the closed set, per the archaeomancer precedent). No CSB popularity COUNT is available in the testbed source (edhrec/price absent) -- popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b6 \u2014 copy->cast-driver AMBER (707.10 uncast + Subsumes=No); bridge sound; PROCEED"
+  },
+  "ports": {
+    "Dualcaster Mage": [
+      {
+        "id": "D0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the driver -- 'When this creature enters' (Trigger.Event=Enters, Filter.IsSelf=true, CardTypes=[creature]); a self-watching ETB subscription (live etb:creature:self). Already-witnessed stem, shown to ground the card-defined flow into the spell-copy emit."
+      },
+      {
+        "id": "D1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "copy",
+        "attrs": {},
+        "note": "THE WITNESS (emit side) -- 'copy target instant or sorcery spell' (EffectType=copy, Target.Filter.CardTypes=[instant,sorcery], Zone=Stack). A STACK spell-copy (CR 707.10): the live engine projects emit:copy:spell:instant+sorcery (CopyFamily.Recognize -> PortStructure.Of(Emit,'copy',('resource','spell')), Subject={instant,sorcery}). Authored as the bare copy stem (matching kiki-jiki's witnessed copy stem): the resource=spell facet is OFF the closed attribute_axes set, so it is surfaced as the axis question (see source.note), NOT invented as a port attr; the copied-type {instant,sorcery} rides in this note (no card-type axis for the copy target). DISTINCT from a permanent token-copy (Kiki-Jiki's bare emit:copy, no :spell) -- a spell-copy lives on the stack and has NO ETB/untap to graft as a permanent."
+      }
+    ],
+    "Ghostly Flicker": [
+      {
+        "id": "G1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE DRIVER (consume side) -- Ghostly Flicker is a Kind:spell instant whose on-cast effect (exile+return blink) fires BECAUSE the spell was cast (CR 601.2f->608). PortGraph projects cast:spell:self (CastDriverFamily.Recognize -> PortStructure.Of(Consume,'cast',('role','driver')), Subject=SpellSelf {instant,sorcery} IsSelf=true). Authored with subject=self to express the IsSelf identity (the spell driving its OWN effects) -- the same convention deadeye/archaeomancer use for a self-watching consume, and what distinguishes this DRIVER from Aang's 'whenever you cast' TRIGGER (which carries control=you/subtype, no self). The structural role=driver facet is carried here as subject=self, matching the aang cast-trigger gold which likewise carries no bare 'role' facet."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Dualcaster Mage.D0",
+      "to": "Dualcaster Mage.D1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "'When Dualcaster Mage enters, copy target instant or sorcery spell' -- a deterministic card-defined flow from the ETB subscription to the spell-copy emit; structural (self-certifying), no rule dependency. Mirrors the live CardDefinedEdge etb:creature:self -> emit:copy:spell:instant+sorcery in the dualcaster-mage interaction snapshot."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Dualcaster Mage.D1",
+      "to": "Ghostly Flicker.G1",
+      "mechanism": "bridge",
+      "rule": "bridge:spell-copy-to-cast-driver",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESS EDGE (emit:copy:spell -> cast:spell:self). The copy of Ghostly Flicker reproduces Ghostly Flicker's OWN effects (CR 707.10 -- a copy of a spell is put on the stack and is NOT cast; it reproduces the copied spell's characteristics, modes, targets, and X), so it feeds the copied spell's cast:spell:self effect-DRIVER -- NEVER a 'whenever you cast' trigger:cast (a copy isn't cast, and the ('copy','cast') arm's Role!=trigger keying makes a cast-trigger match structurally impossible). Materialized by PortGraphEngine.SpellCopyReFiresEffects.",
+        "AMBER via the IsSelf Subsumes=No floor (guard:self-watch): G1 is a subject=self driver (the spell watching its OWN cast), and D1's copied-spell filter {instant,sorcery} only Intersects (Overlaps, NOT Subsumes) that IsSelf self-type -- the operator cannot see the object identity that the copied spell IS this very spell. Honest AMBER, never a false GREEN."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:self-watch",
+        "impl": "code",
+        "corroborates": "guard:self-watch",
+        "desc": "corroborates the Deadeye self-watch guard on the spell-copy -> cast-driver edge: a cast:spell:self DRIVER is a subject=self subscription (the spell watching its own cast), and a spell-copy emit whose {instant,sorcery} filter only Overlaps that self-type cannot prove the copied spell IS this very spell (object identity the operator can't see) -> floors AMBER",
+        "cr": [
+          "400.7",
+          "707.10"
+        ]
+      }
+    ],
+    "bridges": [
+      {
+        "id": "bridge:spell-copy-to-cast-driver",
+        "from_stem": "copy",
+        "to_stem": "cast",
+        "ceiling": "AMBER",
+        "from_attrs": {
+          "resource": "spell"
+        },
+        "desc": "a STACK spell-copy (emit:copy:spell, CR 707.10 -- the copy is put on the stack and is NOT cast) reproduces the copied spell's OWN effects, re-firing a type-compatible spell's cast:spell:self effect-DRIVER (never a cast trigger). Irreducible ceiling AMBER: the copied 'instant or sorcery' filter only Intersects the driver's IsSelf self-type (the IsSelf Subsumes=No floor). NOTE: from_attrs.resource=spell is the load-bearing variant discriminator (only a spell-copy, not a permanent token-copy, re-fires a cast driver) but resource is NOT yet a licensed attribute_axis -- surfaced as an axis decision, not an authored port attr.",
+        "cr": [
+          "707.10",
+          "707",
+          "601.2",
+          "608"
+        ]
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "witnesses_edge.copy-to-cast-driver",
+      "because": "D1 (live emit:copy:spell:instant+sorcery) -> G1 (live cast:spell:self) is the emit:copy:spell -> cast:spell:self edge -- a stack spell-copy re-firing the copied spell's effect driver (PortGraphEngine.SpellCopyReFiresEffects, the ('copy','cast') arm)"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "IsSelf Subsumes=No floor -- the copied {instant,sorcery} only Overlaps the cast:spell:self driver's self-type (guard:self-watch); CR 707.10 makes the copy uncast so no trigger:cast path can upgrade it"
+    },
+    {
+      "claim": "edge.E2.mechanism == bridge:spell-copy-to-cast-driver"
+    },
+    {
+      "claim": "copy_is_uncast",
+      "because": "CR 707.10 -- a copy of a spell is put on the stack and is NOT cast; it reproduces the copied spell's characteristics/modes/targets, so the edge feeds the cast:spell:self effect-DRIVER, never a 'whenever you cast' trigger:cast (the arm's Role!=trigger keying makes a cast-trigger match structurally impossible)"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined mechanism (self-certifying, structural) -- the ETB deterministically fires the spell-copy emit; no over-approximation to cap"
+    },
+    {
+      "claim": "edge.E1.mechanism == card-defined"
+    },
+    {
+      "claim": "surfaces_axis.resource",
+      "because": "the real spell-copy port emit:copy:spell:instant+sorcery carries a resource=spell facet (CopyFamily -> PortStructure.Of(Emit,'copy',('resource','spell'))) that is NOT in the closed attribute_axes set; it is load-bearing (only a spell-copy, not a permanent token-copy, re-fires a cast driver -- CR 707.10), so it needs an axis decision -- surfaced here, not authored as a port attr (matching the kiki-jiki-mirror-breaker precedent)"
+    },
+    {
+      "claim": "scaffold_accretion.subject-on-cast",
+      "because": "G1 carries subject=self on the cast stem to express the driver's IsSelf identity; the subject axis's stems do not yet include cast, so this witness extends subject.stems to the cast stem (a scaffold accretion, like archaeomancer extending from/to to the recur stem)"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: witnesses the copy -> cast-driver edge (one card's emit satisfying another's consume), no cycle closed and no \u00a710 SDF balance. The full Dualcaster x Ghostly Flicker loop needs the copy of Ghostly Flicker to reproduce its blink and re-flicker Dualcaster (the blink->etb graft is pending, SpellCopyFlowArmScopeTest), so the loop tier is deliberately not claimed here"
+    }
+  ],
+  "cr": [
+    "707.10",
+    "707",
+    "601.2",
+    "608",
+    "400.7",
+    "603.6e",
+    "111.2"
+  ]
+}
