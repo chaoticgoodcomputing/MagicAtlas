@@ -476,6 +476,16 @@ public sealed class PortWalk
           costs[i] = costs[i] with { TapGated = true };
       }
 
+      // Provenance (ADR-0003 §7): these are DERIVED ports — the token's own intrinsic affordance
+      // (a Treasure's sac-for-mana), NOT this card's oracle text. They carry no span of their own, so
+      // they inherit the creating clause's line + span from the emit:token port they derive from. Without
+      // this they default to OracleLineIndex 0 / null span and render under the WRONG oracle line — the
+      // "Flying has mana/sacrifice/tap ports" bug on Ancient Copper Dragon (its Treasures come from the
+      // combat-damage clause, not the Flying line).
+      emitPort = emitPort with { OracleLineIndex = emit.OracleLineIndex, SourceSpan = emit.SourceSpan };
+      for (var i = 0; i < costs.Count; i++)
+        costs[i] = costs[i] with { OracleLineIndex = emit.OracleLineIndex, SourceSpan = emit.SourceSpan };
+
       ports.Add(emitPort);
       ports.AddRange(costs);
       foreach (var c in costs)
