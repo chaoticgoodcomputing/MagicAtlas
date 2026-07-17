@@ -13,6 +13,7 @@
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
+    "devoted-druid",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
@@ -24,20 +25,28 @@
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
     "guttersnipe-x-niv-mizzet-visionary",
+    "heliod-sun-crowned-x-walking-ballista",
+    "intruder-alarm-x-oviya-pashiri",
     "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "kiki-jiki-x-restoration-angel",
+    "kiki-jiki-x-zealous-conscripts",
+    "mikaeus-the-unhallowed-x-walking-ballista",
     "nantuko-husk-x-blood-artist",
+    "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
+    "pili-pala-x-grand-architect",
     "ruthless-knave-x-blood-artist",
     "ruthless-knave-x-krark-clan-ironworks",
+    "sanguine-bond-x-exquisite-blood",
     "serum-visions",
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
+    "teysa-karlov-x-blood-artist",
     "titanias-boon",
     "viscera-seer-x-zulaport-cutthroat"
   ],
@@ -75,6 +84,23 @@
       ]
     },
     {
+      "id": "policy:counter-supplies-cost",
+      "consume_kind": "argument",
+      "subject": "cover",
+      "status": "confirmed",
+      "witnesses": [
+        "heliod-sun-crowned-x-walking-ballista"
+      ],
+      "desc": "a counters STATE emit supplies a counter-removal cost (an argument-consume that spends counters as an activation cost, CR 602.1a/118.1) when the emitted counter-type COVERS the required removal type (\u002B1/\u002B1 covers \u002B1/\u002B1). Because a counter is NOT an object and has no characteristics (CR 122.1), this is a resource-supply match distinct from policy:argument:subject-cover (which covers an OBJECT\u0027s card-type). The counter must be placeable on the cost-payer: when the emit\u0027s target is producer-choice among you-controlled objects (target=chosen, control=you), the producer reliably lands the counter on the payer -\u003E GREEN; a non-controllable / opponent-chosen target would only Overlap the payer (operator tiers AMBER). CR 122.6: counters put on an on-battlefield object are available to that object\u0027s abilities.",
+      "cr": [
+        "122.1",
+        "122.6",
+        "118.1",
+        "118.3",
+        "602.1a"
+      ]
+    },
+    {
       "id": "policy:damage-manner-feeds",
       "consume_kind": "subscription",
       "subject": "facet-feeds",
@@ -96,13 +122,31 @@
       "subject": "facet-feeds",
       "status": "confirmed",
       "witnesses": [
+        "sanguine-bond-x-exquisite-blood",
         "soul-warden-x-ajanis-pridemate"
       ],
-      "desc": "a life STATE emit feeds a life subscription (a \u0027whenever [a player] gains/loses life\u0027 trigger, CR 119.9) only when the direction facets match: a gain-direction emit feeds a gain-direction trigger, a loss feeds a loss; a gain NEVER feeds a loss-trigger and vice versa - a loss event is not a life-gain event, so a gain-trigger won\u0027t fire on it (CR 119.9). Directional on the direction axis - the life analogue of policy:damage-manner-feeds (combat axis). Implements the engine\u0027s LifeFlowFeasible direction-match gate (CR 119). The player-scope overlap (who gains vs whom the trigger watches) is the operator\u0027s job via the recipient Subjects; this rule gates only the direction.",
+      "desc": "corroborates the soul-warden-x-ajanis-pridemate witness of policy:life-direction-match with (a) the FIRST loss-branch witness -- Sanguine Bond\u0027s opponent-loss emit feeds Exquisite Blood\u0027s opponent-loss subscription (loss feeds loss, edge E2), where soul-warden exercised only the gain branch -- and (b) a re-witness of the gain branch (Exquisite\u0027s you-gain emit feeds Sanguine\u0027s you-gain subscription, edge E4). Byte-identical core (consume_kind=subscription, subject=facet-feeds) and same axis/lattice/cr -\u003E a reference, not a re-definition. Additionally the FIRST closed-CYCLE witness of the rule: soul-warden was one open pairwise feed, this pairs two direction-matched feeds into a self-sustaining life-mirror loop. The life \u0027mirror\u0027 needs NO new rule -- each card\u0027s gain\u003C-\u003Eloss FLIP is its own card-defined trigger-\u003Eemit edge, so both cross-card edges are plain same-direction feeds under THIS rule.",
       "cr": [
         "119",
         "119.3",
         "119.9"
+      ],
+      "corroborates": "policy:life-direction-match"
+    },
+    {
+      "id": "policy:reanimate:external-trigger-return",
+      "consume_kind": "reanimate-driver",
+      "subject": "trigger-subject-return",
+      "status": "confirmed",
+      "witnesses": [
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist"
+      ],
+      "desc": "an external permanent\u0027s dies-trigger whose paid effect RETURNS the triggering creature to the battlefield: a returntobattlefield (recur, from=graveyard-\u003Eto=battlefield) emit driven by a permanent OTHER than the returned card, keyed on that creature\u0027s death, that returns THAT card (the exact nontoken creature whose leaves-the-battlefield-to-graveyard event fired the trigger, CR 603.6e/603.10a) under the trigger-controller\u0027s control (CR 400.7 -- a new object put onto the battlefield by an effect). Because the returned object is the trigger\u0027s OWN captured subject (not a producer choice, not the driver\u0027s self-identity), the recast/return subject Subsumes on identity -\u003E GREEN-eligible; but the return is performed by an EXTERNAL object (the reanimator, e.g. Nim Deathmantle the Equipment, NOT the returned creature itself) and it is a direct battlefield RETURN by an effect, NOT a CAST -- so it does NOT pay the returned creature\u0027s own mana cost, only the trigger\u0027s activation/pay co-cost (guard:recast-pays-mana; here Deathmantle\u0027s {4}, paid during resolution, CR 608.2). The EXTERNAL-AGENT dual of policy:recast:battlefield-return (self-return, where the returned object IS the driver card and casts ITSELF from the graveyard via a static permission, CR 601.3): there the agent and the returned object are ONE card; here they are DISTINCT cards -- a triggered reanimation of an external creature. Any loop closed by this reanimate still carries the pay co-cost, which floors the cycle to AMBER unless the loop provably refills that mana (Ashnod\u0027s {C}{C} covers only 2 of Deathmantle\u0027s {4} per single sac -\u003E mana-negative -\u003E AMBER; a token-doubling reanimation target refills it -\u003E GREEN).",
+      "cr": [
+        "400.7",
+        "603.2",
+        "603.10a",
+        "608.2"
       ]
     },
     {
@@ -136,6 +180,24 @@
       ]
     },
     {
+      "id": "policy:recur:death-return-self",
+      "consume_kind": "recur-driver",
+      "subject": "self-return",
+      "status": "confirmed",
+      "witnesses": [
+        "mikaeus-the-unhallowed-x-walking-ballista"
+      ],
+      "desc": "undying/persist death-driven SELF-recursion: a creature\u0027s OWN dies event (a removal:creature[self] put into the graveyard from the battlefield, CR 603.6 zone-change trigger) satisfies a returntobattlefield[self:true] recur emit that re-enters the SAME permanent onto the battlefield under its owner\u0027s control (undying CR 702.93a, persist CR 702.79) -- refueling its own death loop. A NEW recursion driver, sibling-but-DISTINCT from the two recast policies: (1) policy:recast:battlefield-return refuels a self-CAST from the graveyard (CR 601.3) that RE-PAYS full mana every iteration (guard:recast-pays-mana); (2) policy:recast:spell-recursion re-casts a spell from HAND (CR 601.2). Undying is a TRIGGERED-ABILITY return, NOT a cast: the permanent returns directly as the trigger resolves -- no stack-spell, no mana cost -\u003E guard:recast-pays-mana DOES NOT apply and the loop is mana-free. Because the return is the SAME object (self:true), the recast subject Subsumes on identity (GREEN-eligible), UNLIKE blink\u0027s \u0027another creature\u0027 Overlaps floor (guard:self-watch). Any loop closed by this driver is instead gated by undying\u0027s counter-state condition (guard:undying-counter-reset), not a mana co-cost. Distinct on three axes -- trigger vs cast, no-mana vs full-mana-repayment, counter-parity vs mana-parity -- so a fresh declare, not a corroboration of either recast policy.",
+      "cr": [
+        "702.93",
+        "702.93a",
+        "702.79",
+        "603.6",
+        "601.3",
+        "400.7"
+      ]
+    },
+    {
       "id": "policy:subscription:subject-intersect",
       "consume_kind": "subscription",
       "subject": "intersect",
@@ -162,6 +224,21 @@
         "111.1"
       ],
       "corroborates": "policy:subscription:subject-intersect"
+    },
+    {
+      "id": "policy:trigger-multiplier:firing-cover",
+      "consume_kind": "subscription",
+      "subject": "firing-multiplier",
+      "status": "confirmed",
+      "witnesses": [
+        "teysa-karlov-x-blood-artist"
+      ],
+      "desc": "a trigger-firing MULTIPLIER intercept (an effect that makes a triggered ability trigger additional times, CR 603.2d \u2014 Teysa Karlov / Panharmonicon family) covers a triggered-ability SUBSCRIPTION and multiplies its firings when (a) the subscription\u0027s trigger-CAUSE event is covered by the multiplier\u0027s watched cause (Teysa: a creature dying, removal:creature[to=graveyard]; Blood Artist\u0027s cause creature \u2286 creature), and (b) the subscription\u0027s SOURCE permanent is covered by the multiplier\u0027s ability-owner control scope (Teysa: \u0027a permanent you control\u0027; Blood Artist is a permanent you control). Distinct from the structural \u00A74 modifier arm (grave-titan-x-anointed-procession, mechanism=modifier, self-certifying): that arm multiplies the MAGNITUDE of an EMIT event via single-referent stem-cover (the intercept watches the same event the emitter emits); THIS policy multiplies the FIRINGS of a SUBSCRIPTION (a consume-side triggered ability) and requires a DUAL-referent match (trigger-cause cover AND ability-owner control cover) that structural emit-cover cannot certify. Ceiling GREEN: the multiplication is mandatory and deterministic (603.2d, no \u0027may\u0027), reliability-bounded only by the shared premise that both the source permanent and the multiplier are under your control. No loop: 603.2d \u2014 \u0027an effect that states that an ability triggers additional times doesn\u0027t invoke itself repeatedly\u0027; the extra trigger is a one-shot per-death magnitude multiplier, not a repeating cycle.",
+      "cr": [
+        "603.2d",
+        "603.2",
+        "700.4"
+      ]
     }
   ],
   "guards": [
@@ -199,7 +276,8 @@
       "status": "confirmed",
       "witnesses": [
         "displacer-kitten-x-conviction",
-        "gravecrawler-x-ashnods-altar-x-blood-artist"
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist"
       ],
       "desc": "a recast emit (emit:cast - a spell bounced/returned to a castable zone and cast again, CR 601) re-pays the spell\u0027s full mana cost every iteration. A cast-loop that is closed BY a recast therefore carries an irreducible mana co-cost: the loop is sound (GREEN-eligible) only if it provably refills that cost; unrefilled - or refilled only through an AMBER mana bridge (untap-\u003Emana) - the loop floors to AMBER (ADR-0003 \u00A78 mana balance). Caps the cast-\u003Ecast-trigger edge that the recast closes.",
       "cr": [
@@ -229,12 +307,41 @@
       "witnesses": [
         "deadeye-x-peregrine-drake",
         "dualcaster-mage-x-ghostly-flicker",
-        "emiel-the-blessed-x-mulldrifter"
+        "emiel-the-blessed-x-mulldrifter",
+        "kiki-jiki-x-zealous-conscripts"
       ],
       "desc": "a self-watching trigger (subject=self) requires a same-card witness that the emitted object IS the watcher; object identity the operator can\u0027t see \u2192 Overlaps floors AMBER",
       "cr": [
         "603.6e",
         "400.7"
+      ]
+    },
+    {
+      "id": "guard:undying-counter-reset",
+      "impl": "code",
+      "status": "confirmed",
+      "witnesses": [
+        "mikaeus-the-unhallowed-x-walking-ballista"
+      ],
+      "desc": "the undying/persist counter-parity loop-soundness floor (the counter analogue of guard:recast-pays-mana\u0027s mana-parity): undying returns the creature ONLY \u0027if it had no \u002B1/\u002B1 counters on it\u0027 and puts it back \u0027with a \u002B1/\u002B1 counter on it\u0027 (CR 702.93a / 122.1). A self-recursion loop closed by policy:recur:death-return-self is therefore re-armable ONLY if each iteration REMOVES that returned \u002B1/\u002B1 counter before the creature next dies -- otherwise the second death has a \u002B1/\u002B1 counter on it, undying\u0027s condition fails, and the loop halts after a single return. Caps policy:recur:death-return-self: GREEN-eligible only when the loop provably resets the \u002B1/\u002B1 counter to zero every cycle (here Walking Ballista\u0027s \u0027Remove a \u002B1/\u002B1 counter\u0027 cost spends exactly the returned counter; net counter change per iteration = 0). Persist is the dual with -1/-1 counters (return only if none, come back with one). The state the loop must reset to stay sound, the counter-parity sibling of the recast mana-parity guard.",
+      "cr": [
+        "702.93a",
+        "702.79",
+        "122.1"
+      ]
+    },
+    {
+      "id": "guard:untap-cost-accrues-counter",
+      "impl": "code",
+      "status": "confirmed",
+      "witnesses": [
+        "devoted-druid"
+      ],
+      "desc": "the self-untap\u0027s activation cost places a cumulative -1/-1 counter on the source (CR 118.1 cost / 122.1 counter), permanently weakening it each renewal; a creature reaching toughness 0 or less is put into its graveyard as a state-based action (CR 704.5f). So a self-untap loop closed by this counter cost carries an irreducible -1/-1 \u0027toughness-budget\u0027 co-cost -- BOUNDED by the source\u0027s starting toughness on its own, no closed infinite cycle. The loop is GREEN-eligible (truly infinite) only when an external effect refills that budget: a -1/-1 counter remover/preventer (Vizier of Remedies replaces the -1/-1 with zero counters) or a noncreature-type change (Swift Reconfiguration -- 704.5f then no longer applies). The counter analogue of guard:recast-pays-mana (a mana co-cost that floors a loop unless the resource is provably refilled) -- the section-8/SDF co-cost cap for the self-untap-via-counter arm.",
+      "cr": [
+        "118.1",
+        "122.1",
+        "704.5f"
       ]
     }
   ],
@@ -256,6 +363,41 @@
         "707.2",
         "603.6e",
         "400.7"
+      ]
+    },
+    {
+      "id": "bridge:lethal-damage-to-dies",
+      "from_stem": "damage-dealt",
+      "to_stem": "removal:creature",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "witnesses": [
+        "mikaeus-the-unhallowed-x-walking-ballista"
+      ],
+      "desc": "a damage-dealt emit feeds a dies event (removal:creature[to=graveyard]) when the marked damage is lethal: total damage marked on a creature \u003E= its toughness -\u003E the creature is destroyed as a state-based action (CR 120.6 / 302.7 -\u003E 704), i.e. it is put into the graveyard from the battlefield and dies. Supplies the damage-\u003Edeath transition the parser proves only as a damage emit (the event_verbs note \u0027damage-dealt ... when lethal, removal (state-based death)\u0027). Ceiling AMBER, never GREEN: lethality is BOARD-STATE-dependent -- it holds only when marked damage provably \u003E= toughness, which the operator cannot see in general (a ping is usually non-lethal), and it is reliability-capped by damage prevention / regeneration / indestructible / toughness-boost replacements. Contrast bridge:sacrifice-to-dies (GREEN, a deterministic rules zone-change independent of board state): a sacrifice always dies; damage dies only if lethal. Distinct from the cross-resource untap-\u003Emana / copy-\u003Ecast bridges.",
+      "cr": [
+        "120.6",
+        "302.7",
+        "704"
+      ]
+    },
+    {
+      "id": "bridge:lifelink-damage-to-life",
+      "from_stem": "damage-dealt",
+      "to_stem": "life",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {},
+      "witnesses": [
+        "heliod-sun-crowned-x-walking-ballista"
+      ],
+      "desc": "a damage-dealt emit whose source has lifelink causes that source\u0027s controller to gain that much life (CR 702.15b, which references 120.3), and that life-gain feeds a \u0027whenever you gain life\u0027 subscription (CR 119.9; the gain-\u003Egain direction match is policy:life-direction-match, reused). The damage-\u003Elife resource crossing. Ceiling AMBER, never GREEN: lifelink is a static keyword the operator often cannot prove is present - most sharply when it is GRANTED (Heliod\u0027s \u0027{1}{W}: another target creature gains lifelink\u0027) and the parser projects the grant only as coarse emit:gainability (keyword=lifelink not AST-derivable) - so whether a given damage emit yields life is unprovable. The granted-keyword (lifelink) parse is the PARSER TARGET, mirroring bridge:untap-land-to-mana\u0027s cross-resource AMBER and deadeye\u0027s blink-as-gainability. A damage emit from a NON-lifelink source yields no life at all (CR 120.3) - the reason this can never be a blanket GREEN.",
+      "cr": [
+        "702.15a",
+        "702.15b",
+        "119.3",
+        "119.9",
+        "120.3"
       ]
     },
     {
@@ -298,6 +440,25 @@
       ]
     },
     {
+      "id": "bridge:untap-creature-to-mana",
+      "from_stem": "structure:untap",
+      "to_stem": "mana",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "subtype": "creature"
+      },
+      "witnesses": [
+        "pili-pala-x-grand-architect"
+      ],
+      "desc": "untapping a CREATURE renews a creature-tap-for-mana ability - an EXTERNAL activated ability (\u0027tap an untapped [blue] creature you control: add mana\u0027, e.g. Grand Architect) that taps the creature for mana. The creature dual of bridge:untap-land-to-mana, but a genuinely different arm: the land bridge\u0027s untapped permanent self-taps for mana (one object, intrinsic mana source), whereas here the untapped creature is NOT a mana source - a separate ability taps it (two objects). So the inference is \u0027untap creature -\u003E external tap-for-mana can re-fire -\u003E mana\u0027, not \u0027untap land -\u003E land taps itself\u0027. Irreducible cross-resource (untap != mana, CR 107.4); AMBER ceiling because the external tap-for-mana ability chooses \u0027AN untapped creature you control\u0027 (producer choice / object identity the operator cannot see, CR 400.7) and the produced mana may carry a spend-restriction. Distinct from bridge:blink-renews-tap (a blink re-entry that renews a tap COST, to_stem=tap) - this renews the untapped STATE that gates the mana.",
+      "cr": [
+        "107.4",
+        "107.6",
+        "400.7"
+      ]
+    },
+    {
       "id": "bridge:untap-land-to-mana",
       "from_stem": "structure:untap",
       "to_stem": "mana",
@@ -313,6 +474,28 @@
       "cr": [
         "107.4"
       ]
+    },
+    {
+      "id": "bridge:untap-renews-tap",
+      "from_stem": "structure:untap",
+      "to_stem": "tap",
+      "ceiling": "GREEN",
+      "status": "confirmed",
+      "from_attrs": {
+        "self": "true"
+      },
+      "witnesses": [
+        "devoted-druid",
+        "intruder-alarm-x-oviya-pashiri",
+        "kiki-jiki-x-zealous-conscripts"
+      ],
+      "desc": "an untap (structure:untap emit) renews a tap-based cost/ability (tap consume): the untapped permanent\u0027s {T} activated ability or tap-cost becomes available again (CR 701.26 untap keyword action; CR 107.5 the {T} cost; CR 602 re-activation). Ceiling GREEN -- a mandatory, universal untap reliably renews the tap (witnessed by Intruder Alarm\u0027s \u0027untap all creatures\u0027); individual edges floor to AMBER via their own residual guards: object-identity Overlap on a targeted untap (guard:self-watch) or a cumulative counter co-cost (guard:untap-cost-accrues-counter). Collapses the batch-9 per-outlet siblings (ETB-targeted / universal-creature / self-via-counter) into one relation -- the differences are the untap\u0027s trigger/target (far side of the emit), not the untap-\u003Etap bridge.",
+      "cr": [
+        "701.26",
+        "107.5",
+        "602"
+      ],
+      "corroborates": "bridge:untap-renews-tap"
     }
   ]
 }

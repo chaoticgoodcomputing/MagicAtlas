@@ -1,0 +1,121 @@
+{
+  "id": "teysa-karlov-x-blood-artist",
+  "unit": "pairwise",
+  "cards": [
+    "Teysa Karlov",
+    "Blood Artist"
+  ],
+  "source": {
+    "csb": false,
+    "note": "the death-trigger-DOUBLING MODIFIER witness (the subscription-side dual of the ADR-0001 §4 modifier arm). Teysa Karlov: 'If a creature dying causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time' (CR 603.2d — an effect that makes a triggered ability trigger additional times) intercepts Blood Artist's dies-triggered ability and MULTIPLIES its firings, so Blood Artist drains twice per creature death. Distinct from the token-DOUBLING modifier (grave-titan-x-anointed-procession: emit:token -> replace:token-creation intercept, CR 614, a magnitude multiplier on an EMIT event): Teysa multiplies the FIRINGS of a SUBSCRIPTION (a triggered ability), NOT the magnitude of an emit. A value multiplier, not a loop (603.2d: the extra trigger 'doesn't invoke itself repeatedly') -> no CSB, no popularity. Teysa's port PARSES CLEAN — dump card-ports.json line 0 projects intercept replace:abilitytrigger (family replacement, Green); NOT emit:unparsed. The 'replace/replacement' label is the engine's coarse ADR-2 family — the CR-correct home is triggering (603.2d), not replacement (614)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Teysa Karlov": [
+      {
+        "id": "T1",
+        "side": "intercept",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "to": "graveyard",
+          "control": "you"
+        },
+        "note": "'If a creature dying causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time' — a CR 603.2d trigger-firing MULTIPLIER. It watches the creature-DEATH cause (removal:creature[to=graveyard] — the alias 'dies') and multiplies the triggered abilities keyed to it. NB the DUAL control referent: control=you here scopes the ABILITY-OWNER permanent ('of a permanent you control'), NOT the dying creature (Teysa doubles regardless of who owned the creature that died) — the two-referent match is exactly why the structural emit-cover modifier cannot certify this edge (see the declared policy). Dump: intercept replace:abilitytrigger (family replacement, Green). Teysa's line-1 token vigilance/lifelink anthem (dump emit:gainability) is off the interaction path and omitted, as Grave Titan's own trigger was in the token-doubler dual."
+      }
+    ],
+    "Blood Artist": [
+      {
+        "id": "B1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "any",
+          "from": "battlefield",
+          "to": "graveyard"
+        },
+        "note": "the dies-triggered ABILITY (the subscription Teysa multiplies) — 'Whenever this creature or another creature dies' — any creature, any controller; a creature-death trigger on a permanent you control. This is the port that fires an ADDITIONAL time under Teysa."
+      },
+      {
+        "id": "B2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent",
+          "qty": 1
+        },
+        "note": "'target player loses 1 life' — the drain that, doubled by Teysa, fires twice per death"
+      },
+      {
+        "id": "B3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": 1
+        },
+        "note": "'you gain 1 life' — the gain that, doubled by Teysa, fires twice per death"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Blood Artist.B1",
+      "to": "Teysa Karlov.T1",
+      "mechanism": "match_policy",
+      "rule": "policy:trigger-multiplier:firing-cover",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "the death-trigger-doubling MODIFIER arm: Teysa's trigger-firing multiplier (T1 intercept) covers Blood Artist's dies-triggered ability (B1 subscription) and makes it trigger an additional time (CR 603.2d), so B1 fires TWICE per creature death and B2/B3 drain twice. GREEN because the doubling is MANDATORY (603.2d — 'that ability triggers that many times', no 'may') and the cover is EXACT: Blood Artist's trigger-CAUSE (a creature dying, removal:creature[to=graveyard]) is provably the very event Teysa watches (creature ⊆ creature, no subtype straddle), and Blood Artist IS a permanent you control, covering Teysa's 'of a permanent you control' ability-owner scope. NOT the structural emit-cover modifier (grave-titan E1): (1) the from-side is a SUBSCRIPTION (consume) not an EMIT — Teysa multiplies a triggered ability's FIRINGS, not an emit's magnitude; (2) the match has a DUAL control referent (Teysa's ability-owner=you scope vs the death-cause's controller-agnostic subject) that single-referent structural stem-cover cannot express. Hence the declared policy:trigger-multiplier:firing-cover (a GREEN edge rests on it — contingent on judge PASS for ladder coherence)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:trigger-multiplier:firing-cover",
+        "consume_kind": "subscription",
+        "subject": "firing-multiplier",
+        "desc": "a trigger-firing MULTIPLIER intercept (an effect that makes a triggered ability trigger additional times, CR 603.2d — Teysa Karlov / Panharmonicon family) covers a triggered-ability SUBSCRIPTION and multiplies its firings when (a) the subscription's trigger-CAUSE event is covered by the multiplier's watched cause (Teysa: a creature dying, removal:creature[to=graveyard]; Blood Artist's cause creature ⊆ creature), and (b) the subscription's SOURCE permanent is covered by the multiplier's ability-owner control scope (Teysa: 'a permanent you control'; Blood Artist is a permanent you control). Distinct from the structural §4 modifier arm (grave-titan-x-anointed-procession, mechanism=modifier, self-certifying): that arm multiplies the MAGNITUDE of an EMIT event via single-referent stem-cover (the intercept watches the same event the emitter emits); THIS policy multiplies the FIRINGS of a SUBSCRIPTION (a consume-side triggered ability) and requires a DUAL-referent match (trigger-cause cover AND ability-owner control cover) that structural emit-cover cannot certify. Ceiling GREEN: the multiplication is mandatory and deterministic (603.2d, no 'may'), reliability-bounded only by the shared premise that both the source permanent and the multiplier are under your control. No loop: 603.2d — 'an effect that states that an ability triggers additional times doesn't invoke itself repeatedly'; the extra trigger is a one-shot per-death magnitude multiplier, not a repeating cycle.",
+        "cr": [
+          "603.2d",
+          "603.2",
+          "700.4"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "the trigger-firing multiplier's cover of a subscription is NOT structural emit-cover (the from-side is a subscription and the match is dual-referent); it is certified by the declared policy:trigger-multiplier:firing-cover, not self-certifying like the token-doubler modifier"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "Teysa's doubling is mandatory (CR 603.2d) and the cover is exact — Blood Artist's creature-death trigger-cause (creature ⊆ creature) is covered by Teysa's watched cause, and Blood Artist is a permanent you control covering Teysa's ability-owner scope; contingent on judge PASS promoting policy:trigger-multiplier:firing-cover to confirmed (ladder coherence)"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: a one-shot value MULTIPLIER (Blood Artist drains twice per death), not a repeating cycle — CR 603.2d: the extra-trigger effect 'doesn't invoke itself repeatedly'; no §10 SDF balance"
+    }
+  ],
+  "cr": [
+    "603.2d",
+    "603.2",
+    "700.4",
+    "111.1"
+  ]
+}

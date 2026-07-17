@@ -13,6 +13,7 @@
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
+    "devoted-druid",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
@@ -24,20 +25,28 @@
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
     "guttersnipe-x-niv-mizzet-visionary",
+    "heliod-sun-crowned-x-walking-ballista",
+    "intruder-alarm-x-oviya-pashiri",
     "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "kiki-jiki-x-restoration-angel",
+    "kiki-jiki-x-zealous-conscripts",
+    "mikaeus-the-unhallowed-x-walking-ballista",
     "nantuko-husk-x-blood-artist",
+    "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
+    "pili-pala-x-grand-architect",
     "ruthless-knave-x-blood-artist",
     "ruthless-knave-x-krark-clan-ironworks",
+    "sanguine-bond-x-exquisite-blood",
     "serum-visions",
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
+    "teysa-karlov-x-blood-artist",
     "titanias-boon",
     "viscera-seer-x-zulaport-cutthroat"
   ],
@@ -159,7 +168,9 @@
       "attrs": [
         "control",
         "counter-type",
-        "qty"
+        "qty",
+        "self",
+        "target"
       ]
     },
     "creature": {
@@ -169,7 +180,8 @@
         "control",
         "exclude_self",
         "qty",
-        "subtype"
+        "subtype",
+        "token"
       ]
     },
     "damage-dealt": {
@@ -275,6 +287,8 @@
       "parent": "modification",
       "status": "witnessed",
       "attrs": [
+        "control",
+        "duration",
         "keyword",
         "subject"
       ]
@@ -340,7 +354,8 @@
         "manner",
         "qty",
         "subtype",
-        "to"
+        "to",
+        "token"
       ]
     },
     "removal:permanent": {
@@ -361,7 +376,9 @@
       "attrs": [
         "control",
         "qty",
-        "subtype"
+        "self",
+        "subtype",
+        "target"
       ]
     },
     "tap": {
@@ -438,6 +455,7 @@
         "deployment:artifact",
         "deployment:creature",
         "dice-rolled",
+        "modification:keyword",
         "modification:spell",
         "recur",
         "removal:creature",
@@ -460,7 +478,8 @@
         "counters"
       ],
       "values_seen": [
-        "\u002B1/\u002B1"
+        "\u002B1/\u002B1",
+        "-1/-1"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -509,6 +528,7 @@
     "duration": {
       "stems": [
         "modification:creature",
+        "modification:keyword",
         "modification:prevention"
       ],
       "values_seen": [
@@ -569,7 +589,8 @@
       ],
       "values_seen": [
         "haste",
-        "soulbond"
+        "soulbond",
+        "undying"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -650,6 +671,7 @@
         "1",
         "2",
         "3",
+        "4",
         "X",
         "that-many",
         "up-to-5"
@@ -693,10 +715,13 @@
     "self": {
       "stems": [
         "artifact",
+        "counters",
         "recur",
+        "structure:untap",
         "tap"
       ],
       "values_seen": [
+        "False",
         "True"
       ],
       "carries_provenance_or_polarity": false,
@@ -737,6 +762,7 @@
       ],
       "values_seen": [
         "attached",
+        "controlled",
         "self"
       ],
       "carries_provenance_or_polarity": false
@@ -762,7 +788,7 @@
         "treasure",
         "zombie"
       ],
-      "carries_provenance_or_polarity": false,
+      "carries_provenance_or_polarity": true,
       "licensed_by": [
         "objects:*",
         "removal:*",
@@ -771,8 +797,13 @@
       "lattice": "type-ontology (creature:squirrel \u2286 creature)"
     },
     "target": {
-      "stems": [],
-      "values_seen": [],
+      "stems": [
+        "counters",
+        "structure:untap"
+      ],
+      "values_seen": [
+        "chosen"
+      ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "*"
@@ -807,12 +838,15 @@
     "token": {
       "stems": [
         "artifact",
+        "creature",
         "deployment",
         "deployment:artifact",
         "deployment:creature",
-        "removal:artifact"
+        "removal:artifact",
+        "removal:creature"
       ],
       "values_seen": [
+        "False",
         "True"
       ],
       "carries_provenance_or_polarity": false,

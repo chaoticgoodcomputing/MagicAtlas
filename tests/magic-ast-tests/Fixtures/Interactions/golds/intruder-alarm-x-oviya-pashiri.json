@@ -1,0 +1,195 @@
+{
+  "id": "intruder-alarm-x-oviya-pashiri",
+  "unit": "combo",
+  "cards": [
+    "Intruder Alarm",
+    "Oviya Pashiri, Sage Lifecrafter"
+  ],
+  "source": {
+    "csb": true,
+    "note": "The untap-on-creature-ETB arm. VERIFIED oracle (oracle-cards.json): Intruder Alarm = 'Creatures don't untap during their controllers' untap steps.\\nWhenever a creature enters, untap all creatures.' ({2}{U} Enchantment). NOTE: my task-prompt paraphrase ('untap all creatures you don't control') was WRONG -- the real text is the UNCONDITIONAL 'untap all creatures' (both players', including the caster's own). Both load-bearing ports project FAITHFULLY in the live dump (card-ports.json), NO parse gap on the Alarm: Intruder Alarm -> consume etb:creature (family=etb, stem=deployment:creature, isSelf=FALSE -- watches ANY creature entering, GREEN) + emit:untap (family=untap, stem=structure:untap, GREEN). Partner is Oviya Pashiri, Sage Lifecrafter ({G} Legendary Creature): '{2}{G}, {T}: Create a 1/1 colorless Servo artifact creature token.' -- line 0 parses FAITHFULLY as emit:token (stem=deployment:creature, a Servo creature entering) + consume tap:self + consume pay:mana(generic {2}) + consume pay:mana:green ({G}). Partner picked for a CLEAN parse: the two other candidate tap-token-makers project emit:unstructured (Wall of Kelp line 1; Myr Propagator line 0) -- Oviya's tap-to-creature-token is the one that grounds in real parses. HONEST verdict: this is a REPEATABLE Servo-token value engine (one Servo per {2}{G}), NOT a free infinite. The untap-on-creature-ETB arm is fully reliable (the untap MANDATORILY + UNIVERSALLY renews Oviya's {T}); the loop floors to AMBER purely on the unrefilled {2}{G} activation co-cost (ADR-0003 section-8 mana balance) -- only a FREE repeatable creature-ETB engine would make it infinite. No edhrec/popularity figure available in the testbed source -- popularity omitted (not fabricated)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Intruder Alarm": [
+      {
+        "id": "IA1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "control": "any"
+        },
+        "note": "THE CREATURE-ETB SUBSCRIPTION -- 'Whenever a creature enters' (dump: consume etb:creature, stem=deployment:creature, isSelf=FALSE, GREEN). Watches ANY creature entering under ANY controller (control=any). CRUCIALLY isSelf=false: this is NOT a self-watching trigger (contrast deadeye PD1 / emiel MU0, subject=self) -> NO object-identity Overlap, NO guard:self-watch -> the incoming edge is a clean cover, not an AMBER self-watch. The line-0 static 'Creatures don't untap during their controllers' untap steps' (dump: emit:doesntuntap, no ADR-3 stem) is Intruder's namesake downside and is NOT part of the loop -- omitted (no clean stem, not load-bearing)."
+      },
+      {
+        "id": "IA2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "control": "any",
+          "subtype": {
+            "value": "creature",
+            "provenance": "derived"
+          }
+        },
+        "note": "THE UNTAP EMIT -- 'untap all creatures' (dump: emit:untap, stem=structure:untap, GREEN). MANDATORY (a plain triggered effect, NOT 'you may') and UNIVERSAL ('all creatures', both players' -> control=any, no target, no object-identity Overlap). subtype=creature marks it untaps CREATURES (the discriminator vs Peregrine Drake's structure:untap[subtype=land]); provenance=derived because the parser projects the bare structure:untap and does NOT prove the subtype facet (a minor facet gap -- the load-bearing behavioral discriminator is instead the bridge's to_stem=tap vs untap-land-to-mana's to_stem=mana)."
+      }
+    ],
+    "Oviya Pashiri, Sage Lifecrafter": [
+      {
+        "id": "OV1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "tap",
+        "attrs": {
+          "self": true
+        },
+        "note": "the {T} activation cost of the Servo ability (dump: consume tap:self). THE LOOP-CLOSING RESOURCE: renewed when Intruder's 'untap all creatures' untaps Oviya (E4)."
+      },
+      {
+        "id": "OV2",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "generic",
+          "qty": 2
+        },
+        "note": "the {2} generic half of the activation cost (dump: consume pay:mana, no color). UNFED in the cycle -- nothing here produces mana. Part of the section-8 mana floor that caps the loop to AMBER."
+      },
+      {
+        "id": "OV3",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "green",
+          "qty": 1
+        },
+        "note": "the {G} half of the activation cost (dump: consume pay:mana:green). UNFED in the cycle -- the loop never refills green mana. Part of the section-8 mana floor."
+      },
+      {
+        "id": "OV4",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "token": true,
+          "subtype": "creature",
+          "control": "you",
+          "qty": 1
+        },
+        "note": "THE CREATURE-TOKEN EMIT -- 'Create a 1/1 colorless Servo artifact creature token' (dump: emit:token:artifact+creature:servo:controlled, family=token, stem=deployment:creature). The Servo is an artifact CREATURE, so it is a creature entering -> it triggers Intruder Alarm's IA1 subscription. subtype=creature is the load-bearing supertype (the Servo covers 'a creature' exactly); it is also an artifact but that is irrelevant to the ETB subscription."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Oviya Pashiri, Sage Lifecrafter.OV1",
+      "to": "Oviya Pashiri, Sage Lifecrafter.OV4",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the {T} cost (OV1) drives the Servo emit (OV4) -- a card-internal cost->effect wiring (cf. kiki E0 K2->K1, displacer DK1->DK2). The ability's OTHER costs OV2/OV3 (the {2}{G} mana) are additional consumes with NO producer in the cycle -- they are the section-8 mana floor (see loop.mana_floored), not a reliability defect of this edge."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Oviya Pashiri, Sage Lifecrafter.OV4",
+      "to": "Intruder Alarm.IA1",
+      "mechanism": "subsumption",
+      "tier": "GREEN",
+      "notes": [
+        "the Servo (a creature you control, OV4) satisfies Intruder's 'whenever a creature enters' subscription (IA1). creature subset creature EXACTLY (cover, no subtype straddle) and control=you subset control=any -> Subsumes -> GREEN (references policy:subscription:subject-subsumes-green, the confirmed GREEN branch witnessed by ruthless-knave). NO guard:self-watch: IA1 is isSelf=false (watches ANY creature), so unlike deadeye E1 / emiel there is NO object-identity Overlap to floor it to AMBER. This is the clean-cover contrast that makes the ETB reach GREEN where a self-watch would be AMBER."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Intruder Alarm.IA1",
+      "to": "Intruder Alarm.IA2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "Intruder's trigger effect IS 'untap all creatures' -- a card-internal trigger->effect wiring (cf. kiki E2, emiel MU0->MU1). MANDATORY: a plain triggered ability, not a 'you may' -> no optionality floor (contrast the Gated blink in kiki-jiki-x-restoration-angel E2/E3)."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Intruder Alarm.IA2",
+      "to": "Oviya Pashiri, Sage Lifecrafter.OV1",
+      "mechanism": "bridge",
+      "rule": "bridge:untap-renews-tap",
+      "residuals": [],
+      "tier": "AMBER",
+      "notes": [
+        "THE CLOSING HOP + THE NOVEL ARM. 'Untap all creatures' (IA2) untaps Oviya -> her {T} cost (OV1) is renewed -> she can re-activate the Servo ability. The bridge CEILING is GREEN: the untap is MANDATORY, UNIVERSAL ('all creatures' -- no target, no 'you may', no object-identity Overlap), and DIRECT (the same object, no blink), so it CR-deterministically renews the tap (CR 107.5: a tapped permanent can't pay {T}; untap it and {T} is payable again; CR 701.26 untap). It is tiered AMBER HERE ONLY because the freshly-declared rule is observed (judge PENDING) -- per the Stage-0b ladder a GREEN edge needs a confirmed rule -> E4 promotes to GREEN once the judge PASSes. INDEPENDENT of the ladder, the LOOP stays AMBER on the section-8 mana floor (E1's unrefilled {2}{G}). Distinct from bridge:untap-land-to-mana (untap a LAND -> ENABLES mana, cross-resource, colors/count unknown -> AMBER ceiling) and bridge:blink-renews-tap (a copy's OPTIONAL/TARGETED blink re-enters the copier as a NEW untapped object -> Gated 'you may' + Overlap -> AMBER ceiling): this is a direct mandatory universal creature-untap renewing the SAME creature's own {T} -> GREEN ceiling."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": [
+      {
+        "id": "bridge:untap-renews-tap",
+        "from_stem": "structure:untap",
+        "from_attrs": {
+          "subtype": "creature"
+        },
+        "to_stem": "tap",
+        "ceiling": "GREEN",
+        "desc": "an untap (structure:untap emit) renews a tap-based cost/ability (tap consume): the untapped permanent's {T} activated ability or tap-cost becomes available again (CR 701.26 untap keyword action; CR 107.5 the {T} cost; CR 602 re-activation). Ceiling GREEN -- a mandatory, universal untap reliably renews the tap (witnessed by Intruder Alarm's 'untap all creatures'); individual edges floor to AMBER via their own residual guards: object-identity Overlap on a targeted untap (guard:self-watch) or a cumulative counter co-cost (guard:untap-cost-accrues-counter). Collapses the batch-9 per-outlet siblings (ETB-targeted / universal-creature / self-via-counter) into one relation -- the differences are the untap's trigger/target (far side of the emit), not the untap->tap bridge.",
+        "cr": [
+          "701.26",
+          "107.5",
+          "602"
+        ],
+        "corroborates": "bridge:untap-renews-tap"
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER"
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "the Servo (creature, you control) covers Intruder's 'a creature enters' subscription EXACTLY (creature subset creature, control=you subset any); IA1 is isSelf=false (watches any creature) so there is NO self-watch object-identity Overlap -> Subsumes -> GREEN (policy:subscription:subject-subsumes-green)"
+    },
+    {
+      "claim": "edge.E3.tier == GREEN",
+      "because": "Intruder's trigger effect IS 'untap all creatures' -- mandatory (not 'you may'), a card-internal trigger->effect wiring"
+    },
+    {
+      "claim": "edge.E4.mechanism == bridge:untap-renews-tap"
+    },
+    {
+      "claim": "edge.E4.tier == AMBER",
+      "because": "the closing hop rests on bridge:untap-renews-tap which is freshly OBSERVED (judge PENDING) -- Stage-0b ladder caps an edge on an observed rule at AMBER; the bridge's CEILING is GREEN (mandatory universal creature-untap CR-deterministically renews the {T}, CR 107.5/701.26) so E4 promotes to GREEN once the judge PASSes; the LOOP is AMBER regardless via the mana floor"
+    },
+    {
+      "claim": "loop.mana_floored",
+      "because": "OV2/OV3 -- Oviya's {2}{G} activation cost -- have NO producer in the cycle (the untap bridge renews only the TAP, not the mana), so the repetition vector requires external {2}{G} per Servo: a BOUNDED value engine (one Servo per {2}{G}), AMBER per ADR-0003 section-8 mana balance (CR 118.3, a cost can't be paid without the resources). Only a FREE repeatable creature-ETB engine would make the untap-on-creature-ETB arm infinite."
+    },
+    {
+      "claim": "new_rule bridge:untap-renews-tap",
+      "because": "genuinely-novel mechanism: a DIRECT, MANDATORY, UNIVERSAL creature-untap that renews a creature's own tap:self cost (structure:untap[subtype=creature] -> tap). Distinct from bridge:untap-land-to-mana (structure:untap[subtype=land] -> mana, AMBER, cross-resource) and bridge:blink-renews-tap (deployment:creature[manner=blink] -> tap, AMBER, optional/Overlap). GREEN ceiling -- the first reliable untap->tap renewal in the ladder."
+    }
+  ],
+  "cr": [
+    "107.5",
+    "107.6",
+    "701.26",
+    "603.2",
+    "603.3",
+    "118.3"
+  ]
+}

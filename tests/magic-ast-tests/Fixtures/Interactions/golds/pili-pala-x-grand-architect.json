@@ -1,0 +1,195 @@
+{
+  "id": "pili-pala-x-grand-architect",
+  "unit": "combo",
+  "cards": [
+    "Pili-Pala",
+    "Grand Architect"
+  ],
+  "source": {
+    "csb": true,
+    "id": "1247-2470",
+    "popularity": 9132,
+    "note": "THE untap-creature->mana EDGE witness (the creature dual of bridge:untap-land-to-mana). AST-derived from dumps/card-ports.json. Grand Architect (oracle line 2: 'Tap an untapped blue creature you control: Add {C}{C}. Spend this mana only to cast artifact spells or activate abilities of artifacts.') projects pay:tappermanents (the tap-an-untapped-creature cost, GA1) + emit:mana:colorless (the {C}{C}, GA2). Pili-Pala (oracle line 1: '{2}, {Q}: Add one mana of any color.', {Q}=untap symbol CR 107.6) projects pay:mana (the {2}, PP1) + pay:untap (the {Q} self-untap, projected as the structure:untap emit PP2) + emit:mana:any (PP3). NOTE ON THE REAL CARDS (verified against oracle-cards.json, NOT the combo's popular shorthand): Grand Architect does NOT untap Pili-Pala and Pili-Pala does NOT tap for mana. The tap-for-mana is GRAND ARCHITECT's third ability (it taps an untapped blue creature for {C}{C}); Pili-Pala's own {Q} untaps ITSELF as a cost. So the renewable resource is Pili-Pala's tapped/untapped STATE, and the untap that renews the creature-tap-for-mana is Pili-Pala's own {Q}. PARSE GAP (reported, non-loop): Grand Architect's SECOND ability '{U}: Target artifact creature becomes blue until end of turn' projects emit:unstructured (UNPARSED). It is the one-time SETUP enabler that makes Pili-Pala a blue creature so GA's third ability can tap it; it is a precondition, not part of the repetition vector, so the loop is modelled without it, but its unparsed status is recorded honestly. popularity 9132 is the CSB combo-instance count (combo 1247-2470)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Grand Architect": [
+      {
+        "id": "GA1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "subtype": "creature",
+          "control": "you"
+        },
+        "note": "the tap-for-mana INPUT: 'Tap an untapped blue creature you control' (live label pay:tappermanents) CONSUMES an untapped controlled creature by tapping it. Modelled as a structure:untap consume (it requires + spends a creature's untapped state). The 'blue' filter on the creature has no ADR-3 axis on structure:untap (color is licensed for mana/objects/deployment, not untap); it is a setup precondition satisfied by GA's own unparsed 'becomes blue' enabler (see source.note) and carried in prose, not as a fabricated attr."
+      },
+      {
+        "id": "GA2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "colorless",
+          "qty": 2
+        },
+        "note": "'Add {C}{C}' (live label emit:mana:colorless) - the mana source the untap-creature bridge collapses (the external tap-for-mana ability). The 'Spend this mana only to cast artifact spells or activate abilities of artifacts' spend-restriction (a mana-use restriction, no ADR-3 axis) is carried in prose: it is SATISFIED here because Pili-Pala is an Artifact Creature (type_line 'Artifact Creature - Scarecrow'), so paying its {2} activation IS 'activating an ability of an artifact'. Colorless {C} covers the generic pips of PP1's {2} (CR 106.1, 107.4c)."
+      }
+    ],
+    "Pili-Pala": [
+      {
+        "id": "PP1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "generic",
+          "qty": 2
+        },
+        "note": "the '{2}' activation cost (live label pay:mana). Generic pips, payable by any mana including the colorless {C}{C} that Grand Architect taps Pili-Pala to produce (subject to GA's artifact-only spend-restriction, satisfied - see GA2). THE mana cost the untap-creature bridge refuels."
+      },
+      {
+        "id": "PP2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "subtype": "creature",
+          "control": "you",
+          "qty": 1,
+          "self": true
+        },
+        "note": "the '{Q}' self-untap (untap symbol, CR 107.6; live label pay:untap). Projected as a structure:untap EMIT of self: paying {Q} untaps Pili-Pala, making it an untapped creature again so Grand Architect's GA1 can tap it once more. self=true on structure:untap is a NEW stem-attr pairing (the self axis is licensed_by '*'); flagged as a scaffold enrichment. Derived from the pay:untap cost span - the untap is certain (not over-approximated), so no provenance wrapper."
+      },
+      {
+        "id": "PP3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": {
+            "value": "any",
+            "polarity": "producer-choice"
+          },
+          "qty": 1
+        },
+        "note": "'Add one mana of any color' (live label emit:mana:any) - the NET PAYOFF that exits the loop. color=any is producer-choice (the controller picks the colour at production, CR 106.4). Per iteration the loop is net +1 mana of ANY colour (see the loop_tier assertion's mana math): the {C}{C} GA taps Pili-Pala for exactly pays Pili-Pala's {2}, and PP3 is the surplus - a TRUE free infinite (colour-filtered) mana engine once set up."
+      },
+      {
+        "id": "PP4",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:evasion:flying",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "Flying - incidental context (an already-witnessed stem); mirrors deadeye-x-peregrine-drake.PD0."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "CE1",
+      "from": "Grand Architect.GA1",
+      "to": "Grand Architect.GA2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: Grand Architect's own ability - tapping the untapped blue creature (GA1) deterministically produces {C}{C} (GA2), self-certifying. Grounds the EXTERNAL tap-for-mana engine that the untap-creature bridge collapses."
+      ]
+    },
+    {
+      "id": "CE2",
+      "from": "Pili-Pala.PP1",
+      "to": "Pili-Pala.PP3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: Pili-Pala's own ability - paying {2},{Q} deterministically produces one mana of any colour (PP3), self-certifying."
+      ]
+    },
+    {
+      "id": "CE3",
+      "from": "Pili-Pala.PP1",
+      "to": "Pili-Pala.PP2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: the same activation pays the {Q} cost, untapping Pili-Pala (PP2) - the self-untap is co-emitted with the mana payoff by one activation of Pili-Pala's ability."
+      ]
+    },
+    {
+      "id": "E1",
+      "from": "Pili-Pala.PP2",
+      "to": "Pili-Pala.PP1",
+      "mechanism": "bridge",
+      "rule": "bridge:untap-creature-to-mana",
+      "residuals": [],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESS. Untapping Pili-Pala (PP2, structure:untap[subtype=creature]) refuels its own {2} cost (PP1, mana): the now-untapped Pili-Pala is tapped by Grand Architect for {C}{C} (GA1->GA2, CE1), which pays the {2}. Same untap-emit -> mana-consume shape as bridge:untap-land-to-mana (deadeye-x-peregrine-drake.E2, aggravated-assault.E2).",
+        "NOVEL vs the land bridge (justifies a new id, not a sibling): in bridge:untap-land-to-mana the untapped permanent IS the mana source (a land taps ITSELF for mana - one object); here the untapped CREATURE is not a mana source - a SEPARATE ability (Grand Architect's 'tap an untapped blue creature: add {C}{C}') taps it - two objects. The land bridge's AMBER reason ('untapped lands' colours/count unknown') does not even apply (the {C}{C} is fixed and known); the creature bridge's distinct reasoning is below.",
+        "AMBER ceiling: (1) untap != mana - irreducible cross-resource (CR 107.4); (2) Grand Architect taps 'AN untapped blue creature you control' - a producer choice the operator cannot pin to Pili-Pala specifically (object identity, cf. guard:self-watch, CR 400.7); (3) the {C}{C} carries an artifact-only spend-restriction and Pili-Pala must first be made blue by GA's UNPARSED 'becomes blue' enabler (source.note). Never a false GREEN despite being a true infinite in actual play."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": [
+      {
+        "id": "bridge:untap-creature-to-mana",
+        "from_stem": "structure:untap",
+        "from_attrs": {
+          "subtype": "creature"
+        },
+        "to_stem": "mana",
+        "ceiling": "AMBER",
+        "desc": "untapping a CREATURE renews a creature-tap-for-mana ability - an EXTERNAL activated ability ('tap an untapped [blue] creature you control: add mana', e.g. Grand Architect) that taps the creature for mana. The creature dual of bridge:untap-land-to-mana, but a genuinely different arm: the land bridge's untapped permanent self-taps for mana (one object, intrinsic mana source), whereas here the untapped creature is NOT a mana source - a separate ability taps it (two objects). So the inference is 'untap creature -> external tap-for-mana can re-fire -> mana', not 'untap land -> land taps itself'. Irreducible cross-resource (untap != mana, CR 107.4); AMBER ceiling because the external tap-for-mana ability chooses 'AN untapped creature you control' (producer choice / object identity the operator cannot see, CR 400.7) and the produced mana may carry a spend-restriction. Distinct from bridge:blink-renews-tap (a blink re-entry that renews a tap COST, to_stem=tap) - this renews the untapped STATE that gates the mana.",
+        "cr": [
+          "107.4",
+          "107.6",
+          "400.7"
+        ]
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the cycle passes through E1 (bridge:untap-creature-to-mana, AMBER) - untap != mana cross-resource + producer-choice object identity on Grand Architect's tap + an artifact-only spend-restriction. Mechanically a TRUE free infinite (per iteration: GA taps Pili-Pala for {C}{C} exactly paying Pili-Pala's {2}, net surplus = PP3's +1 mana of any colour), but UNcertifiable as reliably infinite by the reconstruction -> AMBER, never a false GREEN."
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "bridge:untap-creature-to-mana ceiling: untap enables (does not produce) mana via an external tap-for-mana ability; producer choice on which creature GA taps (CR 400.7)"
+    },
+    {
+      "claim": "edge.E1.rule == bridge:untap-creature-to-mana"
+    },
+    {
+      "claim": "bridge.untap-creature-to-mana.distinct_from.untap-land-to-mana",
+      "because": "different arm, not a subtype sibling: the land bridge's untapped permanent self-taps for mana (one object); the creature bridge renews an EXTERNAL tap-for-mana ability that taps the creature (two objects) - the land bridge's colours/count-unknown reasoning does not apply, the creature bridge's producer-choice/object-identity reasoning does"
+    },
+    {
+      "claim": "stem.structure:untap.emit_witnessed.creature",
+      "because": "PP2 projects structure:untap on the EMIT side with subtype=creature (a self-untap) - the creature-subtype emit dual of the land-subtype untap emits (Peregrine Drake PD2, Sword SW2)"
+    },
+    {
+      "claim": "parse_gap.grand-architect.becomes-blue",
+      "because": "Grand Architect's '{U}: Target artifact creature becomes blue' projects emit:unstructured (UNPARSED); it is the one-time setup enabler (makes Pili-Pala a blue creature), not part of the repetition vector, so the loop is witnessed without it, but the gap is recorded"
+    }
+  ],
+  "cr": [
+    "107.4",
+    "107.6",
+    "106.1",
+    "106.4",
+    "400.7"
+  ]
+}

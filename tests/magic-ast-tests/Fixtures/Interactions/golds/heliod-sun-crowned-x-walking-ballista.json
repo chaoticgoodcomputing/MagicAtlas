@@ -1,0 +1,225 @@
+{
+  "id": "heliod-sun-crowned-x-walking-ballista",
+  "unit": "combo",
+  "cards": [
+    "Heliod, Sun-Crowned",
+    "Walking Ballista"
+  ],
+  "source": {
+    "note": "combo witnessing the NEW lifegain->counter ARM (a lifegain trigger whose PAYOFF emits a +1/+1 counter) and its closed loop through Walking Ballista's counter-removal ping - the life<->counter<->damage triangle. Oracle text verified vs oracle-cards.json 2026-07-17: Heliod, Sun-Crowned = 'Indestructible / As long as your devotion to white is less than five, Heliod isn't a creature. / Whenever you gain life, put a +1/+1 counter on target creature or enchantment you control. / {1}{W}: Another target creature gains lifelink until end of turn.'; Walking Ballista = 'This creature enters with X +1/+1 counters on it. / {4}: Put a +1/+1 counter on this creature. / Remove a +1/+1 counter from this creature: It deals 1 damage to any target.' Live engine ports (dumps/card-ports.json, verified 2026-07-17): Heliod trigger:life:gain:controlled (family=life, Green, line 2) + emit:counter:+1/+1:target (family=counter, Green, line 2 - the SAME triggered ability: lifegain trigger -> counter payoff) + emit:gainability (family=gainability, Green, line 3 - the lifelink grant, COARSE); Walking Ballista pay:removecounters (family=mana/cost, Green, line 2) + emit:damage:noncombat:any (family=damage, Green, isSelf=true, line 2 - same activated ability: remove-counter cost -> damage) + emit:counter:+1/+1:self (Green, line 0 - enters-with seed). LOOP: Ballista removes a +1/+1 counter -> deals 1 damage; with the granted lifelink the controller gains 1 life; Heliod's lifegain trigger fires -> puts a +1/+1 counter on Ballista (target=chosen, you control); Ballista removes it again -> infinite. Counter-neutral (Heliod +1, Ballista -1), no per-iteration mana. PARSE GAP (honest, the AMBER floor): Heliod's lifelink grant projects as coarse emit:gainability - the parser does NOT prove keyword=lifelink, the target ('another target creature'), or the eot duration; Walking Ballista has NO life emit (it has no innate lifelink), so the loop's life-gain arises ENTIRELY from the granted, unparsed lifelink. The granted-keyword (lifelink) is the PARSER TARGET here, exactly the shape of deadeye-x-peregrine-drake's blink-as-gainability. No exact Heliod x Walking Ballista popularity in dumps/combo-instances.json (0 instances) -> source.popularity omitted (not fabricated)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Heliod, Sun-Crowned": [
+      {
+        "id": "H1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you"
+        },
+        "note": "THE LIFEGAIN TRIGGER (consume side of the arm) - 'Whenever you gain life' - a subscription (CR 119.9) watching YOUR life-gain. direction=gain, recipient=you (controlled). No qty facet (any nonzero gain fires it, CR 119.9). kind=STATE follows the registered life stem (state=fold(events)), mirroring Ajani's Pridemate P1. Live label trigger:life:gain:controlled. This is the SAME relation Soul Warden->Ajani's Pridemate witnessed on its CONSUME side (policy:life-direction-match) - reused, NOT re-declared here."
+      },
+      {
+        "id": "H2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "+1/+1",
+          "qty": 1,
+          "control": "you",
+          "target": "chosen"
+        },
+        "note": "THE NEW ARM's EMIT (payoff side) - 'put a +1/+1 counter on target creature or enchantment you control' - a counters STATE emit (CR 122.1) produced BY the lifegain trigger. counter-type=+1/+1, qty=1, control=you, target=chosen (producer picks the you-controlled object - here Walking Ballista). Live label emit:counter:+1/+1:target. THIS is what soul-warden-x-ajanis-pridemate explicitly did NOT model ('the +1/+1 counter payoff is not modeled') - first-modeled here. Distinct from policy:life-direction-match: that rule is the life->life FEED (the CONSUME/subscription side, H1); this is the trigger's counters EMIT (the payoff side) - different port-side, different resource."
+      },
+      {
+        "id": "H3",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:keyword",
+        "attrs": {
+          "control": "you",
+          "duration": "eot"
+        },
+        "note": "THE LIFELINK ENABLER (one-time, {1}{W}: 'Another target creature gains lifelink until end of turn') - a keyword grant (kind=BEHAVIOR per the kinds registry: 'keyword grants'). PARSE GAP: the live label is COARSE emit:gainability - the parser does NOT project keyword=lifelink, the 'another target creature' subject, or nuances; only the eot duration and control=you are safe. keyword=lifelink is therefore OMITTED from attrs (not fabricated) - it is the PARSER TARGET. Not a per-iteration loop edge: it establishes the granted lifelink that bridge:lifelink-damage-to-life (E4) depends on; that dependency's un-provability is the loop's AMBER floor."
+      }
+    ],
+    "Walking Ballista": [
+      {
+        "id": "B0",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "+1/+1",
+          "qty": "X",
+          "control": "you"
+        },
+        "note": "SEED (ignition, not a loop edge) - 'This creature enters with X +1/+1 counters on it' emits the counters STATE resource (CR 122.6, counters given as it enters). qty=X. Live label emit:counter:+1/+1:self. Supplies the FIRST removable counter; thereafter Heliod (H2) refuels the counter each iteration, so the steady-state cycle does not depend on B0."
+      },
+      {
+        "id": "B1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "+1/+1",
+          "qty": 1
+        },
+        "note": "THE COUNTER-CONSUMING PAYOFF (consume side) - 'Remove a +1/+1 counter from this creature:' is the activation cost (CR 602.1a) of the ping. A counters STATE consume (a cost that spends a +1/+1 counter, CR 118.1/118.3). counter-type=+1/+1, qty=1. Live label pay:removecounters. This is the port the NEW arm's counter emit (H2) FEEDS."
+      },
+      {
+        "id": "B2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "THE PING (emit side) - 'It deals 1 damage to any target' - a noncombat damage EVENT (CR 120, not the combat step). combat=noncombat, recipient=any, subject=self (Walking Ballista is the source, isSelf=true). Live label emit:damage:noncombat:any. Walking Ballista has NO life emit - it has no innate lifelink; the loop's life-gain comes ONLY from the granted (H3) lifelink via bridge:lifelink-damage-to-life."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Heliod, Sun-Crowned.H1",
+      "to": "Heliod, Sun-Crowned.H2",
+      "mechanism": "card-defined",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE NEW LIFEGAIN->COUNTER ARM: intra-ability causality - 'Whenever you gain life, put a +1/+1 counter ...' - the trigger (H1) resolves into the counter payoff (H2). card-defined GREEN by construction (CR 603.2 the trigger fires; CR 122.1 the counter is placed), mirroring captain-rex-nebula's E2/E3 intra-ability card-defined edges.",
+        "This ARM is DISTINCT from policy:life-direction-match (the corroborate-vs-new CALL): that rule certifies the life->life FEED (does the trigger FIRE on a life-gain emit - the CONSUME side). THIS edge is the trigger's counters EMIT (the payoff side) - a different port-side and a different resource (counters, not life). So it is NEITHER a corroboration of policy:life-direction-match NOR a sibling. It first-models Ajani's Pridemate's deferred counter payoff (soul-warden-x-ajanis-pridemate explicitly left it unmodeled). CR 702.15's own printed example IS this family ('Ajani's Pridemate ... Whenever you gain life, put a +1/+1 counter on this creature')."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Heliod, Sun-Crowned.H2",
+      "to": "Walking Ballista.B1",
+      "mechanism": "match_policy",
+      "rule": "policy:counter-supplies-cost",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE NEW CROSS-CARD HOP: the arm's counter emit FEEDS the counter-consuming payoff. Heliod's emit:counter (counter-type=+1/+1, target=chosen among you-controlled objects) supplies the +1/+1 counter that Walking Ballista's removal cost (B1) spends (policy:counter-supplies-cost).",
+        "GREEN tiering: counter-type +1/+1 COVERS the +1/+1-counter removal requirement (CR 122.1/122.6), and target=chosen among you-controlled objects means the producer reliably targets Walking Ballista (a creature you control) - fully controllable, no opponent interference. NEEDS the NEW rule policy:counter-supplies-cost CONFIRMED (judge PENDING -> the rule is 'observed' this pass, so the GREEN is provisional until a judge PASS promotes it; stated in the report).",
+        "A counter is NOT an object (CR 122.1: 'Counters are not objects and have no characteristics'), so this is NOT policy:argument:subject-cover (which demands a supplied OBJECT's card-type cover a filter) - a genuinely distinct resource-supply relation."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Walking Ballista.B1",
+      "to": "Walking Ballista.B2",
+      "mechanism": "card-defined",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE PING: intra-ability causality - 'Remove a +1/+1 counter from this creature: It deals 1 damage to any target' - the counter-removal cost (B1) resolves into the damage emit (B2). card-defined GREEN (CR 602.1a activation cost; CR 120 the damage). Deterministic, ungated."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Walking Ballista.B2",
+      "to": "Heliod, Sun-Crowned.H1",
+      "mechanism": "bridge",
+      "rule": "bridge:lifelink-damage-to-life",
+      "residuals": [],
+      "tier": "AMBER",
+      "notes": [
+        "THE RETURN HOP (damage->life->lifegain trigger): Walking Ballista's damage emit (B2), because the source has the granted lifelink, causes its controller to gain that much life (CR 702.15b/119.3/120.3); that life-gain feeds Heliod's lifegain trigger (H1) - the direction match (gain->gain) is policy:life-direction-match, CR 119.9 (REUSED by reference, not re-declared).",
+        "AMBER floor (the parse gap): the source's lifelink is a GRANTED keyword the parser projects only as coarse emit:gainability (H3) - keyword=lifelink is NOT AST-derivable, so the operator cannot certify that Walking Ballista's damage yields life. This is the loop's single AMBER hop and the ONLY reason loop_tier != GREEN: in actual play the loop is counter-neutral, mana-free and infinite. Same shape as deadeye-x-peregrine-drake (blink parsed as coarse emit:gainability -> AMBER, parser target)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:counter-supplies-cost",
+        "consume_kind": "argument",
+        "subject": "cover",
+        "axis": "counter-type",
+        "lattice": "+1/+1 |= +1/+1 (a counter-removal cost is paid only by a counter of the required type; a loyalty / charge / energy / poison counter never pays a +1/+1-counter cost - CR 118.3, can't pay a cost without the necessary resource)",
+        "desc": "a counters STATE emit supplies a counter-removal cost (an argument-consume that spends counters as an activation cost, CR 602.1a/118.1) when the emitted counter-type COVERS the required removal type (+1/+1 covers +1/+1). Because a counter is NOT an object and has no characteristics (CR 122.1), this is a resource-supply match distinct from policy:argument:subject-cover (which covers an OBJECT's card-type). The counter must be placeable on the cost-payer: when the emit's target is producer-choice among you-controlled objects (target=chosen, control=you), the producer reliably lands the counter on the payer -> GREEN; a non-controllable / opponent-chosen target would only Overlap the payer (operator tiers AMBER). CR 122.6: counters put on an on-battlefield object are available to that object's abilities.",
+        "cr": [
+          "122.1",
+          "122.6",
+          "118.1",
+          "118.3",
+          "602.1a"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": [
+      {
+        "id": "bridge:lifelink-damage-to-life",
+        "from_stem": "damage-dealt",
+        "to_stem": "life",
+        "ceiling": "AMBER",
+        "from_attrs": {},
+        "desc": "a damage-dealt emit whose source has lifelink causes that source's controller to gain that much life (CR 702.15b, which references 120.3), and that life-gain feeds a 'whenever you gain life' subscription (CR 119.9; the gain->gain direction match is policy:life-direction-match, reused). The damage->life resource crossing. Ceiling AMBER, never GREEN: lifelink is a static keyword the operator often cannot prove is present - most sharply when it is GRANTED (Heliod's '{1}{W}: another target creature gains lifelink') and the parser projects the grant only as coarse emit:gainability (keyword=lifelink not AST-derivable) - so whether a given damage emit yields life is unprovable. The granted-keyword (lifelink) parse is the PARSER TARGET, mirroring bridge:untap-land-to-mana's cross-resource AMBER and deadeye's blink-as-gainability. A damage emit from a NON-lifelink source yields no life at all (CR 120.3) - the reason this can never be a blanket GREEN.",
+        "cr": [
+          "702.15a",
+          "702.15b",
+          "119.3",
+          "119.9",
+          "120.3"
+        ]
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the closing return hop E4 is AMBER: the life-gain that fires Heliod's trigger depends on Walking Ballista having lifelink, which Heliod GRANTS via a coarse emit:gainability (keyword=lifelink not AST-derivable - the parser target). E1/E2/E3 are all GREEN and the cycle is counter-neutral, mana-free and infinite in play, so this is a PARSER-gated AMBER (a fixable granted-keyword slice), not a soundness AMBER."
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined intra-ability causality: Heliod's 'whenever you gain life, put a +1/+1 counter' resolves the trigger (H1) into the counter payoff (H2) - CR 603.2 (trigger fires) + CR 122.1 (counter placed). Self-certifying, no rule dependency."
+    },
+    {
+      "claim": "arm.lifegain_to_counter.distinct_from_life_direction_match",
+      "because": "the lifegain->counter arm (E1: trigger:life:gain -> emit:counter:+1/+1:target) is the trigger's counters EMIT (payoff side), whereas policy:life-direction-match certifies the life->life FEED (the CONSUME/subscription side, H1). Different port-side + different resource (counters vs life) -> NOT a corroboration and NOT a sibling; the NEW arm is declared (via card-defined E1 + the NEW policy:counter-supplies-cost it feeds), not folded into policy:life-direction-match."
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "policy:counter-supplies-cost (NEW): Heliod's +1/+1 counter emit (target=chosen, control=you) supplies Walking Ballista's +1/+1 counter-removal cost; +1/+1 covers +1/+1 (CR 122.1/122.6) and the producer reliably targets the payer (a you-controlled creature). GREEN is provisional pending a judge PASS confirming the observed rule."
+    },
+    {
+      "claim": "counter_type_prune",
+      "because": "the counter-type must COVER the removal requirement: a +1/+1 counter pays Walking Ballista's '+1/+1 counter' cost, but a loyalty / charge / energy / poison counter would NOT (CR 118.3 - can't pay a cost without the necessary resource; policy:counter-supplies-cost lattice). Counter-type match is load-bearing."
+    },
+    {
+      "claim": "edge.E4.tier == AMBER",
+      "because": "bridge:lifelink-damage-to-life: a lifelink-source damage emit causes controller life-gain (CR 702.15b/119.3/120.3) feeding Heliod's lifegain trigger (CR 119.9). AMBER because the source's lifelink is a granted keyword parsed only as coarse emit:gainability - unprovable."
+    },
+    {
+      "claim": "lifelink_dependency_prune",
+      "because": "without the granted lifelink, Walking Ballista's damage causes NO life-gain (CR 120.3 - damage results depend on the source's characteristics), so Heliod's trigger never fires and the loop does not close. The granted lifelink (H3) is load-bearing, and its coarse parse (emit:gainability) is exactly the AMBER floor."
+    }
+  ],
+  "cr": [
+    "118.1",
+    "118.3",
+    "119.3",
+    "119.9",
+    "120.3",
+    "122.1",
+    "122.6",
+    "602.1a",
+    "603.2",
+    "702.15a",
+    "702.15b"
+  ]
+}

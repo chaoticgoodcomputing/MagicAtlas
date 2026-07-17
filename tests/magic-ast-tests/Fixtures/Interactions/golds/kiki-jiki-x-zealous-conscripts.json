@@ -1,0 +1,178 @@
+{
+  "id": "kiki-jiki-x-zealous-conscripts",
+  "unit": "combo",
+  "cards": [
+    "Kiki-Jiki, Mirror Breaker",
+    "Zealous Conscripts"
+  ],
+  "source": {
+    "csb": true,
+    "note": "The copy+ETB-UNTAP infinite -- the untap-arm SIBLING of kiki-jiki-x-restoration-angel (which closes via BLINK). Kiki-Jiki's '{T}: Create a token that's a copy of target nonlegendary creature you control, except it has haste' copies Zealous Conscripts; GraftCopyInheritance (PortGraphEngine.cs, copy-inheritance-scope.md Decision 2/3) grafts the copy's inherited abilities onto the token. The copy (a Zealous Conscripts, which natively has Haste and is also given haste by Kiki) enters -> its ETB fires and untaps KIKI ITSELF -> Kiki, untapped IN PLACE, re-taps to copy again. VERIFIED Zealous Conscripts oracle text (oracle-cards.json): 'Haste\\nWhen this creature enters, gain control of target permanent until end of turn. Untap that permanent. It gains haste until end of turn.' The closing resource is Kiki's {T} tap cost; it is renewed by the ETB's mandatory 'Untap that permanent', NOT by a blink -- Kiki is never exiled/returned, it stays the SAME object and is merely untapped, so (unlike Kiki x Restoration Angel) there is NO summoning-sickness question at all and Kiki's own haste is NOT load-bearing here. No mana is spent in the cycle, so there is NO CR-808/section-8 mana floor. TIER: still AMBER, but on a SINGLE floor rather than Restoration Angel's two. The untap is MANDATORY (no 'you may' -- contrast Restoration Angel's Gated optional blink, which BlinkReachesSource floors via Trilean.Unknown), so the OPTIONALITY floor is GONE. What remains is the object-identity Overlap: 'gain control of TARGET permanent ... untap that permanent' is a chosen target, and the operator cannot certify the target IS Kiki rather than some other permanent (guard:self-watch, CR 603.6e/400.7) -> Overlaps, never Subsumes -> AMBER. This corroborates that the object-identity Overlap ALONE caps the copy-untap closing hop to AMBER, independent of optionality. CORROBORATES Kiki's copy arm at a 2nd combo: K1 (emit:copy, stem=copy, attrs {}) and K2 (consume tap:self) are BYTE-IDENTICAL to the kiki-jiki-x-restoration-angel witnesses (same faithful live projection: Kiki dump = emit:copy + tap:self). PARSE GAP (reported, not authored around): the live dump projects Zealous Conscripts as emit:gaincontrol + emit:keywordability(haste) + etb:creature:self (stem=deployment:creature, isSelf=true, GREEN) -- the 'Untap that permanent' clause does NOT project a separate emit:untap:permanent; it is currently ABSORBED into the coarse emit:gaincontrol (the compound 'gain control ... untap ...' clause). So ZC1 (the ETB self-watch) is FAITHFULLY parsed, but ZC2 (the structure:untap emit) is the PARSER TARGET, exactly like the Deadeye gold is the parser target for deployment[manner=blink]. The closing bridge is authored in honest ADR-3 vocabulary against that target; the gold witnesses faithfully once the parser slices the untap clause out of the gaincontrol compound. No edhrec/popularity figure available in the testbed source -- popularity omitted (not fabricated)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Kiki-Jiki, Mirror Breaker": [
+      {
+        "id": "K1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "copy",
+        "attrs": {},
+        "note": "THE COPY ARM -- '{T}: Create a token that's a copy of target nonlegendary creature you control, except it has haste.' Permanent token-copy (CR 707.2). BYTE-IDENTICAL to kiki-jiki-x-restoration-angel K1 (live engine emit:copy, family=copy, stem=copy, manner=null, isSelf=false; the permanent variant carries no in-axis facets, so attrs is empty). CORROBORATES Kiki's copy arm at a 2nd, structurally distinct combo (the close here is ETB-UNTAP, not blink). GraftCopyInheritance resolves this copy's target filter against Zealous Conscripts and clones its ports under a synthesized copy identity."
+      },
+      {
+        "id": "K2",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "tap",
+        "attrs": {
+          "self": true
+        },
+        "note": "the {T} activation cost of K1 (dump: consume tap:self). BYTE-IDENTICAL to kiki-jiki-x-restoration-angel K2. THE loop-closing resource: renewed when the copy's ETB untaps Kiki (E3). Contrast Kiki x Restoration Angel, where the renewal is a BLINK (Kiki re-enters as a NEW untapped object); here Kiki is untapped IN PLACE (same object, no re-entry, no summoning sickness)."
+      }
+    ],
+    "Zealous Conscripts": [
+      {
+        "id": "ZC1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the copy's inherited ETB self-watch -- 'When this creature enters ...' (FAITHFULLY PARSED: live dump consume etb:creature:self, stem=deployment:creature, isSelf=true, GREEN). In the loop this fires on the COPY's own entry (grafted onto the token Kiki just created). Same self-watch shape as Restoration Angel R1 / emiel MU0 / deadeye PD1."
+      },
+      {
+        "id": "ZC2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "target": "chosen",
+          "qty": 1
+        },
+        "note": "THE UNTAP ARM -- 'Untap that permanent' (the second sentence of the ETB, acting on the 'target permanent' from the first). MANDATORY: no 'you may' -> no optionality floor (contrast Restoration Angel R2's Gated 'you may' blink). target=chosen + qty=1 captures 'that [target] permanent' -- a single chosen target the operator cannot prove IS Kiki (object-identity Overlap -> guard:self-watch). PARSER TARGET / PARSE GAP: the live dump does NOT project this port -- Zealous Conscripts currently projects emit:gaincontrol (the compound 'gain control of target permanent ... untap that permanent' clause) + emit:keywordability + etb:creature:self; the untap is absorbed into the coarse gaincontrol emit and not sliced out as structure:untap. Authored as the faithful ADR-3 target (as the Deadeye gold authors deployment[manner=blink] before blink parses). NOTE structure:untap gains a `target` attr witness here (deadeye PD2 used subtype/control/qty on 'up to five lands'; `target` is licensed_by ['*'] so the accretion is licit) -- surfaced, not silent."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E0",
+      "from": "Kiki-Jiki, Mirror Breaker.K2",
+      "to": "Kiki-Jiki, Mirror Breaker.K1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the {T} tap cost (K2) drives the copy emit (K1) -- a card-internal cost->effect wiring (byte-identical to kiki-jiki-x-restoration-angel E0; cf. displacer DK1->DK2, conviction CV1->CV2)"
+      ]
+    },
+    {
+      "id": "E1",
+      "from": "Kiki-Jiki, Mirror Breaker.K1",
+      "to": "Zealous Conscripts.ZC1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "THE GRAFT edge. CR 707.2: the copier definitely creates the copy token; the copy (a Zealous Conscripts) enters the battlefield -> its inherited ETB (ZC1) fires (CR 603.6, an ETB trigger is not optional to FIRE). Engine GraftCopyInheritance synthesizes exactly this as a card-defined GREEN edge copy-emit -> copy-etb-consume (PortGraphEngine.cs ~281-285). Same graft as kiki-jiki-x-restoration-angel E1."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Zealous Conscripts.ZC1",
+      "to": "Zealous Conscripts.ZC2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the copy's ETB effect IS the untap -- a card-internal trigger->effect wiring (cf. Restoration Angel R1->R2 the blink; emiel MU0->MU1). Inherited on the copy via the graft. The 'Untap that permanent' clause is the ETB's payload."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Zealous Conscripts.ZC2",
+      "to": "Kiki-Jiki, Mirror Breaker.K2",
+      "mechanism": "bridge",
+      "rule": "bridge:untap-renews-tap",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE CLOSING HOP. The copy's ETB untaps Kiki IN PLACE -> the {T} tap cost K2 is renewed (Kiki is the SAME object, not blinked -- CR 400.7 identity unchanged, no re-entry). AMBER on a SINGLE floor: object-identity Overlap -- 'gain control of target permanent ... untap that permanent' is a chosen target and the operator cannot prove the untap lands on Kiki specifically rather than some other permanent (guard:self-watch, CR 603.6e/400.7). Contrast kiki-jiki-x-restoration-angel E3, which is AMBER on TWO floors (the Gated 'you may' optional blink PLUS object identity): here the untap is MANDATORY, so the optionality floor is absent -- this witnesses that the object-identity Overlap ALONE caps the copy-close to AMBER. Distinct from bridge:blink-renews-tap (Kiki re-enters as a NEW object) and bridge:untap-land-to-mana (renews MANA, not a tap-ability cost) -> new rule bridge:untap-renews-tap."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:self-watch",
+        "impl": "code",
+        "corroborates": "guard:self-watch",
+        "desc": "corroborates the self-watch object-identity guard on the ETB-untap closing hop: a chosen-target untap ('untap that [target] permanent') whose target only Overlaps -- never provably Subsumes -- the specific tap-gated copier (Kiki) cannot certify the untap lands on Kiki rather than another permanent (object identity the operator can't see) -> floors AMBER. A NEW witness type for the guard: it caps AMBER here EVEN THOUGH the effect is mandatory (no optionality), isolating the object-identity floor from the optionality floor that co-caps the blink dual (kiki-jiki-x-restoration-angel).",
+        "cr": [
+          "603.6e",
+          "400.7"
+        ]
+      }
+    ],
+    "bridges": [
+      {
+        "id": "bridge:untap-renews-tap",
+        "from_stem": "structure:untap",
+        "to_stem": "tap",
+        "ceiling": "GREEN",
+        "from_attrs": {
+          "target": "chosen"
+        },
+        "desc": "an untap (structure:untap emit) renews a tap-based cost/ability (tap consume): the untapped permanent's {T} activated ability or tap-cost becomes available again (CR 701.26 untap keyword action; CR 107.5 the {T} cost; CR 602 re-activation). Ceiling GREEN -- a mandatory, universal untap reliably renews the tap (witnessed by Intruder Alarm's 'untap all creatures'); individual edges floor to AMBER via their own residual guards: object-identity Overlap on a targeted untap (guard:self-watch) or a cumulative counter co-cost (guard:untap-cost-accrues-counter). Collapses the batch-9 per-outlet siblings (ETB-targeted / universal-creature / self-via-counter) into one relation -- the differences are the untap's trigger/target (far side of the emit), not the untap->tap bridge.",
+        "cr": [
+          "701.26",
+          "107.5",
+          "602"
+        ],
+        "corroborates": "bridge:untap-renews-tap"
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the graft: CR 707.2 the copier definitely creates the copy and CR 603.6 its ETB fires on entry (card-defined GREEN, matching engine GraftCopyInheritance)"
+    },
+    {
+      "claim": "edge.E3.tier == AMBER",
+      "because": "the closing hop rests SOLELY on the object-identity Overlap (guard:self-watch) -- the mandatory untap targets a chosen permanent the operator cannot prove is Kiki; there is NO optionality floor (contrast Restoration Angel's Gated blink)"
+    },
+    {
+      "claim": "edge.E3.mechanism == bridge:untap-renews-tap"
+    },
+    {
+      "claim": "loop.amber_on_object_identity_alone",
+      "because": "the untap is MANDATORY (no 'you may') and untaps Kiki IN PLACE (same object, no re-entry, no summoning sickness, no mana), so the only irreducible floor is the chosen-target object-identity Overlap -- isolating the guard:self-watch floor from the optionality floor that co-caps the blink dual (kiki-jiki-x-restoration-angel E3)"
+    },
+    {
+      "claim": "corroborates.kiki-copy-arm",
+      "because": "K1 (emit:copy, stem=copy, attrs {}) and K2 (consume tap:self) are byte-identical to the kiki-jiki-x-restoration-angel witnesses -- Kiki's copy arm is now witnessed at a 2nd, structurally distinct combo (ETB-untap close vs blink close)"
+    },
+    {
+      "claim": "parse_target.untap_emit",
+      "because": "Zealous Conscripts currently projects emit:gaincontrol (absorbing the 'untap that permanent' clause) + emit:keywordability + etb:creature:self -- the structure:untap emit ZC2 is NOT yet AST-derivable; this gold is the parser target for slicing the untap out of the gaincontrol compound, mirroring how deadeye-x-peregrine-drake is the parser target for deployment[manner=blink]"
+    }
+  ],
+  "cr": [
+    "707",
+    "707.2",
+    "603.6",
+    "603.6e",
+    "400.7",
+    "605"
+  ]
+}

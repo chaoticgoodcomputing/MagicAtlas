@@ -1,0 +1,171 @@
+{
+  "id": "sanguine-bond-x-exquisite-blood",
+  "unit": "combo",
+  "cards": [
+    "Sanguine Bond",
+    "Exquisite Blood"
+  ],
+  "source": {
+    "popularity": 140681,
+    "note": "The life-MIRROR infinite: the two enchantments each convert one life direction into the other, and the two conversions compose into a closed, self-sustaining drain -- any single life-gain (or opponent life-loss) seeds an unbounded cycle. Oracle text verified vs oracle-cards.json 2026-07-17: Sanguine Bond = 'Whenever you gain life, target opponent loses that much life.' ({3}{B}{B} Enchantment); Exquisite Blood = 'Whenever an opponent loses life, you gain that much life.' ({4}{B} Enchantment). Live engine ports (dumps/card-ports.json, verified 2026-07-17): Sanguine Bond -> consume trigger:life:gain:controlled (family=life, stem=life, direction=gain, controlled=you, Green) + emit:life:loss:opponent (direction=loss, recipient=opponent, Green); Exquisite Blood -> consume trigger:life:loss:opponent (direction=loss, recipient=opponent, Green) + emit:life:gain:controlled (direction=gain, recipient=you, Green). ALL FOUR load-bearing ports are AST-derivable with direction + recipient facets -- NO parse gap. source.popularity=140681 is the REAL corpus figure for the exact 2-card instance (dumps/combo-instances.json: cards='Exquisite Blood + Sanguine Bond', cardCount=2, tier=Green, firable=True, familySignature=life) -- not fabricated. HONEST DECOMPOSITION (the key finding): the 'mirror' is NOT a new residual rule. It decomposes into TWO cross-card life feeds, each already governed by policy:life-direction-match (a same-direction life emit->subscription feed), closed by each card's own card-defined direction-CONVERSION (its trigger->emit internal edge). The direction FLIP (gain<->loss) happens INSIDE each card (card-defined, self-certifying), never on the cross-card edge; every cross-card edge is a same-direction feed. So this gold does NOT mint a life-mirror bridge/arm -- doing so would sibling an existing mechanism. It CORROBORATES policy:life-direction-match on BOTH branches: E2 is the FIRST-EVER loss-branch witness (loss-emit -> loss-trigger; soul-warden-x-ajanis-pridemate witnessed only the gain branch), and E4 re-witnesses the gain branch -- AND it is the first CLOSED-CYCLE (combo, loop_tier) witness of the rule, where soul-warden was a single open pairwise feed. The novelty is thus the emergent GREEN life-only mirror LOOP (the section-10 SDF verdict), not a new edge rule."
+  },
+  "loop_tier": "GREEN",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Sanguine Bond": [
+      {
+        "id": "SB1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you"
+        },
+        "note": "'Whenever you gain life' -- a life subscription (triggered ability, CR 119.9) watching YOUR life-gain. direction=gain; recipient=you (controlled). No qty facet: any nonzero life gained fires it (CR 119.9). MANDATORY (not 'you may') -> ungated. Player-scoped (any source causing you to gain life fires it, CR 119.9) -> no object-identity self-watch. Live label trigger:life:gain:controlled. Identical shape to soul-warden's Ajani's Pridemate P1."
+      },
+      {
+        "id": "SB2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent",
+          "qty": "that-many"
+        },
+        "note": "'target opponent loses that much life' -- the down-conversion: Sanguine turns YOUR gain into an OPPONENT's loss. direction=loss; recipient=opponent; qty=that-many (bound to the amount gained, CR 119.9 'that much'). The direction FLIP (gain-trigger -> loss-emit) is Sanguine's own card-defined behavior (E1), not a cross-card rule. Targets an opponent; in a real game there is always an opponent to target, so the targeting does not gate the loop. Live label emit:life:loss:opponent."
+      }
+    ],
+    "Exquisite Blood": [
+      {
+        "id": "EB1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent"
+        },
+        "note": "'Whenever an opponent loses life' -- a life subscription (CR 119.9) watching an OPPONENT's life-loss. direction=loss; recipient=opponent. No qty facet: any nonzero opponent life-loss fires it. MANDATORY -> ungated. Player-scoped (any source causing an opponent to lose life, CR 119.3/119.9) -> no object-identity self-watch. Live label trigger:life:loss:opponent."
+      },
+      {
+        "id": "EB2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": "that-many"
+        },
+        "note": "'you gain that much life' -- the up-conversion: Exquisite turns an OPPONENT's loss into YOUR gain. direction=gain; recipient=you; qty=that-many (bound to the amount lost). The direction FLIP (loss-trigger -> gain-emit) is Exquisite's own card-defined behavior (E3). Live label emit:life:gain:controlled. Mirror-inverse of Sanguine SB2."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Sanguine Bond.SB1",
+      "to": "Sanguine Bond.SB2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal (Sanguine's own direction-conversion): 'whenever you gain life' (SB1) drives 'target opponent loses that much life' (SB2). The gain->loss FLIP lives HERE, card-defined and self-certifying -- so the two cross-card edges (E2, E4) can each be a plain same-direction feed. qty=that-many carries the amount through unchanged."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Sanguine Bond.SB2",
+      "to": "Exquisite Blood.EB1",
+      "mechanism": "match_policy",
+      "rule": "policy:life-direction-match",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE LOSS-BRANCH WITNESS (first ever): Sanguine's opponent-loss emit (SB2, direction=loss, recipient=opponent) feeds Exquisite's opponent-loss subscription (EB1, direction=loss, recipient=opponent). direction loss=loss (policy:life-direction-match, loss branch -- soul-warden witnessed only the GAIN branch, so this newly exercises the loss half of the SAME rule). A gain-emit would NEVER feed this loss-trigger (CR 119.9: a gain event is not a life-loss event).",
+        "GREEN tiering: recipient=opponent (SB2) Subsumes recipient=opponent (EB1) EXACTLY (opponent<->opponent, both enchantments controlled by you so 'opponent' refers to the same player -- the subscription-subject Subsumes->GREEN branch, reuse policy:subscription:subject-subsumes-green, confirmed). NO self-watch: 'whenever an opponent loses life' watches a PLAYER-scoped life-change event (CR 119.3/119.9 'a source causes a player to lose life'), not object identity, so it is fully observable -> no Overlaps floor -> GREEN. Same GREEN reasoning as soul-warden's gain-branch edge, on the loss branch."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Exquisite Blood.EB1",
+      "to": "Exquisite Blood.EB2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal (Exquisite's own direction-conversion): 'whenever an opponent loses life' (EB1) drives 'you gain that much life' (EB2). The loss->gain FLIP lives HERE, card-defined and self-certifying. This is the second of the two conversions whose COMPOSITION closes the mirror."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Exquisite Blood.EB2",
+      "to": "Sanguine Bond.SB1",
+      "mechanism": "match_policy",
+      "rule": "policy:life-direction-match",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE CYCLE-CLOSING GAIN-BRANCH FEED (corroborates soul-warden): Exquisite's you-gain emit (EB2, direction=gain, recipient=you) feeds Sanguine's you-gain subscription (SB1, direction=gain, recipient=you). direction gain=gain (policy:life-direction-match, gain branch -- the exact shape soul-warden-x-ajanis-pridemate witnessed). Closing this edge back onto SB1 completes the loop SB1->SB2->EB1->EB2->SB1.",
+        "GREEN tiering: recipient=you (EB2) Subsumes recipient=you (SB1) EXACTLY (You<->You, control lattice you=you; policy:subscription:subject-subsumes-green, confirmed). NO self-watch: 'whenever you gain life' is player-scoped (CR 119.9), fully observable -> GREEN."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:life-direction-match",
+        "consume_kind": "subscription",
+        "subject": "facet-feeds",
+        "axis": "direction",
+        "lattice": "gain |= gain ; loss |= loss (a life subscription is fed only by a same-direction life event; a gain never feeds a loss-trigger, nor a loss a gain-trigger)",
+        "corroborates": "policy:life-direction-match",
+        "desc": "corroborates the soul-warden-x-ajanis-pridemate witness of policy:life-direction-match with (a) the FIRST loss-branch witness -- Sanguine Bond's opponent-loss emit feeds Exquisite Blood's opponent-loss subscription (loss feeds loss, edge E2), where soul-warden exercised only the gain branch -- and (b) a re-witness of the gain branch (Exquisite's you-gain emit feeds Sanguine's you-gain subscription, edge E4). Byte-identical core (consume_kind=subscription, subject=facet-feeds) and same axis/lattice/cr -> a reference, not a re-definition. Additionally the FIRST closed-CYCLE witness of the rule: soul-warden was one open pairwise feed, this pairs two direction-matched feeds into a self-sustaining life-mirror loop. The life 'mirror' needs NO new rule -- each card's gain<->loss FLIP is its own card-defined trigger->emit edge, so both cross-card edges are plain same-direction feeds under THIS rule.",
+        "cr": [
+          "119",
+          "119.3",
+          "119.9"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == GREEN",
+      "because": "a genuine mana-free, ungated life-mirror infinite: both triggers are MANDATORY (CR 119.9, neither says 'you may'), neither carries a mana or tap co-cost, and both are player-scoped events (no object-identity self-watch, CR 119.3/119.9) -> every edge in the cycle is GREEN with no residual floor. The section-10 repetition vector is non-negative on every axis (no resource consumed per iteration; qty=that-many carries the amplitude through unchanged), so the loop is self-sustaining and unbounded -> GREEN. The live engine independently tiers this exact 2-card combo Green + firable (dumps/combo-instances.json)."
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "policy:life-direction-match loss branch (FIRST witness): Sanguine's opponent-loss emit feeds Exquisite's opponent-loss subscription (loss=loss); recipient=opponent Subsumes recipient=opponent exactly, and the trigger is player-scoped (no self-watch) -> fully observable -> GREEN. A gain-emit would never feed this loss-trigger (CR 119.9)."
+    },
+    {
+      "claim": "edge.E4.tier == GREEN",
+      "because": "policy:life-direction-match gain branch (corroborates soul-warden-x-ajanis-pridemate): Exquisite's you-gain emit feeds Sanguine's you-gain subscription (gain=gain); recipient=you Subsumes recipient=you exactly, player-scoped, no self-watch -> GREEN. This edge closes the cycle back onto SB1."
+    },
+    {
+      "claim": "mirror_is_two_direction_matched_feeds_not_a_new_rule",
+      "because": "the life-mirror decomposes into TWO cross-card same-direction feeds (E2 loss->loss, E4 gain->gain), each governed by the existing policy:life-direction-match, closed by each card's own card-defined direction-CONVERSION (E1 gain->loss inside Sanguine, E3 loss->gain inside Exquisite). The direction FLIP never occurs on a cross-card edge -- it is always a card's internal trigger->emit -> no new bridge/match_policy is warranted (declaring one would sibling policy:life-direction-match, which rule discipline forbids). The gold's novelty is the emergent closed GREEN cycle + the first loss-branch witness, not a new edge rule."
+    },
+    {
+      "claim": "life_direction_prune",
+      "because": "direction-match is load-bearing on both cross-card edges: SB2.direction=loss feeds EB1.direction=loss and EB2.direction=gain feeds SB1.direction=gain, but a gain-emit would NEVER feed a loss-trigger nor a loss-emit a gain-trigger (policy:life-direction-match, CR 119.9). If the engine ignored direction it would over-connect; the mirror closes ONLY because each card's internal FLIP realigns direction for the next same-direction feed."
+    },
+    {
+      "claim": "loop_is_ungated_and_mana_free",
+      "because": "verified against oracle text 2026-07-17: both triggered abilities are mandatory ('Whenever ...', no 'you may', CR 603.2b) and neither has an activation, mana, or tap cost. Sanguine targets an opponent, but a real game always has an opponent to target, so the targeting does not gate the cycle. No guard (no self-watch, no recast-pays-mana, no exclude-self) applies -> no AMBER floor."
+    }
+  ],
+  "cr": [
+    "119",
+    "119.3",
+    "119.9",
+    "603.2",
+    "603.2b"
+  ]
+}

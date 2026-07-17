@@ -1,0 +1,352 @@
+{
+  "id": "nim-deathmantle-x-ashnods-altar-x-blood-artist",
+  "unit": "combo",
+  "cards": [
+    "Nim Deathmantle",
+    "Ashnod's Altar",
+    "Boggart Brute",
+    "Blood Artist"
+  ],
+  "source": {
+    "note": "The EXTERNAL-reanimator dual of the Gravecrawler SELF-recast golds. WITNESSES a genuinely-NEW pay-mana-REANIMATE arm: policy:reanimate:external-trigger-return -- an EXTERNAL permanent (Nim Deathmantle, an Equipment) whose dies-trigger, on paying a mana co-cost ({4}), RETURNS the dead creature to the battlefield. This is distinct from policy:recast:battlefield-return (Gravecrawler's SELF-recast, where the returned object IS the driver card and CASTS itself from the graveyard, CR 601.3): here the AGENT (Deathmantle) and the RETURNED object (the fodder creature) are DISTINCT cards, and it is a direct battlefield RETURN by an effect (CR 400.7), NOT a cast -- so it never pays the creature's own mana cost, only Deathmantle's {4}. VERIFIED oracle text (oracle-cards.json 2026-07-17): Nim Deathmantle = 'Equipped creature gets +2/+2, has intimidate, and is a black Zombie...\\nWhenever a nontoken creature is put into your graveyard from the battlefield, you may pay {4}. If you do, return that card to the battlefield and attach this Equipment to it.\\nEquip {4}'; Ashnod's Altar = 'Sacrifice a creature: Add {C}{C}.'; Blood Artist = 'Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.'; Boggart Brute = 'Menace' (a vanilla nontoken Goblin -- inert fodder). PARSE-TO-PORT GAP (REPORTED, parser-target gold -- same shape as deadeye-x-peregrine-drake's blink->gainability): read from dumps/card-ports.json 2026-07-17, Nim Deathmantle projects the dies-TRIGGER faithfully (ltb:creature:to-graveyard:controlled, family=death, stem=removal:creature, consume, Green -- ND1, load-bearing and derivable) BUT does NOT project the REANIMATE return: 'you may pay {4}. If you do, return that card to the battlefield and attach this Equipment to it' (spans [266,363]) collapses to a single COARSE emit:conditionalpay (Amber), which conflates the {4} pay-gate with the return -- there is NO emit:returntobattlefield / recur emit and NO separate pay:mana for the reanimate {4} (the only parsed pay:mana, spans [364,373], is the EQUIP {4} on line 2, a different cost). So the two load-bearing reanimate ports authored here -- ND3 (the recur/return emit) and ND2 (the {4} co-cost) -- are NOT yet AST-derivable; they are authored as the parser TARGET and the gap is reported, not papered over. Follow-up parse slice: split emit:conditionalpay into (a) a pay:mana consume for the {4} and (b) an emit:returntobattlefield (recur, from=graveyard->to=battlefield, self=false, subject='that card') so the external reanimate arm becomes engine-derivable. HONEST MANA/LOOP FLOOR (loop_tier=AMBER): with the minimal named engine (Ashnod's + Deathmantle + ONE nontoken creature + Blood Artist) the reanimate arm is MANA-NEGATIVE. Per cycle: sacrifice the creature to Ashnod's -> {C}{C} (2 generic-payable mana); the creature (nontoken) dies -> Deathmantle triggers -> pay {4} to return it. {C}{C} pays only 2 of the {4} generic (no color problem -- pure QUANTITY shortfall) -> net -2 mana/cycle -> NOT provably >= break-even -> AMBER (guard:recast-pays-mana floors it, corroborated here on the REANIMATE arm). To break even you would need TWO sacs' worth of mana ({C}{C}{C}{C}={4}) per reanimation, i.e. TWO bodies per reanimation, but a single reanimation returns only ONE body -> body-limited -> AMBER. The famous INFINITE version therefore needs a token-DOUBLING reanimation target (e.g. Grave Titan, 'Whenever this creature enters or attacks, create two 2/2 black Zombie creature tokens' -- verified oracle text; live ports emit:token:creature:zombie:controlled + entersorattacks:creature): reanimate Grave Titan -> ETB makes 2 tokens -> sacrifice Titan + 2 tokens = 3 sacs = {C}{C}{C}{C}{C}{C} >= {4} -> mana-POSITIVE -> GREEN (tokens are NOT nontoken so they never re-trigger Deathmantle, but they ARE mana fodder AND Blood-Artist death fuel). That token-doubler is a genuine PER-ITERATION mana contributor (unlike the Gravecrawler gold's second-Zombie SEED), so it does change the section-10 repetition vector -- hence the minimal engine is honestly AMBER, not a seed-gated GREEN. No source.popularity/csb: the testbed corpus carries no edhrec/price/CSB count -- omitted rather than fabricated."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Nim Deathmantle": [
+      {
+        "id": "ND1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "to": "graveyard",
+          "token": false
+        },
+        "note": "THE DIES-TRIGGER (subscription) -- 'Whenever a nontoken creature is put into your graveyard from the battlefield' (live ltb:creature:to-graveyard:controlled, family=death, stem=removal:creature, consume, Green -- AST-DERIVABLE, spans [189,265]). token:false is LOAD-BEARING: Deathmantle triggers ONLY on nontoken creatures, so a token dying does NOT fire the reanimation (which is why the GREEN infinite needs a nontoken token-MAKER whose tokens are mere fodder). control=you == 'your graveyard' (a leaves-the-battlefield-to-your-graveyard trigger, CR 603.6e/603.10a). A death subscription; mirrors Blood Artist BA1 but narrower (nontoken, controlled)."
+      },
+      {
+        "id": "ND2",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "generic",
+          "qty": 4
+        },
+        "note": "THE REANIMATE MANA CO-COST -- 'you may pay {4}' (generic mana, qty 4). THE section-8 balance target for the reanimate arm: the loop must refill {4} each iteration to be GREEN. PARSE GAP: this {4} is NOT projected as a distinct pay:mana consume -- it is bundled inside emit:conditionalpay (Amber, spans [266,363]); the only parsed pay:mana (spans [364,373]) is the EQUIP {4} on line 2, a different cost. Authored as the parser target. guard:recast-pays-mana caps the reanimate edge (E9) on this cost."
+      },
+      {
+        "id": "ND3",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "battlefield",
+          "control": "you",
+          "self": false
+        },
+        "note": "THE EXTERNAL REANIMATION ARM -- '...return that card to the battlefield...' (the intended recur/returntobattlefield emit; family=recur, from=graveyard->to=battlefield, control=you). self:FALSE is the crux vs Gravecrawler: the returned object is NOT Deathmantle (the source/driver) -- it is an EXTERNAL creature ('that card', the nontoken creature whose death fired ND1). from=graveyard and to=battlefield are BOTH oracle-proven ('put into your graveyard' + 'return that card to the battlefield'). PARSE GAP (parser-target, mirrors deadeye's blink->emit:gainability): Nim Deathmantle does NOT currently project this recur emit; the return collapses into emit:conditionalpay (Amber, spans [266,363]) together with the {4}. Authored as the intended port; the gap is REPORTED, not papered over."
+      }
+    ],
+    "Ashnod's Altar": [
+      {
+        "id": "AN1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "'Sacrifice a creature' -- the fodder / activation cost (live sac:creature:controlled, family=sacrifice, stem=creature, consume, Green). No exclude_self: Ashnod's sacrifices ANY creature you control (here the reanimated Boggart Brute). An argument-consume (a cost). Structurally identical to the Gravecrawler golds' AN1."
+      },
+      {
+        "id": "AN2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "to": {
+            "value": "graveyard",
+            "provenance": "derived"
+          },
+          "manner": "sacrificed"
+        },
+        "note": "the death half of the sacrifice (the sacrifice-as-dual: fodder consume AN1 + LTB/death emit AN2, via bridge:sacrifice-to-dies, CR 701.21a). The sacrificed nontoken creature (Boggart Brute) leaves the battlefield to the graveyard. to=graveyard is provenance=derived (a sacrifice normally goes to the graveyard but a replacement e.g. Rest in Peace could redirect to exile; the parser cannot prove the destination) -> caps the drain/trigger edges' Reliability. Mirrors the Gravecrawler golds' AN2 / ruthless-knave R3 / chatterfang C5."
+      },
+      {
+        "id": "AN3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "colorless",
+          "qty": 2
+        },
+        "note": "'Add {C}{C}' (live emit:mana:colorless, family=mana, stem=mana, Green). TWO colorless mana -- generic-payable, so they CAN pay part of Deathmantle's generic {4} (no color obstacle, contrast the Gravecrawler-Ashnod's gold where colorless could not pay a colored {B}). But only ONE sac fires per reanimation, so {C}{C}=2 covers only 2 of the {4} -> a QUANTITY shortfall of 2/cycle -> the loop is mana-negative -> AMBER (see E9)."
+      }
+    ],
+    "Boggart Brute": [
+      {
+        "id": "BB1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "token": false,
+          "control": "you",
+          "qty": 1
+        },
+        "note": "Boggart Brute's on-battlefield creature body -- the sac FODDER and the reanimation SUBJECT ('that card'). token:false (a NONTOKEN creature you control) is load-bearing: Nim Deathmantle triggers ONLY on nontoken creatures, so a token would not re-trigger the reanimation. Boggart Brute projects NO interaction emit/consume ports in the live parse (its only ability, menace, is inert -- verified absent from dumps/card-ports.json 2026-07-17); BB1 models its creature-object as a board STATE node (side:emit = the card presents this object to the battlefield), the anchor the reanimate returns (E9) and Ashnod's sacrifices (E1). Any nontoken creature serves as fodder; Boggart Brute is named as a concrete, inert, in-corpus witness."
+      }
+    ],
+    "Blood Artist": [
+      {
+        "id": "BA1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "any",
+          "from": "battlefield",
+          "to": "graveyard"
+        },
+        "note": "'Whenever this creature or another creature dies' (live ltb:creature:to-graveyard, consume, stem=removal:creature, family=death) -- any creature, any controller. A death subscription; mirrors ruthless-knave B1 / the Gravecrawler golds' BA1."
+      },
+      {
+        "id": "BA2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent",
+          "qty": 1
+        },
+        "note": "'target player loses 1 life' -- the drain (payoff). Mirrors the Gravecrawler golds' BA2 / ruthless-knave B2."
+      },
+      {
+        "id": "BA3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": 1
+        },
+        "note": "'and you gain 1 life'. Mirrors the Gravecrawler golds' BA3 / ruthless-knave B3."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Boggart Brute.BB1",
+      "to": "Ashnod's Altar.AN1",
+      "mechanism": "match_policy",
+      "rule": "policy:argument:subject-cover",
+      "tier": "GREEN",
+      "notes": [
+        "the nontoken creature you control (Boggart Brute, or the reanimated body re-supplied by E9) provably COVERS Ashnod's 'sacrifice a creature you control' cost (an argument-consume). Mirrors the Gravecrawler golds' E1 and chatterfang E4. REUSES the confirmed policy:argument:subject-cover (reference, not re-declaration)."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Ashnod's Altar.AN1",
+      "to": "Ashnod's Altar.AN2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: paying the sacrifice cost IS the sacrificed creature's death (removal:creature to the graveyard, manner=sacrificed)."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Ashnod's Altar.AN1",
+      "to": "Ashnod's Altar.AN3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: the activated ability's effect adds {C}{C} when the sacrifice cost is paid."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Ashnod's Altar.AN2",
+      "to": "Blood Artist.BA1",
+      "mechanism": "subsumption",
+      "tier": "GREEN",
+      "notes": [
+        "THE DEATH-PAYOFF EDGE. removal:creature = removal:creature; manner=sacrificed is a dies-to-graveyard event (bridge:sacrifice-to-dies, CR 701.21a); control=you subset of any; creature subset creature EXACTLY -> Subsumes -> GREEN. Corroborates ruthless-knave-x-blood-artist's creature-subset-creature GREEN (policy:subscription:subject-subsumes-green) and mirrors the Gravecrawler golds' E4. AN2.to=graveyard is provenance=derived -> Reliability capped (Rest-in-Peace prune)."
+      ]
+    },
+    {
+      "id": "E5",
+      "from": "Blood Artist.BA1",
+      "to": "Blood Artist.BA2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: the death trigger drains 1 life from a player (the aristocrat payoff)."
+      ]
+    },
+    {
+      "id": "E6",
+      "from": "Blood Artist.BA1",
+      "to": "Blood Artist.BA3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: and you gain 1 life."
+      ]
+    },
+    {
+      "id": "E7",
+      "from": "Ashnod's Altar.AN2",
+      "to": "Nim Deathmantle.ND1",
+      "mechanism": "subsumption",
+      "tier": "GREEN",
+      "notes": [
+        "THE DEATH-FEEDS-REANIMATOR EDGE. The sacrificed nontoken creature's death (AN2: removal:creature, manner=sacrificed, from=battlefield) feeds Nim Deathmantle's 'nontoken creature put into your graveyard from the battlefield' dies-trigger (ND1): manner=sacrificed is a dies-to-graveyard event (bridge:sacrifice-to-dies, CR 701.21a/700.4); Boggart Brute is nontoken (token:false Subsumes Deathmantle's nontoken filter -- a TOKEN would NOT match); from=battlefield matches; control=you subset your-graveyard -> Subsumes -> GREEN. Corroborates bridge:sacrifice-to-dies (a nontoken-creature, external-reanimator witness) and policy:subscription:subject-subsumes-green. AN2.to=graveyard is provenance=derived -> Reliability capped (Rest-in-Peace prune)."
+      ]
+    },
+    {
+      "id": "E8",
+      "from": "Nim Deathmantle.ND1",
+      "to": "Nim Deathmantle.ND3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: the triggered ability's resolution -- 'you may pay {4} (ND2). If you do, return that card to the battlefield' (CR 603.2/608.2). ND1's fire drives ND3's reanimate emit, gated by the ND2 {4} co-cost. PARSE GAP: this internal edge and ND2/ND3 are authored as the parser target -- the live parse collapses both into emit:conditionalpay (Amber)."
+      ]
+    },
+    {
+      "id": "E9",
+      "from": "Nim Deathmantle.ND3",
+      "to": "Boggart Brute.BB1",
+      "mechanism": "match_policy",
+      "rule": "policy:reanimate:external-trigger-return",
+      "residuals": [
+        "guard:recast-pays-mana"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE NEW EXTERNAL-REANIMATE CLOSING EDGE. Nim Deathmantle's dies-trigger returns 'that card' -- the EXACT nontoken creature (Boggart Brute) whose death fired ND1 -- to the battlefield under your control (CR 400.7, a new object put onto the battlefield by an effect), re-supplying the fodder body (BB1) and closing the loop. Because the returned object is the trigger's OWN captured subject ('that card', not a producer choice), it Subsumes on IDENTITY -> GREEN-eligible on the subject axis. DISTINCT from policy:recast:battlefield-return: there the returned object IS the driver card and CASTS itself from the graveyard (self:true, CR 601.3); HERE the agent (Deathmantle) and the returned object (Boggart Brute) are DISTINCT cards and it is a direct battlefield RETURN by an effect, not a cast -- an EXTERNAL triggered reanimation. Declares policy:reanimate:external-trigger-return (its first witness -> observed; judge PENDING).",
+        "AMBER (mana-negative, guard:recast-pays-mana floors it): the reanimate re-pays {4} (ND2) every iteration; the loop's only mana output is Ashnod's {C}{C} (AN3, one sac), which covers only 2 of the generic {4} -> net -2 mana/cycle -> the section-10 repetition vector is NEGATIVE on the mana axis -> not provably >= break-even -> AMBER. This corroborates guard:recast-pays-mana on the REANIMATE arm (a pay-during-resolution {4}, CR 608.2), extending the recast-arm floor witnessed by displacer-kitten / gravecrawler-x-ashnods-altar. GREEN would need a token-DOUBLING reanimation target (e.g. Grave Titan) providing a second sac body -- and hence a second {C}{C} -- per iteration; that is a per-iteration mana contributor, so the minimal engine is honestly AMBER (not a seed-gated GREEN)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:reanimate:external-trigger-return",
+        "consume_kind": "reanimate-driver",
+        "subject": "trigger-subject-return",
+        "tiering": "the returned object is the trigger's captured subject ('that card' = the exact creature whose death fired the trigger) -> Subsumes on identity -> GREEN-eligible on the subject axis; capped AMBER by the reanimate mana co-cost (guard:recast-pays-mana) unless the loop provably refills it",
+        "desc": "an external permanent's dies-trigger whose paid effect RETURNS the triggering creature to the battlefield: a returntobattlefield (recur, from=graveyard->to=battlefield) emit driven by a permanent OTHER than the returned card, keyed on that creature's death, that returns THAT card (the exact nontoken creature whose leaves-the-battlefield-to-graveyard event fired the trigger, CR 603.6e/603.10a) under the trigger-controller's control (CR 400.7 -- a new object put onto the battlefield by an effect). Because the returned object is the trigger's OWN captured subject (not a producer choice, not the driver's self-identity), the recast/return subject Subsumes on identity -> GREEN-eligible; but the return is performed by an EXTERNAL object (the reanimator, e.g. Nim Deathmantle the Equipment, NOT the returned creature itself) and it is a direct battlefield RETURN by an effect, NOT a CAST -- so it does NOT pay the returned creature's own mana cost, only the trigger's activation/pay co-cost (guard:recast-pays-mana; here Deathmantle's {4}, paid during resolution, CR 608.2). The EXTERNAL-AGENT dual of policy:recast:battlefield-return (self-return, where the returned object IS the driver card and casts ITSELF from the graveyard via a static permission, CR 601.3): there the agent and the returned object are ONE card; here they are DISTINCT cards -- a triggered reanimation of an external creature. Any loop closed by this reanimate still carries the pay co-cost, which floors the cycle to AMBER unless the loop provably refills that mana (Ashnod's {C}{C} covers only 2 of Deathmantle's {4} per single sac -> mana-negative -> AMBER; a token-doubling reanimation target refills it -> GREEN).",
+        "cr": [
+          "400.7",
+          "603.2",
+          "603.10a",
+          "608.2"
+        ]
+      }
+    ],
+    "guards": [
+      {
+        "id": "guard:recast-pays-mana",
+        "impl": "code",
+        "corroborates": "guard:recast-pays-mana",
+        "desc": "corroborates the recast mana co-cost floor from a NEW arm: an external triggered REANIMATE (not a cast/recast). Nim Deathmantle's reanimation re-pays {4} every iteration (a pay-during-resolution co-cost, CR 608.2/603.2); the loop's only mana is Ashnod's colorless {C}{C} (one sac), which covers only 2 of the generic {4} -> unrefilled by 2 on the mana axis -> AMBER (ADR-0003 section-8 mana balance). Extends the guard's reach from the cast/recast arm (displacer-kitten bounce-to-hand, gravecrawler-x-ashnods-altar cast-from-graveyard) to the effect-driven battlefield-return arm: any loop closed by a mana-costed re-entry carries the co-cost and floors unless provably refilled.",
+        "cr": [
+          "603.2",
+          "608.2"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the reanimate re-pays {4} (ND2) each iteration and the loop's only mana output is Ashnod's {C}{C} (AN3, one sac), which covers only 2 of the generic {4} -> the section-10 repetition vector is NEGATIVE on the mana axis (net -2/cycle) -> not provably >= break-even -> AMBER (guard:recast-pays-mana). GREEN would require a token-DOUBLING reanimation target (e.g. Grave Titan) that supplies a second sac body -- and a second {C}{C} -- per iteration."
+    },
+    {
+      "claim": "mana_balance == negative",
+      "because": "per iteration the loop produces {C}{C} (2 generic-payable colorless, AN3) from a single sac and consumes {4} (4 generic, ND2) for the reanimation; {C}{C} pays only 2 of 4 -> net -2 mana -> the cycle is not self-sustaining. This is a QUANTITY shortfall (both generic-payable, no color mismatch), distinct from the gravecrawler-x-ashnods-altar COLOR shortfall ({C} cannot pay {B})."
+    },
+    {
+      "claim": "edge.E9.mechanism == match_policy",
+      "because": "an external permanent's dies-trigger returns the dead creature to the battlefield -- policy:reanimate:external-trigger-return; not subsumption/card-defined/modifier, so it cites a rule id."
+    },
+    {
+      "claim": "edge.E9.tier == AMBER",
+      "because": "guard:recast-pays-mana: the {4} reanimate co-cost is unrefilled by the single sac's {C}{C} (short by 2). The edge is GREEN-eligible on identity ('that card' Subsumes) but floors to AMBER on the mana co-cost, exactly as gravecrawler-x-ashnods-altar E7 floors on the same guard."
+    },
+    {
+      "claim": "rule.policy:reanimate:external-trigger-return.witnessed",
+      "because": "E9 is the external-agent triggered-reanimation arm -- Deathmantle (a DISTINCT card from the returned creature) returns 'that card' to the battlefield by an effect (CR 400.7), NOT a cast (contrast Gravecrawler casting ITSELF from the graveyard, CR 601.3). Genuinely NEW: no existing rule covers a dies-trigger that reanimates its captured subject via an external permanent. Distinct from policy:recast:battlefield-return (self:true, same-card self-cast) and policy:recast:spell-recursion (return-to-HAND recast). First witness -> observed; judge PENDING."
+    },
+    {
+      "claim": "edge.E9.subsumes_on_identity",
+      "because": "the reanimate returns 'that card' -- the EXACT creature whose death fired the trigger (Boggart Brute) -- not a producer-chosen or filtered object; so the return subject Subsumes on identity (GREEN-eligible on the subject axis), the mana co-cost being the only reason the edge/loop floors to AMBER."
+    },
+    {
+      "claim": "nontoken_required",
+      "because": "Nim Deathmantle triggers only on a NONTOKEN creature (verified oracle text) -- token:false on ND1/BB1 is load-bearing. A token dying (e.g. Grave Titan's Zombie tokens in the GREEN version) does NOT re-trigger the reanimation; tokens serve only as extra sac/mana/Blood-Artist fuel."
+    },
+    {
+      "claim": "edge.E7.tier == GREEN",
+      "because": "the sacrificed nontoken creature's death (AN2, manner=sacrificed) feeds Deathmantle's nontoken-dies-trigger (ND1): bridge:sacrifice-to-dies (CR 701.21a) supplies to=graveyard; token:false Subsumes the nontoken filter; from=battlefield matches; control=you subset your-graveyard -> Subsumes -> GREEN. Corroborates bridge:sacrifice-to-dies and policy:subscription:subject-subsumes-green."
+    },
+    {
+      "claim": "edge.E7.reliability_capped",
+      "because": "AN2.to has provenance=derived (Rest-in-Peace over-approximation on the sacrifice destination) -> caps the death-feeds-reanimator edge's Reliability."
+    },
+    {
+      "claim": "edge.E4.tier == GREEN",
+      "because": "removal:creature = removal:creature; manner=sacrificed is a dies-to-graveyard event (bridge:sacrifice-to-dies); creature subset creature exactly, control=you subset any -> Subsumes -> GREEN (corroborates ruthless-knave-x-blood-artist)."
+    },
+    {
+      "claim": "edge.E4.reliability_capped",
+      "because": "AN2.to has provenance=derived (Rest-in-Peace over-approximation on the sacrifice destination)."
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the nontoken creature you control (Boggart Brute / the reanimated body) provably covers Ashnod's 'sacrifice a creature you control' cost -> policy:argument:subject-cover."
+    },
+    {
+      "claim": "guard:recast-pays-mana.floors_reanimate_arm",
+      "because": "corroborates guard:recast-pays-mana from a NEW arm (external triggered reanimate, pay-during-resolution {4}, CR 608.2) rather than a cast/recast: the reanimate carries an irreducible mana co-cost that the single sac's {C}{C} does not refill -> AMBER. Extends the guard's reach beyond the cast/recast arm (displacer-kitten, gravecrawler-x-ashnods-altar) to effect-driven battlefield returns."
+    },
+    {
+      "claim": "loop_green_path == token_doubler",
+      "because": "the minimal named engine is AMBER (mana-negative); the documented INFINITE needs a token-DOUBLING reanimation target (e.g. Grave Titan, 2-token ETB, verified oracle text) so that each reanimation yields >= 2 sac bodies (>= {C}{C}{C}{C} = {4}) -> mana-nonnegative -> GREEN. That doubler is a per-iteration mana contributor (not a one-time seed), so the minimal engine is honestly AMBER."
+    },
+    {
+      "claim": "parse_gap == reanimate_arm_conditionalpay",
+      "because": "Nim Deathmantle's dies-TRIGGER (ND1, ltb:creature:to-graveyard:controlled) is AST-derivable (Green), but the REANIMATE return (ND3) and its {4} co-cost (ND2) are NOT projected -- 'you may pay {4}. If you do, return that card to the battlefield...' (spans [266,363]) collapses to a single coarse emit:conditionalpay (Amber). Authored as the parser target (mirrors deadeye blink->emit:gainability); follow-up parse slice: split emit:conditionalpay into a pay:mana consume ({4}) + an emit:returntobattlefield (recur, self=false, subject='that card')."
+    }
+  ],
+  "cr": [
+    "701.21a",
+    "700.4",
+    "603.2",
+    "603.6e",
+    "603.10a",
+    "400.7",
+    "608.2",
+    "601.3"
+  ]
+}

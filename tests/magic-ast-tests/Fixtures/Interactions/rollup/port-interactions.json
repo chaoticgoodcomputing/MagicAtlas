@@ -13,6 +13,7 @@
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
+    "devoted-druid",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
@@ -24,20 +25,28 @@
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
     "guttersnipe-x-niv-mizzet-visionary",
+    "heliod-sun-crowned-x-walking-ballista",
+    "intruder-alarm-x-oviya-pashiri",
     "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "kiki-jiki-x-restoration-angel",
+    "kiki-jiki-x-zealous-conscripts",
+    "mikaeus-the-unhallowed-x-walking-ballista",
     "nantuko-husk-x-blood-artist",
+    "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
+    "pili-pala-x-grand-architect",
     "ruthless-knave-x-blood-artist",
     "ruthless-knave-x-krark-clan-ironworks",
+    "sanguine-bond-x-exquisite-blood",
     "serum-visions",
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
+    "teysa-karlov-x-blood-artist",
     "titanias-boon",
     "viscera-seer-x-zulaport-cutthroat"
   ],
@@ -59,6 +68,12 @@
       "status": "confirmed"
     },
     {
+      "id": "policy:counter-supplies-cost",
+      "consume_kind": "argument",
+      "subject": "cover",
+      "status": "confirmed"
+    },
+    {
       "id": "policy:damage-manner-feeds",
       "consume_kind": "subscription",
       "subject": "facet-feeds",
@@ -68,6 +83,12 @@
       "id": "policy:life-direction-match",
       "consume_kind": "subscription",
       "subject": "facet-feeds",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:reanimate:external-trigger-return",
+      "consume_kind": "reanimate-driver",
+      "subject": "trigger-subject-return",
       "status": "confirmed"
     },
     {
@@ -83,6 +104,12 @@
       "status": "confirmed"
     },
     {
+      "id": "policy:recur:death-return-self",
+      "consume_kind": "recur-driver",
+      "subject": "self-return",
+      "status": "confirmed"
+    },
+    {
       "id": "policy:subscription:subject-intersect",
       "consume_kind": "subscription",
       "subject": "intersect",
@@ -92,6 +119,12 @@
       "id": "policy:subscription:subject-subsumes-green",
       "consume_kind": "subscription",
       "subject": "intersect",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:trigger-multiplier:firing-cover",
+      "consume_kind": "subscription",
+      "subject": "firing-multiplier",
       "status": "confirmed"
     }
   ],
@@ -120,6 +153,16 @@
       "id": "guard:self-watch",
       "impl": "code",
       "status": "confirmed"
+    },
+    {
+      "id": "guard:undying-counter-reset",
+      "impl": "code",
+      "status": "confirmed"
+    },
+    {
+      "id": "guard:untap-cost-accrues-counter",
+      "impl": "code",
+      "status": "confirmed"
     }
   ],
   "bridges": [
@@ -132,6 +175,21 @@
       "from_attrs": {
         "manner": "blink"
       }
+    },
+    {
+      "id": "bridge:lethal-damage-to-dies",
+      "from_stem": "damage-dealt",
+      "to_stem": "removal:creature",
+      "ceiling": "AMBER",
+      "status": "confirmed"
+    },
+    {
+      "id": "bridge:lifelink-damage-to-life",
+      "from_stem": "damage-dealt",
+      "to_stem": "life",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {}
     },
     {
       "id": "bridge:sacrifice-to-dies",
@@ -154,6 +212,16 @@
       }
     },
     {
+      "id": "bridge:untap-creature-to-mana",
+      "from_stem": "structure:untap",
+      "to_stem": "mana",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "subtype": "creature"
+      }
+    },
+    {
       "id": "bridge:untap-land-to-mana",
       "from_stem": "structure:untap",
       "to_stem": "mana",
@@ -161,6 +229,16 @@
       "status": "confirmed",
       "from_attrs": {
         "subtype": "land"
+      }
+    },
+    {
+      "id": "bridge:untap-renews-tap",
+      "from_stem": "structure:untap",
+      "to_stem": "tap",
+      "ceiling": "GREEN",
+      "status": "confirmed",
+      "from_attrs": {
+        "self": "true"
       }
     }
   ]

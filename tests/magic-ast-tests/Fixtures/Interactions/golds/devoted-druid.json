@@ -1,0 +1,170 @@
+{
+  "id": "devoted-druid",
+  "unit": "single-card",
+  "cards": [
+    "Devoted Druid"
+  ],
+  "source": {
+    "csb": true,
+    "note": "VERIFIED oracle text (oracle-cards.json, Elf Druid, {1}{G}, 0/2): line 0 '{T}: Add {G}.'  line 1 'Put a -1/-1 counter on this creature: Untap this creature.'  ALL FOUR ports parse FAITHFULLY in dumps/card-ports.json (no parse gap): consume tap:self (family=tap), emit:mana:green (family=mana, stem=mana), consume pay:putcounters (family=mana; the '-1/-1 counter' cost of line 1), emit:untap:self (family=untap, stem=structure:untap). This single-card gold witnesses the NEW self-untap-via-counter ARM: a counter-placement COST that emits a SELF-untap which renews the source's own tap-for-mana. Devoted Druid ALONE is a BOUNDED self-untap -- each untap costs a cumulative -1/-1 counter, so the 0/2 body dies at toughness 0 (CR 704.5f) after ~2 renewals (it produces a few extra {G}, not infinite). The famous INFINITE-green-mana combo needs an external -1/-1 remover/preventer -- Vizier of Remedies (replaces the -1/-1 with zero counters) or Swift Reconfiguration (makes it a noncreature so 0 toughness no longer kills it); that infinite is a PAIRWISE gold left for when the remover is authored. No edhrec/popularity datum in the testbed source -- popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Devoted Druid": [
+      {
+        "id": "DD_TAP",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "tap",
+        "attrs": {
+          "self": true
+        },
+        "note": "the {T} activation cost of '{T}: Add {G}.' (dump: consume tap:self, family=tap). THE loop-closing renewable resource: a tapped permanent can't be tapped again to pay {T} (CR 107.5), so the cost is spent until the source is untapped. Renewed in place by the self-untap emit (E2). Same shape as kiki K2 (stem=tap, attrs{self:true})."
+      },
+      {
+        "id": "DD_MANA",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "green",
+          "qty": 1
+        },
+        "note": "'Add {G}.' the payoff of the mana ability (dump: emit:mana:green, stem=mana). One green mana into the pool (CR 106.4) per tap; each self-untap renewal buys another activation -> another {G}."
+      },
+      {
+        "id": "DD_CTR",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "-1/-1",
+          "qty": 1,
+          "self": true
+        },
+        "note": "the activation cost of the untap ability -- 'Put a -1/-1 counter on this creature:' (dump: consume pay:putcounters). A cost (CR 118.1) that places a -1/-1 counter (CR 122.1/122.6) on the source ITSELF. SELF-WEAKENING and CUMULATIVE -- this is the boundedness driver: the -1/-1 counters accrue and reduce toughness until the 0/2 body dies at toughness 0 (CR 704.5f). SURFACED SCAFFOLD NOTE: counter-type value '-1/-1' is not yet in the closed counter-type enum (values_seen only '+1/+1') -- a needed minor enum-value extension (a new VALUE on an existing axis, not a new axis); the flow accretes it into values_seen."
+      },
+      {
+        "id": "DD_UNTAP",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "self": true
+        },
+        "note": "'Untap this creature.' the effect of the untap ability (dump: emit:untap:self, family=untap, stem=structure:untap). Flips the source's tapped status back to untapped (CR 110.5), so {T} (DD_TAP) is payable again (CR 107.5). Deterministic (no 'may') and SAME-OBJECT (object identity certain -- 'this creature' is the source), so no guard:self-watch applies. Contrast deadeye PD2 (structure:untap of LANDS, attrs{subtype:land}); here the untap is of SELF."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E0",
+      "from": "Devoted Druid.DD_TAP",
+      "to": "Devoted Druid.DD_MANA",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the {T} tap cost (DD_TAP) drives the 'Add {G}' effect (DD_MANA) -- the card-internal cost->effect wiring of the mana ability (CR 602.1). Structural/self-certifying (cf. kiki E0 K2->K1). GREEN, no rule."
+      ]
+    },
+    {
+      "id": "E1",
+      "from": "Devoted Druid.DD_CTR",
+      "to": "Devoted Druid.DD_UNTAP",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the counter-placement cost (DD_CTR) drives the 'Untap this creature' effect (DD_UNTAP) -- the card-internal cost->effect wiring of the untap ability (CR 602.1/118.1). Structural/self-certifying. GREEN, no rule."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Devoted Druid.DD_UNTAP",
+      "to": "Devoted Druid.DD_TAP",
+      "mechanism": "bridge",
+      "rule": "bridge:untap-renews-tap",
+      "residuals": [
+        "guard:untap-cost-accrues-counter"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE SELF-UNTAP-VIA-COUNTER RENEWAL (the witness). Untapping the source IN PLACE (DD_UNTAP) flips its tapped status back to untapped (CR 110.5), renewing the {T} cost DD_TAP (CR 107.5). The single hop is RELIABLE on the merits -- deterministic (no 'may') and same-object (certain identity, no self-watch Overlap). It is AMBER, never GREEN, for TWO reasons: (i) the irreducible co-cost -- the untap's activation cost accrues a cumulative -1/-1 counter (guard:untap-cost-accrues-counter), so on the source alone the arm is BOUNDED: the 0/2 body dies at toughness 0 (CR 704.5f) after ~2 renewals -> no closed infinite loop; (ii) ladder -- bridge:untap-renews-tap is a NEW rule at status `observed` (judge PENDING), and a GREEN edge may rest only on a `confirmed` rule, so the ladder caps this to AMBER regardless of merits."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:untap-cost-accrues-counter",
+        "impl": "code",
+        "desc": "the self-untap's activation cost places a cumulative -1/-1 counter on the source (CR 118.1 cost / 122.1 counter), permanently weakening it each renewal; a creature reaching toughness 0 or less is put into its graveyard as a state-based action (CR 704.5f). So a self-untap loop closed by this counter cost carries an irreducible -1/-1 'toughness-budget' co-cost -- BOUNDED by the source's starting toughness on its own, no closed infinite cycle. The loop is GREEN-eligible (truly infinite) only when an external effect refills that budget: a -1/-1 counter remover/preventer (Vizier of Remedies replaces the -1/-1 with zero counters) or a noncreature-type change (Swift Reconfiguration -- 704.5f then no longer applies). The counter analogue of guard:recast-pays-mana (a mana co-cost that floors a loop unless the resource is provably refilled) -- the section-8/SDF co-cost cap for the self-untap-via-counter arm.",
+        "cr": [
+          "118.1",
+          "122.1",
+          "704.5f"
+        ]
+      }
+    ],
+    "bridges": [
+      {
+        "id": "bridge:untap-renews-tap",
+        "from_stem": "structure:untap",
+        "from_attrs": {
+          "self": true
+        },
+        "to_stem": "tap",
+        "ceiling": "GREEN",
+        "desc": "an untap (structure:untap emit) renews a tap-based cost/ability (tap consume): the untapped permanent's {T} activated ability or tap-cost becomes available again (CR 701.26 untap keyword action; CR 107.5 the {T} cost; CR 602 re-activation). Ceiling GREEN -- a mandatory, universal untap reliably renews the tap (witnessed by Intruder Alarm's 'untap all creatures'); individual edges floor to AMBER via their own residual guards: object-identity Overlap on a targeted untap (guard:self-watch) or a cumulative counter co-cost (guard:untap-cost-accrues-counter). Collapses the batch-9 per-outlet siblings (ETB-targeted / universal-creature / self-via-counter) into one relation -- the differences are the untap's trigger/target (far side of the emit), not the untap->tap bridge.",
+        "cr": [
+          "701.26",
+          "107.5",
+          "602"
+        ],
+        "corroborates": "bridge:untap-renews-tap"
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "the self-untap renewal is deterministic + same-object (reliable single hop), but its activation cost accrues a cumulative -1/-1 counter (guard:untap-cost-accrues-counter) that kills the 0/2 source at toughness 0 (CR 704.5f) -> bounded, no infinite loop; and the new bridge is `observed` (judge PENDING) so the ladder caps GREEN->AMBER regardless"
+    },
+    {
+      "claim": "edge.E2.rule == bridge:untap-renews-tap"
+    },
+    {
+      "claim": "edge.E2.mechanism == bridge"
+    },
+    {
+      "claim": "bridge.self-untap-via-counter.novel",
+      "because": "first structure:untap[self] -> tap renewal: a counter-placement-cost-driven SELF-untap that renews the source's own tap-for-mana IN PLACE. Distinct from bridge:untap-land-to-mana (structure:untap -> mana, untaps OTHER lands cross-resource) and bridge:blink-renews-tap (deployment:creature[manner=blink] -> tap, renews via an optional blink re-entry)"
+    },
+    {
+      "claim": "edge.E0.tier == GREEN",
+      "because": "the {T} tap cost drives the 'Add {G}' effect -- card-internal cost->effect wiring, structural/self-certifying (CR 602.1)"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the counter-placement cost drives the 'Untap this creature' effect -- card-internal cost->effect wiring, structural/self-certifying (CR 602.1/118.1)"
+    },
+    {
+      "claim": "no_infinite_loop",
+      "because": "unit=single-card: Devoted Druid ALONE is a BOUNDED self-untap -- each untap costs a cumulative -1/-1 counter, killing the 0/2 body at toughness 0 (CR 704.5f) after ~2 renewals (a few extra {G}, not infinite). No closed infinite cycle; the true infinite-green-mana requires an external -1/-1 counter remover/preventer (Vizier of Remedies) or a noncreature-type change (Swift Reconfiguration)"
+    }
+  ],
+  "cr": [
+    "107.5",
+    "110.5",
+    "118.1",
+    "122.1",
+    "122.6",
+    "602.1",
+    "704.5f",
+    "106.4"
+  ]
+}

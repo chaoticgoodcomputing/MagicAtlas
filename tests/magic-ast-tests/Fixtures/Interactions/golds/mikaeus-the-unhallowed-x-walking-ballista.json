@@ -1,0 +1,272 @@
+{
+  "id": "mikaeus-the-unhallowed-x-walking-ballista",
+  "unit": "combo",
+  "cards": [
+    "Mikaeus, the Unhallowed",
+    "Walking Ballista"
+  ],
+  "source": {
+    "note": "Witnesses a genuinely-NEW undying-recursion arm: a creature's OWN death triggers a return-to-the-battlefield-WITH-a-+1/+1-counter (undying, CR 702.93a), a death-driven SELF-recursion driver distinct from BOTH confirmed recast policies. THE NOVEL RULE = policy:recur:death-return-self. WHY NOT policy:recast:battlefield-return (Gravecrawler): that rule refuels a self-RECAST -- you CAST the card from the graveyard (CR 601.3 'you may cast this from your graveyard'), which RE-PAYS the card's full mana cost every iteration (guard:recast-pays-mana floors it to AMBER unless the mana is refilled in the right color) and puts a spell on the stack (targetable/counterable). Undying is a TRIGGERED-ABILITY return (CR 702.93a): the permanent returns to the battlefield DIRECTLY as the trigger resolves -- NO cast, NO stack-spell, NO mana cost. So guard:recast-pays-mana DOES NOT APPLY (the undying loop is mana-free); the loop is gated instead by a COUNTER-STATE condition ('if it had no +1/+1 counters on it'), the NEW guard:undying-counter-reset. It also does not subsume policy:recast:spell-recursion (a re-cast from HAND). Distinct on three axes -- trigger vs cast, no-mana vs full-mana-repayment, counter-parity vs mana-parity -- so a fresh declare, NOT a corroboration. PARSE GAP (the parser target, verified against dumps/card-ports.json 2026-07-17): Mikaeus, the Unhallowed projects ONLY evasion:intimidate -- the entire 'Other non-Human creatures you control get +1/+1 and have undying' grant clause is DROPPED (not even emit:gainability; a MORE complete gap than Deadeye's blink -> emit:gainability). Walking Ballista has NO native undying, so it projects only emit:counter:+1/+1:self + emit:damage:noncombat:any (isSelf) + pay:removecounters + pay:mana -- NOT the returntobattlefield self-recursion. So the undying arm on the GRANT RECIPIENT (WB4/WB5 here) is not AST-derivable today. BUT the undying-recursion arm IS AST-derivable NATIVELY (verified 2026-07-17): Young Wolf, Strangleroot Geist, and Geralf's Messenger each project emit:returntobattlefield (family=recur, side=emit) + ltb:creature:to-graveyard:self (family=death, side=consume) -- exactly this arm. So the arm parses; Mikaeus's GRANT of it onto a non-undying creature is the parser target. LOAD-BEARING PARSED PORTS (WB1 remove-counter cost, WB2 the ping) come straight from the dump; the granted undying ports (WB4/WB5) are authored to the native-undying shape and marked parse-gated. FIRABILITY (verified against the documented combo 2026-07-17): the PURE 2-card Mikaeus + Walking Ballista does NOT deal infinite FACE damage. Mikaeus's static +1/+1 makes Walking Ballista (base 0/0) a 1/1 at zero counters, so it does not die on its own; to close the loop the ping (WB2) must be aimed at the BALLISTA ITSELF (1 self-damage kills the 1/1) -- so the cycle produces infinite DEATH / ETB / LTB triggers, not infinite damage to an opponent. Infinite FACE damage or drain needs a 3rd piece (Blood Artist for the drain, Impact Tremors for ETB burn, or a free sac outlet to redirect the ping). Recorded honestly, not authored as infinite face damage. No source.popularity/csb: the testbed corpus carries no edhrec/price/CSB count -- omitted rather than fabricated."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 9, 2026-07-17): 9/9 PASS, no false GREEN. GREEN-on-new-rule golds (Teysa policy:trigger-multiplier, Heliod policy:counter-supplies-cost) CR-sound; untap-renews-tap collapse ruled SOUND (one relation, GREEN ceiling, guard-floored edges); pili-pala untap-to-mana split ruled SOUND-DISTINCT (external-tapper vs intrinsic self-tap inference)."
+  },
+  "ports": {
+    "Mikaeus, the Unhallowed": [
+      {
+        "id": "M0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:evasion",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "Mikaeus's own Intimidate (live evasion:intimidate, family=evasion, side=emit -- the ONLY port Mikaeus actually projects). Off the combo path; included for faithful derivation."
+      },
+      {
+        "id": "M1",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:keyword",
+        "attrs": {
+          "keyword": "undying",
+          "subject": "controlled"
+        },
+        "note": "THE GRANT -- 'Other non-Human creatures you control get +1/+1 and have undying' (CR 702.93 undying; a static continuous effect, CR 611.3 / 613.1). subject=controlled = other non-Human creatures you control (a new witnessed subject value: values_seen was {self, attached}; open axis, enum:None -- surfaced as a minor scaffold value, NOT a new axis). PARSE-GATED / THE PARSER TARGET: Mikaeus projects ONLY M0 (evasion:intimidate); this grant clause is dropped entirely by the current parser (worse than Deadeye's blink -> emit:gainability). keyword=undying is a new value in the keyword ontology lattice (values_seen was {haste, soulbond})."
+      }
+    ],
+    "Walking Ballista": [
+      {
+        "id": "WB1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "+1/+1",
+          "qty": 1,
+          "control": "you"
+        },
+        "note": "'Remove a +1/+1 counter from this creature' -- the ability's activation cost (live pay:removecounters, family=mana, side=consume; PARSED, read from dumps/card-ports.json 2026-07-17). Load-bearing for the loop: this removal spends exactly the ONE +1/+1 counter undying returned (WB5), resetting the counter to zero and RE-ARMING undying's 'if it had no +1/+1 counters' condition for the next death (guard:undying-counter-reset)."
+      },
+      {
+        "id": "WB2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "'It deals 1 damage to any target' (live emit:damage:noncombat:any, family=damage, side=emit, isSelf=true; PARSED). subject=self (the Ballista is the damage source), recipient=any (any target). IN THE 2-CARD LOOP the target is the BALLISTA ITSELF: at zero counters Walking Ballista is a 1/1 (base 0/0 + Mikaeus's static +1/+1), so 1 self-damage is lethal (WB3). The ping is therefore CONSUMED self-killing the Ballista -> the pure 2-card loop cycles death/ETB/LTB triggers, NOT infinite face damage (see source.note firability)."
+      },
+      {
+        "id": "WB3",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "to": {
+            "value": "graveyard",
+            "provenance": "derived"
+          }
+        },
+        "note": "Walking Ballista's DEATH -- put into the graveyard from the battlefield by lethal damage (CR 120.6 / 302.7: total marked damage >= toughness -> destroyed as a state-based action, CR 704). provenance=derived: the destination is a state-based-action consequence the parser does not emit as a card ability (no card text says 'this dies'); a graveyard-replacement (Rest in Peace) could redirect it to exile -> caps Reliability. This is Walking Ballista's own death and the event undying triggers on; the self-identity is carried on the undying return WB4 (recur, self:true), mirroring how Gravecrawler's death (removal:creature) pairs with its self:true recur emit."
+      },
+      {
+        "id": "WB4",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "battlefield",
+          "control": "you",
+          "self": true
+        },
+        "note": "THE UNDYING RETURN ARM (GRANTED by Mikaeus, PARSE-GATED). 'return it to the battlefield under its owner's control' (CR 702.93a). Models native undying's live emit:returntobattlefield (family=recur, side=emit) -- verified on Young Wolf / Strangleroot Geist / Geralf's Messenger 2026-07-17. self:true encodes isSelf: undying returns the SAME object -- UNAMBIGUOUS same-permanent identity (the ability is on the dying creature, CR 603.6 zone-change trigger / 603.10 look-back / 400.7 the returned permanent is a new object but the trigger is definitionally about the object that died). Contrast Deadeye's blink 'another target creature' whose object identity the operator cannot see (guard:self-watch -> AMBER); undying's self-return is identity-CERTAIN, so it is GREEN-eligible on identity from the merits. from=graveyard / to=battlefield are proven by undying's own text. NOT emitted by the current parser on this grant recipient (Walking Ballista has no native undying)."
+      },
+      {
+        "id": "WB5",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "+1/+1",
+          "qty": 1,
+          "control": "you"
+        },
+        "note": "undying returns the creature 'with a +1/+1 counter on it' (CR 702.93a / 122.1) -- GRANTED, PARSE-GATED (part of the undying return WB4). This is the counter WB1 removes each cycle to re-arm undying: net +1 (undying) - 1 (remove-counter cost) = 0 per iteration -> counter-parity balanced (guard:undying-counter-reset satisfied)."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Mikaeus, the Unhallowed.M1",
+      "to": "Walking Ballista.WB4",
+      "mechanism": "modifier",
+      "tier": "GREEN",
+      "notes": [
+        "THE GRANT edge (structural): Mikaeus's static 'have undying' continuous effect (CR 611.3 / 613.1 / 702.93) confers the undying return arm onto every other non-Human creature you control -- an unambiguous recipient set (all such creatures), so structurally GREEN on the merits. PARSE-GATED (the parser target): the grant is not AST-derivable today -- Mikaeus projects only evasion:intimidate (M0), and Walking Ballista has no native undying. The undying arm IS derivable natively (Young Wolf / Strangleroot Geist / Geralf's Messenger project emit:returntobattlefield + ltb:creature:to-graveyard:self); Mikaeus's GRANT of it onto a non-undying creature is the parse gap. Derivability caveat only -- the CR match is sound; mirrors how deadeye-x-peregrine-drake authors its blink ports while recording blink as the parser target."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Walking Ballista.WB3",
+      "to": "Walking Ballista.WB4",
+      "mechanism": "match_policy",
+      "rule": "policy:recur:death-return-self",
+      "residuals": [
+        "guard:undying-counter-reset"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE NOVEL UNDYING-RECURSION EDGE. Walking Ballista's OWN death (WB3: removal:creature self, put into the graveyard from the battlefield) satisfies its OWN undying self-return driver (WB4: recur returntobattlefield, self:true) -- CR 702.93a 'when this permanent is put into a graveyard from the battlefield ... return it to the battlefield'. Distinct from policy:recast:battlefield-return (Gravecrawler): that refuels a self-CAST (CR 601.3, re-pays full mana every iteration -> guard:recast-pays-mana). Undying is a TRIGGERED-ABILITY return -- NO cast, NO stack-spell, NO mana cost -> guard:recast-pays-mana does NOT apply; the loop is mana-free. Gated instead by counter-state: undying fires only if the creature died with NO +1/+1 counters and returns it with exactly one, so the loop re-arms only because WB1 removes that returned counter each cycle (guard:undying-counter-reset). GREEN-ELIGIBLE ON THE MERITS: the return is the SAME object (self:true, identity-certain -- unlike blink's Overlaps self-watch floor), mana-free, and counter-balanced. AMBER TODAY for two non-CR-soundness reasons: (1) rests on the observed NEW policy:recur:death-return-self (judge PENDING -> not yet confirmed -> the ladder caps GREEN at AMBER), and (2) the arm is parse-gated on Mikaeus's grant (parser target). Not a CR over-approximation -- the honest ceiling is GREEN once the rule is judge-confirmed and the grant parses."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Walking Ballista.WB4",
+      "to": "Walking Ballista.WB5",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: undying returns the permanent to the battlefield WITH a +1/+1 counter on it (CR 702.93a / 122.1) -- the return (WB4) and the counter (WB5) are one effect."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Walking Ballista.WB5",
+      "to": "Walking Ballista.WB1",
+      "mechanism": "subsumption",
+      "tier": "GREEN",
+      "notes": [
+        "THE COUNTER-RESET closure (structural): the +1/+1 counter undying returns (WB5: counters counter-type=+1/+1) is exactly the +1/+1 counter Walking Ballista's ability removes (WB1: consume counters counter-type=+1/+1) -- counters:+1/+1 subset counters:+1/+1 EXACTLY, control=you. Removing it resets the count to zero, re-arming undying's 'no +1/+1 counters' condition for the next death (CR 702.93a). Structurally GREEN."
+      ]
+    },
+    {
+      "id": "E5",
+      "from": "Walking Ballista.WB1",
+      "to": "Walking Ballista.WB2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: paying the 'Remove a +1/+1 counter' cost (WB1) IS the activation of the ability that deals 1 damage to any target (WB2)."
+      ]
+    },
+    {
+      "id": "E6",
+      "from": "Walking Ballista.WB2",
+      "to": "Walking Ballista.WB3",
+      "mechanism": "bridge",
+      "rule": "bridge:lethal-damage-to-dies",
+      "tier": "AMBER",
+      "notes": [
+        "THE LOOP-CLOSING damage->death bridge: the self-targeted ping (WB2: 1 noncombat damage, subject=self, aimed at the Ballista itself) is lethal to Walking Ballista -- at zero counters it is a 1/1 (base 0/0 + Mikaeus's static +1/+1), so 1 marked damage >= 1 toughness -> destroyed as a state-based action (CR 120.6 / 302.7 -> 704), i.e. it dies (WB3), re-firing undying. AMBER ceiling: lethality is BOARD-STATE-dependent -- damage feeds a death only when marked damage provably >= toughness (here Mikaeus's exact +1/+1 plus a self-target make it provable, but in general a ping is not lethal), so the bridge is reliability-capped; and it rests on the observed NEW bridge:lethal-damage-to-dies (judge PENDING). This board-state dependence is a second, independent reason the loop floors to AMBER even on the merits."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:recur:death-return-self",
+        "consume_kind": "recur-driver",
+        "subject": "self-return",
+        "desc": "undying/persist death-driven SELF-recursion: a creature's OWN dies event (a removal:creature[self] put into the graveyard from the battlefield, CR 603.6 zone-change trigger) satisfies a returntobattlefield[self:true] recur emit that re-enters the SAME permanent onto the battlefield under its owner's control (undying CR 702.93a, persist CR 702.79) -- refueling its own death loop. A NEW recursion driver, sibling-but-DISTINCT from the two recast policies: (1) policy:recast:battlefield-return refuels a self-CAST from the graveyard (CR 601.3) that RE-PAYS full mana every iteration (guard:recast-pays-mana); (2) policy:recast:spell-recursion re-casts a spell from HAND (CR 601.2). Undying is a TRIGGERED-ABILITY return, NOT a cast: the permanent returns directly as the trigger resolves -- no stack-spell, no mana cost -> guard:recast-pays-mana DOES NOT apply and the loop is mana-free. Because the return is the SAME object (self:true), the recast subject Subsumes on identity (GREEN-eligible), UNLIKE blink's 'another creature' Overlaps floor (guard:self-watch). Any loop closed by this driver is instead gated by undying's counter-state condition (guard:undying-counter-reset), not a mana co-cost. Distinct on three axes -- trigger vs cast, no-mana vs full-mana-repayment, counter-parity vs mana-parity -- so a fresh declare, not a corroboration of either recast policy.",
+        "cr": [
+          "702.93",
+          "702.93a",
+          "702.79",
+          "603.6",
+          "601.3",
+          "400.7"
+        ]
+      }
+    ],
+    "guards": [
+      {
+        "id": "guard:undying-counter-reset",
+        "impl": "code",
+        "desc": "the undying/persist counter-parity loop-soundness floor (the counter analogue of guard:recast-pays-mana's mana-parity): undying returns the creature ONLY 'if it had no +1/+1 counters on it' and puts it back 'with a +1/+1 counter on it' (CR 702.93a / 122.1). A self-recursion loop closed by policy:recur:death-return-self is therefore re-armable ONLY if each iteration REMOVES that returned +1/+1 counter before the creature next dies -- otherwise the second death has a +1/+1 counter on it, undying's condition fails, and the loop halts after a single return. Caps policy:recur:death-return-self: GREEN-eligible only when the loop provably resets the +1/+1 counter to zero every cycle (here Walking Ballista's 'Remove a +1/+1 counter' cost spends exactly the returned counter; net counter change per iteration = 0). Persist is the dual with -1/-1 counters (return only if none, come back with one). The state the loop must reset to stay sound, the counter-parity sibling of the recast mana-parity guard.",
+        "cr": [
+          "702.93a",
+          "702.79",
+          "122.1"
+        ]
+      }
+    ],
+    "bridges": [
+      {
+        "id": "bridge:lethal-damage-to-dies",
+        "from_stem": "damage-dealt",
+        "to_stem": "removal:creature",
+        "ceiling": "AMBER",
+        "desc": "a damage-dealt emit feeds a dies event (removal:creature[to=graveyard]) when the marked damage is lethal: total damage marked on a creature >= its toughness -> the creature is destroyed as a state-based action (CR 120.6 / 302.7 -> 704), i.e. it is put into the graveyard from the battlefield and dies. Supplies the damage->death transition the parser proves only as a damage emit (the event_verbs note 'damage-dealt ... when lethal, removal (state-based death)'). Ceiling AMBER, never GREEN: lethality is BOARD-STATE-dependent -- it holds only when marked damage provably >= toughness, which the operator cannot see in general (a ping is usually non-lethal), and it is reliability-capped by damage prevention / regeneration / indestructible / toughness-boost replacements. Contrast bridge:sacrifice-to-dies (GREEN, a deterministic rules zone-change independent of board state): a sacrifice always dies; damage dies only if lethal. Distinct from the cross-resource untap->mana / copy->cast bridges.",
+        "cr": [
+          "120.6",
+          "302.7",
+          "704"
+        ]
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "Two independent non-CR-soundness floors plus a board-state ceiling: (1) PARSE-GATED -- Mikaeus's undying grant is not AST-derivable (Mikaeus projects only evasion:intimidate; Walking Ballista has no native undying), so the undying ports WB4/WB5 are a parser target; (2) the loop rests on the observed NEW rules policy:recur:death-return-self and bridge:lethal-damage-to-dies (judge PENDING -> not confirmed -> the ladder caps GREEN at AMBER); (3) even on the merits the closing bridge:lethal-damage-to-dies is board-state-dependent (AMBER ceiling). The underlying death-driven self-recursion is GREEN-ELIGIBLE (mana-free, same-object self-return, counter-parity balanced) once the grant parses and policy:recur:death-return-self is judge-confirmed -- but the lethal-damage closure keeps the honest ceiling at AMBER."
+    },
+    {
+      "claim": "edge.E2.mechanism == match_policy",
+      "because": "cites the NEW policy:recur:death-return-self -- Walking Ballista's own death satisfies its own undying returntobattlefield self-return driver"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "rests on the observed NEW policy:recur:death-return-self (judge PENDING) and is parse-gated on Mikaeus's grant; GREEN-eligible on the merits (self:true same-object return, mana-free, no guard:recast-pays-mana), so AMBER is a ladder/parse cap, not a CR over-approximation"
+    },
+    {
+      "claim": "undying_recursion_is_distinct_from_recast",
+      "because": "policy:recur:death-return-self is a fresh declare, NOT a corroboration of policy:recast:battlefield-return or policy:recast:spell-recursion. Undying is a TRIGGERED-ABILITY return (CR 702.93a), not a cast (CR 601.3/601.2): no stack-spell, no mana cost, so guard:recast-pays-mana does not apply and the loop is mana-free -- gated instead by counter-state (guard:undying-counter-reset). Distinct on trigger-vs-cast, no-mana-vs-full-mana-repayment, and counter-parity-vs-mana-parity."
+    },
+    {
+      "claim": "edge.E6.tier == AMBER",
+      "because": "bridge:lethal-damage-to-dies has an AMBER ceiling: damage feeds a death only when marked damage provably >= toughness (board-state-dependent), and it rests on the observed new bridge (judge PENDING)"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "structural keyword grant (modifier): Mikaeus's static 'have undying' continuous effect (CR 611.3/613.1/702.93) confers undying onto an unambiguous recipient set (all other non-Human creatures you control). GREEN is on the CR merits; the derivability caveat (parse-gated, parser target) is recorded separately and does not lower the match tier"
+    },
+    {
+      "claim": "counter_parity == reset_each_cycle",
+      "because": "guard:undying-counter-reset: undying returns exactly one +1/+1 counter (WB5, CR 702.93a) and Walking Ballista's cost removes exactly one (WB1) -> net counter change per iteration = 0 -> the loop re-arms undying's 'no +1/+1 counters' condition every cycle. Without this reset (or on a creature with a persistent counter) the second death has a counter and undying does not fire -> the loop halts after one return"
+    },
+    {
+      "claim": "loop_product == death_triggers_not_face_damage",
+      "because": "FIRABILITY (verified against the documented combo 2026-07-17): Mikaeus's static +1/+1 makes Walking Ballista (base 0/0) a 1/1 at zero counters, so it does not die on its own; the ping (WB2) must be aimed at the Ballista ITSELF to kill it, so the pure 2-card loop cycles infinite DEATH / ETB / LTB triggers, NOT infinite damage to an opponent. Infinite FACE damage or drain requires a 3rd piece (Blood Artist drain, Impact Tremors ETB burn, or a free sac outlet to redirect the ping). The port engine does not model the counter-parity / self-lethality firability -- documented, not authored as infinite face damage"
+    },
+    {
+      "claim": "parse_gap == mikaeus_grant_unprojected",
+      "because": "the arm is a PARSER TARGET: Mikaeus, the Unhallowed projects only evasion:intimidate -- the '+1/+1 and have undying' grant clause is dropped entirely (more complete a gap than Deadeye's blink -> emit:gainability). The undying-recursion arm itself IS AST-derivable natively -- Young Wolf, Strangleroot Geist, and Geralf's Messenger each project emit:returntobattlefield (family=recur) + ltb:creature:to-graveyard:self (family=death) -- so the parse gap is specifically Mikaeus's GRANT of undying onto a non-undying creature (WB4/WB5 authored to the native shape, marked parse-gated)"
+    }
+  ],
+  "cr": [
+    "702.93",
+    "702.93a",
+    "702.79",
+    "603.6",
+    "603.10",
+    "120.6",
+    "302.7",
+    "704",
+    "611.3",
+    "613.1",
+    "122.1",
+    "601.3",
+    "400.7"
+  ]
+}

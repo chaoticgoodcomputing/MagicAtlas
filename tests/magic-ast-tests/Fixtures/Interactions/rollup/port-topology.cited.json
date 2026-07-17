@@ -13,6 +13,7 @@
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
+    "devoted-druid",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
@@ -24,20 +25,28 @@
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
     "guttersnipe-x-niv-mizzet-visionary",
+    "heliod-sun-crowned-x-walking-ballista",
+    "intruder-alarm-x-oviya-pashiri",
     "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
     "kiki-jiki-x-restoration-angel",
+    "kiki-jiki-x-zealous-conscripts",
+    "mikaeus-the-unhallowed-x-walking-ballista",
     "nantuko-husk-x-blood-artist",
+    "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
+    "pili-pala-x-grand-architect",
     "ruthless-knave-x-blood-artist",
     "ruthless-knave-x-krark-clan-ironworks",
+    "sanguine-bond-x-exquisite-blood",
     "serum-visions",
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
+    "teysa-karlov-x-blood-artist",
     "titanias-boon",
     "viscera-seer-x-zulaport-cutthroat"
   ],
@@ -183,7 +192,8 @@
       "witnesses": [
         "dualcaster-mage-x-ghostly-flicker",
         "kiki-jiki-mirror-breaker",
-        "kiki-jiki-x-restoration-angel"
+        "kiki-jiki-x-restoration-angel",
+        "kiki-jiki-x-zealous-conscripts"
       ]
     },
     "counters": {
@@ -192,10 +202,15 @@
       "attrs": [
         "control",
         "counter-type",
-        "qty"
+        "qty",
+        "self",
+        "target"
       ],
       "witnesses": [
+        "devoted-druid",
         "evolution-sage",
+        "heliod-sun-crowned-x-walking-ballista",
+        "mikaeus-the-unhallowed-x-walking-ballista",
         "titanias-boon"
       ]
     },
@@ -206,13 +221,15 @@
         "control",
         "exclude_self",
         "qty",
-        "subtype"
+        "subtype",
+        "token"
       ],
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "nantuko-husk-x-blood-artist",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
         "ophiomancer-x-nantuko-husk",
         "ruthless-knave-x-blood-artist",
         "viscera-seer-x-zulaport-cutthroat"
@@ -233,6 +250,8 @@
         "brazen-dwarf",
         "captain-rex-nebula",
         "guttersnipe-x-niv-mizzet-visionary",
+        "heliod-sun-crowned-x-walking-ballista",
+        "mikaeus-the-unhallowed-x-walking-ballista",
         "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
@@ -292,9 +311,11 @@
         "dualcaster-mage-x-ghostly-flicker",
         "emiel-the-blessed-x-mulldrifter",
         "grave-titan-x-anointed-procession",
+        "intruder-alarm-x-oviya-pashiri",
         "izzet-chronarch-x-ghostly-flicker",
         "kari-zev-skyship-raider",
         "kiki-jiki-x-restoration-angel",
+        "kiki-jiki-x-zealous-conscripts",
         "ophiomancer-x-nantuko-husk"
       ]
     },
@@ -322,9 +343,13 @@
       "witnesses": [
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "gravecrawler-x-phyrexian-altar-x-blood-artist",
+        "heliod-sun-crowned-x-walking-ballista",
         "nantuko-husk-x-blood-artist",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
         "ruthless-knave-x-blood-artist",
+        "sanguine-bond-x-exquisite-blood",
         "soul-warden-x-ajanis-pridemate",
+        "teysa-karlov-x-blood-artist",
         "viscera-seer-x-zulaport-cutthroat"
       ]
     },
@@ -340,9 +365,13 @@
         "birds-of-paradise-x-horseshoe-crab",
         "chatterfang-x-pitiless-plunderer",
         "deadeye-x-peregrine-drake",
+        "devoted-druid",
         "displacer-kitten-x-conviction",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "gravecrawler-x-phyrexian-altar-x-blood-artist",
+        "intruder-alarm-x-oviya-pashiri",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
+        "pili-pala-x-grand-architect",
         "ruthless-knave-x-blood-artist",
         "ruthless-knave-x-krark-clan-ironworks"
       ]
@@ -370,7 +399,8 @@
         "subject"
       ],
       "witnesses": [
-        "boggart-brute"
+        "boggart-brute",
+        "mikaeus-the-unhallowed-x-walking-ballista"
       ]
     },
     "modification:evasion:flying": {
@@ -384,7 +414,8 @@
         "aang-the-last-airbender",
         "ancient-copper-dragon",
         "deadeye-x-peregrine-drake",
-        "displacer-kitten-x-conviction"
+        "displacer-kitten-x-conviction",
+        "pili-pala-x-grand-architect"
       ]
     },
     "modification:keyword": {
@@ -392,12 +423,16 @@
       "parent": "modification",
       "status": "witnessed",
       "attrs": [
+        "control",
+        "duration",
         "keyword",
         "subject"
       ],
       "witnesses": [
         "deadeye-x-peregrine-drake",
-        "kiki-jiki-x-restoration-angel"
+        "heliod-sun-crowned-x-walking-ballista",
+        "kiki-jiki-x-restoration-angel",
+        "mikaeus-the-unhallowed-x-walking-ballista"
       ]
     },
     "modification:prevention": {
@@ -452,6 +487,8 @@
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "izzet-chronarch-x-ghostly-flicker",
+        "mikaeus-the-unhallowed-x-walking-ballista",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
         "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
@@ -481,7 +518,8 @@
         "manner",
         "qty",
         "subtype",
-        "to"
+        "to",
+        "token"
       ],
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
@@ -489,8 +527,11 @@
         "deadly-rollick",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "gravecrawler-x-phyrexian-altar-x-blood-artist",
+        "mikaeus-the-unhallowed-x-walking-ballista",
         "nantuko-husk-x-blood-artist",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
         "ruthless-knave-x-blood-artist",
+        "teysa-karlov-x-blood-artist",
         "viscera-seer-x-zulaport-cutthroat"
       ]
     },
@@ -515,12 +556,18 @@
       "attrs": [
         "control",
         "qty",
-        "subtype"
+        "self",
+        "subtype",
+        "target"
       ],
       "witnesses": [
         "aggravated-assault-x-sword-of-feast-and-famine",
         "deadeye-x-peregrine-drake",
-        "displacer-kitten-x-conviction"
+        "devoted-druid",
+        "displacer-kitten-x-conviction",
+        "intruder-alarm-x-oviya-pashiri",
+        "kiki-jiki-x-zealous-conscripts",
+        "pili-pala-x-grand-architect"
       ]
     },
     "tap": {
@@ -531,7 +578,10 @@
       ],
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
-        "kiki-jiki-x-restoration-angel"
+        "devoted-druid",
+        "intruder-alarm-x-oviya-pashiri",
+        "kiki-jiki-x-restoration-angel",
+        "kiki-jiki-x-zealous-conscripts"
       ]
     }
   },
@@ -601,6 +651,7 @@
         "deployment:artifact",
         "deployment:creature",
         "dice-rolled",
+        "modification:keyword",
         "modification:spell",
         "recur",
         "removal:creature",
@@ -623,7 +674,8 @@
         "counters"
       ],
       "values_seen": [
-        "\u002B1/\u002B1"
+        "\u002B1/\u002B1",
+        "-1/-1"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -672,6 +724,7 @@
     "duration": {
       "stems": [
         "modification:creature",
+        "modification:keyword",
         "modification:prevention"
       ],
       "values_seen": [
@@ -732,7 +785,8 @@
       ],
       "values_seen": [
         "haste",
-        "soulbond"
+        "soulbond",
+        "undying"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -813,6 +867,7 @@
         "1",
         "2",
         "3",
+        "4",
         "X",
         "that-many",
         "up-to-5"
@@ -856,10 +911,13 @@
     "self": {
       "stems": [
         "artifact",
+        "counters",
         "recur",
+        "structure:untap",
         "tap"
       ],
       "values_seen": [
+        "False",
         "True"
       ],
       "carries_provenance_or_polarity": false,
@@ -900,6 +958,7 @@
       ],
       "values_seen": [
         "attached",
+        "controlled",
         "self"
       ],
       "carries_provenance_or_polarity": false
@@ -925,7 +984,7 @@
         "treasure",
         "zombie"
       ],
-      "carries_provenance_or_polarity": false,
+      "carries_provenance_or_polarity": true,
       "licensed_by": [
         "objects:*",
         "removal:*",
@@ -934,8 +993,13 @@
       "lattice": "type-ontology (creature:squirrel \u2286 creature)"
     },
     "target": {
-      "stems": [],
-      "values_seen": [],
+      "stems": [
+        "counters",
+        "structure:untap"
+      ],
+      "values_seen": [
+        "chosen"
+      ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "*"
@@ -970,12 +1034,15 @@
     "token": {
       "stems": [
         "artifact",
+        "creature",
         "deployment",
         "deployment:artifact",
         "deployment:creature",
-        "removal:artifact"
+        "removal:artifact",
+        "removal:creature"
       ],
       "values_seen": [
+        "False",
         "True"
       ],
       "carries_provenance_or_polarity": false,
