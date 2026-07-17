@@ -1,0 +1,276 @@
+{
+  "id": "gravecrawler-x-phyrexian-altar-x-blood-artist",
+  "unit": "combo",
+  "cards": [
+    "Gravecrawler",
+    "Phyrexian Altar",
+    "Blood Artist"
+  ],
+  "source": {
+    "note": "The GREEN mana-BALANCED sibling of gravecrawler-x-ashnods-altar-x-blood-artist (the AMBER floor witness). SAME three-part aristocrat engine, ONE piece swapped: Phyrexian Altar ('Sacrifice a creature: Add one mana of any color') replaces Ashnod's Altar ('Sacrifice a creature: Add {C}{C}'). This swap is a deliberate CONTRAST that proves the AMBER floor of the Ashnod's version was mana-COLOR-specific, not structural: Ashnod's colorless {C}{C} cannot pay Gravecrawler's colored {B} recast pip (CR 202.2 / 106.1b) -> the black-mana axis of the section-10 repetition vector is negative -> AMBER; Phyrexian Altar's producer-choice ANY-color output (polarity:color:emit-mana, producer picks black, CR 105.2) DOES pay the {B} -> the black-mana axis is refilled to net zero -> guard:recast-pays-mana is SATISFIED (not flooring) -> GREEN. All load-bearing ports are AST-derivable (read from dumps/card-ports.json 2026-07-17): Gravecrawler -> emit:returntobattlefield:self (family=recur, stem=recur, isSelf=true, Green) + emit:cantblock; Phyrexian Altar -> sac:creature:controlled (consume, family=sacrifice, stem=creature, manner=sacrificed) + emit:mana:any (family=mana, stem=mana, Green); Blood Artist -> ltb:creature:to-graveyard (consume, stem=removal:creature, family=death) + emit:life:loss + emit:life:gain:controlled. NO parse gap on the load-bearing ports. HONEST FIRABILITY FLOOR (verified against oracle-cards.json 2026-07-17: Gravecrawler = 'This creature can't block.\\nYou may cast this card from your graveyard as long as you control a Zombie.'): Gravecrawler's recast condition 'as long as you control a Zombie' requires a Zombie ON THE BATTLEFIELD; a card in the graveyard is not a controlled battlefield Zombie, and neither Phyrexian Altar (artifact) nor Blood Artist (Human, not Zombie) is a Zombie. Inside this THREE-card set Gravecrawler is the only Zombie, so after it is sacrificed NO Zombie remains and the recast is impossible -- the famous infinite version therefore needs a SECOND, persistent Zombie (a 4th piece; e.g. a Zombie token). That second Zombie is a one-time SEEDING precondition (it is never sacrificed or consumed -> it is part of the initial state, NOT a per-iteration cost), so it does NOT change the section-10 per-iteration repetition vector -> it does not lower loop_tier below GREEN; but the three NAMED cards alone do NOT loop without it. Recorded honestly, not authored as a phantom port. PARSE-TO-PORT GAP: the 'control a Zombie' condition IS parsed into the AST as a CountCondition over Zombies you control (>=1) (CastFromGraveyardConditionalRule) but is NOT projected as an interaction consume port (Gravecrawler emits only emit:cantblock + emit:returntobattlefield:self) -> the port engine over-approximates by ignoring the seeding requirement; the over-approximation is tier-PRESERVING here (a seed, not a per-iteration drain) but firability-blind, so the floor is documented in the gold rather than emitted. No source.popularity/csb count: the testbed corpus carries no edhrec/price/CSB count -- omitted rather than fabricated (this GREEN combo, unlike the contrived AMBER triple, IS a real documented infinite when the 4th Zombie is present, but the exact count is not in-corpus)."
+  },
+  "loop_tier": "GREEN",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Gravecrawler": [
+      {
+        "id": "GC1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "black",
+          "qty": 1
+        },
+        "note": "the {B} cast-from-graveyard cost (Gravecrawler's own mana cost, re-paid every recast). THE section-8 balance target -- the loop must refill this each iteration in the RIGHT color to be GREEN. In the AMBER Ashnod's sibling this pip is UNREFILLABLE by colorless {C}{C}; here Phyrexian Altar's any-color emit (PA3) pays it via E8."
+      },
+      {
+        "id": "GC2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "battlefield",
+          "control": "you",
+          "self": true
+        },
+        "note": "THE REANIMATION/RECAST ARM -- 'You may cast this card from your graveyard' (live emit:returntobattlefield:self; family=recur, stem=recur, isSelf=true, Green). Re-enters Gravecrawler onto the battlefield from the graveyard as a creature you control. self:true encodes isSelf (Gravecrawler returns ITSELF -- the legitimate same-card recast subject). from=graveyard (proven by the card's own permission) and to=battlefield (definitional to a cast-from-graveyard) are AST-proven. Carries the {B} co-cost (GC1). Identical to the AMBER sibling's GC2 -- the recast arm is unchanged; only the mana SOURCE that refuels it differs."
+      }
+    ],
+    "Phyrexian Altar": [
+      {
+        "id": "PA1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "'Sacrifice a creature' -- the fodder / activation cost (live sac:creature:controlled, consume, family=sacrifice, stem=creature, manner=sacrificed). No exclude_self: Phyrexian Altar sacrifices ANY creature you control (here Gravecrawler itself). An argument-consume (a cost). Structurally identical to the AMBER sibling's AN1."
+      },
+      {
+        "id": "PA2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "to": {
+            "value": "graveyard",
+            "provenance": "derived"
+          },
+          "manner": "sacrificed"
+        },
+        "note": "the death half of the sacrifice (the sacrifice-as-dual: fodder consume PA1 + LTB/death emit PA2, via bridge:sacrifice-to-dies, CR 701.21a). The sacrificed creature (Gravecrawler) leaves the battlefield to the graveyard. to=graveyard is provenance=derived (a sacrifice normally goes to the graveyard but a replacement e.g. Rest in Peace could redirect to exile; the parser cannot prove the destination) -> caps the drain edge's Reliability. Mirrors AMBER sibling AN2 / ruthless-knave R3 / chatterfang C5."
+      },
+      {
+        "id": "PA3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": {
+            "value": "any",
+            "polarity": "producer-choice"
+          },
+          "qty": 1
+        },
+        "note": "'Add one mana of any color' (live emit:mana:any, family=mana, stem=mana, Green). ONE mana of the PRODUCER's chosen color (color = {value:any, polarity:producer-choice}, the section-6 existential/producer-choice match, CR 105.2). The producer may pick BLACK -> this any-color mana DOES pay Gravecrawler's colored {B} recast pip (contrast the AMBER sibling's Ashnod's {C}{C}, which is colorless and cannot, CR 202.2 / 106.1b). THIS is the single port change that lifts the whole loop from AMBER to GREEN."
+      }
+    ],
+    "Blood Artist": [
+      {
+        "id": "BA1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "any",
+          "from": "battlefield",
+          "to": "graveyard"
+        },
+        "note": "'Whenever this creature or another creature dies' (live ltb:creature:to-graveyard, consume, stem=removal:creature, family=death) -- any creature, any controller. A death subscription; mirrors ruthless-knave B1 / AMBER sibling BA1."
+      },
+      {
+        "id": "BA2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent",
+          "qty": 1
+        },
+        "note": "'target player loses 1 life' -- the drain (payoff). Mirrors AMBER sibling BA2 / ruthless-knave B2."
+      },
+      {
+        "id": "BA3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": 1
+        },
+        "note": "'and you gain 1 life'. Mirrors AMBER sibling BA3 / ruthless-knave B3."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Gravecrawler.GC2",
+      "to": "Phyrexian Altar.PA1",
+      "mechanism": "match_policy",
+      "rule": "policy:argument:subject-cover",
+      "tier": "GREEN",
+      "notes": [
+        "the recur re-enters Gravecrawler as a creature you control on the battlefield, which provably COVERS Phyrexian Altar's 'sacrifice a creature you control' cost (an argument-consume). The recast-then-sacrifice closure -- the deployment/return -> creature-consume cover shape, mirrors chatterfang E4 and the AMBER sibling E1. REUSES the confirmed policy:argument:subject-cover (reference, not re-declaration)."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Phyrexian Altar.PA1",
+      "to": "Phyrexian Altar.PA2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: paying the sacrifice cost IS the sacrificed creature's death (removal:creature to the graveyard, manner=sacrificed)."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Phyrexian Altar.PA1",
+      "to": "Phyrexian Altar.PA3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: the activated ability's effect adds one mana of any color when the sacrifice cost is paid."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Phyrexian Altar.PA2",
+      "to": "Blood Artist.BA1",
+      "mechanism": "subsumption",
+      "tier": "GREEN",
+      "notes": [
+        "THE DEATH-PAYOFF EDGE. removal:creature = removal:creature; manner=sacrificed is a dies-to-graveyard event (bridge:sacrifice-to-dies, CR 701.21a); control=you subset of any; creature subset creature EXACTLY (no subtype straddle) -> Subsumes -> GREEN. Corroborates ruthless-knave-x-blood-artist's creature-subset-creature GREEN (policy:subscription:subject-subsumes-green) and mirrors the AMBER sibling E4. PA2.to=graveyard is provenance=derived -> Reliability capped (Rest-in-Peace prune)."
+      ]
+    },
+    {
+      "id": "E5",
+      "from": "Blood Artist.BA1",
+      "to": "Blood Artist.BA2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: the death trigger drains 1 life from a player (the aristocrat payoff)."
+      ]
+    },
+    {
+      "id": "E6",
+      "from": "Blood Artist.BA1",
+      "to": "Blood Artist.BA3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: and you gain 1 life."
+      ]
+    },
+    {
+      "id": "E7",
+      "from": "Phyrexian Altar.PA2",
+      "to": "Gravecrawler.GC2",
+      "mechanism": "match_policy",
+      "rule": "policy:recast:battlefield-return",
+      "residuals": [
+        "guard:recast-pays-mana",
+        "guard:self-recast-samecard"
+      ],
+      "tier": "GREEN",
+      "notes": [
+        "THE RECAST-CLOSING EDGE (RecastSatisfies, returntobattlefield). Gravecrawler's death (PA2: removal to=graveyard) satisfies its OWN from=graveyard cast-from-graveyard precondition. Because Gravecrawler returns ITSELF (self:true), the recast subject Subsumes (GREEN-eligible on identity) and guard:self-recast-samecard PASSES -- the legitimate same-card return (contrast Pair o' Dice Lost, pruned). REUSES the confirmed policy:recast:battlefield-return (first witnessed by the AMBER sibling).",
+        "GREEN (the AMBER floor LIFTED): guard:recast-pays-mana is SATISFIED here, not flooring. The recast re-pays {B} every iteration; the loop's mana output is Phyrexian Altar's one any-color mana (PA3), which via E8 (polarity:color:emit-mana, producer picks black) DOES pay the colored {B} pip (CR 202.2 / 105.2) -> the black-mana axis of the section-10 repetition vector is NET ZERO (refilled) -> provably >= break-even -> GREEN. This is the direct CONTRAST that proves the AMBER sibling's floor was mana-COLOR-specific: same recast, same guard, opposite verdict because the mana color changed colorless -> any.",
+        "FIRABILITY FLOOR (does NOT lower loop_tier -- a seeding precondition, not a per-iteration cost): Gravecrawler's 'as long as you control a Zombie' recast condition needs a Zombie on the battlefield. Within the 3 NAMED cards Gravecrawler is the only Zombie, so after it is sacrificed no Zombie remains -> the loop needs a 4th piece, a persistent second Zombie (never consumed -> initial-state seed). The port engine over-approximates by not projecting the 'control a Zombie' CountCondition as a consume port; documented, not authored."
+      ]
+    },
+    {
+      "id": "E8",
+      "from": "Phyrexian Altar.PA3",
+      "to": "Gravecrawler.GC1",
+      "mechanism": "polarity",
+      "rule": "polarity:color:emit-mana",
+      "tier": "GREEN",
+      "notes": [
+        "THE MANA-REFILL EDGE -- the load-bearing GREEN edge the AMBER sibling STRUCTURALLY LACKS. Phyrexian Altar's one any-color mana (PA3, color={value:any, polarity:producer-choice}) pays Gravecrawler's {B} recast pip (GC1, color=black): the producer picks black -> the existential/producer-choice match COVERS the specific colored demand (CR 105.2). Net black-mana balance is ZERO per iteration -> this refill SATISFIES guard:recast-pays-mana and is what lifts E7/the loop to GREEN. REUSES the confirmed polarity:color:emit-mana (witnessed by birds-of-paradise-x-horseshoe-crab {U} + chatterfang-x-pitiless-plunderer); this is a third, distinct any-color -> specific-pip witness ({B}). In the AMBER Ashnod's sibling NO such edge is possible -- colorless {C}{C} does not cover a colored pip, so the recast is unrefilled and the loop floors to AMBER."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == GREEN",
+      "because": "mana-balanced: Phyrexian Altar's one any-color mana (PA3) pays Gravecrawler's {B} recast pip (GC1) via E8 (polarity:color:emit-mana, producer picks black) -> the black-mana axis of the section-10 repetition vector is NET ZERO (refilled) -> guard:recast-pays-mana is SATISFIED, not flooring -> provably >= break-even -> GREEN. The self-recast passes (guard:self-recast-samecard, Gravecrawler returns itself) and the death payoff is GREEN (E4). Contrast the AMBER sibling gravecrawler-x-ashnods-altar-x-blood-artist, whose colorless {C}{C} cannot pay {B}."
+    },
+    {
+      "claim": "mana_balance == nonnegative",
+      "because": "per iteration the loop produces one mana of any color (PA3, producer-choice -> pick black) and consumes {B} (1 black, GC1); producer-choice any covers the colored pip (CR 105.2 / 202.2) -> net 0 black -> the cycle refills its own recast cost and is self-sustaining on the mana axis. Directly opposite the AMBER sibling's mana_balance == negative."
+    },
+    {
+      "claim": "edge.E8.tier == GREEN",
+      "because": "polarity:color:emit-mana: a producer-choice any-color mana emit COVERS a specific colored ({B}) consume by having the producer pick that color (CR 105.2). Third distinct witness of the rule (after birds->crab {U} and pitiless->chatterfang)."
+    },
+    {
+      "claim": "edge.E7.tier == GREEN",
+      "because": "guard:recast-pays-mana is SATISFIED: the {B} cast-from-graveyard recast is refilled by E8's any-color mana (in the RIGHT color) -> the guard does not floor -> the returntobattlefield self-recast (policy:recast:battlefield-return, self:true, guard:self-recast-samecard passes) certifies GREEN. In the AMBER sibling the identical E7 floors to AMBER on the same guard because the mana is colorless -- the tier flip is entirely mana-color-driven."
+    },
+    {
+      "claim": "guard:recast-pays-mana.satisfied_witness",
+      "because": "corroborates guard:recast-pays-mana from its PASSING/refilled branch: the guard's own desc says a recast-closed loop is GREEN-eligible 'only if it provably refills that cost in the RIGHT color' -- here Phyrexian Altar's any-color mana provably refills the {B}, so the guard passes. The AMBER Ashnod's sibling witnesses the flooring branch; this gold witnesses the satisfied branch (same rule id, reused not re-declared)."
+    },
+    {
+      "claim": "loop_firability == requires_second_zombie",
+      "because": "Gravecrawler's 'as long as you control a Zombie' (verified oracle text 2026-07-17) needs a battlefield Zombie; within the 3 named cards Gravecrawler is the only Zombie and is itself the sac fodder, so after it dies no Zombie remains and the recast is impossible. The famous infinite needs a persistent SECOND Zombie (a 4th piece). This is a one-time SEEDING precondition (the second Zombie is never sacrificed -> not consumed per iteration), so it does NOT change the per-iteration section-10 repetition vector and does NOT lower loop_tier below GREEN; but the 3 named cards alone do not loop without it. The port engine over-approximates by not projecting the 'control a Zombie' CountCondition as a consume port (a firability-blind, tier-preserving over-approximation)."
+    },
+    {
+      "claim": "edge.E4.tier == GREEN",
+      "because": "removal:creature = removal:creature; manner=sacrificed is a dies-to-graveyard event (bridge:sacrifice-to-dies); creature subset creature exactly, control=you subset any -> Subsumes -> GREEN (corroborates ruthless-knave-x-blood-artist)."
+    },
+    {
+      "claim": "edge.E4.reliability_capped",
+      "because": "PA2.to has provenance=derived (Rest-in-Peace over-approximation on the sacrifice destination)."
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the recur re-enters Gravecrawler as a creature you control that provably covers the sacrifice cost -> policy:argument:subject-cover."
+    },
+    {
+      "claim": "contrast_with_amber_is_mana_color_specific",
+      "because": "this gold and gravecrawler-x-ashnods-altar-x-blood-artist share the SAME recast arm (GC2/self:true), the SAME sacrifice-as-dual, the SAME death payoff, and the SAME rules (policy:recast:battlefield-return, guard:recast-pays-mana, guard:self-recast-samecard, policy:subscription:subject-subsumes-green, policy:argument:subject-cover). The ONLY difference is the altar's mana color (colorless {C}{C} vs producer-choice any), and that alone flips loop_tier AMBER -> GREEN -> the AMBER floor was mana-COLOR-specific, not structural (the recast rules are corroborated at GREEN)."
+    }
+  ],
+  "cr": [
+    "701.21a",
+    "603.2",
+    "601.3",
+    "601.2f",
+    "601.2h",
+    "202.2",
+    "106.1b",
+    "105.2",
+    "400.7"
+  ]
+}

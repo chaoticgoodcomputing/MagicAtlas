@@ -1,0 +1,61 @@
+{
+  "id": "evolution-sage",
+  "unit": "single-card",
+  "cards": [
+    "Evolution Sage"
+  ],
+  "source": {
+    "note": "single-card witness of the STATE resource stem 'counters' (CR 122) reached via PROLIFERATE (CR 701.34) -- a DISTINCT counter-ADDING manner from titanias-boon's direct +1/+1 PUT. Oracle (whole card): 'Landfall -- Whenever a land you control enters, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)' The ability's SOLE effect is proliferate, so the counters emit is THE witness; the landfall trigger is incidental subscription context (a land-ETB deployment watch), not the witnessed port. AST faithfulness: proliferate parses to ProliferateEffect (libs/magic-ast/AST/Effects/Counter/ProliferateEffect.cs, [OracleEffect('proliferate')]) -- a PARAMETERLESS keyword action with NO CounterType, NO Count, NO Target/Subject (the GLOSSARY: 'which permanents and players are chosen is a game-state decision handled at the table'). So the honest emit is the BARE counters stem with attrs={}: no facet is AST-derivable. PROJECTION GAP (parser-target, Deadeye-shaped): the live engine does NOT project a counters emit -- ProliferateEffect is absent from PortWalkProjection.EffectTypes and falls to the coarse emit:proliferate fallback (known-coarse-projections.json: 'baseline coarse fallback ... no flow rule consumes it yet'). This canonical counters port is therefore a PARSER-TARGET, the same shape as deadeye-x-peregrine-drake (blink projects emit:gainability today); source records the target rather than authoring a wish silently. TWO axis questions SURFACED (ANTI-PROLIFERATION -- NOT invented): (1) a counter-ADD manner axis -- proliferate (add-one-of-each-existing-kind) vs a direct put has no home: the 'manner' axis is licensed_by [removal:*, deployment:*] only (not counters) and its enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no put/proliferate value; (2) counter-type='each kind already there' is an existential over the EXISTING kinds on the object -- not any single closed counter-type enum value (+1/+1|loyalty|charge|energy|experience|poison) and counter-type carries_provenance_or_polarity=false, so it cannot even be marked producer-choice. SAGA INTERACTION (user-flagged, not yet projectable): a Saga advances by putting a lore counter each upkeep (CR 714) -- proliferate adds another lore counter of that existing kind, ACCELERATING the Saga's chapter clock; SagaAbilityParser.cs notes Saga bodies are 'a counter/proliferate interaction surface once Saga bodies project', so the proliferate->lore-counter payoff edge is unwitnessable today (Saga chapters do not project ports) -- left for when both proliferate and Saga bodies project. No edhrec_rank in the testbed oracle-cards.json source (verified) -- popularity omitted, not fabricated."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Evolution Sage": [
+      {
+        "id": "E0",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {},
+        "note": "THE WITNESS -- 'proliferate' (CR 701.34) emits the counters STATE resource (CR 122): it gives each chosen permanent/player another counter of each kind already there. ProliferateEffect is PARAMETERLESS (no CounterType, no Count, no Target in the AST), so the emit is the BARE counters stem with NO determinate facets. Every facet is either untellable or unexpressible: counter-type is 'each existing kind' (existential -- not a closed counter-type enum value, and the axis carries no polarity -> SURFACED, not invented); qty is unstated (ProliferateEffect has no Count field, unlike titanias-boon's Count=literal 1); control is a table-time choice (no Filter). PROJECTION GAP: live engine projects coarse emit:proliferate, NOT this counters emit -- PARSER-TARGET (see source.note)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.counters.witnessed",
+      "because": "E0 projects the bare STATE stem 'counters' (resources supergroup, CR 122) -- a SECOND witness of the already-witnessed counters stem, corroborating it via a distinct counter-ADDING manner (proliferate, CR 701.34) rather than titanias-boon's direct +1/+1 put. Already declared + already witnessed -> not unpredicted."
+    },
+    {
+      "claim": "E0.kind == STATE",
+      "because": "a counter is a persistent fungible resource on game objects (CR 122), not a discrete occurrence; stems.counters.kind = STATE, mirroring titanias-boon.T0 and the mana/life resources."
+    },
+    {
+      "claim": "E0.attrs == {}",
+      "because": "ProliferateEffect is a PARAMETERLESS keyword action (no CounterType/Count/Target/Subject in the AST). No counter-type, qty, or control facet is AST-derivable, so the honest witness carries the BARE stem with no facets -- authoring any facet would be a wish."
+    },
+    {
+      "claim": "no_axis_invented",
+      "because": "ANTI-PROLIFERATION. proliferate's counter-ADD manner (add-one-of-each-existing vs a direct put) has NO licensed axis on 'counters' -- the 'manner' axis is licensed_by [removal:*, deployment:*] only and its enum lacks any counter-add value; and the 'each existing kind' counter-type is not in the closed counter-type enum (+1/+1|loyalty|charge|energy|experience|poison) and counter-type carries_provenance_or_polarity=false. Both are SURFACED as scaffold questions in source.note, NOT invented as ad-hoc attrs."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the counters stem reached via proliferate, no cycle closed (edges=[]). The proliferate->counter-payoff edge (and the Saga lore-counter acceleration the user flagged) is unwitnessable today -- proliferate projects coarse emit:proliferate and Saga chapters do not project ports (CR 714); left for when both parse."
+    }
+  ],
+  "cr": [
+    "701.34",
+    "122",
+    "122.1",
+    "714"
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "id": "guttersnipe-x-niv-mizzet-visionary",
+  "unit": "pairwise",
+  "cards": [
+    "Guttersnipe",
+    "Niv-Mizzet, Visionary"
+  ],
+  "source": {
+    "csb": false,
+    "note": "CROSS-CARD corroboration of policy:damage-manner-feeds: a DIFFERENT card's damage emit feeding ANOTHER card's damage subscription (contrast captain-rex-nebula, the origin witness, which was a 1-card SELF-loop where the self-watch guard floored the edge to AMBER). Here Niv's trigger is NON-self (isSelf=false, watches 'a source you control', not 'this'), so the self-watch object-identity floor does NOT apply and policy:damage-manner-feeds stands as the sole certifier of the combat-axis compatibility. Live engine ports (dumps/card-ports.json, verified 2026-07-17): Guttersnipe emit:damage:noncombat:opponent (family=damage, stem=damage, manner=noncombat, isSelf=true, tier=Green, line 0 spans [46,93]) and Niv-Mizzet, Visionary trigger:damage:noncombat:any (family=damage, stem=damage, manner=noncombat, isSelf=false, tier=Green, line 2 spans [38,105]) + emit:drawcards (line 2 spans [106,132]). Oracle -- Guttersnipe: 'Whenever you cast an instant or sorcery spell, this creature deals 2 damage to each opponent.' Niv-Mizzet, Visionary: 'Flying / You have no maximum hand size. / Whenever a source you control deals noncombat damage to an opponent, you draw that many cards.' The combat facet (noncombat==noncombat exact match) and recipient (opponent feeds any) are AST-derivable -> a faithful witness, not a wish. NOTE the honest over-approximation: the damage-dealt stem licenses only [combat, recipient, subject] (no control axis), so Niv's 'a source you control' restriction is NOT port-captured; it is recovered under the standard co-control (same-deck) assumption -- Guttersnipe (self-source, a source you control) is provably WITHIN Niv's watched set, so the emit COVERS the subscription -> GREEN. There is NO emit:damage:combat:* port anywhere in the corpus (combat damage is not a discrete facted emit -- it is dealt implicitly in the combat damage step), so a both-combat cross-card FEED is not AST-derivable today; this gold witnesses the noncombat->noncombat FEED clause and asserts the noncombat-vs-combat PRUNE. edhrec/price absent from testbed source -> source.popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Guttersnipe": [
+      {
+        "id": "G1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "opponent",
+          "subject": "self"
+        },
+        "note": "THE SELF-SOURCE DAMAGE EMIT -- 'this creature deals 2 damage to each opponent' -- Guttersnipe is the source (isSelf=true). combat=noncombat: a triggered-ability damage, NOT the combat damage step (CR 120, not CR 510). recipient=opponent. Live label emit:damage:noncombat:opponent (tier=Green). Guttersnipe is a source you control -> WITHIN Niv's 'a source you control' watch."
+      }
+    ],
+    "Niv-Mizzet, Visionary": [
+      {
+        "id": "N1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any"
+        },
+        "note": "THE NON-SELF SUBSCRIPTION -- 'Whenever a source you control deals noncombat damage to an opponent' -- isSelf=false: this trigger watches OTHER sources, not 'this' (the defining contrast with the captain-rex self-watch). combat=noncombat: a noncombat-specific subscription (CR 120), fed ONLY by a noncombat (or general) emit. recipient=any: the parser coarsens 'to an opponent' to any (opponent in any -> the coarsening never drops the Guttersnipe feed). The 'a source you control' control-scope is NOT expressible on this port (damage-dealt licenses only [combat, recipient, subject], no control axis) -- an honest over-approximation recovered under the co-control assumption. Live label trigger:damage:noncombat:any."
+      },
+      {
+        "id": "N2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards",
+        "attrs": {
+          "control": "you",
+          "qty": "X"
+        },
+        "note": "THE PAYOFF -- 'you draw that many cards' -- a positive delta to the cards STATE pool (your hand). qty=X: 'that many' == the noncombat damage dealt (2 from Guttersnipe). Live label emit:drawcards. Not the witness; the card-defined payoff of the N1 subscription."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Guttersnipe.G1",
+      "to": "Niv-Mizzet, Visionary.N1",
+      "mechanism": "match_policy",
+      "rule": "policy:damage-manner-feeds",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE WITNESSED EDGE (CROSS-CARD): a DIFFERENT card's damage-dealt emit satisfies ANOTHER card's damage-dealt subscription. Manner-feeds: G1.combat=noncombat feeds N1.combat=noncombat -- an EXACT-match on the combat axis (a noncombat emit feeds a noncombat-specific trigger, CR 120); this is the exact-match clause of policy:damage-manner-feeds, complementing captain-rex's noncombat->any (general trigger) clause.",
+        "recipient: G1.recipient=opponent feeds N1.recipient=any (a general recipient accepts opponent, CR 510.1 recipient class -- no prune).",
+        "subject cover, NO self-watch: N1 is NON-self (isSelf=false), so the captain-rex self-watch object-identity floor does not apply. G1's self-source (Guttersnipe) is a source you control -> Guttersnipe COVERS N1's watched set -> reliably GREEN under the co-control assumption. The manner-feeds rule is the SOLE certifier here (the whole point of the cross-card witness).",
+        "PRUNE (the directional constraint corroborated): this same G1 noncombat emit would NOT feed a COMBAT-specific trigger -- a different card's trigger:damage:combat:player (e.g. Ancient Copper Dragon) is fed only by a combat emit; noncombat NEVER feeds combat (CR 510 vs 120). policy:damage-manner-feeds, engine CombatFacetFeeds."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Niv-Mizzet, Visionary.N1",
+      "to": "Niv-Mizzet, Visionary.N2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the subscription resolves into the draw: 'Whenever a source you control deals noncombat damage to an opponent, you draw that many cards' -- intra-ability causality, GREEN by construction (CR 603.2 -> the draw effect). Not the witnessed edge; the card-defined payoff bridge."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:damage-manner-feeds",
+        "consume_kind": "subscription",
+        "subject": "facet-feeds",
+        "corroborates": "policy:damage-manner-feeds",
+        "note": "CORROBORATING re-declaration -- NOT a new rule and NOT a sibling. Re-declares the exact existing id with the byte-match core (consume_kind=subscription, subject=facet-feeds) so the InteractionRollup union adds this gold to the rule's witnesses[] and climbs its ladder (captain-rex-nebula, the origin witness, keeps the canonical axis/lattice/desc/cr as the first-loaded slot). Same combat-axis feeds relation, now witnessed CROSS-CARD with a NON-self subscription. Anti-proliferation: no sibling id minted."
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "manner exact-match (G1.combat=noncombat feeds N1.combat=noncombat) + recipient (opponent feeds any) + subject cover (Guttersnipe, a source you control, is WITHIN N1's watched set); N1 is NON-self so there is no self-watch object-identity floor -- a reliable cross-card feed under the co-control assumption"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "the emit->subscription match is certified by policy:damage-manner-feeds (the combat-facet feeds relation), reused by exact id -- not a structural subsumption and not a sibling rule"
+    },
+    {
+      "claim": "manner_feeds",
+      "because": "G1.combat=noncombat feeds N1.combat=noncombat: a noncombat emit feeds a noncombat-specific subscription (exact match on the combat axis) -- policy:damage-manner-feeds, CR 120"
+    },
+    {
+      "claim": "manner_feeds_prune",
+      "because": "this same G1 noncombat emit must NEVER feed a COMBAT-specific trigger (a different card's trigger:damage:combat:player, e.g. Ancient Copper Dragon) -- policy:damage-manner-feeds, CR 510 vs 120; the load-bearing directional prune the combat-damage-modeling blocker named (engine CombatFacetFeeds)"
+    },
+    {
+      "claim": "cross_card_no_self_watch",
+      "because": "N1 is NON-self (isSelf=false, subject!=self) -- unlike captain-rex's self-watch subscription -- so guard:self-watch does not apply and policy:damage-manner-feeds is the sole certifier of the combat-axis compatibility across two distinct cards"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: Guttersnipe's ping feeds Niv's draw one-directionally (the draw does not emit damage back) -- one card's emit satisfying another's consume, no cycle closed, no SDF balance"
+    }
+  ],
+  "cr": [
+    "120",
+    "510",
+    "510.1",
+    "603.2"
+  ]
+}

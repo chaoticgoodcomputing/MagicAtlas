@@ -12,15 +12,22 @@
     "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "deadly-rollick",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
     "dualcaster-mage-x-ghostly-flicker",
     "emiel-the-blessed-x-mulldrifter",
+    "evolution-sage",
     "fog",
+    "grave-titan-x-anointed-procession",
     "gravecrawler-x-ashnods-altar-x-blood-artist",
+    "gravecrawler-x-phyrexian-altar-x-blood-artist",
+    "guttersnipe-x-niv-mizzet-visionary",
+    "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "kiki-jiki-x-restoration-angel",
     "nantuko-husk-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
@@ -31,7 +38,8 @@
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
-    "titanias-boon"
+    "titanias-boon",
+    "viscera-seer-x-zulaport-cutthroat"
   ],
   "conflicts": [],
   "polarity": [
@@ -115,6 +123,16 @@
     }
   ],
   "bridges": [
+    {
+      "id": "bridge:blink-renews-tap",
+      "from_stem": "deployment:creature",
+      "to_stem": "tap",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "manner": "blink"
+      }
+    },
     {
       "id": "bridge:sacrifice-to-dies",
       "from_stem": "removal:creature",

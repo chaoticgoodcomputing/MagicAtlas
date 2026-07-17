@@ -1,0 +1,84 @@
+{
+  "id": "deadly-rollick",
+  "unit": "single-card",
+  "cards": [
+    "Deadly Rollick"
+  ],
+  "source": {
+    "note": "single-card witness of the to=exile destination facet on the removal:creature stem — a TERMINAL exile removal, distinct from (a) Spine of Ish Sah's destroy→graveyard (to=graveyard, derived) and the Chatterfang/Nantuko sacrifice→graveyard witnesses (to=graveyard, manner=sacrificed), and (b) Deadeye-x-Peregrine-Drake's TRANSIENT exile (removal:creature to=exile manner=blink — a flicker round-trip that RETURNS the creature). Oracle: 'If you control a commander, you may cast this spell without paying its mana cost. / Exile target creature.' The witness is line-1's bare 'Exile target creature' — a permanent, one-way exile with NO return clause on the card (unlike Journey to Nowhere / Fiend Hunter, whose leaves-the-battlefield return makes their exile a blink). AST-faithful, not a wish: the committed hand-parse (Fixtures/HandParsedCards/DeadlyRollick.json) is EffectType=exile on Target.Filter.CardTypes=['creature'] with no Controller and no Zone narrowing — byte-analogous to Spine's EffectType=destroy on Filter.CardTypes=['permanent']. Live engine (dumps/card-ports.json) serves line 1 as emit:exile (family=exile, tier=Green, stem=null) alongside the cast:spell:self consume — the ADR-2 shadow projection does NOT map exile→removal:creature (stem is null on all 72 emit:exile rows), the same Stage-3 engine-catch-up gap Spine's emit:destroy carries. The gold hand-maps that parsed AST to removal:creature[to=exile] — a faithful witness. NOTE: Swords to Plowshares and Fiend Hunter's exile lines project emit:unstructured (parse gap — the trailing 'its controller gains life' / 'you may exile another target' text defeats the line parse); Deadly Rollick's bare exile line parses cleanly, so it is the honest exile-removal witness. No edhrec_rank/price in the testbed source — popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Deadly Rollick": [
+      {
+        "id": "D0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "incidental card context — casting the instant (live consume cast:spell:self, family=cast, isSelf=true, stem=cast, span [82,104]). The driver whose resolution produces the exile. Not the witness; the D0 → D1 binding (the spell's resolution deals the exile) is card-defined/internal, not an inter-card edge."
+      },
+      {
+        "id": "D1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "from": "battlefield",
+          "to": "exile",
+          "control": "any"
+        },
+        "note": "THE WITNESS — 'Exile target creature' — a creature leaving play by exile, at CREATURE breadth (Filter.CardTypes=['creature'] — removal:creature, the same stem the sacrifice/blink siblings witness, here carrying the NEW to=exile terminal-destination facet). from=battlefield (a targeted creature is on the battlefield; a creature moves off the battlefield when exiled, CR 406.2); to=exile is AST-PROVEN as a BARE value, NOT derived: exile is definitionally 'put it into the exile zone' (CR 406.2), a one-way holding area with no built-in redirect (CR 406.1) — unlike destroy→graveyard which regeneration/replacement can redirect (Spine's to=graveyard is derived). So this to=exile is a STRONGER destination proof than Spine's. control=any ('Exile target creature' has no Controller restriction — may hit any player's creature). manner is OMITTED: the manner axis enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has NO 'exiled' rung — the creature is neither destroyed (no graveyard, no destruction) nor sacrificed nor blinked (terminal, no return); the load-bearing witness is the to=exile destination, and a manner value is not invented (SCAFFOLD SURFACE: 'exiled' is a candidate manner enum addition). Live ADR-2 label: emit:exile (stem=null; the exile→removal:creature stem-map is the Stage-3 shadow-projection gap)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.removal:creature.witnessed",
+      "because": "D1 projects the removal supergroup at CREATURE breadth — 'Exile target creature' (Filter.CardTypes=['creature']). removal:creature is already witnessed (Chatterfang manner=sacrificed, Deadeye manner=blink), so this corroborates the stem; the NEW content is the to=exile terminal-destination facet it carries. Already declared, so NOT unpredicted."
+    },
+    {
+      "claim": "attr.to.exile.witnessed_terminal",
+      "because": "to=exile is now witnessed as a TERMINAL removal destination (a creature permanently leaving play to the exile zone), distinct from the only prior to=exile occurrence — Deadeye's manner=blink transient exile, a flicker that RETURNS the creature. The 'exile' value is in the to axis's values_seen, but its use as a one-way removal destination (no manner=blink round-trip) is the new facet. to axis, licensed_by removal:*."
+    },
+    {
+      "claim": "D1.to == exile",
+      "because": "EffectType=exile — the destination is definitionally the exile zone (CR 406.2, 'to exile an object is to put it into the exile zone'); a BARE value (AST-proven, not over-approximated). Exile is a one-way holding area with no regeneration/replacement redirect analogous to destroy→graveyard (CR 406.1), so — unlike Spine's derived to=graveyard — to=exile does NOT cap the port's Reliability."
+    },
+    {
+      "claim": "D1.from == battlefield",
+      "because": "removal = a zone-change whose FROM endpoint is play; 'target creature' is a creature on the battlefield, and it moves off the battlefield when exiled (CR 406.2). from axis, licensed_by removal:*."
+    },
+    {
+      "claim": "D1.control == any",
+      "because": "'Exile target creature' imposes no Controller restriction on the target (Filter has no Controller) — it may hit any player's creature. control axis lattice self ⊆ controlled ⊆ any; the widest, any."
+    },
+    {
+      "claim": "D1.manner.omitted",
+      "because": "the manner axis enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no 'exiled' rung, and the creature is neither destroyed/sacrificed nor blinked (terminal exile, no return). manner is omitted rather than invented — the to=exile destination carries the witness. 'exiled' is surfaced as a candidate manner enum addition (scaffold decision, not authored here)."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the removal:creature stem + the to=exile terminal facet, no cycle closed. The internal cast → exile binding (D0 → D1) is card-defined, not an inter-card interaction edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "406.1",
+    "406.2",
+    "400.1",
+    "400.7",
+    "608.2"
+  ]
+}

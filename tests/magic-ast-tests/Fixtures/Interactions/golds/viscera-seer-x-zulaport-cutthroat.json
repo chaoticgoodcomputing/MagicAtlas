@@ -1,0 +1,148 @@
+{
+  "id": "viscera-seer-x-zulaport-cutthroat",
+  "unit": "pairwise",
+  "cards": [
+    "Viscera Seer",
+    "Zulaport Cutthroat"
+  ],
+  "source": {
+    "note": "the SECOND witness for the sacrifice→dies aristocrat-bridge (corroborates nantuko-husk-x-blood-artist on a DIFFERENT sac outlet + a DIFFERENT dies payoff): Viscera Seer's activation cost 'Sacrifice a creature' (Scry 1) DIES (CR 701.21a a sacrificed permanent moves from the battlefield directly to its owner's graveyard → 700.4 dies), feeding Zulaport Cutthroat's 'whenever this or another creature you control dies' subscription. A drain-per-sacrifice value engine, NOT a loop — the smallest honest unit CORROBORATING the confirmed bridge:sacrifice-to-dies EDGE. Distinct corroboration nuance vs the Husk×Blood witness: Zulaport's dies-watch is control=you (creatures YOU control), the TIGHTER cover branch — still GREEN because a creature can only be sacrificed by its controller (CR 701.16a), so the sacrificed subject is always control=you ⊆ the you-filter. No CSB/popularity row for this pairing in dumps/combo-instances.json, so no source.popularity. PARSE-GAP: Viscera Seer's on-ability Scry 1 payoff is off the bridge path and its stem (library-selection) is not in the licensed stem set — surfaced, not modeled; it is irrelevant to the sac→dies edge."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Viscera Seer": [
+      {
+        "id": "V1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "the fodder — 'Sacrifice a creature' (NOT 'another': Viscera Seer MAY sacrifice itself, so NO exclude_self — identical port shape to Nantuko Husk's N1, the sound contrast to Woe Strider's 'sacrifice ANOTHER creature'). A type-based, controlled creature argument, refuellable by any creature you control (CR 701.16a)."
+      },
+      {
+        "id": "V2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "manner": "sacrificed"
+        },
+        "note": "the sacrifice EVENT; carries manner=sacrificed but NOT to — the destination (graveyard) is supplied by the bridge rule (CR 701.21a), not proven on the emit. Byte-identical port shape to Nantuko Husk's N2, the from-side of the bridge. The activated ability's Scry 1 payoff is off-path (library-selection stem is unlicensed) and not modeled — see source.note PARSE-GAP."
+      }
+    ],
+    "Zulaport Cutthroat": [
+      {
+        "id": "Z1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "to": "graveyard"
+        },
+        "note": "'whenever THIS or another creature you control dies' — a dies (leaves-battlefield-to-graveyard) subscription filtered to creatures YOU control; no exclusion (fires on Zulaport itself too). control=you is the meaningful contrast to Blood Artist's B1 control=any — the TIGHTER cover branch this witness exercises."
+      },
+      {
+        "id": "Z2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent",
+          "qty": 1
+        },
+        "note": "'each opponent loses 1 life' — off the bridge path, included for faithful derivation"
+      },
+      {
+        "id": "Z3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": 1
+        },
+        "note": "'and you gain 1 life' — off the bridge path, included for faithful derivation"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Viscera Seer.V2",
+      "to": "Zulaport Cutthroat.Z1",
+      "mechanism": "bridge",
+      "rule": "bridge:sacrifice-to-dies",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "the sac→dies bridge, SECOND witness: V2's manner=sacrificed removal is a death (CR 701.21a→700.4), supplying the to=graveyard Z1 watches. GREEN because the sacrificed subject creature Subsumes Z1's dies-watch filter creature EXACTLY (creature ⊆ creature, no subtype straddle) AND control=you ⊆ control=you — the sacrificed creature is always one you control (CR 701.16a), so it satisfies Zulaport's you-filter with no straddle. This exercises the TIGHTER control branch than the Husk×Blood witness (whose Blood Artist watched control=any). Reuses the CONFIRMED bridge:sacrifice-to-dies (a reference, not a re-declaration — no sibling minted). Reliability capped: the bridge's inferred to=graveyard is a graveyard-replacement (Rest in Peace) board prune — if the sacrificed creature is exiled instead it never dies, so Z1 never fires."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": [
+      {
+        "id": "bridge:sacrifice-to-dies",
+        "from_stem": "removal:creature",
+        "to_stem": "removal:creature",
+        "ceiling": "GREEN",
+        "from_attrs": {
+          "manner": "sacrificed"
+        },
+        "corroborates": "bridge:sacrifice-to-dies",
+        "cr": [
+          "701.21a",
+          "700.4"
+        ],
+        "note": "CORROBORATING re-declaration -- NOT a new rule and NOT a sibling. Re-declares the exact existing id with the byte-match core (from_stem=removal:creature, to_stem=removal:creature, ceiling=GREEN, from_attrs.manner=sacrificed) so the InteractionRollup union adds this gold to the rule's witnesses[] and climbs it 1->2 (nantuko-husk-x-blood-artist, the origin witness, keeps the canonical desc/cr as the first-loaded slot). Same sacrifice->dies zone-change, now witnessed with a DIFFERENT sac outlet (Viscera Seer, not Nantuko Husk) and a DIFFERENT dies payoff (Zulaport Cutthroat, not Blood Artist), on the tighter control=you cover branch. Anti-proliferation: no sibling id minted; core is byte-identical to the origin so the union cannot conflict."
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.mechanism == bridge"
+    },
+    {
+      "claim": "edge.E1.rule == bridge:sacrifice-to-dies",
+      "because": "corroborates the confirmed sac→dies bridge with a SECOND witness (a reference via edge.rule, NOT a re-declaration; no sibling id minted — the rollup adds this gold to the bridge's witnesses[])"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the sacrificed subject creature Subsumes Z1's dies-watch filter exactly (creature ⊆ creature) and control=you ⊆ control=you (a sacrifice can only target a creature you control, CR 701.16a) — the GREEN-cover branch, tighter than Husk×Blood's control=any"
+    },
+    {
+      "claim": "edge.E1.reliability_capped",
+      "because": "the bridge infers to=graveyard from manner=sacrificed (CR 701.21a); a graveyard-replacement (Rest in Peace) redirects the sacrificed creature to exile so it never dies — Z1 does not fire"
+    },
+    {
+      "claim": "corroborates:bridge:sacrifice-to-dies",
+      "because": "a DIFFERENT sac outlet (Viscera Seer's 'Sacrifice a creature: Scry 1') and a DIFFERENT dies payoff (Zulaport Cutthroat's dies-drain, control=you) than the original Nantuko Husk × Blood Artist witness — climbs the bridge from 1→2 witnesses"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: a one-shot drain-per-sacrifice value engine (Zulaport's life drain never refuels Viscera Seer's fodder) — not a repeating cycle, no §10 SDF balance"
+    }
+  ],
+  "cr": [
+    "701.21a",
+    "700.4",
+    "701.16a",
+    "603.6b",
+    "603.2"
+  ]
+}

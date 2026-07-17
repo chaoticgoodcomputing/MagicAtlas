@@ -12,15 +12,22 @@
     "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "deadly-rollick",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
     "dualcaster-mage-x-ghostly-flicker",
     "emiel-the-blessed-x-mulldrifter",
+    "evolution-sage",
     "fog",
+    "grave-titan-x-anointed-procession",
     "gravecrawler-x-ashnods-altar-x-blood-artist",
+    "gravecrawler-x-phyrexian-altar-x-blood-artist",
+    "guttersnipe-x-niv-mizzet-visionary",
+    "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "kiki-jiki-x-restoration-angel",
     "nantuko-husk-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
@@ -31,7 +38,8 @@
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
-    "titanias-boon"
+    "titanias-boon",
+    "viscera-seer-x-zulaport-cutthroat"
   ],
   "kinds": {
     "EVENT": "discrete occurrences with payloads \u2014 what subscriptions (triggered abilities) fire on.",
@@ -104,7 +112,8 @@
       "witnesses": [
         "aggravated-assault-x-sword-of-feast-and-famine",
         "divination",
-        "emiel-the-blessed-x-mulldrifter"
+        "emiel-the-blessed-x-mulldrifter",
+        "guttersnipe-x-niv-mizzet-visionary"
       ]
     },
     "cards:search": {
@@ -147,8 +156,10 @@
       "witnesses": [
         "aang-the-last-airbender",
         "archaeomancer-x-ghostly-flicker",
+        "deadly-rollick",
         "displacer-kitten-x-conviction",
-        "dualcaster-mage-x-ghostly-flicker"
+        "dualcaster-mage-x-ghostly-flicker",
+        "izzet-chronarch-x-ghostly-flicker"
       ]
     },
     "combat-presence": {
@@ -171,7 +182,8 @@
       "unpredicted": true,
       "witnesses": [
         "dualcaster-mage-x-ghostly-flicker",
-        "kiki-jiki-mirror-breaker"
+        "kiki-jiki-mirror-breaker",
+        "kiki-jiki-x-restoration-angel"
       ]
     },
     "counters": {
@@ -183,6 +195,7 @@
         "qty"
       ],
       "witnesses": [
+        "evolution-sage",
         "titanias-boon"
       ]
     },
@@ -198,9 +211,11 @@
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "nantuko-husk-x-blood-artist",
         "ophiomancer-x-nantuko-husk",
-        "ruthless-knave-x-blood-artist"
+        "ruthless-knave-x-blood-artist",
+        "viscera-seer-x-zulaport-cutthroat"
       ]
     },
     "damage-dealt": {
@@ -217,6 +232,7 @@
         "ancient-copper-dragon",
         "brazen-dwarf",
         "captain-rex-nebula",
+        "guttersnipe-x-niv-mizzet-visionary",
         "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
@@ -230,7 +246,8 @@
       ],
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
-        "displacer-kitten-x-conviction"
+        "displacer-kitten-x-conviction",
+        "grave-titan-x-anointed-procession"
       ]
     },
     "deployment:artifact": {
@@ -274,7 +291,10 @@
         "displacer-kitten-x-conviction",
         "dualcaster-mage-x-ghostly-flicker",
         "emiel-the-blessed-x-mulldrifter",
+        "grave-titan-x-anointed-procession",
+        "izzet-chronarch-x-ghostly-flicker",
         "kari-zev-skyship-raider",
+        "kiki-jiki-x-restoration-angel",
         "ophiomancer-x-nantuko-husk"
       ]
     },
@@ -301,9 +321,11 @@
       ],
       "witnesses": [
         "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "nantuko-husk-x-blood-artist",
         "ruthless-knave-x-blood-artist",
-        "soul-warden-x-ajanis-pridemate"
+        "soul-warden-x-ajanis-pridemate",
+        "viscera-seer-x-zulaport-cutthroat"
       ]
     },
     "mana": {
@@ -320,6 +342,7 @@
         "deadeye-x-peregrine-drake",
         "displacer-kitten-x-conviction",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "ruthless-knave-x-blood-artist",
         "ruthless-knave-x-krark-clan-ironworks"
       ]
@@ -373,7 +396,8 @@
         "subject"
       ],
       "witnesses": [
-        "deadeye-x-peregrine-drake"
+        "deadeye-x-peregrine-drake",
+        "kiki-jiki-x-restoration-angel"
       ]
     },
     "modification:prevention": {
@@ -426,6 +450,8 @@
         "archaeomancer",
         "archaeomancer-x-ghostly-flicker",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "gravecrawler-x-phyrexian-altar-x-blood-artist",
+        "izzet-chronarch-x-ghostly-flicker",
         "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
@@ -460,9 +486,12 @@
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
         "deadeye-x-peregrine-drake",
+        "deadly-rollick",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "nantuko-husk-x-blood-artist",
-        "ruthless-knave-x-blood-artist"
+        "ruthless-knave-x-blood-artist",
+        "viscera-seer-x-zulaport-cutthroat"
       ]
     },
     "removal:permanent": {
@@ -501,7 +530,8 @@
         "self"
       ],
       "witnesses": [
-        "chatterfang-x-pitiless-plunderer"
+        "chatterfang-x-pitiless-plunderer",
+        "kiki-jiki-x-restoration-angel"
       ]
     }
   },
@@ -701,6 +731,7 @@
         "modification:keyword"
       ],
       "values_seen": [
+        "haste",
         "soulbond"
       ],
       "carries_provenance_or_polarity": false,
@@ -753,7 +784,8 @@
         "deployment:creature"
       ],
       "values_seen": [
-        "1/1"
+        "1/1",
+        "2/2"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -890,7 +922,8 @@
         "monkey",
         "snake",
         "squirrel",
-        "treasure"
+        "treasure",
+        "zombie"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [

@@ -1,0 +1,171 @@
+{
+  "id": "kiki-jiki-x-restoration-angel",
+  "unit": "combo",
+  "cards": [
+    "Kiki-Jiki, Mirror Breaker",
+    "Restoration Angel"
+  ],
+  "source": {
+    "csb": true,
+    "note": "The classic copy+blink infinite. Kiki-Jiki's '{T}: Create a token that's a copy of target nonlegendary creature you control, except it has haste' copies Restoration Angel; GraftCopyInheritance (PortGraphEngine.cs, copy-inheritance-scope.md Decision 2/3) grafts the copy's inherited abilities onto the token. The copy (a Restoration Angel) enters -> its ETB 'you may exile another target non-Angel creature you control, then return that card to the battlefield' fires and blinks KIKI ITSELF -> Kiki re-enters UNTAPPED (CR 603.6e/400.7) -> Kiki (which has its OWN haste, so the re-entered object is not summoning-sick) re-taps to copy again. No mana is spent anywhere in the cycle, so there is NO CR-808/section-8 mana floor. BOTH ports are FAITHFULLY PARSED (no parse gap): the live dump projects Restoration Angel emit:blink:creature (family=blink, stem=deployment:creature, manner=blink, isSelf=false) + its GREEN etb:creature:self self-watch consume, and Kiki emit:copy (family=copy, stem=copy, manner=null) + its tap:self consume -- contrast Deadeye Navigator, whose GRANTED blink degrades to emit:gainability. The engine names this exact pair: BlinkReachesSource's doc-comment reads 'Kiki copies Restoration Angel ... the copy's ETB blinks a permanent, can blink the COPIER itself, which re-enters UNTAPPED, renewing the copier's tap ... The blink is Gated (\"you may\"), so the renewal is AMBER, never GREEN -- soundly irreducible (the optional ETB).' So despite being mana-free and summoning-sickness-free, the closing hop is floored to AMBER by the optional 'you may' blink + the object-identity Overlap (the operator cannot certify the copy targets Kiki rather than some other creature). No edhrec/popularity figure available in the testbed source -- popularity omitted (not fabricated)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Kiki-Jiki, Mirror Breaker": [
+      {
+        "id": "K1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "copy",
+        "attrs": {},
+        "note": "THE COPY ARM -- '{T}: Create a token that's a copy of target nonlegendary creature you control, except it has haste.' Permanent token-copy (CR 707.2). Live engine projects the bare emit:copy (family=copy, stem=copy, manner=null, isSelf=false); the permanent variant carries no in-axis facets, so attrs is empty (same faithful projection as the kiki-jiki-mirror-breaker single-card gold). GraftCopyInheritance resolves this copy's target filter against Restoration Angel and clones its ports under a synthesized copy identity."
+      },
+      {
+        "id": "K2",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "tap",
+        "attrs": {
+          "self": true
+        },
+        "note": "the {T} activation cost of K1 (dump: consume tap:self). This is the loop-closing resource: it is renewed when the copy's blink returns Kiki to the battlefield untapped (E3)."
+      },
+      {
+        "id": "K3",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:keyword",
+        "attrs": {
+          "keyword": "haste",
+          "subject": "self"
+        },
+        "note": "Kiki-Jiki's OWN haste (dump: emit:keywordability, GREEN, oracle line 0). Load-bearing to the tiering: when the blink returns Kiki as a NEW object it would be summoning-sick, but Kiki's static haste clears that gate -> the re-entered Kiki may immediately re-tap. So the ONLY floor left on the cycle is the Gated 'you may' blink (E3), not summoning sickness and not mana."
+      }
+    ],
+    "Restoration Angel": [
+      {
+        "id": "R1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the copy's inherited ETB self-watch -- 'When Restoration Angel enters the battlefield ...' (dump: consume etb:creature:self, stem=deployment:creature, isSelf=true, GREEN). In the loop this fires on the COPY's own entry (grafted onto the token that Kiki just created). Same self-watch shape as emiel MU0 / deadeye PD1."
+      },
+      {
+        "id": "R2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "control": "you",
+          "manner": "blink",
+          "exclude_self": true,
+          "qty": 1
+        },
+        "note": "THE BLINK ARM -- 'you may exile another target non-Angel creature you control, then return that card to the battlefield under your control.' Live engine projects emit:blink:creature (family=blink, stem=deployment:creature, manner=blink, isSelf=false) -- a faithful blink emit, NOT the coarse emit:gainability of Deadeye. exclude_self=true captures 'another'; the non-Angel restriction (a copy of an Angel cannot target itself anyway) still admits Kiki (not an Angel), so the copy blinks Kiki. Gated 'you may' -> optional ETB."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E0",
+      "from": "Kiki-Jiki, Mirror Breaker.K2",
+      "to": "Kiki-Jiki, Mirror Breaker.K1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the {T} tap cost (K2) drives the copy emit (K1) -- a card-internal cost->effect wiring (cf. displacer DK1->DK2, conviction CV1->CV2)"
+      ]
+    },
+    {
+      "id": "E1",
+      "from": "Kiki-Jiki, Mirror Breaker.K1",
+      "to": "Restoration Angel.R1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "THE GRAFT edge. CR 707.2: the copier definitely creates the copy token; the copy enters the battlefield -> its inherited ETB (R1) fires (CR 603.6, an ETB trigger is not optional to FIRE). Engine GraftCopyInheritance synthesizes exactly this as a card-defined GREEN edge copy-emit -> copy-etb-consume (PortGraphEngine.cs ~281-285). The 'you may' optionality bites at the EFFECT, not the trigger firing -> that AMBER is carried by E3, not here."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Restoration Angel.R1",
+      "to": "Restoration Angel.R2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the copy's ETB effect IS the blink -- a card-internal trigger->effect wiring (cf. emiel MU0->MU1, the ETB's payload). Inherited on the copy via the graft."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Restoration Angel.R2",
+      "to": "Kiki-Jiki, Mirror Breaker.K2",
+      "mechanism": "bridge",
+      "rule": "bridge:blink-renews-tap",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE CLOSING HOP. The copy blinks the copier Kiki -> Kiki re-enters UNTAPPED (CR 603.6e/400.7) -> the tap cost K2 is renewed. AMBER, never GREEN, on TWO soundness floors that survive the mana-free/haste-clear loop: (i) the blink is Gated 'you may' -- the optional ETB cannot be certified to fire (engine BlinkReachesSource returns Trilean.Unknown for every Gated blink, PortGraphEngine.cs ~447-457); (ii) object-identity Overlap -- the operator cannot prove the 'another target creature you control' blink targets Kiki specifically rather than some other creature (guard:self-watch, CR 603.6e/400.7). This is the blink-arm DUAL of the inherited-untap closing hop (Decision 4); the AMBER analogue of bridge:untap-land-to-mana."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": [
+      {
+        "id": "bridge:blink-renews-tap",
+        "from_stem": "deployment:creature",
+        "from_attrs": {
+          "manner": "blink"
+        },
+        "to_stem": "tap",
+        "ceiling": "AMBER",
+        "desc": "a copy's inherited BLINK emit (deployment:creature[manner=blink]) that blinks the tap-gated COPIER renews the copier's tap:self cost: the copier re-enters the battlefield as a new UNTAPPED object (CR 603.6e/400.7), so its {T} ability is available again. The blink-arm dual of the inherited-untap closing hop (copy-inheritance-scope.md Decision 4; engine BlinkReachesSource + the blink branch of GraftCopyInheritance's closing hops). Ceiling AMBER, never GREEN: the ETB carrying the blink is Gated ('you may', CR 603.6e -- the optional ETB cannot be certified to fire), and the 'another target creature you control' clause only Overlaps the specific copier (object identity the operator cannot see -- guard:self-watch). A soundness-preserving floor even when the loop is mana-free and summoning-sickness-free (the copier's own haste clears the sickness gate). Distinct from bridge:spell-copy-to-cast-driver (a STACK spell-copy that re-fires a cast driver and never enters the battlefield) and from bridge:untap-land-to-mana (untap->mana): this is a battlefield permanent-copy's blink renewing a tap cost.",
+        "cr": [
+          "707.2",
+          "603.6e",
+          "400.7"
+        ]
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the graft: CR 707.2 the copier definitely creates the copy and CR 603.6 its ETB fires on entry (card-defined GREEN, matching engine GraftCopyInheritance)"
+    },
+    {
+      "claim": "edge.E3.tier == AMBER",
+      "because": "the closing hop rests on the Gated 'you may' optional blink (engine BlinkReachesSource -> Unknown) and the object-identity Overlap (guard:self-watch) -- the copy blinks Kiki which re-enters untapped to renew the tap"
+    },
+    {
+      "claim": "edge.E3.mechanism == bridge:blink-renews-tap"
+    },
+    {
+      "claim": "loop.mana_free_but_amber",
+      "because": "no mana is spent in the cycle (no CR-808/section-8 mana floor) and Kiki's own haste clears summoning sickness on the re-blinked object, yet the loop is AMBER -- the irreducible floor is the optional Gated ETB, NOT a mana or timing floor"
+    }
+  ],
+  "cr": [
+    "707",
+    "707.2",
+    "603.6",
+    "603.6e",
+    "400.7",
+    "605"
+  ]
+}

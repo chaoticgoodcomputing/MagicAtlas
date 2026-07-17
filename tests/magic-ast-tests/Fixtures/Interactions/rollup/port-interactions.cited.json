@@ -12,15 +12,22 @@
     "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "deadly-rollick",
     "diabolic-tutor",
     "displacer-kitten-x-conviction",
     "divination",
     "dualcaster-mage-x-ghostly-flicker",
     "emiel-the-blessed-x-mulldrifter",
+    "evolution-sage",
     "fog",
+    "grave-titan-x-anointed-procession",
     "gravecrawler-x-ashnods-altar-x-blood-artist",
+    "gravecrawler-x-phyrexian-altar-x-blood-artist",
+    "guttersnipe-x-niv-mizzet-visionary",
+    "izzet-chronarch-x-ghostly-flicker",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "kiki-jiki-x-restoration-angel",
     "nantuko-husk-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
     "pacifism",
@@ -31,7 +38,8 @@
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
-    "titanias-boon"
+    "titanias-boon",
+    "viscera-seer-x-zulaport-cutthroat"
   ],
   "conflicts": [],
   "polarity": [
@@ -72,7 +80,8 @@
       "subject": "facet-feeds",
       "status": "confirmed",
       "witnesses": [
-        "captain-rex-nebula"
+        "captain-rex-nebula",
+        "guttersnipe-x-niv-mizzet-visionary"
       ],
       "desc": "a damage-dealt emit feeds a damage-dealt subscription only when the combat facets are compatible: a general trigger (combat=any, CR 120) fires on either combat or noncombat damage; a combat-specific trigger (CR 510) is fed ONLY by a combat emit; a noncombat emit NEVER feeds a combat-specific trigger. Directional on the combat axis (the manner-feeds constraint the combat-damage-modeling blocker named; engine CombatFacetFeeds).",
       "cr": [
@@ -117,7 +126,8 @@
       "subject": "intersect",
       "status": "confirmed",
       "witnesses": [
-        "archaeomancer-x-ghostly-flicker"
+        "archaeomancer-x-ghostly-flicker",
+        "izzet-chronarch-x-ghostly-flicker"
       ],
       "desc": "a cast:spell recast-driver consume (a spell watching to be re-cast, isSelf) is refueled by a returntohand:spell emit whose returned card lands in a castable zone (to=hand, CR 601.2); the match is feasible when the returned-object type Intersects the cast self-type, and the operator tiers the certainty Subsumes-\u003EGREEN / Overlaps-\u003EAMBER (a targeted \u0027return an instant or sorcery\u0027 is producer-choice -\u003E Overlaps the specific recast spell -\u003E AMBER). The recast/refuel-side analogue of policy:subscription:subject-intersect; implements the SpellRecursionSatisfiesCast arm\u0027s Intersects feasibility.",
       "cr": [
@@ -230,6 +240,25 @@
   ],
   "bridges": [
     {
+      "id": "bridge:blink-renews-tap",
+      "from_stem": "deployment:creature",
+      "to_stem": "tap",
+      "ceiling": "AMBER",
+      "status": "confirmed",
+      "from_attrs": {
+        "manner": "blink"
+      },
+      "witnesses": [
+        "kiki-jiki-x-restoration-angel"
+      ],
+      "desc": "a copy\u0027s inherited BLINK emit (deployment:creature[manner=blink]) that blinks the tap-gated COPIER renews the copier\u0027s tap:self cost: the copier re-enters the battlefield as a new UNTAPPED object (CR 603.6e/400.7), so its {T} ability is available again. The blink-arm dual of the inherited-untap closing hop (copy-inheritance-scope.md Decision 4; engine BlinkReachesSource \u002B the blink branch of GraftCopyInheritance\u0027s closing hops). Ceiling AMBER, never GREEN: the ETB carrying the blink is Gated (\u0027you may\u0027, CR 603.6e -- the optional ETB cannot be certified to fire), and the \u0027another target creature you control\u0027 clause only Overlaps the specific copier (object identity the operator cannot see -- guard:self-watch). A soundness-preserving floor even when the loop is mana-free and summoning-sickness-free (the copier\u0027s own haste clears the sickness gate). Distinct from bridge:spell-copy-to-cast-driver (a STACK spell-copy that re-fires a cast driver and never enters the battlefield) and from bridge:untap-land-to-mana (untap-\u003Emana): this is a battlefield permanent-copy\u0027s blink renewing a tap cost.",
+      "cr": [
+        "707.2",
+        "603.6e",
+        "400.7"
+      ]
+    },
+    {
       "id": "bridge:sacrifice-to-dies",
       "from_stem": "removal:creature",
       "to_stem": "removal:creature",
@@ -239,7 +268,8 @@
         "manner": "sacrificed"
       },
       "witnesses": [
-        "nantuko-husk-x-blood-artist"
+        "nantuko-husk-x-blood-artist",
+        "viscera-seer-x-zulaport-cutthroat"
       ],
       "desc": "a sacrifice (removal:creature[manner=sacrificed] emit) feeds a dies-trigger (removal:creature[to=graveyard] subscription): CR 701.21a \u2014 to sacrifice a permanent is to move it from the battlefield directly to its owner\u0027s graveyard \u2014 so it dies (CR 700.4, leaves-the-battlefield to graveyard). The bridge supplies the to=graveyard destination the parser proves only as manner=sacrificed (the ADR-2 sac-consume \u2192 ltb:\u2026:to-graveyard-consume arm, PortGraphEngine.AddCoarseRulesEdges (3)). Ceiling GREEN \u2014 a deterministic rules zone-change (contrast the AMBER cross-resource untap\u2192mana / copy\u2192cast bridges): the edge is GREEN when the sacrificed type provably covers the dies-watch filter, reliability-capped only by a graveyard-replacement (Rest in Peace) board prune.",
       "cr": [

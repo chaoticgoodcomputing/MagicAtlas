@@ -1,0 +1,85 @@
+{
+  "id": "grave-titan-x-anointed-procession",
+  "unit": "pairwise",
+  "cards": [
+    "Grave Titan",
+    "Anointed Procession"
+  ],
+  "source": {
+    "csb": false,
+    "note": "the token-creation -> REPLACEMENT intercept MODIFIER witness (ADR-0001 §4 modifier arm: emit:token -> replace:token-creation intercept). A pure token-DOUBLER ('creates twice that many instead', CR 614) intercepting a token-maker's emit:token; corroborates Chatterfang C1's replacement intercept (a card-specific token-ADDER) with the canonical doubler shape. Not a CSB combo (a synergy, not a loop) -> no popularity."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Grave Titan": [
+      {
+        "id": "G1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "token": true,
+          "subtype": "zombie",
+          "color": "black",
+          "pt": "2/2",
+          "control": "you",
+          "qty": 2
+        },
+        "note": "'create two 2/2 black Zombie creature tokens' — dump: emit:token:creature:zombie:controlled (GREEN). The enters-or-attacks trigger that drives it is internal to Grave Titan and irrelevant to this witness."
+      }
+    ],
+    "Anointed Procession": [
+      {
+        "id": "A1",
+        "side": "intercept",
+        "kind": "EVENT",
+        "stem": "deployment",
+        "attrs": {
+          "token": true,
+          "control": "you"
+        },
+        "note": "'If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead' — a CR 614 replacement watching the token-creation event. Dump: intercept replace:token-creation (family replacement, GREEN). Same port shape as Chatterfang C1 (a doubler, not an adder — the magnitude difference is card-defined, not port-structural)."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Grave Titan.G1",
+      "to": "Anointed Procession.A1",
+      "mechanism": "modifier",
+      "tier": "GREEN",
+      "notes": [
+        "the ADR-0001 §4 modifier arm: an emit:token (deployment ⊇ deployment:creature[token]) is intercepted by a replace:token-creation replacement (CR 614.1 — a replacement watches the token-creation event and replaces it). control=you covers control=you -> the mandatory replacement applies -> GREEN. mechanism=modifier is structural/self-certifying (like subsumption/card-defined) -> no rule id. Intercept never closes a loop alone (CR 614.5 — a replacement doesn't re-invoke itself, so the doubled tokens aren't re-doubled)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.mechanism == modifier",
+      "because": "the emit:token -> replace:token-creation intercept relation is the structural §4 modifier arm; self-certifying, no rule cited"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "control=you ⊆ control=you and a token-creation replacement is mandatory (CR 614.1); the doubler deterministically intercepts the maker's token creation"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: a one-shot magnitude modifier, not a repeating cycle (CR 614.5 — the replacement gets one opportunity, it does not re-double its own output); no §10 SDF balance"
+    }
+  ],
+  "cr": [
+    "111.10",
+    "614.1",
+    "614.5"
+  ]
+}

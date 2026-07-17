@@ -1,0 +1,182 @@
+{
+  "id": "izzet-chronarch-x-ghostly-flicker",
+  "unit": "combo",
+  "cards": [
+    "Izzet Chronarch",
+    "Ghostly Flicker"
+  ],
+  "source": {
+    "csb": true,
+    "note": "SECOND WITNESS of policy:recast:spell-recursion (CR 601.2) — corroborates the Archaeomancer x Ghostly Flicker parent with a DIFFERENT spell-recursion creature, climbing the rule 1->2 witnesses. Izzet Chronarch is a distinct ETB recursion body ('When Izzet Chronarch enters the battlefield, return target instant or sorcery card from your graveyard to your hand') but projects the IDENTICAL load-bearing ports as Archaeomancer, both AST-derivable and served GREEN in the live dump (dumps/card-ports.json): Izzet Chronarch -> emit:returntohand:spell:instant+sorcery (family=recur, spans [26,98]) + etb:creature:self (family=etb, consume, spans [0,25]); Ghostly Flicker -> cast:spell:self (family=cast, consume, isSelf=true — the recast driver) + emit:blink:artifact+creature+land (family=blink). NO parse gap — Izzet Chronarch's recur emit parses cleanly to emit:returntohand:spell (same as Archaeomancer), and Ghostly Flicker's SPELL blink parses (returnToBattlefield ExiledWith:Self -> emit:blink). CONTRAST / PARSE GAP: the sibling recursion creature Mnemonic Wall does NOT project spell-recursion — its ETB recur line comes back as emit:keywordability + emit:unstructured (family=keywordability/unstructured), a lossy parse of 'return target instant or sorcery card from your graveyard to your hand'; Salvager of Secrets DOES parse clean (emit:returntohand:spell:instant+sorcery, family=recur) and is an equivalent alternate witness. The loop is identical in shape to the parent: cast Ghostly Flicker (G0) -> blink Izzet Chronarch (G1, the return half re-enters it) -> Izzet Chronarch ETB (IC0) -> return Ghostly Flicker gy->hand (IC1, the recur emit) -> recast Ghostly Flicker (G0), closing the cycle. This gold ADDS NO new stem/axis/rule — it reuses the exact policy:recast:spell-recursion id (byte-matched core: consume_kind=recast-driver, subject=intersect) and guard:self-recast-samecard, both already declared by the parent, so the rollup unions them by id and appends this gold to the witnesses list (observed->corroborated / stays confirmed via the parent's PASS). No popularity COUNT is available in the testbed corpus (edhrec/price absent) so source.popularity is omitted (not fabricated); csb=true records this as a documented Commander Spellbook combo (Izzet Chronarch + Ghostly Flicker + a third blinkable permanent = infinite ETB/blink)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 8, 2026-07-17): 8/8 PASS, no false GREEN/prune; AMBER floors sound-irreducible; GREEN edges CR-guaranteed. CR-citation drift fixed where genuinely wrong (evolution-sage proliferate 701.27->701.34)."
+  },
+  "ports": {
+    "Izzet Chronarch": [
+      {
+        "id": "IC0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the ETB driver — 'When Izzet Chronarch enters the battlefield' (live etb:creature:self; family=etb, consume, GREEN, spans [0,25]). A self-watching ETB subscription; grounds the card-defined flow into the recur emit. Mirrors archaeomancer-x-ghostly-flicker A0 and archaeomancer.json R0."
+      },
+      {
+        "id": "IC1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "hand",
+          "control": "you"
+        },
+        "note": "THE EMIT SIDE OF THE WITNESSED EDGE — 'return target instant or sorcery card from your graveyard to your hand' (live emit:returntohand:spell:instant+sorcery; family=recur, GREEN, spans [26,98]). from=graveyard (proven by the target filter) and to=hand (definitional to returnToHand) are both AST-proven; the returned card being a chosen instant/sorcery is producer-choice (a TARGET). In this loop the player returns Ghostly Flicker -> hand, refueling its recast. Same shape as Archaeomancer's recur emit (archaeomancer.json R1) — a DIFFERENT card witnessing the SAME emit stem."
+      }
+    ],
+    "Ghostly Flicker": [
+      {
+        "id": "G0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE CONSUME SIDE OF THE WITNESSED EDGE — the recast driver (live cast:spell:self; family=cast, consume, isSelf=true, spans [0,127]). The spell watches for ITSELF being cast: it needs Ghostly Flicker in a castable zone (hand) + its mana. subject=self encodes isSelf ('spell' is implicit in the cast verb, per aang.json A1). Refueled by Izzet Chronarch's recur emit (edge E4). Identical to the parent gold's G0."
+      },
+      {
+        "id": "G1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "control": "you",
+          "manner": "blink",
+          "qty": 2
+        },
+        "note": "the load-bearing RETURN half of Ghostly Flicker's blink (live emit:blink:artifact+creature+land; blink = exile-then-return, this is the 'return those cards to the battlefield' half). Re-enters the two targets as NEW objects -> retriggers their ETBs; in this loop it re-enters Izzet Chronarch, re-firing IC0. Live filter is artifact+creature+land; modeled at the creature rung (Izzet Chronarch, the loop's blinked creature). The exile half (removal[manner=blink]) is incidental to the loop and omitted for focus. Identical to the parent gold's G1."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Ghostly Flicker.G0",
+      "to": "Ghostly Flicker.G1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "casting Ghostly Flicker (its cast:spell:self driver satisfied) deterministically resolves its blink (exile-then-return) — a self-certifying card-defined flow from the cast consume to the blink emit, no rule dependency. Mirrors the parent gold E1."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Ghostly Flicker.G1",
+      "to": "Izzet Chronarch.IC0",
+      "mechanism": "subsumption",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "blink IS a deployment re-entry (structural half = subsumption); IC0 self-watches (subject=self), Ghostly Flicker blinks 'artifact/creature/land you control' -> the entering creature Overlaps 'this creature enters' but does not Subsume it -> AMBER. Reuses guard:self-watch + policy:subscription:subject-intersect; mirrors the parent gold E2 (G1->A0)."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Izzet Chronarch.IC0",
+      "to": "Izzet Chronarch.IC1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "Izzet Chronarch's ETB deterministically fires the recursion (return an instant/sorcery gy->hand) — a self-certifying card-defined flow from the ETB subscription to the recur emit, no rule dependency. Mirrors the parent gold E3 and archaeomancer.json E1."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Izzet Chronarch.IC1",
+      "to": "Ghostly Flicker.G0",
+      "mechanism": "match_policy",
+      "rule": "policy:recast:spell-recursion",
+      "residuals": [
+        "guard:self-recast-samecard"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESSED EDGE (recur -> recast, CR 601.2) — the SECOND witness of policy:recast:spell-recursion, a DIFFERENT recursion body than the parent's Archaeomancer. Izzet Chronarch's emit:returntohand:spell:instant+sorcery lands the returned card in HAND (to=hand, a castable zone) -> it refuels Ghostly Flicker's cast:spell:self recast driver, re-firing the spell's blink. The returned filter {instant,sorcery} Intersects Ghostly Flicker's self-type (an instant) -> feasible; but 'return TARGET instant or sorcery' is producer-choice (the player could return a different spell), so the returned card Overlaps the specific Ghostly Flicker rather than Subsumes it -> Overlaps->AMBER (policy:recast:spell-recursion). Mirrors the live SpellRecursionSatisfiesCast arm (Intersects feasibility + AddRulesEdge tiering). The guard:self-recast-samecard residual passes trivially here — Izzet Chronarch != Ghostly Flicker (cross-card), so the same-card self-recast prune does not fire; it is the rule the arm carries to kill the spurious 1-card self-loop."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:recast:spell-recursion",
+        "consume_kind": "recast-driver",
+        "subject": "intersect",
+        "desc": "a cast:spell recast-driver consume (a spell watching to be re-cast, isSelf) is refueled by a returntohand:spell emit whose returned card lands in a castable zone (to=hand, CR 601.2); the match is feasible when the returned-object type Intersects the cast self-type, and the operator tiers the certainty Subsumes->GREEN / Overlaps->AMBER (a targeted 'return an instant or sorcery' is producer-choice -> Overlaps the specific recast spell -> AMBER). The recast/refuel-side analogue of policy:subscription:subject-intersect; implements the SpellRecursionSatisfiesCast arm's Intersects feasibility.",
+        "cr": [
+          "601.2",
+          "400.7"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "rule.policy:recast:spell-recursion.corroborated",
+      "because": "this gold re-declares policy:recast:spell-recursion with byte-matched core (consume_kind=recast-driver, subject=intersect) and a DIFFERENT recursion witness (Izzet Chronarch, not Archaeomancer), so the rollup unions by id and appends this gold to the rule's witnesses -> 1->2 witnesses (climbs observed->corroborated; stays confirmed via the parent's judge PASS). No sibling id is minted."
+    },
+    {
+      "claim": "edge.E4.witnesses recur_to_cast",
+      "because": "E4 is Izzet Chronarch.IC1 (emit:returntohand:spell, stem=recur) -> Ghostly Flicker.G0 (cast:spell:self, stem=cast) — the spell-recursion -> recast-driver edge (CR 601.2), closing the loop"
+    },
+    {
+      "claim": "edge.E4.tier == AMBER",
+      "because": "the returned 'target instant or sorcery' is producer-choice and Overlaps (not Subsumes) the specific Ghostly Flicker recast spell -> policy:recast:spell-recursion's Overlaps->AMBER branch"
+    },
+    {
+      "claim": "edge.E4.mechanism == match_policy",
+      "because": "a non-structural recast-refuel certified by policy:recast:spell-recursion (the recur->cast type-Intersect match); not subsumption/card-defined/modifier, so it cites the existing rule id"
+    },
+    {
+      "claim": "guard:self-recast-samecard.inapplicable_here",
+      "because": "the same-card self-recast prune fires only for a 1-card self-loop; Izzet Chronarch != Ghostly Flicker (cross-card), so E4 passes it trivially — the guard is referenced in E4.residuals to document the arm's prune, not to cap this edge"
+    },
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the recast has a mana co-cost (Ghostly Flicker is {2}{U}, 3 mana per recast) so the repetition vector is mana-NEGATIVE (§10 SDF: the loop cannot refuel its own mana), AND E4 is producer-choice (Izzet Chronarch returns a CHOSEN instant/sorcery, not necessarily Ghostly Flicker), AND Ghostly Flicker needs a SECOND blink target (a third permanent) — any one floors the cycle below GREEN"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "the self-watch guard: blink-of-'artifact/creature/land' Overlaps Izzet Chronarch's self-watching ETB -> AMBER (reuses guard:self-watch, mirrors the parent gold E2)"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined (self-certifying): casting Ghostly Flicker deterministically fires its blink, no over-approximation to cap"
+    },
+    {
+      "claim": "edge.E3.tier == GREEN",
+      "because": "card-defined (self-certifying): Izzet Chronarch's ETB deterministically fires the recur emit"
+    },
+    {
+      "claim": "no_new_taxonomy",
+      "because": "no new stem, attribute axis, supergroup, or rule id is introduced — this is a pure corroboration reusing the parent's stems (recur, cast, deployment:creature), the parent's rule id (policy:recast:spell-recursion), and the parent's guard (guard:self-recast-samecard)"
+    }
+  ],
+  "cr": [
+    "601.2",
+    "400.7",
+    "603.6e",
+    "603.2",
+    "400.1"
+  ]
+}
