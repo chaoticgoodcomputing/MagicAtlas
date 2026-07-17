@@ -13,6 +13,12 @@
       "skillPath": "skills/engineering/diagnose/SKILL.md",
       "computedHash": "15939a26f86edec2d4862042b8564e5a062cb81d04e047a0cea6305c8830b5f5"
     },
+    "flowthru": {
+      "source": "chaoticgoodcomputing/flowthru",
+      "sourceType": "github",
+      "skillPath": "src/core/Flowthru.Core/skill/SKILL.md",
+      "computedHash": "0def5ead3cc1b91796b7e6743789f2b95f0a38973fe4732e5faa31442e902770"
+    },
     "grill-with-docs": {
       "source": "mattpocock/skills",
       "sourceType": "github",

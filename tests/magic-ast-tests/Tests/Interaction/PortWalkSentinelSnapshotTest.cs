@@ -541,6 +541,58 @@ public class PortWalkSentinelSnapshotTest
     );
   }
 
+  /// <summary>
+  /// ADR-0003 §7 provenance guard against the "Flying has mana/sacrifice/tap ports" over-generalization —
+  /// a <b>derived</b> port (a created token's own affordance, a granted / copy-grafted ability, projected
+  /// onto the card for the interaction graph) must inherit the oracle line + span of the clause that
+  /// PRODUCES it, never silently default to <see cref="PortNode.OracleLineIndex"/> 0 / null span (which
+  /// mis-attributes it to the first oracle line). The general principle — "a derived port carries its
+  /// progenitor's provenance" — instantiated for the predefined-token mechanism (<c>ResolvePredefinedTokens</c>)
+  /// over the exact reported case, Ancient Copper Dragon: its Treasure's <c>emit:mana</c> / <c>sac:treasure</c>
+  /// / <c>tap:self</c> must ride the "create … Treasure tokens" clause (line 1), not "Flying" (line 0).
+  /// A stateless invariant: it reads the port graph and checks the relationship, no baseline to shrink.
+  /// </summary>
+  [Test]
+  public void Derived_token_affordance_ports_inherit_the_creating_clause()
+  {
+    // Ancient Copper Dragon's gold carries the createToken ability spanned on line 1 — the reported bug's
+    // exact fixture (whether or not it is in the sentinel manifest).
+    var goldPath = Path.Combine(FixturesDir(), "HandParsedCards", "AncientCopperDragon.json");
+    Assert.That(File.Exists(goldPath), Is.True, $"expected the Ancient Copper Dragon gold at {goldPath}");
+    var gold = JsonNode.Parse(File.ReadAllText(goldPath));
+    var graph = new PortWalk(Ontology).Project(
+      "Ancient Copper Dragon",
+      gold!["Output"]!["Oracle"]!["Abilities"],
+      null
+    );
+
+    var tokenEmit = graph.Ports.First(p => p.Side == PortSide.Emit && p.Subject?.IsToken == true);
+    // The Treasure's intrinsic affordance ports (ResolvePredefinedTokens): emit:mana, sac:treasure, tap.
+    var affordances = graph
+      .Ports.Where(p =>
+        p.Label == "emit:mana:any"
+        || p.Label == "tap:self"
+        || p.Label.StartsWith("sac:artifact:treasure", StringComparison.Ordinal)
+      )
+      .ToList();
+
+    Assert.Multiple(() =>
+    {
+      // Teeth: the progenitor clause is a REAL line-1 span, so a regression that drops the inheritance
+      // (defaulting the affordances to line 0 / null) is caught — not a null==null vacuous pass.
+      Assert.That(tokenEmit.OracleLineIndex, Is.EqualTo(1), "the emit:token port rides the create-Treasure clause (line 1)");
+      Assert.That(tokenEmit.SourceSpan, Is.Not.Null, "the emit:token port carries the create-Treasure span");
+      Assert.That(affordances, Has.Count.EqualTo(3), "expected the Treasure's emit:mana + sac + tap affordance ports");
+      foreach (var a in affordances)
+      {
+        Assert.That(a.OracleLineIndex, Is.EqualTo(tokenEmit.OracleLineIndex),
+          $"{a.Label} must inherit the emit:token line ({tokenEmit.OracleLineIndex}), not default to 0 ('Flying')");
+        Assert.That(a.SourceSpan?.Start, Is.EqualTo(tokenEmit.SourceSpan?.Start),
+          $"{a.Label} must inherit the emit:token span, not null");
+      }
+    });
+  }
+
   [Test, Explicit("Writes all sentinel snapshot files to the source tree.")]
   public void Regenerate_snapshots()
   {
