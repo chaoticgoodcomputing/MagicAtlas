@@ -411,9 +411,37 @@ const uniqStr = (xs: string[]): string[] => [...new Set(xs)];
  *  predecessors; right = consumers that DRAIN its emit families ∪ their edge
  *  successors. Non-canonical projections never participate. Returns the card's
  *  own canonical families per side so the caller can label the columns. */
+/** Filter-bar state for the Explorer columns. Each filter targets the NEIGHBOUR
+ *  (the card listed in a column): its color profile, mana value, and second-degree
+ *  reach — plus the edge's certainty tier. `null`/empty means "no filter". */
+export interface NeighbourFilters {
+  tier?: string | null; // "Green" | "Amber"
+  colors?: string[]; // WUBRG — neighbour has at least one
+  maxCmc?: number | null; // neighbour cmc <= this
+  reaches?: string | null; // a family the neighbour reaches (2nd degree)
+}
+
+/** Build the PortEdgeRowFilterInput for one column. The focus-card pin plus every
+ *  filter maps to the NEIGHBOUR's denormalized columns: feeders (neighbour = the
+ *  emitting fromCard) key on the from_* side, drains (neighbour = the consuming
+ *  toCard) on the to_* side. */
+function buildEdgeWhere(card: string, dir: "feeders" | "drains", f: NeighbourFilters): Record<string, unknown> {
+  const w: Record<string, unknown> =
+    dir === "feeders" ? { toCard: { eq: card } } : { fromCard: { eq: card } };
+  const colorsCol = dir === "feeders" ? "fromColors" : "toColors";
+  const cmcCol = dir === "feeders" ? "fromCmc" : "toCmc";
+  const reachCol = dir === "feeders" ? "sourceReaches" : "targetReaches";
+  if (f.tier) w.tier = { eq: f.tier };
+  if (f.colors && f.colors.length) w[colorsCol] = { some: { in: f.colors } };
+  if (f.maxCmc != null) w[cmcCol] = { lte: f.maxCmc };
+  if (f.reaches) w[reachCol] = { some: { eq: f.reaches } };
+  return w;
+}
+
 export function useCardNeighbours(
   ports: CardPort[],
   self: string,
+  filters: NeighbourFilters = {},
 ): AtlasResult<{
   emitters: Candidate[]; // feed this card's consume side (left)
   consumers: Candidate[]; // drain this card's emit side (right)
@@ -433,8 +461,12 @@ export function useCardNeighbours(
   // yields the notable neighbours. NO client-side flow re-derivation — the edges
   // are the engine's verdict, so the columns cannot drift from it (the old
   // feeds()/FLOW_FEEDERS/FLOW_DRAINS path is deleted).
-  const feedersQ = useQuery(CARD_FEEDERS_QUERY, { variables: { card: self, first: 120 }, skip: !self });
-  const drainsQ = useQuery(CARD_DRAINS_QUERY, { variables: { card: self, first: 120 }, skip: !self });
+  const filterKey = JSON.stringify(filters);
+  const feedersWhere = useMemo(() => buildEdgeWhere(self, "feeders", filters), [self, filterKey]);
+  const drainsWhere = useMemo(() => buildEdgeWhere(self, "drains", filters), [self, filterKey]);
+
+  const feedersQ = useQuery(CARD_FEEDERS_QUERY, { variables: { where: feedersWhere, first: 120 }, skip: !self });
+  const drainsQ = useQuery(CARD_DRAINS_QUERY, { variables: { where: drainsWhere, first: 120 }, skip: !self });
 
   const emitters = useMemo(() => edgesToCandidates(feedersQ.data, "feeders", self), [feedersQ.data, self]);
   const consumers = useMemo(() => edgesToCandidates(drainsQ.data, "drains", self), [drainsQ.data, self]);

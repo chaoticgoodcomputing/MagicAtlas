@@ -397,12 +397,16 @@ export const DECK_PORTS_QUERY = gql`
 // FEEDERS (left): edges INTO this card (toCard = $card); the emitting fromCard feeds
 // it. DRAINS (right): edges OUT (fromCard = $card); the consuming toCard is fed.
 // Ranked by combo popularity, then the NEIGHBOUR's EDHREC (the deck-building tiebreak).
+// $where is a full PortEdgeRowFilterInput built client-side (useCardNeighbours) so the
+// filter bar (tier / neighbour color / neighbour mana-value / second-degree reach tag)
+// pushes straight into SQL — the focus-card pin (to/fromCard eq) is folded into the same
+// object. Order is fixed: combo popularity, then the neighbour's EDHREC.
 export const CARD_FEEDERS_QUERY = gql`
-  query CardFeeders($card: String!, $first: Int!) {
+  query CardFeeders($where: PortEdgeRowFilterInput!, $first: Int!) {
     discover {
       atlas {
         portEdgeRows(
-          where: { toCard: { eq: $card } }
+          where: $where
           order: [{ popularity: DESC }, { fromEdhrec: ASC }]
           first: $first
         ) {
@@ -414,11 +418,11 @@ export const CARD_FEEDERS_QUERY = gql`
 `;
 
 export const CARD_DRAINS_QUERY = gql`
-  query CardDrains($card: String!, $first: Int!) {
+  query CardDrains($where: PortEdgeRowFilterInput!, $first: Int!) {
     discover {
       atlas {
         portEdgeRows(
-          where: { fromCard: { eq: $card } }
+          where: $where
           order: [{ popularity: DESC }, { toEdhrec: ASC }]
           first: $first
         ) {

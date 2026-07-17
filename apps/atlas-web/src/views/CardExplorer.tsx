@@ -9,12 +9,12 @@
 // highlighted oracle clause focuses one side; the search box or any CardLink
 // navigates to that card's page.
 
-import { useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode, type CSSProperties } from "react";
 import { cardImage, famHue } from "../data/mock";
 import {
   useCardNeighbours, useCardProfile, useOracle, useCardForward,
   useCardCombos, useCardAnchor, useCardRulings,
-  type CardPort,
+  type CardPort, type NeighbourFilters,
 } from "../data/atlas";
 import { TierChip, FamilyDot, SectionHead } from "../components/primitives";
 import { CardLink } from "../components/CardLink";
@@ -85,6 +85,66 @@ function CandidateRow({ c }: { c: Candidate }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+const WUBRG = ["W", "U", "B", "R", "G"] as const;
+const CMC_STEPS = [1, 2, 3, 4, 6];
+const REACH_FAMILIES = [
+  "life", "damage", "mana", "token", "draw", "sacrifice", "counter", "recur", "blink", "cast",
+];
+
+/** The Explorer filter bar. Every control targets the NEIGHBOUR (the card listed in a
+ *  column) and pushes straight into the port_edges query (server-side SQL), so both
+ *  columns narrow to the ~15 that matter without over-fetching. */
+function NeighbourFilterBar({
+  value, onChange,
+}: { value: NeighbourFilters; onChange: (f: NeighbourFilters) => void }) {
+  const set = (patch: Partial<NeighbourFilters>) => onChange({ ...value, ...patch });
+  const toggleColor = (c: string) => {
+    const cur = value.colors ?? [];
+    set({ colors: cur.includes(c) ? cur.filter((x) => x !== c) : [...cur, c] });
+  };
+  const chip = (on: boolean): CSSProperties => ({
+    fontSize: 11, padding: "3px 8px", borderRadius: 6, cursor: "pointer",
+    border: `1px solid ${on ? "var(--color-accent, #7aa2f7)" : "var(--atlas-border, #2a2d3a)"}`,
+    background: on ? "rgba(122,162,247,.16)" : "transparent",
+    color: on ? "var(--color-text)" : "var(--atlas-muted)",
+  });
+  const active = Boolean(value.tier || value.colors?.length || value.maxCmc != null || value.reaches);
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 16, fontSize: 11, color: "var(--atlas-muted)" }}>
+      <span>Filter neighbours:</span>
+      <span style={{ display: "flex", gap: 4 }}>
+        {["Green", "Amber"].map((t) => (
+          <button key={t} style={chip(value.tier === t)} onClick={() => set({ tier: value.tier === t ? null : t })}>{t}</button>
+        ))}
+      </span>
+      <span style={{ display: "flex", gap: 4 }}>
+        {WUBRG.map((c) => (
+          <button key={c} style={chip((value.colors ?? []).includes(c))} onClick={() => toggleColor(c)}>{c}</button>
+        ))}
+      </span>
+      <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        <span>mv&nbsp;≤</span>
+        {CMC_STEPS.map((n) => (
+          <button key={n} style={chip(value.maxCmc === n)} onClick={() => set({ maxCmc: value.maxCmc === n ? null : n })}>{n}</button>
+        ))}
+      </span>
+      <span style={{ display: "flex", gap: 4, alignItems: "center" }}>
+        <span>reaches</span>
+        <select
+          value={value.reaches ?? ""}
+          onChange={(e) => set({ reaches: e.target.value || null })}
+          style={{ fontSize: 11, padding: "3px 6px", borderRadius: 6, background: "transparent", color: "var(--color-text)", border: "1px solid var(--atlas-border, #2a2d3a)" }}
+        >
+          <option value="">any</option>
+          {REACH_FAMILIES.map((f) => <option key={f} value={f}>{f}</option>)}
+        </select>
+      </span>
+      {active && <button style={chip(false)} onClick={() => onChange({})}>clear</button>}
     </div>
   );
 }
@@ -240,14 +300,16 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
   const card = routeCard ?? DEFAULT_CARD;
   // v2: the selected oracle line scopes the columns to that clause's ports.
   const [selectedLine, setSelectedLine] = useState<number | null>(null);
+  const [filters, setFilters] = useState<NeighbourFilters>({});
   useEffect(() => setSelectedLine(null), [card]);
+  useEffect(() => setFilters({}), [card]);
 
   const oracle = useOracle(card).data;
   const profile = useCardProfile(card).data;
   // v2: when a line is selected, the columns reflect only THAT clause's ports.
   const allPorts = profile?.ports ?? [];
   const activePorts = selectedLine != null ? allPorts.filter((p) => p.lineIndex === selectedLine) : allPorts;
-  const { emitters, consumers, inFams, outFams } = useCardNeighbours(activePorts, card).data;
+  const { emitters, consumers, inFams, outFams } = useCardNeighbours(activePorts, card, filters).data;
   const combos = useCardCombos(card).data;
   const anchor = useCardAnchor(card).data;
   const rulings = useCardRulings(profile?.oracleId).data;
@@ -268,6 +330,8 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
             Viewing <strong style={{ color: "var(--color-text)" }}>{card}</strong>
           </span>
         </div>
+
+        <NeighbourFilterBar value={filters} onChange={setFilters} />
 
         <div className="expl-grid">
           <CandidatePanel
