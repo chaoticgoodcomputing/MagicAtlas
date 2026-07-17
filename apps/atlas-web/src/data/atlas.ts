@@ -40,6 +40,7 @@ import {
   PORT_CANDIDATES_QUERY, DECK_PORTS_QUERY, CARD_FORWARD_QUERY,
   CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
 } from "../queries";
+import { FLOW_FEEDERS, FLOW_DRAINS, feeds, type PortFacets } from "./flowArms";
 import {
   DECKS, FAMCARDS, HEADLINE_STATS, ORACLE,
   TIERS, tierRank,
@@ -303,47 +304,53 @@ const KNOWN_TIERS = new Set<string>(["Green", "Amber", "Inferred", "Declared"]);
 const tierOf = (raw: string | null | undefined): Tier =>
   raw && KNOWN_TIERS.has(raw) ? (raw as Tier) : FALLBACK_TIER;
 
-/** Dedupe portRows into one Candidate per card. A candidate is `via` (a flow
- *  bridge) unless its port family is one the focus card touches directly on the
- *  matching side (`directFams`); the focus card itself is never listed. Prefers
- *  a direct-family port over a bridged one when a card offers both, carries the
- *  coerced tier, and sorts best-fidelity-first, direct-before-bridged, by name. */
+/** Dedupe candidate portRows into one Candidate per card, keeping ONLY those the
+ *  engine's flow matcher (`feeds`) actually connects to one of the focus card's
+ *  ports on the pairing side — the ADR-0003 Stage 5 port-level match. This is what
+ *  replaces the lossy family-ring re-expansion: a `token` emitter no longer shows
+ *  as feeding a `cast` trigger (no flow arm), and a `noncombat` damage emitter no
+ *  longer shows as feeding a `combat` self-trigger (the manner/self guard). A
+ *  candidate is `via` (a bridge) when the arm crosses families (token→sacrifice),
+ *  direct when it stays within one (mana→mana). Sorts best-fidelity, direct-first,
+ *  by name. */
 function candidatesFrom(
-  data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string; tier?: string | null }[] } } } } | undefined,
-  directFams: ReadonlySet<string>,
+  data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string; tier?: string | null; manner?: string | null; isSelf?: boolean | null }[] } } } } | undefined,
+  // The focus card's ports on the side that PAIRS with the candidates: for the
+  // emitters column (candidates emit), these are the focus's consume ports; for
+  // the consumers column (candidates consume), the focus's emit ports.
+  focusPorts: PortFacets[],
   self: string,
-  edges: Edge[],
-  // The side the NEIGHBOUR was matched on: "consume" ⇒ this is the right column
-  // (self EMITS, neighbour consumes); "emit" ⇒ left column (neighbour emits,
-  // self consumes). Determines the direction the bridging edge is read.
+  // "emit" ⇒ the candidate is the emitter (left column, feeds the focus); "consume"
+  // ⇒ the candidate is the consumer (right column, drained by the focus).
   neighbourSide: "emit" | "consume",
 ): Candidate[] {
   const nodes = data?.discover?.atlas?.portRows?.nodes ?? [];
-  const byCard = new Map<string, { family: string; tier: string | null }>(); // card → chosen port
+  const byCard = new Map<string, { family: string; tier: string | null; linkEmit: string; linkConsume: string; via: boolean }>();
   for (const n of nodes) {
     if (n.card === self) continue; // never list the focus card in its own columns
+    const cand: PortFacets = { family: n.family, manner: n.manner, isSelf: n.isSelf ?? false };
+    // Keep the candidate only if a real flow arm connects it to a focus port.
+    let linkEmit: string | null = null;
+    let linkConsume: string | null = null;
+    for (const fp of focusPorts) {
+      const emit = neighbourSide === "emit" ? cand : fp;
+      const consume = neighbourSide === "emit" ? fp : cand;
+      if (feeds(emit, consume)) {
+        linkEmit = emit.family;
+        linkConsume = consume.family;
+        break;
+      }
+    }
+    if (linkEmit === null || linkConsume === null) continue; // no flow arm → pruned
+    const via = linkEmit !== linkConsume;
     const cur = byCard.get(n.card);
-    if (cur === undefined || (!directFams.has(cur.family) && directFams.has(n.family))) {
-      byCard.set(n.card, { family: n.family, tier: n.tier ?? null });
-    }
+    if (cur === undefined || (cur.via && !via)) // prefer a direct arm over a bridged one
+      byCard.set(n.card, { family: n.family, tier: n.tier ?? null, linkEmit, linkConsume, via });
   }
-  // The self-side family that connects to a neighbour matched on `port`: the
-  // same family when it's a direct match, else the `directFams` member joined to
-  // `port` by a resource-edge (the combo-adjacent bridge). Returned oriented
-  // emit→consume so the row reads as a flow (Deadeye's `blink` → a neighbour's `etb`).
-  const link = (port: string): { linkEmit: string; linkConsume: string } => {
-    if (directFams.has(port)) return { linkEmit: port, linkConsume: port };
-    if (neighbourSide === "consume") {
-      const from = edges.find((e) => e.to === port && directFams.has(e.from))?.from ?? port;
-      return { linkEmit: from, linkConsume: port };
-    }
-    const to = edges.find((e) => e.from === port && directFams.has(e.to))?.to ?? port;
-    return { linkEmit: port, linkConsume: to };
-  };
   return [...byCard.entries()]
-    .map(([card, { family: port, tier }]): Candidate => ({
-      card, in: null, out: null, tier: tierOf(tier),
-      via: !directFams.has(port), port, ...link(port),
+    .map(([card, r]): Candidate => ({
+      card, in: null, out: null, tier: tierOf(r.tier),
+      via: r.via, port: r.family, linkEmit: r.linkEmit, linkConsume: r.linkConsume,
     }))
     .sort(
       (a, b) =>
@@ -405,24 +412,34 @@ export function useCardNeighbours(
   outFams: string[]; // canonical emit families of this card
 }> {
   const graph = useFamilyGraph();
-  const edges = graph.data.edges;
   const canonical = useMemo(() => new Set(graph.data.keys), [graph.data.keys]);
 
   const inFams = useMemo(() => canonicalFamilies(ports, "consume", canonical), [ports, canonical]);
   const outFams = useMemo(() => canonicalFamilies(ports, "emit", canonical), [ports, canonical]);
 
-  // Left query set: the consume families themselves (direct) ∪ their edge
-  // predecessors (families that flow INTO them) — matched on the EMIT side.
-  const feederFams = useMemo(() => {
-    const preds = edges.filter((e) => inFams.includes(e.to)).map((e) => e.from);
-    return uniqStr([...inFams, ...preds]);
-  }, [edges, inFams]);
-  // Right query set: the emit families (direct) ∪ their edge successors
-  // (families they flow INTO) — matched on the CONSUME side.
-  const drainFams = useMemo(() => {
-    const succs = edges.filter((e) => outFams.includes(e.from)).map((e) => e.to);
-    return uniqStr([...outFams, ...succs]);
-  }, [edges, outFams]);
+  // The focus card's own ports (with facets) per side — the `feeds` check pairs a
+  // candidate against these, so a match respects manner/self, not just family.
+  const consumeFacets = useMemo<PortFacets[]>(
+    () => ports.filter((p) => p.side === "consume").map((p) => ({ family: p.family, manner: p.manner, isSelf: p.isSelf })),
+    [ports],
+  );
+  const emitFacets = useMemo<PortFacets[]>(
+    () => ports.filter((p) => p.side === "emit").map((p) => ({ family: p.family, manner: p.manner, isSelf: p.isSelf })),
+    [ports],
+  );
+
+  // Left query set: the EMIT families that feed this card's consume families under
+  // a real flow arm (PortFlowMatcher / FLOW_FEEDERS) — NOT the lossy ring
+  // predecessors. Right query set: the CONSUME families this card's emit families
+  // feed (FLOW_DRAINS).
+  const feederFams = useMemo(
+    () => uniqStr(inFams.flatMap((f) => [...(FLOW_FEEDERS[f] ?? [])])),
+    [inFams],
+  );
+  const drainFams = useMemo(
+    () => uniqStr(outFams.flatMap((f) => [...(FLOW_DRAINS[f] ?? [])])),
+    [outFams],
+  );
 
   const emitQ = useQuery(PORT_CANDIDATES_QUERY, {
     variables: { families: feederFams, side: "emit" },
@@ -433,15 +450,13 @@ export function useCardNeighbours(
     skip: drainFams.length === 0,
   });
 
-  const inSet = useMemo(() => new Set(inFams), [inFams]);
-  const outSet = useMemo(() => new Set(outFams), [outFams]);
   const emitters = useMemo(
-    () => (feederFams.length ? candidatesFrom(emitQ.data, inSet, self, edges, "emit") : []),
-    [emitQ.data, feederFams, inSet, self, edges],
+    () => (feederFams.length ? candidatesFrom(emitQ.data, consumeFacets, self, "emit") : []),
+    [emitQ.data, feederFams, consumeFacets, self],
   );
   const consumers = useMemo(
-    () => (drainFams.length ? candidatesFrom(consumeQ.data, outSet, self, edges, "consume") : []),
-    [consumeQ.data, drainFams, outSet, self, edges],
+    () => (drainFams.length ? candidatesFrom(consumeQ.data, emitFacets, self, "consume") : []),
+    [consumeQ.data, drainFams, emitFacets, self],
   );
 
   return {
@@ -486,6 +501,11 @@ export interface CardPort {
    *  the oracle text. Lets the Explorer group ports by clause and tint the span. */
   lineIndex: number;
   spans: number[][] | null;
+  /** ADR-0003 structured facets — the frontend's port-level flow match keys on
+   *  these (via `feeds`) instead of re-expanding lossy family-ring edges. */
+  stem: string | null;
+  manner: string | null;
+  isSelf: boolean;
 }
 
 export interface CardProfile {
@@ -516,6 +536,7 @@ interface CardProfilePortRow {
   family: string; side: string; tier: string | null;
   confidence: number | null; label: string;
   oracleLineIndex: number | null; spans: number[][] | null;
+  stem: string | null; manner: string | null; isSelf: boolean | null;
 }
 
 export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
@@ -537,6 +558,9 @@ export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
       label: p.label,
       lineIndex: p.oracleLineIndex ?? 0,
       spans: p.spans ?? null,
+      stem: p.stem ?? null,
+      manner: p.manner ?? null,
+      isSelf: p.isSelf ?? false,
     }));
     return {
       id: row.id, oracleId: row.oracleId, name: row.name,

@@ -16,15 +16,24 @@ engine already rejects both** — it is the oracle for the migration.
 | 1 | Chatterfang, Squirrel General → Aang, the Last Airbender | Chatterfang `emit:token:creature:squirrel`; Aang `etb:creature:**self**`. Token-creation coarsely matches "a creature enters", but Aang's ETB is self-scoped — only Aang entering fires it. | `FlowFeasible` has **no `(token,etb)` arm** → never drawn. |
 | 2 | Barrage Ogre → Ancient Copper Dragon | Barrage `emit:damage:**noncombat**:any`; Copper Dragon `trigger:damage:**combat**:player` on "**this creature** deals…". Fails on manner (noncombat ✗→ combat) *and* self-source. | `DamageSatisfiesTrigger` rejects on both `CombatFacetFeeds` and the self-source same-card guard. |
 
-### Acceptance (verify at Stage 5, live)
+### Acceptance — RESULTS (verified live at :55173, 2026-07-16)
 
-- **NEG** Chatterfang does **not** list Aang as a neighbour.
-- **NEG** Barrage Ogre does **not** list Ancient Copper Dragon as a neighbour.
-- **POS** Deadeye Navigator still shows `blink → etb` neighbours (self-blink of *another* card's ETB).
-- **POS** an open-ETB payoff (Soul Warden / Essence Warden family, `etb:creature` with no `:self`)
-  is still fed by token emitters like Chatterfang — the family edge is real, only the self-scoped
-  application was wrong.
-- **POS** a genuine combat-damage feeder for Copper Dragon (if any exists in-corpus) is still shown.
+- **NEG ✅** Chatterfang and Aang are now **fully disconnected** (token has no flow arm to a cast
+  trigger). Chatterfang: 0 mentions on Aang's page.
+- **NEG ✅** The false **`damage → damage`** edge between Barrage Ogre and Ancient Copper Dragon is
+  **gone** (Barrage's `noncombat` damage can't feed Copper's `combat` self-trigger — pruned by both
+  the manner guard and the self-source guard). Barrage still appears on Copper's page, but **only via
+  the legitimate `token ↝ sacrifice` link** (Copper makes Treasure → Barrage sacrifices an artifact) —
+  the correct interaction, not the false damage one. This is the right outcome: the *specific* false
+  edge the user reported is removed while the real relationship is kept.
+- **POS ✅** Deadeye Navigator still feeds **392** ETB-trigger cards via `blink → etb` (including
+  cross-card self-ETBs like Aang's — valid, since a *different* card's blink makes it re-enter).
+
+Note: the engine has **no `token → etb` arm** — creating a token is not modelled as feeding an ETB
+trigger (only blink/reanimation re-entry is). So the frontend's ETB feeders are `blink`/`recur`
+emitters, matching both the engine and the *prior* ring behaviour (the ring also lacked `token→etb`).
+The over-sensitivity was entirely the spurious combo-ring hops (`token→cast`, `mana→cast`, …) and the
+missing facet checks, both now removed.
 
 ## The stages
 

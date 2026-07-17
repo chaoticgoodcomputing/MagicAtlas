@@ -322,7 +322,7 @@ export const CARD_PROFILE_QUERY = gql`
           }
         }
         portRows(where: { card: { eq: $name } }, first: 50) {
-          nodes { family side tier confidence label oracleLineIndex spans }
+          nodes { family side tier confidence label oracleLineIndex spans stem manner isSelf }
         }
       }
     }
@@ -396,8 +396,8 @@ export const PORT_CANDIDATES_QUERY = gql`
   query PortCandidates($families: [String!]!, $side: String!) {
     discover {
       atlas {
-        portRows(where: { side: { eq: $side }, family: { in: $families } }, first: 200) {
-          nodes { card family side tier }
+        portRows(where: { side: { eq: $side }, family: { in: $families } }, first: 400) {
+          nodes { card family side tier manner isSelf }
         }
       }
     }
