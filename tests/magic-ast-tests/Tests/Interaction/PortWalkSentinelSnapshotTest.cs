@@ -491,6 +491,56 @@ public class PortWalkSentinelSnapshotTest
     });
   }
 
+  /// <summary>
+  /// ADR-0003 Stage 2 coverage — the flow-participating families are actually wired. Every structured
+  /// stem the interaction matcher will key on (Stage 3) must appear on some sentinel port, else a family
+  /// silently stopped recognizing (a regression the round-trip gate can't see — it only checks ports that
+  /// DO carry a structure). Complements <see cref="Structured_ports_round_trip_to_their_legacy_label"/>:
+  /// that proves losslessness, this proves presence.
+  /// </summary>
+  [Test]
+  public void Flow_family_stems_are_all_exercised()
+  {
+    var walk = new PortWalk(Ontology);
+    var stems = LoadManifest()
+      .SelectMany(s => s.Cards)
+      .DistinctBy(c => c.Path)
+      .SelectMany(c =>
+      {
+        var gold = JsonNode.Parse(File.ReadAllText(Path.Combine(FixturesDir(), c.Path)));
+        var manaCost = (gold!["Output"]?["Attributes"] as JsonArray)
+          ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "manaCost")
+          ?["Symbols"];
+        return walk.Project(c.Card, gold!["Output"]!["Oracle"]!["Abilities"], manaCost).Ports;
+      })
+      .Where(p => p.Structure is not null)
+      .Select(p => (p.Side, p.Structure!.Stem))
+      .ToHashSet();
+
+    // The flow families converted at Stage 2 (emit/consume sides that the engine's FlowFeasible switch and
+    // the resource-graph stations name). Each must be present so Stage 3's matcher has real structures.
+    (PortSide Side, string Stem)[] required =
+    [
+      (PortSide.Emit, "damage"), (PortSide.Consume, "damage"), // deals-damage event (Barrage / Copper Dragon)
+      (PortSide.Emit, "dice"), (PortSide.Consume, "dice"), // dice-rolled event (Brazen Dwarf)
+      (PortSide.Consume, "cast"), (PortSide.Emit, "cast"), // cast event (driver / trigger / recast)
+      (PortSide.Emit, "recur"), // return-to-hand / -battlefield (Boomerang / Gravecrawler)
+      (PortSide.Emit, "copy"), // permanent + spell copy (Kiki / Reiterate)
+      (PortSide.Consume, "life"), // life trigger (Blood Artist)
+      (PortSide.Emit, "deployment:creature"), (PortSide.Consume, "deployment:creature"), // token / etb
+      (PortSide.Consume, "removal:creature"), // dies
+      (PortSide.Emit, "mana"), (PortSide.Consume, "mana"), // mana pool
+    ];
+
+    var missing = required.Where(r => !stems.Contains(r)).ToList();
+    Assert.That(
+      missing,
+      Is.Empty,
+      "flow-family stems not exercised by any sentinel (a family stopped recognizing?): "
+        + string.Join(", ", missing.Select(m => $"{m.Side.ToString().ToLowerInvariant()}:{m.Stem}"))
+    );
+  }
+
   [Test, Explicit("Writes all sentinel snapshot files to the source tree.")]
   public void Regenerate_snapshots()
   {
