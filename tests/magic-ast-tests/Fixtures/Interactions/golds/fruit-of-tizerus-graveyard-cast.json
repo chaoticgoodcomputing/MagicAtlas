@@ -1,0 +1,156 @@
+{
+  "id": "fruit-of-tizerus-graveyard-cast",
+  "unit": "combo",
+  "cards": [
+    "Fruit of Tizerus"
+  ],
+  "source": {
+    "csb": false,
+    "note": "Witnesses the CAST-FROM-GRAVEYARD zone arm -- a spell cast DIRECTLY from the graveyard (escape / flashback / retrace), the distinct-zone dual of policy:recast:spell-recursion (Archaeomancer x Ghostly Flicker), which returns the card to HAND first and then re-casts it from hand. Fruit of Tizerus is a Sorcery with Escape ('Target player loses 2 life. Escape--{3}{B}, Exile three other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)') -- the CLEANEST witness because a spell resolves OFF THE STACK and never becomes a battlefield permanent, maximally distinguishing it from policy:recast:battlefield-return (Gravecrawler, a permanent cast from graveyard to=battlefield). Load-bearing ports are AST-derivable and served GREEN in the live dump (dumps/card-ports.json, 2026-07-17): Fruit of Tizerus -> cast:spell:self (family=cast, stem=cast, consume, isSelf=true, Green, spans [0,27] -- the recast driver) + emit:escape (family=escape, emit, Green, spans [28,153] -- the 'you may cast this card from your graveyard' self-permission). PARSE COVERAGE: escape parses CLEANEST of the graveyard-cast keywords -- emit:escape is a structured GREEN family (7 cards: Fruit of Tizerus, Sweet Oblivion, Woe Strider, Kroxa, Uro, Phlage, Polukranos). CONTRAST / PARSE GAP (reported, not authored around): (1) the cross-card flashback GRANT is a TOTAL parse gap -- Snapcaster Mage projects ZERO ports (its ETB 'target instant or sorcery card in your graveyard gains flashback' granted-keyword is not AST-derivable, the same granted-keyword class as deadeye's blink-as-gainability and bridge:lifelink-damage-to-life's lifelink grant); (2) the direct FLASHBACK keyword is lossy -- Flame Jab's retrace/flashback line comes back as emit:keywordability, and Mystic Retrieval's flashback misparses to emit:returntobattlefield:self; (3) Conduit of Worlds' generic 'you may cast that card' is a coarse emit:maycasttargetfromgraveyard (Amber). So the honest witness is the SELF escape self-cast, which parses faithfully. SCAFFOLD SURFACES (documented, none invented): (a) the parser's family=escape is projected here to the ADR-3 stem `recur` (a return/recursion that casts the card from the graveyard) -- the escape-family analogue of gravecrawler's emit:returntobattlefield:self -> stem=recur; recur already licenses from/self/control (port-topology attribute_axes), so no attr is invented. (b) An escaped spell is cast onto the STACK; `stack` is NOT a licensed value of the `to` axis (values_seen = battlefield/exile/graveyard/hand), so F1 OMITS `to` rather than inventing to=stack -- surfaced, not fabricated. The refuel `to=graveyard` (608.2n, a resolving sorcery is put into its owner's graveyard) is carried by the card-defined close E2, not the recast emit. No source.popularity: the testbed corpus carries no edhrec/price count -- omitted rather than fabricated; csb=false (a single-card escape self-loop, not a documented Commander Spellbook combo)."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Fruit of Tizerus": [
+      {
+        "id": "F0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE CONSUME SIDE OF THE WITNESSED EDGE -- the recast driver (live cast:spell:self; family=cast, consume, isSelf=true, Green, spans [0,27]). The spell watches for ITSELF being cast; subject=self encodes isSelf ('spell' is implicit in the cast verb, per aang.json A1). Mirrors Ghostly Flicker's G0, but here the driver is refueled from the GRAVEYARD by the SAME card's escape permission (edge E1), not by a separate card's return-to-hand."
+      },
+      {
+        "id": "F1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "self": true,
+          "control": "you"
+        },
+        "note": "THE GRAVEYARD-CAST ZONE ARM (emit side of the witnessed edge) -- Escape's static ability 'You may cast this card from your graveyard for its escape cost' (live emit:escape; family=escape, emit, Green, spans [28,153]; CR 702.138a: escape functions while the card is in a player's graveyard). from=graveyard is AST-proven (escape is a graveyard-zone static ability). self:true (the card casts ITSELF -- the legitimate same-card self-recast subject, Subsumes on identity). `to` is deliberately OMITTED: an escaped spell is cast onto the STACK (not a licensed `to` value -- see source SCAFFOLD SURFACE (b)); it resolves and is put into the graveyard (608.2n, the refuel E2), and NEVER enters the battlefield -- THE distinction from gravecrawler's GC2 (recur, to=battlefield). Projected to stem=recur (the escape-family analogue of returntobattlefield; source SCAFFOLD SURFACE (a))."
+      },
+      {
+        "id": "F2",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "black",
+          "qty": 1
+        },
+        "note": "the colored {B} pip of the {3}{B} escape cost (an alternative cost, CR 702.138a -> 601.2b/601.2f-h), re-paid every escape. THE section-8 mana-balance target -- the loop must refill this each iteration to be GREEN-eligible; the 1-card loop's only effect is 'target player loses 2 life' (no mana output), so the black-mana axis of the section-10 repetition vector is NEGATIVE -> guard:recast-pays-mana floors the cycle to AMBER. Additionally, escape's 'Exile three OTHER cards from your graveyard' is a graveyard-fuel co-cost that depletes 3 cards per cast (noted here, not authored as a separate port -- mirrors gravecrawler's 'as long as you control a Zombie' floor, noted-not-authored) -- an independent AMBER floor."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Fruit of Tizerus.F1",
+      "to": "Fruit of Tizerus.F0",
+      "mechanism": "match_policy",
+      "rule": "policy:recast:graveyard-cast",
+      "residuals": [
+        "guard:self-recast-samecard",
+        "guard:recast-pays-mana"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESSED EDGE (graveyard-cast, CR 702.138a / 601.3). Escape's static graveyard ability (F1: recur, from=graveyard, self:true) makes Fruit of Tizerus castable DIRECTLY from the graveyard -- it refuels the card's OWN cast:spell:self recast driver (F0) with NO return-to-hand step (contrast policy:recast:spell-recursion) and the spell resolves off the STACK, never a battlefield permanent (contrast policy:recast:battlefield-return). Because the card casts ITSELF (self:true), the recast subject Subsumes on identity -> GREEN-eligible; guard:self-recast-samecard PASSES (the legitimate same-card self-recast -- contrast Pair o' Dice Lost, pruned).",
+        "AMBER floor is DOUBLE: (i) ladder -- policy:recast:graveyard-cast is a NEW rule, observed until the judge confirms it, so a GREEN edge is not yet permitted; (ii) section-8 balance -- guard:recast-pays-mana: the escape cost re-pays {3}{B} every iteration and the loop refills no mana (the payoff is life-loss, not mana), and escape additionally exiles three OTHER graveyard cards per cast (fuel-negative). Either floor alone caps the cycle below GREEN. GREEN would need a loop that provably refills both the {B} and the exiled fuel every iteration."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Fruit of Tizerus.F0",
+      "to": "Fruit of Tizerus.F1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "the REFUEL / loop-closing hop (self-certifying, definitional): casting the sorcery (F0) resolves it, and as the final part of an instant or sorcery spell's resolution the spell is put into its owner's graveyard (CR 608.2n) -- which re-arms the escape static ability (F1, functional while the card is in the graveyard, CR 702.138a). A rules zone-change, not a card-specific ability, so structural GREEN with no rule dependency. Closes the 1-card self-loop F0 -> F1 -> F0."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:recast:graveyard-cast",
+        "consume_kind": "recast-driver",
+        "subject": "self-return",
+        "tiering": "self-return Subsumes->GREEN-eligible on identity; capped AMBER by the recast mana co-cost (guard:recast-pays-mana) and, for escape, an additional exile-graveyard-fuel co-cost, unless the loop provably refills both",
+        "desc": "a spell self-cast DIRECTLY from the graveyard via a static alternative-cost permission -- escape (CR 702.138a), flashback (CR 702.34a), or retrace (CR 702.81), each granting 'you may cast this card from your graveyard' (the casting permission of CR 601.3, paid as an alternative cost per 601.2b/601.2f-h) -- refuels the card's OWN cast:spell:self recast driver (subject=self-return, self:true) directly from the graveyard. The spell is cast onto the STACK, resolves, and is put into the graveyard (608.2n, escape/retrace) or exile (702.34a, flashback) -- it NEVER enters the battlefield. Because the card casts ITSELF, the recast subject Subsumes on identity -> GREEN-eligible, and guard:self-recast-samecard passes. The THIRD member of the recast family, distinct on the SOURCE ZONE + DESTINATION mechanism from both siblings: (1) policy:recast:spell-recursion returns the card to HAND first and re-casts a TARGET-chosen spell from hand (subject=intersect, Overlaps->AMBER, typically cross-card) -- THIS arm has no return-to-hand step and is self-return (Subsumes); (2) policy:recast:battlefield-return also casts from=graveyard and is self-return, but the object is a PERMANENT arriving ON the battlefield (to=battlefield, an ETB permanent, e.g. Gravecrawler) -- an escaped/flashed-back instant or sorcery resolves OFF the stack and is never a battlefield permanent, and escape additionally pays an exile-fuel co-cost (exile N other cards from your graveyard) that battlefield-return lacks. Two genuine axes of difference (destination stack vs battlefield; exile-fuel co-cost) -> a fresh declare, NOT a sibling of battlefield-return (reusing that id would collide, same-id/different-content) and NOT a from=graveyard attr on spell-recursion (different subject and no return-to-hand). Any loop closed by this recast carries the recast mana co-cost (guard:recast-pays-mana) and, for escape, the exile-fuel co-cost -- both floor the cycle to AMBER unless provably refilled.",
+        "cr": [
+          "702.138a",
+          "702.34a",
+          "601.3",
+          "601.2f",
+          "608.2n",
+          "400.7"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.witnesses graveyard_cast",
+      "because": "E1 is Fruit of Tizerus.F1 (emit:escape -> stem=recur, from=graveyard, self:true) -> Fruit of Tizerus.F0 (cast:spell:self, stem=cast) -- a spell cast DIRECTLY from the graveyard (CR 702.138a / 601.3), refueling its own recast driver with no return-to-hand step"
+    },
+    {
+      "claim": "rule.policy:recast:graveyard-cast.witnessed",
+      "because": "E1 is the direct graveyard-cast recast-satisfies arm (escape's graveyard static permission enabling the card's own cast:spell:self), not previously in the rollup -- the direct-from-graveyard dual of policy:recast:spell-recursion (return-to-hand) and distinct from policy:recast:battlefield-return (permanent to battlefield)"
+    },
+    {
+      "claim": "rule.policy:recast:graveyard-cast.is_new_not_corroboration",
+      "because": "distinct from BOTH recast siblings on genuine mechanism axes: vs spell-recursion (no return-to-hand step; subject=self-return not intersect -> Subsumes not Overlaps); vs battlefield-return (the spell resolves OFF the stack and never becomes a battlefield permanent -- to != battlefield -- and escape pays an exile-graveyard-fuel co-cost battlefield-return lacks). Reusing policy:recast:battlefield-return's id would be a same-id/different-content rollup conflict; a from=graveyard attr on spell-recursion would misstate the subject and the missing return-to-hand -> a fresh id, no collision"
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "double floor -- (i) ladder: policy:recast:graveyard-cast is observed (judge PENDING), so no GREEN edge yet; (ii) section-8: guard:recast-pays-mana re-pays {3}{B} unrefilled plus escape exiles 3 graveyard cards per cast (fuel-negative)"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "a non-structural graveyard-cast recast certified by policy:recast:graveyard-cast; not subsumption/card-defined/modifier, so it cites a rule id"
+    },
+    {
+      "claim": "guard:self-recast-samecard.passes_self_return",
+      "because": "Fruit of Tizerus casts ITSELF from the graveyard (F1.self:true) -- the legitimate same-card self-recast the guard permits (it prunes only return subjects that are NOT self, e.g. Pair o' Dice Lost); referenced in E1.residuals, not re-declared"
+    },
+    {
+      "claim": "F1.from == graveyard",
+      "because": "escape is a static ability that functions while the card is in a player's graveyard (CR 702.138a) -- from=graveyard is AST-proven (bare value, not derived)"
+    },
+    {
+      "claim": "F1.to_omitted_stack_unlicensed",
+      "because": "an escaped spell is cast onto the STACK, which is not a licensed value of the `to` axis (values_seen = battlefield/exile/graveyard/hand); `to` is omitted rather than inventing to=stack -- surfaced as a scaffold decision, not fabricated. The distinction from policy:recast:battlefield-return's to=battlefield is that the spell NEVER enters the battlefield"
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "card-defined (self-certifying, definitional): a resolving instant/sorcery spell is put into its owner's graveyard (CR 608.2n), re-arming the escape graveyard static ability -- a rules zone-change with no rule dependency"
+    },
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "the 1-card escape self-loop re-pays {3}{B} and exiles 3 OTHER graveyard cards every iteration with no refill of either (the payoff is life-loss, not mana or graveyard cards) -> the section-10 repetition vector is NEGATIVE on both the black-mana and the graveyard-fuel axes -> not self-sustaining -> AMBER; independently, E1 rests on an observed rule (judge PENDING) which alone caps below GREEN"
+    }
+  ],
+  "cr": [
+    "702.138",
+    "702.138a",
+    "702.34a",
+    "702.81",
+    "601.3",
+    "601.2f",
+    "608.2n",
+    "400.7",
+    "601.2"
+  ]
+}

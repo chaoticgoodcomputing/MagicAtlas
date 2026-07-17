@@ -2,6 +2,7 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aetherflux-reservoir",
     "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
@@ -11,6 +12,8 @@
     "brazen-dwarf",
     "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
+    "cloudstone-curio-x-priest-of-gix",
+    "combat-celebrant",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
     "devoted-druid",
@@ -21,6 +24,8 @@
     "emiel-the-blessed-x-mulldrifter",
     "evolution-sage",
     "fog",
+    "fruit-of-tizerus-graveyard-cast",
+    "gaeas-cradle",
     "grave-titan-x-anointed-procession",
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
@@ -33,6 +38,7 @@
     "kiki-jiki-x-restoration-angel",
     "kiki-jiki-x-zealous-conscripts",
     "mikaeus-the-unhallowed-x-walking-ballista",
+    "murderous-redcap-x-viscera-seer",
     "nantuko-husk-x-blood-artist",
     "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
@@ -48,7 +54,10 @@
     "stone-calendar",
     "teysa-karlov-x-blood-artist",
     "titanias-boon",
-    "viscera-seer-x-zulaport-cutthroat"
+    "titanias-boon-x-doubling-season",
+    "trostani-selesnyas-voice",
+    "viscera-seer-x-zulaport-cutthroat",
+    "young-pyromancer"
   ],
   "kinds": {
     "EVENT": "discrete occurrences with payloads \u2014 what subscriptions (triggered abilities) fire on.",
@@ -253,6 +262,7 @@
       "status": "witnessed",
       "attrs": [
         "color",
+        "control",
         "qty"
       ]
     },
@@ -353,6 +363,7 @@
         "from",
         "manner",
         "qty",
+        "self",
         "subtype",
         "to",
         "token"
@@ -455,6 +466,7 @@
         "deployment:artifact",
         "deployment:creature",
         "dice-rolled",
+        "mana",
         "modification:keyword",
         "modification:spell",
         "recur",
@@ -516,7 +528,7 @@
         "gain",
         "loss"
       ],
-      "carries_provenance_or_polarity": false,
+      "carries_provenance_or_polarity": true,
       "licensed_by": [
         "life"
       ],
@@ -672,6 +684,7 @@
         "2",
         "3",
         "4",
+        "50",
         "X",
         "that-many",
         "up-to-5"
@@ -717,6 +730,7 @@
         "artifact",
         "counters",
         "recur",
+        "removal:creature",
         "structure:untap",
         "tap"
       ],
@@ -780,6 +794,8 @@
       ],
       "values_seen": [
         "creature",
+        "elemental",
+        "instant\u002Bsorcery",
         "land",
         "lesson",
         "monkey",

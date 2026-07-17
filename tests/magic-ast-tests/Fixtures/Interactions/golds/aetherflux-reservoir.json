@@ -1,0 +1,129 @@
+{
+  "id": "aetherflux-reservoir",
+  "unit": "single-card",
+  "cards": [
+    "Aetherflux Reservoir"
+  ],
+  "source": {
+    "csb": false,
+    "note": "GAP-DOCUMENTING single-card witness of Aetherflux Reservoir's two arms plus TWO precise parse gaps. Oracle text verified vs oracle-cards.json: 'Whenever you cast a spell, you gain 1 life for each spell you've cast this turn. Pay 50 life: This artifact deals 50 damage to any target.' (Artifact, {4}). Live engine ports (dumps/card-ports.json, verified 2026-07-17): (1) trigger:cast:spell:controlled (family=cast, stem=cast, side=consume, isSelf=false, tier=Green, line0 spans[0,25]) -- the 'whenever you cast a spell' SUBSCRIPTION; (2) emit:life:gain:controlled (family=life, stem=life, side=emit, isSelf=false, tier=Green, line0 spans[26,80]) -- the lifegain, projected as a PLAIN gain with NO qty facet; (3) pay:paylife (family=mana, side=consume, isSelf=false, tier=Green, line1 spans[81,93], stem=NULL) -- the 'Pay 50 life' activation cost, bucketed under the mana COST family with no stem; (4) emit:damage:noncombat:any (family=damage, stem=damage, manner=noncombat, isSelf=true, tier=Green, line1 spans[93,138]) -- the literal 50-damage payoff. TWO PARSE GAPS make the two POTENTIALLY-novel mechanisms un-witnessable as edges today, so this is authored as a gap-documenting single-card gold (per ACCRETION Step 3: author what DOES parse), NOT a wish: (A) the cast-COUNT scaling ('1 life FOR EACH spell you've cast this turn') is NOT AST-derivable -- the life emit projects with no qty facet, so the storm-scaling that is the whole point of the payoff is invisible; (B) the life-AS-COST is projected coarse (label pay:paylife, family=mana, stem=null) and is NOT stemmed as a life[direction=loss] consume, so a life-GAIN emit SUPPLYING this life-cost -- the life analogue of policy:counter-supplies-cost (a would-be policy:life-supplies-cost) -- cannot be engine-matched (the cost is not recognized as consuming the life resource). What DOES parse faithfully: the four ports and the two intra-ability CARD-DEFINED arms (cast-subscription -> lifegain; life-cost -> damage), both GREEN by construction. No exact popularity in the dumps (Aetherflux absent from dumps/combo-instances.json; no edhrec/price in testbed source) -> source.popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Aetherflux Reservoir": [
+      {
+        "id": "A1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE CAST SUBSCRIPTION - 'Whenever you cast a spell' - a subscription (triggered ability, CR 603.2) watching YOUR spell-casts (CR 601). control=you ('you cast'). NO subtype filter: it watches ANY spell (not a permanent-subtype restriction, so no subtype facet - contrast a 'whenever you cast an instant or sorcery' trigger). isSelf=false (it does not watch 'this'). Live label trigger:cast:spell:controlled (tier=Green). PARSE-GAP CONTEXT: what a cast event FEEDING this subscription would be (the storm/cast-count cross-card arm) is not AST-derivable - casting a spell is not projected as a discrete emit port (like combat damage, it has no facted emit), so no cross-card cast-emit -> cast-subscription feed exists in the corpus."
+      },
+      {
+        "id": "A2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you"
+        },
+        "note": "THE LIFEGAIN PAYOFF (arm A) - 'you gain 1 life for each spell you've cast this turn' - a life STATE emit (CR 119.3), direction=gain, recipient=you (controlled). Live label emit:life:gain:controlled (tier=Green). PARSE GAP (A): the qty is OMITTED because the CAST-COUNT SCALING ('1 life FOR EACH spell you've cast this turn') is NOT AST-derivable - the engine projects a PLAIN gain emit with no qty facet, so the storm-scaling (qty = spells-cast-this-turn, a running per-turn cast count) that is the mechanically interesting part of this payoff is invisible. Modeling qty here (e.g. qty='that-many') would over-claim a facet the parser does not prove -> honestly omitted, gap documented (assertion cast_count_scaling_parse_gap)."
+      },
+      {
+        "id": "A3",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": {
+            "value": "loss",
+            "provenance": "derived"
+          },
+          "recipient": "you",
+          "qty": 50
+        },
+        "note": "THE LIFE-AS-ACTIVATION-COST (arm B cost) - 'Pay 50 life:' - an activation cost paid by spending life (CR 118.1 cost / 119.4 paying life). direction=loss (you lose 50 life), recipient=you, qty=50 (literal). PARSE GAP (B): the LIVE projection is COARSE - label pay:paylife, family=mana (the COST bucket), stem=NULL - the parser does NOT stem this to the life resource. So direction carries provenance=derived: the life[direction=loss] stem is an ADR-3 re-interpretation the parser does not prove (the life-loss stem is the PARSER TARGET, cf. captain-rex's stem=null emit:sacrifice which was left un-facted). CONSEQUENCE: because the cost is not recognized as consuming the life resource, a life-GAIN emit (A2, or an external Soul Warden / lifelink) SUPPLYING this life-cost - the would-be policy:life-supplies-cost, the life analogue of policy:counter-supplies-cost (consume_kind=argument) - is NOT engine-matchable today. Not declared (no faithful witness -> a wish); documented as the sought future rule."
+      },
+      {
+        "id": "A4",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "THE DAMAGE PAYOFF (arm B effect) - 'This artifact deals 50 damage to any target' - Aetherflux is the source (isSelf=true, subject=self). combat=noncombat (a triggered/activated-ability damage, CR 120, not the combat-damage step CR 510). recipient=any ('any target'). Live label emit:damage:noncombat:any, tier=Green (a LITERAL 50 damage, deterministic - cleaner than captain-rex's R3 die-gated Amber, whose 'that much' quantity was unknown). Same port shape as captain-rex R3 / guttersnipe G1."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Aetherflux Reservoir.A1",
+      "to": "Aetherflux Reservoir.A2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "ARM A (what parses): the cast subscription resolves into the lifegain - 'Whenever you cast a spell, you gain 1 life ...' - intra-ability causality, GREEN by construction (CR 603.2 -> the gain-life effect). Self-certifying (mechanism=card-defined cites no rule).",
+        "the WITNESSED core of arm A is only this trigger->gain causality. The mechanically-novel part (the qty SCALING with spells-cast-this-turn) is NOT captured - the emit projects with no qty facet (parse gap A, assertion cast_count_scaling_parse_gap). So this edge witnesses that the cast-storm payoff is a plain card-defined cast-subscription->lifegain, and documents that its scaling is invisible."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Aetherflux Reservoir.A3",
+      "to": "Aetherflux Reservoir.A4",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "ARM B (what parses): the life-as-cost gates the damage effect - 'Pay 50 life: This artifact deals 50 damage to any target' - an activated ability whose cost (pay 50 life) gates its effect (deal 50 damage); intra-ability causality, GREEN by construction (CR 602.1a activated ability / 118.1 cost -> the damage effect). Self-certifying (mechanism=card-defined cites no rule).",
+        "the derived life stem on A3 does NOT cap this edge: card-defined causality is about the activated ability's own cost gating its own effect, independent of how the cost's RESOURCE is classified - once the cost is paid the damage is dealt regardless of stem. The derived stem would ONLY cap a hypothetical policy:life-supplies-cost edge (a life-gain emit -> A3), which is the parse-gapped, un-authored arm (parse gap B).",
+        "the 'you must have >=50 life to pay' precondition (CR 119.4) is a firability gate on ACTIVATING the ability, not a reliability cap on the intra-ability cost->effect causality; unit=single-card so there is no loop for it to floor."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "mechanism=card-defined: the 'whenever you cast a spell' subscription resolves into the 'you gain 1 life ...' effect - intra-ability causality, self-certifying GREEN (CR 603.2), no rule dependency"
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "mechanism=card-defined: the 'Pay 50 life' activation cost gates the 'deal 50 damage to any target' effect - intra-ability causality, self-certifying GREEN (CR 602.1a, 118.1), independent of A3's derived life stem"
+    },
+    {
+      "claim": "cast_count_scaling_parse_gap",
+      "because": "PARSE GAP A: 'you gain 1 life FOR EACH spell you've cast this turn' scales the lifegain by the running per-turn cast count, but emit:life:gain:controlled projects with NO qty facet - the cast-count scaling (the storm payoff's whole point) is not AST-derivable. A2 honestly omits qty. The would-be cross-card arm 'a spell-cast event feeds the cast subscription' is likewise ungrounded (casting has no discrete emit port). Report as parse gap, do not model."
+    },
+    {
+      "claim": "life_as_cost_parse_gap",
+      "because": "PARSE GAP B: 'Pay 50 life' projects coarse (label pay:paylife, family=mana, stem=NULL) - NOT stemmed as a life[direction=loss] consume. A3's direction carries provenance=derived. Because the cost is not recognized as consuming the life resource, a life-GAIN emit SUPPLYING this life-cost (the would-be policy:life-supplies-cost, consume_kind=argument, the life analogue of policy:counter-supplies-cost) is NOT engine-matchable. Sought future rule, NOT declared (no faithful witness -> a wish)."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: no cycle. The damage emit (A4) does not feed casting (A1), and the lifegain (A2) requires casting EXTERNAL spells - Aetherflux alone closes no loop. A storm-fueled value engine, not a self-sustaining cycle; no S10 SDF balance."
+    }
+  ],
+  "cr": [
+    "118.1",
+    "119.3",
+    "119.4",
+    "120",
+    "601.2",
+    "602.1a",
+    "603.2"
+  ]
+}

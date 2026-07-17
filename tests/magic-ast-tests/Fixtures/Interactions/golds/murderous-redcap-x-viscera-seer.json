@@ -1,0 +1,227 @@
+{
+  "id": "murderous-redcap-x-viscera-seer",
+  "unit": "pairwise",
+  "cards": [
+    "Murderous Redcap",
+    "Viscera Seer"
+  ],
+  "source": {
+    "note": "Witnesses PERSIST as a death-return self-recursion arm and CORROBORATES policy:recur:death-return-self (the batch-9 Mikaeus/undying witness) -- climbing it from observed-by-one to a second, INDEPENDENT witness. THE CORROBORATE-vs-NEW-RULE CALL: persist ('When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it', CR 702.79) is the -1/-1 DUAL of undying (CR 702.93a, '+1/+1 counter'). It is the SAME structural arm on every load-bearing axis: (1) a TRIGGERED-ABILITY return, not a cast -- the permanent returns directly as the trigger resolves, NO stack-spell, NO mana cost, so guard:recast-pays-mana does NOT apply and the return is mana-free; (2) the returned object is the SAME permanent (self:true) -- identity-certain, GREEN-eligible on identity, unlike blink's 'another creature' Overlaps floor; (3) gated by a COUNTER-STATE condition ('if it had no counters'), not a mana co-cost. The ONLY difference from undying is the counter SIGN (-1/-1 vs +1/+1), which does NOT change the recursion MECHANISM (trigger-not-cast, no-mana, same-object self-return are all identical). policy:recur:death-return-self's own desc ALREADY names persist (CR 702.79 is already in its cr list). So this is a CORROBORATION (byte-matched core: consume_kind=recur-driver, subject=self-return), NOT a redundant sibling policy -- rule discipline forbids siblings. GUARD CALL: also a CORROBORATION of guard:undying-counter-reset (2nd witness), NOT a persist-specific sibling. That guard is the generic counter-parity loop-soundness floor -- 'return-with-a-counter; the loop is re-armable ONLY if each iteration removes/cancels the returned counter before the next death'; its desc ALREADY names persist as the -1/-1 dual and already cites CR 702.79. Persist's floor is structurally IDENTICAL: persist returns with a -1/-1 counter, so the SECOND death has a -1/-1 counter, persist's 'if it had no -1/-1 counters' condition FAILS, and the loop halts after exactly one return -- UNLESS the -1/-1 is removed/prevented (Melira, Sylvok Outcast) or cancelled by a +1/+1 counter via the state-based annihilation (CR 704.5q) to re-arm 'no -1/-1 counters'. The counter-reset requirement is the same relation as undying's; only the SIGN of the counter that must be cleared differs, which does not make the soundness floor genuinely different -- so a persist-specific guard would be a redundant sibling. CORROBORATE, do not mint. PARSE (verified against dumps/card-ports.json 2026-07-17): unlike Mikaeus (whose undying GRANT is dropped by the parser), the persist arm PARSES NATIVELY on Murderous Redcap -- it projects emit:returntobattlefield (family=recur, side=emit) + ltb:permanent:to-graveyard:self (family=death, side=consume, isSelf=True), exactly the Young-Wolf undying shape. So MR1 (persist dies-watch) and MR2 (persist return) are AST-derivable; NO parse gap on the arm. The -1/-1 COUNTER the return carries is PARSE-GATED (Murderous Redcap projects no emit:counter:-1/-1 port -- the counter clause is not derived, the same coarseness undying's +1/+1 has: Young Wolf projects no +1/+1 port either), so MR3 is authored to the native-undying WB5 shape and marked parse-gated. Viscera Seer's sac outlet PARSES (sac:creature:controlled = V1, + emit:scry off-path); V2 is the removal:creature[manner=sacrificed] sac emit, modeled identically to the viscera-seer-x-zulaport-cutthroat gold. Oracle text verified vs oracle-cards.json 2026-07-17: Murderous Redcap = 'When this creature enters, it deals damage equal to its power to any target.\\nPersist (...)'; Viscera Seer = 'Sacrifice a creature: Scry 1. ...'. FIRABILITY / BOUNDEDNESS (the honest §10 verdict): persist ALONE with a plain sac outlet is BOUNDED, NOT an infinite loop. Sac Redcap -> it dies -> persist returns it with a -1/-1 counter (now a 0/1) -> sac it again -> it dies -> persist checks 'if it had no -1/-1 counters' -> it HAS one -> persist does NOT fire -> the cycle HALTS after one return (two deaths). An infinite loop needs a THIRD piece that resets the counter: Melira, Sylvok Outcast (Redcap returns without the -1/-1 -> the famous Melira/Redcap/sac infinite-damage combo, GREEN), a -1/-1 remover, or a +1/+1 source that annihilates it (CR 704.5q). Recorded as no_infinite_loop, not authored as a combo. Contrast Mikaeus: there the death was closed by bridge:lethal-damage-to-dies (AMBER, board-state-dependent); here the death is closed by bridge:sacrifice-to-dies (GREEN, a deterministic rules zone-change) -- persist witnesses the SAME policy fed by a stronger (GREEN) death source. Murderous Redcap's ETB damage (MR4) is the eventual payoff but is OFF the persist-arm path (its power drops to 0 after the -1/-1, so the second ETB deals 0). No source.popularity/csb: the testbed corpus carries no edhrec/price/CSB count -- omitted rather than fabricated. judge = PENDING (this gold has not yet been interaction-judge-blessed)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Murderous Redcap": [
+      {
+        "id": "MR1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "to": "graveyard",
+          "self": true
+        },
+        "note": "THE PERSIST DIES-WATCH -- 'When this creature dies' (CR 603.6 zone-change trigger; the persist keyword, CR 702.79). Live label ltb:permanent:to-graveyard:self (family=death, side=consume, isSelf=True; PARSED, read from dumps/card-ports.json 2026-07-17 -- the persist arm is AST-derivable natively, unlike Mikaeus's dropped undying GRANT). self:true encodes isSelf: persist watches THIS creature's OWN death, not any creature's (contrast Blood Artist / Zulaport, control=you|any, which watch every creature dying). Modeled as a removal:creature consume with to=graveyard, matching how dies-triggers are modeled in the other golds (viscera-seer-x-zulaport Z1, blood-artist B1), plus self:true for the self-scope. The death that fires it is supplied EXTERNALLY -- here by Viscera Seer's sacrifice (V2 -> E1, bridge:sacrifice-to-dies)."
+      },
+      {
+        "id": "MR2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "battlefield",
+          "control": "you",
+          "self": true
+        },
+        "note": "THE PERSIST RETURN (the self-return recur driver) -- 'return it to the battlefield under its owner's control' (CR 702.79). Live label emit:returntobattlefield (family=recur, side=emit; PARSED). self:true encodes isSelf: persist returns the SAME object that died -- identity-CERTAIN (the ability is on the dying creature, CR 603.6/603.10; the returned permanent is a new object under CR 400.7 but the trigger is definitionally about the object that died). from=graveyard / to=battlefield proven by persist's own text. The exact -1/-1 DUAL of undying's WB4 in mikaeus-the-unhallowed-x-walking-ballista; here derivable NATIVELY (no grant, no parse gap on the return itself)."
+      },
+      {
+        "id": "MR3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "counters",
+        "attrs": {
+          "counter-type": "-1/-1",
+          "qty": 1,
+          "control": "you"
+        },
+        "note": "persist returns the creature 'with a -1/-1 counter on it' (CR 702.79 / 122.1) -- PARSE-GATED (part of the return; Murderous Redcap projects NO emit:counter:-1/-1 port -- the counter clause is not AST-derived, the same coarseness undying's +1/+1 has: Young Wolf projects no +1/+1 port either). Authored to the native-undying WB5 shape and marked parse-gated. This -1/-1 counter is what makes persist BOUNDED: it sits on the returned creature, so the SECOND death has a -1/-1 counter and persist's 'if it had no -1/-1 counters' condition fails (guard:undying-counter-reset). The exact sign-flipped dual of Mikaeus WB5's +1/+1 counter."
+      },
+      {
+        "id": "MR4",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "Murderous Redcap's ETB payoff -- 'When this creature enters, it deals damage equal to its power to any target' (live emit:damage:noncombat:any, family=damage, isSelf=True; PARSED). OFF the persist-arm path (included for faithful derivation, like Mikaeus M0). This is the payoff a Melira-completed infinite loop exploits (repeated ETBs -> repeated damage); but in the pure 2-card bounded case Redcap's power drops to 0 after the -1/-1 counter, so the SECOND ETB deals 0. Not load-bearing for the persist arm."
+      }
+    ],
+    "Viscera Seer": [
+      {
+        "id": "V1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "'Sacrifice a creature' -- the activation cost's fodder demand (live sac:creature:controlled, family=sacrifice, side=consume; PARSED). A creature you control must be supplied. Modeled identically to viscera-seer-x-zulaport-cutthroat V1. The returned Redcap satisfies this each cycle (E4) -- which is why the cycle is topologically closed but bounded."
+      },
+      {
+        "id": "V2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "manner": "sacrificed"
+        },
+        "note": "The sacrifice event -- the fodder creature is moved from the battlefield to its owner's graveyard (CR 701.21a). Live modeling: the sac's death emit (manner=sacrificed), identical to viscera-seer-x-zulaport-cutthroat V2 and gravecrawler AN2. This is the DEATH that fires Redcap's persist dies-watch (E1, bridge:sacrifice-to-dies). (Viscera's emit:scry Scry-1 payoff is off-path and omitted, as in the zulaport gold.)"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Viscera Seer.V2",
+      "to": "Murderous Redcap.MR1",
+      "mechanism": "bridge",
+      "rule": "bridge:sacrifice-to-dies",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE DEATH SOURCE: Viscera Seer's sacrifice (V2, removal:creature[manner=sacrificed]) moves the creature from the battlefield directly to its graveyard (CR 701.21a -> 700.4, it dies), feeding Murderous Redcap's persist dies-watch (MR1). Reuses bridge:sacrifice-to-dies (confirmed; a sac emit feeds a dies-trigger -- exactly the viscera-seer-x-zulaport V2->Z1 shape). The bridge's own ceiling is GREEN (a deterministic rules zone-change), but this edge floors to AMBER via guard:self-watch (reused): MR1 is self-scoped (isSelf -- persist fires only for REDCAP's own death), and 'Sacrifice a creature you control' is producer-choice among all your creatures, so it only Overlaps Redcap (the player must aim the sac at Redcap; object identity the operator cannot see, CR 400.7). Contrast Mikaeus, where the death was closed by the AMBER bridge:lethal-damage-to-dies (board-state-dependent); here the death is a GREEN-ceiling sacrifice floored only by the self-target identity."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Murderous Redcap.MR1",
+      "to": "Murderous Redcap.MR2",
+      "mechanism": "match_policy",
+      "rule": "policy:recur:death-return-self",
+      "residuals": [
+        "guard:undying-counter-reset"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE PERSIST DEATH-RETURN SELF-RECURSION EDGE -- the CORROBORATING witness of policy:recur:death-return-self (climbs it 1->2). Redcap's OWN dies event (MR1: persist dies-watch, removal:creature self, to=graveyard) satisfies its OWN persist returntobattlefield self-return driver (MR2: recur, self:true) -- CR 702.79 'when this creature dies ... return it to the battlefield'. Byte-matched to the Mikaeus/undying witness on the policy's core (consume_kind=recur-driver, subject=self-return): a TRIGGERED-ABILITY return, NOT a cast -- no stack-spell, no mana cost -> guard:recast-pays-mana does NOT apply, the return is mana-free; the returned object is the SAME permanent (self:true, identity-certain -> GREEN-eligible on identity). The ONLY difference from undying is the counter SIGN (-1/-1 vs +1/+1), which does not change the recursion mechanism -- so this CORROBORATES the policy, it does not sibling it. AMBER, not GREEN, for two reasons: (1) it rests on guard:undying-counter-reset -- the returned -1/-1 counter (MR3) blocks persist's 'no -1/-1 counters' condition on the second death, so without a counter-reset the recursion is BOUNDED (see the no_infinite_loop assertion); and (2) the returned -1/-1 counter (MR3) is parse-gated. GREEN-eligible on identity (self:true, mana-free), but the counter-parity floor caps it -- exactly as it caps the undying witness."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Murderous Redcap.MR2",
+      "to": "Murderous Redcap.MR3",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "internal: persist returns the permanent to the battlefield WITH a -1/-1 counter on it (CR 702.79 / 122.1) -- the return (MR2) and the counter (MR3) are one persist effect. Self-certifying; the -1/-1 sign is the dual of Mikaeus E3's +1/+1 (WB4->WB5)."
+      ]
+    },
+    {
+      "id": "E4",
+      "from": "Murderous Redcap.MR2",
+      "to": "Viscera Seer.V1",
+      "mechanism": "match_policy",
+      "rule": "policy:argument:subject-cover",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE (bounded) CYCLE-CLOSING hop: the returned Redcap (MR2 -> a creature you control) covers Viscera Seer's 'Sacrifice a creature you control' fodder demand (V1) -- creature Subsumes creature, control you=you -> re-sac-able. Reuses policy:argument:subject-cover (confirmed; the same argument-cover the Gravecrawler GC2->AN1 hop uses), GREEN on the cover. This closes a STRUCTURAL cycle (V1->V2->MR1->MR2->V1), but the cycle does NOT self-sustain: the returned Redcap carries a -1/-1 counter (MR3), so its SECOND death does not re-fire persist (guard:undying-counter-reset) -> the loop halts after one return. GREEN is the edge's own cover reliability; the BOUNDEDNESS lives on E2's counter-parity residual, recorded in no_infinite_loop."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:recur:death-return-self",
+        "consume_kind": "recur-driver",
+        "subject": "self-return",
+        "corroborates": "policy:recur:death-return-self",
+        "desc": "CORROBORATES the mikaeus-the-unhallowed-x-walking-ballista (undying) witness of policy:recur:death-return-self with a second, INDEPENDENT witness on the -1/-1 DUAL, PERSIST (CR 702.79). Persist -- 'When this creature dies, if it had no -1/-1 counters on it, return it to the battlefield under its owner's control with a -1/-1 counter on it' -- is the SAME death-driven SELF-recursion arm as undying on every load-bearing axis: a TRIGGERED-ABILITY return, not a cast (no stack-spell, no mana cost -> guard:recast-pays-mana does not apply, the return is mana-free); the returned object is the SAME permanent (self:true, identity-certain -> Subsumes on identity, GREEN-eligible); gated by a counter-STATE condition, not a mana co-cost. Byte-identical core (consume_kind=recur-driver, subject=self-return) and the same CR family (702.79 was ALREADY in the rule's cr) -> a reference/corroboration, NOT a re-definition and NOT a sibling. The ONLY difference from undying is the counter SIGN (-1/-1 vs +1/+1), which changes neither the trigger-not-cast nature, the no-mana property, nor the same-object self-return -- so persist does NOT warrant a sibling policy (rule discipline forbids redundant siblings); it climbs THIS rule observed->corroborated. Additionally the FIRST witness fed by a GREEN death source (bridge:sacrifice-to-dies) rather than Mikaeus's AMBER bridge:lethal-damage-to-dies.",
+        "cr": [
+          "702.79",
+          "702.93a",
+          "603.6",
+          "603.10",
+          "400.7",
+          "122.1"
+        ]
+      }
+    ],
+    "guards": [
+      {
+        "id": "guard:undying-counter-reset",
+        "impl": "code",
+        "corroborates": "guard:undying-counter-reset",
+        "desc": "CORROBORATES guard:undying-counter-reset (the counter-parity loop-soundness floor) on its PERSIST (-1/-1) branch -- second witness. The guard is the generic counter analogue of guard:recast-pays-mana's mana-parity: a self-recursion loop closed by policy:recur:death-return-self returns the creature WITH a counter and re-fires ONLY 'if it had no counters', so the loop is re-armable ONLY if each iteration removes/cancels that returned counter before the next death. Persist's floor is structurally IDENTICAL to undying's; only the counter SIGN differs (persist returns with a -1/-1 counter, so the second death has a -1/-1 counter and persist's 'if it had no -1/-1 counters' condition FAILS -> the loop halts after exactly one return). To re-arm persist the -1/-1 must be cleared: Melira, Sylvok Outcast prevents it ('creatures you control can't have -1/-1 counters put on them' -> the famous Melira/Murderous Redcap/sac-outlet infinite), a -1/-1 remover, or a +1/+1 counter that annihilates it as a state-based action (CR 704.5q). Because the counter-reset requirement is the SAME relation for both signs, this is a CORROBORATION of the existing guard (whose desc already names persist as the dual and already cites 702.79), NOT a persist-specific sibling. GREEN-eligible only when the loop provably resets the -1/-1 counter to zero every cycle; with a plain sac outlet it does not -> BOUNDED.",
+        "cr": [
+          "702.79",
+          "702.93a",
+          "122.1",
+          "704.5q"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "persist_corroborates_death_return_self_not_a_new_rule",
+      "because": "policy:recur:death-return-self is CORROBORATED byte-matched (consume_kind=recur-driver, subject=self-return), climbing it observed(1)->corroborated(2). Persist (CR 702.79) is the -1/-1 DUAL of undying (CR 702.93a): the SAME death-driven self-recursion arm -- triggered-ability return not a cast (mana-free, no guard:recast-pays-mana), same-object self-return (self:true, identity-certain), counter-state gated. The only difference is the counter SIGN, which does not change the mechanism, so a sibling policy would be redundant (rule discipline forbids). The rule's own cr already listed 702.79 (persist) -- this gold pays for that."
+    },
+    {
+      "claim": "guard_undying_counter_reset_corroborated_not_siblinged",
+      "because": "the persist -1/-1 loop-soundness floor is the SAME counter-parity relation as undying's +1/+1 -- 'return-with-a-counter; re-armable only if the returned counter is cleared each cycle before the next death'. Only the sign of the counter to clear differs; the floor does not genuinely differ, so guard:undying-counter-reset is CORROBORATED (2nd witness), not minted as a persist-specific sibling. The existing guard's desc already names persist as the dual and already cites 702.79."
+    },
+    {
+      "claim": "edge.E2.mechanism == match_policy",
+      "because": "E2 cites policy:recur:death-return-self -- Redcap's own persist dies-watch (MR1) drives its own persist self-return (MR2)"
+    },
+    {
+      "claim": "edge.E2.tier == AMBER",
+      "because": "rests on guard:undying-counter-reset (the returned -1/-1 counter blocks the second persist trigger -> bounded) and the returned -1/-1 counter (MR3) is parse-gated; GREEN-eligible on identity (self:true, mana-free, no guard:recast-pays-mana) but the counter-parity floor caps it -- exactly as it caps the undying witness"
+    },
+    {
+      "claim": "no_infinite_loop",
+      "because": "persist ALONE with a plain sac outlet is BOUNDED, not infinite: sac Redcap -> persist returns it with a -1/-1 counter (MR3) -> sac it again -> its second death HAS a -1/-1 counter -> persist's 'if it had no -1/-1 counters' condition fails -> the cycle halts after one return (guard:undying-counter-reset). A GREEN infinite loop needs a third piece that resets the counter (Melira, Sylvok Outcast preventing the -1/-1; a -1/-1 remover; or a +1/+1 source annihilating it via CR 704.5q). Recorded honestly, not authored as a combo -- so unit=pairwise with no loop_tier (cf. devoted-druid's bounded self-untap)."
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "bridge:sacrifice-to-dies (GREEN ceiling -- a deterministic sac zone-change, CR 701.21a) floored by guard:self-watch: MR1 is self-scoped (isSelf), and Viscera's 'Sacrifice a creature you control' is producer-choice, so it only Overlaps Redcap (the sac must be aimed at Redcap; identity the operator cannot see, CR 400.7)"
+    },
+    {
+      "claim": "edge.E4.tier == GREEN",
+      "because": "policy:argument:subject-cover (confirmed): the returned Redcap (a creature you control) covers Viscera's 'Sacrifice a creature you control' fodder demand (creature Subsumes creature, control you=you). GREEN is the cover reliability; the boundedness of the cycle lives on E2's counter-parity residual, not here"
+    },
+    {
+      "claim": "persist_arm_parses_natively",
+      "because": "unlike Mikaeus's dropped undying GRANT, the persist arm is AST-derivable natively: Murderous Redcap projects emit:returntobattlefield (family=recur -> MR2) + ltb:permanent:to-graveyard:self (family=death, isSelf -> MR1) (dumps/card-ports.json, verified 2026-07-17), the Young-Wolf undying shape. The ONLY parse gap is the returned -1/-1 counter (MR3): Murderous Redcap projects no emit:counter:-1/-1 port -- the same coarseness undying has (Young Wolf projects no +1/+1 port). MR3 is authored parse-gated, mirroring Mikaeus WB5"
+    }
+  ],
+  "cr": [
+    "702.79",
+    "702.93a",
+    "603.6",
+    "603.10",
+    "701.21a",
+    "700.4",
+    "122.1",
+    "704.5q",
+    "400.7",
+    "601.2b"
+  ]
+}

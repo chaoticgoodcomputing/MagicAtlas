@@ -2,6 +2,7 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aetherflux-reservoir",
     "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
@@ -11,6 +12,8 @@
     "brazen-dwarf",
     "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
+    "cloudstone-curio-x-priest-of-gix",
+    "combat-celebrant",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
     "devoted-druid",
@@ -21,6 +24,8 @@
     "emiel-the-blessed-x-mulldrifter",
     "evolution-sage",
     "fog",
+    "fruit-of-tizerus-graveyard-cast",
+    "gaeas-cradle",
     "grave-titan-x-anointed-procession",
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
@@ -33,6 +38,7 @@
     "kiki-jiki-x-restoration-angel",
     "kiki-jiki-x-zealous-conscripts",
     "mikaeus-the-unhallowed-x-walking-ballista",
+    "murderous-redcap-x-viscera-seer",
     "nantuko-husk-x-blood-artist",
     "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
@@ -48,7 +54,10 @@
     "stone-calendar",
     "teysa-karlov-x-blood-artist",
     "titanias-boon",
-    "viscera-seer-x-zulaport-cutthroat"
+    "titanias-boon-x-doubling-season",
+    "trostani-selesnyas-voice",
+    "viscera-seer-x-zulaport-cutthroat",
+    "young-pyromancer"
   ],
   "conflicts": [],
   "polarity": [
@@ -95,6 +104,18 @@
       "id": "policy:recast:battlefield-return",
       "consume_kind": "recast-driver",
       "subject": "self-return",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:recast:graveyard-cast",
+      "consume_kind": "recast-driver",
+      "subject": "self-return",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:recast:permanent-bounce",
+      "consume_kind": "recast-driver",
+      "subject": "intersect",
       "status": "confirmed"
     },
     {

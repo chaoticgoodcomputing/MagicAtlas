@@ -1,0 +1,107 @@
+{
+  "id": "young-pyromancer",
+  "unit": "single-card",
+  "cards": [
+    "Young Pyromancer"
+  ],
+  "source": {
+    "csb": false,
+    "note": "single-card witness of the cast-count PAYOFF arm — a cast-trigger subscription (stem=cast) bound card-defined to a token EMIT (stem=deployment:creature[token]). Oracle (single line): 'Whenever you cast an instant or sorcery spell, create a 1/1 red Elemental creature token.' Live engine ports (dumps/card-ports.json, verified 2026-07-17): consume family=cast, label 'trigger:cast:instant+sorcery+spell:controlled' (stem=cast, isSelf=false, tier=Green, line 0 spans [0,45]) + emit family=token, label 'emit:token:creature:elemental:controlled' (stem=deployment:creature, isSelf=false, tier=Green, line 0 spans [46,89]). NO parse gap: both ports are Stage-2 structured (the consume serves the structured 'cast' stem, exactly as Aang does; the emit serves the deployment:creature token rung, exactly as Grave Titan / Chatterfang do), so this is a faithful witness, not a wish. RULE DISCIPLINE (checked the rollup FIRST): the intra-card binding 'whenever you cast -> create a token' is a subscription->payoff flow that is CARD-DEFINED (self-certifying, no rule id), mirroring guttersnipe E2 (cast-trigger payoff -> draw), archaeomancer E1 (ETB subscription -> recur emit), and aang's would-be (but unported) cast->lifelink. So NO new rule and NO sibling is minted; this gold CORROBORATES two already-witnessed stems: (1) the 'cast' event-verb stem (first witnessed by aang-the-last-airbender, A1; this is the SECOND witness, climbing it) and (2) the 'deployment:creature'[token] emit (grave-titan-x-anointed-procession, chatterfang C-tokens). CAST-CONSUMER CONTRAST (the task's 'compare to cast:spell consumers'): Young Pyromancer's consume is the AANG-family cast-WATCH subscription (isSelf=false, control=you — watches YOUR casts), NOT the Ghostly Flicker-family recast DRIVER (cast:spell:self, isSelf=true, watching ITSELF to be re-cast). So no policy:recast:* rule is in play — a recast policy refuels a self-recasting spell; a cast-trigger subscription simply fires a payoff on each of your casts. SCAFFOLD SURFACE (value accretion only, no new axis): the cast filter 'instant+sorcery' accretes the values instant, sorcery to the subtype axis values_seen — the exact precedent aang.json set by accreting 'lesson' to the same axis (the subtype axis already carries top-level card-type values 'creature' and 'land', so instant/sorcery are consistent). The axis KEY (subtype) and its licensed stem ('cast', already listed) are both in the closed set, so only values_seen accretes; no axis is invented. PARSE GAP REPORTED (why Young Pyromancer, not Storm-Kiln Artist): the magecraft 'cast OR copy' variant (Storm-Kiln Artist: 'Magecraft — Whenever you cast or copy an instant or sorcery spell, create a Treasure token') projects as a COARSER un-stemmed label — live family=castorcopyspell, label 'castorcopyspell:instant+sorcery+spell', with NO stem field — unlike Young Pyromancer's clean family=cast/stem=cast. So the magecraft cast-or-copy consume is NOT yet ADR-3-stem-projected (a parser target: castorcopyspell -> stem=cast [+ a copy alias]); Young Pyromancer's plain 'whenever you cast' is the faithfully-stemmed witness. No popularity COUNT is available in the testbed corpus (edhrec/price absent), so source.popularity is omitted (not fabricated from a rank); csb=false (a value engine, not a documented Commander Spellbook loop)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Young Pyromancer": [
+      {
+        "id": "Y0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "control": "you",
+          "subtype": "instant+sorcery"
+        },
+        "note": "THE CAST-COUNT DRIVER — 'Whenever you cast an instant or sorcery spell' (live trigger:cast:instant+sorcery+spell:controlled; family=cast, stem=cast, isSelf=false, tier=Green, spans [0,45]). A player-action subscription on the bare EVENT verb cast (casting a spell is a discrete occurrence, CR 601). Mirrors aang.json A1 (the cast-WATCH subscription family): control=you decodes 'controlled' (you cast); subtype='instant+sorcery' is the watched card-type filter ('spell' is implicit in the cast verb, per aang), carried honestly so the consume is NOT over-broadened to all casts. isSelf=false — this is a subscription watching YOUR casts, NOT a recast driver watching ITSELF (contrast Ghostly Flicker G0, cast:spell:self, isSelf=true), so no policy:recast:* rule applies. The filter accretes instant, sorcery to the subtype axis values_seen (see source.note)."
+      },
+      {
+        "id": "Y1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "token": true,
+          "subtype": "elemental",
+          "color": "red",
+          "pt": "1/1",
+          "control": "you",
+          "qty": 1
+        },
+        "note": "THE PAYOFF EMIT — 'create a 1/1 red Elemental creature token' (live emit:token:creature:elemental:controlled; family=token, stem=deployment:creature, tier=Green, spans [46,89]). A positive token deployment, the value paid out per qualifying cast. Same port shape as grave-titan.G1 / chatterfang C-tokens (token=true, control=you); color=red / pt=1/1 / subtype=elemental enriched from the oracle (mirroring grave-titan's zombie/black/2-2 enrichment beyond its label). qty=1 (one token per firing)."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Young Pyromancer.Y0",
+      "to": "Young Pyromancer.Y1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "THE CAST-COUNT PAYOFF ARM — 'Whenever you cast an instant or sorcery spell, create a 1/1 red Elemental creature token' — a deterministic card-defined flow from the cast subscription to the token emit; structural (self-certifying), no rule dependency (CR 603.2 -> the triggered effect). Mirrors archaeomancer.json E1 (ETB subscription -> recur emit) and guttersnipe E2 (damage subscription -> draw payoff). GREEN: the trigger is mandatory (no 'may') and the token creation is deterministic — no over-approximation to cap."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.cast.corroborated",
+      "because": "Y0 projects the bare EVENT verb stem cast (live family=cast, stem=cast) a SECOND time after aang-the-last-airbender A1 (the origin witness) — a distinct card with a distinct filter (card-type instant/sorcery vs subtype lesson), climbing the cast stem's witness ladder"
+    },
+    {
+      "claim": "Y0.control == you",
+      "because": "'whenever YOU cast an instant or sorcery spell' — the caster's scope is the controller (control axis, licensed_by *; the label's 'controlled' segment); isSelf=false, a cast-watch subscription, not a self-recast driver"
+    },
+    {
+      "claim": "Y0.subtype == instant+sorcery",
+      "because": "the trigger fires only on instant/sorcery spells — the watched card-type filter (subtype axis, which already licenses the 'cast' stem and carries card-type values creature/land). Carried explicitly so the consume is not over-broadened to every cast; accretes instant, sorcery to values_seen (the aang 'lesson' precedent)"
+    },
+    {
+      "claim": "stem.deployment:creature.token.corroborated",
+      "because": "Y1 projects emit:token (deployment:creature[token=true]) — the same token-emit port witnessed by grave-titan-x-anointed-procession G1 and the chatterfang tokens; corroborated here as the PAYOFF of a cast-count subscription"
+    },
+    {
+      "claim": "edge.E1.mechanism == card-defined",
+      "because": "the cast-subscription -> token-emit binding is an intra-ability card-defined flow (self-certifying, structural like subsumption/modifier) — no rule id cited, no new rule and no sibling minted"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined (self-certifying): the mandatory cast trigger deterministically fires the token creation (CR 603.2), no over-approximation to cap"
+    },
+    {
+      "claim": "cast_payoff_arm.witnessed",
+      "because": "E1 is Y0 (cast subscription) -> Y1 (emit:token) — the cast-count -> value-emit arm, the first gold to witness a cast-trigger's PAYOFF EMIT ported and bound (aang witnessed the cast consume but its lifelink payoff was unported)"
+    },
+    {
+      "claim": "no_new_rule",
+      "because": "checked the rollup first: the cast->token binding is card-defined (no rule), and both stems (cast, deployment:creature[token]) already exist — this gold corroborates, it does not declare (declares all empty)"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the cast subscription + its token payoff, no cycle closed. A loop would need the payoff to refuel a cast (e.g. Storm-Kiln Artist's Treasure -> mana -> recast a spell), which needs a second recastable piece and is mana-negative for most spells (1 Treasure < a spell's cost) — not closed here"
+    }
+  ],
+  "cr": [
+    "601",
+    "601.2",
+    "603.2",
+    "111.1"
+  ]
+}

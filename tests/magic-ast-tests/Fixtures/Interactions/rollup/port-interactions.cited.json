@@ -2,6 +2,7 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "aang-the-last-airbender",
+    "aetherflux-reservoir",
     "aggravated-assault-x-sword-of-feast-and-famine",
     "ancient-copper-dragon",
     "archaeomancer",
@@ -11,6 +12,8 @@
     "brazen-dwarf",
     "captain-rex-nebula",
     "chatterfang-x-pitiless-plunderer",
+    "cloudstone-curio-x-priest-of-gix",
+    "combat-celebrant",
     "deadeye-x-peregrine-drake",
     "deadly-rollick",
     "devoted-druid",
@@ -21,6 +24,8 @@
     "emiel-the-blessed-x-mulldrifter",
     "evolution-sage",
     "fog",
+    "fruit-of-tizerus-graveyard-cast",
+    "gaeas-cradle",
     "grave-titan-x-anointed-procession",
     "gravecrawler-x-ashnods-altar-x-blood-artist",
     "gravecrawler-x-phyrexian-altar-x-blood-artist",
@@ -33,6 +38,7 @@
     "kiki-jiki-x-restoration-angel",
     "kiki-jiki-x-zealous-conscripts",
     "mikaeus-the-unhallowed-x-walking-ballista",
+    "murderous-redcap-x-viscera-seer",
     "nantuko-husk-x-blood-artist",
     "nim-deathmantle-x-ashnods-altar-x-blood-artist",
     "ophiomancer-x-nantuko-husk",
@@ -48,7 +54,10 @@
     "stone-calendar",
     "teysa-karlov-x-blood-artist",
     "titanias-boon",
-    "viscera-seer-x-zulaport-cutthroat"
+    "titanias-boon-x-doubling-season",
+    "trostani-selesnyas-voice",
+    "viscera-seer-x-zulaport-cutthroat",
+    "young-pyromancer"
   ],
   "conflicts": [],
   "polarity": [
@@ -165,6 +174,39 @@
       ]
     },
     {
+      "id": "policy:recast:graveyard-cast",
+      "consume_kind": "recast-driver",
+      "subject": "self-return",
+      "status": "confirmed",
+      "witnesses": [
+        "fruit-of-tizerus-graveyard-cast"
+      ],
+      "desc": "a spell self-cast DIRECTLY from the graveyard via a static alternative-cost permission -- escape (CR 702.138a), flashback (CR 702.34a), or retrace (CR 702.81), each granting \u0027you may cast this card from your graveyard\u0027 (the casting permission of CR 601.3, paid as an alternative cost per 601.2b/601.2f-h) -- refuels the card\u0027s OWN cast:spell:self recast driver (subject=self-return, self:true) directly from the graveyard. The spell is cast onto the STACK, resolves, and is put into the graveyard (608.2n, escape/retrace) or exile (702.34a, flashback) -- it NEVER enters the battlefield. Because the card casts ITSELF, the recast subject Subsumes on identity -\u003E GREEN-eligible, and guard:self-recast-samecard passes. The THIRD member of the recast family, distinct on the SOURCE ZONE \u002B DESTINATION mechanism from both siblings: (1) policy:recast:spell-recursion returns the card to HAND first and re-casts a TARGET-chosen spell from hand (subject=intersect, Overlaps-\u003EAMBER, typically cross-card) -- THIS arm has no return-to-hand step and is self-return (Subsumes); (2) policy:recast:battlefield-return also casts from=graveyard and is self-return, but the object is a PERMANENT arriving ON the battlefield (to=battlefield, an ETB permanent, e.g. Gravecrawler) -- an escaped/flashed-back instant or sorcery resolves OFF the stack and is never a battlefield permanent, and escape additionally pays an exile-fuel co-cost (exile N other cards from your graveyard) that battlefield-return lacks. Two genuine axes of difference (destination stack vs battlefield; exile-fuel co-cost) -\u003E a fresh declare, NOT a sibling of battlefield-return (reusing that id would collide, same-id/different-content) and NOT a from=graveyard attr on spell-recursion (different subject and no return-to-hand). Any loop closed by this recast carries the recast mana co-cost (guard:recast-pays-mana) and, for escape, the exile-fuel co-cost -- both floor the cycle to AMBER unless provably refilled.",
+      "cr": [
+        "702.138a",
+        "702.34a",
+        "601.3",
+        "601.2f",
+        "608.2n",
+        "400.7"
+      ]
+    },
+    {
+      "id": "policy:recast:permanent-bounce",
+      "consume_kind": "recast-driver",
+      "subject": "intersect",
+      "status": "confirmed",
+      "witnesses": [
+        "cloudstone-curio-x-priest-of-gix"
+      ],
+      "desc": "a returntohand:permanent BOUNCE emit (from=battlefield -\u003E to=hand, a permanent returned from the battlefield to its owner\u0027s hand) refuels the RECAST of the bounced permanent: recast from hand (CR 601.2, full mana repaid -\u003E guard:recast-pays-mana), the permanent re-enters as a new object (CR 603.6e/400.7) and re-fires its self-ETB subscription. The PERMANENT dual of policy:recast:spell-recursion, distinct on three axes: (1) the returned object is a PERMANENT with an ETB, not an instant/sorcery SPELL with a cast trigger; (2) from=BATTLEFIELD (a bounce), not from=graveyard (graveyard recursion); (3) it terminates at the redeploy\u0027s self-ETB (a permanent\u0027s recast IS its re-entry), not at a cast:spell:self driver. Distinct from blink (deployment:creature[manner=blink], a DIRECT battlefield return, mana-free, no hand step) and from policy:recast:battlefield-return (a self-CAST from=graveyard directly ONTO the battlefield, CR 601.3). Feasible when the returned permanent\u0027s type Intersects the recast target; the operator tiers Subsumes-\u003EGREEN / Overlaps-\u003EAMBER -- a producer-choice return (\u0027return ANOTHER permanent that shares a permanent type\u0027) Overlaps the specific creature the player wants to recast -\u003E AMBER. Any loop closed by this bounce-recast carries the recast mana co-cost (guard:recast-pays-mana) and floors below GREEN unless the loop provably refills it in the right color (Priest of Gix\u0027s {B}{B}{B} refills {2}{B} -\u003E mana parity, still AMBER via the producer-choice/\u0027may\u0027 Overlap).",
+      "cr": [
+        "601.2",
+        "603.6e",
+        "400.7"
+      ]
+    },
+    {
       "id": "policy:recast:spell-recursion",
       "consume_kind": "recast-driver",
       "subject": "intersect",
@@ -185,7 +227,8 @@
       "subject": "self-return",
       "status": "confirmed",
       "witnesses": [
-        "mikaeus-the-unhallowed-x-walking-ballista"
+        "mikaeus-the-unhallowed-x-walking-ballista",
+        "murderous-redcap-x-viscera-seer"
       ],
       "desc": "undying/persist death-driven SELF-recursion: a creature\u0027s OWN dies event (a removal:creature[self] put into the graveyard from the battlefield, CR 603.6 zone-change trigger) satisfies a returntobattlefield[self:true] recur emit that re-enters the SAME permanent onto the battlefield under its owner\u0027s control (undying CR 702.93a, persist CR 702.79) -- refueling its own death loop. A NEW recursion driver, sibling-but-DISTINCT from the two recast policies: (1) policy:recast:battlefield-return refuels a self-CAST from the graveyard (CR 601.3) that RE-PAYS full mana every iteration (guard:recast-pays-mana); (2) policy:recast:spell-recursion re-casts a spell from HAND (CR 601.2). Undying is a TRIGGERED-ABILITY return, NOT a cast: the permanent returns directly as the trigger resolves -- no stack-spell, no mana cost -\u003E guard:recast-pays-mana DOES NOT apply and the loop is mana-free. Because the return is the SAME object (self:true), the recast subject Subsumes on identity (GREEN-eligible), UNLIKE blink\u0027s \u0027another creature\u0027 Overlaps floor (guard:self-watch). Any loop closed by this driver is instead gated by undying\u0027s counter-state condition (guard:undying-counter-reset), not a mana co-cost. Distinct on three axes -- trigger vs cast, no-mana vs full-mana-repayment, counter-parity vs mana-parity -- so a fresh declare, not a corroboration of either recast policy.",
       "cr": [
@@ -261,7 +304,8 @@
       "impl": "code",
       "status": "confirmed",
       "witnesses": [
-        "aggravated-assault-x-sword-of-feast-and-famine"
+        "aggravated-assault-x-sword-of-feast-and-famine",
+        "combat-celebrant"
       ],
       "desc": "an additional-combat driver (an emit on combat-presence, control=you \u2014 \u0027there is an additional combat phase\u0027, CR 500.8) that satisfies a creature\u0027s re-attack subscription (combat-presence, subject=self) can NEVER certify GREEN, even though control=you covers subject=self: re-attacking is a CHOICE (CR 508.1a \u0027if any\u0027 \u2014 attackers are declared, never forced), the attacker may be blocked, and the combat-damage it re-drives is Gated (once per combat, CR 510). So any loop through the extra-combat re-attack floors to AMBER \u2014 the \u00A78 soundness floor for the extra-combat arm, mirroring how the Gated combat-damage emit prevents a false GREEN",
       "cr": [
@@ -275,6 +319,7 @@
       "impl": "code",
       "status": "confirmed",
       "witnesses": [
+        "cloudstone-curio-x-priest-of-gix",
         "displacer-kitten-x-conviction",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "nim-deathmantle-x-ashnods-altar-x-blood-artist"
@@ -284,7 +329,8 @@
         "601.2f",
         "601.2h",
         "603.2"
-      ]
+      ],
+      "corroborates": "guard:recast-pays-mana"
     },
     {
       "id": "guard:self-recast-samecard",
@@ -321,7 +367,8 @@
       "impl": "code",
       "status": "confirmed",
       "witnesses": [
-        "mikaeus-the-unhallowed-x-walking-ballista"
+        "mikaeus-the-unhallowed-x-walking-ballista",
+        "murderous-redcap-x-viscera-seer"
       ],
       "desc": "the undying/persist counter-parity loop-soundness floor (the counter analogue of guard:recast-pays-mana\u0027s mana-parity): undying returns the creature ONLY \u0027if it had no \u002B1/\u002B1 counters on it\u0027 and puts it back \u0027with a \u002B1/\u002B1 counter on it\u0027 (CR 702.93a / 122.1). A self-recursion loop closed by policy:recur:death-return-self is therefore re-armable ONLY if each iteration REMOVES that returned \u002B1/\u002B1 counter before the creature next dies -- otherwise the second death has a \u002B1/\u002B1 counter on it, undying\u0027s condition fails, and the loop halts after a single return. Caps policy:recur:death-return-self: GREEN-eligible only when the loop provably resets the \u002B1/\u002B1 counter to zero every cycle (here Walking Ballista\u0027s \u0027Remove a \u002B1/\u002B1 counter\u0027 cost spends exactly the returned counter; net counter change per iteration = 0). Persist is the dual with -1/-1 counters (return only if none, come back with one). The state the loop must reset to stay sound, the counter-parity sibling of the recast mana-parity guard.",
       "cr": [

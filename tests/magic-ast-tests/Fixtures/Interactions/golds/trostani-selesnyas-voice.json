@@ -1,0 +1,59 @@
+{
+  "id": "trostani-selesnyas-voice",
+  "unit": "single-card",
+  "cards": [
+    "Trostani, Selesnya's Voice"
+  ],
+  "source": {
+    "csb": false,
+    "note": "PARSER-TARGET gold for the POPULATE token-copy arm (the token-source-restricted variant of Kiki's permanent token-copy). Populate (CR 701.36) = 'choose a creature token you control and create a token that's a copy of that creature token' -- a token-that's-a-copy under CR 707.2, the SAME copy mechanism as Kiki-Jiki's emit:copy (kiki-jiki-mirror-breaker K1: 'Create a token that's a copy of target nonlegendary creature you control'). The ONLY difference from Kiki is the copy-SOURCE restriction: populate may only copy a creature TOKEN you already control (CR 701.36 note: 'If you control no creature tokens when instructed to populate, you won't create a token'), whereas Kiki copies ANY nonlegendary creature. That restriction is a card-defined target filter, NOT a distinct mechanism and NOT a new port-structural facet -- exactly as Kiki's 'nonlegendary creature you control' filter carries no facet on the bare `copy` stem (attrs:[] on the permanent token-copy variant). PARSE GAP (the reason judge is PENDING, not PASS): the live dump does NOT project emit:copy for populate -- Trostani's activated populate line '{1}{G}{W}, {T}: Populate.' (oracleLineIndex 1) currently projects emit:unstructured (family=unstructured, tier=Amber); the Populate keyword action is unrecognized, so the token-copy structure is NOT AST-derivable today (its costs parse fine -- pay:mana:green, pay:mana:white, tap:self). This is the copy analogue of Deadeye's blink-as-emit:gainability parser target: `copy` is the target stem, and once the parser recognizes Populate this port faithfully projects the bare emit:copy and CORROBORATES the `copy` stem at a DISTINCT card (a second witness restricted to a token source) -- NOT a new rule, NOT a new axis, NEVER a sibling. Trostani's OTHER line (the life-on-ETB trigger) parses faithfully (emit:life:gain, GREEN) and is incidental to this witness. No edhrec_rank in the testbed source -- popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Trostani, Selesnya's Voice": [
+      {
+        "id": "T1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "copy",
+        "attrs": {},
+        "note": "THE POPULATE TOKEN-COPY ARM (PARSER TARGET) -- activated '{1}{G}{W}, {T}: Populate.' Populate (CR 701.36) creates a token that's a copy of a creature token you control -- a token-copy under CR 707.2, the identical copy effect to Kiki-Jiki K1. TARGET projection: the bare emit:copy (family=copy, stem=copy, manner=null, isSelf=false, attrs:[]) -- byte-identical to the kiki-jiki-mirror-breaker K1 projection, because the permanent token-copy variant carries no in-axis facets and the token-source restriction is a card-defined target filter (not a licensed facet -- there is no source axis in attribute_axes; the closed `copy` stem has attrs:[]). CURRENT projection (PARSE GAP): the live dump emits emit:unstructured (Amber) for this line -- the Populate keyword action is unrecognized, so the copy structure is NOT AST-derivable yet. An EVENT: a copy is a discrete object-creation occurrence a subscription can fire on (matches the copy neighbourhood, kind_view EVENT), same as Kiki K1."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "T1.stem == copy",
+      "because": "populate creates a token that's a copy of a creature token (CR 701.36 -> CR 707.2, a token-copy) -- the SAME copy effect the engine's CopyFamily projects as the bare `copy` stem for Kiki-Jiki (CopyFamily.Recognize -> PortStructure.Of(Emit, 'copy')); no supergroup prefix, manner=null, attrs empty on the permanent token-copy variant."
+    },
+    {
+      "claim": "T1.corroborates_stem == copy",
+      "because": "the token-copy arm is NOT a genuinely different mechanism from Kiki's emit:copy -- both are CR 707.2 'create a token that's a copy'. Populate is the token-SOURCE-restricted variant (a card-defined filter, not a new port structure), so this witnesses the existing `copy` stem at a DISTINCT card (kiki-jiki-mirror-breaker is the incumbent witness) -- a CORROBORATION, not a NEW rule/stem/axis, and not a sibling. declares is empty."
+    },
+    {
+      "claim": "T1.parse_gap",
+      "because": "the CURRENT live projection for Trostani's populate line (oracleLineIndex 1) is emit:unstructured (family=unstructured, tier=Amber), NOT emit:copy -- the Populate keyword action is not yet AST-recognized. `copy` is the PARSER TARGET (the copy analogue of Deadeye's blink-as-emit:gainability); this gold is a parser target, not a realized witness -- which is why judge is PENDING, and why the copy-stem corroboration is claimed as a target, not asserted as a live engine fact."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation naming the populate token-copy arm's target stem, no cycle closed (edges=[]). The {1}{G}{W},{T} activation cost and the incidental life-on-ETB trigger are card context, not inter-card interaction edges."
+    }
+  ],
+  "cr": [
+    "701.36",
+    "707",
+    "707.2",
+    "111.2",
+    "603.7c"
+  ]
+}

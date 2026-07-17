@@ -1,0 +1,179 @@
+{
+  "id": "cloudstone-curio-x-priest-of-gix",
+  "unit": "combo",
+  "cards": [
+    "Cloudstone Curio",
+    "Priest of Gix"
+  ],
+  "source": {
+    "csb": true,
+    "note": "combo witness of the PERMANENT bounce->recast EDGE (CR 601.2 / 603.6e / 400.7): a returntohand:permanent BOUNCE (battlefield->hand) refueling a mana-paying RECAST that re-enters an ETB creature, re-firing its self-ETB. The PERMANENT dual of policy:recast:spell-recursion (which returns a SPELL from=graveyard to=HAND and feeds a cast:spell:self driver) and DISTINCT from blink (deployment:creature[manner=blink]) which returns the permanent directly to the BATTLEFIELD, mana-free, no hand step. Here the return goes to HAND and the permanent must be RE-CAST paying full mana (guard:recast-pays-mana). Both cards' load-bearing ports are AST-derivable and served by the live engine (dumps/card-ports.json, 2026-07-17): Cloudstone Curio -> emit:returntohand:permanent (family=recur, tier=Amber, the bounce) + etb:permanent:controlled (family=etb, consume, the 'whenever a nonartifact permanent you control enters' watcher); Priest of Gix -> emit:mana:black (family=mana, adds {B}{B}{B}) + etb:creature:self (family=etb, consume, isSelf=true). VERIFIED oracle text: Cloudstone Curio = 'Whenever a nonartifact permanent you control enters, you may return another permanent you control that shares a permanent type with it to its owner's hand.'; Priest of Gix = 'When this creature enters, add {B}{B}{B}.' The loop needs TWO permanents sharing a permanent type (Cloudstone returns ANOTHER permanent, guard:exclude-self) -- e.g. two Priest of Gix (both Creatures): cast Priest B -> its ETB adds {B}{B}{B} + Cloudstone triggers -> return Priest A to hand -> recast Priest A ({2}{B}) -> its ETB adds {B}{B}{B} + Cloudstone returns Priest B -> ... a self-sustaining infinite-ETB engine. MANA ECONOMICS (honest): each recast is {2}{B} and each ETB yields {B}{B}{B}, so the loop is mana-NEUTRAL (parity holds: {B}{B}{B} refills {2}{B}) -- unlike a GENERIC hand-bounce loop, which is mana-NEGATIVE and merely bounded. So mana is NOT this loop's floor; the AMBER floor is (a) Cloudstone's bounce is OPTIONAL ('you MAY return', CR 603) and (b) 'another permanent ... that shares a permanent type' is PRODUCER-CHOICE which permanent -> Overlaps the specific creature to recast (object identity the operator can't see) -> policy:recast:permanent-bounce's Overlaps->AMBER branch, exactly mirroring spell-recursion's targeted-return Overlaps. MODELING SEAM (honest, NOT a parse gap in the endpoints): the intermediate 'recast re-entry' (the permanent redeploy) is the RULES recast (CR 601.2, any card in a castable zone is castable), NOT a card-text-parsed port; and a dedicated permanent recast-DRIVER consume (cast:creature:self) is NOT AST-derivable for a vanilla ETB creature (the parser emits cast:spell:self only for the 112 self-cast-referencing cards; Priest of Gix has none). So the witnessed edge E1 lands the bounce faithfully on Priest's REAL etb:creature:self (the recast re-enters it and re-fires it) rather than on a non-existent recast-driver port, and the Cloudstone re-trigger that closes the cycle is left an implicit hop (Deadeye-style: deadeye-x-peregrine-drake draws only its 2 cross-card edges). No source.popularity COUNT is available in the testbed corpus (edhrec/price absent) so it is omitted (not fabricated); csb=true records this is a documented Commander Spellbook engine (Cloudstone Curio + two ETB-mana creatures = infinite ETB triggers). SCAFFOLD SURFACE: this witnesses the `recur` stem with from=battlefield (a battlefield->hand BOUNCE), where archaeomancer used from=graveyard -- from=battlefield is already in the `from` axis values_seen and `recur` is a licensed `from` stem, so no new axis is invented; only the recur-from=battlefield combination accretes."
+  },
+  "loop_tier": "AMBER",
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Cloudstone Curio": [
+      {
+        "id": "CC1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE ENTRY WATCHER -- 'Whenever a nonartifact permanent you control enters' (live etb:permanent:controlled; family=etb, consume). Bare `deployment` with control=you, mirroring chatterfang C1's 'a permanent you control enters' watcher; the nonartifact restriction is a filter detail on the watch. Re-fired every time a shared-type permanent re-enters -> drives the bounce (CC2)."
+      },
+      {
+        "id": "CC2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "battlefield",
+          "to": "hand",
+          "control": "you"
+        },
+        "note": "THE EMIT SIDE OF THE WITNESSED EDGE -- 'return another permanent you control ... to its owner's hand' (live emit:returntohand:permanent; family=recur, tier=Amber). A BOUNCE: from=battlefield (the returned permanent is on the battlefield, AST-proven) and to=hand (definitional to return-to-hand) -- distinct from archaeomancer's recur[from=graveyard]. WHICH permanent is returned is producer-choice ('another permanent ... that shares a permanent type'), the Overlap that floors the recast edge to AMBER. In the loop the player returns the OTHER shared-type creature -> hand, to be recast."
+      }
+    ],
+    "Priest of Gix": [
+      {
+        "id": "PG1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE CONSUME SIDE OF THE WITNESSED EDGE -- the ETB driver 'When this creature enters' (live etb:creature:self; family=etb, consume, isSelf=true). A self-watching ETB; when Priest is bounced to hand and RE-CAST, it re-enters as a new object (CR 603.6e/400.7) and this ETB re-fires. The recast re-entry is genuinely SELF (the same card recast), so this ETB fires on identity -- the Overlap that caps the edge is on Cloudstone's producer-choice RETURN (which permanent), not on this self-ETB. Mirrors archaeomancer A0, deadeye PD1, mulldrifter MU0."
+      },
+      {
+        "id": "PG2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "mana",
+        "attrs": {
+          "color": "black",
+          "qty": 3,
+          "control": "you"
+        },
+        "note": "the ETB payoff grounding the loop's mana balance -- 'add {B}{B}{B}' (live emit:mana:black; family=mana). qty=3 black; refills the {2}{B} recast ({B}{B}{B} covers {2}{B}) -> the loop is mana-NEUTRAL (parity), the reason this bounce loop sustains where a generic mana-negative one only bounds. control=you and color=black are AST-derivable."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Cloudstone Curio.CC2",
+      "to": "Priest of Gix.PG1",
+      "mechanism": "match_policy",
+      "rule": "policy:recast:permanent-bounce",
+      "residuals": [
+        "guard:recast-pays-mana",
+        "guard:exclude-self"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESSED EDGE (permanent bounce->recast, CR 601.2/603.6e/400.7). Cloudstone's emit:returntohand:permanent lands the returned permanent in HAND (to=hand, a castable zone) -> the player RE-CASTS it paying full mana (guard:recast-pays-mana; {2}{B} here) -> it re-enters as a new object and re-fires Priest's etb:creature:self (PG1). The PERMANENT dual of policy:recast:spell-recursion: SPELL vs permanent, from=graveyard vs from=battlefield, terminating at a cast-driver vs at the redeploy's self-ETB. WHICH permanent Cloudstone returns is producer-choice ('another permanent that shares a permanent type') so the returned card Overlaps the specific creature to recast -> Overlaps->AMBER, mirroring spell-recursion's targeted-return AMBER. guard:recast-pays-mana is the mana co-cost the arm always carries (here refilled by PG2's {B}{B}{B} -> parity, so it does not floor THIS loop, but it is why a generic hand-bounce loop is mana-negative). guard:exclude-self documents that Cloudstone returns ANOTHER permanent -> the loop needs a SECOND shared-type permanent (two Priest of Gix), it can never self-loop on one card."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Priest of Gix.PG1",
+      "to": "Priest of Gix.PG2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "Priest's ETB deterministically adds {B}{B}{B} -- a self-certifying card-defined flow from the ETB subscription to the mana emit, no rule dependency. Grounds PG1 as a real value ETB and supplies the loop's mana refill (parity with the {2}{B} recast). Mirrors archaeomancer E1, mulldrifter E2."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Cloudstone Curio.CC1",
+      "to": "Cloudstone Curio.CC2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "Cloudstone's entry-trigger deterministically resolves into its return effect -- a self-certifying card-defined flow from the watcher (CC1) to the bounce emit (CC2). The trigger itself is mandatory (a triggered ability always triggers, CR 603.2); the OPTIONAL 'you may return' is a reliability cap carried by the loop_tier/E1 Overlap, not a tier floor on this structural fire."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:recast:permanent-bounce",
+        "consume_kind": "recast-driver",
+        "subject": "intersect",
+        "desc": "a returntohand:permanent BOUNCE emit (from=battlefield -> to=hand, a permanent returned from the battlefield to its owner's hand) refuels the RECAST of the bounced permanent: recast from hand (CR 601.2, full mana repaid -> guard:recast-pays-mana), the permanent re-enters as a new object (CR 603.6e/400.7) and re-fires its self-ETB subscription. The PERMANENT dual of policy:recast:spell-recursion, distinct on three axes: (1) the returned object is a PERMANENT with an ETB, not an instant/sorcery SPELL with a cast trigger; (2) from=BATTLEFIELD (a bounce), not from=graveyard (graveyard recursion); (3) it terminates at the redeploy's self-ETB (a permanent's recast IS its re-entry), not at a cast:spell:self driver. Distinct from blink (deployment:creature[manner=blink], a DIRECT battlefield return, mana-free, no hand step) and from policy:recast:battlefield-return (a self-CAST from=graveyard directly ONTO the battlefield, CR 601.3). Feasible when the returned permanent's type Intersects the recast target; the operator tiers Subsumes->GREEN / Overlaps->AMBER -- a producer-choice return ('return ANOTHER permanent that shares a permanent type') Overlaps the specific creature the player wants to recast -> AMBER. Any loop closed by this bounce-recast carries the recast mana co-cost (guard:recast-pays-mana) and floors below GREEN unless the loop provably refills it in the right color (Priest of Gix's {B}{B}{B} refills {2}{B} -> mana parity, still AMBER via the producer-choice/'may' Overlap).",
+        "cr": [
+          "601.2",
+          "603.6e",
+          "400.7"
+        ]
+      }
+    ],
+    "guards": [
+      {
+        "id": "guard:recast-pays-mana",
+        "impl": "code",
+        "corroborates": "guard:recast-pays-mana",
+        "desc": "a recast emit (emit:cast - a spell bounced/returned to a castable zone and cast again, CR 601) re-pays the spell's full mana cost every iteration. A cast-loop that is closed BY a recast therefore carries an irreducible mana co-cost: the loop is sound (GREEN-eligible) only if it provably refills that cost; unrefilled - or refilled only through an AMBER mana bridge (untap->mana) - the loop floors to AMBER (ADR-0003 §8 mana balance). Caps the cast->cast-trigger edge that the recast closes.",
+        "cr": [
+          "601.2f",
+          "601.2h",
+          "603.2"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "loop_tier == AMBER",
+      "because": "mana-parity HOLDS (Priest of Gix's {B}{B}{B} ETB refills the {2}{B} recast), so unlike a generic mana-NEGATIVE hand-bounce this loop sustains -- mana is NOT the floor; the AMBER floor is (a) Cloudstone's bounce is OPTIONAL ('you may return', CR 603) and (b) 'another permanent that shares a permanent type' is producer-choice which permanent -> Overlaps the specific creature to recast -> policy:recast:permanent-bounce's Overlaps->AMBER branch; either one floors it below GREEN"
+    },
+    {
+      "claim": "edge.E1.witnesses permanent_bounce_recast",
+      "because": "E1 is Cloudstone.CC2 (emit:returntohand:permanent, stem=recur, from=battlefield to=hand) -> Priest.PG1 (etb:creature:self) -- a battlefield->hand BOUNCE refueling a mana-paying recast that re-enters the permanent and re-fires its ETB (CR 601.2/603.6e). The PERMANENT dual of policy:recast:spell-recursion, closing the Cloudstone-Curio bounce loop"
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "Cloudstone returns a PRODUCER-CHOICE 'another permanent that shares a permanent type' -> the returned card Overlaps (not Subsumes) the specific creature to recast -> policy:recast:permanent-bounce's Overlaps->AMBER branch; plus the guard:recast-pays-mana co-cost"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "a non-structural bounce-recast refuel certified by policy:recast:permanent-bounce (the returntohand:permanent -> redeploy self-ETB match); not subsumption/card-defined/modifier, so it cites a rule id"
+    },
+    {
+      "claim": "rule.policy:recast:permanent-bounce.witnessed",
+      "because": "E1 is the permanent bounce->recast this gold introduces -- a returntohand:permanent (from=battlefield, to=hand) emit refueling a mana-paying recast that re-fires a permanent's self-ETB, the PERMANENT dual of the spell-recursion recast, not previously in the rollup"
+    },
+    {
+      "claim": "corroborates_rule.guard:recast-pays-mana",
+      "because": "this gold re-declares guard:recast-pays-mana (impl=code, byte-identical desc+cr) with a corroborates pointer -> adds cloudstone-curio-x-priest-of-gix to its witness set: a PERMANENT recast (recast from HAND after a bounce) re-paying {2}{B} every iteration, refilled here by Priest's {B}{B}{B} (mana parity) -- a witness DISTINCT from the spell/battlefield-return recasts already carrying this guard"
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "card-defined (self-certifying): Priest's ETB deterministically adds {B}{B}{B}, no over-approximation to cap; a GREEN card-defined edge rests on no rule, so it is coherent with a PENDING judge"
+    },
+    {
+      "claim": "edge.E3.tier == GREEN",
+      "because": "card-defined (self-certifying): Cloudstone's entry-trigger deterministically resolves into its return effect; the optional 'may' is a reliability cap on the loop, not a tier floor on the structural trigger->effect fire"
+    },
+    {
+      "claim": "no_recast_driver_port_gap",
+      "because": "the witnessed edge lands on Priest's REAL etb:creature:self (a permanent's recast IS its re-entry, which re-fires the ETB); a dedicated permanent recast-DRIVER consume (cast:creature:self) is NOT AST-derivable for a vanilla ETB creature (the parser emits cast:spell:self only for self-cast-referencing cards) -- so this is a modeling seam recorded honestly, not a parse gap in the gold's endpoints, which all project cleanly"
+    }
+  ],
+  "cr": [
+    "601.2",
+    "603.6e",
+    "603.2",
+    "400.7",
+    "601.2f"
+  ]
+}

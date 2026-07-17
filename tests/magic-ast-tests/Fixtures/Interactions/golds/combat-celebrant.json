@@ -1,0 +1,145 @@
+{
+  "id": "combat-celebrant",
+  "unit": "pairwise",
+  "cards": [
+    "Combat Celebrant",
+    "Other Creature You Control"
+  ],
+  "source": {
+    "csb": true,
+    "id": "1692-2105",
+    "popularity": 24971,
+    "note": "The ATTACK-TRIGGERED extra-combat witness — corroborates guard:extra-combat-gated (already confirmed by aggravated-assault-x-sword-of-feast-and-famine) via a DISTINCT DRIVER: an attack trigger, not an activated ability. Oracle: 'If this creature hasn't been exerted this turn, you may exert it as it attacks. When you do, untap all other creatures you control and after this phase, there is an additional combat phase. (An exerted creature won't untap during your next untap step.)' Per CR 701.43 + 508.1g, 'you may exert [this] as it attacks' is an OPTIONAL COST TO ATTACK, and the linked 'when you do' is a reflexive triggered ability (CR 607.2h) — so the additional-combat driver here is ATTACK-TRIGGERED (Combat Celebrant attacking + exerting fires it), where Aggravated Assault's identical additionalcombat emit came from a {3}{R}{R} activated ability. The extra-combat -> re-attack EDGE is mechanistically identical to the AA witness (an emit:additionalcombat on combat-presence[control=you] satisfying a creature's combat-presence[subject=self] re-attack subscription, CR 500.8), so this CORROBORATES guard:extra-combat-gated — NOT a new rule (the attack-trigger origin is a driver difference, not a new edge mechanism; a sibling guard would be forbidden). Provenance: Commander Spellbook combo 1692-2105 (popularity 24971, result 'Infinite combat'): Combat Celebrant + Helm of the Host. HONEST BOUND: on its own Combat Celebrant produces AT MOST ONE additional combat per turn and DOES NOT self-perpetuate — (a) it untaps all OTHER creatures, NOT itself, so it is tapped-from-attacking and cannot re-attack in the extra combat (CR 508.1); (b) the exert is once-per-turn ('If this creature hasn't been exerted this turn') so the driver fires once. The infinite requires an EXERT-RESET enabler: Helm of the Host makes a fresh token copy each combat that 'hasn't been exerted this turn' (a NEW object, CR 707.2/701.43) — that fresh copy re-exerts and re-drives the additional combat, closing the CR 500.8 infinite-combat loop. So there is NO closed loop in THIS gold (unit=pairwise, no_loop). PARSE GAPS (reported, not authored-around): the live parser projects Combat Celebrant's additional-combat emit faithfully (emit:additionalcombat, family combat, stem combat, Green) and the untap faithfully (emit:untap, stem structure:untap), BUT (1) the ATTACK-TRIGGER / exert origin projects as UNSTEMMED ports — exerted:object (consume, isSelf, stem=null) + emit:exert (stem=null) — and 'exert' is NOT a licensed ADR-3 event-verb/stem/alias, so the attack->exert->additional-combat internal driver edge is not cleanly stem-derivable (no combat-presence[subject=self] consume is projected for the exert trigger, unlike Kari Zev's attacks:creature); (2) the untap's 'OTHER creatures' exclude-self restriction and subtype=creature are NOT captured by the coarse emit:untap (isSelf=false, no facets), and exclude_self is not even a licensed axis on structure:untap. What faithfully projects with an ADR-3 stem is witnessed below; the exert-trigger stem is left as the parse target."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Combat Celebrant": [
+      {
+        "id": "CC1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "combat-presence",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE ADDITIONAL-COMBAT DRIVER — 'after this phase, there is an additional combat phase' (live emit:additionalcombat, family combat, stem combat, tier Green). Modelled as an emit on the bare event verb combat-presence with control=you: an additional combat phase re-raises the combat-presence of the creatures you control (O21 / event_verbs def: 'emit:additionalcombat re-raises the phase that produces it'). Same emit shape as aggravated-assault-x-sword-of-feast-and-famine AA3 — CORROBORATES the combat-presence EMIT-side witness with a second, distinct card whose driver is ATTACK-TRIGGERED (via exert, CR 508.1g/607.2h) rather than an activated ability. The trigger that raises this emit (the exert-as-it-attacks reflexive ability) projects as unstemmed exert ports — see source.note parse gap; the emit itself is faithfully AST-derivable."
+      },
+      {
+        "id": "CC2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "structure:untap",
+        "attrs": {
+          "subtype": {
+            "value": "creature",
+            "provenance": "derived"
+          },
+          "control": "you"
+        },
+        "note": "'untap all OTHER creatures you control' (live emit:untap, stem structure:untap). Enabler: it untaps the TEAMMATES so they can attack in the extra combat (Combat Celebrant itself is excluded and stays tapped). subtype=creature is provenance=derived (the coarse emit:untap does not carry it); the 'OTHER' exclude-self restriction is NOT representable — exclude_self is not a licensed axis on structure:untap and the parser's emit:untap does not capture it (parse gap, source.note). Not load-bearing for the edge witnessed here (the re-attack subscription EC/OC1 is Gated but not tap-gated, mirroring AA4); shown for card faithfulness + as the reason Combat Celebrant cannot itself re-attack."
+      }
+    ],
+    "Other Creature You Control": [
+      {
+        "id": "OC1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "combat-presence",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the RE-ATTACK subscription — the universal combat-presence consume ProjectCombatPresence projects for every creature (live label attacksorblocks:self, Gated, subject {IsSelf}). THE consume Combat Celebrant's additional-combat driver satisfies (E1). This is a creature OTHER than Combat Celebrant — the one Combat Celebrant untapped (CC2) so it can re-attack in the extra combat. Identical stem+facet to the kari-zev-skyship-raider and aggravated-assault (EC1) combat-presence[subject=self] witnesses."
+      },
+      {
+        "id": "OC2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "combat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "the Gated combat-damage emit ProjectCombatPresence projects for every creature (live label emit:damage:combat:any, Gated, subject {IsSelf}). recipient=any (combat damage hits the blocking creature OR the defending player, CR 510.1). GATED: attacking is once per combat — the §8 soundness floor that keeps every extra-combat re-attack AMBER, never a false GREEN. Same shape as aggravated-assault EC2."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Combat Celebrant.CC1",
+      "to": "Other Creature You Control.OC1",
+      "mechanism": "match_policy",
+      "rule": "policy:subscription:subject-intersect",
+      "residuals": [
+        "guard:extra-combat-gated"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE HEADLINE WITNESS — emit:additionalcombat (combat-presence, control=you — the attack-triggered additional-combat driver) satisfies the re-attack subscription (combat-presence, subject=self): the additional combat phase lets this untapped teammate attack AGAIN (CR 500.8), re-driving its Gated combat-damage emit. control=you covers subject=self (this is a creature you control), which alone would read Subsumes->GREEN — but re-attacking is a CHOICE (CR 508.1a 'if any') and the combat-damage it re-drives is Gated, so guard:extra-combat-gated floors it AMBER, never a false GREEN. Mechanistically IDENTICAL to aggravated-assault-x-sword-of-feast-and-famine E3 — CORROBORATES guard:extra-combat-gated with a second witness whose driver is ATTACK-TRIGGERED (exert, CR 508.1g/607.2h) rather than activated. Reuses policy:subscription:subject-intersect (confirmed, deadeye). Live arm: PortGraphEngine.FlowFeasible (\"additionalcombat\",\"attacksorblocks\") + ExtraCombatArmScopeTest."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Other Creature You Control.OC1",
+      "to": "Other Creature You Control.OC2",
+      "mechanism": "card-defined",
+      "tier": "AMBER",
+      "notes": [
+        "ProjectCombatPresence's card-defined edge: attacking (the combat-presence re-attack) deterministically leads to dealing combat damage (CR 510) — but the combat-damage emit is Gated (attacking is a choice / may be blocked), so the hop carries the AMBER floor. Same shape as aggravated-assault E4."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:extra-combat-gated",
+        "impl": "code",
+        "desc": "an additional-combat driver (an emit on combat-presence, control=you — 'there is an additional combat phase', CR 500.8) that satisfies a creature's re-attack subscription (combat-presence, subject=self) can NEVER certify GREEN, even though control=you covers subject=self: re-attacking is a CHOICE (CR 508.1a 'if any' — attackers are declared, never forced), the attacker may be blocked, and the combat-damage it re-drives is Gated (once per combat, CR 510). So any loop through the extra-combat re-attack floors to AMBER — the §8 soundness floor for the extra-combat arm, mirroring how the Gated combat-damage emit prevents a false GREEN",
+        "cr": [
+          "500.8",
+          "508.1a",
+          "510"
+        ],
+        "corroborates": "guard:extra-combat-gated"
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "guard:extra-combat-gated: re-attacking is a choice (CR 508.1a) and the re-driven combat-damage is Gated — the extra-combat re-attack edge never certifies GREEN, identical mechanism to aggravated-assault E3"
+    },
+    {
+      "claim": "edge.E1 witnesses combat-presence emit -> combat-presence:self consume",
+      "because": "CC1 (emit combat-presence, control=you — the ATTACK-TRIGGERED additional-combat driver) feeds OC1 (consume combat-presence, subject=self — the re-attack subscription): the CR 500.8 extra-combat re-attack edge"
+    },
+    {
+      "claim": "guard:extra-combat-gated corroborated",
+      "because": "second independent witness of guard:extra-combat-gated, byte-identical core + corroborates pointer; the driver is an attack trigger (exert, CR 508.1g/607.2h) rather than aggravated-assault's activated ability, but the extra-combat -> re-attack edge is mechanistically the same — a corroboration, not a new/sibling rule"
+    },
+    {
+      "claim": "stem.combat-presence.emit corroborated",
+      "because": "CC1 projects combat-presence on the EMIT side (live emit:additionalcombat) — a second emit-side witness after aggravated-assault AA3, via a distinct (attack-triggered) driver"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise, no cycle closed. Combat Celebrant on its own produces AT MOST ONE additional combat: (a) it untaps all OTHER creatures, not itself (CR 508.1 — tapped from attacking, cannot re-attack), and (b) the exert is once-per-turn ('If this creature hasn't been exerted this turn', CR 701.43). The CR 500.8 infinite-combat loop closes only with an EXERT-RESET enabler that yields a fresh un-exerted object each combat (Helm of the Host token-copy, CR 707.2) — that enabler is not part of this witness"
+    }
+  ],
+  "cr": [
+    "500.8",
+    "508.1a",
+    "508.1g",
+    "510.1",
+    "701.43",
+    "607.2h",
+    "603.2"
+  ]
+}

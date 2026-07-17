@@ -1,0 +1,64 @@
+{
+  "id": "gaeas-cradle",
+  "unit": "single-card",
+  "cards": [
+    "Gaea's Cradle"
+  ],
+  "source": {
+    "csb": false,
+    "note": "COUNT-SCALED MANA FRONTIER witness (ADR-0003 accretion). Oracle (VERIFIED against oracle-cards.json): 'Legendary Land — {T}: Add {G} for each creature you control.' Ground ports (dumps/card-ports.json): line0 emit:mana:green (stem=mana, tier=Amber, spans [4,43]) + line0 consume tap:self. The mana emit IS AST-derivable at stem+color level (emit:mana:green), so this projects a USABLE mana port — but with NO qty projected at all: the 'for each creature you control' count sits inside span [4,43] yet is NOT extracted as a quantity. Contrast devoted-druid.json ('{T}: Add {G}' -> {color:green, qty:1}): Gaea's Cradle is byte-identical to that witnessed green-mana emit EXCEPT for the quantity, which is the whole point. TWO stacked gaps: (1) PARSE — the count clause is swallowed; the parser derives a flat mana emit with no qty. (2) SCAFFOLD — the qty axis (bindable: X | that-many | up-to-N; values 1..4 / X / that-many / up-to-5) has NO value that expresses 'an amount equal to a board count'. A count-scaled amount is none of the licensed bindings: it is not X (a chosen cast-value), not that-many (bound to a preceding count in the SAME effect), and not up-to-N (a bounded firability choice); it is qty = |board subset matching a filter|, a new symbolic binding. NO qty value is invented in this gold (per rule discipline) — the qty attr is DELIBERATELY OMITTED and the needed axis value is surfaced as the scaffold question in the assertions. Chosen over Nykthos, Shrine to Nyx / Nyx Lotus because THEIR count-scaled 'devotion' line projects emit:unstructured (stem=None, fully parse-gated) — Gaea's Cradle is the smallest card whose count-scaled mana emit still projects a usable (flat-qty) mana port. This is the smallest honest single-card witness of the count-scaling gap; judge PENDING and no rollup regenerated (frontier map, no flow run)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (accretion batch 10, 2026-07-17): 9/9 PASS, no false GREEN. Both new recast members (policy:recast:graveyard-cast, policy:recast:permanent-bounce) ruled genuinely distinct (from-zone/end-state/consume-side); persist ruled a correct corroboration of policy:recur:death-return-self + guard:undying-counter-reset (sign-of-counter differs, mechanism identical), not a sibling."
+  },
+  "ports": {
+    "Gaea's Cradle": [
+      {
+        "id": "GC0",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "tap",
+        "attrs": {
+          "self": true
+        },
+        "note": "the '{T}' activation cost (dump: consume tap:self). Same shape as devoted-druid.DD_TAP / kiki K2."
+      },
+      {
+        "id": "GC1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "green"
+        },
+        "note": "'Add {G} for each creature you control' (live label emit:mana:green, stem=mana). color=green is AST-derivable (dumps/card-ports.json line0). qty is DELIBERATELY OMITTED, NOT set to 1: the true quantity is count-scaled (= creatures you control) which is both (a) not parsed (no qty span extracted — flat mana emit) and (b) not expressible by any licensed qty binding (X | that-many | up-to-N). Omitting is honest to the parser's flat derivation and avoids inventing a qty value; qty:1 would falsely under-approximate to a single pip. The MISSING count-scaled qty is the documented gap — see the scaffold_question assertion."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "port.GC1.stem == mana",
+      "because": "emit:mana:green is AST-derivable (dumps/card-ports.json line0, stem=mana, color=green) — a usable mana port at stem+color level"
+    },
+    {
+      "claim": "parse_gap.gaeas-cradle.count-scaled-qty == ABSENT",
+      "because": "PARSE gap: the 'for each creature you control' count is swallowed into span [4,43] but no qty is projected — the parser derives a flat mana emit with no quantity, indistinguishable at the qty axis from a single {G} (devoted-druid). Extracting the count clause into a qty span is the parser target."
+    },
+    {
+      "claim": "scaffold_question.qty.count-scaled-binding",
+      "because": "SCAFFOLD gap surfaced (NOT resolved, NO value invented): the count-scaled amount (qty = |creatures you control|) is not any licensed qty binding (X | that-many | up-to-N). It needs a NEW symbolic qty value — a board-count binding, e.g. qty = { bind: 'per-object', filter: <object-query> } — so the qty axis can express 'an amount equal to a board count' (devotion to a color and 'for each Swamp/creature you control' are the same shape). This is a taxonomy decision for the scaffold owner, not authorable unilaterally."
+    }
+  ],
+  "cr": [
+    "106.1",
+    "106.4"
+  ]
+}
