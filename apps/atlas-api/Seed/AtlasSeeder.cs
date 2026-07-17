@@ -419,6 +419,9 @@ public sealed class AtlasSeeder
                 Confidence = raw.Confidence,
                 OracleLineIndex = raw.OracleLineIndex ?? 0,
                 Spans = raw.Spans,
+                Stem = raw.Stem,
+                Manner = raw.Manner,
+                IsSelf = raw.IsSelf,
             });
 
             if (batch.Count >= 1000)
@@ -780,6 +783,10 @@ public sealed class AtlasSeeder
         [JsonPropertyName("confidence")] public double? Confidence { get; set; }
         [JsonPropertyName("oracleLineIndex")] public int? OracleLineIndex { get; set; }
         [JsonPropertyName("spans")] public int[][]? Spans { get; set; }
+        // ADR-0003 structured facets (Stage 4).
+        [JsonPropertyName("stem")] public string? Stem { get; set; }
+        [JsonPropertyName("manner")] public string? Manner { get; set; }
+        [JsonPropertyName("isSelf")] public bool IsSelf { get; set; }
     }
 
     private sealed class RawResourceGraph

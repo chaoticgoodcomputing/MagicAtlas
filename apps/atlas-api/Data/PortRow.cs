@@ -60,4 +60,19 @@ public class PortRow
     /// <summary>Source spans in the oracle text as <c>[[start,end), …]</c> (§4 provenance), null until produced.</summary>
     [Column("spans", TypeName = "jsonb")]
     public int[][]? Spans { get; set; }
+
+    /// <summary>ADR-0003 structured stem (<c>removal:creature</c>, <c>damage</c>, …); null for an
+    /// unconverted family or a backfill row.</summary>
+    [Column("stem")]
+    public string? Stem { get; set; }
+
+    /// <summary>ADR-0003 <c>manner</c> facet (<c>combat</c>/<c>noncombat</c>/<c>sacrificed</c>/<c>blink</c>);
+    /// null when the stem carries no manner. The frontend's damage-flow prune keys on this.</summary>
+    [Column("manner")]
+    public string? Manner { get; set; }
+
+    /// <summary>Whether the port's Subject is self-scoped (<c>this creature</c> — a self-source damage
+    /// trigger / self ETB), the engine's same-card guard axis.</summary>
+    [Column("is_self")]
+    public bool IsSelf { get; set; }
 }

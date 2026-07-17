@@ -76,6 +76,24 @@ public partial record CardPortRow
   /// Declared rows.</summary>
   [SerializedLabel("confidence")]
   public double? Confidence { get; init; }
+
+  /// <summary>ADR-0003 structured stem (the is-a spine — <c>removal:creature</c>, <c>damage</c>, …);
+  /// <c>null</c> for an unconverted family or a backfill row. The frontend's flow matching (Stage 5) keys
+  /// on this + <see cref="Manner"/> + <see cref="IsSelf"/> instead of the lossy family-ring edges.</summary>
+  [SerializedLabel("stem")]
+  public string? Stem { get; init; }
+
+  /// <summary>ADR-0003 <c>manner</c> facet (<c>combat</c>/<c>noncombat</c> for damage, <c>sacrificed</c>/
+  /// <c>blink</c> for a removal/deployment); <c>null</c> when the stem carries no manner. Load-bearing for
+  /// the damage-flow prune (a noncombat emit never feeds a combat trigger).</summary>
+  [SerializedLabel("manner")]
+  public string? Manner { get; init; }
+
+  /// <summary>Whether the port's Subject is self-scoped (<c>this creature</c> — a self-source damage
+  /// trigger, a self ETB). The self-source guard the engine applies same-card-only; not always encoded in
+  /// the label string, so surfaced explicitly for the frontend's port-level match.</summary>
+  [SerializedLabel("isSelf")]
+  public bool IsSelf { get; init; }
 }
 
 // ── D4 ComboInstances — per-combo reconstructed loops with named cards, tier, and result. ──────────

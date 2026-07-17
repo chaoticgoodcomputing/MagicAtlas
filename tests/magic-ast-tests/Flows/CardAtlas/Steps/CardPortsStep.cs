@@ -102,6 +102,10 @@ public static partial class CardPortsStep
             Spans = p.SourceSpan is MagicAST.AST.TextSpan s
               ? new[] { new[] { s.Start, s.End } }
               : null,
+            // ADR-0003 structured facets (Stage 4) — the frontend's port-level flow match keys on these.
+            Stem = p.Structure?.Stem,
+            Manner = p.Structure?.Attr("manner"),
+            IsSelf = p.Subject?.IsSelf == true,
           });
         }
         metas.Add(new CardMetaRow
