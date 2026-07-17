@@ -1012,10 +1012,20 @@ public sealed class PortGraphEngine
         return false;
     // Every required subtype must be bearable: the token must have one of the subtype's (non-kindred)
     // owner card types, else it cannot be that subtype at creation (a Saproling is not a Treasure).
+    var tokenSubs = emit.Subject.Subtypes;
     foreach (var s in consume.Subject.Subtypes ?? [])
     {
       var owners = PrimaryOwners(s);
       if (owners.Count > 0 && !owners.Any(o => tokenTypes.Contains(o, StringComparer.OrdinalIgnoreCase)))
+        return false;
+      // A token's characteristics are CLOSED at creation (CR 111.10 / 707.2) — it is EXACTLY the
+      // subtypes the creation specifies. So a required subtype the token DECLARES but does not carry is
+      // an outright miss: a specified Eldrazi Scion token is never a Squirrel, so it can't feed a
+      // "Sacrifice a Squirrel" cost. (This is the ONE place the additive/open-subtype over-approximation
+      // the operator uses for general filters — a creature "could" gain any subtype — is wrong: a token
+      // is fully specified. An UNDER-specified token, no subtypes given, stays refuellable: its subtype
+      // is unknown, so over-approximation is still principled.)
+      if (tokenSubs is { Count: > 0 } && !tokenSubs.Contains(s, StringComparer.OrdinalIgnoreCase))
         return false;
     }
     return true;
