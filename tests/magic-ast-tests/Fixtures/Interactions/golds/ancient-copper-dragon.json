@@ -1,0 +1,72 @@
+{
+  "id": "ancient-copper-dragon",
+  "unit": "single-card",
+  "cards": [
+    "Ancient Copper Dragon"
+  ],
+  "source": {
+    "note": "single-card witness of the bare event-verb stem damage-dealt (no supergroup) with manner=combat and the self-source watch. Live engine projects trigger:damage:combat:player (interim stem 'damage', isSelf=true; AST Trigger.Event=DealsCombatDamageToPlayer, Filter.IsSelf=true) \u2014 ADR-3 canonical stem = damage-dealt. The parser derives the combat facet, so this is a faithful witness, not a wish."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 \u2014 CR-sound + AST-faithful (damage-dealt/combat/player/self verify vs DealsCombatDamageToPlayer + IsSelf); PROCEED"
+  },
+  "ports": {
+    "Ancient Copper Dragon": [
+      {
+        "id": "A0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:evasion:flying",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "Flying (evasion:flying) \u2014 incidental card context"
+      },
+      {
+        "id": "A1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "combat",
+          "recipient": "player",
+          "subject": "self"
+        },
+        "note": "THE WITNESS \u2014 'whenever this creature deals combat damage to a player' \u2014 a self-source subscription; combat facet + self-watch are both AST-derivable (Filter.IsSelf=true)"
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.damage-dealt.witnessed",
+      "because": "A1 projects the bare EVENT verb damage-dealt (event_verbs entry, no supergroup \u2014 stem is literally 'damage-dealt', not emit:damage)"
+    },
+    {
+      "claim": "A1.combat == combat",
+      "because": "manner=combat facet on the combat axis (licensed_by damage-dealt); combat damage is dealt in the combat damage step (CR 510)"
+    },
+    {
+      "claim": "A1.subject == self",
+      "because": "Filter.IsSelf=true \u2014 self-source watch; an inbound emit:damage-dealt -> A1 edge would require guard:self-watch (same-card identity, already confirmed by deadeye-x-peregrine-drake), not re-declared here"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + facets, no cycle closed"
+    }
+  ],
+  "cr": [
+    "120",
+    "510.1b",
+    "510.2",
+    "603.2",
+    "400.7"
+  ]
+}

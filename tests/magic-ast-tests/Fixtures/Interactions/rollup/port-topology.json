@@ -1,6 +1,7 @@
 {
   "$generated": "tools/interaction-rollup",
   "$golds": [
+    "ancient-copper-dragon",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "ruthless-knave-x-blood-artist"
@@ -80,6 +81,16 @@
         "qty",
         "subtype"
       ]
+    },
+    "damage-dealt": {
+      "kind": "EVENT",
+      "status": "witnessed",
+      "attrs": [
+        "combat",
+        "recipient",
+        "subject"
+      ],
+      "unpredicted": true
     },
     "deployment": {
       "kind": "EVENT",
@@ -245,8 +256,12 @@
       ]
     },
     "combat": {
-      "stems": [],
-      "values_seen": [],
+      "stems": [
+        "damage-dealt"
+      ],
+      "values_seen": [
+        "combat"
+      ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "damage-dealt",
@@ -468,10 +483,12 @@
     },
     "recipient": {
       "stems": [
+        "damage-dealt",
         "life"
       ],
       "values_seen": [
         "opponent",
+        "player",
         "you"
       ],
       "carries_provenance_or_polarity": false,
@@ -522,6 +539,7 @@
     },
     "subject": {
       "stems": [
+        "damage-dealt",
         "deployment:creature",
         "modification:evasion:flying",
         "modification:keyword"
