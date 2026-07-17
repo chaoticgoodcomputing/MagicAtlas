@@ -6,6 +6,7 @@
     "ancient-copper-dragon",
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
+    "birds-of-paradise-x-horseshoe-crab",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -15,13 +16,19 @@
     "displacer-kitten-x-conviction",
     "divination",
     "dualcaster-mage-x-ghostly-flicker",
+    "emiel-the-blessed-x-mulldrifter",
     "fog",
+    "gravecrawler-x-ashnods-altar-x-blood-artist",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "nantuko-husk-x-blood-artist",
+    "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
+    "ruthless-knave-x-krark-clan-ironworks",
     "serum-visions",
+    "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
     "titanias-boon"
@@ -47,6 +54,18 @@
       "id": "policy:damage-manner-feeds",
       "consume_kind": "subscription",
       "subject": "facet-feeds",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:life-direction-match",
+      "consume_kind": "subscription",
+      "subject": "facet-feeds",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:recast:battlefield-return",
+      "consume_kind": "recast-driver",
+      "subject": "self-return",
       "status": "confirmed"
     },
     {
@@ -96,6 +115,16 @@
     }
   ],
   "bridges": [
+    {
+      "id": "bridge:sacrifice-to-dies",
+      "from_stem": "removal:creature",
+      "to_stem": "removal:creature",
+      "ceiling": "GREEN",
+      "status": "confirmed",
+      "from_attrs": {
+        "manner": "sacrificed"
+      }
+    },
     {
       "id": "bridge:spell-copy-to-cast-driver",
       "from_stem": "copy",

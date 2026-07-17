@@ -1,0 +1,149 @@
+{
+  "id": "nantuko-husk-x-blood-artist",
+  "unit": "pairwise",
+  "cards": [
+    "Nantuko Husk",
+    "Blood Artist"
+  ],
+  "source": {
+    "note": "the sacrifice\u2192dies aristocrat-bridge witness: Nantuko Husk's activation cost 'Sacrifice a creature' DIES (CR 701.21a a sacrificed permanent moves from the battlefield directly to its owner's graveyard \u2192 700.4 dies), feeding Blood Artist's 'whenever this or another creature dies' subscription. A drain-per-sacrifice value engine, NOT a loop \u2014 the smallest honest unit witnessing the bridge:sacrifice-to-dies EDGE (the ADR-2 sac\u2192ltb:to-graveyard bridge arm, PortGraphEngine.AddCoarseRulesEdges (3))."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b7 \u2014 sac->dies bridge GREEN (creature cover, RiP-capped); bridge:sacrifice-to-dies genuinely distinct (zone-change death bridge); PROCEED"
+  },
+  "ports": {
+    "Nantuko Husk": [
+      {
+        "id": "N1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "the fodder \u2014 'Sacrifice a creature' (NOT 'another': the Husk MAY sacrifice itself, so NO exclude_self \u2014 the sound contrast to Ruthless Knave's 'another creature')"
+      },
+      {
+        "id": "N2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "you",
+          "from": "battlefield",
+          "manner": "sacrificed"
+        },
+        "note": "the sacrifice EVENT; carries manner=sacrificed but NOT to \u2014 the destination is supplied by the bridge rule (CR 701.21a), not proven on the emit"
+      },
+      {
+        "id": "N3",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:creature",
+        "attrs": {
+          "stat": "pt",
+          "delta": "+2/+2",
+          "duration": "eot"
+        },
+        "note": "the Husk's own +2/+2 payoff (self); off the bridge path, included for faithful derivation"
+      }
+    ],
+    "Blood Artist": [
+      {
+        "id": "B1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "removal:creature",
+        "attrs": {
+          "control": "any",
+          "from": "battlefield",
+          "to": "graveyard"
+        },
+        "note": "'whenever THIS or another creature dies' \u2014 any creature, any controller; no exclusion (fires on itself too)"
+      },
+      {
+        "id": "B2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent",
+          "qty": 1
+        }
+      },
+      {
+        "id": "B3",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": 1
+        }
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Nantuko Husk.N2",
+      "to": "Blood Artist.B1",
+      "mechanism": "bridge",
+      "rule": "bridge:sacrifice-to-dies",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "the sac\u2192dies bridge: N2's manner=sacrificed removal is a death (CR 701.21a\u2192700.4), supplying the to=graveyard B1 watches. GREEN because the sacrificed subject creature Subsumes B1's dies-watch filter creature EXACTLY (creature \u2286 creature, no subtype straddle) and control=you \u2286 any \u2014 the ruthless-knave GREEN-cover precedent (policy:subscription:subject-subsumes-green). Reliability capped: the bridge's inferred to=graveyard is a graveyard-replacement (Rest in Peace) board prune \u2014 if the sacrificed creature is exiled instead it never dies, so B1 never fires."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": [
+      {
+        "id": "bridge:sacrifice-to-dies",
+        "from_stem": "removal:creature",
+        "to_stem": "removal:creature",
+        "ceiling": "GREEN",
+        "from_attrs": {
+          "manner": "sacrificed"
+        },
+        "desc": "a sacrifice (removal:creature[manner=sacrificed] emit) feeds a dies-trigger (removal:creature[to=graveyard] subscription): CR 701.21a \u2014 to sacrifice a permanent is to move it from the battlefield directly to its owner's graveyard \u2014 so it dies (CR 700.4, leaves-the-battlefield to graveyard). The bridge supplies the to=graveyard destination the parser proves only as manner=sacrificed (the ADR-2 sac-consume \u2192 ltb:\u2026:to-graveyard-consume arm, PortGraphEngine.AddCoarseRulesEdges (3)). Ceiling GREEN \u2014 a deterministic rules zone-change (contrast the AMBER cross-resource untap\u2192mana / copy\u2192cast bridges): the edge is GREEN when the sacrificed type provably covers the dies-watch filter, reliability-capped only by a graveyard-replacement (Rest in Peace) board prune.",
+        "cr": [
+          "701.21a",
+          "700.4"
+        ]
+      }
+    ]
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.mechanism == bridge"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the sacrificed subject creature Subsumes B1's dies-watch filter creature exactly (creature \u2286 creature, no subtype straddle), control=you \u2286 any \u2014 the GREEN-cover branch"
+    },
+    {
+      "claim": "edge.E1.reliability_capped",
+      "because": "the bridge infers to=graveyard from manner=sacrificed (CR 701.21a); a graveyard-replacement (Rest in Peace) redirects the sacrificed creature to exile so it never dies \u2014 B1 does not fire"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: a one-shot drain-per-sacrifice value engine (Blood Artist's life drain never refuels the Husk's fodder) \u2014 not a repeating cycle, no \u00a710 SDF balance"
+    }
+  ],
+  "cr": [
+    "701.21a",
+    "700.4",
+    "603.6b",
+    "603.2",
+    "111.1"
+  ]
+}

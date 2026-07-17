@@ -6,6 +6,7 @@
     "ancient-copper-dragon",
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
+    "birds-of-paradise-x-horseshoe-crab",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -15,13 +16,19 @@
     "displacer-kitten-x-conviction",
     "divination",
     "dualcaster-mage-x-ghostly-flicker",
+    "emiel-the-blessed-x-mulldrifter",
     "fog",
+    "gravecrawler-x-ashnods-altar-x-blood-artist",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "nantuko-husk-x-blood-artist",
+    "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
+    "ruthless-knave-x-krark-clan-ironworks",
     "serum-visions",
+    "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
     "titanias-boon"
@@ -76,13 +83,15 @@
       "kind": "STATE",
       "status": "witnessed",
       "attrs": [
+        "control",
         "qty",
         "self",
         "subtype",
         "token"
       ],
       "witnesses": [
-        "chatterfang-x-pitiless-plunderer"
+        "chatterfang-x-pitiless-plunderer",
+        "ruthless-knave-x-krark-clan-ironworks"
       ]
     },
     "cards": {
@@ -94,7 +103,8 @@
       ],
       "witnesses": [
         "aggravated-assault-x-sword-of-feast-and-famine",
-        "divination"
+        "divination",
+        "emiel-the-blessed-x-mulldrifter"
       ]
     },
     "cards:search": {
@@ -187,6 +197,9 @@
       ],
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "nantuko-husk-x-blood-artist",
+        "ophiomancer-x-nantuko-husk",
         "ruthless-knave-x-blood-artist"
       ]
     },
@@ -234,6 +247,7 @@
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
         "ruthless-knave-x-blood-artist",
+        "ruthless-knave-x-krark-clan-ironworks",
         "spine-of-ish-sah"
       ]
     },
@@ -259,7 +273,9 @@
         "deadeye-x-peregrine-drake",
         "displacer-kitten-x-conviction",
         "dualcaster-mage-x-ghostly-flicker",
-        "kari-zev-skyship-raider"
+        "emiel-the-blessed-x-mulldrifter",
+        "kari-zev-skyship-raider",
+        "ophiomancer-x-nantuko-husk"
       ]
     },
     "dice-rolled": {
@@ -284,7 +300,10 @@
         "recipient"
       ],
       "witnesses": [
-        "ruthless-knave-x-blood-artist"
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "nantuko-husk-x-blood-artist",
+        "ruthless-knave-x-blood-artist",
+        "soul-warden-x-ajanis-pridemate"
       ]
     },
     "mana": {
@@ -296,10 +315,13 @@
       ],
       "witnesses": [
         "aggravated-assault-x-sword-of-feast-and-famine",
+        "birds-of-paradise-x-horseshoe-crab",
         "chatterfang-x-pitiless-plunderer",
         "deadeye-x-peregrine-drake",
         "displacer-kitten-x-conviction",
-        "ruthless-knave-x-blood-artist"
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "ruthless-knave-x-blood-artist",
+        "ruthless-knave-x-krark-clan-ironworks"
       ]
     },
     "modification:creature": {
@@ -312,7 +334,9 @@
         "stat"
       ],
       "witnesses": [
-        "chatterfang-x-pitiless-plunderer"
+        "chatterfang-x-pitiless-plunderer",
+        "nantuko-husk-x-blood-artist",
+        "ophiomancer-x-nantuko-husk"
       ]
     },
     "modification:evasion": {
@@ -394,12 +418,14 @@
       "attrs": [
         "control",
         "from",
+        "self",
         "to"
       ],
       "unpredicted": true,
       "witnesses": [
         "archaeomancer",
         "archaeomancer-x-ghostly-flicker",
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
         "pair-o-dice-lost-x-brazen-dwarf"
       ]
     },
@@ -434,6 +460,8 @@
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
         "deadeye-x-peregrine-drake",
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "nantuko-husk-x-blood-artist",
         "ruthless-knave-x-blood-artist"
       ]
     },
@@ -484,9 +512,11 @@
         "mana"
       ],
       "values_seen": [
+        "C",
         "any",
         "black",
         "blue",
+        "colorless",
         "generic",
         "green",
         "red",
@@ -529,6 +559,7 @@
     },
     "control": {
       "stems": [
+        "artifact",
         "cards",
         "cards:search",
         "cards:select",
@@ -582,6 +613,7 @@
         "modification:creature"
       ],
       "values_seen": [
+        "\u002B2/\u002B2",
         "\u002BX/-X"
       ],
       "carries_provenance_or_polarity": false,
@@ -792,6 +824,7 @@
     "self": {
       "stems": [
         "artifact",
+        "recur",
         "tap"
       ],
       "values_seen": [
@@ -855,6 +888,7 @@
         "land",
         "lesson",
         "monkey",
+        "snake",
         "squirrel",
         "treasure"
       ],
@@ -888,6 +922,7 @@
         "removal:permanent"
       ],
       "values_seen": [
+        "battlefield",
         "exile",
         "graveyard",
         "hand"

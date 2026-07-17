@@ -6,6 +6,7 @@
     "ancient-copper-dragon",
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
+    "birds-of-paradise-x-horseshoe-crab",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -15,13 +16,19 @@
     "displacer-kitten-x-conviction",
     "divination",
     "dualcaster-mage-x-ghostly-flicker",
+    "emiel-the-blessed-x-mulldrifter",
     "fog",
+    "gravecrawler-x-ashnods-altar-x-blood-artist",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "nantuko-husk-x-blood-artist",
+    "ophiomancer-x-nantuko-husk",
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
     "ruthless-knave-x-blood-artist",
+    "ruthless-knave-x-krark-clan-ironworks",
     "serum-visions",
+    "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
     "titanias-boon"
@@ -35,12 +42,14 @@
       "value": "producer-choice",
       "status": "confirmed",
       "witnesses": [
+        "birds-of-paradise-x-horseshoe-crab",
         "chatterfang-x-pitiless-plunderer"
       ],
-      "desc": "a mana emit whose color is producer-chosen matches any specific-color consume it can pay",
+      "desc": "corroborates the Pitiless\u2192Chatterfang producer-choice witness with a second, independent any-color\u2192specific-pip pair: Birds of Paradise\u0027s \u0027add one mana of any color\u0027 pays Horseshoe Crab\u0027s {U} (producer picks blue). Second witness, distinct producer/consumer/color \u2014 climbs the ladder.",
       "cr": [
         "105.2"
-      ]
+      ],
+      "corroborates": "polarity:color:emit-mana"
     }
   ],
   "match_policy": [
@@ -70,6 +79,36 @@
         "120",
         "510",
         "510.1"
+      ]
+    },
+    {
+      "id": "policy:life-direction-match",
+      "consume_kind": "subscription",
+      "subject": "facet-feeds",
+      "status": "confirmed",
+      "witnesses": [
+        "soul-warden-x-ajanis-pridemate"
+      ],
+      "desc": "a life STATE emit feeds a life subscription (a \u0027whenever [a player] gains/loses life\u0027 trigger, CR 119.9) only when the direction facets match: a gain-direction emit feeds a gain-direction trigger, a loss feeds a loss; a gain NEVER feeds a loss-trigger and vice versa - a loss event is not a life-gain event, so a gain-trigger won\u0027t fire on it (CR 119.9). Directional on the direction axis - the life analogue of policy:damage-manner-feeds (combat axis). Implements the engine\u0027s LifeFlowFeasible direction-match gate (CR 119). The player-scope overlap (who gains vs whom the trigger watches) is the operator\u0027s job via the recipient Subjects; this rule gates only the direction.",
+      "cr": [
+        "119",
+        "119.3",
+        "119.9"
+      ]
+    },
+    {
+      "id": "policy:recast:battlefield-return",
+      "consume_kind": "recast-driver",
+      "subject": "self-return",
+      "status": "confirmed",
+      "witnesses": [
+        "gravecrawler-x-ashnods-altar-x-blood-artist"
+      ],
+      "desc": "a returntobattlefield emit -- a permanent cast or reanimated from the graveyard directly ONTO the battlefield (from=graveyard, to=battlefield; e.g. a static \u0027you may cast this from your graveyard\u0027 permission, CR 601.3) -- refuels a self-recast when the returned object IS the recast subject (self:true). Because the card returns ITSELF (Gravecrawler\u0027s own death to the graveyard satisfies its own from=graveyard cast precondition), the recast subject Subsumes (not merely Overlaps) -\u003E GREEN-eligible on identity; the battlefield-return analog of policy:recast:spell-recursion (which returns to HAND and Overlaps a target-chosen spell -\u003E AMBER on identity). Any loop CLOSED by this recast still carries the recast\u0027s mana co-cost (guard:recast-pays-mana), which floors the cycle to AMBER unless the loop provably refills that cost in the RIGHT color.",
+      "cr": [
+        "601.3",
+        "601.2",
+        "400.7"
       ]
     },
     {
@@ -149,7 +188,8 @@
       "impl": "code",
       "status": "confirmed",
       "witnesses": [
-        "displacer-kitten-x-conviction"
+        "displacer-kitten-x-conviction",
+        "gravecrawler-x-ashnods-altar-x-blood-artist"
       ],
       "desc": "a recast emit (emit:cast - a spell bounced/returned to a castable zone and cast again, CR 601) re-pays the spell\u0027s full mana cost every iteration. A cast-loop that is closed BY a recast therefore carries an irreducible mana co-cost: the loop is sound (GREEN-eligible) only if it provably refills that cost; unrefilled - or refilled only through an AMBER mana bridge (untap-\u003Emana) - the loop floors to AMBER (ADR-0003 \u00A78 mana balance). Caps the cast-\u003Ecast-trigger edge that the recast closes.",
       "cr": [
@@ -163,7 +203,8 @@
       "impl": "code",
       "status": "confirmed",
       "witnesses": [
-        "archaeomancer-x-ghostly-flicker"
+        "archaeomancer-x-ghostly-flicker",
+        "gravecrawler-x-ashnods-altar-x-blood-artist"
       ],
       "desc": "the SpellRecursionSatisfiesCast same-card self-recast prune: a card whose return-to-hand returns OTHER cards (emit subject not self) can NEVER satisfy its OWN cast:spell:self driver \u2014 a spell is cast from where it is (CR 601.2), and an other-card / exile return is not THIS spell in hand (Pair o\u0027 Dice Lost returns other graveyard cards and exiles itself, so it is not its own recast subject). Prunes the spurious 1-card self-loop; the CROSS-card recursion (Archaeomancer returns Ghostly Flicker) is a different card and unaffected. The recast dual of guard:self-watch (both same-card object-identity guards, CR 400.7).",
       "cr": [
@@ -177,7 +218,8 @@
       "status": "confirmed",
       "witnesses": [
         "deadeye-x-peregrine-drake",
-        "dualcaster-mage-x-ghostly-flicker"
+        "dualcaster-mage-x-ghostly-flicker",
+        "emiel-the-blessed-x-mulldrifter"
       ],
       "desc": "a self-watching trigger (subject=self) requires a same-card witness that the emitted object IS the watcher; object identity the operator can\u0027t see \u2192 Overlaps floors AMBER",
       "cr": [
@@ -187,6 +229,24 @@
     }
   ],
   "bridges": [
+    {
+      "id": "bridge:sacrifice-to-dies",
+      "from_stem": "removal:creature",
+      "to_stem": "removal:creature",
+      "ceiling": "GREEN",
+      "status": "confirmed",
+      "from_attrs": {
+        "manner": "sacrificed"
+      },
+      "witnesses": [
+        "nantuko-husk-x-blood-artist"
+      ],
+      "desc": "a sacrifice (removal:creature[manner=sacrificed] emit) feeds a dies-trigger (removal:creature[to=graveyard] subscription): CR 701.21a \u2014 to sacrifice a permanent is to move it from the battlefield directly to its owner\u0027s graveyard \u2014 so it dies (CR 700.4, leaves-the-battlefield to graveyard). The bridge supplies the to=graveyard destination the parser proves only as manner=sacrificed (the ADR-2 sac-consume \u2192 ltb:\u2026:to-graveyard-consume arm, PortGraphEngine.AddCoarseRulesEdges (3)). Ceiling GREEN \u2014 a deterministic rules zone-change (contrast the AMBER cross-resource untap\u2192mana / copy\u2192cast bridges): the edge is GREEN when the sacrificed type provably covers the dies-watch filter, reliability-capped only by a graveyard-replacement (Rest in Peace) board prune.",
+      "cr": [
+        "701.21a",
+        "700.4"
+      ]
+    },
     {
       "id": "bridge:spell-copy-to-cast-driver",
       "from_stem": "copy",

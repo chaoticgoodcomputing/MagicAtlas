@@ -1,0 +1,102 @@
+{
+  "id": "ruthless-knave-x-krark-clan-ironworks",
+  "unit": "pairwise",
+  "cards": [
+    "Ruthless Knave",
+    "Krark-Clan Ironworks"
+  ],
+  "source": {
+    "note": "The GREEN artifact \u2286 artifact cover witness on the ARGUMENT (cost) axis \u2014 corroborates policy:argument:subject-cover (Chatterfang, creature axis) generalized to artifacts. Ruthless Knave emits a Treasure (a colorless Treasure artifact token) via 'Create two Treasure tokens'; Krark-Clan Ironworks is an artifact-sacrifice OUTLET whose activation cost is 'Sacrifice an artifact' (an argument/cost-consume demanding an artifact object). The Treasure (type Artifact, subtype Treasure) provably COVERS the 'artifact' cost parameter \u2014 treasure \u2286 artifact, no straddle \u2192 GREEN. NOT a loop: Ruthless Knave needs {2}{B} to make Treasures but Krark-Clan Ironworks yields only {C}{C} colorless \u2014 the black pip is unrefillable, so the Treasure\u2192sac\u2192mana path is a ramp/value interaction, not a repeating cycle (unit=pairwise, no \u00a710 SDF balance). Live ADR-2 shadow: Ruthless Knave emits emit:token:artifact:treasure:controlled (stem shadow=deployment:creature) and Krark-Clan Ironworks consumes sac:artifact:controlled (stem shadow=creature, manner=sacrificed) \u2014 the shadow stem-maps ALL sacrifice fodder to creature, the Stage-3 engine-catch-up gap; but the LABELS prove the parser derives artifact-type + controlled scope + treasure subtype from the AST, so the ADR-3 stems (deployment:artifact / artifact) are faithfully AST-derivable, not a wish. No edhrec_rank / real combo popularity for this pair in the testbed \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b7 \u2014 artifact cover GREEN (treasure subset artifact); redundant sibling collapsed; edge is structural subsumption; PROCEED"
+  },
+  "ports": {
+    "Ruthless Knave": [
+      {
+        "id": "RK1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:artifact",
+        "attrs": {
+          "token": true,
+          "subtype": "treasure",
+          "control": "you",
+          "qty": 2
+        },
+        "note": "THE FODDER SOURCE \u2014 'Create two Treasure tokens' (line 0, spans [29,138]); a Treasure is a colorless Treasure ARTIFACT token, so this deploys an artifact object under your control. Reuses the witnessed R4 shape from ruthless-knave-x-blood-artist. Live ADR-2 label: emit:token:artifact:treasure:controlled (stem shadow=deployment:creature; the token\u2192artifact stem-map is the shadow-projection gap, but the label carries artifact:treasure:controlled)."
+      }
+    ],
+    "Krark-Clan Ironworks": [
+      {
+        "id": "KCI1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "artifact",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "THE WITNESS \u2014 'Sacrifice an artifact:' (line 0, spans [0,22]); the activation-cost argument-consume, an artifact OBJECT demanded as a cost (the objects-supergroup fodder decrement, a bare object-consume). control=you: sacrificing a permanent means one you control (CR 701.21a \u2014 'its controller moves it'). No exclude_self: 'an artifact' includes Krark-Clan Ironworks itself, unlike Ruthless Knave's 'another creature'. Live ADR-2 label: sac:artifact:controlled (stem shadow=creature, manner=sacrificed \u2014 the shadow maps all sac fodder to stem=creature; the label proves the parser derives the artifact type + controlled scope)."
+      },
+      {
+        "id": "KCI2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "C",
+          "qty": 2
+        },
+        "note": "incidental card context \u2014 'Add {C}{C}.' (line 0, spans [22,34]); the payoff the sacrifice pays for, which makes Krark-Clan Ironworks a repeatable OUTLET. Not the witness; the KCI1\u2192KCI2 (cost pays for mana) binding is card-defined/internal, not an inter-card edge. Live ADR-2 label: emit:mana:colorless."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Ruthless Knave.RK1",
+      "to": "Krark-Clan Ironworks.KCI1",
+      "mechanism": "subsumption",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "Ruthless Knave's deployed Treasure (type Artifact, subtype Treasure) satisfies Krark-Clan Ironworks' 'Sacrifice an artifact' cost. The supplied object's at-creation type (artifact:treasure) provably COVERS the 'artifact' parameter filter \u2014 treasure \u2286 artifact by the type-ontology subtype lattice (CR 205.3, a Treasure IS an artifact), no subtype straddle; and control=you \u2286 you. Subsumption is structural/self-certifying \u2192 GREEN. The artifact-axis analogue of Ruthless Knave\u2192Blood Artist's creature \u2286 creature GREEN, but on the ARGUMENT/cost side (a cost demanding an artifact) rather than the subscription/trigger side."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "the supplied Treasure's type (artifact:treasure) provably covers the 'artifact' cost parameter \u2014 treasure \u2286 artifact (subtype lattice, CR 205.3), no straddle; control=you \u2286 you. Subsumption is structural."
+    },
+    {
+      "claim": "edge.E1.mechanism == subsumption"
+    },
+    {
+      "claim": "policy:argument:subject-cover.corroborated_on_artifact_axis",
+      "because": "policy:argument:subject-cover-artifact carries corroborates:policy:argument:subject-cover \u2014 the argument subject-cover match generalizes from the creature axis (Chatterfang) to the artifact axis; a reference/corroboration, NOT a re-declaration of the parent rule."
+    },
+    {
+      "claim": "cover.artifact_subset_artifact",
+      "because": "the artifact-scoped cost ('an artifact') is covered by an artifact-typed fodder \u2014 treasure \u2286 artifact; the artifact-axis witness of the type-cover policy, complementing the creature \u2286 creature cover (ruthless-knave-x-blood-artist)."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: Ruthless Knave requires {2}{B} to create Treasures but Krark-Clan Ironworks yields only {C}{C} colorless \u2014 the black pip is unrefillable, so no cycle closes. A one-shot ramp/value interaction, not a repeating cycle (no \u00a710 SDF balance). The KCI1\u2192KCI2 cost\u2192mana binding is card-defined, not an inter-card edge."
+    }
+  ],
+  "cr": [
+    "701.21a",
+    "601.2b",
+    "205.3",
+    "111.1"
+  ]
+}

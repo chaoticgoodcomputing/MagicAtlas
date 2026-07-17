@@ -1,0 +1,104 @@
+{
+  "id": "soul-warden-x-ajanis-pridemate",
+  "unit": "pairwise",
+  "cards": [
+    "Soul Warden",
+    "Ajani's Pridemate"
+  ],
+  "source": {
+    "note": "pairwise witness of the life -> trigger:life EDGE (CR 119): a life-GAIN emit feeds a same-direction 'whenever you gain life' subscription. Oracle text verified vs oracle-cards.json: Soul Warden = 'Whenever another creature enters, you gain 1 life.'; Ajani's Pridemate = 'Whenever you gain life, put a +1/+1 counter on this creature.'. Live engine ports (dumps/card-ports.json, verified 2026-07-17): Soul Warden emit:life:gain:controlled (family=life, direction=gain, controlled=you, tier=Green); Ajani's Pridemate consume trigger:life:gain:controlled (direction=gain, controlled=you, tier=Green). direction (gain) + recipient (you) are both AST-derivable on both ports -> a faithful witness, not a wish. No exact pairwise popularity count in the corpus (Soul Warden absent from dumps/combo-instances.json) -> source.popularity omitted (not fabricated). Ajani's Pridemate's +1/+1 counter payoff is not modeled: it is not part of the witnessed edge (the smallest honest pairwise is the life-gain emit -> life-gain trigger)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b7 \u2014 life->life GREEN (same-direction, You subset You, player-scoped no self-watch); policy:life-direction-match distinct (life analogue); PROCEED"
+  },
+  "ports": {
+    "Soul Warden": [
+      {
+        "id": "S1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": 1
+        },
+        "note": "THE WITNESS (emit side) - 'you gain 1 life' - a life STATE emit (life = fold of life-change events, CR 119.3). direction=gain from the effect verb; recipient=you (controlled - the controller gains); qty=1 literal. Live label emit:life:gain:controlled. The sibling of Blood Artist's B3 emit:life direction=gain."
+      }
+    ],
+    "Ajani's Pridemate": [
+      {
+        "id": "P1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you"
+        },
+        "note": "THE WITNESS (consume side) - 'Whenever you gain life' - a subscription (triggered ability, CR 119.9) watching YOUR life-gain. direction=gain (a gain-direction trigger); recipient=you (controlled). No qty facet - any nonzero amount of life gained fires it (CR 119.9: 'if a player gains 0 life ... these abilities won't trigger'). kind=STATE follows the registered life stem (state=fold(events)); the trigger fires on the life-change folded into that state. Live label trigger:life:gain:controlled."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Soul Warden.S1",
+      "to": "Ajani's Pridemate.P1",
+      "mechanism": "match_policy",
+      "rule": "policy:life-direction-match",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE WITNESSED EDGE: a life emit satisfies a life subscription. Direction-feeds: S1.direction=gain feeds P1.direction=gain (policy:life-direction-match); a gain emit would NEVER feed a loss-trigger - the load-bearing direction match (CR 119.9: a loss event is not a life-gain event, so a gain-trigger won't fire on it).",
+        "GREEN tiering: recipient=you (S1) Subsumes recipient=you (P1) EXACTLY - You<->You, control lattice you=you (the subscription-subject Subsumes->GREEN branch, reuse policy:subscription:subject-subsumes-green, confirmed). No self-watch guard applies: 'whenever you gain life' watches a PLAYER-scoped life-change event (CR 119.9 'a source causes a player to gain life'), not an object-identity, so ANY source causing you to gain life fires it - fully observable, no Overlaps floor. The GREEN contrast to captain-rex's self-watch AMBER.",
+        "the +1/+1 counter payoff (P1's effect) is not modeled - not part of the witnessed edge; this is the smallest honest pairwise (emit -> subscription, no cycle closed)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:life-direction-match",
+        "consume_kind": "subscription",
+        "subject": "facet-feeds",
+        "axis": "direction",
+        "lattice": "gain |= gain ; loss |= loss (a life subscription is fed only by a same-direction life event; a gain never feeds a loss-trigger, nor a loss a gain-trigger)",
+        "desc": "a life STATE emit feeds a life subscription (a 'whenever [a player] gains/loses life' trigger, CR 119.9) only when the direction facets match: a gain-direction emit feeds a gain-direction trigger, a loss feeds a loss; a gain NEVER feeds a loss-trigger and vice versa - a loss event is not a life-gain event, so a gain-trigger won't fire on it (CR 119.9). Directional on the direction axis - the life analogue of policy:damage-manner-feeds (combat axis). Implements the engine's LifeFlowFeasible direction-match gate (CR 119). The player-scope overlap (who gains vs whom the trigger watches) is the operator's job via the recipient Subjects; this rule gates only the direction.",
+        "cr": [
+          "119",
+          "119.3",
+          "119.9"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "direction gain=gain feasible (policy:life-direction-match) AND recipient=you Subsumes recipient=you (You<->You, control lattice you=you) with NO self-watch guard - the life-gain trigger watches a player-scoped event (CR 119.9), fully observable -> GREEN"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "the emit->subscription match is certified by policy:life-direction-match (the direction-feeds relation), not a structural subsumption; the GREEN tiering reuses policy:subscription:subject-subsumes-green (recipient you Subsumes you)"
+    },
+    {
+      "claim": "life_direction_prune",
+      "because": "S1.direction=gain feeds P1.direction=gain, but a life:loss emit (e.g. Blood Artist's 'target player loses 1 life') NEVER feeds a gain-direction trigger - a loss event is not a life-gain event (policy:life-direction-match, CR 119.9). Direction-match is load-bearing."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: Soul Warden's ETB-gated life gain feeds Ajani's growth trigger once per creature entering - a value engine, not a repeating cycle; no cycle closed, no S10 SDF balance"
+    }
+  ],
+  "cr": [
+    "119",
+    "119.3",
+    "119.9",
+    "603.2"
+  ]
+}

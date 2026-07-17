@@ -1,0 +1,138 @@
+{
+  "id": "emiel-the-blessed-x-mulldrifter",
+  "unit": "pairwise",
+  "cards": [
+    "Emiel the Blessed",
+    "Mulldrifter"
+  ],
+  "source": {
+    "note": "PAIRWISE witness of the blink -> etb EDGE (CR 603.6e/400.7), the SECOND witness of that edge (the first is deadeye-x-peregrine-drake E1) and a corroboration of guard:self-watch on a DISTINCT, cleanly-parsing blink outlet. Emiel the Blessed's {3} activated ability -- 'Exile another target creature you control, then return it to the battlefield under its owner's control' -- parses CLEANLY to emit:blink: the hand-parse (Fixtures/HandParsedCards/EmieltheBlessed.json) is an activated ability whose Effects are [exile(CardTypes=[creature], Controller=You, ExcludeSelf=true), returnToBattlefield(Target.Filter.Zone=Exile, ExiledWith={Kind:Self}, UnderControl={Kind:Owner})]; ExileAnotherCreatureThenReturnRule emits exactly that pair and PortGraph's returnToBattlefield-with-ExiledWith:Self projection (PortGraph.cs ~913) renders emit:blink (deployment:creature[manner=blink]). This is the KEY distinction from Deadeye Navigator, whose soulbond-GRANTED activated blink projects the coarse emit:gainability (the parse gap the Deadeye gold records): Emiel is not a gap, it is a faithful blink emit, so this witness is grounded, not a wish. The payoff card, Mulldrifter (oracle 'When this creature enters, draw two cards.'), has a self-watching ETB (Trigger.Event=Enters, Filter.IsSelf=true) whose draw-two lands as the coarse emit:drawcards -> ADR-3 cards STATE (per golds/divination.json). The interaction: Emiel blinks Mulldrifter -> Mulldrifter re-enters as a new object -> its ETB re-fires -> draw two. A real EDH blink-value pairing, but NOT an infinite loop by itself (each blink costs {3} and draws only 2), so no loop is claimed and unit=pairwise. CROSS-CARD ARM: Emiel blinks ANOTHER creature (its exile ExcludeSelf=true, CR 109.5), so emit.Card (Emiel) != consume.Card (Mulldrifter) and BlinkSatisfiesEnter's same-card self-blink refusal (PortGraphEngine.cs ~764) does not fire -- the inter-card blink of a DIFFERENT card's self-ETB is the real arm the combos turn on. No CSB popularity COUNT is available in the testbed source (edhrec/price absent) so source.popularity is omitted (not fabricated); csb is not claimed because Emiel + Mulldrifter is a value engine, not a documented infinite combo."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b7 \u2014 blink->etb AMBER (Overlaps, cross-card); 2nd blink witness, corroborates guard:self-watch; PROCEED"
+  },
+  "ports": {
+    "Emiel the Blessed": [
+      {
+        "id": "EM1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "control": "you",
+          "manner": "blink",
+          "exclude_self": true,
+          "qty": 1
+        },
+        "note": "THE EMIT SIDE OF THE WITNESSED EDGE -- the RETURN half of Emiel's {3} activated blink ('exile another target creature you control, then return it to the battlefield under its owner's control'). The blinked creature re-enters as a NEW object (CR 603.6e/400.7), re-firing its ETB -- this is the load-bearing half. Live emit:blink (ExileAnotherCreatureThenReturnRule -> returnToBattlefield[ExiledWith:Self] -> PortGraph emit:blink); parses CLEANLY, NOT emit:gainability (the Deadeye parse gap). exclude_self=true from the exile's ExcludeSelf ('another', CR 109.5) -- Emiel cannot blink itself. Mirrors deadeye D4 and archaeomancer-x-ghostly-flicker G1."
+      }
+    ],
+    "Mulldrifter": [
+      {
+        "id": "MU0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE CONSUME SIDE OF THE WITNESSED EDGE -- the ETB driver 'When this creature enters' (Trigger.Event=Enters, Filter.IsSelf=true, CardTypes=[creature]); a self-watching ETB subscription (live etb:creature:self; family=etb, consume). Mirrors deadeye PD1, archaeomancer R0/A0, dualcaster D0."
+      },
+      {
+        "id": "MU1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards",
+        "attrs": {
+          "control": "you",
+          "qty": 2
+        },
+        "note": "the payoff grounding the ETB as a real value trigger -- 'draw two cards' (EffectType=drawCards, Count={literal,2}, Player={You}). A positive delta to the cards STATE pool (your hand); qty=2 and control=you are AST-derivable (per golds/divination.json; the ADR-2 coarse emit:drawcards hand-mapped up to the ADR-3 cards STATE stem). The draw/discard polarity has no closed axis (scaffold surface, per divination.json) -- omitted, not invented."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Emiel the Blessed.EM1",
+      "to": "Mulldrifter.MU0",
+      "mechanism": "subsumption",
+      "residuals": [
+        "guard:self-watch"
+      ],
+      "tier": "AMBER",
+      "notes": [
+        "THE WITNESSED EDGE (blink -> etb, CR 603.6e/400.7) -- the SECOND witness of the edge (first = deadeye E1, D4->PD1). Blink IS a deployment re-entry (structural half = subsumption); MU0 self-watches (subject=self), and Emiel blinks 'another target creature you control' -> the entering creature Overlaps 'this creature enters' but does not Subsume it (object identity the operator can't see) -> AMBER. Reuses guard:self-watch + policy:subscription:subject-intersect (the Overlaps->AMBER branch); the BlinkSatisfiesEnter arm. Cross-card (Emiel != Mulldrifter), so BlinkSatisfiesEnter's same-card self-blink refusal does not fire. Mirrors deadeye E1 and archaeomancer-x-ghostly-flicker E2."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Mulldrifter.MU0",
+      "to": "Mulldrifter.MU1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "Mulldrifter's ETB deterministically fires the draw -- a self-certifying card-defined flow from the ETB subscription to the cards emit, no rule dependency. Grounds MU0 as a real value ETB (not a bare consume). Mirrors archaeomancer.json E1."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [
+      {
+        "id": "guard:self-watch",
+        "impl": "code",
+        "corroborates": "guard:self-watch",
+        "desc": "corroborates the Deadeye self-watch guard on a SECOND, cleanly-parsing blink -> etb pair: Emiel's emit:blink of 'another target creature you control' re-enters a DIFFERENT card (Mulldrifter) whose subject=self ETB fires, but the blink-of-a-creature only Overlaps (not Subsumes) 'this creature enters' -- the same-card object identity the operator cannot see (CR 603.6e/400.7) -> floors AMBER. A distinct witness from the copy->cast corroboration (dualcaster-mage-x-ghostly-flicker) and the original Deadeye witness (whose GRANTED activated blink is emit:gainability): here the ACTIVATED blink parses cleanly to emit:blink.",
+        "cr": [
+          "603.6e",
+          "400.7"
+        ]
+      }
+    ],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "witnesses_edge.blink-to-etb",
+      "because": "E1 is Emiel.EM1 (emit deployment:creature[manner=blink]) -> Mulldrifter.MU0 (consume deployment:creature[subject=self]) -- a blinked permanent re-entering as a new object re-fires a self-watching ETB (CR 603.6e/400.7, the BlinkSatisfiesEnter arm). The SECOND witness of the blink->etb edge (first = deadeye-x-peregrine-drake E1)."
+    },
+    {
+      "claim": "edge.E1.tier == AMBER",
+      "because": "the self-watch guard: blink-of-'another target creature you control' Overlaps (not Subsumes) Mulldrifter's self-watching ETB 'this creature enters' -> policy:subscription:subject-intersect's Overlaps->AMBER branch (guard:self-watch); mirrors deadeye E1."
+    },
+    {
+      "claim": "edge.E1.mechanism == subsumption",
+      "because": "blink's structural half unifies with cast/reanimate under deployment -> deployment-consume; the residual guard:self-watch (not the mechanism) caps the tier."
+    },
+    {
+      "claim": "corroborates_rule.guard:self-watch",
+      "because": "this gold re-declares guard:self-watch (impl=code, the union's core field) with a corroborates pointer -> adds emiel-the-blessed-x-mulldrifter to its witness set (a blink->etb pair DISTINCT from deadeye), strengthening the already-confirmed guard on the blink arm specifically."
+    },
+    {
+      "claim": "blink_parses_clean",
+      "because": "Emiel's {3} activated ability parses to emit:blink (ExileAnotherCreatureThenReturnRule -> returnToBattlefield[Target.Filter.ExiledWith:Self] -> PortGraph emit:blink; hand-parse EmieltheBlessed.json), NOT emit:gainability -- so EM1 is a faithful blink emit, not a wish. THIS is why Emiel (not Deadeye's granted blink) is the corroborating outlet."
+    },
+    {
+      "claim": "cross_card_arm",
+      "because": "emit.Card (Emiel the Blessed) != consume.Card (Mulldrifter), and Emiel's blink excludes itself (exile ExcludeSelf=true, CR 109.5), so BlinkSatisfiesEnter's same-card self-blink refusal (consume.Subject.IsSelf && emit.Card==consume.Card) does not fire -- the inter-card blink of ANOTHER card's self-ETB is the real arm."
+    },
+    {
+      "claim": "edge.E2.tier == GREEN",
+      "because": "card-defined mechanism (self-certifying, structural): Mulldrifter's ETB deterministically draws two, no over-approximation to cap; a GREEN card-defined edge rests on no rule, so it is coherent with a PENDING judge."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: witnesses the blink->etb edge (one card's emit satisfying another's consume), no cycle closed and no \u00a710 SDF balance -- each Emiel blink costs {3} and draws only 2, so the pairing is a value engine, not a self-refueling loop."
+    }
+  ],
+  "cr": [
+    "603.6e",
+    "400.7",
+    "603.2",
+    "121",
+    "109.5"
+  ]
+}

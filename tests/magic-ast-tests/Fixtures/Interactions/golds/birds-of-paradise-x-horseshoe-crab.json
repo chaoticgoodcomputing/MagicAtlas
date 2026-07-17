@@ -1,0 +1,99 @@
+{
+  "id": "birds-of-paradise-x-horseshoe-crab",
+  "unit": "pairwise",
+  "cards": [
+    "Birds of Paradise",
+    "Horseshoe Crab"
+  ],
+  "source": {
+    "csb": false,
+    "note": "AST-derived from dumps/card-ports.json \u2014 Birds of Paradise projects emit:mana:any (oracle '{T}: Add one mana of any color.') and Horseshoe Crab projects pay:mana:blue (oracle '{U}: Untap this creature.'). Not a named combo \u2014 no combo-popularity datum, so source.popularity is omitted (honest)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b7 \u2014 mana->pay GREEN producer-choice; clean same-id corroboration of polarity:color:emit-mana; PROCEED"
+  },
+  "ports": {
+    "Birds of Paradise": [
+      {
+        "id": "B1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": {
+            "value": "any",
+            "polarity": "producer-choice"
+          },
+          "qty": 1
+        },
+        "note": "'{T}: Add one mana of any color.' \u2014 the producer picks the color at production (CR 106.4)"
+      }
+    ],
+    "Horseshoe Crab": [
+      {
+        "id": "H1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "mana",
+        "attrs": {
+          "color": "blue",
+          "qty": 1
+        },
+        "note": "the {U} cost of '{U}: Untap this creature.' \u2014 a specific colored pip"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Birds of Paradise.B1",
+      "to": "Horseshoe Crab.H1",
+      "mechanism": "polarity",
+      "rule": "polarity:color:emit-mana",
+      "residuals": [
+        "polarity:color:emit-mana"
+      ],
+      "tier": "GREEN",
+      "notes": [
+        "color=any\u2022producer-choice covers the specific {U} pip: the producer chooses blue when paying (CR 106.4, 105.2) \u2192 existential cover \u2192 GREEN. A DISTINCT witness from Pitiless\u2192Chatterfang (Treasure any \u2192 black): different producer (Birds, a mana-dork {T} ability, not a Treasure sac), different consumer, different color (blue)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [
+      {
+        "id": "polarity:color:emit-mana",
+        "attr": "color",
+        "context": "emit:mana",
+        "value": "producer-choice",
+        "corroborates": "polarity:color:emit-mana",
+        "desc": "corroborates the Pitiless\u2192Chatterfang producer-choice witness with a second, independent any-color\u2192specific-pip pair: Birds of Paradise's 'add one mana of any color' pays Horseshoe Crab's {U} (producer picks blue). Second witness, distinct producer/consumer/color \u2014 climbs the ladder.",
+        "cr": [
+          "105.2"
+        ]
+      }
+    ],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "color=any is producer-choice (CR 106.4) \u2192 the producer covers the specific {U} pip existentially; not an over-approximation"
+    },
+    {
+      "claim": "edge.E1.rule == polarity:color:emit-mana"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: Birds' mana pays Crab's untap cost once \u2014 no closed cycle, no \u00a710 SDF balance"
+    }
+  ],
+  "cr": [
+    "105.2",
+    "106.4",
+    "602.1"
+  ]
+}

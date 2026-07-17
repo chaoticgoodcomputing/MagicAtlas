@@ -1,0 +1,108 @@
+{
+  "id": "ophiomancer-x-nantuko-husk",
+  "unit": "pairwise",
+  "cards": [
+    "Ophiomancer",
+    "Nantuko Husk",
+    "Snake"
+  ],
+  "source": {
+    "note": "the SECOND token\u2192sac argument-cover witness (corroborates Chatterfang's E4 on the card-type branch): a created CREATURE token's at-creation card type provably COVERS a generic 'sacrifice a creature' cost. A one-shot fodder-feeds-outlet value pairwise, NOT a loop. No CSB/popularity row for this pairing in dumps/combo-instances.json, so no source.popularity."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "ij 2026-07-17 b7 \u2014 token->sac GREEN (creature-token covers creature-sac, CR 111.10/205.3); redundant sibling collapsed to base-rule reference; PROCEED"
+  },
+  "ports": {
+    "Ophiomancer": [
+      {
+        "id": "O1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "token": true,
+          "subtype": "snake",
+          "color": "black",
+          "pt": "1/1",
+          "control": "you",
+          "qty": 1
+        },
+        "note": "'create a 1/1 black Snake creature token with deathtouch' (AST port emit:token:creature:snake:controlled). The token's at-creation card type is creature (CR 111.10 \u2014 a created token's types are fully specified at creation); Snake also rides creature (CR 205.3). Upkeep-gated 'if you control no Snakes' is a timing/board condition on HOW OFTEN the token appears \u2014 orthogonal to the type-cover, and irrelevant to a pairwise (no SDF/loop tiering). Deathtouch grant not modeled (not part of the cover)."
+      }
+    ],
+    "Nantuko Husk": [
+      {
+        "id": "H1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "creature",
+        "attrs": {
+          "control": "you",
+          "qty": 1
+        },
+        "note": "the sac cost 'Sacrifice a creature' (AST port sac:creature:controlled, isSelf=false). A type-based, controlled creature argument \u2014 NOT :self \u2014 so it is refuellable by an externally-created creature (TokenSatisfiesAtCreation's not-self positive branch, CR 400.7)."
+      },
+      {
+        "id": "H2",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:creature",
+        "attrs": {
+          "stat": "pt",
+          "delta": "+2/+2",
+          "duration": "eot"
+        },
+        "note": "'This creature gets +2/+2 until end of turn' \u2014 the outlet's payoff; not on the witnessed edge."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Ophiomancer.O1",
+      "to": "Nantuko Husk.H1",
+      "mechanism": "match_policy",
+      "rule": "policy:argument:subject-cover",
+      "tier": "GREEN",
+      "residuals": [],
+      "notes": [
+        "Ophiomancer's Snake token is at-creation a creature (card type creature, explicit in the token emit; Snake also rides creature via CR 205.3). Husk's argument-consume requires 'a creature' (card type creature, no subtype). creature COVERS creature (cover, not intersect \u2014 the \u00a76 argument-cost semantics, CR 601.2b) \u2192 GREEN. Reuses the confirmed policy:argument:subject-cover; the co-declared card-type branch corroborates it. Not a :self consume \u2192 TokenSatisfiesAtCreation refuel holds. The argument-side analogue of Ruthless\u00d7Blood's subscription-side creature\u2286creature GREEN."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "creature-token at-creation card type COVERS the 'sacrifice a creature' argument (creature \u2286 creature, no subtype straddle)"
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy:argument-cover"
+    },
+    {
+      "claim": "edge.E1.rule == policy:argument:subject-cover",
+      "because": "reuses the confirmed argument-cover rule (a reference, not a re-declaration); the co-declared card-type branch carries the corroborates pointer"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: a one-shot fodder-feeds-outlet value pairwise (Ophiomancer refills at most one Snake per upkeep), not a repeating cycle \u2014 no \u00a710 SDF balance"
+    },
+    {
+      "claim": "token_cover_not_self",
+      "because": "Husk's argument is type-based (IsSelf null), so the externally-created Snake refuels it (TokenSatisfiesAtCreation not-self branch); a Treasure token would NOT cover this creature sac"
+    }
+  ],
+  "cr": [
+    "601.2b",
+    "701.16",
+    "111.10",
+    "205.3",
+    "400.7"
+  ]
+}
