@@ -1,0 +1,68 @@
+{
+  "id": "serum-visions",
+  "unit": "single-card",
+  "cards": [
+    "Serum Visions"
+  ],
+  "source": {
+    "note": "single-card witness of the SOUGHT library-selection hole (port-topology.cited.json holes[library-selection]: proposed_stem 'cards:select', priority 5, kind STATE, slang [dig,scry,surveil,impulse], note 'peek/reorder top-N; a Cards-STATE op'). library-selection = reordering/selecting from the TOP of your library WITHOUT moving zones -- distinct from library-search (which tutors a card OUT to hand). Witnessed via the SCRY half of Serum Visions (oracle 'Draw a card. Scry 2.'). The parser splits the spell into two flat sibling effects; the scry sentence 'Scry 2.' matches ScrySpellRule (^Scry\\s+\\d+$) -> a clean ScryEffect{Count={QuantityType:literal, Value:2}}, verified via `dotnet run --project apps/mast-query-cli -- --dump \"Serum Visions\"` (Abilities[0].Kind=spell, Effects=[drawCards{1,You}, scry{literal 2}]). A faithful witness, not a wish. Scry (not surveil) is the SMALLEST honest unit for cards:select: CR 701.22a -- 'scry N means look at the top N cards of YOUR library, then put any number on the bottom in any order and the rest on top in any order' -- is a pure top-N peek+reorder with NO zone change (bottom-of-library is still library). Surveil (CR 701.25) was deliberately NOT chosen: it optionally moves cards to the graveyard, a zone move that muddies the 'no zone move' distinction the hole names. The live engine projects the ADR-2 COARSE label emit:scry (known-coarse-projections.json line 178: 'baseline coarse fallback ... no flow rule consumes it yet') -- the interim ADR-2 stem this gold hand-maps up to the ADR-3 STATE stem 'cards:select', exactly as the divination sibling hand-maps emit:drawcards -> 'cards'. STEM CREATED (burn-down): 'cards:select' is NOT in the scaffold's declared stems spine (it lives only as a sought hole's proposed_stem), so this projection creates it -- the rollup will mark it unpredicted:true. AXIS SURFACES (surfaced, not invented): the hole's proposed attrs are 'peek=N' and 'reorder'. peek=N (the look depth) is hand-mapped onto the closed 'qty' axis (licensed_by *, applies to cards) -- qty=2 from ScryEffect.Count -- rather than inventing a 'peek'/'depth' axis. The 'reorder' behavior (top/bottom re-arrangement) and the scry-vs-surveil KIND have NO closed attribute axis; following the divination/boggart-brute convention they are recorded here as open scaffold questions, NOT fabricated as ad-hoc attrs keys. A dedicated depth/reorder axis or a select-kind axis is a taxonomy decision for the scaffold, not this gold. No edhrec_rank in the testbed source -- popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-5 \u2014 cards:select (Serum Visions scry, CR 701.22a; surveil correctly excluded as a zone move) hole burn-down; PROCEED"
+  },
+  "ports": {
+    "Serum Visions": [
+      {
+        "id": "S1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards:select",
+        "attrs": {
+          "control": "you",
+          "qty": 2
+        },
+        "note": "THE WITNESS -- the 'Scry 2.' sentence of Serum Visions emits the cards:select STATE op (CR 701.22a: look at the top 2 cards of your library, reorder top/bottom, no zone change). AST-derivable: Abilities[0].Effects[1] = ScryEffect{Count={QuantityType:literal, Value:2}}. qty=2 is the peek/look DEPTH (hole's proposed peek=N), mapped onto the closed qty axis (licensed_by *). control=you is CR-definitional -- 701.22a fixes scry to YOUR OWN library (there is no Player field on ScryEffect; scry cannot target another player's library, unlike fateseal) -- value 'you' on the control lattice self<=controlled<=any. A STATE emit (a re-ordering of the library resource in place), NOT an EVENT zone change: it moves no card between zones, which is precisely what separates cards:select from the library-search / removal / deployment families. The reorder behavior and the scry-vs-surveil kind have no closed axis -- surfaced in source.note, not invented as attrs keys."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.cards:select.witnessed",
+      "because": "S1 projects the STATE stem 'cards:select' (the library-selection hole's proposed_stem), turning the SOUGHT hole into a witnessed stem. Derived by hand-mapping the ADR-2 coarse emit:scry up to the ADR-3 cards:select rung (peek/reorder top-N, CR 701.22a). This BURNS DOWN holes[library-selection]."
+    },
+    {
+      "claim": "stem.cards:select.unpredicted",
+      "because": "'cards:select' is NOT in the scaffold's declared stems spine -- it exists only as a sought hole's proposed_stem, never as a declared stem. Per the rollup rule (TopologyStep: Projected && !Declared => unpredicted:true) this gold-projected stem is unpredicted; the witness CREATES the rung. Contrast the divination gold, whose 'cards' stem was already declared (NOT unpredicted)."
+    },
+    {
+      "claim": "S1.qty == 2",
+      "because": "ScryEffect.Count={QuantityType:literal, Value:2} -- 'Scry 2' looks at the top TWO cards. The hole's proposed 'peek=N' depth is hand-mapped onto the closed 'qty' axis (licensed_by *, applies to cards; '2' already in qty.values_seen) rather than inventing a 'peek' axis. CR 701.22a: top N cards, N=2."
+    },
+    {
+      "claim": "S1.control == you",
+      "because": "CR 701.22a -- 'the top N cards of YOUR library'. Scry is definitionally self-library (no Player field on ScryEffect; scry cannot look at an opponent's library -- that is fateseal). control axis licensed_by *; value 'you' on the lattice self <= controlled <= any; 'you' already in control.values_seen. Provenance is CR-definitional, not an explicit AST field."
+    },
+    {
+      "claim": "S1.kind == STATE",
+      "because": "scry re-orders the library resource IN PLACE with no card crossing a zone boundary (bottom-of-library is still library, CR 701.22a). Like mana/life/counters it is a STATE op on a resource pool, not a discrete EVENT zone change -- this is exactly what distinguishes cards:select from library-search (to=hand) and from removal/deployment (zone-anchored)."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: one port derivation witnessing the cards:select stem + its qty/control facets, no cycle closed (edges=[])."
+    }
+  ],
+  "cr": [
+    "701.22",
+    "701.22a",
+    "701.22b",
+    "401.1"
+  ]
+}

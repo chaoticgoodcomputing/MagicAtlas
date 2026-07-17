@@ -1,0 +1,70 @@
+{
+  "id": "pacifism",
+  "unit": "single-card",
+  "cards": [
+    "Pacifism"
+  ],
+  "source": {
+    "note": "single-card witness of the SOUGHT hole 'restriction-grant' (priority 1 enabler; holes.restriction-grant, proposed_stem modification:restriction, kind BEHAVIOR, slang pacifism/prison/lock). Pacifism is the canonical pacifism grant. Oracle (whole card): 'Enchant creature\\nEnchanted creature can't attack or block.' The card is an Aura whose sole non-enchant clause imposes a can't-attack/can't-block restriction on the object it is attached to, so the restriction emit is THE witness with no incidental context. The AST is FAITHFUL, not a wish (hand-parsed gold at Fixtures/HandParsedCards/Pacifism.json): the second static ability parses to two ContinuousEffects on one StaticAbility \u2014 CantAttackEffect{ Target={ Kind: EnchantedOrEquipped } } (CR 508.1c) and CantBlockEffect{ Target={ Kind: EnchantedOrEquipped } } (CR 509.1c) \u2014 exactly the multi-effect-per-clause reading the effect docs describe for 'can't attack or block'. The restriction PARSES cleanly (no emit:unparsed, no diagnostics), so there is no parse gap to route. ADR-3 canonical: side=emit, kind=BEHAVIOR (modification supergroup: 'an object altered in place'), stem=modification:restriction. HOLE BURN-DOWN: modification:restriction has NO declared stem (it lives only in holes), so this witness CREATES the stem \u2014 the rollup will surface it with unpredicted:true. That is the POINT (a sought hole turned into a witnessed stem), not an error; the scaffold should promote modification:restriction from a hole to a declared stem. MISSING AXIS (surfaced, NOT invented): the hole proposes attrs 'restrict=attack|block', but there is NO 'restrict' axis in the closed attribute_axes set (color/combat/control/counter-type/delta/direction/duration/exclude_self/from/keyword/manner/owner/pt/qty/recipient/self/stat/subject/subtype/target/to/token). Following the boggart-brute precedent (bare modification:evasion + the evasion-kind axis surfaced, not invented), this gold witnesses the BARE stem and does NOT add an off-axis 'restrict' key \u2014 the restrict={attack,block} facet (AST-derivable from the CantAttackEffect + CantBlockEffect pair) is a proposed new closed axis for the scaffold to decide, recorded here and in the assertion, not smuggled in. The one attr witnessed is subject=attached, which IS on the closed subject axis (the modification:* sibling convention: modification:evasion/:flying/:keyword all carry subject). subject=attached is AST-derivable from Target.Kind=EnchantedOrEquipped (the restriction lands on the attached creature, CR 303.4 / 701.3 attach), a new value on the subject axis whose only prior value_seen was 'self' (self = the source restricts itself, e.g. Defender; attached = an Aura/Equipment grants the restriction to a distinct attached object \u2014 the essence of a restriction *grant*). No edhrec_rank in the testbed source \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-5 \u2014 modification:restriction (Pacifism, CR 508.1c/509.1b) hole burn-down; restrict axis surfaced; PROCEED"
+  },
+  "ports": {
+    "Pacifism": [
+      {
+        "id": "P0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:restriction",
+        "attrs": {
+          "subject": "attached"
+        },
+        "note": "THE WITNESS \u2014 'Enchanted creature can't attack or block' emits the modification:restriction BEHAVIOR (a continuous can't-attack/can't-block grant on the attached object). AST-derivable: the StaticAbility carries CantAttackEffect{Target=EnchantedOrEquipped} (CR 508.1c) + CantBlockEffect{Target=EnchantedOrEquipped} (CR 509.1c). A BEHAVIOR emit like modification:evasion (a continuous static grant), not an EVENT. subject=attached from Target.Kind=EnchantedOrEquipped (CR 303.4 aura attach). The restrict={attack,block} facet is NOT witnessed as an attr because there is no closed 'restrict' axis \u2014 surfaced in source.note + assertion as a proposed axis, not invented as an off-axis key (boggart-brute evasion-kind precedent)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:restriction.witnessed",
+      "because": "P0 projects the BEHAVIOR stem modification:restriction (modification supergroup, CR 611.2c continuous effect from a static ability), derived from the CantAttackEffect + CantBlockEffect pair on Pacifism's second static ability. This is the first witness of the stem: it burns down the 'restriction-grant' sought hole (holes.restriction-grant.proposed_stem == modification:restriction)."
+    },
+    {
+      "claim": "stem.modification:restriction.unpredicted == true",
+      "because": "modification:restriction was NOT a declared stem (it lived only in holes with status=sought, no declared stem in stems_representative); a gold that projects a stem the scaffold never declared carries unpredicted:true. This is the intended hole burn-down, not an error \u2014 the scaffold should promote modification:restriction from a hole to a declared stem."
+    },
+    {
+      "claim": "P0.subject == attached",
+      "because": "Target.Kind=EnchantedOrEquipped \u2014 the restriction lands on the attached creature (CR 303.4 / 701.3 attach), not on Pacifism itself. subject axis (closed; licenses the modification:* stems), a new value 'attached' alongside the prior value_seen 'self'. attached is the restriction-*grant* case (source imposes on a distinct attached object) vs self (source restricts itself)."
+    },
+    {
+      "claim": "axis.restrict.missing",
+      "because": "the hole proposes attrs restrict=attack|block, but there is NO 'restrict' key in the closed attribute_axes set. Following boggart-brute (evasion sub-kind surfaced, not invented), this gold witnesses the BARE modification:restriction stem and does NOT add an off-axis restrict key. restrict={attack,block} is AST-derivable (CantAttackEffect + CantBlockEffect) and is SURFACED here as a proposed new closed axis (values: attack, block, activate) \u2014 a scaffold decision, not a unilateral gold edit."
+    },
+    {
+      "claim": "P0.kind == BEHAVIOR",
+      "because": "a can't-attack/can't-block grant is a continuous, time-varying value applied to an object in place (CR 611 continuous effects; modification supergroup kind_view=BEHAVIOR), not a discrete EVENT occurrence and not a STATE pool."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + subject facet, no cycle closed (edges=[])."
+    }
+  ],
+  "cr": [
+    "303.4",
+    "508.1c",
+    "509.1b",
+    "604.1",
+    "611.2c",
+    "701.3",
+    "702.5"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "id": "diabolic-tutor",
+  "unit": "single-card",
+  "cards": [
+    "Diabolic Tutor"
+  ],
+  "source": {
+    "note": "single-card witness of the SOUGHT hole 'library-search' (port-topology holes, priority 4, corpus demand ~77k) \u2014 turning it from a sought hole into a witnessed stem. proposed_stem = 'cards:search' (kind STATE): searching your library for a card and moving it out (tutor/fetch; slang 'tutor'/'fetch'), library\u2192hand by criteria, distinct from draw (a bare cards STATE delta with no from) and from Removal/Deployment (whose from\u2192to is play-anchored). Witness card = Diabolic Tutor, a Demonic Tutor sibling. Oracle: 'Search your library for a card, put that card into your hand, then shuffle.' The live engine parses Oracle.Abilities[0] (Kind=spell) -> Effects[0]: EffectType=searchLibrary, Filter.CardTypes=[card] (unrestricted 'a card'), Count={QuantityType:literal, Value:1}, Destination='Hand', Player omitted, Sources omitted. The searchLibrary effect DEFINITIONALLY searches the library (CR 701.23) \u2014 Player omitted => your library (701.23a default subject = the ability's controller), Sources omitted => library-only \u2014 so from=library is AST-proven, not over-approximated; Destination='Hand' proves to=hand; Player-omitted proves control=you; Count.Value=1 proves qty=1. A faithful witness, not a wish. HONEST DEMAND CAVEAT (ACCRETION.md): the hole's corpus number rides the coarse 'library' token which over-counts (it also catches library-selection); the load-bearing signal is the matched tutor/fetch payoffs, which Diabolic Tutor squarely is. SCAFFOLD SURFACE #1 (from/to licensing): the from/to zone axes are currently licensed_by removal:*/deployment:* only; this witness extends them to the cards:search stem (accretion adds cards:search to from/to.stems and 'library' to from.values_seen) \u2014 the axis KEYS are in the closed set, so no new axis is invented, but their licensed_by should gain cards:search. This is the SAME hidden-zone<->hidden-zone kinship the archaeomancer gold established for recur (graveyard\u2192hand): both are non-play zone moves that name from/to; cards:search shares the to=hand endpoint with recur. SCAFFOLD SURFACE #2 (by=criteria): the hole proposes an attr 'by=criteria' (the search predicate), but there is NO closed 'by'/'criteria' axis \u2014 so it is SURFACED here, not invented as an ad-hoc key. For Diabolic Tutor the criterion is the unrestricted 'a card' (Filter.CardTypes=[card]) anyway, so nothing is lost; the subtype axis (which could carry a searched type) is licensed_by objects:*/removal:*/deployment:*, NOT cards:*, so it does not apply to cards:search either. cards:search is NOT in the scaffold's stems, so it surfaces as an unpredicted witnessed stem (burn-down of the sought hole). No edhrec_rank/popularity in the testbed corpus \u2014 omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-5 \u2014 cards:search (Diabolic Tutor, CR 701.23a; from/to shared with recur) hole burn-down; PROCEED"
+  },
+  "ports": {
+    "Diabolic Tutor": [
+      {
+        "id": "T1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards:search",
+        "attrs": {
+          "from": "library",
+          "to": "hand",
+          "control": "you",
+          "qty": 1
+        },
+        "note": "THE WITNESS \u2014 'Search your library for a card, put that card into your hand, then shuffle.' (EffectType=searchLibrary, Filter.CardTypes=[card], Count={literal,1}, Destination='Hand', Player omitted, Sources omitted). A cards:search STATE op: a card moves library\u2192hand by criteria (here the trivial unrestricted 'a card'). from=library is AST-proven (searchLibrary definitionally searches the library; Player omitted => your library per CR 701.23a, Sources omitted => library-only) \u2014 a bare value, not derived. to=hand is proven by Destination='Hand'. control=you from Player omitted (701.23a default subject = the controller/searcher, who also receives the card into hand). qty=1 from Count={literal,1} ('search for A card'). The search predicate ('by=criteria') rides in the source note, not as an attr: there is no closed by/criteria axis, and Diabolic Tutor's criterion is unrestricted anyway."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.cards:search.witnessed",
+      "because": "T1 projects the bare STATE stem cards:search (a search/tutor library\u2192hand cards op; parent = the already-witnessed cards STATE stem), derived from EffectType=searchLibrary. cards:search is absent from the scaffold's stems, so it surfaces as an unpredicted witnessed stem \u2014 the burn-down of the sought hole 'library-search' (proposed_stem cards:search)."
+    },
+    {
+      "claim": "T1.from == library",
+      "because": "the searchLibrary effect definitionally searches the library (CR 701.23); Player omitted => your library (701.23a default), Sources omitted => library-only \u2014 the source zone is AST-proven (bare value, not derived/over-approximated). Extends the from axis (closed key) to the cards:search stem and adds 'library' to from.values_seen."
+    },
+    {
+      "claim": "T1.to == hand",
+      "because": "Destination == 'Hand' on the searchLibrary effect \u2014 the destination is AST-proven (bare value). Shares the to=hand endpoint with the recur stem (archaeomancer): both are hidden-zone<->hidden-zone (non-play) moves."
+    },
+    {
+      "claim": "T1.control == you",
+      "because": "Player omitted => CR 701.23a default subject = the ability's controller (the searcher, who also puts the found card into their own hand); control axis licensed_by *, value 'you' already in control.values_seen."
+    },
+    {
+      "claim": "T1.qty == 1",
+      "because": "Count == {QuantityType:literal, Value:1} \u2014 'search your library for A card'; qty axis licensed_by * (applies to cards), value '1' already in qty.values_seen."
+    },
+    {
+      "claim": "burns_down_hole.library-search",
+      "because": "the sought hole's proposed_stem 'cards:search' is now witnessed by T1 (from=library, to=hand, control=you, qty=1) \u2014 a SOUGHT hole becomes a witnessed stem. distinct from library-selection (scry/surveil, peek/reorder, no zone move) and from recur (graveyard-source)."
+    },
+    {
+      "claim": "by_criteria_omitted (unaxised)",
+      "because": "the hole proposes an attr 'by=criteria' (the search predicate), but there is no closed by/criteria axis, and the subtype axis is not licensed for cards:*; Diabolic Tutor's criterion is the unrestricted 'a card' (Filter.CardTypes=[card]) anyway. Surfaced as an open scaffold question in the source note, NOT invented as an ad-hoc attrs key."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: one port derivation witnessing the cards:search stem + its from/to/control/qty facets, no cycle closed (edges=[])."
+    }
+  ],
+  "cr": [
+    "701.23",
+    "701.23a",
+    "400.1",
+    "401.1",
+    "402.1",
+    "121.4",
+    "601.2"
+  ]
+}

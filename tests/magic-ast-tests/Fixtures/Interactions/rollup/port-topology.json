@@ -8,11 +8,16 @@
     "brazen-dwarf",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "diabolic-tutor",
     "divination",
+    "fog",
     "kari-zev-skyship-raider",
     "kiki-jiki-mirror-breaker",
+    "pacifism",
     "ruthless-knave-x-blood-artist",
+    "serum-visions",
     "spine-of-ish-sah",
+    "stone-calendar",
     "titanias-boon"
   ],
   "kinds": {
@@ -78,6 +83,28 @@
         "control",
         "qty"
       ]
+    },
+    "cards:search": {
+      "kind": "STATE",
+      "parent": "cards",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "from",
+        "qty",
+        "to"
+      ],
+      "unpredicted": true
+    },
+    "cards:select": {
+      "kind": "STATE",
+      "parent": "cards",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "qty"
+      ],
+      "unpredicted": true
     },
     "cast": {
       "kind": "EVENT",
@@ -227,6 +254,33 @@
         "subject"
       ]
     },
+    "modification:prevention": {
+      "kind": "BEHAVIOR",
+      "parent": "modification",
+      "status": "witnessed",
+      "attrs": [
+        "duration"
+      ],
+      "unpredicted": true
+    },
+    "modification:restriction": {
+      "kind": "BEHAVIOR",
+      "parent": "modification",
+      "status": "witnessed",
+      "attrs": [
+        "subject"
+      ],
+      "unpredicted": true
+    },
+    "modification:spell": {
+      "kind": "BEHAVIOR",
+      "parent": "modification",
+      "status": "witnessed",
+      "attrs": [
+        "control"
+      ],
+      "unpredicted": true
+    },
     "recur": {
       "kind": "EVENT",
       "status": "witnessed",
@@ -342,6 +396,8 @@
     "control": {
       "stems": [
         "cards",
+        "cards:search",
+        "cards:select",
         "cast",
         "counters",
         "creature",
@@ -349,6 +405,7 @@
         "deployment:artifact",
         "deployment:creature",
         "dice-rolled",
+        "modification:spell",
         "recur",
         "removal:creature",
         "removal:permanent",
@@ -416,7 +473,8 @@
     },
     "duration": {
       "stems": [
-        "modification:creature"
+        "modification:creature",
+        "modification:prevention"
       ],
       "values_seen": [
         "eot"
@@ -452,6 +510,7 @@
     },
     "from": {
       "stems": [
+        "cards:search",
         "recur",
         "removal:artifact",
         "removal:creature",
@@ -459,7 +518,8 @@
       ],
       "values_seen": [
         "battlefield",
-        "graveyard"
+        "graveyard",
+        "library"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -537,6 +597,8 @@
       "stems": [
         "artifact",
         "cards",
+        "cards:search",
+        "cards:select",
         "counters",
         "creature",
         "deployment:artifact",
@@ -628,9 +690,11 @@
         "deployment:creature",
         "modification:evasion",
         "modification:evasion:flying",
-        "modification:keyword"
+        "modification:keyword",
+        "modification:restriction"
       ],
       "values_seen": [
+        "attached",
         "self"
       ],
       "carries_provenance_or_polarity": false
@@ -676,6 +740,7 @@
     },
     "to": {
       "stems": [
+        "cards:search",
         "recur",
         "removal:artifact",
         "removal:creature",

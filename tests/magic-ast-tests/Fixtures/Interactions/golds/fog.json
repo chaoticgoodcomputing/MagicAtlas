@@ -1,0 +1,68 @@
+{
+  "id": "fog",
+  "unit": "single-card",
+  "cards": [
+    "Fog"
+  ],
+  "source": {
+    "note": "single-card witness of the SOUGHT hole 'prevention' (topology-scaffold holes: priority 3, kind BEHAVIOR, slang ['fog'], note 'a shield/replacement on the damage event', proposed_stem modification:prevention). No declared stem existed \u2014 this witness CREATES it, so the rollup flags it unpredicted:true (the backlog burn-down, not an error). Oracle (whole card): 'Prevent all combat damage that would be dealt this turn.' A single spell ability whose sole effect is the prevention shield, so the emit is THE witness with no incidental context. AST faithful, not a wish (hand-parsed gold Fixtures/HandParsedCards/Fog.json): Ability.Kind=spell, one Effect EffectType=preventDamage { All=true, CombatOnly=true, Duration=untilTime(Turn/End) }. ADR-3 canonical: side=emit, kind=BEHAVIOR (a prevention shield is a continuous effect \u2014 CR 611/615 \u2014 living in the 'modification' supergroup = 'an object/event altered in place'), stem=modification:prevention (the hole's proposed_stem). Live engine projects the ADR-2 coarse label preventDamage (known-coarse-projections.json: 'baseline coarse fallback \u2014 no flow rule consumes it yet' \u2014 shadow-mode inert per ACCRETION; NOT emit:unparsed, the parser derives the effect richly). duration=eot is AST-derivable (Duration End-of-Turn) and LICENSED (duration axis licensed_by modification:*, enum contains eot), so this gold also first-witnesses the duration axis on a non-creature modification stem. MISSING-AXIS SURFACED, NOT INVENTED: the hole's proposed attr 'prevents=combat-damage' has no closed axis. CombatOnly=true is the prevented-damage class (combat/noncombat/all); it maps semantically to the existing 'combat' axis (enum [combat,noncombat,any]) but that axis is licensed_by [damage-dealt, combat-presence], NOT modification:*, so it is not licensed for modification:prevention. Following the boggart-brute precedent (bare modification:evasion witnessed, evasion-kind axis surfaced not invented), this gold witnesses the bare stem carrying only the licensed duration facet and DOES NOT attach an unlicensed combat facet or invent a 'prevents' key. Scaffold decision surfaced: extend the 'combat' axis licensed_by to include modification:prevention (or modification:*), or add a new prevented-damage-class axis. No edhrec_rank in the testbed source \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-5 \u2014 modification:prevention (Fog, CR 615.1) hole burn-down; combat-class is a re-licensing of the existing axis; PROCEED"
+  },
+  "ports": {
+    "Fog": [
+      {
+        "id": "F0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:prevention",
+        "attrs": {
+          "duration": "eot"
+        },
+        "note": "THE WITNESS \u2014 'Prevent all combat damage that would be dealt this turn' emits a prevention shield (CR 615.1 prevention effect; CR 611 continuous effect). AST-derivable from PreventDamageEffect{ All=true, CombatOnly=true, Duration=untilTime(Turn/End) }. duration='eot' <- Duration End-of-Turn (licensed by modification:*). The CombatOnly=true damage-class is recorded in source.note as an open axis question (combat axis not licensed for modification:prevention), NOT invented as an attrs key. All=true (unbounded, no qty limit) => no qty facet."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:prevention.witnessed",
+      "because": "F0 projects the BEHAVIOR stem modification:prevention (modification supergroup, kind_view BEHAVIOR), derived from the preventDamage effect. This turns the SOUGHT 'prevention' hole (proposed_stem modification:prevention) into a witnessed stem."
+    },
+    {
+      "claim": "stem.modification:prevention.unpredicted",
+      "because": "the scaffold declared no such stem (prevention was a holes[] entry, not a stems[] entry), so the rollup sets unpredicted:true \u2014 the hole burn-down, not an error; parallels archaeomancer's recur."
+    },
+    {
+      "claim": "F0.kind == BEHAVIOR",
+      "because": "a prevention shield is a continuous effect (PreventDamageEffect : ContinuousEffect; CR 611/615) \u2014 a time-varying property watching the damage event, not a discrete occurrence; belongs to the modification supergroup."
+    },
+    {
+      "claim": "F0.duration == eot",
+      "because": "PreventDamageEffect.Duration = untilTime(Turn/End) \u2014 'this turn'. duration axis enum contains eot and is licensed_by modification:*, which covers modification:prevention; this gold first-witnesses the duration axis on a modification:prevention stem."
+    },
+    {
+      "claim": "F0.combat_class == combat (unaxised)",
+      "because": "CombatOnly=true (only combat damage is prevented; CR 510.2) is the prevented-damage class, but neither a stem leaf nor a licensed closed axis captures it \u2014 the 'combat' axis (enum combat/noncombat/any) is licensed_by [damage-dealt, combat-presence], not modification:*. Recorded in source.note as an open scaffold question (extend combat's licensing or add a prevented-damage-class axis), not invented as an ad-hoc attrs key."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + duration facet, no cycle closed and no edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "615",
+    "615.1",
+    "611.1",
+    "510.2",
+    "120.6"
+  ]
+}

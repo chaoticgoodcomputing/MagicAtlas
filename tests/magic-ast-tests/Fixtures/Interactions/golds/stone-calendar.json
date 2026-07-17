@@ -1,0 +1,68 @@
+{
+  "id": "stone-calendar",
+  "unit": "single-card",
+  "cards": [
+    "Stone Calendar"
+  ],
+  "source": {
+    "note": "single-card witness of the SOUGHT HOLE 'cost-modification' (priority 1 in rollup/port-topology.cited.json holes; proposed_stem=modification:spell, kind=BEHAVIOR, slang=[tax, cost-reduction, cheat-out], note: 'both directions (up tax / down reduction) homeless'). Per ACCRETION.md the corpus demand of this ENABLER hole reads ~0 (payoff-invisible), so its panel PRIORITY (1, most-corroborated) governs the pick, not the 0. Stone Calendar is the SMALLEST honest unit for the down (cost-reduction) direction: its ONLY ability is the cost modifier. Oracle (whole card): 'Spells you cast cost {1} less to cast.' AST is faithful, not a wish (hand-parsed gold at Fixtures/HandParsedCards/StoneCalendar.json): a single Ability.Kind=static with one Effect EffectType=costReduction, Amount={QuantityType:literal, Value:1} (purely generic {1}), AffectedObjects={CardTypes:[spell], Controller:You}. The ADR-2 layer projects the cost modifier as emit:costreduction; ADR-3 canonical stem = the bare modification:spell (the hole's proposed_stem). AXIS QUESTION (surfaced, not decided): the hole's proposed attr 'cost-delta' (which would carry the modification DIRECTION down/reduction, the AMOUNT {1}, and the CURRENCY mana) is NOT in the closed attribute_axes set. There is a 'delta' axis but it is signed-magnitude P/T on modification:creature (values_seen +X/-X), a different concept from a mana-cost delta. Following the Boggart Brute precedent (witness the bare modification:evasion, surface the evasion-kind axis rather than invent one), this gold witnesses the bare stem with ONLY the closed 'control' axis (control=you, from AffectedObjects.Controller=You) and does NOT invent a cost-delta key. The scaffold question (does modification:spell need a closed 'cost-delta' axis carrying {direction, amount, currency}?) is surfaced for scaffold refinement, not decided. SUPERGROUP caveat also surfaced: the modification supergroup def ('an object altered in place: P/T, keyword/ability grant, type/color/control change') does not yet mention casting-cost adjustment (CR 601.2f) as a modification target; modification:spell stretches it and the def may want a follow-up. No edhrec_rank in the testbed source, so source.popularity is omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-5 \u2014 modification:spell (Stone Calendar, CR 601.2f; honest \u2193-only partial) hole burn-down; cost-delta axis surfaced; PROCEED"
+  },
+  "ports": {
+    "Stone Calendar": [
+      {
+        "id": "S0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:spell",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE WITNESS \u2014 'Spells you cast cost {1} less to cast' is a static continuous effect (CR 604.1, 611.2) that adjusts the total cost of casting a spell (CR 601.2f). AST-derivable: StaticAbility with one CostReductionEffect{Amount=literal 1} over AffectedObjects{CardTypes=[spell], Controller=You} -> engine emits ADR-2 emit:costreduction -> hand-maps to the bare BEHAVIOR stem modification:spell (the hole's proposed_stem). control='you' is the ONLY closed axis attached (AffectedObjects.Controller=You: the modified objects are spells YOU cast; control axis licensed_by *, lattice self subset controlled subset any). The reduction DIRECTION/AMOUNT ({1} less) belongs to the proposed-but-unclosed 'cost-delta' axis and is deliberately NOT encoded as an attrs key \u2014 surfaced in source.note, not invented."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:spell.witnessed",
+      "because": "S0 projects the bare BEHAVIOR stem modification:spell \u2014 the priority-1 sought hole 'cost-modification' proposed_stem \u2014 derived from Stone Calendar's sole static ability (a costReduction over spells you cast, CR 601.2f). This burns the hole's STEM down from status=sought to witnessed."
+    },
+    {
+      "claim": "stem.modification:spell.unpredicted",
+      "because": "modification:spell is NOT in the scaffold's declared stems set (it existed only as a hole proposed_stem); a gold that first-projects it is Projected && !Declared, so TopologyStep marks it unpredicted:true \u2014 a taxonomy surprise warranting a scaffold update (promote the hole to a declared stem)."
+    },
+    {
+      "claim": "S0.control == you",
+      "because": "AffectedObjects.Controller=You \u2014 'Spells YOU cast'; the modified objects are yours (control axis, licensed_by *, values_seen already contains 'you', lattice self subset controlled subset any). AST-derivable from an explicit Controller filter, the ONLY closed axis this witness attaches."
+    },
+    {
+      "claim": "S0.kind == BEHAVIOR",
+      "because": "a cost modifier alters casting cost in place via a static continuous effect (CR 604.1, 611.2), not a discrete zone-change occurrence or a fungible resource pool; it lands under the modification supergroup (kind_view BEHAVIOR), mirroring modification:evasion / modification:keyword."
+    },
+    {
+      "claim": "cost-delta axis missing (unaxised, SURFACED not invented)",
+      "because": "the hole's proposed attr 'cost-delta' (carrying direction=reduction, amount={1}, currency=mana) is NOT a closed attribute_axis; the existing 'delta' axis is signed-magnitude P/T on modification:creature, a different concept. Per the Boggart Brute bare-stem precedent this gold records the missing axis as an open scaffold question rather than inventing an ad-hoc attrs key \u2014 the cost-delta axis is a scaffold surface for a follow-up decision."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + control facet, no cycle closed and no edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "601.2",
+    "601.2f",
+    "604.1",
+    "611.2",
+    "118.7"
+  ]
+}
