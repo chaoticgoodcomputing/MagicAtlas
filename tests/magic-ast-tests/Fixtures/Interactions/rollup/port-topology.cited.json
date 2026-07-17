@@ -2,8 +2,10 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "ancient-copper-dragon",
+    "brazen-dwarf",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "kari-zev-skyship-raider",
     "ruthless-knave-x-blood-artist"
   ],
   "kinds": {
@@ -70,6 +72,17 @@
       "status": "declared",
       "attrs": []
     },
+    "combat-presence": {
+      "kind": "EVENT",
+      "status": "witnessed",
+      "attrs": [
+        "subject"
+      ],
+      "unpredicted": true,
+      "witnesses": [
+        "kari-zev-skyship-raider"
+      ]
+    },
     "counters": {
       "kind": "STATE",
       "status": "declared",
@@ -99,7 +112,8 @@
       ],
       "unpredicted": true,
       "witnesses": [
-        "ancient-copper-dragon"
+        "ancient-copper-dragon",
+        "brazen-dwarf"
       ]
     },
     "deployment": {
@@ -145,7 +159,19 @@
       ],
       "witnesses": [
         "chatterfang-x-pitiless-plunderer",
-        "deadeye-x-peregrine-drake"
+        "deadeye-x-peregrine-drake",
+        "kari-zev-skyship-raider"
+      ]
+    },
+    "dice-rolled": {
+      "kind": "EVENT",
+      "status": "witnessed",
+      "attrs": [
+        "control"
+      ],
+      "unpredicted": true,
+      "witnesses": [
+        "brazen-dwarf"
       ]
     },
     "life": {
@@ -313,7 +339,8 @@
         "damage-dealt"
       ],
       "values_seen": [
-        "combat"
+        "combat",
+        "noncombat"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -332,6 +359,7 @@
         "deployment",
         "deployment:artifact",
         "deployment:creature",
+        "dice-rolled",
         "removal:creature",
         "structure:untap"
       ],
@@ -592,6 +620,7 @@
     },
     "subject": {
       "stems": [
+        "combat-presence",
         "damage-dealt",
         "deployment:creature",
         "modification:evasion:flying",
@@ -614,6 +643,7 @@
       ],
       "values_seen": [
         "land",
+        "monkey",
         "squirrel",
         "treasure"
       ],

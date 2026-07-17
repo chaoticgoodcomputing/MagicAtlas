@@ -1,0 +1,71 @@
+{
+  "id": "brazen-dwarf",
+  "unit": "single-card",
+  "cards": [
+    "Brazen Dwarf"
+  ],
+  "source": {
+    "note": "single-card witness of the bare event-verb stem dice-rolled (no supergroup) via the 'whenever you roll one or more dice' subscription (a player-action trigger, CR 706). Oracle: 'Whenever you roll one or more dice, this creature deals 1 damage to each opponent.' Live engine projects trigger:rolldice:controlled (interim family='dice', stem='dice', isSelf=false; AST TriggerCondition.Event=TriggerEvent.DiceRolled from DiceRolledConditionRule, plain any-roll form \u2014 no DieResultThreshold/DieResultValues, controller 'you' implicit with no Filter) \u2014 ADR-3 canonical stem = dice-rolled. The dice family is Stage-2 structured, so this is a faithful witness, not a wish. No edhrec_rank in the testbed source \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-2 \u2014 dice-rolled/control=you faithful vs TriggerEvent.DiceRolled (CR 706/603.2); PROCEED"
+  },
+  "ports": {
+    "Brazen Dwarf": [
+      {
+        "id": "B0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "dice-rolled",
+        "attrs": {
+          "control": "you"
+        },
+        "note": "THE WITNESS \u2014 'whenever you roll one or more dice' \u2014 a player-action subscription on the bare EVENT verb dice-rolled (event_verbs entry: stem is literally 'dice-rolled', not consume:rolldice). The ADR-2 label segment 'controlled' maps to the control axis value 'you' (the roller's scope: you roll). A plain any-roll trigger (no result qualifier). AST-derivable: TriggerEvent.DiceRolled, plain _plain form, no Filter (controller 'you' implicit)."
+      },
+      {
+        "id": "B1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "opponent",
+          "subject": "self"
+        },
+        "note": "incidental card context \u2014 'this creature deals 1 damage to each opponent' (the roll payoff). damage-dealt already witnessed by ancient-copper-dragon; noncombat facet (CR 120, not the combat damage step) + self source (isSelf=true) both AST-derivable. Not the witness of this gold."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.dice-rolled.witnessed",
+      "because": "B0 projects the bare EVENT verb dice-rolled (event_verbs entry, no supergroup \u2014 O19 dissolved dice into an event verb, no fourth axis); the stem is literally 'dice-rolled', turning it declared \u2192 witnessed"
+    },
+    {
+      "claim": "B0.control == you",
+      "because": "'whenever YOU roll one or more dice' \u2014 the roller's scope is the controller (you). The ADR-2 label's 'controlled' segment maps to control=you (control axis, licensed_by *; lattice self \u2286 controlled \u2286 any). A player-action trigger, so the restriction is implicit (no Filter in the AST)."
+    },
+    {
+      "claim": "B0.kind == EVENT",
+      "because": "a die roll is a discrete occurrence with a numeric payload (CR 706.2) that subscriptions fire on \u2014 event_verbs.dice-rolled.kind = EVENT"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + facet, no cycle closed. The internal roll \u2192 dice-rolled \u2192 damage-dealt binding is card-defined, not an inter-card interaction edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "706",
+    "706.2",
+    "603.2",
+    "120"
+  ]
+}

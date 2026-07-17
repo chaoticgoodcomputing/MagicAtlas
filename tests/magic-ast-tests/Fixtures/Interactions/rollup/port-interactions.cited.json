@@ -2,8 +2,10 @@
   "$generated": "tools/interaction-rollup",
   "$golds": [
     "ancient-copper-dragon",
+    "brazen-dwarf",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
+    "kari-zev-skyship-raider",
     "ruthless-knave-x-blood-artist"
   ],
   "conflicts": [],

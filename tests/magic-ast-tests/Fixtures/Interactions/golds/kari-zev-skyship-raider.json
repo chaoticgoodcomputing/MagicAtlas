@@ -1,0 +1,86 @@
+{
+  "id": "kari-zev-skyship-raider",
+  "unit": "single-card",
+  "cards": [
+    "Kari Zev, Skyship Raider"
+  ],
+  "source": {
+    "note": "single-card witness of the bare event-verb stem combat-presence (no supergroup; O21 the attacksorblocks subscription). Live engine projects attacks:creature (Consume; Subject cardTypes=creature|isSelf=True; AST Trigger.Event=Attacks, Filter.IsSelf=true) for 'Whenever Kari Zev, Skyship Raider attacks' \u2014 ADR-3 canonical stem = combat-presence, attacks half. The parser derives the self-source watch (isSelf=True), so this is a faithful witness, not a wish. No popularity source available in the testbed corpus (edhrec/price absent) \u2014 omitted."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-2 \u2014 combat-presence/subject=self faithful vs Attacks/IsSelf (CR 508/603.2); card-defined token edge honest; PROCEED"
+  },
+  "ports": {
+    "Kari Zev, Skyship Raider": [
+      {
+        "id": "K1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "combat-presence",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "THE WITNESS \u2014 'whenever this creature attacks' \u2014 the attacksorblocks subscription (attacks half); a self-source watch (Filter.IsSelf=true). combat-presence unifies attacks + blocks into one bare EVENT verb (O21), so the attacks-only specificity is deliberately folded in \u2014 no attacks-vs-blocks axis exists in the closed set, and none is needed to witness the stem."
+      },
+      {
+        "id": "K2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "token": true,
+          "subtype": "monkey",
+          "control": "you",
+          "qty": 1
+        },
+        "note": "incidental card context \u2014 the Ragavan token the attack trigger creates (live emit:token:creature:monkey:controlled); already-witnessed stem, shown to ground the card-defined flow out of the combat-presence subscription"
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Kari Zev, Skyship Raider.K1",
+      "to": "Kari Zev, Skyship Raider.K2",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "'Whenever Kari Zev attacks, create a Monkey token' \u2014 a deterministic card-defined flow from the combat-presence subscription to the deployment; structural (self-certifying), no rule dependency. Matches the live CardDefinedEdge attacks:creature -> emit:token."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.combat-presence.witnessed",
+      "because": "K1 projects the bare EVENT verb combat-presence (event_verbs entry, no supergroup \u2014 stem is literally 'combat-presence', not attacks:creature); the attacksorblocks subscription, attacks half"
+    },
+    {
+      "claim": "K1.subject == self",
+      "because": "Filter.IsSelf=true \u2014 self-source watch ('whenever THIS creature attacks'); an inbound emit:combat-presence -> K1 edge would require guard:self-watch (same-card identity, already confirmed by deadeye-x-peregrine-drake), not re-declared here"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined mechanism (self-certifying, structural); the attack trigger deterministically creates the token \u2014 no over-approximation to cap"
+    },
+    {
+      "claim": "edge.E1.mechanism == card-defined"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + self-source facet, no cycle closed (the extra-combat driver emit:additionalcombat that would close a loop lives on the structured 'combat' stem, not on this subscription)"
+    }
+  ],
+  "cr": [
+    "508.1a",
+    "509.1a",
+    "500.8",
+    "603.2"
+  ]
+}
