@@ -369,13 +369,24 @@ export const CARDPOOL: PoolCard[] = [
 
 export const EXPLORER_CARDS = ["Midnight Reaper", "Grave Pact", "Ashnod's Altar", "Zulaport Cutthroat", "Impact Tremors"];
 
-export interface Candidate extends PoolCard { via: boolean; port: string; }
+export interface Candidate extends PoolCard {
+  via: boolean;
+  port: string;
+  /** The connecting port-pair (ADR-0003 §3 capture): the emitting family →
+   *  the consuming family of THIS link, ordered emit→consume regardless of
+   *  column. For a direct same-family match the two are equal; for a
+   *  combo-adjacent bridge they differ (e.g. Deadeye's `blink` → a neighbour's
+   *  `etb`). The UI renders `linkEmit → linkConsume`. Optional so the mock
+   *  fallback need not populate the exact hop. */
+  linkEmit?: string;
+  linkConsume?: string;
+}
 
 /** Cards that emit what `fam` consumes (supergroup matches flagged `via`). */
 export function emittersOf(fam: string): Candidate[] {
   return CARDPOOL
     .filter((c) => c.out != null && subsumes(fam, c.out))
-    .map((c) => ({ ...c, via: c.out !== fam, port: c.out as string }))
+    .map((c) => ({ ...c, via: c.out !== fam, port: c.out as string, linkEmit: c.out as string, linkConsume: fam }))
     .sort((a, b) => tierRank[a.tier] - tierRank[b.tier]);
 }
 

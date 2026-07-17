@@ -28,16 +28,33 @@ const DEFAULT_CARD = "Ashnod's Altar";
 const goToCard = (name: string) => { window.location.hash = `/card/${encodeURIComponent(name)}`; };
 
 function CandidateRow({ c }: { c: Candidate }) {
+  // The connecting port-pair, oriented emit→consume: e.g. Deadeye's `blink`
+  // feeds a neighbour's `etb`. Equal families = a direct same-resource match
+  // (shown once); differing = the flow hop (shown as `emit → consume`, with `↝`
+  // when it rides a combo-adjacent family bridge rather than a shared resource).
+  const from = c.linkEmit ?? c.port;
+  const to = c.linkConsume ?? c.port;
+  const cross = from !== to;
   return (
     <div className="list-row">
       <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         <CardLink name={c.card} />
       </span>
-      {c.via && (
-        <span className="ws-mono" title={`bridged through the ${c.port} resource (combo-adjacent family), not a direct port match`} style={{ fontSize: 9, color: famHue(c.port), whiteSpace: "nowrap" }}>
-          ↝ {c.port}
-        </span>
-      )}
+      <span
+        className="ws-mono"
+        title={cross
+          ? `${from} feeds ${to}${c.via ? " — via a combo-adjacent family bridge" : ""}`
+          : `direct ${from} match`}
+        style={{ fontSize: 9.5, whiteSpace: "nowrap", display: "inline-flex", alignItems: "center", gap: 3 }}
+      >
+        <span style={{ color: famHue(from) }}>{from}</span>
+        {cross && (
+          <>
+            <span style={{ color: "var(--atlas-muted)" }}>{c.via ? "↝" : "→"}</span>
+            <span style={{ color: famHue(to) }}>{to}</span>
+          </>
+        )}
+      </span>
       <FamilyDot family={c.port} />
       <TierChip tier={c.tier} conf={c.conf} />
     </div>

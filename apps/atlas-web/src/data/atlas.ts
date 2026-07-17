@@ -312,6 +312,11 @@ function candidatesFrom(
   data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string; tier?: string | null }[] } } } } | undefined,
   directFams: ReadonlySet<string>,
   self: string,
+  edges: Edge[],
+  // The side the NEIGHBOUR was matched on: "consume" ⇒ this is the right column
+  // (self EMITS, neighbour consumes); "emit" ⇒ left column (neighbour emits,
+  // self consumes). Determines the direction the bridging edge is read.
+  neighbourSide: "emit" | "consume",
 ): Candidate[] {
   const nodes = data?.discover?.atlas?.portRows?.nodes ?? [];
   const byCard = new Map<string, { family: string; tier: string | null }>(); // card → chosen port
@@ -322,10 +327,23 @@ function candidatesFrom(
       byCard.set(n.card, { family: n.family, tier: n.tier ?? null });
     }
   }
+  // The self-side family that connects to a neighbour matched on `port`: the
+  // same family when it's a direct match, else the `directFams` member joined to
+  // `port` by a resource-edge (the combo-adjacent bridge). Returned oriented
+  // emit→consume so the row reads as a flow (Deadeye's `blink` → a neighbour's `etb`).
+  const link = (port: string): { linkEmit: string; linkConsume: string } => {
+    if (directFams.has(port)) return { linkEmit: port, linkConsume: port };
+    if (neighbourSide === "consume") {
+      const from = edges.find((e) => e.to === port && directFams.has(e.from))?.from ?? port;
+      return { linkEmit: from, linkConsume: port };
+    }
+    const to = edges.find((e) => e.from === port && directFams.has(e.to))?.to ?? port;
+    return { linkEmit: port, linkConsume: to };
+  };
   return [...byCard.entries()]
     .map(([card, { family: port, tier }]): Candidate => ({
       card, in: null, out: null, tier: tierOf(tier),
-      via: !directFams.has(port), port,
+      via: !directFams.has(port), port, ...link(port),
     }))
     .sort(
       (a, b) =>
@@ -418,12 +436,12 @@ export function useCardNeighbours(
   const inSet = useMemo(() => new Set(inFams), [inFams]);
   const outSet = useMemo(() => new Set(outFams), [outFams]);
   const emitters = useMemo(
-    () => (feederFams.length ? candidatesFrom(emitQ.data, inSet, self) : []),
-    [emitQ.data, feederFams, inSet, self],
+    () => (feederFams.length ? candidatesFrom(emitQ.data, inSet, self, edges, "emit") : []),
+    [emitQ.data, feederFams, inSet, self, edges],
   );
   const consumers = useMemo(
-    () => (drainFams.length ? candidatesFrom(consumeQ.data, outSet, self) : []),
-    [consumeQ.data, drainFams, outSet, self],
+    () => (drainFams.length ? candidatesFrom(consumeQ.data, outSet, self, edges, "consume") : []),
+    [consumeQ.data, drainFams, outSet, self, edges],
   );
 
   return {
