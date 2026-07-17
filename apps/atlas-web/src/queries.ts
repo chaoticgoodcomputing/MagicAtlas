@@ -392,12 +392,37 @@ export const DECK_PORTS_QUERY = gql`
 // nullable and stays null until the pipeline reseeds the backfilled tiers — the
 // hook falls back to a neutral tier so the UI never shows a blank one. The
 // PortRow schema exposes no `confidence` field, so none is selected here.
-export const PORT_CANDIDATES_QUERY = gql`
-  query PortCandidates($families: [String!]!, $side: String!) {
+// The Card Explorer's two columns, served straight from the engine's precise,
+// denormalized interaction graph (atlas.port_edges) — no client-side flow logic.
+// FEEDERS (left): edges INTO this card (toCard = $card); the emitting fromCard feeds
+// it. DRAINS (right): edges OUT (fromCard = $card); the consuming toCard is fed.
+// Ranked by combo popularity, then the NEIGHBOUR's EDHREC (the deck-building tiebreak).
+export const CARD_FEEDERS_QUERY = gql`
+  query CardFeeders($card: String!, $first: Int!) {
     discover {
       atlas {
-        portRows(where: { side: { eq: $side }, family: { in: $families } }, first: 400) {
-          nodes { card family side tier manner isSelf }
+        portEdgeRows(
+          where: { toCard: { eq: $card } }
+          order: [{ popularity: DESC }, { fromEdhrec: ASC }]
+          first: $first
+        ) {
+          nodes { fromCard fromFamily fromLabel toCard toFamily toLabel tier popularity }
+        }
+      }
+    }
+  }
+`;
+
+export const CARD_DRAINS_QUERY = gql`
+  query CardDrains($card: String!, $first: Int!) {
+    discover {
+      atlas {
+        portEdgeRows(
+          where: { fromCard: { eq: $card } }
+          order: [{ popularity: DESC }, { toEdhrec: ASC }]
+          first: $first
+        ) {
+          nodes { fromCard fromFamily fromLabel toCard toFamily toLabel tier popularity }
         }
       }
     }

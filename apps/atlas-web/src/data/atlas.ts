@@ -37,10 +37,9 @@ import {
   ANALYZE_DECK_QUERY,
   ARCHETYPES_QUERY, FAMILY_CARDS_QUERY, FAMILY_GRAPH_QUERY, HEADLINE_STATS_QUERY, TIER_COUNTS_QUERY,
   ORACLE_SPANS_QUERY,
-  PORT_CANDIDATES_QUERY, DECK_PORTS_QUERY, CARD_FORWARD_QUERY,
+  CARD_FEEDERS_QUERY, CARD_DRAINS_QUERY, DECK_PORTS_QUERY, CARD_FORWARD_QUERY,
   CARD_PROFILE_QUERY, CARD_COMBOS_QUERY, CARD_ANCHOR_QUERY, RULINGS_QUERY,
 } from "../queries";
-import { FLOW_FEEDERS, FLOW_DRAINS, feeds, type PortFacets } from "./flowArms";
 import {
   DECKS, FAMCARDS, HEADLINE_STATS, ORACLE,
   TIERS, tierRank,
@@ -313,51 +312,61 @@ const tierOf = (raw: string | null | undefined): Tier =>
  *  candidate is `via` (a bridge) when the arm crosses families (token→sacrifice),
  *  direct when it stays within one (mana→mana). Sorts best-fidelity, direct-first,
  *  by name. */
-function candidatesFrom(
-  data: { discover?: { atlas?: { portRows?: { nodes?: { card: string; family: string; tier?: string | null; manner?: string | null; isSelf?: boolean | null }[] } } } } | undefined,
-  // The focus card's ports on the side that PAIRS with the candidates: for the
-  // emitters column (candidates emit), these are the focus's consume ports; for
-  // the consumers column (candidates consume), the focus's emit ports.
-  focusPorts: PortFacets[],
+/** One row of the denormalized interaction graph (atlas.port_edges) as the
+ *  Explorer needs it. */
+interface EdgeNode {
+  fromCard: string;
+  fromFamily: string | null;
+  fromLabel: string;
+  toCard: string;
+  toFamily: string | null;
+  toLabel: string;
+  tier: string | null;
+  popularity: number;
+}
+
+/** Map port-edge rows — the ENGINE's precise, tier'd, popularity-ranked interaction
+ *  edges — to Candidate rows for one column. `dir === "feeders"` ⇒ edges point INTO
+ *  the focus (its `toCard`); the neighbour is the emitting `fromCard`. `dir ===
+ *  "drains"` ⇒ edges point OUT (its `fromCard`); the neighbour is the consuming
+ *  `toCard`. Dedup by neighbour card, keeping the most-popular edge; order by
+ *  popularity (relevance) then tier. There is NO client-side flow logic — the edges
+ *  ARE the engine's verdict, so the columns cannot drift from it (the whole point of
+ *  serving port_edges instead of re-deriving arms with feeds()/FLOW_FEEDERS). */
+function edgesToCandidates(
+  data: { discover?: { atlas?: { portEdgeRows?: { nodes?: EdgeNode[] } } } } | undefined,
+  dir: "feeders" | "drains",
   self: string,
-  // "emit" ⇒ the candidate is the emitter (left column, feeds the focus); "consume"
-  // ⇒ the candidate is the consumer (right column, drained by the focus).
-  neighbourSide: "emit" | "consume",
 ): Candidate[] {
-  const nodes = data?.discover?.atlas?.portRows?.nodes ?? [];
-  const byCard = new Map<string, { family: string; tier: string | null; linkEmit: string; linkConsume: string; via: boolean }>();
-  for (const n of nodes) {
-    if (n.card === self) continue; // never list the focus card in its own columns
-    const cand: PortFacets = { family: n.family, manner: n.manner, isSelf: n.isSelf ?? false };
-    // Keep the candidate only if a real flow arm connects it to a focus port.
-    let linkEmit: string | null = null;
-    let linkConsume: string | null = null;
-    for (const fp of focusPorts) {
-      const emit = neighbourSide === "emit" ? cand : fp;
-      const consume = neighbourSide === "emit" ? fp : cand;
-      if (feeds(emit, consume)) {
-        linkEmit = emit.family;
-        linkConsume = consume.family;
-        break;
-      }
-    }
-    if (linkEmit === null || linkConsume === null) continue; // no flow arm → pruned
-    const via = linkEmit !== linkConsume;
-    const cur = byCard.get(n.card);
-    if (cur === undefined || (cur.via && !via)) // prefer a direct arm over a bridged one
-      byCard.set(n.card, { family: n.family, tier: n.tier ?? null, linkEmit, linkConsume, via });
+  const nodes = data?.discover?.atlas?.portEdgeRows?.nodes ?? [];
+  const byCard = new Map<
+    string,
+    { port: string; linkEmit: string; linkConsume: string; tier: string | null; via: boolean; pop: number }
+  >();
+  for (const e of nodes) {
+    const neighbour = dir === "feeders" ? e.fromCard : e.toCard;
+    if (neighbour === self) continue; // never list the focus card in its own columns
+    const linkEmit = e.fromFamily || e.fromLabel;
+    const linkConsume = e.toFamily || e.toLabel;
+    const port = dir === "feeders" ? linkEmit : linkConsume;
+    const cur = byCard.get(neighbour);
+    if (cur === undefined || e.popularity > cur.pop)
+      byCard.set(neighbour, {
+        port, linkEmit, linkConsume, tier: e.tier ?? null,
+        via: linkEmit !== linkConsume, pop: e.popularity,
+      });
   }
   return [...byCard.entries()]
-    .map(([card, r]): Candidate => ({
-      card, in: null, out: null, tier: tierOf(r.tier),
-      via: r.via, port: r.family, linkEmit: r.linkEmit, linkConsume: r.linkConsume,
-    }))
     .sort(
       (a, b) =>
-        tierRank[a.tier] - tierRank[b.tier] ||
-        Number(a.via) - Number(b.via) ||
-        a.card.localeCompare(b.card),
-    );
+        b[1].pop - a[1].pop ||
+        tierRank[tierOf(a[1].tier)] - tierRank[tierOf(b[1].tier)] ||
+        a[0].localeCompare(b[0]),
+    )
+    .map(([card, r]): Candidate => ({
+      card, in: null, out: null, tier: tierOf(r.tier),
+      via: r.via, port: r.port, linkEmit: r.linkEmit, linkConsume: r.linkConsume,
+    }));
 }
 
 /** The live canonical resource-family set — the resource-graph stations
@@ -417,52 +426,23 @@ export function useCardNeighbours(
   const inFams = useMemo(() => canonicalFamilies(ports, "consume", canonical), [ports, canonical]);
   const outFams = useMemo(() => canonicalFamilies(ports, "emit", canonical), [ports, canonical]);
 
-  // The focus card's own ports (with facets) per side — the `feeds` check pairs a
-  // candidate against these, so a match respects manner/self, not just family.
-  const consumeFacets = useMemo<PortFacets[]>(
-    () => ports.filter((p) => p.side === "consume").map((p) => ({ family: p.family, manner: p.manner, isSelf: p.isSelf })),
-    [ports],
-  );
-  const emitFacets = useMemo<PortFacets[]>(
-    () => ports.filter((p) => p.side === "emit").map((p) => ({ family: p.family, manner: p.manner, isSelf: p.isSelf })),
-    [ports],
-  );
+  // The two columns come straight from the engine's precise interaction edges
+  // (atlas.port_edges): FEEDERS (left) = edges INTO this card (toCard = self), the
+  // emitting fromCard feeds it; DRAINS (right) = edges OUT (fromCard = self), the
+  // consuming toCard is fed. Ranked by combo popularity server-side, so first:N
+  // yields the notable neighbours. NO client-side flow re-derivation — the edges
+  // are the engine's verdict, so the columns cannot drift from it (the old
+  // feeds()/FLOW_FEEDERS/FLOW_DRAINS path is deleted).
+  const feedersQ = useQuery(CARD_FEEDERS_QUERY, { variables: { card: self, first: 120 }, skip: !self });
+  const drainsQ = useQuery(CARD_DRAINS_QUERY, { variables: { card: self, first: 120 }, skip: !self });
 
-  // Left query set: the EMIT families that feed this card's consume families under
-  // a real flow arm (PortFlowMatcher / FLOW_FEEDERS) — NOT the lossy ring
-  // predecessors. Right query set: the CONSUME families this card's emit families
-  // feed (FLOW_DRAINS).
-  const feederFams = useMemo(
-    () => uniqStr(inFams.flatMap((f) => [...(FLOW_FEEDERS[f] ?? [])])),
-    [inFams],
-  );
-  const drainFams = useMemo(
-    () => uniqStr(outFams.flatMap((f) => [...(FLOW_DRAINS[f] ?? [])])),
-    [outFams],
-  );
-
-  const emitQ = useQuery(PORT_CANDIDATES_QUERY, {
-    variables: { families: feederFams, side: "emit" },
-    skip: feederFams.length === 0,
-  });
-  const consumeQ = useQuery(PORT_CANDIDATES_QUERY, {
-    variables: { families: drainFams, side: "consume" },
-    skip: drainFams.length === 0,
-  });
-
-  const emitters = useMemo(
-    () => (feederFams.length ? candidatesFrom(emitQ.data, consumeFacets, self, "emit") : []),
-    [emitQ.data, feederFams, consumeFacets, self],
-  );
-  const consumers = useMemo(
-    () => (drainFams.length ? candidatesFrom(consumeQ.data, emitFacets, self, "consume") : []),
-    [consumeQ.data, drainFams, emitFacets, self],
-  );
+  const emitters = useMemo(() => edgesToCandidates(feedersQ.data, "feeders", self), [feedersQ.data, self]);
+  const consumers = useMemo(() => edgesToCandidates(drainsQ.data, "drains", self), [drainsQ.data, self]);
 
   return {
     data: { emitters, consumers, inFams, outFams },
-    loading: graph.loading || emitQ.loading || consumeQ.loading,
-    error: graph.error ?? emitQ.error ?? consumeQ.error ?? null,
+    loading: graph.loading || feedersQ.loading || drainsQ.loading,
+    error: graph.error ?? feedersQ.error ?? drainsQ.error ?? null,
   };
 }
 

@@ -488,6 +488,12 @@ public sealed class AtlasSeeder
                      .ToListAsync(ct))
             attrsByCard[c.Name] = ((double)c.Cmc, c.EdhrecRank, (c.Colors ?? new()).ToArray());
 
+        // (card, label) -> engine family, so each edge endpoint carries its family denormalized (the
+        // frontend renders/colors the hop without re-deriving families client-side).
+        var famByPort = new Dictionary<(string Card, string Label), string>();
+        foreach (var p in await db.Ports.Select(p => new { p.Card, p.Label, p.Family }).ToListAsync(ct))
+            famByPort[(p.Card, p.Label)] = p.Family;
+
         // Combo-popularity back-annotation: an edge's relevance = the max popularity of any combo whose
         // card set contains BOTH its endpoints (a co-occurrence proxy — the exact cycle-membership would
         // need the reconstructed edge list, but "both cards in a popular combo" is the right relevance
@@ -508,7 +514,10 @@ public sealed class AtlasSeeder
 
         var indexNames = new[]
         {
-            "ix_port_edges_from", "ix_port_edges_reaches", "ix_port_edges_edhrec", "ix_port_edges_cmc",
+            "ix_port_edges_from", "ix_port_edges_to",
+            "ix_port_edges_reaches", "ix_port_edges_source_reaches",
+            "ix_port_edges_edhrec", "ix_port_edges_cmc",
+            "ix_port_edges_from_edhrec", "ix_port_edges_from_cmc",
             "ix_port_edges_popularity",
         };
         foreach (var ix in indexNames)
@@ -522,8 +531,9 @@ public sealed class AtlasSeeder
         long total = 0;
 
         await using (var writer = await conn.BeginBinaryImportAsync(
-            "COPY atlas.port_edges (from_card, from_label, to_card, to_label, relation, tier, "
-                + "to_cmc, to_edhrec, to_colors, popularity, target_reaches) FROM STDIN (FORMAT BINARY)",
+            "COPY atlas.port_edges (from_card, from_label, from_family, to_card, to_label, to_family, "
+                + "relation, tier, from_cmc, from_edhrec, from_colors, source_reaches, "
+                + "to_cmc, to_edhrec, to_colors, target_reaches, popularity) FROM STDIN (FORMAT BINARY)",
             ct))
         {
             await using var stream = File.OpenRead(_cardEdgesPath!);
@@ -537,35 +547,53 @@ public sealed class AtlasSeeder
                 // ("X copy of Y" — ~97% of the engine's raw union) and any other non-card node: copy
                 // interactions are set-contextual and belong in the combo view (design §4), not this
                 // pairwise edge table. Requiring both endpoints be real cards also guarantees every seeded
-                // row carries its denormalized attrs.
-                if (!attrsByCard.ContainsKey(fromCard) || !attrsByCard.TryGetValue(toCard, out var attr))
+                // row carries its denormalized attrs on both sides.
+                if (!attrsByCard.TryGetValue(fromCard, out var fromAttr)
+                    || !attrsByCard.TryGetValue(toCard, out var toAttr))
                     continue;
-                var reaches = reachesByCard.TryGetValue(toCard, out var r) ? r : empty;
+                var toReaches = reachesByCard.TryGetValue(toCard, out var tr) ? tr : empty;
+                var fromReaches = reachesByCard.TryGetValue(fromCard, out var fr) ? fr : empty;
+
+                var fromLabel = e.FromLabel ?? "";
+                var toLabel = e.ToLabel ?? "";
 
                 await writer.StartRowAsync(ct);
                 await writer.WriteAsync(fromCard, NpgsqlDbType.Text, ct);
-                await writer.WriteAsync(e.FromLabel ?? "", NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(fromLabel, NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(famByPort.GetValueOrDefault((fromCard, fromLabel), ""), NpgsqlDbType.Text, ct);
                 await writer.WriteAsync(toCard, NpgsqlDbType.Text, ct);
-                await writer.WriteAsync(e.ToLabel ?? "", NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(toLabel, NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(famByPort.GetValueOrDefault((toCard, toLabel), ""), NpgsqlDbType.Text, ct);
                 await writer.WriteAsync(e.Family ?? "", NpgsqlDbType.Text, ct);
                 if (e.Tier is null) await writer.WriteNullAsync(ct);
                 else await writer.WriteAsync(e.Tier, NpgsqlDbType.Text, ct);
-                await writer.WriteAsync(attr.Cmc, NpgsqlDbType.Double, ct);
-                if (attr.Edhrec is int edh) await writer.WriteAsync(edh, NpgsqlDbType.Integer, ct);
+                // source (feeder) side
+                await writer.WriteAsync(fromAttr.Cmc, NpgsqlDbType.Double, ct);
+                if (fromAttr.Edhrec is int fedh) await writer.WriteAsync(fedh, NpgsqlDbType.Integer, ct);
                 else await writer.WriteNullAsync(ct);
-                await writer.WriteAsync(attr.Colors, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(fromAttr.Colors, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(fromReaches, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
+                // target (consumer) side
+                await writer.WriteAsync(toAttr.Cmc, NpgsqlDbType.Double, ct);
+                if (toAttr.Edhrec is int tedh) await writer.WriteAsync(tedh, NpgsqlDbType.Integer, ct);
+                else await writer.WriteNullAsync(ct);
+                await writer.WriteAsync(toAttr.Colors, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(toReaches, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
                 await writer.WriteAsync(
                     pairPop.TryGetValue((fromCard, toCard), out var pop) ? pop : 0, NpgsqlDbType.Integer, ct);
-                await writer.WriteAsync(reaches, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
                 total++;
             }
             await writer.CompleteAsync(ct);
         }
 
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_from ON atlas.port_edges (from_card, from_label)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_to ON atlas.port_edges (to_card, to_label)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_reaches ON atlas.port_edges USING GIN (target_reaches)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_source_reaches ON atlas.port_edges USING GIN (source_reaches)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_edhrec ON atlas.port_edges (to_edhrec)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_cmc ON atlas.port_edges (to_cmc)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_from_edhrec ON atlas.port_edges (from_edhrec)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_from_cmc ON atlas.port_edges (from_cmc)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_popularity ON atlas.port_edges (popularity DESC)");
 
         _logger.LogInformation("Port edges: {Total} rows.", total);
