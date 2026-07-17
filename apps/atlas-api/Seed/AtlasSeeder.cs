@@ -488,9 +488,28 @@ public sealed class AtlasSeeder
                      .ToListAsync(ct))
             attrsByCard[c.Name] = ((double)c.Cmc, c.EdhrecRank, (c.Colors ?? new()).ToArray());
 
+        // Combo-popularity back-annotation: an edge's relevance = the max popularity of any combo whose
+        // card set contains BOTH its endpoints (a co-occurrence proxy — the exact cycle-membership would
+        // need the reconstructed edge list, but "both cards in a popular combo" is the right relevance
+        // signal and sinks the ~inert edges to 0). Combo.Cards is "A + B [+ C…]".
+        var pairPop = new Dictionary<(string From, string To), int>();
+        foreach (var combo in await db.Combos.Select(c => new { c.Cards, c.Popularity }).ToListAsync(ct))
+        {
+            var cards = combo.Cards.Split(" + ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            for (var i = 0; i < cards.Length; i++)
+                for (var j = 0; j < cards.Length; j++)
+                {
+                    if (i == j) continue;
+                    var key = (cards[i], cards[j]);
+                    if (!pairPop.TryGetValue(key, out var cur) || combo.Popularity > cur)
+                        pairPop[key] = combo.Popularity;
+                }
+        }
+
         var indexNames = new[]
         {
             "ix_port_edges_from", "ix_port_edges_reaches", "ix_port_edges_edhrec", "ix_port_edges_cmc",
+            "ix_port_edges_popularity",
         };
         foreach (var ix in indexNames)
             db.Database.ExecuteSqlRaw($"DROP INDEX IF EXISTS atlas.{ix}");
@@ -535,7 +554,8 @@ public sealed class AtlasSeeder
                 if (attr.Edhrec is int edh) await writer.WriteAsync(edh, NpgsqlDbType.Integer, ct);
                 else await writer.WriteNullAsync(ct);
                 await writer.WriteAsync(attr.Colors, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
-                await writer.WriteAsync(0, NpgsqlDbType.Integer, ct); // popularity — combo back-annotation TODO
+                await writer.WriteAsync(
+                    pairPop.TryGetValue((fromCard, toCard), out var pop) ? pop : 0, NpgsqlDbType.Integer, ct);
                 await writer.WriteAsync(reaches, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
                 total++;
             }
@@ -546,6 +566,7 @@ public sealed class AtlasSeeder
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_reaches ON atlas.port_edges USING GIN (target_reaches)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_edhrec ON atlas.port_edges (to_edhrec)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_cmc ON atlas.port_edges (to_cmc)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_popularity ON atlas.port_edges (popularity DESC)");
 
         _logger.LogInformation("Port edges: {Total} rows.", total);
     }
