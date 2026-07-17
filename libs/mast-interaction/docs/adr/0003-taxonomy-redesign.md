@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposed (2026-07-16).** Refines [ADR 0001](0001-the-interaction-line.md) (ports and the edge families
+**Accepted (2026-07-16; implemented through Stage 4, 2026-07-17).** Refines [ADR 0001](0001-the-interaction-line.md) (ports and the edge families
 survive intact) and supersedes [ADR 0002](0002-port-labels-are-deterministic-ast-projections.md) **§3**
 (the single ordered colon-chain) and **§6's** bridge-primacy; ADR 0002's foundational principles —
 deterministic projection, label-as-query, totality, the §8 accounting axes, the collision-lint — all
@@ -14,8 +14,14 @@ and Deadeye Navigator × Peregrine Drake (AMBER) — which between them exercise
 (Appendix); a third, Ruthless Knave × Blood Artist, is absorbed from the existing fixtures as a GREEN
 cover-policy seed-witness (§8 bootstraps from all three).
 
-**Not yet implemented.** The projection, engine, and fixtures still reflect ADR 0002 until the Migration
-stages complete; nothing ships from this document before its Stage gates pass.
+**Implemented (Stages 0–4, 2026-07-17).** The scaffold, per-gold fixture + rollup formats, the parser asks,
+the structured dual-emit `PortNode`, and the **engine cutover** have all landed: `PortFlowMatcher.Captures`
+(structure) is the authoritative flow matcher, proven quotient-equal to the ADR-0002 `FlowFeasible` label
+switch over the full corpus (Stage 3, 0 divergences) and behaviour-preserving at cutover (Stage 4, byte-
+identical dumps, 7253/0 tests). The residual layer is the accreted rollup (O17.1): 57 golds → 29 confirmed
+rules, topology 29/29 witnessed. All O17 open items are closed (see the ledger). *Remaining:* Stage 5
+frontend completeness, and the deferred non-behaviour-preserving cleanup (delete `FlowFeasible` + the label
+`Serialize` shims; retire the sac→dies bridge into subsumption).
 
 ## Context — why the ontology reopened
 
@@ -321,13 +327,21 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
   `Sacrificed`/blink emit-side manner values** (moved here from Stage 1 — they are projection, derived
   from effect node type). *Gate:* label round-trip — serialize(structure) reproduces today's labels
   byte-for-byte across the corpus.
-- **Stage 3 — engine shadow mode.** `captures(Q,E)` + residual registry runs in parallel with the old arms
-  on the full corpus; diff edges + tiers. Stem-bucketed candidates; quotient re-proof. *Gate:*
-  reconstruction golds + bench:recall + a judged sweep of **every tier change** (including the §7
-  null-Subject GREEN drops); the corpus-edge-diff gate is explicitly non-authoritative.
-- **Stage 4 — cutover.** Retire subsumption-expressible arms; guards/bridges remain as the registry.
-  Regenerate resource graph + D1–D4 dumps; reseed the API. *Gate:* CardAtlas contract tests + atlas-diag
-  spot-checks on both golds' cards.
+- **Stage 3 — engine shadow mode. DONE (2026-07-17).** `PortFlowMatcher.Captures` (structural `SelectArm` +
+  the shared guards) shadowed against the `FlowFeasible` label oracle over the FULL production reconstruction
+  workload (env-gated `MAST_CAPTURES_SHADOW` instrumentation in `PortGraphEngine.Materialize`): **3,006,456
+  pairs, 112,631 feasible, 0 divergences** — quotient re-proof complete, full structure-coverage confirmed.
+  The sweep surfaced + closed two latent Stage-2 coverage gaps (bare `emit:returntobattlefield`,
+  `attacksorblocks:creature`) a null `PortStructure` would otherwise have silently dropped. No tier change
+  materialised (the null-Subject KILL was already the engine convention), so the "judged sweep of every GREEN
+  drop" was empty. Sentinel `PortFlowMatcherShadowTest` remains the CI regression guard.
+- **Stage 4 — cutover. DONE (2026-07-17).** `Materialize`'s flow gate now calls `Captures` (structure
+  authoritative); new flow arms are added on `SelectArm` + a guard, not the label switch. Guards/bridges stay
+  in code as the registry (§6). Behaviour-preserving, proven three ways: 0 shadow divergences, D1–D4 dumps +
+  `_08_Reporting` byte-identical after regen, and the full NUnit suite green (7253/0). API reseed is a no-op
+  (dumps unchanged → `atlas.ports` already current). *Deferred cleanup (non-behaviour-preserving, follow-up):*
+  physically delete `FlowFeasible` + the family `Serialize` label shims, and retire the sac→dies bridge into
+  subsumption.
 - **Stage 5 — frontend.** Structured attributes + rollup consumption; attribute-subset column matching.
   *Gate:* the Chatterfang and Deadeye card pages render the worked-gold edge sets exactly.
 
