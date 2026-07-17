@@ -465,6 +465,11 @@ export interface CardPort {
   tier: Tier;
   confidence: number | null;
   label: string;
+  /** ADR-0003 provenance: the 0-based oracle line this port projects from, and
+   *  the absolute `[start, end]` character spans of the projecting clause within
+   *  the oracle text. Lets the Explorer group ports by clause and tint the span. */
+  lineIndex: number;
+  spans: number[][] | null;
 }
 
 export interface CardProfile {
@@ -494,6 +499,7 @@ interface CardProfileCardRow {
 interface CardProfilePortRow {
   family: string; side: string; tier: string | null;
   confidence: number | null; label: string;
+  oracleLineIndex: number | null; spans: number[][] | null;
 }
 
 export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
@@ -513,6 +519,8 @@ export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
       tier: tierOf(p.tier),
       confidence: p.confidence,
       label: p.label,
+      lineIndex: p.oracleLineIndex ?? 0,
+      spans: p.spans ?? null,
     }));
     return {
       id: row.id, oracleId: row.oracleId, name: row.name,

@@ -9,21 +9,20 @@
 // highlighted oracle clause focuses one side; the search box or any CardLink
 // navigates to that card's page.
 
-import { useState } from "react";
-import { cardImage, famHue, type Side } from "../data/mock";
+import { useState, useEffect, type ReactNode } from "react";
+import { cardImage, famHue } from "../data/mock";
 import {
   useCardNeighbours, useCardProfile, useOracle,
   useCardCombos, useCardAnchor, useCardRulings,
+  type CardPort,
 } from "../data/atlas";
 import { TierChip, FamilyDot, SectionHead } from "../components/primitives";
-import { OracleText } from "../components/OracleText";
 import { CardLink } from "../components/CardLink";
 import { CardSearch } from "../components/CardSearch";
 import { PortsPanel, CombosPanel, AnchorPanel, RulingsPanel, MetaStat } from "../components/CardProfile";
 import { ManaCost, SymbolsProvider } from "../ManaCost";
 import type { Candidate } from "../data/mock";
 
-type Focus = Side | "both";
 const DEFAULT_CARD = "Ashnod's Altar";
 const goToCard = (name: string) => { window.location.hash = `/card/${encodeURIComponent(name)}`; };
 
@@ -93,18 +92,137 @@ function CandidatePanel({
   );
 }
 
+// ── Line-oriented oracle (v2) ────────────────────────────────────────────────
+// Every port carries its oracle line + the [start,end] spans of the clause that
+// projects it (ADR-0003 provenance). So the oracle text renders line-by-line:
+// each line tints its ports' spans and lists the ports it emits/consumes, and
+// selecting a line scopes the explore/exploit columns to THAT clause's ports —
+// "what does the blink clause feed" rather than "what does the whole card feed".
+
+/** Group a card's ports by the oracle line they project from. */
+function portsByLine(ports: CardPort[]): Map<number, CardPort[]> {
+  const m = new Map<number, CardPort[]>();
+  for (const p of ports) {
+    const arr = m.get(p.lineIndex);
+    if (arr) arr.push(p);
+    else m.set(p.lineIndex, [p]);
+  }
+  return m;
+}
+
+/** Merge overlapping [start,end) line-relative ranges. */
+function mergeRanges(rs: [number, number][]): [number, number][] {
+  const out: [number, number][] = [];
+  for (const [s, e] of [...rs].sort((a, b) => a[0] - b[0])) {
+    const last = out[out.length - 1];
+    if (last && s <= last[1]) last[1] = Math.max(last[1], e);
+    else out.push([s, e]);
+  }
+  return out;
+}
+
+/** Render `text` with the given line-relative ranges wrapped in a tinted mark. */
+function highlightText(text: string, ranges: [number, number][]): ReactNode {
+  if (!ranges.length) return text;
+  const out: ReactNode[] = [];
+  let cur = 0;
+  mergeRanges(ranges).forEach(([s, e], k) => {
+    if (s > cur) out.push(text.slice(cur, s));
+    out.push(
+      <mark key={k} style={{ background: "color-mix(in srgb, var(--atlas-accent, #6c8cff) 26%, transparent)", color: "inherit", borderRadius: 2, padding: "0 1px" }}>
+        {text.slice(s, e)}
+      </mark>,
+    );
+    cur = e;
+  });
+  if (cur < text.length) out.push(text.slice(cur));
+  return out;
+}
+
+const sideGlyph = (side: CardPort["side"]) => (side === "emit" ? "▸" : side === "intercept" ? "⇄" : "◂");
+
+function PortChip({ p }: { p: CardPort }) {
+  const hue = famHue(p.family);
+  return (
+    <span
+      className="ws-mono"
+      title={`${p.side} · ${p.label} · ${p.tier}`}
+      style={{
+        fontSize: 9.5, display: "inline-flex", alignItems: "center", gap: 3, padding: "1px 5px",
+        borderRadius: 4, whiteSpace: "nowrap",
+        background: `color-mix(in srgb, ${hue} 13%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${hue} 30%, transparent)`,
+      }}
+    >
+      <span style={{ color: "var(--atlas-muted)" }}>{sideGlyph(p.side)}</span>
+      <span style={{ color: hue }}>{p.family}</span>
+    </span>
+  );
+}
+
+/** The oracle text as selectable, port-annotated lines. */
+function OracleLines({ oracleText, ports, selected, onSelect }: {
+  oracleText: string; ports: CardPort[];
+  selected: number | null; onSelect: (line: number | null) => void;
+}) {
+  const lines = oracleText.split("\n");
+  const byLine = portsByLine(ports);
+  let off = 0;
+  const starts = lines.map((l) => { const s = off; off += l.length + 1; return s; });
+  return (
+    <div className="oracle-text" style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      {lines.map((text, i) => {
+        const lps = byLine.get(i) ?? [];
+        const start = starts[i];
+        const end = start + text.length;
+        const ranges = lps
+          .flatMap((p) => p.spans ?? [])
+          .map(([s, e]) => [Math.max(s, start) - start, Math.min(e, end) - start] as [number, number])
+          .filter(([s, e]) => e > s);
+        const sel = selected === i;
+        const clickable = lps.length > 0;
+        return (
+          <div
+            key={i}
+            onClick={clickable ? () => onSelect(sel ? null : i) : undefined}
+            title={clickable ? "focus this clause's connections" : undefined}
+            style={{
+              cursor: clickable ? "pointer" : "default",
+              borderLeft: `2px solid ${sel ? "var(--atlas-accent, #6c8cff)" : "transparent"}`,
+              background: sel ? "color-mix(in srgb, var(--atlas-accent, #6c8cff) 9%, transparent)" : "transparent",
+              padding: "3px 7px", borderRadius: 4,
+              opacity: selected != null && !sel ? 0.45 : 1, transition: "opacity .15s",
+            }}
+          >
+            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.45 }}>{highlightText(text, ranges)}</p>
+            {lps.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
+                {lps.map((p) => <PortChip key={p.label} p={p} />)}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function CardExplorer({ card: routeCard }: { card?: string }) {
   const card = routeCard ?? DEFAULT_CARD;
-  const [focus, setFocus] = useState<Focus>("both");
+  // v2: the selected oracle line scopes the columns to that clause's ports.
+  const [selectedLine, setSelectedLine] = useState<number | null>(null);
+  useEffect(() => setSelectedLine(null), [card]);
 
   const oracle = useOracle(card).data;
   const profile = useCardProfile(card).data;
-  const { emitters, consumers, inFams, outFams } = useCardNeighbours(profile?.ports ?? [], card).data;
+  // v2: when a line is selected, the columns reflect only THAT clause's ports.
+  const allPorts = profile?.ports ?? [];
+  const activePorts = selectedLine != null ? allPorts.filter((p) => p.lineIndex === selectedLine) : allPorts;
+  const { emitters, consumers, inFams, outFams } = useCardNeighbours(activePorts, card).data;
   const combos = useCardCombos(card).data;
   const anchor = useCardAnchor(card).data;
   const rulings = useCardRulings(profile?.oracleId).data;
 
-  const onFocus = (side: Side) => setFocus((f) => (f === side ? "both" : side));
 
   return (
     <SymbolsProvider>
@@ -128,7 +246,7 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
             fams={inFams}
             list={emitters}
             emptyHint={inFams.length === 0 ? "This card consumes no tracked resource" : "Nothing emits what this card consumes"}
-            dim={focus === "emit"}
+            dim={false}
           />
 
           <div className="panel">
@@ -155,14 +273,13 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
                   {profile?.edhrecRank != null && <MetaStat value={`#${profile.edhrecRank.toLocaleString()}`} label="EDHREC rank" />}
                 </div>
               )}
-              {oracle ? (
-                <OracleText oracle={oracle} focus={focus} onFocus={onFocus} />
-              ) : profile?.oracleText ? (
-                <div className="oracle-text">
-                  {profile.oracleText.split("\n").map((line, i) => (
-                    <p key={i} style={{ margin: "0 0 0.4em" }}><ManaCost value={line} /></p>
-                  ))}
-                </div>
+              {profile?.oracleText ? (
+                <OracleLines
+                  oracleText={profile.oracleText}
+                  ports={allPorts}
+                  selected={selectedLine}
+                  onSelect={setSelectedLine}
+                />
               ) : (
                 <div style={{ color: "var(--atlas-muted)", fontSize: 13 }}>oracle text unavailable</div>
               )}
@@ -170,11 +287,9 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
                 <a href={profile.scryfallUri} target="_blank" rel="noreferrer" style={{ fontSize: 12 }}>View on Scryfall →</a>
               )}
               <div className="ws-mono" style={{ fontSize: 10.5, color: "var(--atlas-muted)" }}>
-                {focus === "both"
-                  ? "click a highlighted clause to focus one side of the query"
-                  : focus === "consume"
-                    ? "showing what EMITS into this card's consume — click again to clear"
-                    : "showing what CONSUMES this card's emit — click again to clear"}
+                {selectedLine != null
+                  ? "columns scoped to the selected clause — click it again to clear"
+                  : "click an oracle clause to scope the columns to just that clause's ports"}
               </div>
             </div>
           </div>
@@ -184,7 +299,7 @@ export default function CardExplorer({ card: routeCard }: { card?: string }) {
             fams={outFams}
             list={consumers}
             emptyHint={outFams.length === 0 ? "This card emits no tracked resource" : "Nothing consumes what this card emits"}
-            dim={focus === "consume"}
+            dim={false}
           />
         </div>
 

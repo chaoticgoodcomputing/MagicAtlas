@@ -322,7 +322,7 @@ export const CARD_PROFILE_QUERY = gql`
           }
         }
         portRows(where: { card: { eq: $name } }, first: 50) {
-          nodes { family side tier confidence label }
+          nodes { family side tier confidence label oracleLineIndex spans }
         }
       }
     }
