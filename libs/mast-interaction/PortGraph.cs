@@ -306,6 +306,11 @@ public sealed class PortWalk
         foreach (var (label, quantity) in SpellCastCost(manaCostSymbols))
           consumes.Add(Port(card, label, PortSide.Consume, quantity));
 
+      // Snapshot the port count so granted-ability ports — appended DIRECTLY to `ports` by a nested
+      // ProjectAbility inside Effects (a gainAbility'd / becomesPermanent'd ability, e.g. Deadeye's
+      // soulbond-granted blink) — can inherit THIS ability's oracle provenance below. The nested ability
+      // JSON carries no OracleLineIndex/SourceSpan, so without this its ports default to line 0 / null.
+      var grantPortsStart = ports.Count;
       foreach (var effect in ability["Effects"] as JsonArray ?? [])
         Effects(effect, card, keyword, manaCostSymbols, consumes, emits, ports, edges);
 
@@ -393,6 +398,13 @@ public sealed class PortWalk
         for (var i = 0; i < emits.Count; i++)
           emits[i] = emits[i] with { SourceSpan = emitSpan, OracleLineIndex = abilityLine };
       }
+
+      // Granted-ability ports inherit this (granting) ability's line + span — they trace to the clause
+      // that CREATES the flow (Deadeye's granted blink lives on the soulbond clause, not line 0). Only
+      // fills the provenance gap (line 0 / null span); never clobbers a value the nested ability supplied.
+      for (var i = grantPortsStart; i < ports.Count; i++)
+        if (ports[i].OracleLineIndex == 0 && ports[i].SourceSpan is null)
+          ports[i] = ports[i] with { OracleLineIndex = abilityLine, SourceSpan = abilitySpan };
 
       ports.AddRange(consumes);
       ports.AddRange(emits);
