@@ -17,6 +17,7 @@ public class AtlasDbContext : DbContext
 
     // ── CardAtlas analytics read models (D1–D4 + combo anchors + family lattice) ──
     public DbSet<PortRow> Ports => Set<PortRow>();
+    public DbSet<PortEdgeRow> PortEdges => Set<PortEdgeRow>();
     public DbSet<ResourceFamilyRow> ResourceFamilies => Set<ResourceFamilyRow>();
     public DbSet<ResourceEdgeRow> ResourceEdges => Set<ResourceEdgeRow>();
     public DbSet<ComboRow> Combos => Set<ComboRow>();
@@ -71,6 +72,14 @@ public class AtlasDbContext : DbContext
                 (l, r) => JsonSerializer.Serialize(l, (JsonSerializerOptions?)null) == JsonSerializer.Serialize(r, (JsonSerializerOptions?)null),
                 v => v == null ? 0 : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null).GetHashCode(),
                 v => v == null ? null : JsonSerializer.Deserialize<int[][]>(JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), (JsonSerializerOptions?)null)));
+
+        // port_edges: bigserial surrogate key. Secondary indexes (GIN on target_reaches + btrees) are
+        // created by the seeder AFTER the bulk COPY (fastest, and matches "Trax does not own migrations"),
+        // so none are declared here — only the table + PK are auto-created by GenerateCreateScript. text[]
+        // columns (to_colors, target_reaches) map natively to Postgres arrays; no value converter needed.
+        var portEdge = modelBuilder.Entity<PortEdgeRow>();
+        portEdge.HasKey(e => e.Id);
+        portEdge.Property(e => e.Id).ValueGeneratedOnAdd();
 
         var family = modelBuilder.Entity<ResourceFamilyRow>();
         family.HasKey(f => f.Family);

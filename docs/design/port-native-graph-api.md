@@ -136,7 +136,25 @@ GIN-indexed on `targetReaches` + btrees on `from_card`, `to_edhrec`, `to_cmc`.
 a graph DB or a live nested join — is a flat array-overlap. The stack is validated; no
 alternative datastore is warranted.
 
-## 8. Open decisions / follow-ups
+## 8. Implementation status (2026-07-17)
+
+**Slice 1 landed** (API data layer, end-to-end): `PortEdgeRow` `[TraxQueryModel]` +
+`atlas.port_edges` + a seeder (`SeedPortEdgesAsync`) that streams the engine's
+`card-edges.json`, denormalizes in-stream via Npgsql binary COPY (`toCmc/toColors/
+toEdhrec/targetReaches`), and rebuilds the GIN + btree indexes after load.
+
+**A big finding fell out of the seed:** the engine's raw union is **97% copy-graft
+synthetics** ("X copy of Y" nodes). Excluding them (design §4 — copy is set-contextual, it
+belongs in combos) collapses the graph from 5.5M edges to **163,170 real-card pairwise
+edges** — 34× smaller than the spike's raw count. The size/reseed concern evaporates.
+
+Verified through Trax GraphQL: `portEdgeRows(where: { fromCard, fromLabel, targetReaches:
+{some:{eq:"life"}}, toCmc:{lte} }, order:{toEdhrec}, first:15)` returns the correct
+aristocrat payoffs (Ayara, Cauldron of Essence, Zimone) in ~ms — confirming HotChocolate
+auto-generates the nested list filter for the `text[]` tag column. The 2-hop feature is a
+flat filter in production, exactly as designed.
+
+## 9. Open decisions / follow-ups
 
 - **Popularity back-annotation** — the pipeline step that stamps each edge with its combos'
   popularity. Load-bearing for the relevance sort; couples the edge dump to the combo pass.

@@ -1,7 +1,10 @@
+using System.Data;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MagicAtlas.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace MagicAtlas.Api.Seed;
 
@@ -28,6 +31,7 @@ public sealed class AtlasSeeder
     private readonly string? _atlasPointsPath;
 
     private readonly string? _cardPortsPath;
+    private readonly string? _cardEdgesPath;
     private readonly string? _resourceGraphPath;
     private readonly string? _comboInstancesPath;
     private readonly string? _archetypeCatalogPath;
@@ -46,6 +50,7 @@ public sealed class AtlasSeeder
         _cardsBulkPath = Resolve(configuration["Atlas:ScryfallBulkPath"], env.ContentRootPath);
         _atlasPointsPath = Resolve(configuration["Atlas:AtlasPointsPath"], env.ContentRootPath);
         _cardPortsPath = Resolve(configuration["Atlas:CardPortsPath"], env.ContentRootPath);
+        _cardEdgesPath = Resolve(configuration["Atlas:CardEdgesPath"], env.ContentRootPath);
         _resourceGraphPath = Resolve(configuration["Atlas:ResourceGraphPath"], env.ContentRootPath);
         _comboInstancesPath = Resolve(configuration["Atlas:ComboInstancesPath"], env.ContentRootPath);
         _archetypeCatalogPath = Resolve(configuration["Atlas:ArchetypeCatalogPath"], env.ContentRootPath);
@@ -67,6 +72,7 @@ public sealed class AtlasSeeder
         await SeedSymbolsAsync(ct);
         await SeedAtlasPointsAsync(ct);
         await SeedPortsAsync(ct);
+        await SeedPortEdgesAsync(ct);
         await SeedResourceFamiliesAsync(ct);
         await SeedResourceEdgesAsync(ct);
         await SeedCombosAsync(ct);
@@ -441,6 +447,109 @@ public sealed class AtlasSeeder
         _logger.LogInformation("Ports: {Total} rows.", total);
     }
 
+    /// <summary>
+    /// Seeds <c>atlas.port_edges</c> — the denormalized port→port interaction graph — from the engine's
+    /// materialized union (<c>card-edges.json</c>). Runs AFTER ports+cards are seeded (it denormalizes off
+    /// them). Streams the (large) edge dump and bulk-loads via Npgsql binary COPY, computing each row's
+    /// denormalized columns in-stream from small in-memory maps (target-card attrs; the target card's
+    /// emit-families = the <c>target_reaches</c> second-degree tags). Drops its secondary indexes before
+    /// the COPY and rebuilds them after — fastest load, and the seeder owns these indexes (Trax/EF create
+    /// only the table + PK). Idempotent-by-emptiness like the other seeds.
+    /// </summary>
+    private async Task SeedPortEdgesAsync(CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        if (await db.PortEdges.AnyAsync(ct))
+        {
+            _logger.LogInformation("Port edges already seeded ({Count} rows) — skipping.", await db.PortEdges.CountAsync(ct));
+            return;
+        }
+
+        if (!FileReady(_cardEdgesPath, "Card edges")) return;
+
+        _logger.LogInformation("Seeding port edges from {Path}...", _cardEdgesPath);
+
+        // Denormalization sources (small, in-memory): each target card's emit-side families (the
+        // second-degree reachability), and its cmc/edhrec/colors.
+        var reachesByCard = (await db.Ports
+                .Where(p => p.Side == "emit")
+                .Select(p => new { p.Card, p.Family })
+                .ToListAsync(ct))
+            .GroupBy(p => p.Card, StringComparer.Ordinal)
+            .ToDictionary(g => g.Key, g => g.Select(p => p.Family).Distinct().ToArray(), StringComparer.Ordinal);
+
+        // Card names are NOT unique (token cards like "Soldier", split/DFC printings), so build the map
+        // last-wins rather than ToDictionary (which throws on a dup key). cmc/colors/edhrec are stable
+        // across printings of the same name, so any printing's attrs are fine.
+        var attrsByCard = new Dictionary<string, (double Cmc, int? Edhrec, string[] Colors)>(StringComparer.Ordinal);
+        foreach (var c in await db.Cards
+                     .Select(c => new { c.Name, c.Cmc, c.EdhrecRank, c.Colors })
+                     .ToListAsync(ct))
+            attrsByCard[c.Name] = ((double)c.Cmc, c.EdhrecRank, (c.Colors ?? new()).ToArray());
+
+        var indexNames = new[]
+        {
+            "ix_port_edges_from", "ix_port_edges_reaches", "ix_port_edges_edhrec", "ix_port_edges_cmc",
+        };
+        foreach (var ix in indexNames)
+            db.Database.ExecuteSqlRaw($"DROP INDEX IF EXISTS atlas.{ix}");
+
+        var conn = (NpgsqlConnection)db.Database.GetDbConnection();
+        if (conn.State != ConnectionState.Open) await conn.OpenAsync(ct);
+
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        var empty = Array.Empty<string>();
+        long total = 0;
+
+        await using (var writer = await conn.BeginBinaryImportAsync(
+            "COPY atlas.port_edges (from_card, from_label, to_card, to_label, relation, tier, "
+                + "to_cmc, to_edhrec, to_colors, popularity, target_reaches) FROM STDIN (FORMAT BINARY)",
+            ct))
+        {
+            await using var stream = File.OpenRead(_cardEdgesPath!);
+            await foreach (var e in JsonSerializer.DeserializeAsyncEnumerable<RawEdge>(stream, options, ct))
+            {
+                if (e is null) continue;
+                var fromCard = e.FromCard ?? "";
+                var toCard = e.ToCard ?? "";
+
+                // The broad pairwise graph is over REAL cards only. Skip copy-graft synthetic identities
+                // ("X copy of Y" — ~97% of the engine's raw union) and any other non-card node: copy
+                // interactions are set-contextual and belong in the combo view (design §4), not this
+                // pairwise edge table. Requiring both endpoints be real cards also guarantees every seeded
+                // row carries its denormalized attrs.
+                if (!attrsByCard.ContainsKey(fromCard) || !attrsByCard.TryGetValue(toCard, out var attr))
+                    continue;
+                var reaches = reachesByCard.TryGetValue(toCard, out var r) ? r : empty;
+
+                await writer.StartRowAsync(ct);
+                await writer.WriteAsync(fromCard, NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(e.FromLabel ?? "", NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(toCard, NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(e.ToLabel ?? "", NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(e.Family ?? "", NpgsqlDbType.Text, ct);
+                if (e.Tier is null) await writer.WriteNullAsync(ct);
+                else await writer.WriteAsync(e.Tier, NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(attr.Cmc, NpgsqlDbType.Double, ct);
+                if (attr.Edhrec is int edh) await writer.WriteAsync(edh, NpgsqlDbType.Integer, ct);
+                else await writer.WriteNullAsync(ct);
+                await writer.WriteAsync(attr.Colors, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
+                await writer.WriteAsync(0, NpgsqlDbType.Integer, ct); // popularity — combo back-annotation TODO
+                await writer.WriteAsync(reaches, NpgsqlDbType.Array | NpgsqlDbType.Text, ct);
+                total++;
+            }
+            await writer.CompleteAsync(ct);
+        }
+
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_from ON atlas.port_edges (from_card, from_label)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_reaches ON atlas.port_edges USING GIN (target_reaches)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_edhrec ON atlas.port_edges (to_edhrec)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_cmc ON atlas.port_edges (to_cmc)");
+
+        _logger.LogInformation("Port edges: {Total} rows.", total);
+    }
+
     private async Task SeedResourceFamiliesAsync(CancellationToken ct)
     {
         await using var db = await _dbFactory.CreateDbContextAsync(ct);
@@ -787,6 +896,17 @@ public sealed class AtlasSeeder
         [JsonPropertyName("stem")] public string? Stem { get; set; }
         [JsonPropertyName("manner")] public string? Manner { get; set; }
         [JsonPropertyName("isSelf")] public bool IsSelf { get; set; }
+    }
+
+    /// <summary>One row of <c>card-edges.json</c> (the engine's materialized port→port union).</summary>
+    private sealed class RawEdge
+    {
+        [JsonPropertyName("fromCard")] public string? FromCard { get; set; }
+        [JsonPropertyName("fromLabel")] public string? FromLabel { get; set; }
+        [JsonPropertyName("toCard")] public string? ToCard { get; set; }
+        [JsonPropertyName("toLabel")] public string? ToLabel { get; set; }
+        [JsonPropertyName("family")] public string? Family { get; set; }
+        [JsonPropertyName("tier")] public string? Tier { get; set; }
     }
 
     private sealed class RawResourceGraph
