@@ -1,11 +1,14 @@
 {
   "$generated": "tools/interaction-rollup",
   "$golds": [
+    "aang-the-last-airbender",
     "ancient-copper-dragon",
+    "archaeomancer",
     "brazen-dwarf",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "kari-zev-skyship-raider",
+    "kiki-jiki-mirror-breaker",
     "ruthless-knave-x-blood-artist"
   ],
   "kinds": {
@@ -69,12 +72,27 @@
       "status": "declared",
       "attrs": []
     },
+    "cast": {
+      "kind": "EVENT",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "subtype"
+      ],
+      "unpredicted": true
+    },
     "combat-presence": {
       "kind": "EVENT",
       "status": "witnessed",
       "attrs": [
         "subject"
       ],
+      "unpredicted": true
+    },
+    "copy": {
+      "kind": "EVENT",
+      "status": "witnessed",
+      "attrs": [],
       "unpredicted": true
     },
     "counters": {
@@ -195,6 +213,16 @@
         "subject"
       ]
     },
+    "recur": {
+      "kind": "EVENT",
+      "status": "witnessed",
+      "attrs": [
+        "control",
+        "from",
+        "to"
+      ],
+      "unpredicted": true
+    },
     "removal:artifact": {
       "kind": "EVENT",
       "parent": "removal:permanent",
@@ -294,11 +322,13 @@
     },
     "control": {
       "stems": [
+        "cast",
         "creature",
         "deployment",
         "deployment:artifact",
         "deployment:creature",
         "dice-rolled",
+        "recur",
         "removal:creature",
         "structure:untap"
       ],
@@ -396,11 +426,13 @@
     },
     "from": {
       "stems": [
+        "recur",
         "removal:artifact",
         "removal:creature"
       ],
       "values_seen": [
-        "battlefield"
+        "battlefield",
+        "graveyard"
       ],
       "carries_provenance_or_polarity": false,
       "licensed_by": [
@@ -573,6 +605,7 @@
     "subtype": {
       "stems": [
         "artifact",
+        "cast",
         "creature",
         "deployment:artifact",
         "deployment:creature",
@@ -582,6 +615,7 @@
       ],
       "values_seen": [
         "land",
+        "lesson",
         "monkey",
         "squirrel",
         "treasure"
@@ -609,12 +643,14 @@
     },
     "to": {
       "stems": [
+        "recur",
         "removal:artifact",
         "removal:creature"
       ],
       "values_seen": [
         "exile",
-        "graveyard"
+        "graveyard",
+        "hand"
       ],
       "carries_provenance_or_polarity": true,
       "licensed_by": [

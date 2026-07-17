@@ -1,0 +1,73 @@
+{
+  "id": "aang-the-last-airbender",
+  "unit": "single-card",
+  "cards": [
+    "Aang, the Last Airbender"
+  ],
+  "source": {
+    "note": "single-card witness of the bare event-verb stem cast (no supergroup) via the 'whenever you cast a Lesson spell' subscription (a cast trigger, CR 601/603.2). Oracle line 2: 'Whenever you cast a Lesson spell, Aang gains lifelink until end of turn.' (the witnessed span [163,195] = 'Whenever you cast a Lesson spell'). Live engine projects trigger:cast:spell:lesson:controlled (Consume; family=cast; stem='cast'; isSelf=false; manner=null) - ADR-3 canonical stem = cast. The cast family is Stage-2 structured (the served stem is the structured 'cast', not a coarse label), so this is a faithful witness, not a wish. The lifelink payoff on that same line is NOT projected as a separate port by the engine (line 2 emits only the cast consume), so no card-defined cast->modification:keyword edge is modeled - authoring one would be a wish. edhrecRank 6549 is present in the served CardRow, but that is a rank, not a CSB/combo popularity COUNT (the semantic demand.witnessed sums), so source.popularity is omitted (not fabricated from a rank)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-3 \u2014 cast/control=you+subtype=lesson faithful (CR 601/603.2); PROCEED (dropped stray 111.1)"
+  },
+  "ports": {
+    "Aang, the Last Airbender": [
+      {
+        "id": "A0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:evasion:flying",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "Flying (evasion:flying) - incidental card context (oracle line 0), an already-witnessed stem; not the witness of this gold. Mirrors ancient-copper-dragon.A0."
+      },
+      {
+        "id": "A1",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "control": "you",
+          "subtype": "lesson"
+        },
+        "note": "THE WITNESS - 'whenever you cast a Lesson spell' - a player-action subscription on the bare EVENT verb cast (casting a spell is a discrete occurrence, CR 601). The ADR-2 label 'trigger:cast:spell:lesson:controlled' decodes to: stem cast (event verb), the watched object's subtype 'lesson' (the narrowing filter; 'spell' is implicit in the cast verb), and control=you ('controlled' -> you cast). All AST-derivable from the served structured stem (family=cast, stem=cast). subtype=lesson is carried honestly so the consume is NOT over-broadened to all casts (isSelf=false; Aang watches YOUR Lesson casts, not itself casting)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.cast.witnessed",
+      "because": "A1 projects the bare EVENT verb cast (no supergroup - the stem is literally 'cast', not consume:cast); casting a spell (CR 601) is a discrete occurrence subscriptions fire on. Not in the Stage-0a scaffold's event_verbs, so this turns an unpredicted stem declared->witnessed (unpredicted: true)."
+    },
+    {
+      "claim": "A1.control == you",
+      "because": "'whenever YOU cast a Lesson spell' - the caster's scope is the controller (you). The ADR-2 label's 'controlled' segment maps to control=you (control axis, licensed_by *; lattice self subset-of controlled subset-of any). A player-action trigger, so the restriction is implicit."
+    },
+    {
+      "claim": "A1.subtype == lesson",
+      "because": "the trigger fires only on Lesson spells - the watched-object subtype (subtype axis, type-ontology). Carried explicitly so the subscription-consume is faithfully narrowed and not over-approximated to every cast; AST-derivable from the structured label's 'lesson' segment."
+    },
+    {
+      "claim": "A1.kind == EVENT",
+      "because": "casting a spell is a discrete occurrence with a payload (the spell put on the stack, CR 601.2/601.2i) that subscriptions fire on - the cast event verb's kind = EVENT."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + facets, no cycle closed. The internal cast -> gains-lifelink binding is card-defined (and not even port-projected), not an inter-card interaction edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "601",
+    "601.2",
+    "603.2"
+  ]
+}

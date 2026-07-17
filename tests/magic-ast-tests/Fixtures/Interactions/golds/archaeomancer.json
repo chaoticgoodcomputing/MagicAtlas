@@ -1,0 +1,96 @@
+{
+  "id": "archaeomancer",
+  "unit": "single-card",
+  "cards": [
+    "Archaeomancer"
+  ],
+  "source": {
+    "note": "single-card witness of the recur stem \u2014 a return/recursion zone-change \u2014 that ALSO corroborates the sought hole non-play-zone-move (port-topology holes, priority 6). Archaeomancer's ETB spell-recursion moves an instant/sorcery card graveyard->hand: from=graveyard is NOT play and to=hand is NOT play, so it fits NEITHER Removal (from=play) nor Deployment (to=play) \u2014 exactly the hidden-zone<->hidden-zone primitive the hole predicts (slang 'reclamation (gy->hand)'). The live engine serves this port as emit:returntohand:spell:instant+sorcery (family=recur, stem=recur, isSelf=false). AST-faithful, not a wish: the Archaeomancer hand-parse (Fixtures/HandParsedCards/M14/Archaeomancer.json) has EffectType=returnToHand with Target.Filter.Zone=Graveyard, Controller=You, CardTypes=[instant,sorcery] \u2014 so from=graveyard, to=hand, control=you are all AST-derivable (the returnToHand effect definitionally lands in hand; the target filter proves the graveyard source), none over-approximated. recur is NOT in the scaffold's stems_representative, so it surfaces as an unpredicted witnessed stem (the scaffold's proposed_stem for this hole is 'zonechange (neither removal nor deployment)'; the served engine name is 'recur' \u2014 a scaffold reconciliation, zonechange<->recur, is warranted). SCAFFOLD SURFACE: the from/to attribute axes are currently licensed_by removal:*/deployment:* only; this witness extends them to the recur stem (accretion adds recur to from/to.stems and 'hand' to to.values_seen) \u2014 the axis KEYS are in the closed set, so no new axis is invented, but their licensed_by should gain the recur/zonechange stem. No popularity source available in the testbed corpus (edhrec/price absent) \u2014 omitted."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-3 \u2014 recur/from=graveyard+to=hand faithful, non-play-zone-move hole corroborated (CR 400.7/404.1/402.1); PROCEED (603.6e->603.6a)"
+  },
+  "ports": {
+    "Archaeomancer": [
+      {
+        "id": "R0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "deployment:creature",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "the driver \u2014 'When this creature enters' (Trigger.Event=Enters, Filter.IsSelf=true, CardTypes=[creature]); a self-watching ETB subscription (live etb:creature:self). Already-witnessed stem, shown to ground the card-defined flow into the recur emit."
+      },
+      {
+        "id": "R1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "recur",
+        "attrs": {
+          "from": "graveyard",
+          "to": "hand",
+          "control": "you"
+        },
+        "note": "THE WITNESS \u2014 'return target instant or sorcery card from your graveyard to your hand' (EffectType=returnToHand, Target.Filter.Zone=Graveyard, Controller=You, CardTypes=[instant,sorcery]). A recur zone-change graveyard->hand: from=graveyard (proven by the target filter) and to=hand (definitional to returnToHand) are BOTH hidden zones \u2014 neither endpoint is play \u2014 so this is the non-play-zone-move hole, not Removal (needs from=play) nor Deployment (needs to=play). The returned card being an instant/sorcery (spell-recursion, live emit:returntohand:spell:instant+sorcery) rides in this note rather than as an attr: no card-type axis for the recur target exists in the closed set, and the load-bearing witness is the from->to zone primitive."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Archaeomancer.R0",
+      "to": "Archaeomancer.R1",
+      "mechanism": "card-defined",
+      "tier": "GREEN",
+      "notes": [
+        "'When Archaeomancer enters, return target instant or sorcery from your graveyard to your hand' \u2014 a deterministic card-defined flow from the ETB subscription to the recur emit; structural (self-certifying), no rule dependency. Mirrors the live CardDefinedEdge etb:creature:self -> emit:returntohand:spell."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.recur.witnessed",
+      "because": "R1 projects the bare EVENT stem recur (a return/recursion zone-change; live family=recur/stem=recur) \u2014 absent from the scaffold's stems_representative, so it surfaces as an unpredicted witnessed stem"
+    },
+    {
+      "claim": "R1.from == graveyard",
+      "because": "Target.Filter.Zone == Graveyard on the returnToHand effect \u2014 the source zone is AST-proven (bare value, not derived/over-approximated)"
+    },
+    {
+      "claim": "R1.to == hand",
+      "because": "EffectType == returnToHand \u2014 the destination is definitionally the hand (bare value, AST-proven)"
+    },
+    {
+      "claim": "corroborates_hole.non-play-zone-move",
+      "because": "from=graveyard (not play) AND to=hand (not play) \u2014 a hidden-zone<->hidden-zone move that fits NEITHER Removal (from=play) NOR Deployment (to=play); the priority-6 sought hole's from->to primitive, now witnessed"
+    },
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "card-defined mechanism (self-certifying, structural) \u2014 the ETB trigger deterministically fires the recursion, no over-approximation to cap"
+    },
+    {
+      "claim": "edge.E1.mechanism == card-defined"
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the recur stem + its from/to zone facets, no cycle closed (spell-recast into a cast:spell:self driver would need a second piece \u2014 e.g. Ghostly Flicker \u2014 to close a loop)"
+    }
+  ],
+  "cr": [
+    "400.1",
+    "400.7",
+    "402.1",
+    "404.1",
+    "603.2",
+    "603.6a",
+    "601.2"
+  ]
+}

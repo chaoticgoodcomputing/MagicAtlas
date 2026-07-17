@@ -1,11 +1,14 @@
 {
   "$generated": "tools/interaction-rollup",
   "$golds": [
+    "aang-the-last-airbender",
     "ancient-copper-dragon",
+    "archaeomancer",
     "brazen-dwarf",
     "chatterfang-x-pitiless-plunderer",
     "deadeye-x-peregrine-drake",
     "kari-zev-skyship-raider",
+    "kiki-jiki-mirror-breaker",
     "ruthless-knave-x-blood-artist"
   ],
   "conflicts": [],

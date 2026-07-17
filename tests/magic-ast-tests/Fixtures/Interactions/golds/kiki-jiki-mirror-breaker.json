@@ -1,0 +1,61 @@
+{
+  "id": "kiki-jiki-mirror-breaker",
+  "unit": "single-card",
+  "cards": [
+    "Kiki-Jiki, Mirror Breaker"
+  ],
+  "source": {
+    "note": "single-card witness of the bare EMIT stem `copy` (no supergroup) \u2014 a copy effect (CR 707). Live engine projects emit:copy (family=copy, stem=copy, manner=null, isSelf=false) for the activated ability '{T}: Create a token that's a copy of target nonlegendary creature you control, except it has haste. Sacrifice it at the beginning of the next end step.' This is the permanent token-copy variant (CR 707.2): CopyFamily.Recognize returns PortStructure.Of(Emit, \"copy\") \u2014 the AST CopyEffect (OracleEffect \"copy\", Target=nonlegendary creature you control, Modifications=[+haste]). The copy family is Stage-2 structured, so this is a faithful witness, not a wish. The permanent variant projects NO in-axis facets (the bare stem); the spell-copy variant (Dualcaster Mage / Reiterate, emit:copy:spell:instant+sorcery) adds resource=spell + a copied-type subject \u2014 `resource` is NOT in the closed attribute_axes set, so that facet is a taxonomy/axis decision surfaced separately, not authored here. No edhrec_rank in the testbed source (edhrec_rank=None) \u2014 popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-17 batch-3 \u2014 copy/empty-attrs conservative permanent token-copy (CR 707/707.2); PROCEED"
+  },
+  "ports": {
+    "Kiki-Jiki, Mirror Breaker": [
+      {
+        "id": "K1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "copy",
+        "attrs": {},
+        "note": "THE WITNESS \u2014 'Create a token that's a copy of target nonlegendary creature you control' \u2014 a permanent token-copy (CR 707.2). Projects bare emit:copy (family=copy, stem=copy, manner=null, isSelf=false); CopyFamily.Recognize \u2192 PortStructure.Of(Emit, \"copy\") carries NO facets on the permanent variant, so attrs is empty \u2014 the faithful projection of the bare `copy` stem. An EVENT: a copy is a discrete object-creation occurrence a subscription can fire on (kind_view of the deployment neighbourhood that lists copy). The scaffold predicted copy would fold into deployment[manner=copied] (deployment def + manner enum 'copied'), but the engine emits a DISTINCT `copy` stem \u2192 surfaced unpredicted."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.copy.witnessed",
+      "because": "K1 projects the bare EMIT stem `copy` (family=copy; CopyFamily.Recognize \u2192 PortStructure.Of(Emit, \"copy\")), a copy effect per CR 707 \u2014 the permanent token-copy rung (CR 707.2). Turns the stem declared/unpredicted \u2192 witnessed."
+    },
+    {
+      "claim": "K1.stem == copy",
+      "because": "the served stem is literally `copy` (not deployment:creature[manner=copied]); the engine's CopyFamily keeps copy as its own bare stem, so no supergroup prefix and no manner facet."
+    },
+    {
+      "claim": "K1.kind == EVENT",
+      "because": "a copy is a discrete object-creation occurrence with a payload (the new token/copy) that subscriptions fire on (CR 707.2, 111.2) \u2014 EVENT, matching the copy neighbourhood of the deployment supergroup (kind_view EVENT)."
+    },
+    {
+      "claim": "stem.copy.unpredicted",
+      "because": "the scaffold folds copy into deployment[manner=copied] (the deployment supergroup def names copy; the manner axis enum includes 'copied'), but the engine's CopyFamily projects a DISTINCT bare `copy` stem with no supergroup and manner=null \u2014 a taxonomy surprise surfaced unpredicted for a possible scaffold update."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the bare `copy` stem, no cycle closed (edges=[]). The '{T}' tap cost and 'sacrifice it at the next end step' delayed trigger are incidental card context, not inter-card interaction edges."
+    }
+  ],
+  "cr": [
+    "707",
+    "707.2",
+    "111.2",
+    "603.7c"
+  ]
+}
