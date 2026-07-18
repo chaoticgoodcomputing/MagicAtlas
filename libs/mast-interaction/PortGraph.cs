@@ -758,19 +758,37 @@ public sealed class PortWalk
 
     if (effectType == "replacement")
     {
-      // Intercept side: the replaced event (ADR-0002 §3, CR 614). Scope rides only if the event carries it.
+      // Intercept side: the replaced event (ADR-0002 §3, CR 614). Scope rides only if the event carries it
+      // — a tokenCreation event MAY carry its own TokenFilter (Academy Manufactor's "a Clue, Food, or
+      // Treasure token", the sole corpus card that narrows it; Chatterfang/Doubling Season/Anointed
+      // Procession/Peregrin Took all say "one or more tokens" with none). Reading the real TokenFilter when
+      // present — intersected with the broad IsToken:true so the untyped case is unchanged — keeps this
+      // replacement's intercept from Overlapping an UNRELATED token-creation port it can't actually catch
+      // (Academy Manufactor's Clue/Food/Treasure-only redirect wrongly re-triggering off a Squirrel token
+      // Chatterfang created — a false ping-pong loop neither card's oracle text supports; discovered when
+      // this branch's composite-recursion fix, below, first made Academy Manufactor emit real per-token
+      // ports for this intercept to reach). Never a null-default {IsToken:true} GREEN when a narrower,
+      // AST-derivable filter is right there on the event (the same anti-pattern-3 discipline this file
+      // applies throughout).
       var eventType = e["Event"]?["EventType"]?.ToString() ?? "event";
+      var tokenFilter = Filter(e["Event"]?["TokenFilter"]);
       consumes.Add(
         Port(
           card,
           PortLabel.Replacement(eventType),
           PortSide.Intercept,
-          subject: new ObjectFilter { IsToken = true }
+          subject: tokenFilter is null ? new ObjectFilter { IsToken = true } : tokenFilter with { IsToken = true }
         )
       );
-      // Emit side: the replacement's own effect (Chatterfang's added Squirrels).
-      if (EmitPort(e["Replacement"], card, keyword, manaCostSymbols, consumes) is { } inner)
-        emits.Add(inner);
+      // Emit side: the replacement's own effect(s) (Chatterfang's added Squirrels — a single createToken;
+      // Academy Manufactor's Clue/Food/Treasure triple — EffectType:composite of 3x createToken). Recurse
+      // back through THIS SAME Effects() entry point (not a direct EmitPort call) so a composite Replacement
+      // gets the identical unwrap-and-recurse treatment as the top-level ability-effects composite (§ comment
+      // ~658): one port PER sub-effect, instead of collapsing the whole triple into a single coarse dead-end
+      // emit:composite no flow arm reads. That coarse collapse was silently swallowing the Food token's
+      // intrinsic PredefinedTokens gainlife resolution (ADR-0002 §9, CR 111.10b) — ResolvePredefinedTokens
+      // only sees a created token if its OWN createToken port makes it into `ports` individually.
+      Effects(e["Replacement"], card, keyword, manaCostSymbols, consumes, emits, ports, edges);
       return;
     }
     if (EmitPort(effect, card, keyword, manaCostSymbols, consumes) is { } emit)
