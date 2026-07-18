@@ -609,6 +609,26 @@ public sealed class PortWalk
       case "tap":
         consumes.Add(Port(card, "tap:self", PortSide.Consume));
         break;
+      case "payLife":
+        // CR 118.1 cost / 119.4 paying life: a "Pay N life" activation/casting cost consumes the LIFE
+        // resource (mirrors the "mana" case's dedicated pay:mana projection). Always paid by the
+        // activating/casting player (CR 601.2h/602.2 — a Cost carries no Player field), so the port's
+        // Subject is the caster, mirroring the sacrifice cost's implicit-You convention above. The label
+        // stays the pre-existing "pay:paylife" (unchanged from the generic fallback this replaces — no
+        // gold/whitelist churn from the string itself), now carrying the real Amount (was silently
+        // defaulting to 1 via Qty's null-quantity fallback, since the generic case read "Quantity" — a
+        // field PayLifeCost doesn't have; it's "Amount") and a real Subject so a flow arm can bridge a
+        // same-player life-gain emit to it (PortFlowMatcher's LifeCostToPay arm).
+        consumes.Add(
+          Port(
+            card,
+            "pay:paylife",
+            PortSide.Consume,
+            Qty(c["Amount"]),
+            new ObjectFilter { Controller = ControllerFilter.You }
+          )
+        );
+        break;
       case { } other:
         consumes.Add(Port(card, $"pay:{other.ToLowerInvariant()}", PortSide.Consume, Qty(c["Quantity"])));
         break;

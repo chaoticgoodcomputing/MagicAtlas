@@ -76,6 +76,17 @@ public sealed record PortCycle
   public bool Balanced { get; init; } = true;
 
   /// <summary>
+  /// Life balance (ADR-0002 §8, 2026-07-18 precision-fix): the life analogue of <see cref="Balanced"/>,
+  /// tracked as its own field (not folded into <see cref="Balanced"/>) so <see cref="LimitingReason"/> can
+  /// name which resource actually floors the cycle instead of misreporting a life shortfall as
+  /// "mana-negative". A cycle whose <c>pay:paylife</c> costs exceed its own <c>emit:life:gain</c> producers
+  /// (CR 119.4 — paying life is a real, bounded loss; CR 119.6 — 0-or-less life ends the game) is finite,
+  /// not infinite, so it floors to Amber. Default <c>true</c> (conservative: only floored when the
+  /// shortfall is provable from known quantities).
+  /// </summary>
+  public bool LifeBalanced { get; init; } = true;
+
+  /// <summary>
   /// Productivity (ADR-0002 §8): the loop nets an <em>unbounded</em> resource — it doesn't just sustain
   /// itself, it produces something. A <b>pure-mana</b> loop (every emit is mana) that nets exactly zero
   /// (a 1-for-1 filter: Bog Initiate <c>{1}:Add{B}</c> ↔ Farrelite Priest <c>{1}:Add{W}</c>) is a
@@ -92,7 +103,7 @@ public sealed record PortCycle
       : (CertaintyTier)
         Math.Max(
           (int)Edges.Max(e => e.Tier),
-          Firable && CoCostsSatisfied && Balanced && Productive ? 0 : (int)CertaintyTier.Amber
+          Firable && CoCostsSatisfied && Balanced && LifeBalanced && Productive ? 0 : (int)CertaintyTier.Amber
         );
 
   /// <summary>The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>).</summary>
@@ -109,6 +120,7 @@ public sealed record PortCycle
     : Edges.Any(e => e.From.Gated || e.To.Gated) ? "gated (rate-limit / intervening-if)"
     : !Firable ? "tap (not renewed by an untapper)"
     : !Balanced ? "mana-negative"
+    : !LifeBalanced ? "life-negative"
     : !Productive ? "net-zero filter (no surplus)"
     : !CoCostsSatisfied ? "unfed co-cost"
     : LimitingHop?.Reason is { Length: > 0 } reason ? reason
@@ -678,6 +690,8 @@ public sealed class PortGraphEngine
       ("token", "sac") => TokenSatisfiesAtCreation(emit, consume),
       ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
         && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
+      ("life", "pay") => ResourceKind(consume.Label) == "paylife" // life replenishes a "Pay N life" cost…
+        && LifeGainFeedsCost(emit), // …only a GAIN emit (never a loss) can pay it, mirrors ManaToPay
       ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
       // Die rolls (CR 706.2). A "roll [N] dice" emit refuels a "whenever you roll one or more dice"
       // trigger, so a self-feeding roll engine closes (Brazen Dwarf, Mr. House). Feasibility only —
@@ -973,6 +987,13 @@ public sealed class PortGraphEngine
   internal static bool LifeFlowFeasible(PortNode emit, PortNode consume) =>
     LifeDirection(emit.Label) is { } dir && dir == LifeDirection(consume.Label);
 
+  /// <summary>Does a life event replenish a "Pay N life" cost (CR 118.1/119.4)? Only a life-GAIN emit can
+  /// (mirrors <see cref="ManaColorFeeds"/> — the resource must actually be produced, not consumed, to
+  /// refund a cost): a life-LOSS emit is a further drain, never a refund, so it must not feed a life cost
+  /// (the false-GREEN this guard exists to prevent).</summary>
+  internal static bool LifeGainFeedsCost(PortNode emit) =>
+    LifeDirection(emit.Label) == "gain";
+
   /// <summary>The gain/loss facet of a <c>emit:life:&lt;dir&gt;</c> / <c>trigger:life:&lt;dir&gt;</c> label.</summary>
   private static string? LifeDirection(string label)
   {
@@ -1247,6 +1268,7 @@ public sealed class PortGraphEngine
                 Edges = loop,
                 CoCostsSatisfied = ConjunctionHolds(loop, coCosts, allEdges),
                 Balanced = ManaBalanced(loop, coCosts, allEdges),
+                LifeBalanced = LifeBalanceHolds(loop, coCosts, allEdges),
                 Productive = ManaProductive(loop, coCosts, allEdges),
                 TapRenewed = TapGatesRenewed(loop, allEdges),
               }
@@ -1712,6 +1734,93 @@ public sealed class PortGraphEngine
   }
 
   /// <summary>
+  /// The §8 LIFE-balance — the life analogue of <see cref="ManaBalanced"/> (2026-07-18 precision-fix, the
+  /// Warren Soultrader × Blood Artist / Zulaport Cutthroat gap): the loop's per-iteration life production
+  /// must cover its life costs (<c>net(life) ≥ 0</c>). CR-grounded, not a stylistic mirror: CR 119.4 makes
+  /// paying life a REAL loss (subtracted from the payer's life total, only payable while the total is
+  /// sufficient) and CR 119.6 ends the game for a player at 0-or-less life. A loop that nets NEGATIVE life
+  /// each iteration is therefore bounded by the payer's (finite, positive) starting life total — it kills
+  /// its own caster after finitely many iterations, so it is a finite sequence, not a certifiable infinite
+  /// combo, exactly the reasoning <see cref="ManaBalanced"/> already applies to a mana-negative loop (mana
+  /// empties between uses; life persists but is still finite and terminates the game at zero — both are
+  /// "you cannot keep doing this forever" floors). No colour-style split is needed (life has no colour
+  /// pips, CR 119 is a single fungible pool), so this is a straight scalar sum, simpler than
+  /// <see cref="ManaBalanced"/>. CONSERVATIVE: returns true (no floor) when there is no provable life cost
+  /// or any relevant quantity is symbolic — it only floors when the shortfall is provable.
+  /// <para><b>Known boundary (documented, not implemented):</b> unlike <see cref="ManaProductive"/>, there
+  /// is no life-analogue "pure-life loop nets exactly zero is a do-nothing" check — a hypothetical loop
+  /// whose ONLY output is a net-zero life exchange (no token/mana/other advantage) would incorrectly stay
+  /// <see cref="PortCycle.Productive"/>=true. No known corpus card is "pay life: gain that much life" with
+  /// no other effect (paying life to merely regain it is pointless, so nothing prints it), so this is a
+  /// theoretical gap, not a live false-GREEN risk; flagged here rather than silently engineered around.</para>
+  /// </summary>
+  private static bool LifeBalanceHolds(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var flow = GatherLifeFlow(cycle, coCosts, edges);
+    if (flow is null)
+      return true; // no provable life cost — nothing to balance (conservative)
+    var (costs, producers) = flow.Value;
+    return producers.Sum(p => p.Quantity!.Value) >= costs.Sum(p => p.Quantity!.Value);
+  }
+
+  /// <summary>
+  /// Shared life-flow gather (§8), the life analogue of <see cref="GatherManaFlow"/>: the cycle's
+  /// <c>pay:paylife</c> costs (co-costs of its consumes + any in-cycle pay) and the distinct
+  /// <c>emit:life:gain</c> producers <see cref="ReachableWithinLoop">the loop drives</see> that feed them
+  /// (a life-LOSS emit is never a producer here — <see cref="LifeGainFeedsCost"/> already excludes it at
+  /// the edge-materialisation layer, so no loss-direction port can appear as a producer of a real edge).
+  /// Returns <c>null</c> — the conservative "can't prove anything" signal — when there's no life cost or
+  /// any relevant quantity is symbolic.
+  /// </summary>
+  private static (List<PortNode> Costs, List<PortNode> Producers)? GatherLifeFlow(
+    IReadOnlyList<PortEdge> cycle,
+    IReadOnlyDictionary<string, IReadOnlyList<PortNode>> coCosts,
+    IReadOnlyList<PortEdge> edges
+  )
+  {
+    var inCycle = cycle
+      .SelectMany(e => new[] { e.From.Identity, e.To.Identity })
+      .ToHashSet(StringComparer.Ordinal);
+    var reachable = ReachableWithinLoop(cycle, edges);
+
+    var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
+    void AddIfLife(PortNode p)
+    {
+      if (p.Side == PortSide.Consume && IsPayLife(p.Label))
+        costs[p.Identity] = p;
+    }
+    foreach (var id in inCycle)
+      if (coCosts.TryGetValue(id, out var siblings))
+        foreach (var s in siblings)
+          AddIfLife(s);
+    foreach (var e in cycle)
+    {
+      AddIfLife(e.From);
+      AddIfLife(e.To);
+    }
+    if (costs.Count == 0 || costs.Values.Any(p => p.Quantity is null))
+      return null;
+
+    var producers = edges
+      .Where(e =>
+        costs.ContainsKey(e.To.Identity)
+        && IsEmitLifeGain(e.From.Label)
+        && reachable.Contains(e.From.Identity)
+      )
+      .Select(e => e.From)
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .Select(g => g.First())
+      .ToList();
+    if (producers.Any(p => p.Quantity is null))
+      return null;
+    return (costs.Values.ToList(), producers);
+  }
+
+  /// <summary>
   /// ADR-0002 §8 ("B") — one-shot self-removal. A cycle that traverses a source's OWN
   /// leaves-the-battlefield-to-graveyard trigger (a self-scoped <c>ltb:…:to-graveyard:self</c> consume)
   /// is <b>structurally non-repeatable</b>: the source is a single object that dies at most once and the
@@ -1924,6 +2033,12 @@ public sealed class PortGraphEngine
 
   private static bool IsEmitMana(string label) =>
     label.StartsWith("emit:mana", StringComparison.Ordinal);
+
+  private static bool IsPayLife(string label) =>
+    label.StartsWith("pay:paylife", StringComparison.Ordinal);
+
+  private static bool IsEmitLifeGain(string label) =>
+    label.StartsWith("emit:life:gain", StringComparison.Ordinal);
 
   private static string Role(string label) => label.Split(':', 2)[0];
 
