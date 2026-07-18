@@ -25,6 +25,15 @@ public static class BenchPaths
   public static string OntologyPath => Path.Combine(OutputDir, "Data", "type-ontology.json");
 
   /// <summary>
+  /// The oracle-text drift/quarantine whitelist (<c>tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json</c>,
+  /// linked into the build output). Keys by fixture RELATIVE PATH (e.g. <c>"NPH/SuturePriest"</c>) — joined
+  /// against <see cref="GoldCorpus.FixturePathFor"/> to compute <c>ComboResult.FidelityRisk</c> (item R1:
+  /// a Green/Amber pin resting on a known-drifted fixture is not trustworthy).
+  /// </summary>
+  public static string QuarantinePath =>
+    Path.Combine(OutputDir, "Fixtures", "oracle-text-quarantine.json");
+
+  /// <summary>
   /// The committed baseline report path, resolved in the SOURCE tree (not the build output) so the
   /// ratchet reads/writes the version-controlled artifact. The build redirects output to
   /// <c>dist/tools/bench/MagicAtlas.Bench/net10.0</c> (Directory.Build.props' <c>BaseOutputPath</c>),
@@ -41,6 +50,14 @@ public static class BenchPaths
   /// </summary>
   public static string ExpectedTiersPath =>
     Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "combo-expected-tiers.json");
+
+  /// <summary>
+  /// The fidelityRisk gate's human-reviewed, shrink-only acknowledgment carve-out (item R1) — resolved
+  /// in the SOURCE tree (like <see cref="ExpectedTiersPath"/>), since it is a version-controlled contract
+  /// <c>FidelityRiskGateTest</c> asserts against, not a build artifact.
+  /// </summary>
+  public static string FidelityRiskAcknowledgedPath =>
+    Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "fidelity-risk-acknowledged.json");
 
   private static string RepoRoot
   {

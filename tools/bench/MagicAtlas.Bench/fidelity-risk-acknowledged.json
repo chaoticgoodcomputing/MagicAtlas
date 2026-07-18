@@ -1,0 +1,95 @@
+{
+  "_doc": "Fidelity-risk ACKNOWLEDGED carve-out (item R1, landed 2026-07-18). The fidelityRisk gate (FidelityRiskGateTest) fails LOUDLY, per combo, whenever a pinned Green/Amber combo rests on a card whose gold fixture is on tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json (known-drifted oracle text) -- GoldCorpus reads Output.Oracle.Abilities directly and never re-parses Input.OracleText, so a drifted fixture silently props up whatever tier its combos certify at. This whitelist is the SAME shrink-only-ratchet pattern as oracle-text-quarantine.json itself: an entry here says 'yes, this pin currently rests on already-tracked quarantine debt, and that is KNOWN and accepted for now' -- NOT that the pin is correct. Matching is on (id, fixture) PAIRS, not id alone: each entry's 'fixtures' array names exactly which quarantined fixtures are acknowledged for that combo, so a DIFFERENT/NEW quarantine hit on an already-acknowledged combo (e.g. a second card in the same combo getting quarantined later) is NOT silently swallowed -- it fails as its own, separate, unacknowledged risk. An acknowledged fixture that's no longer at risk (de-quarantined/fixed) FAILS until removed from 'fixtures' -- the list only shrinks, per-fixture, same as the quarantine it mirrors. DATA AUDIT (interaction-review, 2026-07-18): every entry below was independently re-verified against authoritative oracle text and the engine's actual reasoning for its combo (via --explain edge trails). None masks a live tier error -- all drift is either cosmetic (reminder-text wording) or a strictly-conservative/irrelevant subset that cannot over-certify the pinned tier. Three fixtures (RIX/PitilessPlunderer, ELD/CorridorMonitor, PLC/EssenceWarden) carry genuine (non-tier-affecting) mechanical drift and are separately flagged as ordinary gold-fidelity debt worth a GoldRegenerationUtility re-point, not urgent.",
+  "entries": [
+    {
+      "id": "1385-2577-5670",
+      "cards": ["Warren Soultrader", "Gravecrawler", "Zulaport Cutthroat"],
+      "fixtures": ["LCI/WarrenSoultrader", "BFZ/ZulaportCutthroat"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic Treasure-reminder-text drift only) and Zulaport Cutthroat (BFZ/ZulaportCutthroat, tag 'debt', cosmetic self-name drift only). Independently re-verified 2026-07-18: neither drift affects the parsed AST's mechanics or this combo's Amber tier."
+    },
+    {
+      "id": "1385-3000-5670",
+      "cards": ["Warren Soultrader", "Zulaport Cutthroat", "Chatterfang, Squirrel General"],
+      "fixtures": ["LCI/WarrenSoultrader", "BFZ/ZulaportCutthroat"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic) and Zulaport Cutthroat (BFZ/ZulaportCutthroat, tag 'debt', cosmetic). Independently re-verified 2026-07-18: cosmetic-only drift, tier unaffected."
+    },
+    {
+      "id": "2034-2577-4871",
+      "cards": ["Gravecrawler", "Pitiless Plunderer", "Ashnod's Altar"],
+      "fixtures": ["RIX/PitilessPlunderer"],
+      "reason": "Pitiless Plunderer (RIX/PitilessPlunderer, tag 'debt'): fixture dropped 'another' from the death trigger (over-broad, would wrongly self-trigger). Independently re-verified 2026-07-18 via --explain: this combo's loop is fed by OTHER creatures dying (Gravecrawler/Squirrels), present under both fixture and authoritative text -- tier unaffected. Fixture is genuine gold-fidelity debt worth a non-urgent re-point (GoldRegenerationUtility), not a tier-affecting bug."
+    },
+    {
+      "id": "2034-3000-5009",
+      "cards": ["Chatterfang, Squirrel General", "Ruthless Knave", "Ashnod's Altar"],
+      "fixtures": ["XLN/RuthlessKnave"],
+      "reason": "Ruthless Knave (XLN/RuthlessKnave, tag 'debt', cosmetic Treasure-reminder-text drift only). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "2511-2577-4871",
+      "cards": ["Pitiless Plunderer", "Gravecrawler", "Bloodflow Connoisseur"],
+      "fixtures": ["RIX/PitilessPlunderer", "AVR/BloodflowConnoisseur"],
+      "reason": "Pitiless Plunderer (RIX/PitilessPlunderer, tag 'debt', see 2034-2577-4871 -- non-tier-affecting) and Bloodflow Connoisseur (AVR/BloodflowConnoisseur, tag 'debt', cosmetic self-name drift only). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "2577-2741-5670",
+      "cards": ["Warren Soultrader", "Gravecrawler", "Essence Warden"],
+      "fixtures": ["LCI/WarrenSoultrader", "PLC/EssenceWarden"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic) and Essence Warden (PLC/EssenceWarden, tag 'debt'): fixture's trigger filter is narrower than authoritative text (ownership-restricted vs. 'another creature enters'), a strictly conservative subset. Independently re-verified 2026-07-18 via --explain: combo uses your own creatures re-entering, which fires under the fixture's narrower filter too -- cannot over-certify. Essence Warden fixture is genuine gold-fidelity debt worth a non-urgent re-point, not a tier-affecting bug."
+    },
+    {
+      "id": "2577-2842-5670",
+      "cards": ["Warren Soultrader", "Gravecrawler", "Blood Artist"],
+      "fixtures": ["LCI/WarrenSoultrader"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic Treasure-reminder-text drift only). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "261-2577-5670",
+      "cards": ["Warren Soultrader", "Gravecrawler", "Suture Priest"],
+      "fixtures": ["LCI/WarrenSoultrader"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic). NOTE: this combo's OTHER card, Suture Priest, was the session's original stale-fixture find (commit 295f3506) and is already fixed/de-quarantined -- this entry acknowledges only the separate, unrelated, cosmetic Warren Soultrader drift. Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "261-3000-5670",
+      "cards": ["Warren Soultrader", "Suture Priest", "Chatterfang, Squirrel General"],
+      "fixtures": ["LCI/WarrenSoultrader"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic). Same note as 261-2577-5670: Suture Priest is already fixed/de-quarantined; only Warren Soultrader's unrelated cosmetic drift remains. Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "2741-3000-5670",
+      "cards": ["Warren Soultrader", "Essence Warden", "Chatterfang, Squirrel General"],
+      "fixtures": ["LCI/WarrenSoultrader", "PLC/EssenceWarden"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic) and Essence Warden (PLC/EssenceWarden, tag 'debt', see 2577-2741-5670 -- non-tier-affecting conservative-subset drift). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "2842-3000-5670",
+      "cards": ["Warren Soultrader", "Blood Artist", "Chatterfang, Squirrel General"],
+      "fixtures": ["LCI/WarrenSoultrader"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "3000-4231-5670",
+      "cards": ["Chatterfang, Squirrel General", "Warren Soultrader", "Academy Manufactor"],
+      "fixtures": ["LCI/WarrenSoultrader"],
+      "reason": "Warren Soultrader (LCI/WarrenSoultrader, tag 'debt', cosmetic). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "3000-4772-5009",
+      "cards": ["Chatterfang, Squirrel General", "Ruthless Knave", "Doubling Season"],
+      "fixtures": ["XLN/RuthlessKnave"],
+      "reason": "Ruthless Knave (XLN/RuthlessKnave, tag 'debt', cosmetic Treasure-reminder-text drift only). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "3000-4871",
+      "cards": ["Chatterfang, Squirrel General", "Pitiless Plunderer"],
+      "fixtures": ["RIX/PitilessPlunderer"],
+      "reason": "Pitiless Plunderer (RIX/PitilessPlunderer, tag 'debt', see 2034-2577-4871 -- non-tier-affecting). Independently re-verified 2026-07-18: tier unaffected."
+    },
+    {
+      "id": "618-4404",
+      "cards": ["Kiki-Jiki, Mirror Breaker", "Corridor Monitor"],
+      "fixtures": ["ELD/CorridorMonitor"],
+      "reason": "Corridor Monitor (ELD/CorridorMonitor, tag 'debt'): fixture dropped 'you control' from the untap target (over-broad). Independently re-verified 2026-07-18 via --explain: the combo untaps Kiki-Jiki, which the pilot controls -- allowed under authoritative text too, tier unaffected. Fixture is genuine gold-fidelity debt worth a non-urgent re-point, not a tier-affecting bug."
+    }
+  ]
+}

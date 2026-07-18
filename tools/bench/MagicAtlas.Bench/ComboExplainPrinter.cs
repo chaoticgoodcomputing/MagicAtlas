@@ -13,6 +13,13 @@ public static class ComboExplainPrinter
     Console.WriteLine($"Combo {result.Id}  [{string.Join(" + ", result.Cards)}]");
     Console.WriteLine($"  outcome : {result.Outcome}");
 
+    if (result.FidelityRisk is { Count: > 0 } risk)
+    {
+      Console.WriteLine("  fidelityRisk (QUARANTINED fixture(s) feed this combo):");
+      foreach (var r in risk)
+        Console.WriteLine($"    {r.Card}  fixture={r.Fixture}  tag={r.Tag}");
+    }
+
     if (result.Outcome == ReconstructionOutcome.Missed || result.Diagnostics is null)
     {
       Console.WriteLine("  no spanning cycle reconstructs this combo over the current gold ASTs (Missed).");
