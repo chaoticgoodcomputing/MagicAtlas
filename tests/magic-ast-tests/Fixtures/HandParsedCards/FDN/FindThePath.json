@@ -61,7 +61,7 @@
                   {
                     "CostType": "tap",
                     "SourceSpan": {
-                      "Start": 0,
+                      "Start": 33,
                       "Length": 3
                     }
                   }
@@ -71,7 +71,7 @@
                     "EffectType": "addMana",
                     "Mana": "{G}{G}",
                     "SourceSpan": {
-                      "Start": 4,
+                      "Start": 37,
                       "Length": 12
                     }
                   }

@@ -66,7 +66,14 @@ public sealed class EnchantedHasGrantedTriggeredAbilityRule : IStaticRule
       return null;
     }
 
-    var grantedAbility = TryParseTriggeredBody(body);
+    // Rebase the quoted body's span onto its REAL absolute offset in the original
+    // oracle text. `rawText` (StripReminderText'd) may differ from `clause.RawText`
+    // by leading/trailing trimming, so re-locate `body` within the untouched
+    // `clause.RawText` rather than trusting the match index into `rawText`.
+    var bodyOffsetInClause = clause.RawText.IndexOf(body, System.StringComparison.Ordinal);
+    var bodyAbsoluteStart = clause.SourceSpan.Start + (bodyOffsetInClause >= 0 ? bodyOffsetInClause : 0);
+
+    var grantedAbility = TryParseTriggeredBody(body, bodyAbsoluteStart);
     if (grantedAbility is null)
     {
       // Not a triggered-ability body — leave this clause to GrantedAbilityRule's
@@ -92,7 +99,14 @@ public sealed class EnchantedHasGrantedTriggeredAbilityRule : IStaticRule
   /// <summary>
   /// Hands the quoted body off to <see cref="TriggeredAbilityParser"/>.
   /// </summary>
-  private Ability? TryParseTriggeredBody(string body)
+  /// <param name="body">The quoted ability text, verbatim.</param>
+  /// <param name="bodyAbsoluteStart">
+  /// The body's real absolute offset into the original oracle text (NOT 0-based —
+  /// <see cref="TriggeredAbilityParser"/> computes every nested trigger/effect span
+  /// off this clause's <c>SourceSpan.Start</c>, so a wrong basis here silently
+  /// corrupts every span the inner parser produces).
+  /// </param>
+  private Ability? TryParseTriggeredBody(string body, int bodyAbsoluteStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue ? tokenResult.Value : new TokenList<OracleToken>([]);
@@ -101,7 +115,7 @@ public sealed class EnchantedHasGrantedTriggeredAbilityRule : IStaticRule
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(bodyAbsoluteStart, body.Length),
     };
 
     return new TriggeredAbilityParser().TryParse(

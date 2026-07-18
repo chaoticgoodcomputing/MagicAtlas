@@ -60,7 +60,7 @@
                   {
                     "CostType": "tap",
                     "SourceSpan": {
-                      "Start": 0,
+                      "Start": 41,
                       "Length": 3
                     }
                   }
@@ -79,7 +79,7 @@
                       "Kind": "AnyTarget"
                     },
                     "SourceSpan": {
-                      "Start": 4,
+                      "Start": 45,
                       "Length": 44
                     }
                   }

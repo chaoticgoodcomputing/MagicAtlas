@@ -133,7 +133,16 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
       var quotedCond = soulbondQuotedMatch.Groups["cond"].Value.Trim();
       var quotedBody = soulbondQuotedMatch.Groups["body"].Value.Trim();
       var quotedDuration = new AsLongAsDuration { Condition = MagicAST.Parsing.ConditionParser.Parse(quotedCond) };
-      var quotedGrantedAbility = TryParseGrantedActivatedBody(quotedBody);
+      // Rebase the quoted body's span onto its REAL absolute offset in the original
+      // oracle text: `quotedBody` is only a substring of `clause.RawText`, so the
+      // naive 0-based span the inner parser would otherwise stamp on the granted
+      // ability (and its nested effects/triggers, computed relative to whatever
+      // SourceSpan.Start we hand it) needs `clause.SourceSpan.Start` PLUS the
+      // body's own offset within `clause.RawText`.
+      var quotedBodyOffsetInClause = clause.RawText.IndexOf(quotedBody, System.StringComparison.Ordinal);
+      var quotedBodyAbsoluteStart =
+        clause.SourceSpan.Start + (quotedBodyOffsetInClause >= 0 ? quotedBodyOffsetInClause : 0);
+      var quotedGrantedAbility = TryParseGrantedActivatedBody(quotedBody, quotedBodyAbsoluteStart);
       if (quotedGrantedAbility != null)
       {
         return
@@ -342,7 +351,14 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
   /// (for triggered-ability shapes like Tandem Lookout's
   /// "Whenever this creature deals damage to an opponent, draw a card.").
   /// </summary>
-  private Ability? TryParseGrantedActivatedBody(string body)
+  /// <param name="body">The quoted ability text, verbatim.</param>
+  /// <param name="bodyAbsoluteStart">
+  /// The body's real absolute offset into the original oracle text (NOT 0-based —
+  /// both inner parsers compute every nested trigger/effect/cost span off this
+  /// clause's <c>SourceSpan.Start</c>, so a wrong basis here silently corrupts
+  /// every span the inner parser produces).
+  /// </param>
+  private Ability? TryParseGrantedActivatedBody(string body, int bodyAbsoluteStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue
@@ -353,7 +369,7 @@ public sealed class AsLongAsStaticGrantRule : IStaticRule
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(bodyAbsoluteStart, body.Length),
     };
 
     // Try activated first (the historical shape for this method).

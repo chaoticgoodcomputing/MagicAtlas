@@ -69,7 +69,16 @@ public sealed class GrantedAbilityRule : IStaticRule
       return null;
     }
 
-    var innerAbility = TryParseGrantedBody(body);
+    // Rebase the quoted body's span onto its REAL absolute offset in the original
+    // oracle text: `body` is only a substring of `clause.RawText`, so the naive
+    // 0-based span the inner parser would otherwise stamp on the granted ability
+    // (and its nested effects/triggers, which are computed relative to whatever
+    // SourceSpan.Start we hand it) needs `clause.SourceSpan.Start` PLUS the body's
+    // own offset within `clause.RawText` — not `clause.SourceSpan.Start` alone.
+    var bodyOffsetInClause = clause.RawText.IndexOf(body, System.StringComparison.Ordinal);
+    var bodyAbsoluteStart = clause.SourceSpan.Start + (bodyOffsetInClause >= 0 ? bodyOffsetInClause : 0);
+
+    var innerAbility = TryParseGrantedBody(body, bodyAbsoluteStart);
     if (innerAbility is null)
     {
       // The body's shape isn't yet supported by ActivatedAbilityParser.
@@ -93,7 +102,14 @@ public sealed class GrantedAbilityRule : IStaticRule
   /// <summary>
   /// Hands the quoted body off to <see cref="ActivatedAbilityParser"/>.
   /// </summary>
-  private Ability? TryParseGrantedBody(string body)
+  /// <param name="body">The quoted ability text, verbatim.</param>
+  /// <param name="bodyAbsoluteStart">
+  /// The body's real absolute offset into the original oracle text (NOT 0-based —
+  /// <see cref="ActivatedAbilityParser"/> computes every nested effect/cost span off
+  /// this clause's <c>SourceSpan.Start</c>, so a wrong basis here silently corrupts
+  /// every span the inner parser produces).
+  /// </param>
+  private Ability? TryParseGrantedBody(string body, int bodyAbsoluteStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue
@@ -104,7 +120,7 @@ public sealed class GrantedAbilityRule : IStaticRule
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(bodyAbsoluteStart, body.Length),
     };
     var innerClassification = new ClauseClassification
     {

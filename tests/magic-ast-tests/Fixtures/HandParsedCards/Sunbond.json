@@ -66,7 +66,7 @@
                     "Controller": "You"
                   },
                   "SourceSpan": {
-                    "Start": 0,
+                    "Start": 41,
                     "Length": 22
                   }
                 },
@@ -82,7 +82,7 @@
                       "DerivedFrom": "LifeGained"
                     },
                     "SourceSpan": {
-                      "Start": 23,
+                      "Start": 64,
                       "Length": 47
                     }
                   }

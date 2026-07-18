@@ -68,14 +68,14 @@
                       }
                     ],
                     "SourceSpan": {
-                      "Start": 0,
+                      "Start": 41,
                       "Length": 3
                     }
                   },
                   {
                     "CostType": "tap",
                     "SourceSpan": {
-                      "Start": 5,
+                      "Start": 46,
                       "Length": 3
                     }
                   }
@@ -97,7 +97,7 @@
                       "Value": 1
                     },
                     "SourceSpan": {
-                      "Start": 9,
+                      "Start": 50,
                       "Length": 40
                     }
                   }
