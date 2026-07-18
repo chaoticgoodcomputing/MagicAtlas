@@ -29,6 +29,10 @@
     "guards": [],
     "bridges": []
   },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-18 round-4 batch — modification:prevention (Glacial Chasm, CR 604.2/611/615.1) corroborating witness, static always-on single-recipient shield genuinely distinct from fog's one-shot blanket instant; PROCEED"
+  },
   "assertions": [
     {
       "claim": "stem.modification:prevention.witnessed",
