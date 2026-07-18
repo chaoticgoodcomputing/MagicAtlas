@@ -642,7 +642,6 @@
         "mana"
       ],
       "values_seen": [
-        "C",
         "any",
         "black",
         "blue",
@@ -655,15 +654,17 @@
       "carries_provenance_or_polarity": true,
       "licensed_by": [
         "mana",
-        "objects:*"
+        "objects:*",
+        "deployment:*"
       ],
       "enum": [
-        "W",
-        "U",
-        "B",
-        "R",
-        "G",
-        "C",
+        "white",
+        "blue",
+        "black",
+        "red",
+        "green",
+        "colorless",
+        "generic",
         "any"
       ]
     },
@@ -735,6 +736,7 @@
       ],
       "enum": [
         "\u002B1/\u002B1",
+        "-1/-1",
         "loyalty",
         "charge",
         "energy",
@@ -805,7 +807,8 @@
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "removal:*",
-        "deployment:*"
+        "deployment:*",
+        "creature"
       ],
       "enum": [
         "True"
@@ -828,7 +831,9 @@
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "removal:*",
-        "deployment:*"
+        "deployment:*",
+        "cards:*",
+        "recur"
       ],
       "lattice": "zones"
     },
@@ -863,7 +868,8 @@
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "removal:*",
-        "deployment:*"
+        "deployment:*",
+        "deployment"
       ],
       "enum": [
         "sacrificed",
@@ -897,7 +903,8 @@
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "objects:*",
-        "modification:*"
+        "modification:*",
+        "deployment:*"
       ],
       "lattice": "power/toughness comparisons"
     },
@@ -980,7 +987,8 @@
         "*"
       ],
       "enum": [
-        "True"
+        "True",
+        "False"
       ],
       "note": "the port\u0027s subject is the source object itself"
     },
@@ -1048,7 +1056,11 @@
       "licensed_by": [
         "objects:*",
         "removal:*",
-        "deployment:*"
+        "deployment:*",
+        "artifact",
+        "cast",
+        "creature",
+        "structure:untap"
       ],
       "lattice": "type-ontology (creature:squirrel \u2286 creature)"
     },
@@ -1088,7 +1100,9 @@
       "carries_provenance_or_polarity": true,
       "licensed_by": [
         "removal:*",
-        "deployment:*"
+        "deployment:*",
+        "cards:*",
+        "recur"
       ],
       "lattice": "zones"
     },
@@ -1109,7 +1123,11 @@
       "carries_provenance_or_polarity": false,
       "licensed_by": [
         "objects:*",
-        "deployment:*"
+        "deployment:*",
+        "removal:*",
+        "artifact",
+        "creature",
+        "deployment"
       ],
       "enum": [
         "True",

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using Flowthru.Step;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 
@@ -29,6 +30,25 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 public static class TopologyStep
 {
   private const string GeneratedStamp = "tools/interaction-rollup";
+
+  /// <summary>
+  /// R2 hardening: the well-formed shape of a real stem name (a colon-separated is-a spine; each segment
+  /// starts with a letter and may contain digits/hyphens, e.g. <c>modification:restriction</c>,
+  /// <c>cards:search</c>, <c>combat-presence</c>). A hole's <c>proposed_stem</c> that doesn't match this
+  /// shape is a human-typed placeholder (e.g. free text with spaces/parens) that can never resolve against
+  /// any real projected stem — it would sit <c>sought</c> forever with no signal. Reject it at construction
+  /// time instead. Deliberately no fuzzy/prefix/alias matching beyond this shape check.
+  ///
+  /// <para><b>Scope note (ADR-0003 §8 R2):</b> the companion "dead-prediction" gate — flag a well-shaped
+  /// <c>proposed_stem</c> that has sat unresolved for a long time with zero witness attempts — is NOT
+  /// implemented here. <see cref="TopologyStep"/> is a pure regeneration function of (golds, scaffold)
+  /// with no access to prior-run history (no "how many rollups has this hole been sought across" counter
+  /// exists, and inventing one would itself be a new hand-maintained artifact subject to drift — exactly
+  /// what this hardening pass exists to eliminate). A real implementation would need either git-history
+  /// mining (outside a pure function's scope) or a durable run-log the flow doesn't currently write.
+  /// Only the shape half is implemented; see the 2026-07-18 hardening report for detail.</para>
+  /// </summary>
+  private static readonly Regex StemShapeRegex = new(@"^[a-z][a-z0-9-]*(:[a-z][a-z0-9-]*)*$", RegexOptions.Compiled);
 
   private sealed class StemAccum
   {
@@ -152,6 +172,14 @@ public static class TopologyStep
       foreach (var kv in holeScaffold)
       {
         var proposedStem = kv.Value["proposed_stem"]!.GetValue<string>();
+        if (!StemShapeRegex.IsMatch(proposedStem))
+          throw new InvalidOperationException(
+            $"topology scaffold hole '{kv.Key}' has a malformed proposed_stem '{proposedStem}' — "
+              + "must be a well-formed kebab-stem shape (colon-separated is-a spine, e.g. "
+              + "'modification:restriction' or 'cards:search'). A free-text placeholder can never resolve "
+              + "against a real projected stem and would sit 'sought' forever with no signal — fix the "
+              + "scaffold hole's proposed_stem to the actual (or intended) stem name."
+          );
         var resolved = stems.TryGetValue(proposedStem, out var stemAccum) && stemAccum.Projected;
         holes[kv.Key] = new HoleEntry
         {
@@ -184,6 +212,10 @@ public static class TopologyStep
           Note = d?["note"]?.GetValue<string>(),
         };
       }
+
+      // R3 hardening: cross-validate the scaffold's declared enum/licensed_by constraints against what
+      // the golds actually witnessed — throws loudly on drift (see ValidateAxisConstraints).
+      ValidateAxisConstraints(axesOut);
 
       // ── materialize stems (lean + cited) ──
       var stemsLean = new Dictionary<string, StemEntry>(StringComparer.Ordinal);
@@ -236,6 +268,63 @@ public static class TopologyStep
     var colon = stem.LastIndexOf(':');
     return colon >= 0 ? stem[..colon] : null;
   }
+
+  /// <summary>
+  /// R3 hardening: an axis's declared <c>enum</c> and <c>licensed_by</c> are hand-maintained closed sets
+  /// that can silently drift from what the golds actually witness (ADR-0003 §8 — code/data as ultimate
+  /// source of truth). For every axis: (1) every witnessed value must be covered by the declared enum, if
+  /// one is declared; (2) every stem actually carrying the axis must be covered by some declared
+  /// licensed_by glob, if any are declared. Both checks are EXACT — no fuzzy/alias matching — so a
+  /// genuine vocabulary mismatch (e.g. letter-form vs word-form colors) fails the build instead of rotting
+  /// silently. Collects every offender across every axis before throwing once, loudly.
+  /// </summary>
+  private static void ValidateAxisConstraints(IReadOnlyDictionary<string, AxisEntry> axes)
+  {
+    var errors = new List<string>();
+    foreach (var (axisName, axis) in axes)
+    {
+      if (axis.Enum is { Count: > 0 } enumValues)
+      {
+        var allowed = new HashSet<string>(enumValues, StringComparer.Ordinal);
+        var offending = axis.ValuesSeen.Where(v => !allowed.Contains(v)).ToList();
+        if (offending.Count > 0)
+          errors.Add(
+            $"axis '{axisName}': values_seen not covered by declared enum {FormatList(enumValues)} "
+              + $"— offending: {FormatList(offending)}"
+          );
+      }
+
+      if (axis.LicensedBy is { Count: > 0 } globs)
+      {
+        var offendingStems = axis.Stems.Where(s => !globs.Any(g => StemMatchesGlob(s, g))).ToList();
+        if (offendingStems.Count > 0)
+          errors.Add(
+            $"axis '{axisName}': stems not covered by declared licensed_by {FormatList(globs)} "
+              + $"— offending: {FormatList(offendingStems)}"
+          );
+      }
+    }
+
+    if (errors.Count > 0)
+      throw new InvalidOperationException(
+        "Topology axis constraints diverged from witnessed reality (ADR-0003 §8 R3):\n  "
+          + string.Join("\n  ", errors)
+      );
+  }
+
+  /// <summary>A stem-glob match: <c>"*"</c> matches anything, <c>"prefix:*"</c> matches any stem starting
+  /// with <c>prefix:</c>, anything else is an exact stem-name match. No fuzzy/prefix-without-colon
+  /// matching — deliberately literal.</summary>
+  private static bool StemMatchesGlob(string stem, string glob)
+  {
+    if (glob == "*")
+      return true;
+    if (glob.EndsWith(":*", StringComparison.Ordinal))
+      return stem.StartsWith(glob[..^1], StringComparison.Ordinal);
+    return string.Equals(stem, glob, StringComparison.Ordinal);
+  }
+
+  private static string FormatList(IEnumerable<string> xs) => "[" + string.Join(", ", xs) + "]";
 
   /// <summary>Enumerate an object's entries, skipping <c>$</c>-prefixed metadata keys (e.g. <c>$note</c>).</summary>
   private static IEnumerable<KeyValuePair<string, JsonObject>> Entries(JsonNode? node)

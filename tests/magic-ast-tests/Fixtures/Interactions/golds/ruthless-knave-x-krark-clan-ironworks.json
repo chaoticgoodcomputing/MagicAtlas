@@ -46,7 +46,7 @@
         "kind": "STATE",
         "stem": "mana",
         "attrs": {
-          "color": "C",
+          "color": "colorless",
           "qty": 2
         },
         "note": "incidental card context \u2014 'Add {C}{C}.' (line 0, spans [22,34]); the payoff the sacrifice pays for, which makes Krark-Clan Ironworks a repeatable OUTLET. Not the witness; the KCI1\u2192KCI2 (cost pays for mana) binding is card-defined/internal, not an inter-card edge. Live ADR-2 label: emit:mana:colorless."
