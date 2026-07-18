@@ -98,7 +98,7 @@
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": "cardTypes=|subtypes=Treasure|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+      "Subject": "cardTypes=artifact|subtypes=Treasure|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Ruthless Knave::sac:creature:controlled",

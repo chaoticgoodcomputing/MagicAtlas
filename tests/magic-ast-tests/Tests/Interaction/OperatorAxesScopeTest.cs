@@ -16,8 +16,14 @@ using MagicAST.Tests.Infrastructure;
 /// (a regression definition of "still done", per ADR-0002 §8-B / §10). The genuinely-open axis is
 /// <c>Resource.Subject</c> — the positional-counter <c>@bearer</c> facet (ADR-0002 §3) — which has NOT
 /// landed; the counter-flow exemplar pins the desired GREEN once it does. No exemplar here is blocked by
-/// the IsSelf axis; the bench's measured gap is the Squirrel⊄creature type straddle (8 Amber) and absent
-/// flow arms (25 Missed), neither in this track's scope.</para>
+/// the IsSelf axis; the bench's (as of 2026-06-16) measured gap was the Squirrel⊄creature type straddle
+/// (8 Amber) and absent flow arms (25 Missed), neither in this track's scope. 2026-07-18: the straddle's
+/// <b>sacrifice-cost</b> instance (Chatterfang × Pitiless Plunderer, CR 701.21a guarantees sac fodder is
+/// already a permanent) is fixed — <c>PortGraph</c>'s sacrifice-cost Subject now lifts a subtype-only
+/// filter to its permanent card type, see <c>PortGraphEngineTest.Reconstructs_the_chatterfang_pitiless_free_loop_as_green</c>
+/// — but the general <c>ObjectFilterRelations.Subsumes</c> contract (a context-free subtype filter can't
+/// assume a permanent) is unchanged, so the straddle may still gate other non-sac port roles; the exact
+/// remaining count needs a fresh bench run, not re-derived here.</para>
 /// </summary>
 [TestFixture]
 public class OperatorAxesScopeTest

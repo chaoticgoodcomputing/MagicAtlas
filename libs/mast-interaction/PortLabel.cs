@@ -81,6 +81,25 @@ public static class PortLabel
   /// </summary>
   private static string? LiftCardTypes(IReadOnlyList<string>? subtypes, TypeOntology ontology)
   {
+    var lifted = LiftPermanentCardTypeList(subtypes, ontology);
+    return lifted is null ? null : string.Join("+", lifted);
+  }
+
+  /// <summary>
+  /// The list form of <see cref="LiftCardTypes"/> — a subtype's permanent (non-kindred) owner card
+  /// type(s), for callers that need the <see cref="ObjectFilter.CardTypes"/> list itself rather than
+  /// the joined label facet (e.g. <c>PortGraph</c>'s sacrifice-cost Subject: CR 701.21a guarantees a
+  /// sac cost's fodder is a permanent already, so a bare <c>Subtypes:["Squirrel"]</c> filter with no
+  /// explicit <c>CardTypes</c> can safely carry its lifted permanent type — the operator's general
+  /// <c>Subsumes</c> stays conservative for a context-free filter (the Squirrel⊄creature straddle is a
+  /// real ambiguity there), but a sac-cost object is never that ambiguous). <c>null</c> if no subtype
+  /// resolves to a permanent type.
+  /// </summary>
+  internal static IReadOnlyList<string>? LiftPermanentCardTypeList(
+    IReadOnlyList<string>? subtypes,
+    TypeOntology ontology
+  )
+  {
     if (subtypes is null || subtypes.Count == 0)
       return null;
     var permanents = ontology.PermanentTypes.ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -95,7 +114,7 @@ public static class PortLabel
       .Distinct()
       .OrderBy(c => c, StringComparer.Ordinal)
       .ToList();
-    return lifted.Count == 0 ? null : string.Join("+", lifted);
+    return lifted.Count == 0 ? null : lifted;
   }
 
   /// <summary>

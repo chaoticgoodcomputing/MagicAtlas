@@ -576,6 +576,19 @@ public sealed class PortWalk
       {
         // CR 701.21a: you sacrifice only what you control — the operator sees a controlled fodder.
         var controlled = fodder with { Controller = fodder.Controller ?? ControllerFilter.You };
+        // CR 701.21a also guarantees the fodder IS a permanent (you cannot sacrifice a spell), so a
+        // subtype-only cost ("Sacrifice X Squirrels", no explicit "creature") can safely carry its
+        // lifted permanent card type — the same lift PortLabel.Subject already does for the LABEL
+        // string, applied here to the Subject itself so the operator's Subsumes (ObjectFilterRelations
+        // — a context-free, general-purpose relation that must stay honestly Unknown for a bare
+        // subtype filter with no such guarantee, per the Squirrel⊄creature panel contract) can prove
+        // this sac cost feeds a same-type dies-trigger (e.g. Pitiless Plunderer's "creature ... dies")
+        // instead of floors to Amber on a false ambiguity that a sac-cost object never actually has.
+        if (controlled.CardTypes is null)
+          controlled = controlled with
+          {
+            CardTypes = PortLabel.LiftPermanentCardTypeList(controlled.Subtypes, _ontology),
+          };
         consumes.Add(
           Port(
             card,
