@@ -5,7 +5,7 @@ description: Drives a TDD cycle for extending MagicAST (the Magic-the-Gathering 
 
 # MAST TDD loop
 
-> **This is the Parse track of the unified [`mast-loop`](../mast-loop/SKILL.md).** The loop now has three tracks — Parse (this doc), [Legacy-engine](../mast-loop/LEGACY-ENGINE.md) (ADR-2 ports/edges), and [Accretion](../mast-loop/ACCRETION.md) (ADR-3 taxonomy). Enter through `mast-loop` and pick a track by objective; this doc is the authoritative Parse-track detail, and its "three kinds of effort" §below is where the engine currencies were promoted from. The shared machinery (worktree/serial-merge, judges, gates, fan-out, model policy) is described here and referenced by the umbrella.
+> **This is the Parse track of the unified [`mast-loop`](../mast-loop/SKILL.md).** The loop has two tracks — Parse (this doc) and [Interaction](../mast-loop/INTERACTION.md) (ports, edges, taxonomy, and wrong-port correction). Enter through `mast-loop` and pick a track by objective; this doc is the authoritative Parse-track detail, and its "three kinds of effort" §below is where the engine currencies were promoted from. The shared machinery (worktree/serial-merge, judges, gates, fan-out, model policy) is described here and referenced by the umbrella.
 
 Drives one round of extending MagicAST. Each round starts at parser gaps surfaced by triage, ends with new AST nodes and/or parser rules that close them, lands `nx run mast:test` at 100% green (vanilla NUnit, no ratchet tolerance), and rolls the corpus-wide triage forward.
 

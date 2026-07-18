@@ -1,8 +1,8 @@
-# Error-check track — the span-witness QA loop
+# Error-check — the span-witness QA mechanics
 
-The quality dimension of the loop: not "add a port" but "**a port is wrong — fix it**." A port's `SourceSpan` is a **witness** — the exact oracle-text characters the port claims. When that text contradicts the port's label (a `sac` port whose span says "Flying", a `trigger:damage` port whose span points at an equipment's enchant clause), the port is a **suspect**: either a **false-positive port** (the parser/projection over-generated a port that isn't in the text) or a **span mis-attribution** (a real port pointing at the wrong clause). Both poison downstream: a false-positive port fabricates edges (the "Chatterfang feeds Aang" class); a mis-attributed span mis-highlights and mis-routes. A wrong port outranks a missing one — the same "untrustworthy GREEN > coverage" logic the Legacy-engine track uses, one layer down at the port.
+The quality dimension of the loop: not "add a port" but "**a port is wrong — fix it**." A port's `SourceSpan` is a **witness** — the exact oracle-text characters the port claims. When that text contradicts the port's label (a `sac` port whose span says "Flying", a `trigger:damage` port whose span points at an equipment's enchant clause), the port is a **suspect**: either a **false-positive port** (the parser/projection over-generated a port that isn't in the text) or a **span mis-attribution** (a real port pointing at the wrong clause). Both poison downstream: a false-positive port fabricates edges (the "Chatterfang feeds Aang" class); a mis-attributed span mis-highlights and mis-routes. A wrong port outranks a missing one — the same "untrustworthy GREEN > coverage" logic the [Interaction track](INTERACTION.md) uses, one layer down at the port.
 
-> Cross-cutting track: a suspect resolves into **either** a Parse sub-slice (fix the span mint) **or** an Accretion refinement (tighten the gold that witnesses the stem). The entry report routes it; you finish in the owning track's discipline.
+> This is the mechanics doc for the check the [Interaction track](INTERACTION.md) runs at the end of every round (Step 6). It's also directly invocable on its own for a full-corpus sweep. Either way, a suspect resolves into **either** a Parse sub-slice (fix the span mint) **or** an Interaction-track refinement (tighten the gold that witnesses the stem) — the entry report routes it; you finish in the owning track's discipline.
 
 ## Entry report — `span-witness-report.json`
 
@@ -13,17 +13,17 @@ The check slices every parsed port's span and verifies it contains the anchor wo
 - **`checkedPorts`** — the denominator (ports with a span + a checkable anchor).
 - **`derivedExcluded`** — a created token's affordance projected onto its creator (span borrowed from the creating clause, ADR-0003 §7). **Not a defect** — excluded by design.
 - **`misalignedDfc`** — span offsets run *past* the stored oracle text (empty slice). A distinct systematic class: **double-faced cards** whose served `OracleText` is empty while spans index the composed CardFaces text. Its own fix (store/serve the composed text), not a per-port suspect.
-- **`outliers[]`** — the **actionable suspects**: span text present, anchor absent. Ranked **unwitnessed-stem-first** (a suspect on a stem no gold covers is a QA flag *and* an accretion gap), then by stem, then card. Each carries `stem`, `expectedAnchor`, `claimedText`, and **`witnessGolds`** — the golds that witness its ADR-3 stem (`stems[stem].witnesses` from the cited topology).
+- **`outliers[]`** — the **actionable suspects**: span text present, anchor absent. Ranked **unwitnessed-stem-first** (a suspect on a stem no gold covers is a QA flag *and* a taxonomy gap), then by stem, then card. Each carries `stem`, `expectedAnchor`, `claimedText`, and **`witnessGolds`** — the golds that witness its stem (`stems[stem].witnesses` from the cited topology).
 
 ## The pick → diagnose → route cycle
 
 1. **Pick** a suspect (top of `outliers[]` — unwitnessed stems first). Read `claimedText` against `label`.
 2. **Diagnose** which failure it is:
    - **Span mis-attribution** (the common case): the port IS real, but its span points at a container/preamble/grant clause instead of its own text (a Class level, a Siege mode, an equipment's granted trigger). → **Parse sub-slice**: the parser must mint the inner-clause span. See the convergence note below.
-   - **False-positive port**: the `claimedText` genuinely doesn't support the port — the parser/projection invented it. → fix the parser rule or the PortWalk projection that mints it (Parse or Legacy-engine discipline). This is the one that also kills fabricated edges.
+   - **False-positive port**: the `claimedText` genuinely doesn't support the port — the parser/projection invented it. → fix the parser rule or the PortWalk projection that mints it (Parse or Interaction-track discipline). This is the one that also kills fabricated edges.
 3. **Route via the witness** — `witnessGolds` names the golds that vouch for this stem. Two moves:
-   - If the port is a **false positive** and a gold witnesses its stem, the gold's witness is likely **too permissive** (it admits the bad port). Tighten the gold (Accretion), re-run `InteractionRollup`.
-   - If the stem is **uncovered** (`witnessGolds` empty — the event-verb stems `damage`/`dice` carry no per-stem witness today), the suspect is *also* an accretion gap: witnessing that stem (Accretion track) both covers it and gives future checks a reference.
+   - If the port is a **false positive** and a gold witnesses its stem, the gold's witness is likely **too permissive** (it admits the bad port). Tighten the gold, re-run `InteractionRollup`.
+   - If the stem is **uncovered** (`witnessGolds` empty — the event-verb stems `damage`/`dice` carry no per-stem witness today), the suspect is *also* a taxonomy gap: witnessing that stem (Interaction track, Currency C) both covers it and gives future checks a reference.
 4. **Gate**: `nx run mast:test` (the span-provenance NUnit invariants — `Derived_token_affordance_ports_inherit_the_creating_clause`, the orphan/round-trip guards) must stay green, and **re-run `nx run mast:span-witness`** — the suspect must clear (and no new one appear). If the fix touched golds, `InteractionRollup` conflict + ladder green.
 
 ## Standing facts
