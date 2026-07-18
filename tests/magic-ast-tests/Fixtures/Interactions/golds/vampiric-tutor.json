@@ -1,0 +1,79 @@
+{
+  "id": "vampiric-tutor",
+  "unit": "single-card",
+  "cards": [
+    "Vampiric Tutor"
+  ],
+  "source": {
+    "note": "single-card CORROBORATING witness of stem cards:search (already witnessed once by diabolic-tutor.json, judge PASS). Diabolic Tutor witnesses from=library, to=hand, control=you, qty=1 with an unrestricted 'a card' criterion — the tutor-to-hand shape. Vampiric Tutor witnesses a structurally different destination: the searched card never leaves the library at all, it is repositioned to the TOP of the same zone it was searched from. Oracle (verified against tests/magic-ast-tests/Data/_01_Raw/Datasets/External/oracle-cards.json, byte-exact, name='Vampiric Tutor', mana_cost='{B}', type_line='Instant'): 'Search your library for a card, then shuffle and put that card on top. You lose 2 life.' AST-faithful, not a wish: Fixtures/HandParsedCards/MIR/VampiricTutor.json is an already-committed, already-green parser gold (consumed by Tests/Parse/HandParsedCardTests.cs) — Abilities[0].Kind='spell', Effects=[ searchLibrary{ Filter.CardTypes=[card], Count={literal,1}, Destination='TopOfLibrary', Revealed=false }, loseLife{ Amount={literal,2}, Player=You } ]. No parser work was needed for this gold. The searchLibrary effect DEFINITIONALLY searches the library (CR 701.23), Player is omitted on the effect => your own library (CR 701.23a default subject = the ability's controller) => from=library is AST-proven, not derived — the SAME from=library value diabolic-tutor already witnesses (reused, not a new value). Destination='TopOfLibrary' is the new content: hand-mapped to the closed 'to' zone axis as the bare value 'library' (mirroring the axis's existing zone-name vocabulary — battlefield/exile/graveyard/hand are all bare zone names with no positional qualifier baked into the value), and 'library' is NOT YET in to.values_seen (currently {battlefield, exile, graveyard, hand}) — this gold ADDS it, a genuinely new value on an already-licensed axis (to is already licensed_by cards:search via diabolic-tutor), not a new axis and not a re-declaration. from=library and to=library both being 'library' is itself the honest witness: unlike Diabolic Tutor's library-to-hand tutor, Vampiric Tutor's card never crosses a zone boundary — it is a same-zone reposition, the search-and-reorder sibling shape one register down from cards:select's blind top-N peek (Serum Visions), except cards:search always names a specific found card by CRITERIA (even the trivial 'a card') and cards:select never removes a card from its position at all. control=you and qty=1 are identical to diabolic-tutor's values (Player omitted => CR 701.23a default controller; Count={literal,1} => 'search for A card') — reused, not new. AXIS SURFACE (surfaced, not invented): the TOP-of-library POSITION (as opposed to e.g. a hypothetical bottom-of-library destination) has no closed attribute_axis to carry it — the 'to' axis's zone-name vocabulary has no room for a within-zone position qualifier. Following the Moat/Thorn-of-Amethyst precedent (witness the licensed facet, surface the unlicensed one), this gold witnesses only the bare to=library zone value and leaves the top/bottom position facet as an open scaffold question. The card's second effect (You lose 2 life, an additional cost-like drawback on the spell) is INCIDENTAL — not modeled as a port here, the same restraint scour-from-existence.json applied to its own incidental cast:spell:self consume; this gold's only port is the search itself. No edhrec_rank in the testbed source (verified null in oracle-cards.json), so source.popularity is omitted (not fabricated)."
+  },
+  "ports": {
+    "Vampiric Tutor": [
+      {
+        "id": "V1",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "cards:search",
+        "attrs": {
+          "from": "library",
+          "to": "library",
+          "control": "you",
+          "qty": 1
+        },
+        "note": "THE WITNESS — 'Search your library for a card, then shuffle and put that card on top.' (EffectType=searchLibrary, Filter.CardTypes=[card], Count={literal,1}, Destination='TopOfLibrary', Player omitted). A cards:search STATE op whose destination never leaves the source zone: from=library is AST-proven (searchLibrary definitionally searches the library; Player omitted => your library per CR 701.23a), identical to diabolic-tutor's witnessed from value. to=library is the NEW facet this gold adds — Destination='TopOfLibrary' hand-mapped to the bare zone value 'library' (the axis's existing zone-name vocabulary carries no positional qualifier), a value not previously in to.values_seen ({battlefield, exile, graveyard, hand}). control=you and qty=1 reuse diabolic-tutor's already-witnessed values (Player omitted => CR 701.23a default controller; Count={literal,1})."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.cards:search.witnessed",
+      "because": "V1 projects the STATE stem cards:search (parent = the already-witnessed cards STATE stem), derived from EffectType=searchLibrary. This REUSES the stem diabolic-tutor already witnesses — not a re-declaration, a corroborating second witness of a structurally different (same-zone reposition, not zone-crossing) search shape."
+    },
+    {
+      "claim": "V1.to == library",
+      "because": "Destination == 'TopOfLibrary' on the searchLibrary effect — the found card is placed back on top of the SAME library it was searched from, never crossing a zone boundary. Hand-mapped to the bare zone value 'library' on the closed 'to' axis (already licensed_by cards:search via diabolic-tutor), a NEW value on that axis's values_seen (prior: battlefield, exile, graveyard, hand)."
+    },
+    {
+      "claim": "V1.from == library",
+      "because": "the searchLibrary effect definitionally searches the library (CR 701.23); Player omitted => your library (701.23a default) — the same from=library value diabolic-tutor already witnesses, reused here, not new."
+    },
+    {
+      "claim": "V1.control == you",
+      "because": "Player omitted => CR 701.23a default subject = the ability's controller (the searcher, who also repositions the found card within their own library); identical to diabolic-tutor's witnessed value."
+    },
+    {
+      "claim": "V1.qty == 1",
+      "because": "Count == {QuantityType:literal, Value:1} — 'search your library for A card'; identical to diabolic-tutor's witnessed value."
+    },
+    {
+      "claim": "position_axis_missing (unaxised, SURFACED not invented)",
+      "because": "the top-of-library POSITION (as distinct from a hypothetical bottom-of-library destination) has no closed attribute_axis — the 'to' axis's zone-name vocabulary (battlefield/exile/graveyard/hand/library) carries no within-zone positional qualifier. Surfaced as an open scaffold question, not invented as an ad-hoc attrs key, following the Moat (subject) / Thorn-of-Amethyst (cost-delta) precedent."
+    },
+    {
+      "claim": "second_effect_incidental",
+      "because": "the card's 'You lose 2 life' effect is a drawback/cost-like clause on the spell, not part of the search-and-reposition witness; not modeled as a port here, mirroring scour-from-existence.json's treatment of its own incidental cast:spell:self consume."
+    },
+    {
+      "claim": "no_parser_work_needed",
+      "because": "Fixtures/HandParsedCards/MIR/VampiricTutor.json is a pre-existing, already-green gold in the parse suite (Tests/Parse/HandParsedCardTests.cs). This witness needed zero parser changes."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the cards:search stem's to=library facet, no cycle closed and no edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "701.23",
+    "701.23a",
+    "400.1",
+    "401.1",
+    "601.2"
+  ]
+}
