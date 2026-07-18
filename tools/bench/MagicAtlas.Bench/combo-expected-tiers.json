@@ -172,8 +172,8 @@
         "Pitiless Plunderer",
         "Night of Souls' Betrayal"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Missed",
+      "reason": "RE-PIN (2026-07-18, was wrongly 'Amber'): the prior Amber never actually used Night of Souls' Betrayal — the cycle the engine found was 'Gravecrawler::emit:returntobattlefield:self => Pitiless Plunderer::sac:artifact:treasure:controlled', i.e. a recast Gravecrawler (a Zombie creature) satisfying a 'sacrifice a Treasure' cost, which is impossible (Gravecrawler is never an artifact/Treasure). That was the exact false-positive the RecastSatisfies subtype guard in d7a8b2c1 (fix(interaction): prune coarse self-return from subtype-specific sacs) correctly pruned; the prune just happened to also remove this combo's only cycle, unmasking that the pin was never verifying the real combo mechanism. The real loop needs Night of Souls' Betrayal's -1/-1 to kill a freshly-recast Gravecrawler via state-based action (1/0 toughness) so it dies-and-recasts with no sac outlet at all; the engine has no P/T-lethality reasoning hop for that ('modifyPT' is an inert port today) per libs/mast-interaction/docs/aristocrat-recursion-scope.md §1 row 2 / §4 Decision 5, which predicted exactly 'AMBER at best, likely Missed... out of scope' for this combo when the recursion arm was scoped. Honest current tier is Missed; upgrading to Amber/Green needs a real P/T-lethality flow arm, not a pin edit."
     },
     {
       "id": "261-2577-5670",
