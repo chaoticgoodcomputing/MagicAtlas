@@ -73,9 +73,15 @@ public sealed class NamedModeGatedAbilityRule : IStaticRule
     }
 
     var mode = label.Groups["mode"].Value;
-    var body = label.Groups["body"].Value.Trim();
+    var bodyGroup = label.Groups["body"];
+    var body = bodyGroup.Value.Trim();
 
     // Recover the trigger by re-parsing the label-stripped body through the full pipeline.
+    // This is a FRESH, isolated OracleParser.Parse(string) call: its internal
+    // ClauseSplitter/StampProvenance stamps every SourceSpan (top-level ability, the
+    // nested Trigger condition, and any top-level Effect) 0-based relative to `body` —
+    // disconnected from the real card's oracle text. Below, we rebase every one of
+    // those spans back to the card's real coordinates before returning.
     var reparsed = _bodyParser.Value.Parse(body);
     var baseTrigger = reparsed.Output.Abilities.OfType<TriggeredAbility>().FirstOrDefault();
     if (baseTrigger is null)
@@ -83,17 +89,39 @@ public sealed class NamedModeGatedAbilityRule : IStaticRule
       return null;
     }
 
-    var effects = BuildModeEffects(body) ?? baseTrigger.Effects;
+    // Absolute offset of `body` within the real oracle text. clause.SourceSpan is the
+    // real span of this "• Name — ability" line (ClauseSplitter.CreateClause guarantees
+    // clause.RawText corresponds index-for-index to clause.SourceSpan), and bodyGroup.Index
+    // is body's offset within clause.RawText. Trim() above may have eaten leading
+    // whitespace the regex left in the captured group, so account for that too.
+    var leadingTrim = bodyGroup.Value.Length - bodyGroup.Value.TrimStart().Length;
+    var bodyOffset = clause.SourceSpan.Start + bodyGroup.Index + leadingTrim;
+
+    var effects = BuildModeEffects(body);
+    var rebasedEffects =
+      effects
+      // BuildModeEffects constructs these directly (no SourceSpan set) — nothing to rebase.
+      ?? baseTrigger.Effects.Select(e => e with { SourceSpan = Rebase(e.SourceSpan, bodyOffset) }).ToList();
 
     return
     [
       baseTrigger with
       {
+        SourceSpan = Rebase(baseTrigger.SourceSpan, bodyOffset),
+        Trigger = baseTrigger.Trigger with { SourceSpan = Rebase(baseTrigger.Trigger.SourceSpan, bodyOffset) },
         InterveningIf = new ChosenModeCondition { Mode = mode },
-        Effects = effects,
+        Effects = rebasedEffects,
       },
     ];
   }
+
+  /// <summary>
+  /// Shifts a span stamped 0-based relative to the isolated re-parsed <c>body</c> string
+  /// back to its real absolute position in the card's oracle text. Null propagates (a span
+  /// the isolated re-parse never stamped stays unset rather than being fabricated).
+  /// </summary>
+  private static AST.TextSpan? Rebase(AST.TextSpan? span, int offset) =>
+    span is null ? null : new AST.TextSpan(span.Value.Start + offset, span.Value.Length);
 
   /// <summary>
   /// Builds the mode-specific effects directly from the ability body. Returns null when the
