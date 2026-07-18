@@ -28,6 +28,10 @@
     "guards": [],
     "bridges": []
   },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-18 round-1 batch — modification:spell (Thorn of Amethyst, CR 601.2f) closes the up/tax direction stone-calendar left homeless; control=any honestly derived from the total absence of a Controller filter; PROCEED"
+  },
   "assertions": [
     {
       "claim": "stem.modification:spell.witnessed",

@@ -28,6 +28,10 @@
     "guards": [],
     "bridges": []
   },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-18 round-1 batch — modification:restriction (Moat, CR 508.1c/611.3) corroborating witness, subject=each honestly mirrors Target.Kind=Each and the LacksKeywords:Flying filter correctly left unwitnessed (no closed axis); PROCEED"
+  },
   "assertions": [
     {
       "claim": "stem.modification:restriction.witnessed",
