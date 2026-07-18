@@ -1,0 +1,81 @@
+{
+  "id": "scour-from-existence",
+  "unit": "single-card",
+  "cards": [
+    "Scour from Existence"
+  ],
+  "source": {
+    "note": "single-card CORROBORATING witness of the removal:permanent stem (real corpus demand — matched payoffs including 'Infinite copies of noncreature permanents you control' and 'Infinite mana permanents you control can produce'). The stem's only prior witness, spine-of-ish-sah, covers manner=destroyed, to=graveyard (derived, regeneration/replacement-redirectable), driven by a self-ETB trigger on an Artifact permanent. Scour from Existence witnesses a genuinely different facet/shape: (a) to=exile — a TERMINAL, AST-PROVEN destination (not derived; exile has no regeneration-style redirect, CR 406.1), the same to=exile upgrade deadly-rollick.json already landed for removal:creature, here landed for the PERMANENT-breadth parent stem; (b) a direct spell-cast effect (cast:spell:self -> exile), not an ETB-triggered ability off a permanent already in play — a structurally distinct port-derivation route from Spine's etb:artifact:self -> destroy; (c) card type Instant, not Artifact. Oracle: 'Exile target permanent.' (BFZ). AST-faithful, not a wish: the committed hand-parse (Fixtures/HandParsedCards/BFZ/ScourFromExistence.json) is EffectType=exile on Target.Filter.CardTypes=['permanent'], no Controller, no Zone narrowing, SourceSpan [0,23] oracleLineIndex 0 — byte-analogous to deadly-rollick's EffectType=exile on Filter.CardTypes=['creature'] (the same exile-effect parser path, permanent breadth instead of creature breadth). Scour from Existence does not appear as a row in the current Data/_08_Reporting/card-ports.json snapshot (a sampled/filtered dump, not the full corpus), so no live-engine label is cited here; the hand-parse fixture is the authoritative AST source, exactly as deadly-rollick's own note anticipates for cards sharing this exile-effect shape (emit:exile, family=exile, stem=null — the ADR-2 shadow projection does not yet map exile -> removal:*, the same Stage-3 engine-catch-up gap Spine's emit:destroy and Deadly Rollick's emit:exile both carry). No edhrec_rank/price in the testbed source (oracle-cards.json card object has no edhrec_rank key) — popularity omitted, not fabricated."
+  },
+  "ports": {
+    "Scour from Existence": [
+      {
+        "id": "SC0",
+        "side": "consume",
+        "kind": "EVENT",
+        "stem": "cast",
+        "attrs": {
+          "subject": "self"
+        },
+        "note": "incidental card context — casting the instant (live-pattern consume cast:spell:self, family=cast, isSelf=true, stem=cast — the same consume shape deadly-rollick.json's D0 witnesses; HandParsedCards ability Kind='spell'). The driver whose resolution produces the exile. Not the witness; the SC0 -> SC1 binding (the spell's resolution deals the exile) is card-defined/internal, not an inter-card edge."
+      },
+      {
+        "id": "SC1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:permanent",
+        "attrs": {
+          "from": "battlefield",
+          "to": "exile",
+          "control": "any"
+        },
+        "note": "THE WITNESS — 'Exile target permanent' — a permanent leaving play by exile, at PERMANENT breadth (Filter.CardTypes=['permanent'], no card-type narrowing — genuinely removal:permanent, the same stem spine-of-ish-sah witnesses, here carrying the to=exile terminal-destination facet spine does not). from=battlefield (a targeted permanent is on the battlefield; it moves off the battlefield when exiled, CR 406.2). to=exile is AST-PROVEN as a BARE value, NOT derived: exile is definitionally 'put it into the exile zone' (CR 406.2), a one-way holding area with no built-in redirect (CR 406.1) — unlike Spine's destroy-to-graveyard, which regeneration/a replacement effect (CR 614) can redirect, so this to=exile does NOT cap the port's Reliability the way Spine's derived to=graveyard does. control=any ('Exile target permanent' has no Controller restriction on the target — may hit any player's permanent, same value as Spine's witness, not itself the differentiator here). manner is OMITTED: the manner axis enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no 'exiled' rung, and the permanent is neither destroyed/sacrificed nor blinked (terminal exile, no return) — the same omission deadly-rollick.json already made for removal:creature's to=exile facet; not invented here either."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.removal:permanent.witnessed",
+      "because": "SC1 projects the removal supergroup at PERMANENT breadth — 'Exile target permanent' (Filter.CardTypes=['permanent']). removal:permanent is already witnessed (spine-of-ish-sah, manner=destroyed, to=graveyard derived), so this CORROBORATES the stem with a structurally distinct second witness; the new content is the to=exile terminal-destination facet and the direct-cast (non-ETB) derivation route. Already declared, so NOT unpredicted."
+    },
+    {
+      "claim": "attr.to.exile.witnessed_terminal_at_permanent_breadth",
+      "because": "to=exile is already in the to axis's values_seen and already witnessed as a terminal removal destination at CREATURE breadth (deadly-rollick). This gold is the first witness of the SAME terminal to=exile facet at the broader PERMANENT breadth (removal:permanent), i.e. it climbs the facet up the removal:permanent/removal:creature parent/child pair rather than introducing a new value. to axis, licensed_by removal:*."
+    },
+    {
+      "claim": "SC1.to == exile",
+      "because": "EffectType=exile — the destination is definitionally the exile zone (CR 406.2, 'to exile an object is to put it into the exile zone'); a BARE value (AST-proven, not over-approximated). Exile has no regeneration/replacement redirect analogous to destroy->graveyard (CR 406.1, 614), so to=exile does NOT cap the port's Reliability, unlike Spine's derived to=graveyard."
+    },
+    {
+      "claim": "SC1.from == battlefield",
+      "because": "removal = a zone-change whose FROM endpoint is play; 'target permanent' is a permanent on the battlefield, and it moves off the battlefield when exiled (CR 406.2). from axis, licensed_by removal:*."
+    },
+    {
+      "claim": "SC1.control == any",
+      "because": "'Exile target permanent' imposes no Controller restriction on the target (Filter has no Controller) — it may hit any player's permanent. control axis lattice self subset-of controlled subset-of any; the widest, any."
+    },
+    {
+      "claim": "SC1.manner.omitted",
+      "because": "the manner axis enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no 'exiled' rung, and the permanent is neither destroyed/sacrificed nor blinked (terminal exile, no return). manner is omitted rather than invented — the to=exile destination carries the witness, mirroring deadly-rollick's same omission for removal:creature. 'exiled' remains a candidate manner enum addition (scaffold decision, not authored here)."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the removal:permanent stem + the to=exile terminal facet at permanent breadth, no cycle closed. The internal cast -> exile binding (SC0 -> SC1) is card-defined, not an inter-card interaction edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "406.1",
+    "406.2",
+    "400.1",
+    "400.7",
+    "608.2",
+    "601.2"
+  ]
+}
