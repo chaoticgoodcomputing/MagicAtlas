@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/GrantedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.3"],
+      "reason": "clause.RawText.IndexOf(body, Ordinal) + clause.SourceSpan.Start correctly rebases the quoted body's span; clause is pre-split to a single newline-free clause so a spurious earlier match of the exact quoted body inside the subject noun phrase is not a live risk in practice, and no fixture in this batch exhibits it"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedHasGrantedTriggeredAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 113.3", "CR 603.2"],
+      "reason": "identical rebase convention; correctly re-locates body in the untouched clause.RawText (not the StripReminderText'd rawText used for the regex match) to avoid an offset skew from reminder stripping"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/AsLongAsStaticGrantRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 702.95"],
+      "reason": "identical rebase convention applied to the Soulbond quoted-activated path; single rebased bodyAbsoluteStart is shared correctly across both the ActivatedAbilityParser-first and TriggeredAbilityParser-fallback branches (verified via TandemLookout, which falls through to the triggered branch)"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AVR/TandemLookout.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked: SourceSpan{237,50}/{288,13} exactly match 'Whenever this creature deals damage to an opponent' / ' draw a card.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/AVR/DeadeyeNavigator.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked: SourceSpan{240,6}/{247,75} exactly match '{1}{U}' / ' Exile this creature, then return it to the battlefield under your control.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/GauntletsOfLight.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked: SourceSpan{143,6}/{150,21} exactly match '{2}{W}' / ' Untap this creature.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/UmbralMantle.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked: SourceSpan{23,3}/{28,3}/{32,44} exactly match '{3}' / '{Q}' / ' This creature gets +2/+2 until end of turn.' in the real oracle text; correctly handles the trailing '({Q} is the untap symbol.)' reminder without offset skew"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ToralfGodofFuryToralfsHammer.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked against CardFaces[1] (Toralf's Hammer) OracleText: SourceSpan{23,6}/{31,3}/{36,24}/{61,77} exactly match '{1}{R}' / '{T}' / \"Unattach Toralf's Hammer\" / ' It deals 3 damage to any target. Return Toralf's Hammer to its owner's hand.'; DFC face-indexing did not confuse the rebase"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/Sunbond.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked: SourceSpan{41,22}/{64,47} exactly match 'Whenever you gain life' / ' put that many +1/+1 counters on this creature.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CHK/SachiDaughterOfSeshiro.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked (non-Aura/Equipment 'Shamans you control have' grant, good diversity case): SourceSpan{71,3}/{75,12} exactly match '{T}' / ' Add {G}{G}.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/EpharasRadiance.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked: SourceSpan{41,6}/{49,3}/{53,17} exactly match '{1}{W}' / '{T}' / ' You gain 3 life.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FUT/CompulsoryRest.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "spot-checked (multi-clause Aura, quoted body is the 3rd sentence): SourceSpan{83,3}/{88,23}/{112,17} exactly match '{2}' / 'Sacrifice this creature' / ' You gain 2 life.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/CSP/ResplendentMentor.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "verified by direct computation: SourceSpan{34,3}/{38,17} exactly match '{T}' / ' You gain 1 life.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/SadisticObsession.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "verified by direct computation: SourceSpan{41,3}/{46,3}/{50,40} exactly match '{B}' / '{T}' / ' Put a -1/-1 counter on target creature.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TSP/TelekineticSliver.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "verified by direct computation: SourceSpan{18,3}/{22,22} exactly match '{T}' / ' Tap target permanent.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/UDS/CitanulHierophants.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "verified by direct computation: SourceSpan{28,3}/{32,9} exactly match '{T}' / ' Add {G}.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/USG/HermeticStudy.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "verified by direct computation: SourceSpan{41,3}/{45,44} exactly match '{T}' / ' This creature deals 1 damage to any target.' in the real oracle text"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/FDN/FindThePath.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "verified by direct computation: SourceSpan{33,3}/{37,12} exactly match '{T}' / ' Add {G}{G}.' in the real oracle text"
+    }
+  ]
+}

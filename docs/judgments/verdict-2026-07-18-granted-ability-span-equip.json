@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquippedCreatureHasQuotedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "rebases the quoted body's inner-clause SourceSpan to clause.SourceSpan.Start + clause.RawText.IndexOf(body, Ordinal), fixing the disconnected 0-based span so ActivatedAbilityParser/TriggeredAbilityParser derive correct absolute nested spans; verified against The Reaver Cleaver's oracle text is out of scope for this rule but the identical pattern verified correct in siblings"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquippedCreatureHasTwoQuotedAbilitiesRule.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "same rebase convention applied to both quoted bodies, with body2's IndexOf search deliberately started after body1's match end to avoid mis-locating an earlier duplicate substring; verified byte-exact against Thornbite Staff oracle text (spans 23/28/32 for body1's cost+effect, 82/107 for body2's trigger+effect all confirmed to point at the correct substrings)"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EquippedPTKeywordAndGrantedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "independently confirmed to carry the identical pre-existing bug (TextSpan(0, body.Length)) and the identical correct fix, verified byte-exact against The Reaver Cleaver's oracle text (trigger span 50/70 = 'Whenever...planeswalker', effect span 121/34 = ' create that many Treasure tokens.')"
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/OtherColorCreaturesGrantQuotedTriggeredAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.3", "CR 109.5"],
+      "reason": "same rebase convention applied; verified byte-exact against Unctus, Grand Metatect's oracle text (trigger span 39/37 = 'Whenever this creature becomes tapped', effect span 77/34 = ' draw a card, then discard a card.'); CR 611.3 and 109.5 citations in the doc-comment are pre-existing and unaffected by this change, both exist in rules-structure.json and are consistent with the modeling"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/TheReaverCleaver.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "corrected spans (Start:50/70, Start:121/34) verified byte-exact against Scryfall oracle text for The Reaver Cleaver; OracleText field unmodified, only SourceSpan.Start values corrected"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ThornbiteStaff.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "all five corrected spans (23/3, 28/3, 32/43, 82/24, 107/21) verified byte-exact against Scryfall oracle text for Thornbite Staff, including the whole-static-ability span (0,129) confirming clause.SourceSpan.Start is already anchored to full-oracle-text absolute offsets"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/UnctusGrandMetatect.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "corrected spans (Start:39/37, Start:77/34) verified byte-exact against Scryfall oracle text for Unctus, Grand Metatect"
+    }
+  ]
+}

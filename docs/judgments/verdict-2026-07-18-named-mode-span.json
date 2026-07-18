@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/NamedModeGatedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "bodyOffset = clause.SourceSpan.Start + bodyGroup.Index + leadingTrim correctly computes body's absolute offset in oracle text (verified against ClauseSplitter.CreateClause/SplitIntoParagraphs, which stamp clause.SourceSpan.Start as the real absolute paragraph start and guarantee clause.RawText is index-for-index with clause.SourceSpan); leadingTrim guards regex/Trim() divergence; Rebase() is applied uniformly to top-level ability, nested Trigger, and fallback Effects spans, with null propagation for unset spans; hand-computed offsets for Phenomenon Investigators (Believe body at 62, Doubt body at 173) match the rebase formula exactly"
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/PhenomenonInvestigators.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "OracleText matches Scryfall oracle_text verbatim (byte-exact); recomputed the real absolute offsets in Python and confirmed every changed span lands on the correct substring: static preamble [0,49)='As this creature enters, choose Believe or Doubt.' (unchanged), Believe Trigger.SourceSpan [62,107)='Whenever a nontoken creature you control dies', Believe ability SourceSpan [62,162) ending exactly at the period before the Doubt bullet, Doubt Trigger.SourceSpan [173,206)='At the beginning of your end step', Doubt ability SourceSpan [173,288) running to end-of-text; OracleLineIndex 1/2 correctly identify the Believe/Doubt bullet lines (0=preamble); no span overlaps into the sibling bullet or the modal preamble"
+    }
+  ]
+}

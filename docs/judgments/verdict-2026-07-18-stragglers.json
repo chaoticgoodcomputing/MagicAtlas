@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/EnchantedPTAndGrantedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 303.4", "CR 702.5"],
+      "reason": "IndexOf-then-rebase span fix matches the already-approved convention verbatim (identical to GrantedAbilityRule.cs's bodyOffsetInClause/bodyAbsoluteStart pattern); regex `(?:Enchanted|Equipped)\\s+creature\\s+gets\\s+...` confirmed to genuinely match both Aura and Equipment quoted-grant shapes, verified against Biorganic Carapace's real oracle text; Target already used the generic EnchantedOrEquipped ObjectReferenceKind pre-fix, so no Enchant-only mis-attribution risk for Equipment cards."
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Static/Rules/SubtypeCreaturesHaveQuotedAbilityRule.cs",
+      "verdict": "PASS",
+      "citations": ["CR 611.1", "CR 113.3"],
+      "reason": "identical IndexOf-then-rebase convention applied correctly; no logic errors versus the 4 prior branches' pattern."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ManaweftSliver.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "corrected spans verified by hand against real oracle text: tap-cost span Start=35 Length=3 = '{T}' (35 = quoted-body offset in the full oracle string, computed via body.index in clause.RawText), addMana effect span Start=39 Length=27 = ' Add one mana of any color.' (39 = 35 + 4, matching the pre-fix 0-based value of 4 exactly rebased by +35); arithmetic is exact, not coincidental."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ROE/BearUmbra.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "corrected spans verified against real oracle text: trigger clause span Start=56 Length=30 = 'Whenever this creature attacks' (56 = quoted-body's real offset on line 2 of the multi-line oracle text, i.e. 17 + 39), untap effect span Start=87 Length=29 = ' untap all lands you control.' (87 = 56 + 31, matching the pre-fix 0-based value of 31 exactly rebased by +56); arithmetic is exact."
+    },
+    {
+      "target": "mast-tdd/2026-07-18-stragglers#projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator, effect/cost type, trigger event, or restriction introduced — pure SourceSpan-provenance fix on existing rule files; no PortWalk projection decision is required."
+    }
+  ]
+}

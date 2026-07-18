@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/ActivatedAbilityParser.cs#TryParse(offset tracking)",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "offset accumulates exactly the DashPrefix strip's removed prefix (emDashIndex+1 plus post-dash TrimStart whitespace) and nothing else; costPartStart and effectSpan both add offset consistently, and the effectSpan length formula (RawText.Length - offset - (colonIndex+1)) correctly re-pins the end to clause end; hand-recomputed for all 6 cards and every byte offset matches the fixture output exactly."
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/ActivatedAbilityParser.cs#scoping-to-DashPrefix-only",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "paren-wrap + dash-prefix combination is structurally impossible: IsParentheticalActivatedAbility requires the paren-stripped inner text to match ^\\{[^}]+\\}: immediately (no room for a 'Word — ' prefix inside), and TryExtractAbilityWord does an exact-match lookup of clause.RawText[..emDashIndex].Trim() against the ability-word/printed-label sets, which a leading '(' character always breaks — so no real card shape is left unhandled by scoping the offset fix to DashPrefix only."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/MoxOpal.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "oracle text confirmed against oracle-cards.json; corrected Cost SourceSpan {Start:13,Length:3} lands exactly on '{T}', Effect SourceSpan {Start:17,Length:81} starts right after the cost colon and runs to end of RawText."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/BloomTender.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "oracle text confirmed; Cost SourceSpan {Start:8,Length:3} lands on '{T}', Effect SourceSpan {Start:12,Length:73} lands on the effect text."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RiverchurnMonument.json",
+      "verdict": "PASS",
+      "citations": ["CR 702.177a"],
+      "reason": "oracle text confirmed (two-line card, Exhaust is the second ability); hand-recomputed absolute offsets against the full two-line RawText match the fixture exactly: mana-cost span {147,9} on '{2}{U}{U}', tap span {158,3} on '{T}', effect span {162,137} on the effect text."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/RubblebeltMaaka.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "oracle text confirmed; comma-split cost component spans {12,3} on '{R}' and {17,17} on 'Discard this card' both correct, effect span {35,56} lands on the effect text."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/ShiftingWoodland.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "oracle text confirmed (three-line card, Delirium is the third ability); cost span {78,9} on '{2}{G}{G}', effect span {88,169} on the effect text, both recomputed independently and matching."
+    },
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/WastelandViper.json",
+      "verdict": "PASS",
+      "citations": ["CR 207.2c"],
+      "reason": "oracle text confirmed (two-line card, Bloodrush is the second ability); cost component spans {23,3} on '{G}' and {28,17} on 'Discard this card', effect span {46,77} on the effect text, all recomputed and matching."
+    }
+  ]
+}
