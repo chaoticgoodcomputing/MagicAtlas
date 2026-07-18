@@ -15,16 +15,19 @@ using MagicAST.AST.References;
 /// <para>
 /// Distinct from <see cref="MayHaveThatPlayerLoseLifeYouGainRule"/> (which requires the
 /// trailing "If you do, you gain N life" clause — Bloodchief Ascension). Here there is no
-/// follow-up: the "you may" makes the life-loss itself optional (CR 118.12), full stop.
-/// Modelled as an <see cref="OptionalEffect"/> whose <see cref="OptionalEffect.Inner"/> is
-/// <c>loseLife</c> (player = <see cref="ObjectReferenceKind.ThatPlayer"/>) and whose
-/// <see cref="OptionalEffect.IfYouDo"/> is omitted (null).
+/// follow-up: the "you may" makes the life-loss itself an optional triggered effect (CR
+/// 603.5 — "Some triggered abilities' effects are optional... The choice is made when the
+/// ability resolves"), full stop. Modelled as an <see cref="OptionalEffect"/> whose
+/// <see cref="OptionalEffect.Inner"/> is <c>loseLife</c> (player =
+/// <see cref="ObjectReferenceKind.ThatPlayer"/>) and whose <see cref="OptionalEffect.IfYouDo"/>
+/// is omitted (null).
 /// </para>
 ///
 /// <para>
 /// Representative card: Suture Priest (NPH) — "Whenever a creature an opponent controls
 /// enters, you may have that player lose 1 life."
-/// Rule citations: CR 118.12 ("may" effects), CR 119.3 (life totals), CR 109.5 ("that player").
+/// Rule citations: CR 603.5 (optional triggered effects), CR 119.3 (life totals), CR 109.5
+/// ("that player").
 /// </para>
 /// </summary>
 [TriggeredRule]
