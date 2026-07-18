@@ -166,16 +166,6 @@
       "Reason": null
     },
     {
-      "From": "Gravecrawler::emit:returntobattlefield:self",
-      "To": "Pitiless Plunderer::sac:artifact:treasure:controlled",
-      "Provenance": "RulesDefined",
-      "Family": "Flow",
-      "Overlap": "Overlaps",
-      "Reliability": "No",
-      "Tier": "Amber",
-      "Reason": "IsToken"
-    },
-    {
       "From": "Gravecrawler::pay:mana:black",
       "To": "Gravecrawler::emit:returntobattlefield:self",
       "Provenance": "CardDefined",
@@ -262,21 +252,6 @@
         "Pitiless Plunderer::emit:mana:any=\u003EGravecrawler::pay:mana:black|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Pitiless Plunderer::emit:token:artifact:treasure:controlled=\u003EPitiless Plunderer::sac:artifact:treasure:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Pitiless Plunderer::ltb:creature:to-graveyard:controlled=\u003EPitiless Plunderer::emit:token:artifact:treasure:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
-        "Pitiless Plunderer::sac:artifact:treasure:controlled=\u003EPitiless Plunderer::emit:mana:any|CardDefined|Flow|Overlaps|Yes|Green|"
-      ]
-    },
-    {
-      "Tier": "Amber",
-      "Firable": true,
-      "TapRenewed": true,
-      "CoCostsSatisfied": true,
-      "Balanced": true,
-      "Productive": true,
-      "LimitingReason": "IsToken",
-      "Edges": [
-        "Gravecrawler::emit:returntobattlefield:self=\u003EPitiless Plunderer::sac:artifact:treasure:controlled|RulesDefined|Flow|Overlaps|No|Amber|IsToken",
-        "Gravecrawler::pay:mana:black=\u003EGravecrawler::emit:returntobattlefield:self|CardDefined|Flow|Overlaps|Yes|Green|",
-        "Pitiless Plunderer::emit:mana:any=\u003EGravecrawler::pay:mana:black|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Pitiless Plunderer::sac:artifact:treasure:controlled=\u003EPitiless Plunderer::emit:mana:any|CardDefined|Flow|Overlaps|Yes|Green|"
       ]
     }

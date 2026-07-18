@@ -33,11 +33,15 @@ public static class MaterializeCardEdgesStep
   > Create(string ontologyPath) =>
     inputs =>
     {
+      // graftCopies: false — the flat edge dump excludes the set-contextual copy synthetics (they belong
+      // in the combo view, design §4). Skipping the graft over the whole corpus is what keeps the union
+      // tractable + under the 2GB serialization limit (with it, ~97% of the union is copy edges we discard).
       var (_, edges) = InteractionUnion.Materialize(
         inputs.Combos,
         inputs.Records,
         inputs.CardInputs,
-        ontologyPath
+        ontologyPath,
+        graftCopies: false
       );
 
       var rows = edges

@@ -21,7 +21,8 @@ internal static class InteractionUnion
     IEnumerable<Combo> combos,
     IEnumerable<ParseRecord> records,
     IEnumerable<MastCardInput> cardInputs,
-    string ontologyPath
+    string ontologyPath,
+    bool graftCopies = true
   )
   {
     var fullyParsed = records
@@ -74,6 +75,6 @@ internal static class InteractionUnion
       .Select(GraphFor)
       .ToList();
 
-    return (engine, engine.Materialize(allGraphs));
+    return (engine, engine.Materialize(allGraphs, graftCopies));
   }
 }

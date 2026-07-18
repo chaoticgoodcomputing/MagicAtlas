@@ -225,14 +225,23 @@ public sealed class PortGraphEngine
     }
   }
 
-  public IReadOnlyList<PortEdge> Materialize(IReadOnlyList<PortGraph> graphs)
+  public IReadOnlyList<PortEdge> Materialize(IReadOnlyList<PortGraph> graphs, bool graftCopies = true)
   {
     // (0) Copy-token inheritance (copy-inheritance-scope.md, Decision 2): the copy effect is the ONLY
     // port whose meaning depends on the OTHER cards in the set, so the graft runs here — where the card
     // set is known — not in PortWalk (which sees one card). It resolves each copy emit's target filter
     // against the materialised set and clones the matching cards' ports under a synthesized copy identity.
-    var grafted = GraftCopyInheritance(graphs);
-    graphs = grafted.Graphs;
+    // Skipped when graftCopies is false — the broad global-union edge dump (MaterializeCardEdges → the
+    // port_edges graph) excludes the set-contextual copy synthetics anyway (design §4), and grafting them
+    // over the WHOLE corpus is what explodes the union to ~5.5M edges (97% copy) and past the 2GB JSON
+    // serialization limit. Combo reconstruction (a small card set) always grafts.
+    IReadOnlyList<PortEdge> closingEdges = [];
+    if (graftCopies)
+    {
+      var grafted = GraftCopyInheritance(graphs);
+      graphs = grafted.Graphs;
+      closingEdges = grafted.ClosingEdges;
+    }
 
     // ADR-0003 Stage 4: the structured Captures requires every flow-participating port to carry its
     // PortStructure. Projection (PortWalk → PortFamilyRegistry.Annotate) always does this in the product, so
@@ -254,7 +263,7 @@ public sealed class PortGraphEngine
     // The graft's synthesized closing edges (an inherited target-untap renewing the copier's tap), tiered
     // by the operator in the pass (Decision 3/4) — added alongside the card-defined edges so FindCycles
     // closes the copy loop with no new arm (the connection layer doing its normal job, per §6 Track B).
-    edges.AddRange(grafted.ClosingEdges);
+    edges.AddRange(closingEdges);
 
     var emits = ports.Where(p => p.Side == PortSide.Emit).ToList();
     var consumes = ports.Where(p => p.Side == PortSide.Consume).ToList();
@@ -816,6 +825,21 @@ public sealed class PortGraphEngine
         foreach (var required in consume.Subject.CardTypes ?? [])
           if (!TokenHasCardType(reentered, required))
             return false;
+      // A sac naming a specific SUBTYPE (CR 701.21b — "Sacrifice a Squirrel") needs the re-entering object
+      // to BE that subtype. The self-return filter is coarse (CardTypes:[creature], no subtypes — PortGraph
+      // §770) — it drops the card's printed subtypes on re-entry — so a subtype-specific sac can't be
+      // confirmed: Gravecrawler (a Zombie) re-entering never satisfies "Sacrifice a Squirrel". Prune it, the
+      // subtype dual of the null-Subject prune above and TokenSatisfiesAtCreation's closed-identity guard.
+      // (False negative only on the rare card that self-recurs AND is itself the sac's named subtype — which
+      // the coarse filter can't witness anyway; never a false positive. A subtype-less sac is unaffected.)
+      var reenteredSubs = emit.Subject.Subtypes;
+      foreach (var s in consume.Subject.Subtypes ?? [])
+      {
+        if (PrimaryOwners(s).Count == 0)
+          continue; // unknown subtype — no ontology basis to prune
+        if (reenteredSubs is not { Count: > 0 } || !reenteredSubs.Contains(s, StringComparer.OrdinalIgnoreCase))
+          return false;
+      }
       return true;
     }
 
