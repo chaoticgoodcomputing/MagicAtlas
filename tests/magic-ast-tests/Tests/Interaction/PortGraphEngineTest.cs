@@ -9,10 +9,19 @@ using MagicAST.Tests.Infrastructure;
 /// <summary>
 /// ADR-0002 §4–7 — the <see cref="PortGraphEngine"/> reconstructs the canonical Chatterfang × Pitiless
 /// free loop from the new single-role port model (via <see cref="PortWalk"/>), combining card-defined
-/// edges (certain) with derived rules-defined edges (flow + the sac→death bridge + modifier). It must
-/// land the <b>same sound AMBER</b> the old recognizer engine did — the Squirrel ⊄ creature straddle
-/// on the death hop — proving the model migration preserves the verdict. Additive (S3a); the old
-/// engine + golds stay green until S3b.
+/// edges (certain) with derived rules-defined edges (flow + the sac→death bridge + modifier).
+/// Historically this landed the <b>same sound AMBER</b> the old recognizer engine did — the Squirrel ⊄
+/// creature straddle on the death hop (CR 308.1: a subtype can ride a non-permanent Kindred card
+/// instead of its ordinary permanent type). 2026-07-18 precision-fix: that straddle does not actually
+/// apply to a SACRIFICE cost's fodder — CR 701.21a guarantees you can only ever sacrifice a permanent
+/// already on the battlefield, so a Kindred Instant/Sorcery (which never IS a permanent) can never be
+/// the object behind a <c>sac:</c> port. <see cref="PortGraph"/>'s sacrifice-cost construction now lifts
+/// a subtype-only fodder filter to its permanent card type (mirroring what <c>PortLabel.Subject</c>
+/// already did for the LABEL string alone), so the sac→dies bridge here certifies GREEN. The general,
+/// context-free <c>ObjectFilterRelations.Subsumes</c> contract (<c>squirrel-not-subset-of-creature</c>)
+/// is UNCHANGED and stays honestly Unknown — this fix is scoped to the sac-cost Subject, which carries
+/// the permanent guarantee the bare operator cannot assume on its own. Additive (S3a); the old engine +
+/// golds stay green until S3b.
 /// </summary>
 [TestFixture]
 public class PortGraphEngineTest
@@ -35,7 +44,7 @@ public class PortGraphEngineTest
   }
 
   [Test]
-  public void Reconstructs_the_chatterfang_pitiless_free_loop_as_amber()
+  public void Reconstructs_the_chatterfang_pitiless_free_loop_as_green()
   {
     var graphs = new[]
     {
@@ -62,17 +71,23 @@ public class PortGraphEngineTest
 
     Assert.That(loop, Is.Not.Null, "the free loop should reconstruct from the parsed golds");
 
-    // AMBER is the *correct, sound* verdict: the sac→dies bridge straddles Squirrel ⊄ creature
-    // (a Squirrel could be a non-creature Kindred-Squirrel, CR 308.1), so the operator cannot certify
-    // every sacrificed Squirrel satisfies a creature-death trigger. GREEN would be unsound.
-    Assert.That(loop!.Tier, Is.EqualTo(CertaintyTier.Amber));
+    // GREEN is the correct, sound verdict (2026-07-18): the sac→dies bridge's "from" side is a
+    // SACRIFICE cost's fodder, which CR 701.21a guarantees is already a permanent on the battlefield —
+    // a Kindred Instant/Sorcery (the only way "Squirrel" could ride a non-creature card, CR 308.1) can
+    // never be that fodder, since it's never a permanent to begin with. So every sacrificed Squirrel
+    // IS provably a creature here, and the death trigger's "creature ... dies" filter is subsumed.
+    Assert.That(loop!.Tier, Is.EqualTo(CertaintyTier.Green));
 
-    var limiter = loop.LimitingHop!;
-    Assert.That(limiter.From.Label, Is.EqualTo("sac:creature:squirrel:controlled"));
-    Assert.That(limiter.To.Label, Is.EqualTo("ltb:creature:to-graveyard:controlled"));
-    Assert.That(limiter.Overlap, Is.EqualTo(FilterRelation.Overlaps));
-    Assert.That(limiter.Reliability, Is.EqualTo(Trilean.Unknown));
-    Assert.That(limiter.Reason, Is.EqualTo("Types"));
+    foreach (var edge in loop.Edges)
+      if (
+        edge.From.Label == "sac:creature:squirrel:controlled"
+        && edge.To.Label == "ltb:creature:to-graveyard:controlled"
+      )
+      {
+        Assert.That(edge.Overlap, Is.EqualTo(FilterRelation.Overlaps));
+        Assert.That(edge.Reliability, Is.EqualTo(Trilean.Yes));
+        Assert.That(edge.Reason, Is.Null.Or.Empty);
+      }
   }
 
   [Test]

@@ -65,7 +65,7 @@
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": "cardTypes=|subtypes=Squirrel|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+      "Subject": "cardTypes=creature|subtypes=Squirrel|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
     },
     {
       "Identity": "Pitiless Plunderer::emit:mana:any",
@@ -206,9 +206,9 @@
       "Provenance": "RulesDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
-      "Reliability": "Unknown",
-      "Tier": "Amber",
-      "Reason": "Types"
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
     },
     {
       "From": "Pitiless Plunderer::emit:mana:any",
@@ -296,17 +296,17 @@
       ]
     },
     {
-      "Tier": "Amber",
+      "Tier": "Green",
       "Firable": true,
       "TapRenewed": true,
       "CoCostsSatisfied": true,
       "Balanced": true,
       "Productive": true,
-      "LimitingReason": "Types",
+      "LimitingReason": null,
       "Edges": [
         "Chatterfang::emit:token:creature:squirrel:controlled=\u003EChatterfang::sac:creature:squirrel:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Chatterfang::replace:token-creation=\u003EChatterfang::emit:token:creature:squirrel:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
-        "Chatterfang::sac:creature:squirrel:controlled=\u003EPitiless Plunderer::ltb:creature:to-graveyard:controlled|RulesDefined|Flow|Overlaps|Unknown|Amber|Types",
+        "Chatterfang::sac:creature:squirrel:controlled=\u003EPitiless Plunderer::ltb:creature:to-graveyard:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Pitiless Plunderer::emit:token:artifact:treasure:controlled=\u003EChatterfang::replace:token-creation|RulesDefined|Modifier|Overlaps|Yes|Green|",
         "Pitiless Plunderer::ltb:creature:to-graveyard:controlled=\u003EPitiless Plunderer::emit:token:artifact:treasure:controlled|CardDefined|Flow|Overlaps|Yes|Green|"
       ]

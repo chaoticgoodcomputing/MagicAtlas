@@ -241,8 +241,8 @@
         "Chatterfang, Squirrel General",
         "Pitiless Plunderer"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "2026-07-18 precision-fix: TypeGuaranteed (ObjectFilterRelations.Subsumes) treated a subtype's 'kindred' pool membership as a competing owner, so a bare Subtypes:[Squirrel] filter (no CardTypes) straddled to Unknown against a 'creature' requirement (CR 308.1 kindred-partition-neutral gap, the 'Squirrel⊄creature' straddle already named in OperatorAxesScopeTest.cs). Fixed to prefer the ordinary (non-kindred) owner set, mirroring TypeAxis's existing Intersects treatment of the same straddle. The sac:creature:squirrel:controlled -> ltb:creature:to-graveyard:controlled sac-death bridge now certifies GREEN (Reliability=Yes), and the full 5-hop cross-card cycle (sac squirrel -> Pitiless dies-trigger -> Treasure emit -> Chatterfang token-doubling intercept -> squirrel regrowth) certifies Green — CoCostsSatisfied/Balanced/Productive all hold (non-mana output makes it productive per PortCycle's own doc). Verified against Commander Spellbook (community-confirmed 2-card infinite: infinite mana/ETB/LTB/death/sac triggers, requires 'an additional Squirrel' in play, which is a board-state precondition outside AST scope, not a card/engine gap)."
     },
     {
       "id": "314-3966",
