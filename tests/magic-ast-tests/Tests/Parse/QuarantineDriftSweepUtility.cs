@@ -89,6 +89,21 @@ public class QuarantineDriftSweepUtility
       if (name is null)
         continue;
 
+      // DFC/MDFC golds carry no top-level Input.OracleText — the real text lives per-face in
+      // Input.CardFaces[].OracleText. Compose it the SAME way LoadBulk composes the authoritative side's
+      // card_faces (blank-line join), so a two-faced card is compared face-text-to-face-text instead of
+      // a null gold side against a genuinely-composed authoritative side (which reads as 100% drift for
+      // every DFC regardless of correctness — found by review, 2026-07-18).
+      if (string.IsNullOrWhiteSpace(goldText) && testCase.InputNode["CardFaces"] is System.Text.Json.Nodes.JsonArray faces)
+      {
+        goldText = string.Join(
+          "\n\n",
+          faces
+            .Select(f => f?["OracleText"]?.ToString())
+            .Where(t => !string.IsNullOrEmpty(t))
+        );
+      }
+
       // Corpus wins on conflict (it is the exact text the parser consumes); the bulk fills gaps for
       // cards filtered out of the commander-legal-paper corpus — same precedence as
       // GoldOracleTextFidelityTests / GoldRegenerationUtility.

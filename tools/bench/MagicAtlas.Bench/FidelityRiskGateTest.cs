@@ -23,13 +23,15 @@ using System.Text.Json;
 /// pre-date the gate and were never re-reviewed against it. Rather than either (a) retroactively failing
 /// the whole suite on debt nobody consciously accepted, or (b) silently weakening the gate, this mirrors
 /// the SAME shrink-only-whitelist pattern <c>oracle-text-quarantine.json</c> itself uses:
-/// <c>fidelity-risk-acknowledged.json</c> is an explicit, named, per-combo carve-out. A combo NOT on it
-/// must have zero fidelity risk (the loud check). A combo ON it is allowed to currently have risk, but
-/// MUST still have some — an acknowledged entry whose risk evaporates (its card was de-quarantined) fails
-/// until removed, so the carve-out list only shrinks, same as the quarantine it mirrors. Per the governing
-/// principle, growing this list is something a sweep may PROPOSE (which is exactly how the seed was
-/// produced — see that file's <c>_doc</c>), but accepting a proposed entry is a human-confirmed decision;
-/// the seed is pending that review.
+/// <c>fidelity-risk-acknowledged.json</c> is an explicit, named, per-(combo, fixture) carve-out — matching
+/// is on the PAIR, not the combo id alone, so a NEW/different quarantine hit on an already-acknowledged
+/// combo (e.g. a second card in the same combo getting quarantined later) is never silently swallowed by
+/// the existing entry; it fails as its own, separate, unacknowledged risk. Every currently-observed risk
+/// fixture for a combo must be individually listed in that combo's <c>fixtures</c> array (the loud check);
+/// an acknowledged fixture no longer at risk (de-quarantined/fixed) fails until removed — the carve-out
+/// only shrinks, per fixture, same as the quarantine it mirrors. Per the governing principle, growing this
+/// list is something a sweep may PROPOSE (which is exactly how the seed was produced — see that file's
+/// <c>_doc</c>), but accepting a proposed entry is a human-confirmed decision.
 /// </para>
 /// </summary>
 [TestFixture]
@@ -45,7 +47,10 @@ public class FidelityRiskGateTest
     () => QuarantineIndex.Load(BenchPaths.QuarantinePath)
   );
 
-  private static readonly Lazy<IReadOnlySet<string>> _acknowledged = new(LoadAcknowledged);
+  // (comboId, fixturePath) pairs, not comboId alone — so a NEW/different quarantine hit on an
+  // already-acknowledged combo (e.g. a second card in the combo getting quarantined later) is never
+  // silently swallowed by the combo-level entry; it fails as its own, separate, unacknowledged risk.
+  private static readonly Lazy<IReadOnlySet<(string Id, string Fixture)>> _acknowledged = new(LoadAcknowledged);
 
   [Test]
   public void Pinned_run_is_present()
@@ -66,25 +71,38 @@ public class FidelityRiskGateTest
       $"Combo '{id}' is pinned '{tier}' but is no longer eligible in the run — see ComboExpectedTierTest."
     );
 
-    var risk = _current.Value[id].FidelityRisk;
-    var hasRisk = risk is { Count: > 0 };
-    var acknowledged = _acknowledged.Value.Contains(id);
+    var risk = RiskOrEmpty(_current.Value[id].FidelityRisk);
+    var currentFixtures = risk.Select(r => r.Fixture).ToHashSet(StringComparer.Ordinal);
+    var acknowledgedFixtures = _acknowledged.Value
+      .Where(p => p.Id == id)
+      .Select(p => p.Fixture)
+      .ToHashSet(StringComparer.Ordinal);
 
-    if (acknowledged)
-    {
-      // Shrink-only: an acknowledged carve-out whose risk evaporated (the card was de-quarantined) must
-      // be REMOVED from fidelity-risk-acknowledged.json — same ratchet direction as the quarantine itself.
-      Assert.That(
-        hasRisk,
-        Is.True,
-        $"Combo '{id}' is on fidelity-risk-acknowledged.json but no longer rests on a quarantined fixture "
-          + "(its card(s) were de-quarantined). Remove its entry — the carve-out only shrinks."
-      );
-      return;
-    }
+    // Every CURRENTLY-observed risk fixture must be individually acknowledged — a fixture at risk that
+    // isn't in this combo's acknowledged set is a NEW/unreviewed risk (never silently swallowed just
+    // because some OTHER fixture on this same combo was previously accepted).
+    var unacknowledged = currentFixtures.Except(acknowledgedFixtures).ToList();
+    Assert.That(
+      unacknowledged,
+      Is.Empty,
+      unacknowledged.Count > 0
+        ? BuildMessage(id, tier, cards, risk.Where(r => unacknowledged.Contains(r.Fixture)).ToList())
+        : ""
+    );
 
-    Assert.That(hasRisk, Is.False, BuildMessage(id, tier, cards, risk));
+    // Shrink-only, per fixture: an acknowledged fixture no longer at risk (de-quarantined/fixed) must be
+    // REMOVED from its entry's 'fixtures' array — same ratchet direction as the quarantine itself.
+    var stale = acknowledgedFixtures.Except(currentFixtures).ToList();
+    Assert.That(
+      stale,
+      Is.Empty,
+      $"Combo '{id}' acknowledges fixture(s) [{string.Join(", ", stale)}] in fidelity-risk-acknowledged.json "
+        + "but no longer rests on them (de-quarantined/fixed). Remove them from this entry's 'fixtures' "
+        + "array — the carve-out only shrinks, per fixture."
+    );
   }
+
+  private static IReadOnlyList<QuarantinedCard> RiskOrEmpty(IReadOnlyList<QuarantinedCard>? risk) => risk ?? [];
 
   private static string BuildMessage(
     string id,
@@ -128,18 +146,25 @@ public class FidelityRiskGateTest
     return runner.Run(snapshot).Combos.ToDictionary(c => c.Id, StringComparer.Ordinal);
   }
 
-  private static IReadOnlySet<string> LoadAcknowledged()
+  private static IReadOnlySet<(string Id, string Fixture)> LoadAcknowledged()
   {
     var path = BenchPaths.FidelityRiskAcknowledgedPath;
-    var set = new HashSet<string>(StringComparer.Ordinal);
+    var set = new HashSet<(string, string)>();
     if (!File.Exists(path))
       return set;
 
     using var doc = JsonDocument.Parse(File.ReadAllText(path));
     if (doc.RootElement.TryGetProperty("entries", out var entries))
       foreach (var e in entries.EnumerateArray())
-        if (e.TryGetProperty("id", out var idEl) && idEl.GetString() is { } id)
-          set.Add(id);
+      {
+        if (!e.TryGetProperty("id", out var idEl) || idEl.GetString() is not { } id)
+          continue;
+        if (!e.TryGetProperty("fixtures", out var fixturesEl))
+          continue; // malformed entry — treated as acknowledging nothing, not everything
+        foreach (var f in fixturesEl.EnumerateArray())
+          if (f.GetString() is { } fixture)
+            set.Add((id, fixture));
+      }
 
     return set;
   }
