@@ -2,8 +2,8 @@
   "Input": {
     "Name": "Suture Priest",
     "ManaCost": "{1}{W}",
-    "TypeLine": "Creature — Human Cleric",
-    "OracleText": "Whenever another creature enters the battlefield under your control, you gain 1 life.\nWhenever a creature an opponent controls enters the battlefield, that player loses 1 life.",
+    "TypeLine": "Creature — Phyrexian Cleric",
+    "OracleText": "Whenever another creature you control enters, you may gain 1 life.\nWhenever a creature an opponent controls enters, you may have that player lose 1 life.",
     "Power": "1",
     "Toughness": "1",
     "Colors": [
@@ -16,21 +16,25 @@
   "Output": {
     "Name": "Suture Priest",
     "TypeLine": {
-      "Raw": "Creature — Human Cleric",
+      "Raw": "Creature — Phyrexian Cleric",
       "Types": [
         "Creature"
       ],
       "Subtypes": [
-        "Human",
+        "Phyrexian",
         "Cleric"
       ]
     },
     "Oracle": {
-      "RawText": "Whenever another creature enters the battlefield under your control, you gain 1 life.\nWhenever a creature an opponent controls enters the battlefield, that player loses 1 life.",
+      "RawText": "Whenever another creature you control enters, you may gain 1 life.\nWhenever a creature an opponent controls enters, you may have that player lose 1 life.",
       "Abilities": [
         {
           "Kind": "triggered",
           "Trigger": {
+            "SourceSpan": {
+              "Start": 0,
+              "Length": 44
+            },
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
@@ -39,37 +43,40 @@
               ],
               "Controller": "You",
               "ExcludeSelf": true
-            },
-            "SourceSpan": {
-              "Start": 0,
-              "Length": 67
             }
           },
           "Effects": [
             {
-              "EffectType": "gainLife",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "You"
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "gainLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "You"
+                }
               },
               "SourceSpan": {
-                "Start": 68,
-                "Length": 17
+                "Start": 45,
+                "Length": 21
               }
             }
           ],
           "SourceSpan": {
             "Start": 0,
-            "Length": 85
+            "Length": 66
           },
           "OracleLineIndex": 0
         },
         {
           "Kind": "triggered",
           "Trigger": {
+            "SourceSpan": {
+              "Start": 67,
+              "Length": 47
+            },
             "Timing": "Whenever",
             "Event": "Enters",
             "Filter": {
@@ -77,31 +84,30 @@
                 "creature"
               ],
               "Controller": "Opponent"
-            },
-            "SourceSpan": {
-              "Start": 86,
-              "Length": 63
             }
           },
           "Effects": [
             {
-              "EffectType": "loseLife",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 1
-              },
-              "Player": {
-                "Kind": "ThatPlayer"
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "loseLife",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 1
+                },
+                "Player": {
+                  "Kind": "ThatPlayer"
+                }
               },
               "SourceSpan": {
-                "Start": 150,
-                "Length": 26
+                "Start": 115,
+                "Length": 38
               }
             }
           ],
           "SourceSpan": {
-            "Start": 86,
-            "Length": 90
+            "Start": 67,
+            "Length": 86
           },
           "OracleLineIndex": 1
         }
@@ -123,7 +129,8 @@
             ]
           }
         ],
-        "ManaValue": 2
+        "ManaValue": 2,
+        "IsVariable": false
       },
       {
         "Kind": "colors",
@@ -141,13 +148,13 @@
         "Kind": "creatureStats",
         "Power": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         },
         "Toughness": {
           "ValueType": "fixed",
-          "Raw": "1",
-          "Value": 1
+          "Value": 1,
+          "Raw": "1"
         }
       }
     ]
