@@ -35,7 +35,7 @@
             {
               "CostType": "tap",
               "SourceSpan": {
-                "Start": 0,
+                "Start": 8,
                 "Length": 3
               }
             }
@@ -53,8 +53,8 @@
                 "Zone": "Battlefield"
               },
               "SourceSpan": {
-                "Start": 4,
-                "Length": 81
+                "Start": 12,
+                "Length": 73
               }
             }
           ],

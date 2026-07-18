@@ -73,6 +73,14 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
   {
     var text = clause.RawText;
 
+    // Count of characters removed from the FRONT of clause.RawText to reach the
+    // current (dash-prefix-stripped) `text`, so spans computed from positions
+    // within `text` can be re-anchored to clause.SourceSpan.Start's absolute
+    // basis. Scoped to the dash-prefix strip only (see below) — the paren-strip
+    // branch intentionally does NOT contribute to this offset, preserving its
+    // existing (pre-existing, out-of-scope) span behavior byte-for-byte.
+    var offset = 0;
+
     // Strip surrounding parens from parenthetical-wrapped abilities like
     // "({T}: Add {B} or {R}.)" so cost/effect parsing proceeds on the inner text.
     if (text.StartsWith('(') && text.EndsWith(')'))
@@ -90,7 +98,10 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
       var emDashIndex = text.IndexOf('—');
       if (emDashIndex >= 0)
       {
-        text = text[(emDashIndex + 1)..].TrimStart();
+        var afterDash = text[(emDashIndex + 1)..];
+        var afterDashTrimmed = afterDash.TrimStart();
+        offset += (emDashIndex + 1) + (afterDash.Length - afterDashTrimmed.Length);
+        text = afterDashTrimmed;
       }
     }
 
@@ -109,18 +120,20 @@ public sealed partial class ActivatedAbilityParser : IAbilityParser
     // the cost colon, absolute into the original oracle text. Half-granularity — every
     // effect the ability produces shares it. Mirrors the precedent already used for the
     // L1 UnstructuredEffect fallback below; hoisted here so the success path stamps it
-    // onto each parsed effect too. (An em-dash ability-word prefix, if present, is not
-    // reflected in colonIndex — a pre-existing limitation shared with the fallback.)
+    // onto each parsed effect too. `offset` re-anchors colonIndex (relative to the
+    // dash-prefix-stripped `text`) back to clause.SourceSpan.Start's basis; subtracting
+    // it from the RawText-based length keeps the span's end pinned to clause end (the
+    // formula collapses to the original clause.RawText.Length - (colonIndex + 1) when
+    // offset is 0, i.e. whenever DashPrefix didn't fire).
     var effectSpan = new MagicAST.AST.TextSpan(
-      clause.SourceSpan.Start + colonIndex + 1,
-      Math.Max(0, clause.RawText.Length - (colonIndex + 1))
+      clause.SourceSpan.Start + offset + colonIndex + 1,
+      Math.Max(0, clause.RawText.Length - offset - (colonIndex + 1))
     );
 
     // Parse costs — thread the absolute start of the (trimmed) cost half so ParseCosts can stamp each
-    // comma-split component's SourceSpan (same clause.SourceSpan.Start basis as effectSpan; shares the
-    // em-dash/paren caveat noted above).
+    // comma-split component's SourceSpan (same clause.SourceSpan.Start + offset basis as effectSpan).
     var rawCostPart = text[..colonIndex];
-    var costPartStart = clause.SourceSpan.Start + (rawCostPart.Length - rawCostPart.TrimStart().Length);
+    var costPartStart = clause.SourceSpan.Start + offset + (rawCostPart.Length - rawCostPart.TrimStart().Length);
     var costs = ParseCosts(costPart, classification, costPartStart);
     if (costs == null)
     {
