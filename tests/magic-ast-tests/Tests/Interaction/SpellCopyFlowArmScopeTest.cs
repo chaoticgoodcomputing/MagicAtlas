@@ -162,10 +162,19 @@ public class SpellCopyFlowArmScopeTest
 
   /// <summary>bench 147-1987 (Ghostly Flicker + Dualcaster Mage). Ghostly Flicker blinks Dualcaster;
   /// Dualcaster's ETB copies the Ghostly Flicker spell; the copy re-flickers Dualcaster, re-firing the ETB
-  /// (the spell-copy reproduces a blink → the existing blink→etb arm closes it). Target: <b>GREEN</b>
-  /// (Ghostly Flicker's exile+return is not optional).</summary>
+  /// (the spell-copy reproduces a blink → the existing blink→etb arm closes it). Target tier: <b>AMBER</b>
+  /// — <em>irreducibly</em> so, via TWO stacked identity-Subsumes=No floors, not one: (1) the
+  /// <c>("blink","etb")</c> edge (<see cref="BlinkSatisfiesEnter"/>) can't prove Ghostly Flicker's broad
+  /// "two target artifacts/creatures/lands" blink Subsumes Dualcaster's IsSelf ETB watch, and (2) the
+  /// <c>("copy","cast")</c> edge (<c>bridge:spell-copy-to-cast-driver</c>, declared <c>ceiling: AMBER</c> in
+  /// the <c>dualcaster-mage-x-ghostly-flicker</c> gold) can't prove the copied "instant or sorcery" Subsumes
+  /// Ghostly Flicker's own IsSelf cast:spell:self driver. Both edges float on the caster's free choice of
+  /// legal target — a choice the AST cannot statically prove selects THIS card — so the loop is capped
+  /// AMBER by construction, not by a temporary gap. Audited 2026-07-18 (Currency-B precision-fix pass):
+  /// confirmed genuinely AMBER, matches the pin in <c>combo-expected-tiers.json</c>; no GREEN is reachable
+  /// through this 2-card cycle.</summary>
   [Test]
-  public void Ghostly_flicker_x_dualcaster_reconstructs_green_pending_the_spell_copy_graft()
+  public void Ghostly_flicker_x_dualcaster_reconstructs_amber_the_double_identity_floor()
   {
     var graphs = new[]
     {
@@ -174,12 +183,13 @@ public class SpellCopyFlowArmScopeTest
     };
     var engine = new PortGraphEngine(Ontology);
     var cycles = engine.FindCycles(engine.Materialize(graphs));
-    Assert.That(
-      cycles.Any(c => c.Edges.Any(e =>
+    var loop = cycles.FirstOrDefault(c =>
+      c.Edges.Any(e =>
         e.From.Card.Contains("Dualcaster", StringComparison.Ordinal)
-        || e.To.Card.Contains("Dualcaster", StringComparison.Ordinal))),
-      Is.True
+        || e.To.Card.Contains("Dualcaster", StringComparison.Ordinal))
     );
+    Assert.That(loop, Is.Not.Null, "the blink→etb→copy→cast round-trip must close a cycle");
+    Assert.That(loop!.Tier, Is.EqualTo(CertaintyTier.Amber));
   }
 
   /// <summary>bench 11-3368 (Narset's Reversal + Reiterate). Each copies the other's spell; Reiterate's
