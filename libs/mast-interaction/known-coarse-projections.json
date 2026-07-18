@@ -228,7 +228,6 @@
     "drawCards": "cumulative upkeep's per-age-counter draw-a-card cost (CR 702.24a) on Psychic Vortex \u2014 sibling of the coarse payLife/payEnergy flat upkeep-tax costs; no flow rule reads a card draw paid as a cost yet (mirrors the coarse drawCards EffectType); consciously inert for interaction recall",
     "exile": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "forage": "Forage keyword-action cost (CR 701.61a \u2014 exile three cards from your graveyard or sacrifice a Food); no flow rule consumes forage activation-cost events yet; consciously inert for interaction recall",
-    "payLife": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "removeCounters": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "returnToHand": "baseline coarse fallback (initiative-03 inception 2026-06-15) \u2014 no flow rule consumes it yet",
     "reveal": "'Morph\u2014Reveal a [color] card in your hand' non-mana turn-face-up cost variant (CR 702.37a: the printed morph cost paid to turn a face-down permanent face up) \u2014 an information-disclosure cost; the revealed card stays in the controller's hand (no zone change, no resource loss), so it originates no cross-card resource a flow rule consumes (same coarse precedent as the sibling revealCards effectType); no flow rule reads reveal-cost payment yet; consciously inert for interaction recall (Horde Ambusher)",

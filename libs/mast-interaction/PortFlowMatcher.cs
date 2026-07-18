@@ -34,6 +34,7 @@ public sealed class PortFlowMatcher
   {
     TokenToSac,
     ManaToPay,
+    LifeCostToPay,
     LifeToTrigger,
     DiceToTrigger,
     DamageToTrigger,
@@ -68,6 +69,12 @@ public sealed class PortFlowMatcher
     // produced mana → a mana cost (colour compatibility in the guard).
     if (E("mana") && C("mana"))
       return FlowArm.ManaToPay;
+    // a life-gain event → a life-payment cost (replenishing life spent, mirrors mana → pay:mana; the
+    // gain-only direction check is the guard). A distinct consume stem ("paylife", not "life") from the
+    // life-TRIGGER consume below keeps the two relations — a subscription vs. an actual resource payment —
+    // unambiguous at the structural layer (PayLifeFamily).
+    if (E("life") && C("paylife"))
+      return FlowArm.LifeCostToPay;
     // a life event → a same-direction life trigger (direction in the guard).
     if (E("life") && C("life"))
       return FlowArm.LifeToTrigger;
@@ -131,6 +138,7 @@ public sealed class PortFlowMatcher
         PortGraphEngine.ManaColor(emit.Label),
         PortGraphEngine.ManaColor(consume.Label)
       ),
+      FlowArm.LifeCostToPay => PortGraphEngine.LifeGainFeedsCost(emit),
       FlowArm.LifeToTrigger => PortGraphEngine.LifeFlowFeasible(emit, consume),
       FlowArm.DiceToTrigger => true,
       FlowArm.DamageToTrigger => _engine.DamageSatisfiesTrigger(emit, consume),

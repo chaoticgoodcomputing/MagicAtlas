@@ -58,6 +58,7 @@ public static class PortWalkProjection
     "sacrifice", // PortWalk.Costs — sac:<fodder>:controlled
     "mana", // PortWalk.Costs — pay:mana:<color> per symbol
     "tap", // PortWalk.Costs — tap:self
+    "payLife", // PortWalk.Costs — pay:paylife, with a real Amount + You Subject (life cost flow arm, 2026-07-18)
   };
 
   /// <summary>Trigger <c>Event</c> values with a semantic projection (not the coarse-role fallback).

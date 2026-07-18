@@ -64,8 +64,8 @@
         "Gravecrawler",
         "Zulaport Cutthroat"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "2026-07-18 Amber->Green: the LifeCostToPay flow arm (PortFlowMatcher/PortGraphEngine, precision-fix for the Warren Soultrader life-cost gap) now bridges Zulaport's emit:life:gain:controlled to Warren's pay:paylife cost -- CoCostsSatisfied flips true via a real materialized edge (Reliability=Yes), and LifeBalanced holds because Zulaport's 'you gain 1 life' exactly offsets Warren's 'Pay 1 life' every iteration (CR 119.3/119.4, net 0, non-negative). Traced cycle: Gravecrawler recast -> Warren sac -> Zulaport dies-trigger -> life-gain -> Warren pay:paylife -> Warren Treasure -> sac Treasure -> mana:any -> Gravecrawler {B} recast (closes). Every hop Reliability=Yes/Tier=Green, mana-balanced (1 any-mana pays {B}). Shares the SAME accepted over-approximation as the pre-existing GREEN gravecrawler-x-ashnods-altar-x-blood-artist precedent (2034-2577-4871 pinned Green) and that gold's own documented note: Gravecrawler's 'as long as you control a Zombie' recast condition is not modeled as a gate (no other Zombie is present in this 3-card set), a pre-existing, consciously-accepted engine boundary this fix does not touch or worsen."
     },
     {
       "id": "1385-3000-5670",
@@ -74,8 +74,8 @@
         "Zulaport Cutthroat",
         "Chatterfang, Squirrel General"
       ],
-      "expectedTier": "Amber",
-      "reason": "2026-07-18 audit (confirmed no-op, correctly Amber): the 4-hop cycle Chatterfang's Squirrel token -> Warren's 'Sacrifice another creature' -> Warren's Treasure -> Chatterfang's token-doubling replace -> back to Squirrel token reconstructs with EVERY hop already Reliability=Yes/Tier=Green (Warren's sac-cost fodder filter declares CardTypes:[creature] directly in the AST, so the Squirrel-subtype straddle the 2026-07-18 Chatterfang x Pitiless Plunderer fix addressed never applied here in the first place -- that fix is a genuine no-op for this combo). The sole limiter is CoCostsSatisfied=false ('unfed co-cost'): Warren Soultrader's activated ability is 'Pay 1 life, Sacrifice another creature: Create a Treasure token', so PayLifeCost projects a Warren::pay:paylife consume port that is a co-cost sibling of the sacrifice cost (both drive the same createToken effect, PortGraphEngine.CoCostMap). Zulaport Cutthroat's dies-trigger emits Zulaport::emit:life:gain:controlled (which in real play exactly offsets Warren's 1-life cost every iteration, and drains the opponent besides -- Zulaport sits OUTSIDE the reconstructed cycle as the sustaining payoff, exactly like Blood Artist in the sibling 2577-2842-5670 combo), but no RulesDefined flow arm exists connecting a life-gain emit to a pay-life cost consume (PortFlowMatcher.SelectArm's LifeToTrigger arm only bridges emit:life to a life TRIGGER consume, not a cost); verified directly by materializing the 3-card graph -- no edge targets Warren::pay:paylife anywhere in the full edge set. So ConjunctionHolds' LoopFeeds check can never see the co-cost fed, and the cycle floors to Amber ('unfed co-cost') even though the life economy is genuinely sustainable in the real card text. This is the SAME structural gap as the Warren Soultrader + Gravecrawler + Blood Artist audit (2577-2842-5670): the engine has no life-cost-vs-life-gain balance dimension (no LifeCostToPay flow arm / LifeBalanced check analogous to ManaToPay / ManaBalanced) -- a real architecture-level taxonomy gap (Currency C scope), not a narrow type-proof fixable in-place like the Chatterfang sac-cost lift. Honest, conservative Amber; not forced to Green."
+      "expectedTier": "Green",
+      "reason": "2026-07-18 Amber->Green: closes the exact gap the 2026-07-18 audit identified (this entry's prior reason) by adding the LifeCostToPay flow arm (PortFlowMatcher.SelectArm/Captures + PortGraphEngine.LifeGainFeedsCost/LifeBalanced, mirroring ManaToPay/ManaBalanced). The arm now bridges Zulaport's emit:life:gain:controlled to Warren's pay:paylife cost as a REAL materialized RulesDefined/Green edge (verified by direct materialization, not inference), so ConjunctionHolds/CoCostsSatisfied sees it fed. Better still, the fed pay:paylife port sits ON the reconstructed ring itself (its card-defined edge to Warren's createToken effect is a real hop), pulling Zulaport onto the cycle: Chatterfang's bonus Squirrel (its 'create twice as many' replacement on Warren's Treasure) -> Warren sac -> Zulaport dies-trigger -> life-gain -> Warren pay:paylife -> Warren Treasure -> Chatterfang's replacement -> bonus Squirrel (closes) -- a clean, mana-free, Gravecrawler-free 3-card loop. LifeBalanced holds because Zulaport's 'you gain 1 life' exactly offsets Warren's 'Pay 1 life' every iteration (CR 119.3/119.4, net 0). Every hop Reliability=Yes/Tier=Green; the Chatterfang dual-emit mechanism itself is pre-existing, judge-approved machinery (chatterfang-x-pitiless-plunderer.json)."
     },
     {
       "id": "147-1810",
@@ -152,8 +152,8 @@
         "Gravecrawler",
         "Essence Warden"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "2026-07-18 Amber->Green: the LifeCostToPay flow arm bridges Essence Warden's emit:life:gain:controlled to Warren's pay:paylife cost as a real materialized RulesDefined/Green edge; CoCostsSatisfied flips true and LifeBalanced holds ('you gain 1 life' vs 'Pay 1 life', net 0, CR 119.3/119.4). Traced cycle: Essence Warden's life-gain -> Warren pay:paylife -> Warren Treasure -> sac Treasure -> mana:any -> Gravecrawler {B} recast -> Gravecrawler re-enters -> Essence Warden's 'a creature you control enters' trigger (closes). Every hop Reliability=Yes/Tier=Green, mana-balanced. Shares the SAME accepted over-approximation as the pre-existing GREEN gravecrawler-x-ashnods-altar-x-blood-artist precedent (2034-2577-4871 pinned Green): Gravecrawler's 'as long as you control a Zombie' recast condition is not modeled as a gate (no other Zombie in this 3-card set), a pre-existing, consciously-accepted engine boundary this fix does not touch or worsen."
     },
     {
       "id": "2577-2842-5670",
@@ -162,8 +162,8 @@
         "Gravecrawler",
         "Blood Artist"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "2026-07-18 Amber->Green: closes the gap the Warren Soultrader + Gravecrawler + Blood Artist audit identified (Warren's 'Pay 1 life, Sacrifice another creature' co-cost pair; PayLifeCost's pay:paylife consume had no flow arm bridging a life-gain emit to it, so CoCostsSatisfied floored every such combo to Amber). Fix: a new LifeCostToPay flow arm (PortFlowMatcher.SelectArm/Captures + a dedicated PayLifeFamily projecting pay:paylife with a real Quantity + You Subject, PortGraphEngine.LifeGainFeedsCost) mirrors ManaToPay/ManaBalanced for life, plus a LifeBalanced check (PortCycle.LifeBalanced, its own field so LimitingReason can name it distinctly from mana) requiring net(life) >= 0 per iteration -- CR-grounded, not a stylistic mirror: CR 119.4 makes paying life a real, bounded loss and CR 119.6 ends the game at 0-or-less life, so a net-negative life loop would kill its own caster after finitely many iterations and is not a certifiable infinite combo; 'some life gain exists' alone is NOT sufficient, only a provable net>=0 is. Traced cycle here: Blood Artist's emit:life:gain:controlled -> Warren pay:paylife (now a REAL materialized RulesDefined/Green edge, Reliability=Yes) -> Warren Treasure -> sac Treasure -> mana:any -> Gravecrawler {B} recast -> Gravecrawler sac'd again -> Blood Artist's dies-trigger (closes). LifeBalanced holds because Blood Artist's 'you gain 1 life' exactly offsets Warren's 'Pay 1 life' every iteration (net 0, non-negative). Every hop Reliability=Yes/Tier=Green, mana-balanced (1 any-mana pays {B}). Shares the SAME accepted over-approximation as the pre-existing GREEN gravecrawler-x-ashnods-altar-x-blood-artist precedent (2034-2577-4871 pinned Green) and that gold's own documented note: Gravecrawler's 'as long as you control a Zombie' recast condition is not modeled as a gate (no other Zombie in this 3-card set), a pre-existing, consciously-accepted engine boundary this fix does not touch or worsen. Full bench + Ast.Tests core ring verified green alongside this change."
     },
     {
       "id": "2577-3983-4871",
@@ -182,8 +182,8 @@
         "Gravecrawler",
         "Suture Priest"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "2026-07-18 Amber->Green: the LifeCostToPay flow arm bridges Suture Priest's emit:life:gain:controlled to Warren's pay:paylife cost as a real materialized RulesDefined/Green edge; CoCostsSatisfied flips true and LifeBalanced holds ('you gain 1 life' vs 'Pay 1 life', net 0, CR 119.3/119.4). Traced cycle: Gravecrawler recast -> Suture Priest's 'another creature enters' trigger -> life-gain -> Warren pay:paylife -> Warren Treasure -> sac Treasure -> mana:any -> Gravecrawler {B} recast (closes). Every hop Reliability=Yes/Tier=Green, mana-balanced. Shares the SAME accepted over-approximation as the pre-existing GREEN gravecrawler-x-ashnods-altar-x-blood-artist precedent (2034-2577-4871 pinned Green): Gravecrawler's 'as long as you control a Zombie' recast condition is not modeled as a gate (no other Zombie in this 3-card set), a pre-existing, consciously-accepted engine boundary this fix does not touch or worsen."
     },
     {
       "id": "261-3000-5670",
@@ -212,8 +212,8 @@
         "Blood Artist",
         "Chatterfang, Squirrel General"
       ],
-      "expectedTier": "Amber",
-      "reason": "engine reconstructs a spanning cycle but its best certified tier is Amber (conditional)"
+      "expectedTier": "Green",
+      "reason": "2026-07-18 Amber->Green: the LifeCostToPay flow arm bridges Blood Artist's emit:life:gain:controlled to Warren's pay:paylife cost as a real materialized RulesDefined/Green edge; CoCostsSatisfied flips true and LifeBalanced holds ('you gain 1 life' vs 'Pay 1 life', net 0, CR 119.3/119.4). Traced cycle: Chatterfang's bonus Squirrel (its 'create twice as many' replacement on Warren's Treasure) -> Warren sac -> Blood Artist's dies-trigger -> life-gain -> Warren pay:paylife -> Warren Treasure -> Chatterfang's replacement -> bonus Squirrel (closes) -- a clean, mana-free, Gravecrawler-free 3-card loop, the Blood Artist sibling of 1385-3000-5670. Every hop Reliability=Yes/Tier=Green; the Chatterfang dual-emit mechanism itself is pre-existing, judge-approved machinery (chatterfang-x-pitiless-plunderer.json)."
     },
     {
       "id": "3000-4231-5670",

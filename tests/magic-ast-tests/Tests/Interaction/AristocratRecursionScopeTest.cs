@@ -24,11 +24,17 @@ using MagicAST.Tests.Infrastructure;
 /// Ashnod's {C}{C} pure surplus. Mana-positive ⇒ §8 <c>ManaBalanced</c> + <c>ManaProductive</c> ⇒ GREEN.
 /// (A 7-hop cycle: the engine's unbounded <c>FindCycles</c> here tiers it GREEN; the product/bench
 /// <c>LengthBound=5</c> can't reach it and reads it AMBER — a separate length-bound decision.)</item>
-/// <item>Warren Soultrader + Gravecrawler + Blood Artist → <b>AMBER</b>. NOT a mana shortfall (the {B}
-/// recast is fully paid by Warren's one Treasure). The honest floor is Warren's <b>unfed <c>Pay 1 life</c>
-/// co-cost</b>: §8 <c>ConjunctionHolds</c> needs it loop-fed, but there is no <c>(life, pay)</c> flow arm
-/// (only <c>(life, trigger)</c>), so <c>CoCostsSatisfied=false</c> → AMBER (CR 118.3/119.4 — life is a
-/// real resource MAST can't certify the loop refills). Sound AMBER, not a false negative.</item>
+/// <item>Warren Soultrader + Gravecrawler + Blood Artist → <b>GREEN</b> (2026-07-18, was AMBER). NOT a
+/// mana shortfall (the {B} recast is fully paid by Warren's one Treasure). The prior floor was Warren's
+/// <b>unfed <c>Pay 1 life</c> co-cost</b>: §8 <c>ConjunctionHolds</c> needs it loop-fed, but there was no
+/// <c>(life, pay)</c> flow arm (only <c>(life, trigger)</c>), so <c>CoCostsSatisfied=false</c> → AMBER (CR
+/// 118.3/119.4 — life is a real resource). A new <c>LifeCostToPay</c> flow arm (PortFlowMatcher +
+/// PortGraphEngine.LifeGainFeedsCost, mirroring ManaToPay) now bridges Blood Artist's life-gain emit to
+/// Warren's <c>pay:paylife</c> cost, and a new <c>LifeBalanced</c> check (mirroring ManaBalanced, its own
+/// <c>PortCycle</c> field so the tier floor stays distinguishable from a mana shortfall) requires net life
+/// ≥ 0 per iteration (CR 119.4 paying life is a real bounded loss; CR 119.6 ends the game at 0-or-less
+/// life, so a net-negative life loop is finite, not infinite) — genuinely satisfied here (1 life gained
+/// exactly offsets 1 life paid). No longer a false negative.</item>
 /// <item>Gravecrawler with its cast-from-graveyard permission ABSENT + a free sac outlet → <b>NO
 /// cycle</b>. The false-positive guard (scope §4, layer i): the recursion arm fires ONLY on a real
 /// cast-from-graveyard permission. A dead creature with no recast permission stays dead — a naive
@@ -114,22 +120,28 @@ public class AristocratRecursionScopeTest
   }
 
   /// <summary>
-  /// AMBER COMBO (bench: Warren Soultrader + Gravecrawler + Blood Artist, pop 38 733). Warren sacs GC
-  /// (<b>Pay 1 life</b>, Sacrifice another creature → ONE Treasure) → GC dies → Blood Artist drains → GC
-  /// recast for {B} → re-enter → re-sac. The honest tier is AMBER, not GREEN — but NOT for a mana reason:
-  /// the {B} recast is fully paid by Warren's one Treasure (no shortfall). The floor is Warren's
-  /// <b>unfed <c>Pay 1 life</c> co-cost</b>: §8 <c>ConjunctionHolds</c> requires every co-cost sibling
-  /// loop-fed, and there is no <c>(life, pay)</c> flow arm (Blood Artist's <c>emit:life:gain</c> feeds a
-  /// life-TRIGGER, never a life-COST), so <c>CoCostsSatisfied=false</c>.
+  /// GREEN COMBO (bench: Warren Soultrader + Gravecrawler + Blood Artist, pop 38 733; 2026-07-18, was
+  /// AMBER). Warren sacs GC (<b>Pay 1 life</b>, Sacrifice another creature → ONE Treasure) → GC dies →
+  /// Blood Artist drains (and gains Warren's controller 1 life) → GC recast for {B} → re-enter → re-sac.
+  /// The {B} recast is fully paid by Warren's one Treasure (no mana shortfall — never the issue here).
   ///
-  /// <para>Target: <b>AMBER</b>. The drain is a productive output, but the loop can't certify it refills
-  /// the paid life each iteration (CR 118.3/119.4 — life is a real resource; MAST has no life-as-resource
-  /// ledger). Sound AMBER, not Red (the loop is structurally feasible), not a false negative. Earning
-  /// GREEN later needs a real <c>(life, pay)</c> arm or a life-ledger, never an engine fudge
-  /// (adding-a-flow-arm anti-pattern 2). The Warren+Zulaport sibling (pop 34 860) is the same shape.</para>
+  /// <para>Formerly floored to AMBER by Warren's <b>unfed <c>Pay 1 life</c> co-cost</b>: §8
+  /// <c>ConjunctionHolds</c> requires every co-cost sibling loop-fed, and there was no <c>(life, pay)</c>
+  /// flow arm (Blood Artist's <c>emit:life:gain</c> fed only a life-TRIGGER, never a life-COST), so
+  /// <c>CoCostsSatisfied=false</c>. The 2026-07-18 precision-fix adds <c>PortFlowMatcher.FlowArm.LifeCostToPay</c>
+  /// (a new <c>PayLifeFamily</c> stems <c>pay:paylife</c> as its own <c>paylife</c> consume; the guard
+  /// <c>PortGraphEngine.LifeGainFeedsCost</c> requires a GAIN-direction emit, mirroring
+  /// <c>ManaColorFeeds</c>) plus a new <c>PortCycle.LifeBalanced</c> field (mirroring
+  /// <c>Balanced</c>/<c>ManaBalanced</c>) requiring the loop's net life ≥ 0 per iteration — CR-grounded:
+  /// CR 119.4 makes paying life a real, bounded loss and CR 119.6 ends the game at 0-or-less life, so a
+  /// net-negative life loop would kill its own caster after finitely many iterations and is not
+  /// certifiable infinite; "some life gain exists" alone would NOT be sufficient. Here Blood Artist's "you
+  /// gain 1 life" exactly offsets Warren's "Pay 1 life" (net 0, non-negative) — genuinely GREEN, not a
+  /// fudge (adding-a-flow-arm anti-pattern 2). The Warren+Zulaport sibling (pop 34 860) is the same shape,
+  /// also now GREEN.</para>
   /// </summary>
   [Test]
-  public void Warren_x_gravecrawler_x_blood_artist_reconstructs_amber_unfed_life_cocost()
+  public void Warren_x_gravecrawler_x_blood_artist_reconstructs_green_life_cost_fed()
   {
     var graphs = new[]
     {
@@ -146,15 +158,18 @@ public class AristocratRecursionScopeTest
         e.From.Label.StartsWith("emit:returntobattlefield", StringComparison.Ordinal)
         || e.To.Label.StartsWith("emit:returntobattlefield", StringComparison.Ordinal)
       )
+      && c.Tier == CertaintyTier.Green
     );
 
-    Assert.That(loop, Is.Not.Null, "the recursion loop should be recognized (recast refuels Warren's sac)");
     Assert.That(
-      loop!.Tier,
-      Is.EqualTo(CertaintyTier.Amber),
-      "Warren's unfed 'Pay 1 life' co-cost (no (life,pay) arm) → ConjunctionHolds false → §8 floors to AMBER "
-        + "(the {B} recast itself is fully paid by the Treasure — not a mana shortfall, not a fudge to GREEN)"
+      loop,
+      Is.Not.Null,
+      "the recursion loop should be recognized (recast refuels Warren's sac) and certify GREEN now that "
+        + "Blood Artist's life-gain feeds Warren's pay:paylife co-cost (LifeCostToPay arm) and the loop is "
+        + "life-balanced (net 0)"
     );
+    Assert.That(loop!.CoCostsSatisfied, Is.True, "the life co-cost is now loop-fed by Blood Artist's life-gain");
+    Assert.That(loop.LifeBalanced, Is.True, "1 life gained (Blood Artist) exactly offsets 1 life paid (Warren) per iteration");
   }
 
   /// <summary>
