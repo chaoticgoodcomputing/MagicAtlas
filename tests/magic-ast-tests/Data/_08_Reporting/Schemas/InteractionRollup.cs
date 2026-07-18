@@ -104,9 +104,16 @@ public partial record HoleEntry
   [SerializedLabel("note")]
   public string? Note { get; init; }
 
-  /// <summary>Always <c>sought</c> — the hole is declared but not yet witnessed (ADR-0003 §8).</summary>
+  /// <summary><c>sought</c> while no gold projects <see cref="ProposedStem"/>; <c>witnessed</c> once one
+  /// does (reconciled against the same gold-projection pass that computes <see cref="StemEntry.Status"/>
+  /// — a hole does not stay <c>sought</c> forever just because the scaffold entry is static).</summary>
   [SerializedLabel("status")]
   public required string Status { get; init; }
+
+  /// <summary>Gold ids that witness <see cref="ProposedStem"/>, set only when <see cref="Status"/> is
+  /// <c>witnessed</c>.</summary>
+  [SerializedLabel("witnesses")]
+  public IReadOnlyList<string>? Witnesses { get; init; }
 }
 
 /// <summary>One stem's topology entry (is-a parent + kind + observed attribute set + declared|witnessed status).</summary>

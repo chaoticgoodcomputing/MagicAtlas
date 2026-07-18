@@ -9,8 +9,12 @@ namespace MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 /// Builds artifact 1 — the port topology (ADR-0003 §8), now the MERGE of the negotiated Stage-0a scaffold
 /// (the DECLARED half) with the gold-projected ports (the WITNESSED half):
 /// <list type="bullet">
-///   <item><c>kinds</c> / <c>supergroups</c> / <c>event_verbs</c> / <c>aliases</c> / <c>holes</c> — passed
-///     through from the scaffold (holes carry <c>status: sought</c>).</item>
+///   <item><c>kinds</c> / <c>supergroups</c> / <c>event_verbs</c> / <c>aliases</c> — passed through from
+///     the scaffold verbatim.</item>
+///   <item><c>holes</c> — scaffold-declared, but <c>status</c> is reconciled against the same
+///     gold-projection pass that computes <c>stems</c>: <c>sought</c> until some gold projects the hole's
+///     <c>proposed_stem</c>, then <c>witnessed</c> (with the witnessing gold ids carried on the hole). A
+///     hole does not stay <c>sought</c> forever just because the scaffold entry is static.</item>
 ///   <item><c>stems</c> — the scaffold's is-a spine (declared) unioned with the stems the golds project
 ///     (witnessed). Per stem <c>status</c> is <c>witnessed</c> when any gold projects it, else
 ///     <c>declared</c>; a gold stem the scaffold never predicted carries <c>unpredicted: true</c>.</item>
@@ -75,18 +79,10 @@ public static class TopologyStep
           Def = kv.Value["def"]!.GetValue<string>(),
         };
 
-      var holes = new Dictionary<string, HoleEntry>(StringComparer.Ordinal);
-      foreach (var kv in Entries(scaffold["holes"]))
-        holes[kv.Key] = new HoleEntry
-        {
-          Priority = kv.Value["priority"]!.GetValue<int>(),
-          Kind = kv.Value["kind"]!.GetValue<string>(),
-          ProposedStem = kv.Value["proposed_stem"]!.GetValue<string>(),
-          Attrs = StrListOrNull(kv.Value["attrs"]),
-          Slang = StrListOrNull(kv.Value["slang"]),
-          Note = kv.Value["note"]?.GetValue<string>(),
-          Status = "sought",
-        };
+      // Deferred: a hole's status depends on whether its proposed_stem ends up projected by a gold, which
+      // isn't known until the gold-projection pass below runs. Stash the scaffold entries now, materialize
+      // HoleEntry after `stems` is fully populated.
+      var holeScaffold = Entries(scaffold["holes"]).ToList();
 
       // ── stems: scaffold spine (declared) ∪ gold projections (witnessed) ──
       var stems = new Dictionary<string, StemAccum>(StringComparer.Ordinal);
@@ -149,6 +145,25 @@ public static class TopologyStep
             }
           }
         }
+      }
+
+      // ── materialize holes: resolved once a gold projects the proposed_stem, not hardcoded "sought" ──
+      var holes = new Dictionary<string, HoleEntry>(StringComparer.Ordinal);
+      foreach (var kv in holeScaffold)
+      {
+        var proposedStem = kv.Value["proposed_stem"]!.GetValue<string>();
+        var resolved = stems.TryGetValue(proposedStem, out var stemAccum) && stemAccum.Projected;
+        holes[kv.Key] = new HoleEntry
+        {
+          Priority = kv.Value["priority"]!.GetValue<int>(),
+          Kind = kv.Value["kind"]!.GetValue<string>(),
+          ProposedStem = proposedStem,
+          Attrs = StrListOrNull(kv.Value["attrs"]),
+          Slang = StrListOrNull(kv.Value["slang"]),
+          Note = kv.Value["note"]?.GetValue<string>(),
+          Status = resolved ? "witnessed" : "sought",
+          Witnesses = resolved ? stemAccum!.Witnesses.ToList() : null,
+        };
       }
 
       // ── materialize axes ──

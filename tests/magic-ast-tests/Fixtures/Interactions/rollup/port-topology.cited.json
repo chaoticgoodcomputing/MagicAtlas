@@ -1127,7 +1127,11 @@
         "cheat-out"
       ],
       "note": "no cost-delta stem; both directions (\u2191 tax / \u2193 reduction) homeless. Most corroborated (panel \u002B full-slang \u002B checklist).",
-      "status": "sought"
+      "status": "witnessed",
+      "witnesses": [
+        "stone-calendar",
+        "thorn-of-amethyst"
+      ]
     },
     "restriction-grant": {
       "priority": 2,
@@ -1142,7 +1146,11 @@
         "lock"
       ],
       "note": "\u0027can\u0027t attack/block\u0027 grant \u2014 a Behavior with no stem.",
-      "status": "sought"
+      "status": "witnessed",
+      "witnesses": [
+        "moat",
+        "pacifism"
+      ]
     },
     "prevention": {
       "priority": 3,
@@ -1155,7 +1163,10 @@
         "fog"
       ],
       "note": "a shield/replacement on the damage event.",
-      "status": "sought"
+      "status": "witnessed",
+      "witnesses": [
+        "fog"
+      ]
     },
     "library-search": {
       "priority": 4,
@@ -1171,7 +1182,10 @@
         "fetch"
       ],
       "note": "library\u2192hand by criteria; distinct from draw. A Cards-STATE op.",
-      "status": "sought"
+      "status": "witnessed",
+      "witnesses": [
+        "diabolic-tutor"
+      ]
     },
     "library-selection": {
       "priority": 5,
@@ -1188,7 +1202,10 @@
         "impulse"
       ],
       "note": "peek/reorder top-N; a Cards-STATE op.",
-      "status": "sought"
+      "status": "witnessed",
+      "witnesses": [
+        "serum-visions"
+      ]
     },
     "non-play-zone-move": {
       "priority": 6,

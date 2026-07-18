@@ -192,12 +192,15 @@ public static partial class TopologyDemandStep
         }
       }
 
-      // ── holes ──
+      // ── holes (sought only — a hole TopologyStep has reconciled to "witnessed" already surfaces above,
+      //    under its real stem name in witnessedStems[]; listing it again here would be a stale duplicate) ──
       var holes = new List<DemandEntry>();
       foreach (var kv in topology["holes"]!.AsObject())
       {
         var hole = kv.Key;
         var h = kv.Value!.AsObject();
+        if (h["status"]?.GetValue<string>() != "sought")
+          continue;
         var kind = h["kind"]?.GetValue<string>();
         var priority = h["priority"]?.GetValue<int>();
         var proposedLeaf = LeafOf(h["proposed_stem"]?.GetValue<string>());
