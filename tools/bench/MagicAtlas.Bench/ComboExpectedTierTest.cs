@@ -20,6 +20,10 @@ using System.Text.Json;
 ///         a coverage gain is a deliberate, reviewed edit to the named pin, never a silent ratchet;</item>
 ///   <item>a combo present in the run but absent from the whitelist (or vice-versa) fails — the whitelist
 ///         is a list of NAMES, exhaustive over the eligible set, never a count.</item>
+///   <item>a combo whose tier is UNCHANGED but whose reconstructed cycle's diagnostics drifted (a
+///         different limiting hop, a flipped Balanced/Productive/etc. flag) fails — the tier-only check
+///         above is blind to "stayed Amber but the REASON silently changed"; the diagnostics-equality
+///         check below is the assertion that catches it.</item>
 /// </list>
 /// </para>
 ///
@@ -32,8 +36,16 @@ using System.Text.Json;
 [TestFixture]
 public class ComboExpectedTierTest
 {
-  /// <summary>One pinned expectation: a combo id, its cards (for the failure message), and its tier.</summary>
-  private sealed record ExpectedTier(string Id, IReadOnlyList<string> Cards, string Tier);
+  /// <summary>
+  /// One pinned expectation: a combo id, its cards (for the failure message), its tier, and its
+  /// mechanistic <c>expected</c> diagnostics block (<c>null</c> only for Missed combos).
+  /// </summary>
+  private sealed record ExpectedTier(
+    string Id,
+    IReadOnlyList<string> Cards,
+    string Tier,
+    ExpectedDiagnostics? Expected
+  );
 
   // The current bench run, keyed by combo id (one run, shared across cases).
   private static readonly Lazy<IReadOnlyDictionary<string, ComboResult>> _current = new(RunCurrent);
@@ -85,7 +97,12 @@ public class ComboExpectedTierTest
 
   /// <summary>For EACH pinned combo: its current reconstruction tier must equal its pinned expected tier.</summary>
   [TestCaseSource(nameof(WhitelistCases))]
-  public void Combo_reconstructs_at_its_pinned_tier(string id, IReadOnlyList<string> cards, string expected)
+  public void Combo_reconstructs_at_its_pinned_tier(
+    string id,
+    IReadOnlyList<string> cards,
+    string expected,
+    ExpectedDiagnostics? _
+  )
   {
     Assert.That(
       _current.Value.ContainsKey(id),
@@ -109,6 +126,74 @@ public class ComboExpectedTierTest
     );
   }
 
+  /// <summary>
+  /// For EACH pinned combo whose TIER already matches (the test above): the live run's <c>ComboDiagnostics</c>
+  /// must structurally equal the pinned <c>expected</c> block — catching "stayed Amber but the limiting
+  /// reason / a §8 flag silently changed", which the tier-only check above cannot see. Only meaningful
+  /// once the tier matches; if it doesn't, the tier test above already fails loudly, so this test skips
+  /// rather than double-reporting the same drift.
+  /// </summary>
+  [TestCaseSource(nameof(WhitelistCases))]
+  public void Combo_diagnostics_matches_the_pinned_expected_block(
+    string id,
+    IReadOnlyList<string> cards,
+    string tier,
+    ExpectedDiagnostics? expected
+  )
+  {
+    Assert.That(_current.Value.ContainsKey(id), Is.True, $"Combo '{id}' is no longer eligible in the run.");
+    var result = _current.Value[id];
+
+    Assume.That(
+      result.Outcome.ToString(),
+      Is.EqualTo(tier),
+      "Tier already mismatches (see Combo_reconstructs_at_its_pinned_tier) — skipping the diagnostics "
+        + "comparison to avoid double-reporting the same drift."
+    );
+
+    if (tier == "Missed")
+    {
+      Assert.Multiple(() =>
+      {
+        Assert.That(
+          result.Diagnostics,
+          Is.Null,
+          $"Combo '{id}' is pinned Missed but the live run produced a ComboDiagnostics — should be null."
+        );
+        Assert.That(
+          expected,
+          Is.Null,
+          $"Combo '{id}' is pinned Missed but has a non-null 'expected' block in combo-expected-tiers.json "
+            + "— Missed combos must pin 'expected': null."
+        );
+      });
+      return;
+    }
+
+    Assert.That(
+      result.Diagnostics,
+      Is.Not.Null,
+      $"Combo '{id}' is pinned '{tier}' but the live run produced no ComboDiagnostics — unexpected."
+    );
+    Assert.That(
+      expected,
+      Is.Not.Null,
+      $"Combo '{id}' is pinned '{tier}' but has no 'expected' block in combo-expected-tiers.json — "
+        + "regenerate it via `dotnet run -- --regenerate-expected-tiers`."
+    );
+
+    var actual = ExpectedDiagnostics.FromDiagnostics(result.Diagnostics!);
+    Assert.That(
+      actual,
+      Is.EqualTo(expected),
+      $"Combo '{id}' ({string.Join(" + ", cards)}) stays '{tier}' but its live diagnostics no longer "
+        + "structurally match the pinned 'expected' block — the REASON it reconstructs at this tier "
+        + "silently changed (a different limiting hop, or a flipped §8 flag). If this is a deliberate, "
+        + "reviewed engine change, regenerate the pin via `dotnet run -- --regenerate-expected-tiers` "
+        + $"(refuses unless expectedTier already matches the live run).\n  actual   : {actual}\n  expected : {expected}"
+    );
+  }
+
   /// <summary>Green > Amber > Missed — lets the message distinguish a regression from an improvement.</summary>
   private static int TierRank(string tier) =>
     tier switch
@@ -122,7 +207,9 @@ public class ComboExpectedTierTest
   public static IEnumerable<TestCaseData> WhitelistCases() =>
     _expected
       .Value.Values.OrderBy(e => e.Id, StringComparer.Ordinal)
-      .Select(e => new TestCaseData(e.Id, e.Cards, e.Tier).SetName($"Combo_{e.Id}_is_{e.Tier}"));
+      .Select(e =>
+        new TestCaseData(e.Id, e.Cards, e.Tier, e.Expected).SetName($"Combo_{e.Id}_is_{e.Tier}")
+      );
 
   private static IReadOnlyDictionary<string, ComboResult> RunCurrent()
   {
@@ -157,7 +244,20 @@ public class ComboExpectedTierTest
           Is.True,
           $"Combo '{id}' has an invalid expectedTier '{tier}' — must be Green, Amber, or Missed."
         );
-        map[id] = new ExpectedTier(id, cards, tier);
+
+        Assert.That(
+          e.TryGetProperty("expected", out _) || e.TryGetProperty("narrative", out _),
+          Is.True,
+          $"Combo '{id}' still uses the pre-2026-07-18 flat 'reason' schema — migrate it via "
+            + "`dotnet run -- --regenerate-expected-tiers` (combo-expected-tiers.json must be fully "
+            + "migrated: every entry needs 'expected' + 'narrative' + 'narrativeVerifiedAt')."
+        );
+
+        ExpectedDiagnostics? expectedDiagnostics = null;
+        if (e.TryGetProperty("expected", out var expectedEl) && expectedEl.ValueKind != JsonValueKind.Null)
+          expectedDiagnostics = JsonSerializer.Deserialize<ExpectedDiagnostics>(expectedEl.GetRawText());
+
+        map[id] = new ExpectedTier(id, cards, tier, expectedDiagnostics);
       }
     }
 

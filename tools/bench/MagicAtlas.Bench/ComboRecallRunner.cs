@@ -27,6 +27,13 @@ public sealed record ComboResult
 
   /// <summary>The distinct cards the reconstructing cycle actually spans (empty when missed).</summary>
   public required IReadOnlyList<string> CycleCards { get; init; }
+
+  /// <summary>
+  /// The full "why" behind the winning cycle — its §8 verdict + edge trail (<see cref="ComboDiagnostics"/>).
+  /// Present whenever a cycle was found and attributed (Green or Amber); <c>null</c> for Missed (no
+  /// spanning cycle to report on).
+  /// </summary>
+  public ComboDiagnostics? Diagnostics { get; init; }
 }
 
 /// <summary>The aggregate combo-recall report — the committed bench artifact (initiative 04 §2).</summary>
@@ -114,7 +121,12 @@ public sealed class ComboRecallRunner
     };
   }
 
-  private ComboResult Evaluate(SnapshotCombo combo, IReadOnlyList<string> cardNames)
+  /// <summary>
+  /// Runs the reconstruction pipeline over exactly this combo's cards and picks the winning cycle (Green
+  /// beats Amber). Public so <c>--explain</c> / <c>--explain-cards</c> (Program.cs) can reuse the EXACT
+  /// same code path the bench itself scores — no parallel "diagnostic test" reimplementation.
+  /// </summary>
+  public ComboResult Evaluate(SnapshotCombo combo, IReadOnlyList<string> cardNames)
   {
     var comboCardSet = cardNames.ToHashSet(StringComparer.Ordinal);
 
@@ -184,6 +196,7 @@ public sealed class ComboRecallRunner
           Cards = cardNames,
           Outcome = outcome,
           CycleCards = [.. cycleCards.OrderBy(c => c, StringComparer.Ordinal)],
+          Diagnostics = ComboDiagnostics.FromCycle(cycle),
         };
 
       if (best.Outcome == ReconstructionOutcome.Green)

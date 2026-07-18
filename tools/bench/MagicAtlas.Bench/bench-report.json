@@ -1,10 +1,10 @@
 {
   "CombosEligible": 33,
-  "ReconstructedGreen": 8,
-  "ReconstructedAmber": 22,
-  "Missed": 3,
-  "RecallAtGreen": 0.2424,
-  "RecallAtAmber": 0.9091,
+  "ReconstructedGreen": 14,
+  "ReconstructedAmber": 15,
+  "Missed": 4,
+  "RecallAtGreen": 0.4242,
+  "RecallAtAmber": 0.8788,
   "Combos": [
     {
       "Id": "1090-2781",
@@ -17,7 +17,76 @@
       "CycleCards": [
         "Felidar Guardian",
         "Restoration Angel"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": false,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "gated (rate-limit / intervening-if)",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Felidar Guardian",
+            "FromLabel": "emit:blink:permanent",
+            "ToCard": "Restoration Angel",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": true
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Restoration Angel",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Restoration Angel",
+            "ToLabel": "emit:blink:creature",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": true
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Restoration Angel",
+            "FromLabel": "emit:blink:creature",
+            "ToCard": "Felidar Guardian",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": true
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Felidar Guardian",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Felidar Guardian",
+            "ToLabel": "emit:blink:permanent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": true
+          }
+        ]
+      }
     },
     {
       "Id": "11-3368",
@@ -30,7 +99,76 @@
       "CycleCards": [
         "Narset's Reversal",
         "Reiterate"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Narset's Reversal",
+            "FromLabel": "cast:spell:self",
+            "ToCard": "Narset's Reversal",
+            "ToLabel": "emit:copy:spell:instant+sorcery",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Narset's Reversal",
+            "FromLabel": "emit:copy:spell:instant+sorcery",
+            "ToCard": "Reiterate",
+            "ToLabel": "cast:spell:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Unknown",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Reiterate",
+            "FromLabel": "cast:spell:self",
+            "ToCard": "Reiterate",
+            "ToLabel": "emit:copy:spell:instant+sorcery",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Reiterate",
+            "FromLabel": "emit:copy:spell:instant+sorcery",
+            "ToCard": "Narset's Reversal",
+            "ToLabel": "cast:spell:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Unknown",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "110-3966",
@@ -43,7 +181,76 @@
       "CycleCards": [
         "Exquisite Blood",
         "Marauding Blight-Priest"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Exquisite Blood",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Marauding Blight-Priest",
+            "ToLabel": "trigger:life:gain:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Marauding Blight-Priest",
+            "FromLabel": "trigger:life:gain:controlled",
+            "ToCard": "Marauding Blight-Priest",
+            "ToLabel": "emit:life:loss:opponent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Marauding Blight-Priest",
+            "FromLabel": "emit:life:loss:opponent",
+            "ToCard": "Exquisite Blood",
+            "ToLabel": "trigger:life:loss:opponent",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Exquisite Blood",
+            "FromLabel": "trigger:life:loss:opponent",
+            "ToCard": "Exquisite Blood",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "110-6191",
@@ -56,7 +263,76 @@
       "CycleCards": [
         "Bloodthirsty Conqueror",
         "Marauding Blight-Priest"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Bloodthirsty Conqueror",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Marauding Blight-Priest",
+            "ToLabel": "trigger:life:gain:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Marauding Blight-Priest",
+            "FromLabel": "trigger:life:gain:controlled",
+            "ToCard": "Marauding Blight-Priest",
+            "ToLabel": "emit:life:loss:opponent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Marauding Blight-Priest",
+            "FromLabel": "emit:life:loss:opponent",
+            "ToCard": "Bloodthirsty Conqueror",
+            "ToLabel": "trigger:life:loss:opponent",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Bloodthirsty Conqueror",
+            "FromLabel": "trigger:life:loss:opponent",
+            "ToCard": "Bloodthirsty Conqueror",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "1170-3540-3821",
@@ -71,7 +347,104 @@
         "Displacer Kitten",
         "Mourning",
         "Peregrine Drake"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 6,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Displacer Kitten",
+            "FromLabel": "emit:blink:permanent",
+            "ToCard": "Peregrine Drake",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Peregrine Drake",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Peregrine Drake",
+            "ToLabel": "emit:untap",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Peregrine Drake",
+            "FromLabel": "emit:untap",
+            "ToCard": "Mourning",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Unknown",
+            "EdgeTier": "Amber",
+            "Reason": "untapped lands' colours/count are unknown — can't certify they cover the cost (CR 107.4)",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Mourning",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Mourning",
+            "ToLabel": "emit:cast:spell",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Mourning",
+            "FromLabel": "emit:cast:spell",
+            "ToCard": "Displacer Kitten",
+            "ToLabel": "trigger:cast:spell:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Unknown",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Displacer Kitten",
+            "FromLabel": "trigger:cast:spell:controlled",
+            "ToCard": "Displacer Kitten",
+            "ToLabel": "emit:blink:permanent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "1170-3821-6058",
@@ -86,7 +459,104 @@
         "Conviction",
         "Displacer Kitten",
         "Peregrine Drake"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 6,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Conviction",
+            "FromLabel": "emit:cast:spell",
+            "ToCard": "Displacer Kitten",
+            "ToLabel": "trigger:cast:spell:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Unknown",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Displacer Kitten",
+            "FromLabel": "trigger:cast:spell:controlled",
+            "ToCard": "Displacer Kitten",
+            "ToLabel": "emit:blink:permanent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Displacer Kitten",
+            "FromLabel": "emit:blink:permanent",
+            "ToCard": "Peregrine Drake",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Peregrine Drake",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Peregrine Drake",
+            "ToLabel": "emit:untap",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Peregrine Drake",
+            "FromLabel": "emit:untap",
+            "ToCard": "Conviction",
+            "ToLabel": "pay:mana:white",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Unknown",
+            "EdgeTier": "Amber",
+            "Reason": "untapped lands' colours/count are unknown — can't certify they cover the cost (CR 107.4)",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Conviction",
+            "FromLabel": "pay:mana:white",
+            "ToCard": "Conviction",
+            "ToLabel": "emit:cast:spell",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "1385-2577-5670",
@@ -96,11 +566,151 @@
         "Gravecrawler",
         "Zulaport Cutthroat"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
         "Gravecrawler",
-        "Warren Soultrader"
-      ]
+        "Warren Soultrader",
+        "Zulaport Cutthroat"
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 9,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "emit:returntobattlefield:self",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Zulaport Cutthroat",
+            "ToLabel": "ltb:creature:to-graveyard:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Zulaport Cutthroat",
+            "FromLabel": "ltb:creature:to-graveyard:controlled",
+            "ToCard": "Zulaport Cutthroat",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Zulaport Cutthroat",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "pay:paylife",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "pay:paylife",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:artifact:treasure:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:mana:any",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 7,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:mana:any",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 8,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "emit:returntobattlefield:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "1385-3000-5670",
@@ -110,11 +720,123 @@
         "Zulaport Cutthroat",
         "Chatterfang, Squirrel General"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
         "Chatterfang, Squirrel General",
-        "Warren Soultrader"
-      ]
+        "Warren Soultrader",
+        "Zulaport Cutthroat"
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 7,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Zulaport Cutthroat",
+            "ToLabel": "ltb:creature:to-graveyard:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Zulaport Cutthroat",
+            "FromLabel": "ltb:creature:to-graveyard:controlled",
+            "ToCard": "Zulaport Cutthroat",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Zulaport Cutthroat",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "pay:paylife",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "pay:paylife",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "147-1810",
@@ -127,7 +849,76 @@
       "CycleCards": [
         "Cackling Counterpart",
         "Dualcaster Mage"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Cackling Counterpart copy of Dualcaster Mage",
+            "FromLabel": "emit:copy:spell:instant+sorcery",
+            "ToCard": "Cackling Counterpart",
+            "ToLabel": "cast:spell:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Unknown",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Cackling Counterpart",
+            "FromLabel": "cast:spell:self",
+            "ToCard": "Cackling Counterpart",
+            "ToLabel": "emit:copy",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Cackling Counterpart",
+            "FromLabel": "emit:copy",
+            "ToCard": "Cackling Counterpart copy of Dualcaster Mage",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Cackling Counterpart copy of Dualcaster Mage",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Cackling Counterpart copy of Dualcaster Mage",
+            "ToLabel": "emit:copy:spell:instant+sorcery",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "147-1987",
@@ -140,7 +931,76 @@
       "CycleCards": [
         "Dualcaster Mage",
         "Ghostly Flicker"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Dualcaster Mage",
+            "FromLabel": "emit:copy:spell:instant+sorcery",
+            "ToCard": "Ghostly Flicker",
+            "ToLabel": "cast:spell:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Unknown",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Ghostly Flicker",
+            "FromLabel": "cast:spell:self",
+            "ToCard": "Ghostly Flicker",
+            "ToLabel": "emit:blink:artifact+creature+land",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Ghostly Flicker",
+            "FromLabel": "emit:blink:artifact+creature+land",
+            "ToCard": "Dualcaster Mage",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Dualcaster Mage",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Dualcaster Mage",
+            "ToLabel": "emit:copy:spell:instant+sorcery",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "1987-2493-3821",
@@ -154,7 +1014,76 @@
       "CycleCards": [
         "Archaeomancer",
         "Ghostly Flicker"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Archaeomancer",
+            "FromLabel": "emit:returntohand:spell:instant+sorcery",
+            "ToCard": "Ghostly Flicker",
+            "ToLabel": "cast:spell:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Unknown",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Ghostly Flicker",
+            "FromLabel": "cast:spell:self",
+            "ToCard": "Ghostly Flicker",
+            "ToLabel": "emit:blink:artifact+creature+land",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Ghostly Flicker",
+            "FromLabel": "emit:blink:artifact+creature+land",
+            "ToCard": "Archaeomancer",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Archaeomancer",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Archaeomancer",
+            "ToLabel": "emit:returntohand:spell:instant+sorcery",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "1987-3277-3821",
@@ -168,7 +1097,76 @@
       "CycleCards": [
         "Ghostly Flicker",
         "Izzet Chronarch"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Ghostly Flicker",
+            "FromLabel": "cast:spell:self",
+            "ToCard": "Ghostly Flicker",
+            "ToLabel": "emit:blink:artifact+creature+land",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Ghostly Flicker",
+            "FromLabel": "emit:blink:artifact+creature+land",
+            "ToCard": "Izzet Chronarch",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Izzet Chronarch",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Izzet Chronarch",
+            "ToLabel": "emit:returntohand:spell:instant+sorcery",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Izzet Chronarch",
+            "FromLabel": "emit:returntohand:spell:instant+sorcery",
+            "ToCard": "Ghostly Flicker",
+            "ToLabel": "cast:spell:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Unknown",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2034-2577-4871",
@@ -183,7 +1181,118 @@
         "Ashnod's Altar",
         "Gravecrawler",
         "Pitiless Plunderer"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 7,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Ashnod's Altar",
+            "FromLabel": "sac:creature:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "ltb:creature:to-graveyard:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "ltb:creature:to-graveyard:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "sac:artifact:treasure:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "sac:artifact:treasure:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "emit:mana:any",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "emit:mana:any",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "emit:returntobattlefield:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "emit:returntobattlefield:self",
+            "ToCard": "Ashnod's Altar",
+            "ToLabel": "sac:creature:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2034-3000-5009",
@@ -198,7 +1307,104 @@
         "Ashnod's Altar",
         "Chatterfang, Squirrel General",
         "Ruthless Knave"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 6,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Ashnod's Altar",
+            "FromLabel": "emit:mana:colorless",
+            "ToCard": "Ruthless Knave",
+            "ToLabel": "pay:mana",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Ruthless Knave",
+            "FromLabel": "pay:mana",
+            "ToCard": "Ruthless Knave",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Ruthless Knave",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Ashnod's Altar",
+            "ToLabel": "sac:creature:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Ashnod's Altar",
+            "FromLabel": "sac:creature:controlled",
+            "ToCard": "Ashnod's Altar",
+            "ToLabel": "emit:mana:colorless",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2511-2577-4871",
@@ -213,7 +1419,118 @@
         "Bloodflow Connoisseur",
         "Gravecrawler",
         "Pitiless Plunderer"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 7,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Bloodflow Connoisseur",
+            "FromLabel": "sac:creature:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "ltb:creature:to-graveyard:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "ltb:creature:to-graveyard:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "sac:artifact:treasure:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "sac:artifact:treasure:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "emit:mana:any",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "emit:mana:any",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "emit:returntobattlefield:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "emit:returntobattlefield:self",
+            "ToCard": "Bloodflow Connoisseur",
+            "ToLabel": "sac:creature:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2577-2741-5670",
@@ -223,11 +1540,137 @@
         "Gravecrawler",
         "Essence Warden"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
+        "Essence Warden",
         "Gravecrawler",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 8,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Essence Warden",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "pay:paylife",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "pay:paylife",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:artifact:treasure:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:mana:any",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:mana:any",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "emit:returntobattlefield:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "emit:returntobattlefield:self",
+            "ToCard": "Essence Warden",
+            "ToLabel": "etb:creature:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 7,
+            "FromCard": "Essence Warden",
+            "FromLabel": "etb:creature:controlled",
+            "ToCard": "Essence Warden",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2577-2842-5670",
@@ -237,11 +1680,151 @@
         "Gravecrawler",
         "Blood Artist"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
+        "Blood Artist",
         "Gravecrawler",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 9,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Blood Artist",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "pay:paylife",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "pay:paylife",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:artifact:treasure:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:mana:any",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:mana:any",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "emit:returntobattlefield:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "emit:returntobattlefield:self",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 7,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Blood Artist",
+            "ToLabel": "ltb:creature:to-graveyard",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 8,
+            "FromCard": "Blood Artist",
+            "FromLabel": "ltb:creature:to-graveyard",
+            "ToCard": "Blood Artist",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2577-3983-4871",
@@ -251,11 +1834,9 @@
         "Pitiless Plunderer",
         "Night of Souls' Betrayal"
       ],
-      "Outcome": "Amber",
-      "CycleCards": [
-        "Gravecrawler",
-        "Pitiless Plunderer"
-      ]
+      "Outcome": "Missed",
+      "CycleCards": [],
+      "Diagnostics": null
     },
     {
       "Id": "261-2577-5670",
@@ -269,7 +1850,104 @@
       "CycleCards": [
         "Gravecrawler",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 6,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": true,
+        "LifeBalanced": false,
+        "Productive": true,
+        "LimitingReason": "life-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "emit:returntobattlefield:self",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:artifact:treasure:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:artifact:treasure:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:mana:any",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:mana:any",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "pay:mana:black",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Gravecrawler",
+            "FromLabel": "pay:mana:black",
+            "ToCard": "Gravecrawler",
+            "ToLabel": "emit:returntobattlefield:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "261-3000-5670",
@@ -283,7 +1961,76 @@
       "CycleCards": [
         "Chatterfang, Squirrel General",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": true,
+        "LifeBalanced": false,
+        "Productive": true,
+        "LimitingReason": "life-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2741-3000-5670",
@@ -297,7 +2044,76 @@
       "CycleCards": [
         "Chatterfang, Squirrel General",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": true,
+        "LifeBalanced": false,
+        "Productive": true,
+        "LimitingReason": "life-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "2842-3000-5670",
@@ -307,11 +2123,123 @@
         "Blood Artist",
         "Chatterfang, Squirrel General"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
+        "Blood Artist",
         "Chatterfang, Squirrel General",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 7,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Blood Artist",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "pay:paylife",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "pay:paylife",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Blood Artist",
+            "ToLabel": "ltb:creature:to-graveyard",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 6,
+            "FromCard": "Blood Artist",
+            "FromLabel": "ltb:creature:to-graveyard",
+            "ToCard": "Blood Artist",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "3000-4231-5670",
@@ -323,9 +2251,107 @@
       ],
       "Outcome": "Amber",
       "CycleCards": [
+        "Academy Manufactor",
         "Chatterfang, Squirrel General",
         "Warren Soultrader"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 6,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": false,
+        "Balanced": true,
+        "LifeBalanced": false,
+        "Productive": true,
+        "LimitingReason": "life-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Academy Manufactor",
+            "FromLabel": "emit:token:artifact:clue:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "sac:creature:controlled:another",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "sac:creature:controlled:another",
+            "ToCard": "Warren Soultrader",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Warren Soultrader",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Academy Manufactor",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "Types",
+            "Gated": false
+          },
+          {
+            "Hop": 5,
+            "FromCard": "Academy Manufactor",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Academy Manufactor",
+            "ToLabel": "emit:token:artifact:clue:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "3000-4772-5009",
@@ -339,7 +2365,76 @@
       "CycleCards": [
         "Chatterfang, Squirrel General",
         "Ruthless Knave"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": false,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "mana-negative",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Ruthless Knave",
+            "ToLabel": "sac:creature:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Ruthless Knave",
+            "FromLabel": "sac:creature:controlled",
+            "ToCard": "Ruthless Knave",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Ruthless Knave",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "3000-4871",
@@ -348,11 +2443,94 @@
         "Chatterfang, Squirrel General",
         "Pitiless Plunderer"
       ],
-      "Outcome": "Amber",
+      "Outcome": "Green",
       "CycleCards": [
         "Chatterfang, Squirrel General",
         "Pitiless Plunderer"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 5,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "emit:token:creature:squirrel:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "sac:creature:squirrel:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "sac:creature:squirrel:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "ltb:creature:to-graveyard:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "ltb:creature:to-graveyard:controlled",
+            "ToCard": "Pitiless Plunderer",
+            "ToLabel": "emit:token:artifact:treasure:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Pitiless Plunderer",
+            "FromLabel": "emit:token:artifact:treasure:controlled",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "replace:token-creation",
+            "Provenance": "RulesDefined",
+            "Family": "Modifier",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 4,
+            "FromCard": "Chatterfang, Squirrel General",
+            "FromLabel": "replace:token-creation",
+            "ToCard": "Chatterfang, Squirrel General",
+            "ToLabel": "emit:token:creature:squirrel:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "314-3966",
@@ -365,7 +2543,76 @@
       "CycleCards": [
         "Exquisite Blood",
         "Vito, Thorn of the Dusk Rose"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Exquisite Blood",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Vito, Thorn of the Dusk Rose",
+            "ToLabel": "trigger:life:gain:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Vito, Thorn of the Dusk Rose",
+            "FromLabel": "trigger:life:gain:controlled",
+            "ToCard": "Vito, Thorn of the Dusk Rose",
+            "ToLabel": "emit:life:loss:opponent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Vito, Thorn of the Dusk Rose",
+            "FromLabel": "emit:life:loss:opponent",
+            "ToCard": "Exquisite Blood",
+            "ToLabel": "trigger:life:loss:opponent",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Exquisite Blood",
+            "FromLabel": "trigger:life:loss:opponent",
+            "ToCard": "Exquisite Blood",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "314-6191",
@@ -378,7 +2625,76 @@
       "CycleCards": [
         "Bloodthirsty Conqueror",
         "Vito, Thorn of the Dusk Rose"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Bloodthirsty Conqueror",
+            "FromLabel": "emit:life:gain:controlled",
+            "ToCard": "Vito, Thorn of the Dusk Rose",
+            "ToLabel": "trigger:life:gain:controlled",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Vito, Thorn of the Dusk Rose",
+            "FromLabel": "trigger:life:gain:controlled",
+            "ToCard": "Vito, Thorn of the Dusk Rose",
+            "ToLabel": "emit:life:loss:opponent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Vito, Thorn of the Dusk Rose",
+            "FromLabel": "emit:life:loss:opponent",
+            "ToCard": "Bloodthirsty Conqueror",
+            "ToLabel": "trigger:life:loss:opponent",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Bloodthirsty Conqueror",
+            "FromLabel": "trigger:life:loss:opponent",
+            "ToCard": "Bloodthirsty Conqueror",
+            "ToLabel": "emit:life:gain:controlled",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "618-1090",
@@ -391,7 +2707,76 @@
       "CycleCards": [
         "Kiki-Jiki, Mirror Breaker",
         "Restoration Angel"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": false,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "gated (rate-limit / intervening-if)",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel",
+            "FromLabel": "emit:blink:creature",
+            "ToCard": "Kiki-Jiki, Mirror Breaker",
+            "ToLabel": "tap:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Unknown",
+            "EdgeTier": "Amber",
+            "Reason": "inherited untap is optional/conditional",
+            "Gated": true
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Kiki-Jiki, Mirror Breaker",
+            "FromLabel": "tap:self",
+            "ToCard": "Kiki-Jiki, Mirror Breaker",
+            "ToLabel": "emit:copy",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Kiki-Jiki, Mirror Breaker",
+            "FromLabel": "emit:copy",
+            "ToCard": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel",
+            "ToLabel": "emit:blink:creature",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": true
+          }
+        ]
+      }
     },
     {
       "Id": "618-1692",
@@ -401,7 +2786,8 @@
         "Helm of the Host"
       ],
       "Outcome": "Missed",
-      "CycleCards": []
+      "CycleCards": [],
+      "Diagnostics": null
     },
     {
       "Id": "618-2781",
@@ -414,7 +2800,76 @@
       "CycleCards": [
         "Felidar Guardian",
         "Kiki-Jiki, Mirror Breaker"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Amber",
+        "CycleLength": 4,
+        "Firable": false,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "gated (rate-limit / intervening-if)",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Felidar Guardian",
+            "FromLabel": "emit:blink:permanent",
+            "ToCard": "Kiki-Jiki, Mirror Breaker copy of Felidar Guardian",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": true
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Kiki-Jiki, Mirror Breaker copy of Felidar Guardian",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Kiki-Jiki, Mirror Breaker copy of Felidar Guardian",
+            "ToLabel": "emit:blink:permanent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": true
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Kiki-Jiki, Mirror Breaker copy of Felidar Guardian",
+            "FromLabel": "emit:blink:permanent",
+            "ToCard": "Felidar Guardian",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "No",
+            "EdgeTier": "Amber",
+            "Reason": "IsSelf",
+            "Gated": true
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Felidar Guardian",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Felidar Guardian",
+            "ToLabel": "emit:blink:permanent",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": true
+          }
+        ]
+      }
     },
     {
       "Id": "618-4222--140",
@@ -424,7 +2879,8 @@
         "Freed from the Real"
       ],
       "Outcome": "Missed",
-      "CycleCards": []
+      "CycleCards": [],
+      "Diagnostics": null
     },
     {
       "Id": "618-4404",
@@ -437,7 +2893,76 @@
       "CycleCards": [
         "Corridor Monitor",
         "Kiki-Jiki, Mirror Breaker"
-      ]
+      ],
+      "Diagnostics": {
+        "CycleTier": "Green",
+        "CycleLength": 4,
+        "Firable": true,
+        "TapRenewed": true,
+        "CoCostsSatisfied": true,
+        "Balanced": true,
+        "LifeBalanced": true,
+        "Productive": true,
+        "LimitingReason": "",
+        "Edges": [
+          {
+            "Hop": 0,
+            "FromCard": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor",
+            "FromLabel": "emit:untap",
+            "ToCard": "Kiki-Jiki, Mirror Breaker",
+            "ToLabel": "tap:self",
+            "Provenance": "RulesDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 1,
+            "FromCard": "Kiki-Jiki, Mirror Breaker",
+            "FromLabel": "tap:self",
+            "ToCard": "Kiki-Jiki, Mirror Breaker",
+            "ToLabel": "emit:copy",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 2,
+            "FromCard": "Kiki-Jiki, Mirror Breaker",
+            "FromLabel": "emit:copy",
+            "ToCard": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor",
+            "ToLabel": "etb:creature:self",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          },
+          {
+            "Hop": 3,
+            "FromCard": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor",
+            "FromLabel": "etb:creature:self",
+            "ToCard": "Kiki-Jiki, Mirror Breaker copy of Corridor Monitor",
+            "ToLabel": "emit:untap",
+            "Provenance": "CardDefined",
+            "Family": "Flow",
+            "Overlap": "Overlaps",
+            "Reliability": "Yes",
+            "EdgeTier": "Green",
+            "Reason": "",
+            "Gated": false
+          }
+        ]
+      }
     },
     {
       "Id": "618-7624",
@@ -447,7 +2972,8 @@
         "Sea-Dasher Octopus"
       ],
       "Outcome": "Missed",
-      "CycleCards": []
+      "CycleCards": [],
+      "Diagnostics": null
     }
   ]
 }
