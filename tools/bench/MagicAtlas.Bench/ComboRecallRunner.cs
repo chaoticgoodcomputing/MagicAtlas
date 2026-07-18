@@ -34,7 +34,19 @@ public sealed record ComboResult
   /// spanning cycle to report on).
   /// </summary>
   public ComboDiagnostics? Diagnostics { get; init; }
+
+  /// <summary>
+  /// Item R1 — the combo's constituent cards that resolve to a fixture on
+  /// <c>oracle-text-quarantine.json</c> (known-drifted oracle text). <c>null</c> when no combo card is
+  /// quarantined. A Green/Amber pin resting on a quarantined fixture is not trustworthy — its Output AST
+  /// may have been derived from stale Input text (the exact Suture Priest incident); see
+  /// <c>FidelityRiskGateTest</c>.
+  /// </summary>
+  public IReadOnlyList<QuarantinedCard>? FidelityRisk { get; init; }
 }
+
+/// <summary>One combo card whose gold fixture is on the oracle-text quarantine (item R1).</summary>
+public sealed record QuarantinedCard(string Card, string Fixture, string Tag);
 
 /// <summary>The aggregate combo-recall report — the committed bench artifact (initiative 04 §2).</summary>
 public sealed record BenchReport
@@ -73,20 +85,30 @@ public sealed class ComboRecallRunner
   private readonly GoldCorpus _corpus;
   private readonly PortWalk _walk;
   private readonly PortGraphEngine _engine;
+  private readonly QuarantineIndex _quarantine;
 
-  public ComboRecallRunner(GoldCorpus corpus, TypeOntology ontology)
+  public ComboRecallRunner(GoldCorpus corpus, TypeOntology ontology, QuarantineIndex? quarantine = null)
   {
     _corpus = corpus;
     _walk = new PortWalk(ontology);
     _engine = new PortGraphEngine(ontology);
+    _quarantine = quarantine ?? QuarantineIndex.Empty;
   }
 
-  public static ComboRecallRunner Create(string fixturesRoot, string ontologyPath)
+  /// <summary><paramref name="quarantinePath"/> defaults to <see cref="BenchPaths.QuarantinePath"/> when
+  /// omitted; overridable so a test can point at a synthetic quarantine file without touching the
+  /// committed one.</summary>
+  public static ComboRecallRunner Create(
+    string fixturesRoot,
+    string ontologyPath,
+    string? quarantinePath = null
+  )
   {
     var ontology =
       JsonSerializer.Deserialize<TypeOntology>(File.ReadAllText(ontologyPath))
       ?? throw new InvalidOperationException($"Could not parse ontology at {ontologyPath}");
-    return new ComboRecallRunner(GoldCorpus.Load(fixturesRoot), ontology);
+    var quarantine = QuarantineIndex.Load(quarantinePath ?? BenchPaths.QuarantinePath);
+    return new ComboRecallRunner(GoldCorpus.Load(fixturesRoot), ontology, quarantine);
   }
 
   /// <summary>Run the recall benchmark over every combo in the snapshot. Combos whose cards aren't all
@@ -129,6 +151,7 @@ public sealed class ComboRecallRunner
   public ComboResult Evaluate(SnapshotCombo combo, IReadOnlyList<string> cardNames)
   {
     var comboCardSet = cardNames.ToHashSet(StringComparer.Ordinal);
+    var fidelityRisk = ComputeFidelityRisk(cardNames);
 
     // Walk each combo card's gold AST into its port graph, then materialize + find cycles over EXACTLY
     // this card set — no corpus-wide subsidy, no other combo's cards (the spec: "run the engine over
@@ -197,6 +220,7 @@ public sealed class ComboRecallRunner
           Outcome = outcome,
           CycleCards = [.. cycleCards.OrderBy(c => c, StringComparer.Ordinal)],
           Diagnostics = ComboDiagnostics.FromCycle(cycle),
+          FidelityRisk = fidelityRisk,
         };
 
       if (best.Outcome == ReconstructionOutcome.Green)
@@ -211,7 +235,29 @@ public sealed class ComboRecallRunner
         Cards = cardNames,
         Outcome = ReconstructionOutcome.Missed,
         CycleCards = [],
+        FidelityRisk = fidelityRisk,
       };
+  }
+
+  /// <summary>
+  /// Item R1 — for each combo card, looks up its gold fixture path (<see cref="GoldCorpus.FixturePathFor"/>)
+  /// and checks membership in the quarantine (<see cref="QuarantineIndex"/>). Computed for EVERY combo
+  /// (not just Green/Amber) so the field is a faithful fact about the corpus regardless of outcome; the
+  /// gate that actually fails is scoped to Green/Amber (<c>FidelityRiskGateTest</c>) — a quarantined card
+  /// feeding a Missed combo isn't a false-positive risk, since nothing certified on top of it.
+  /// </summary>
+  private IReadOnlyList<QuarantinedCard>? ComputeFidelityRisk(IReadOnlyList<string> cardNames)
+  {
+    List<QuarantinedCard>? risk = null;
+    foreach (var name in cardNames)
+    {
+      var fixturePath = _corpus.FixturePathFor(name);
+      if (fixturePath is null)
+        continue;
+      if (_quarantine.TryGet(fixturePath, out var entry))
+        (risk ??= []).Add(new QuarantinedCard(name, fixturePath, entry.Tag));
+    }
+    return risk;
   }
 
   private static double Recall(int hit, int eligible) =>

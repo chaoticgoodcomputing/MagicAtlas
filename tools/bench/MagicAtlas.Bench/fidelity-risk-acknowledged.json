@@ -1,0 +1,139 @@
+{
+  "_doc": "Fidelity-risk ACKNOWLEDGED carve-out (item R1, landed 2026-07-18). The fidelityRisk gate (FidelityRiskGateTest) fails LOUDLY, per combo, whenever a pinned Green/Amber combo rests on a card whose gold fixture is on tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json (known-drifted oracle text) -- GoldCorpus reads Output.Oracle.Abilities directly and never re-parses Input.OracleText, so a drifted fixture silently props up whatever tier its combos certify at. This whitelist is the SAME shrink-only-ratchet pattern as oracle-text-quarantine.json itself: an entry here says 'yes, this pin currently rests on already-tracked quarantine debt, and that is KNOWN and accepted for now' -- NOT that the pin is correct. An acknowledged combo whose FidelityRisk becomes empty (its quarantined card was fixed/de-quarantined) FAILS until removed -- the list only shrinks. Seeded in one shot by mechanically joining combo-expected-tiers.json against oracle-text-quarantine.json (Input.Name -> fixturePath join) the moment the gate landed, so it captures debt that PRE-DATES the gate, not something the gate's author reviewed card-by-card -- per the governing principle, growth of this list may be sweep-PROPOSED, but each entry here is a human-confirmed acceptance once reviewed, so treat this seed as a PROPOSAL pending that review, not a settled decision.",
+  "entries": [
+    {
+      "id": "1385-2577-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Zulaport Cutthroat"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'); Zulaport Cutthroat (BFZ/ZulaportCutthroat, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "1385-3000-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Zulaport Cutthroat",
+        "Chatterfang, Squirrel General"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'); Zulaport Cutthroat (BFZ/ZulaportCutthroat, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2034-2577-4871",
+      "cards": [
+        "Gravecrawler",
+        "Pitiless Plunderer",
+        "Ashnod's Altar"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Pitiless Plunderer (RIX/PitilessPlunderer, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2034-3000-5009",
+      "cards": [
+        "Chatterfang, Squirrel General",
+        "Ruthless Knave",
+        "Ashnod's Altar"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Ruthless Knave (XLN/RuthlessKnave, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2511-2577-4871",
+      "cards": [
+        "Pitiless Plunderer",
+        "Gravecrawler",
+        "Bloodflow Connoisseur"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Pitiless Plunderer (RIX/PitilessPlunderer, tag 'debt'); Bloodflow Connoisseur (AVR/BloodflowConnoisseur, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2577-2741-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Essence Warden"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'); Essence Warden (PLC/EssenceWarden, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2577-2842-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Blood Artist"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "261-2577-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Gravecrawler",
+        "Suture Priest"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "261-3000-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Suture Priest",
+        "Chatterfang, Squirrel General"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2741-3000-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Essence Warden",
+        "Chatterfang, Squirrel General"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'); Essence Warden (PLC/EssenceWarden, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "2842-3000-5670",
+      "cards": [
+        "Warren Soultrader",
+        "Blood Artist",
+        "Chatterfang, Squirrel General"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "3000-4231-5670",
+      "cards": [
+        "Chatterfang, Squirrel General",
+        "Warren Soultrader",
+        "Academy Manufactor"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Warren Soultrader (LCI/WarrenSoultrader, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "3000-4772-5009",
+      "cards": [
+        "Chatterfang, Squirrel General",
+        "Ruthless Knave",
+        "Doubling Season"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Ruthless Knave (XLN/RuthlessKnave, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "3000-4871",
+      "cards": [
+        "Chatterfang, Squirrel General",
+        "Pitiless Plunderer"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Pitiless Plunderer (RIX/PitilessPlunderer, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    },
+    {
+      "id": "618-4404",
+      "cards": [
+        "Kiki-Jiki, Mirror Breaker",
+        "Corridor Monitor"
+      ],
+      "reason": "Pre-existing pin, dated before the fidelityRisk gate (item R1, 2026-07-18) landed. Rests on already-tracked quarantine debt: Corridor Monitor (ELD/CorridorMonitor, tag 'debt'). Not a new/unreviewed risk introduced by this gate -- acknowledged so the gate can go live without retroactively blocking on debt that predates it. NEEDS HUMAN REVIEW before merge (was NOT independently re-verified against authoritative oracle text by the agent that seeded this list)."
+    }
+  ]
+}
+

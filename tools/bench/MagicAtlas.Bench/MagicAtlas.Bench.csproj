@@ -47,6 +47,10 @@
          tree by the test (BenchPaths.ExpectedTiersPath), so it is listed here for IDE/build visibility
          only, not copied to output. -->
     <None Include="combo-expected-tiers.json" />
+    <!-- The fidelityRisk gate's human-reviewed, shrink-only acknowledgment carve-out (item R1) — read
+         from the source tree by FidelityRiskGateTest (BenchPaths.FidelityRiskAcknowledgedPath), like
+         combo-expected-tiers.json above. -->
+    <None Include="fidelity-risk-acknowledged.json" />
     <!-- The pinned, checksummed Spellbook combo snapshot + the committed baseline report. -->
     <None Include="Data/**/*.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Data/**/*.sha256" CopyToOutputDirectory="PreserveNewest" />
@@ -54,6 +58,12 @@
          reads the same source-of-truth fixtures the MAST tests use. -->
     <None Include="../../../tests/magic-ast-tests/Fixtures/HandParsedCards/**/*.json"
           Link="Fixtures/HandParsedCards/%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+    <!-- The oracle-text drift/quarantine whitelist (fidelityRisk join, item R1) — same source-of-truth
+         file the MAST GoldOracleTextFidelityTests gate reads, linked (not copied into Data) so a pinned
+         combo whose card rests on a known-drifted fixture can be flagged. -->
+    <None Include="../../../tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json"
+          Link="Fixtures/oracle-text-quarantine.json"
           CopyToOutputDirectory="PreserveNewest" />
     <!-- The type ontology the engine binds to (provenance: mtg-rules; vendored under the test project). -->
     <None Include="../../../tests/magic-ast-tests/Data/_01_Raw/Datasets/Curated/type-ontology.json"

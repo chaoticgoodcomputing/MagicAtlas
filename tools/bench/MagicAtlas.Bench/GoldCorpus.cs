@@ -15,16 +15,19 @@ public sealed class GoldCorpus
   private readonly IReadOnlyDictionary<string, JsonArray> _abilitiesByName;
   private readonly IReadOnlyDictionary<string, JsonArray> _manaCostByName;
   private readonly IReadOnlyDictionary<string, JsonObject> _profileByName;
+  private readonly IReadOnlyDictionary<string, string> _fixturePathByName;
 
   private GoldCorpus(
     IReadOnlyDictionary<string, JsonArray> abilitiesByName,
     IReadOnlyDictionary<string, JsonArray> manaCostByName,
-    IReadOnlyDictionary<string, JsonObject> profileByName
+    IReadOnlyDictionary<string, JsonObject> profileByName,
+    IReadOnlyDictionary<string, string> fixturePathByName
   )
   {
     _abilitiesByName = abilitiesByName;
     _manaCostByName = manaCostByName;
     _profileByName = profileByName;
+    _fixturePathByName = fixturePathByName;
   }
 
   /// <summary>The distinct card names present in the corpus.</summary>
@@ -52,6 +55,15 @@ public sealed class GoldCorpus
     _profileByName.TryGetValue(cardName, out var p) ? p : null;
 
   /// <summary>
+  /// The card's fixture RELATIVE PATH under <c>Fixtures/HandParsedCards</c> (no extension, forward-slash
+  /// separated, e.g. <c>"NPH/SuturePriest"</c>) — the SAME key <c>oracle-text-quarantine.json</c> uses
+  /// (<see cref="QuarantineIndex"/>), enabling the <c>Input.Name</c> (display name, e.g. <c>"Suture
+  /// Priest"</c>) → fixture-path join item R1 needs. <c>null</c> for a name absent from the corpus.
+  /// </summary>
+  public string? FixturePathFor(string cardName) =>
+    _fixturePathByName.TryGetValue(cardName, out var p) ? p : null;
+
+  /// <summary>
   /// Load every <c>*.json</c> under <paramref name="fixturesRoot"/> (recursively), keying each by its
   /// <c>Input.Name</c>. DETERMINISTIC: files are visited in ordinal-sorted path order and a duplicate
   /// card name (the same card hand-parsed in several sets — e.g. Mana Leak in 2X2 and M10) resolves to
@@ -64,6 +76,7 @@ public sealed class GoldCorpus
     var byName = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
     var manaByName = new Dictionary<string, JsonArray>(StringComparer.Ordinal);
     var profileByName = new Dictionary<string, JsonObject>(StringComparer.Ordinal);
+    var fixturePathByName = new Dictionary<string, string>(StringComparer.Ordinal);
     var files = Directory
       .EnumerateFiles(fixturesRoot, "*.json", SearchOption.AllDirectories)
       .OrderBy(p => p, StringComparer.Ordinal);
@@ -83,6 +96,15 @@ public sealed class GoldCorpus
       var name = root?["Input"]?["Name"]?.GetValue<string>();
       if (string.IsNullOrEmpty(name) || byName.ContainsKey(name))
         continue; // first-path-wins keeps the choice deterministic across duplicate-name fixtures
+
+      // The fixture's relative path under fixturesRoot (no extension, forward-slash), matching the key
+      // shape oracle-text-quarantine.json uses and CardTestCaseLoader's testCase.Name — captured
+      // regardless of whether Output.Oracle.Abilities parses, so a quarantined-but-malformed fixture
+      // still resolves for the FidelityRisk join.
+      var relPath = Path.GetRelativePath(fixturesRoot, file);
+      relPath = Path.ChangeExtension(relPath, null)!;
+      relPath = relPath.Replace(Path.DirectorySeparatorChar, '/').Replace(Path.AltDirectorySeparatorChar, '/');
+      fixturePathByName[name] = relPath;
 
       if (root?["Output"]?["Oracle"]?["Abilities"] is JsonArray abilities)
       {
@@ -117,6 +139,6 @@ public sealed class GoldCorpus
       }
     }
 
-    return new GoldCorpus(byName, manaByName, profileByName);
+    return new GoldCorpus(byName, manaByName, profileByName, fixturePathByName);
   }
 }
