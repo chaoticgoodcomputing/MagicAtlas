@@ -42,6 +42,14 @@ public static class ExpectedTiersMigration
       var narrative = e.TryGetProperty("narrative", out var n) ? n.GetString() ?? ""
         : e.TryGetProperty("reason", out var r) ? r.GetString() ?? ""
         : throw new InvalidOperationException($"Combo '{id}' has neither 'narrative' nor 'reason' — cannot migrate.");
+      // NarrativeVerifiedAt asserts a human verified `narrative` still describes reality. This tool
+      // carries `narrative` over VERBATIM (never edits it) — so if the pin already had a verified date,
+      // that verification is still current and must be preserved, not silently bumped to today just
+      // because the mechanistic `expected` block was regenerated. Only a first-time migration (no prior
+      // date — the pin only had the old flat `reason` field) legitimately stamps today.
+      var narrativeVerifiedAt = e.TryGetProperty("narrativeVerifiedAt", out var v) && v.GetString() is { } existing
+        ? existing
+        : today.ToString("yyyy-MM-dd");
 
       if (!current.TryGetValue(id, out var result))
       {
@@ -67,7 +75,7 @@ public static class ExpectedTiersMigration
           ExpectedTier = expectedTier,
           Expected = result.Diagnostics is { } d ? ExpectedDiagnostics.FromDiagnostics(d) : null,
           Narrative = narrative,
-          NarrativeVerifiedAt = today.ToString("yyyy-MM-dd"),
+          NarrativeVerifiedAt = narrativeVerifiedAt,
         }
       );
     }
