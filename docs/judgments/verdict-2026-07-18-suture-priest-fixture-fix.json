@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "target": "tests/magic-ast-tests/Fixtures/HandParsedCards/NPH/SuturePriest.json",
+      "verdict": "PASS",
+      "citations": ["CR 603.5", "CR 119.3", "CR 109.5"],
+      "reason": "corrected Input.OracleText/TypeLine verified byte-exact against oracle-cards.json ('you may gain 1 life' / 'you may have that player lose 1 life', 'Phyrexian Cleric'); regenerated Output wraps both effects in OptionalEffect with SourceSpans that exactly match the corrected text's substring offsets, and the dotnet test run of the fixture case passes against the live parser (not hand-invented)."
+    },
+    {
+      "target": "libs/magic-ast/Parsing/Parsers/Triggered/Rules/MayHaveThatPlayerLoseLifeRule.cs",
+      "verdict": "FAIL",
+      "citations": ["CR 118.12", "CR 119.3", "CR 109.5"],
+      "reason": "the regex is correctly fully anchored (^...$) and mutually exclusive from MayHaveThatPlayerLoseLifeYouGainRule and ThatPlayerLosesLifeRule, and the OptionalEffect/LoseLifeEffect shape is correct, but the doc-comment's CR 118.12 citation is wrong: CR 118 is titled 'Costs' and 118.12's text is specifically about the paired '[Do something]. If [player] does, [effect]' cost-then-conditional construct -- it requires the exact follow-up clause this rule's own doc-comment says is ABSENT ('there is no follow-up... full stop'). The correct general citation for a bare optional triggered-ability effect is CR 603.5 ('Some triggered abilities' effects are optional... The choice is made when the ability resolves'), which exists in rules-structure.json and was not cited."
+    },
+    {
+      "target": "tools/bench/MagicAtlas.Bench/combo-expected-tiers.json",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "re-pin of 261-2577-5670 Green->Amber is the honest, empirically-verified consequence of the fixture correction (independently reproduced: applying only the corrected fixture + new rule to the pre-branch base, with the OLD pin left in place, fails exactly one bench test -- Combo_261-2577-5670_is_Green, Amber vs Green -- and all other 72 pass); PortGraph.cs's optional-effect recursion (lines 658-680) does mark the wrapped gainLife emit Gated=true, and PortGraphEngine.cs line 48's Firable predicate floors any cycle touching a Gated port to Amber, exactly as the reason text describes. The general Gated-floors-to-Amber policy (ADR-0002 SS8) is correctly left untouched -- not in scope for this narrow data-fidelity fix."
+    },
+    {
+      "target": "libs/mast-interaction/PortGraph.cs#optional-projection",
+      "verdict": "PASS",
+      "citations": [],
+      "reason": "no new discriminator was introduced by this branch -- OptionalEffect and LoseLifeEffect are both pre-existing AST node types with pre-existing PortGraph projections (generic optional/composite recursion at PortGraph.cs:658-680, and the loseLife case at PortGraph.cs:924); the new parser rule only recognizes a new TEXTUAL SHAPE that composes two already-projected primitives, so initiative 03's projection-decision requirement does not apply here."
+    }
+  ]
+}
