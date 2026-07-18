@@ -1,0 +1,72 @@
+{
+  "id": "thorn-of-amethyst",
+  "unit": "single-card",
+  "cards": [
+    "Thorn of Amethyst"
+  ],
+  "source": {
+    "note": "single-card witness of the SOUGHT HOLE 'cost-modification' (priority 1 in rollup/port-topology.cited.json holes; proposed_stem=modification:spell, kind=BEHAVIOR, slang=[tax, cost-reduction, cheat-out], note: 'both directions (up tax / down reduction) homeless'). stone-calendar.json already witnessed the DOWN (cost-reduction) direction with control=you; this gold closes the remaining UP (tax) direction the hole explicitly called out as still homeless, and does so with a card whose static ability carries NO controller filter at all — a second, structurally distinct point on the closed 'control' axis (any vs stone-calendar's you). Oracle (whole card): 'Noncreature spells cost {1} more to cast.' Verified against the actual corpus (Data/_01_Raw/Datasets/External/oracle-cards.json), not memory. AST is faithful, not a wish: there is an ALREADY-GREEN hand-parsed gold at Fixtures/HandParsedCards/LRW/ThornOfAmethyst.json (consumed by Tests/Parse/HandParsedCardTests.cs) — a single Ability.Kind=static with one Effect EffectType=costIncrease, Amount={QuantityType:literal, Value:1} (purely generic {1}), AffectedObjects={CardTypes:[spell], ExcludedCardTypes:[creature]} (no Controller field at all — the parser comment on NoncreatureSpellCostIncreaseRule records 'No \"you cast\" suffix — the tax applies to all players' noncreature spells.'). No parser work was needed for this gold: CostIncreaseEffect (libs/magic-ast/AST/Effects/Resource/CostIncreaseEffect.cs) and NoncreatureSpellCostIncreaseRule already exist and already parse this exact card. The ADR-2 layer projects the cost modifier as emit:costincrease (libs/mast-interaction/known-coarse-projections.json: 'costIncrease: baseline coarse fallback ... no flow rule consumes it yet' — the same no-flow-arm-yet state as costReduction); ADR-3 canonical stem = the bare modification:spell (the hole's proposed_stem, already status=witnessed via stone-calendar, unpredicted:true). AXIS QUESTION (surfaced, not decided — same open item stone-calendar recorded): the hole's proposed attr 'cost-delta' (direction=increase, amount={1}, currency=mana) is still NOT in the closed attribute_axes set; this gold does not invent it. A SECOND, narrower axis gap is also surfaced here: AffectedObjects.ExcludedCardTypes=[creature] (the noncreature restriction) has no closed attribute_axis to carry a card-type filter either — 'subtype' in the closed set is creature-subtype vocabulary (squirrel, etc.), a different concept from a card-type exclusion. Following the Boggart Brute / Stone Calendar precedent (witness the bare stem, surface the missing axis rather than invent one), this gold witnesses the bare stem with ONLY the closed 'control' axis (control=any, derived from the total absence of a Controller filter — CR 601.2f's cost increase applies to whichever spell meets AffectedObjects regardless of caster) and leaves both the cost-delta and card-type-filter axis questions for scaffold refinement. No edhrec_rank in the testbed source for Thorn of Amethyst (verified null in oracle-cards.json), so source.popularity is omitted (not fabricated)."
+  },
+  "ports": {
+    "Thorn of Amethyst": [
+      {
+        "id": "T0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:spell",
+        "attrs": {
+          "control": "any"
+        },
+        "note": "THE WITNESS — 'Noncreature spells cost {1} more to cast' is a static continuous effect (CR 604.1, 611.2) that adjusts the total cost of casting a spell (CR 601.2f, cost increases). AST-derivable: StaticAbility with one CostIncreaseEffect{Amount=literal 1} over AffectedObjects{CardTypes=[spell], ExcludedCardTypes=[creature]} -> engine emits ADR-2 emit:costincrease -> hand-maps to the bare BEHAVIOR stem modification:spell (the hole's proposed_stem, already witnessed once by stone-calendar). control='any' is the ONLY closed axis attached, and it is the LATTICE TOP: AffectedObjects carries no Controller filter at all, so the tax binds every player's matching spells (control axis licensed_by *, lattice self ⊆ controlled ⊆ any) — the honest opposite pole from stone-calendar's control=you, corroborating that 'control' genuinely varies (not a fixed constant) on modification:spell."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:spell.witnessed",
+      "because": "T0 projects the bare BEHAVIOR stem modification:spell — the priority-1 sought hole 'cost-modification' proposed_stem — derived from Thorn of Amethyst's sole static ability (a costIncrease over noncreature spells, CR 601.2f). This is the SECOND independent witness of the stem (after stone-calendar), corroborating it was not a one-card fluke."
+    },
+    {
+      "claim": "hole.cost-modification.up_direction_witnessed",
+      "because": "the hole's own note records 'both directions (up tax / down reduction) homeless'; stone-calendar closed the down/reduction leg (control=you), and this gold closes the up/tax leg (control=any) — both directions of the priority-1 enabler hole now have a single-card witness."
+    },
+    {
+      "claim": "T0.control == any",
+      "because": "AffectedObjects carries NO Controller filter — 'Noncreature spells cost {1} more to cast' (no 'you cast' suffix, confirmed by the parser rule's own comment) taxes every player's matching spells; control axis licensed_by *, values_seen already contains 'any', lattice self ⊆ controlled ⊆ any — 'any' is the top of the lattice and the AST-derivable value when no filter is present."
+    },
+    {
+      "claim": "T0.kind == BEHAVIOR",
+      "because": "a cost modifier alters casting cost in place via a static continuous effect (CR 604.1, 611.2), not a discrete zone-change occurrence or a fungible resource pool; it lands under the modification supergroup (kind_view BEHAVIOR), mirroring modification:spell's first witness (stone-calendar) and modification:evasion / modification:keyword."
+    },
+    {
+      "claim": "no_parser_work_needed",
+      "because": "CostIncreaseEffect and NoncreatureSpellCostIncreaseRule already exist in libs/magic-ast and already parse this exact card text; Fixtures/HandParsedCards/LRW/ThornOfAmethyst.json is a pre-existing, already-green gold in the parse suite (Tests/Parse/HandParsedCardTests.cs). This witness needed zero parser changes."
+    },
+    {
+      "claim": "cost-delta axis missing (unaxised, SURFACED not invented)",
+      "because": "same open scaffold question as stone-calendar: the hole's proposed attr 'cost-delta' (carrying direction=increase, amount={1}, currency=mana) is NOT a closed attribute_axis; not invented here either."
+    },
+    {
+      "claim": "card-type-filter axis missing (unaxised, SURFACED not invented)",
+      "because": "AffectedObjects.ExcludedCardTypes=[creature] (the noncreature restriction) has no closed attribute_axis; 'subtype' in the closed set is creature-subtype vocabulary (squirrel, etc.), a different concept from a card-type exclusion filter. Recorded as a second open scaffold question, not invented as an ad-hoc attrs key."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + the control facet's other lattice pole, no cycle closed and no edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "601.2",
+    "601.2f",
+    "604.1",
+    "611.2",
+    "118.7"
+  ]
+}
