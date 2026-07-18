@@ -28,7 +28,7 @@
             {
               "CostType": "tap",
               "SourceSpan": {
-                "Start": 0,
+                "Start": 13,
                 "Length": 3
               }
             }
@@ -39,8 +39,8 @@
               "Mana": "",
               "AnyColor": true,
               "SourceSpan": {
-                "Start": 4,
-                "Length": 94
+                "Start": 17,
+                "Length": 81
               }
             }
           ],
