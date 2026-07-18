@@ -59,6 +59,7 @@
     "titanias-boon",
     "titanias-boon-x-doubling-season",
     "trostani-selesnyas-voice",
+    "vampiric-tutor",
     "viscera-seer-x-zulaport-cutthroat",
     "young-pyromancer"
   ],
@@ -149,7 +150,8 @@
       ],
       "unpredicted": true,
       "witnesses": [
-        "diabolic-tutor"
+        "diabolic-tutor",
+        "vampiric-tutor"
       ]
     },
     "cards:select": {
@@ -1070,7 +1072,8 @@
         "battlefield",
         "exile",
         "graveyard",
-        "hand"
+        "hand",
+        "library"
       ],
       "carries_provenance_or_polarity": true,
       "licensed_by": [
@@ -1187,7 +1190,8 @@
       "note": "library\u2192hand by criteria; distinct from draw. A Cards-STATE op.",
       "status": "witnessed",
       "witnesses": [
-        "diabolic-tutor"
+        "diabolic-tutor",
+        "vampiric-tutor"
       ]
     },
     "library-selection": {
