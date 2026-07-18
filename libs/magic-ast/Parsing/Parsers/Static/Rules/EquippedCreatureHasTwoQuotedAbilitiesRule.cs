@@ -79,14 +79,34 @@ public sealed class EquippedCreatureHasTwoQuotedAbilitiesRule : IStaticRule
       return null;
     }
 
-    var grantedAbility1 = TryParseGrantedBody(body1);
+    // Real absolute offsets of each quoted body within the card's oracle text — NOT
+    // the 0-based offsets of body1/body2 within themselves. `match` ran against the
+    // untouched `clause.RawText` here, but its group `.Index` is still relative to
+    // that clause's own text, not the card's full oracle text — and `.Trim()` above
+    // may have shifted the true content start further still. Locating each (already
+    // trimmed) body inside `clause.RawText` and adding `clause.SourceSpan.Start`
+    // recovers the true absolute start, so every span the inner parser derives from
+    // `innerClause.SourceSpan.Start` (see ActivatedAbilityParser/TriggeredAbilityParser)
+    // lands correctly rebased instead of 0-based-and-disconnected. body2's search
+    // starts after body1's match to avoid mis-locating an earlier duplicate substring.
+    var body1OffsetInClause = clause.RawText.IndexOf(body1, System.StringComparison.Ordinal);
+    var absoluteBody1Start = clause.SourceSpan.Start + Math.Max(body1OffsetInClause, 0);
+    var body2SearchStart = body1OffsetInClause >= 0 ? body1OffsetInClause + body1.Length : 0;
+    var body2OffsetInClause = clause.RawText.IndexOf(
+      body2,
+      Math.Min(body2SearchStart, clause.RawText.Length),
+      System.StringComparison.Ordinal
+    );
+    var absoluteBody2Start = clause.SourceSpan.Start + Math.Max(body2OffsetInClause, 0);
+
+    var grantedAbility1 = TryParseGrantedBody(body1, absoluteBody1Start);
     if (grantedAbility1 is null)
     {
       // The first body's shape isn't yet supported — surface the gap honestly.
       return null;
     }
 
-    var grantedAbility2 = TryParseGrantedBody(body2);
+    var grantedAbility2 = TryParseGrantedBody(body2, absoluteBody2Start);
     if (grantedAbility2 is null)
     {
       // The second body's shape isn't yet supported — surface the gap honestly.
@@ -112,7 +132,12 @@ public sealed class EquippedCreatureHasTwoQuotedAbilitiesRule : IStaticRule
   /// Parses a quoted body — activated ability first (the common Equipment grant
   /// shape), falling back to triggered. Returns null when neither recognises the body.
   /// </summary>
-  private Ability? TryParseGrantedBody(string body)
+  /// <param name="body">The quoted ability text, trimmed.</param>
+  /// <param name="absoluteBodyStart">
+  /// The body's real absolute offset within the card's oracle text — the basis every
+  /// span the inner parser derives is rebased from (see caller).
+  /// </param>
+  private Ability? TryParseGrantedBody(string body, int absoluteBodyStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue ? tokenResult.Value : new TokenList<OracleToken>([]);
@@ -121,7 +146,7 @@ public sealed class EquippedCreatureHasTwoQuotedAbilitiesRule : IStaticRule
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(absoluteBodyStart, body.Length),
     };
 
     // Try activated first — Equipment grants are typically activated abilities.

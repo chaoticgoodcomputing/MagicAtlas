@@ -86,7 +86,19 @@ public sealed class EquippedPTKeywordAndGrantedAbilityRule : IStaticRule
       return null;
     }
 
-    var grantedAbility = TryParseGrantedBody(body);
+    // The quoted body's real absolute offset within the card's oracle text — NOT
+    // the 0-based offset of `body` within itself. `match` was run against `rawText`
+    // (the reminder-stripped/trimmed clause text), so its group `.Index` is relative
+    // to that intermediate string, not the original oracle text. Locating `body`
+    // (already trimmed) inside the untouched `clause.RawText` and adding
+    // `clause.SourceSpan.Start` recovers the true absolute start regardless of any
+    // stripping/trimming shift, so every span the inner parser derives from
+    // `innerClause.SourceSpan.Start` (see TriggeredAbilityParser/ActivatedAbilityParser)
+    // lands correctly rebased instead of 0-based-and-disconnected.
+    var bodyOffsetInClause = clause.RawText.IndexOf(body, System.StringComparison.Ordinal);
+    var absoluteBodyStart = clause.SourceSpan.Start + Math.Max(bodyOffsetInClause, 0);
+
+    var grantedAbility = TryParseGrantedBody(body, absoluteBodyStart);
     if (grantedAbility is null)
     {
       return null;
@@ -131,7 +143,12 @@ public sealed class EquippedPTKeywordAndGrantedAbilityRule : IStaticRule
   /// Parses the quoted body — a triggered ability first, falling back to an activated
   /// ability. Returns null when neither recognises the body so the caller surfaces the gap.
   /// </summary>
-  private Ability? TryParseGrantedBody(string body)
+  /// <param name="body">The quoted ability text, trimmed.</param>
+  /// <param name="absoluteBodyStart">
+  /// The body's real absolute offset within the card's oracle text — the basis every
+  /// span the inner parser derives is rebased from (see caller).
+  /// </param>
+  private Ability? TryParseGrantedBody(string body, int absoluteBodyStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue ? tokenResult.Value : new TokenList<OracleToken>([]);
@@ -140,7 +157,7 @@ public sealed class EquippedPTKeywordAndGrantedAbilityRule : IStaticRule
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(absoluteBodyStart, body.Length),
     };
 
     var triggered = new TriggeredAbilityParser().TryParse(
