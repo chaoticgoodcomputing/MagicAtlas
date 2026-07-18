@@ -1,0 +1,59 @@
+{
+  "id": "moat",
+  "unit": "single-card",
+  "cards": [
+    "Moat"
+  ],
+  "source": {
+    "note": "Corroborating single-card witness of stem modification:restriction (the 'restriction-grant' hole's proposed_stem; already witnessed once by Pacifism, judge PASS, commit 72d40950). This is a DELIBERATE second witness, not a re-declaration: Pacifism witnesses only subject=attached (an Aura's restriction on the single creature it enchants); Moat witnesses a structurally different, board-wide restriction with no target and no attach relationship, which is exactly the 'Lock'/'prison' payoff shape this hole's matched_payoffs=['Lock'] names (Moat is one of the archetypal EDH/prison 'lock' pieces — the wall-behind-a-Moat deck). Oracle text (verified against Data/_01_Raw/Datasets/External/oracle-cards.json, byte-exact, name='Moat', mana_cost='{2}{W}{W}', type_line='Enchantment'): 'Creatures without flying can't attack.' No edhrec_rank present in the testbed source — popularity omitted (not fabricated), same caveat as Pacifism. The AST is FAITHFUL (hand-parsed gold at Fixtures/HandParsedCards/Moat.json, already a committed parser gold — no parser gap to route): the single static ability parses to one CantAttackEffect{ Target={ Kind: Each, Filter: { CardTypes: [creature], LacksKeywords: [Flying] } } } (CR 508.1c restriction on attacking). ADR-3 canonical: side=emit, kind=BEHAVIOR (modification supergroup: an object altered in place), stem=modification:restriction — the SAME stem as Pacifism, reused, not re-declared. NEW WITNESSED SUBJECT VALUE: subject=each. The subject axis is open (no 'enum' key in attribute_axes.subject), and its values_seen prior to this gold were {attached, controlled, self} (per port-topology.cited.json and the Mikaeus gold's controlled precedent). Target.Kind=Each with no control/attach relationship is a THIRD distinct restriction-source shape (self restricts itself; attached = an Aura/Equipment grants the restriction to one distinct object; controlled = an anthem-style grant scoped to the controller's own board; each = a global grant with no controller or attach scoping at all, applying even to the controller's own creatures). subject=each is chosen to mirror the AST's own Target.Kind enum value directly (traceable / minimally-interpreted), following the same value-naming discipline as attached (from Target.Kind=EnchantedOrEquipped). CR 611.3's own worked example — 'All white creatures get +1/+1' generates an effect that continuously gives +1/+1 to each white creature on the battlefield — is structurally identical to Moat's 'Creatures without flying can't attack': a static ability's continuous effect over an unscoped, unattached, unowned each-matching-object set. MISSING FACET (surfaced, NOT invented): the LacksKeywords:Flying filter criterion (which creatures are eligible for the restriction) has no home in the closed attribute_axes set — 'keyword' is licensed only by modification:keyword and means a keyword the ability GRANTS, not a filter predicate on eligibility, and 'subtype'/'exclude_self' are not licensed by modification:* stems. Following the Pacifism precedent (restrict={attack,block} surfaced but not added as an off-axis key), this gold witnesses the BARE stem + the subject facet only. A future scaffold decision could add a filter/eligibility axis (values seen: lacks-keyword, has-keyword, pt-threshold — c.f. Meekstone's power>=3 filter) to capture which creatures a modification:restriction targets; recorded here as a proposal, not smuggled in as an attr. HOLE-STATUS NOTE: port-topology.cited.json's holes['restriction-grant'] still reports status='sought' even though stems['modification:restriction'].status is already 'witnessed' by pacifism — this is a rollup staleness (TopologyStep.cs hardcodes hole status to 'sought' and never cross-checks the computed stems map, unlike stems itself which correctly derives witnessed/declared from gold projections). That staleness is a pipeline bug to flag to the scaffold owner, not something this gold works around or a reason to skip a genuinely valuable corroborating witness for the 'Lock' payoff class."
+  },
+  "ports": {
+    "Moat": [
+      {
+        "id": "M0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:restriction",
+        "attrs": {
+          "subject": "each"
+        },
+        "note": "THE WITNESS — 'Creatures without flying can't attack' emits the modification:restriction BEHAVIOR as a board-wide, unattached, unscoped continuous grant (CR 611.3 continuous effect from a static ability). AST-derivable: the StaticAbility carries CantAttackEffect{ Target: { Kind: Each, Filter: { CardTypes: [creature], LacksKeywords: [Flying] } } } (CR 508.1c). subject=each is a NEW value on the open subject axis (prior values_seen: attached, controlled, self) — mirrors the AST's own Target.Kind=Each. The LacksKeywords:Flying eligibility filter is NOT witnessed as an attr — no closed axis licenses a negative-keyword filter predicate on modification:* stems; surfaced in source.note as a proposed facet, not invented."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:restriction.witnessed",
+      "because": "M0 projects the BEHAVIOR stem modification:restriction (modification supergroup, CR 611.3 continuous effect from a static ability), derived from the CantAttackEffect on Moat's sole static ability. This REUSES the stem Pacifism already witnesses — not a re-declaration, a corroborating second witness of a structurally different (unattached, board-wide) restriction shape."
+    },
+    {
+      "claim": "M0.subject == each",
+      "because": "Target.Kind=Each with no control or attach relationship — the restriction lands on every matching creature regardless of controller (CR 611.3's own 'All white creatures get +1/+1' example is the structural precedent for an each-scoped static continuous effect). A new value on the open subject axis, distinct from attached (Pacifism, an Aura's single enchanted target) and controlled (Mikaeus, an anthem scoped to the controller's own board)."
+    },
+    {
+      "claim": "M0.kind == BEHAVIOR",
+      "because": "a can't-attack grant is a continuous, time-varying value applied to a set of objects in place (CR 611 continuous effects; modification supergroup kind_view=BEHAVIOR), not a discrete EVENT occurrence and not a STATE pool."
+    },
+    {
+      "claim": "axis.filter.missing",
+      "because": "the LacksKeywords:Flying eligibility criterion is AST-derivable (CantAttackEffect.Target.Filter.LacksKeywords) but has no home in the closed attribute_axes set for modification:* stems (keyword means granted-keyword, not a filter predicate; subtype/exclude_self are not licensed by modification:*). Surfaced here as a proposed filter/eligibility axis for the scaffold to decide, not invented as an off-axis key — same restraint as Pacifism's restrict={attack,block} surfacing."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation witnessing the stem + a new subject facet value, no cycle closed (edges=[])."
+    }
+  ],
+  "cr": [
+    "508.1c",
+    "604.1",
+    "611.3",
+    "702.9"
+  ]
+}

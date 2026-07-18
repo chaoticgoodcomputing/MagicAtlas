@@ -38,6 +38,7 @@
     "kiki-jiki-x-restoration-angel",
     "kiki-jiki-x-zealous-conscripts",
     "mikaeus-the-unhallowed-x-walking-ballista",
+    "moat",
     "murderous-redcap-x-viscera-seer",
     "nantuko-husk-x-blood-artist",
     "nim-deathmantle-x-ashnods-altar-x-blood-artist",
@@ -484,6 +485,7 @@
       ],
       "unpredicted": true,
       "witnesses": [
+        "moat",
         "pacifism"
       ]
     },
@@ -997,6 +999,7 @@
       "values_seen": [
         "attached",
         "controlled",
+        "each",
         "self"
       ],
       "carries_provenance_or_polarity": false
