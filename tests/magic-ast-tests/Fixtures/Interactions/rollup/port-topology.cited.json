@@ -49,6 +49,7 @@
     "ruthless-knave-x-blood-artist",
     "ruthless-knave-x-krark-clan-ironworks",
     "sanguine-bond-x-exquisite-blood",
+    "scour-from-existence",
     "serum-visions",
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
@@ -182,6 +183,7 @@
         "dualcaster-mage-x-ghostly-flicker",
         "fruit-of-tizerus-graveyard-cast",
         "izzet-chronarch-x-ghostly-flicker",
+        "scour-from-existence",
         "young-pyromancer"
       ]
     },
@@ -583,6 +585,7 @@
         "to"
       ],
       "witnesses": [
+        "scour-from-existence",
         "spine-of-ish-sah"
       ]
     },
