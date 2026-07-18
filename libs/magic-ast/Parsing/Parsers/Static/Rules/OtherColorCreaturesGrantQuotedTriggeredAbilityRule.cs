@@ -83,7 +83,18 @@ public sealed class OtherColorCreaturesGrantQuotedTriggeredAbilityRule : IStatic
       return null;
     }
 
-    var grantedAbility = TryParseGrantedBody(body);
+    // The quoted body's real absolute offset within the card's oracle text — NOT
+    // the 0-based offset of `body` within itself. `match.Groups["body"].Index` is
+    // relative to `clause.RawText`, but `.Trim()` above may have shifted the true
+    // content start further still. Locating the (already trimmed) body inside
+    // `clause.RawText` and adding `clause.SourceSpan.Start` recovers the true
+    // absolute start, so every span the inner parser derives from
+    // `innerClause.SourceSpan.Start` (see TriggeredAbilityParser/ActivatedAbilityParser)
+    // lands correctly rebased instead of 0-based-and-disconnected.
+    var bodyOffsetInClause = clause.RawText.IndexOf(body, System.StringComparison.Ordinal);
+    var absoluteBodyStart = clause.SourceSpan.Start + Math.Max(bodyOffsetInClause, 0);
+
+    var grantedAbility = TryParseGrantedBody(body, absoluteBodyStart);
     if (grantedAbility is null)
     {
       // The body's shape isn't yet supported — surface the gap via the fallback.
@@ -121,7 +132,12 @@ public sealed class OtherColorCreaturesGrantQuotedTriggeredAbilityRule : IStatic
   /// (mirroring <see cref="EnchantedPTAndGrantedAbilityRule.TryParseGrantedBody"/>).
   /// Returns null when neither recognises the body so the caller surfaces the gap.
   /// </summary>
-  private Ability? TryParseGrantedBody(string body)
+  /// <param name="body">The quoted ability text, trimmed.</param>
+  /// <param name="absoluteBodyStart">
+  /// The body's real absolute offset within the card's oracle text — the basis every
+  /// span the inner parser derives is rebased from (see caller).
+  /// </param>
+  private Ability? TryParseGrantedBody(string body, int absoluteBodyStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue ? tokenResult.Value : new TokenList<OracleToken>([]);
@@ -130,7 +146,7 @@ public sealed class OtherColorCreaturesGrantQuotedTriggeredAbilityRule : IStatic
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(absoluteBodyStart, body.Length),
     };
 
     var triggered = new TriggeredAbilityParser().TryParse(
