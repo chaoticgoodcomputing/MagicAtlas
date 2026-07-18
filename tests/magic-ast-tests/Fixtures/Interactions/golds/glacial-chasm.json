@@ -1,0 +1,69 @@
+{
+  "id": "glacial-chasm",
+  "unit": "single-card",
+  "cards": [
+    "Glacial Chasm"
+  ],
+  "source": {
+    "note": "Corroborating single-card witness of stem modification:prevention (the 'prevention' hole's proposed_stem; already witnessed once by fog.json, judge PASS 2026-07-17 batch-5). This is a DELIBERATE second witness, not a re-declaration: Fog witnesses a one-shot INSTANT (a spell resolving once, duration=eot, combat-damage-only, blanket across all players with no recipient filter). Glacial Chasm witnesses a structurally different shape along two closed axes at once: (1) a STATIC, always-on shield (a Land's continuous ability, CR 604.2 — 'Static abilities create continuous effects ... active as long as the permanent with the ability remains on the battlefield') rather than a one-shot spell resolution, and (2) scoped to a single recipient (the controller, 'you') rather than blanket across all players. Oracle text (verified against tests/magic-ast-tests/Data/_01_Raw/Datasets/External/oracle-cards.json, byte-exact, name='Glacial Chasm', mana_cost='', type_line='Land', edhrec_rank=null so popularity omitted per the same caveat as fog/thorn/moat): 'Cumulative upkeep—Pay 2 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\\nWhen this land enters, sacrifice a land.\\nCreatures you control can't attack.\\nPrevent all damage that would be dealt to you.' Only the fourth clause ('Prevent all damage that would be dealt to you.') is the witness; the cumulative-upkeep/ETB-sacrifice/can't-attack clauses are separate abilities not part of this port. AST is FAITHFUL, not a wish: Glacial Chasm is an ALREADY-COMMITTED hand-parsed gold at Fixtures/HandParsedCards/GlacialChasm.json (consumed by the parse suite) whose fourth ability is a bare StaticAbility{ Effects: [ PreventDamageEffect{ All=true, Target=ObjectReference.You() } ] } — no Duration field, no Source field, no CombatOnly/NoncombatOnly flag. This is produced by the dedicated, already-landed PreventAllDamageToYouStaticRule (libs/magic-ast/Parsing/Parsers/Static/Rules/PreventAllDamageToYouStaticRule.cs), whose own doc comment independently confirms the semantics claimed here: 'No Duration: an always-on static ability that persists while the permanent remains on the battlefield (CR 604.2), so it carries no stated duration.' No parser work was needed for this gold. ADR-3 canonical: side=emit, kind=BEHAVIOR (PreventDamageEffect : ContinuousEffect, the modification supergroup), stem=modification:prevention, REUSED from fog — not re-declared. TWO NEW WITNESSED FACETS on already-closed axes: duration='permanent' (the duration axis is licensed_by modification:* and its enum already contains 'permanent'; fog witnessed only 'eot' — this is the genuinely different other pole of the SAME axis, mirroring how thorn-of-amethyst/stone-calendar corroborated the 'control' axis with its opposite lattice pole) and subject='you' (the subject axis carries no licensed_by restriction at all — fully open — and its values_seen prior to this gold were {attached, controlled, each, self}; 'you' is a NEW value representing the controlling PLAYER as the shield's recipient, distinct from 'self' which per the axis's own note means 'the port's subject is the source object itself' — here the object bearing the ability, the land, is NOT what is protected, the player is). MISSING FACET REAFFIRMED, NOT INVENTED: like fog, this gold's shield covers ALL damage (no CombatOnly/NoncombatOnly flag at all — strictly broader than fog's combat-only shield), which only reinforces that the 'combat' axis genuinely does not capture modification:prevention's real variance (it is licensed_by [damage-dealt, combat-presence], not modification:*); this gold does not attach it either, same restraint as fog. The 'recipient' axis (enum already contains 'you', licensed_by [life, damage-dealt]) was considered and deliberately NOT used for the who-is-shielded facet — it is not licensed for modification:* stems, so 'subject' (open, no licensing restriction) was used instead, following the golds' own discipline of using only licensed/open axes rather than smuggling in an unlicensed one."
+  },
+  "ports": {
+    "Glacial Chasm": [
+      {
+        "id": "G0",
+        "side": "emit",
+        "kind": "BEHAVIOR",
+        "stem": "modification:prevention",
+        "attrs": {
+          "duration": "permanent",
+          "subject": "you"
+        },
+        "note": "THE WITNESS — 'Prevent all damage that would be dealt to you.' emits a prevention shield (CR 615.1 prevention effect; CR 611 continuous effect; CR 604.2 static-ability-sourced continuous effect) as a bare, always-on StaticAbility with no Duration and no Source restriction. AST-derivable from PreventDamageEffect{ All=true, Target=ObjectReference.You() } (PreventAllDamageToYouStaticRule). duration='permanent' <- absence of a Duration field on a ContinuousEffect from a StaticAbility means the effect persists for as long as the permanent remains on the battlefield with the ability (CR 604.2) — the licensed 'permanent' enum value on the duration axis, corroborating fog's 'eot' with its opposite pole. subject='you' <- Target=ObjectReference.You(), a NEW value on the open subject axis representing the controlling player as the shielded recipient (not the source object itself, so not 'self'; not an attach/anthem/each-scoped creature grant, so not attached/controlled/each either)."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.modification:prevention.witnessed",
+      "because": "G0 projects the BEHAVIOR stem modification:prevention (modification supergroup, CR 611/615 continuous prevention effect), derived from Glacial Chasm's fourth static ability. This REUSES the stem fog.json already witnesses — not a re-declaration, a corroborating second witness of a structurally different (static/always-on, single-recipient) prevention shape."
+    },
+    {
+      "claim": "G0.duration == permanent",
+      "because": "the StaticAbility's PreventDamageEffect carries no Duration field at all; per CR 604.2 a continuous effect from a static ability persists for as long as the permanent remains on the battlefield with the ability — the licensed 'permanent' value on the duration axis (enum [eot, permanent, your-next-turn], licensed_by modification:*), the opposite pole from fog's 'eot'."
+    },
+    {
+      "claim": "G0.subject == you",
+      "because": "Target=ObjectReference.You() — the shield's recipient is the controlling player, not the permanent bearing the ability itself. A NEW value on the open subject axis (prior values_seen: attached, controlled, each, self), distinct from 'self' (the axis's own note: 'the port's subject is the source object itself') because here the protected object is the player, not the land."
+    },
+    {
+      "claim": "G0.kind == BEHAVIOR",
+      "because": "a damage-prevention shield is a continuous effect (PreventDamageEffect : ContinuousEffect; CR 611.1, 615.1), not a discrete EVENT occurrence and not a STATE pool; lands in the modification supergroup, mirroring fog."
+    },
+    {
+      "claim": "combat_class still unaxised (reaffirmed, not invented)",
+      "because": "Glacial Chasm's shield has no CombatOnly/NoncombatOnly flag at all (strictly ALL damage, a superset of fog's combat-only shield) — this reaffirms, rather than resolves, the open scaffold question fog first surfaced: the 'combat' axis (enum combat/noncombat/any) is licensed_by [damage-dealt, combat-presence], not modification:*, so no combat-class facet is attached here either."
+    },
+    {
+      "claim": "no_parser_work_needed",
+      "because": "PreventDamageEffect and the dedicated PreventAllDamageToYouStaticRule already exist in libs/magic-ast and already parse this exact clause; Fixtures/HandParsedCards/GlacialChasm.json is a pre-existing, already-committed parser gold. This witness needed zero parser changes."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation corroborating the stem plus two new facet values (duration=permanent, subject=you) on already-closed axes, no cycle closed and no edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "604.2",
+    "611.1",
+    "615",
+    "615.1",
+    "615.1a"
+  ]
+}
