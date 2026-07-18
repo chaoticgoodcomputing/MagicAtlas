@@ -988,7 +988,7 @@
     "non-play-zone-move": {
       "priority": 6,
       "kind": "EVENT",
-      "proposed_stem": "zonechange (neither removal nor deployment)",
+      "proposed_stem": "recur",
       "attrs": [
         "from",
         "to"
@@ -997,8 +997,21 @@
         "reclamation (gy\u2192hand)",
         "bounce-recur"
       ],
-      "note": "the from\u2192to primitive is play-anchored; hidden-zone\u2194hidden-zone moves fit neither Removal (from=play) nor Deployment (to=play). Do NOT force into Removal. Opus-3\u0027s \u0027real hole\u0027.",
-      "status": "sought"
+      "note": "the from\u2192to primitive is play-anchored; hidden-zone\u2194hidden-zone moves fit neither Removal (from=play) nor Deployment (to=play). Do NOT force into Removal. Opus-3\u0027s \u0027real hole\u0027. Scaffold reconciliation 2026-07-18: already witnessed by archaeomancer.json (recur stem, from=graveyard/to=hand) \u2014 proposed_stem updated from the placeholder \u0027zonechange (neither removal nor deployment)\u0027 to the landed stem name \u0027recur\u0027 so TopologyStep\u0027s literal proposed_stem match resolves this hole to witnessed; no new gold authored (would have duplicated archaeomancer.json).",
+      "status": "witnessed",
+      "witnesses": [
+        "archaeomancer",
+        "archaeomancer-x-ghostly-flicker",
+        "cloudstone-curio-x-priest-of-gix",
+        "fruit-of-tizerus-graveyard-cast",
+        "gravecrawler-x-ashnods-altar-x-blood-artist",
+        "gravecrawler-x-phyrexian-altar-x-blood-artist",
+        "izzet-chronarch-x-ghostly-flicker",
+        "mikaeus-the-unhallowed-x-walking-ballista",
+        "murderous-redcap-x-viscera-seer",
+        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
+        "pair-o-dice-lost-x-brazen-dwarf"
+      ]
     }
   }
 }
