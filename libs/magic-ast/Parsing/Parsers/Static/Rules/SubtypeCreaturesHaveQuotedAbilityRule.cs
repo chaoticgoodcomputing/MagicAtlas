@@ -70,7 +70,16 @@ public sealed class SubtypeCreaturesHaveQuotedAbilityRule : IStaticRule
       return null;
     }
 
-    var grantedAbility = TryParseGrantedBody(body);
+    // Rebase the quoted body's span onto its REAL absolute offset in the original
+    // oracle text: `body` is only a substring of `clause.RawText`, so the naive
+    // 0-based span the inner parser would otherwise stamp on the granted ability
+    // (and its nested effects/triggers, which are computed relative to whatever
+    // SourceSpan.Start we hand it) needs `clause.SourceSpan.Start` PLUS the body's
+    // own offset within `clause.RawText` — not `clause.SourceSpan.Start` alone.
+    var bodyOffsetInClause = clause.RawText.IndexOf(body, System.StringComparison.Ordinal);
+    var bodyAbsoluteStart = clause.SourceSpan.Start + (bodyOffsetInClause >= 0 ? bodyOffsetInClause : 0);
+
+    var grantedAbility = TryParseGrantedBody(body, bodyAbsoluteStart);
     if (grantedAbility is null)
     {
       // The body's shape isn't yet supported — surface the gap honestly.
@@ -107,7 +116,14 @@ public sealed class SubtypeCreaturesHaveQuotedAbilityRule : IStaticRule
   /// grant shape), falling back to triggered. Returns null when neither recognises
   /// the body.
   /// </summary>
-  private Ability? TryParseGrantedBody(string body)
+  /// <param name="body">The quoted ability text, verbatim.</param>
+  /// <param name="bodyAbsoluteStart">
+  /// The body's real absolute offset into the original oracle text (NOT 0-based —
+  /// the inner parsers compute every nested effect/cost span off this clause's
+  /// SourceSpan.Start, so a wrong basis here silently corrupts every span the
+  /// inner parser produces).
+  /// </param>
+  private Ability? TryParseGrantedBody(string body, int bodyAbsoluteStart)
   {
     var tokenResult = _tokenizer.TryTokenize(body);
     var tokens = tokenResult.HasValue ? tokenResult.Value : new TokenList<OracleToken>([]);
@@ -116,7 +132,7 @@ public sealed class SubtypeCreaturesHaveQuotedAbilityRule : IStaticRule
     {
       Tokens = tokens,
       RawText = body,
-      SourceSpan = new MagicAST.AST.TextSpan(0, body.Length),
+      SourceSpan = new MagicAST.AST.TextSpan(bodyAbsoluteStart, body.Length),
     };
 
     // Try activated first — tribal-lord grants are typically "{T}: Add …" mana abilities.
