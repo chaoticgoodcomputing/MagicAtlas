@@ -40,6 +40,10 @@
     "guards": [],
     "bridges": []
   },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-18 round-3 batch — removal:permanent (Scour from Existence, CR 406.1/406.2) corroborating witness, to=exile terminal facet climbed from removal:creature (deadly-rollick) to the permanent-breadth parent stem, cast-driven route distinct from Spine of Ish Sah's ETB route; PROCEED"
+  },
   "assertions": [
     {
       "claim": "stem.removal:permanent.witnessed",
