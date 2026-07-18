@@ -105,7 +105,7 @@
                       }
                     ],
                     "SourceSpan": {
-                      "Start": 0,
+                      "Start": 143,
                       "Length": 6
                     }
                   }
@@ -117,7 +117,7 @@
                       "Kind": "Self"
                     },
                     "SourceSpan": {
-                      "Start": 7,
+                      "Start": 150,
                       "Length": 21
                     }
                   }

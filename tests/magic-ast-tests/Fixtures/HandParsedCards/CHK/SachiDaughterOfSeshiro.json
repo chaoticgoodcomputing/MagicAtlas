@@ -85,7 +85,7 @@
                   {
                     "CostType": "tap",
                     "SourceSpan": {
-                      "Start": 0,
+                      "Start": 71,
                       "Length": 3
                     }
                   }
@@ -97,7 +97,7 @@
                     "AnyColor": false,
                     "OfChosenColor": false,
                     "SourceSpan": {
-                      "Start": 4,
+                      "Start": 75,
                       "Length": 12
                     }
                   }

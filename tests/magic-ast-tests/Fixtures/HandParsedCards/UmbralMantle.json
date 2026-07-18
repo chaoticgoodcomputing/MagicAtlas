@@ -41,14 +41,14 @@
                       }
                     ],
                     "SourceSpan": {
-                      "Start": 0,
+                      "Start": 23,
                       "Length": 3
                     }
                   },
                   {
                     "CostType": "untap",
                     "SourceSpan": {
-                      "Start": 5,
+                      "Start": 28,
                       "Length": 3
                     }
                   }
@@ -75,7 +75,7 @@
                       }
                     },
                     "SourceSpan": {
-                      "Start": 9,
+                      "Start": 32,
                       "Length": 44
                     }
                   }

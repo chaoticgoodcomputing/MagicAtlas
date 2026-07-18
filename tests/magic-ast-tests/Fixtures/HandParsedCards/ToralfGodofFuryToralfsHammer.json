@@ -241,14 +241,14 @@
                           }
                         ],
                         "SourceSpan": {
-                          "Start": 0,
+                          "Start": 23,
                           "Length": 6
                         }
                       },
                       {
                         "CostType": "tap",
                         "SourceSpan": {
-                          "Start": 8,
+                          "Start": 31,
                           "Length": 3
                         }
                       },
@@ -256,7 +256,7 @@
                         "CostType": "unattachNamed",
                         "CardName": "Toralf's Hammer",
                         "SourceSpan": {
-                          "Start": 13,
+                          "Start": 36,
                           "Length": 24
                         }
                       }
@@ -275,7 +275,7 @@
                           "Kind": "Self"
                         },
                         "SourceSpan": {
-                          "Start": 38,
+                          "Start": 61,
                           "Length": 77
                         }
                       },
@@ -285,7 +285,7 @@
                           "Kind": "Self"
                         },
                         "SourceSpan": {
-                          "Start": 38,
+                          "Start": 61,
                           "Length": 77
                         }
                       }
