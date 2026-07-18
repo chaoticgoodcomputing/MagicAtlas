@@ -54,9 +54,14 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
+    // Reflect any origin: the Vite frontend now derives the API URL from its own host, so its origin
+    // varies (localhost, the tailnet MagicDNS name, a Tailscale/LAN IP). This dev API is unauthenticated,
+    // read-mostly card data with no cookies/credentials, and its reachability is already gated by the
+    // network it binds to (Tailscale/LAN) — so allow-any-origin here is the dev posture, not a hole. It
+    // pairs with AllowedHosts:"*". Tighten to an explicit origin list if this is ever exposed publicly.
     options.AddDefaultPolicy(policy =>
         policy
-            .WithOrigins("http://localhost:55173", "http://localhost:3000")
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyMethod()
             .AllowAnyHeader()
     );
