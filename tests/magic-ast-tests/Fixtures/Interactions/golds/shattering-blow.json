@@ -1,0 +1,79 @@
+{
+  "id": "shattering-blow",
+  "unit": "single-card",
+  "cards": [
+    "Shattering Blow"
+  ],
+  "source": {
+    "note": "single-card CORROBORATING witness of stem removal:artifact (currently witnessed only once, by chatterfang-x-pitiless-plunderer's Treasure.T3 port). That sole prior witness is a NARROW shape: a Treasure TOKEN being SACRIFICED as an activated ability's cost (manner=sacrificed, token=true, subtype=treasure, to=graveyard, no control attr set at all — control is implicitly you, since a player can only sacrifice permanents they control, CR 701.16b). Shattering Blow witnesses a structurally different removal:artifact shape along every axis that varies: (a) to=exile, a TERMINAL AST-proven destination (not derived — exile has no regeneration/replacement-style redirect, CR 406.1), the SAME to=exile upgrade already landed for removal:creature (deadly-rollick) and removal:permanent (scour-from-existence), here landed for the removal:artifact CHILD stem; (b) manner is OMITTED, not sacrificed — the object leaves play via a targeted spell effect, not a cost payment, and the manner enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no 'exiled' rung (the same omission scour-from-existence and deadly-rollick already made for their own to=exile facets); (c) control=any, a NEW facet on this stem — 'Exile target artifact' carries no Controller filter on the target at all, so it may hit ANY player's artifact (a removal spell, not a self-sacrifice), the same any-breadth reasoning scour-from-existence used for removal:permanent's control axis (control is licensed_by '*', so attaching it to removal:artifact for the first time is not a new axis, just a first use on this particular child stem); (d) subtype and token are correctly OMITTED (not asserted false) — the Filter is bare CardTypes=['artifact'] with no subtype/token narrowing, genuinely broader than the prior witness's treasure-token-specific shape, showing removal:artifact is not merely a treasure-sacrifice-outlet stem. Oracle text (verified against tests/magic-ast-tests/Data/_01_Raw/Datasets/External/oracle-cards.json, byte-exact, name='Shattering Blow', mana_cost='{1}{R/W}', type_line='Instant', edhrec_rank=null so popularity omitted per the same caveat as scour-from-existence/moat/thorn-of-amethyst): 'Exile target artifact.' AST-faithful, not a wish: Fixtures/HandParsedCards/GTC/ShatteringBlow.json is an ALREADY-COMMITTED hand-parsed gold (consumed by Tests/Parse/HandParsedCardTests.cs) whose sole ability is Kind='spell', Effects=[ EffectType='exile', Target={ Kind:'Target', Filter:{ CardTypes:['artifact'] } } ] — no Controller field, no subtype narrowing, no token flag. No parser work was needed for this gold. from=battlefield is CR-definitional, not an explicit AST field: per CR 109.2, 'If a spell or ability uses a description of an object that includes a card type or subtype, but doesn't refer to a specific zone or include the word \"card\", \"spell\", \"source\", or \"scheme\", it means a permanent of that card type or subtype on the battlefield' — bare 'target artifact' (no zone qualifier, no 'card') means an artifact PERMANENT, i.e. on the battlefield, the same reasoning scour-from-existence applied to 'target permanent'. ADR-3 canonical: side=emit, kind=EVENT (a discrete zone-change occurrence, mirroring removal:creature/removal:permanent's kind_view), stem=removal:artifact, REUSED from chatterfang — not re-declared."
+  },
+  "ports": {
+    "Shattering Blow": [
+      {
+        "id": "SB1",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "removal:artifact",
+        "attrs": {
+          "from": "battlefield",
+          "to": "exile",
+          "control": "any"
+        },
+        "note": "THE WITNESS — 'Exile target artifact.' (EffectType=exile, Target.Filter.CardTypes=['artifact'], no Controller, no subtype/token narrowing). from=battlefield is CR-definitional (CR 109.2: an unqualified card-type description with no zone/'card' word means a permanent of that type on the battlefield). to=exile is AST-PROVEN as a BARE value, NOT derived: exile is definitionally 'put it into the exile zone' (CR 406.2), a one-way holding area with no built-in redirect (CR 406.1) — unlike the prior witness's derived-by-rule to=graveyard from a sacrifice cost, this to=exile does not cap the port's Reliability. control=any — the target Filter carries no Controller restriction, so the spell may exile ANY player's artifact; a NEW facet on this stem (control is licensed_by '*', first use here on removal:artifact specifically; the prior witness never set control at all since a sacrifice cost is implicitly self-only). manner is OMITTED: the manner enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no 'exiled' rung, and the object is neither sacrificed nor destroyed nor blinked — same omission already made for removal:creature/removal:permanent's to=exile facets (deadly-rollick, scour-from-existence). subtype/token are OMITTED (not invented as false) — the Filter has no subtype or token narrowing at all, genuinely broader than the treasure-token-specific prior witness."
+      }
+    ]
+  },
+  "edges": [],
+  "declares": {
+    "polarity": [],
+    "match_policy": [],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "stem.removal:artifact.witnessed",
+      "because": "SB1 projects the EVENT stem removal:artifact, derived from Shattering Blow's sole spell ability (EffectType=exile, Filter.CardTypes=['artifact']). This REUSES the stem chatterfang-x-pitiless-plunderer already witnesses (Treasure.T3) — not a re-declaration, a corroborating second witness of a structurally different (targeted-spell, non-token, any-controller, terminal-exile) removal shape."
+    },
+    {
+      "claim": "SB1.to == exile",
+      "because": "EffectType=exile — the destination is definitionally the exile zone (CR 406.2, 'to exile an object is to put it into the exile zone'), a BARE value (AST-proven, not over-approximated). Exile has no regeneration/replacement redirect analogous to destroy->graveyard, so to=exile does NOT cap the port's Reliability, mirroring scour-from-existence's identical claim for removal:permanent."
+    },
+    {
+      "claim": "SB1.from == battlefield",
+      "because": "CR 109.2 — a card-type description with no zone qualifier and no 'card'/'spell'/'source'/'scheme' word means a permanent of that type on the battlefield; 'target artifact' therefore means an artifact PERMANENT. removal = a zone-change whose FROM endpoint is play. from axis, licensed_by removal:*."
+    },
+    {
+      "claim": "SB1.control == any",
+      "because": "'Exile target artifact' imposes no Controller restriction on the target Filter — it may hit any player's artifact. A NEW facet value on removal:artifact specifically (control is licensed_by '*', already used on sibling stems removal:creature/removal:permanent, first attached here to removal:artifact); the prior witness (a self-sacrifice cost) never carried a control attr at all."
+    },
+    {
+      "claim": "SB1.manner.omitted",
+      "because": "the manner axis enum {sacrificed,destroyed,combat,state-based,blink,cast,copied} has no 'exiled' rung, and the object is removed via a targeted spell effect, not a sacrifice cost, a destroy effect, combat, an SBA, or a blink. manner is omitted rather than invented, mirroring deadly-rollick's and scour-from-existence's identical omission for their own to=exile facets."
+    },
+    {
+      "claim": "SB1.subtype_and_token.omitted",
+      "because": "Target.Filter carries no subtype or token narrowing (bare CardTypes=['artifact']) — genuinely broader than the prior witness's treasure-token-specific shape. Omitted, not asserted false, following the golds' discipline of only witnessing AST-derivable facets."
+    },
+    {
+      "claim": "SB1.kind == EVENT",
+      "because": "an exile-to-a-new-zone occurrence is a discrete zone-change event (CR 406.2), not a continuous BEHAVIOR modifier and not a fungible STATE resource pool; lands in the removal supergroup, mirroring removal:creature/removal:permanent's kind_view=EVENT."
+    },
+    {
+      "claim": "no_parser_work_needed",
+      "because": "Fixtures/HandParsedCards/GTC/ShatteringBlow.json is a pre-existing, already-committed parser gold (consumed by Tests/Parse/HandParsedCardTests.cs). This witness needed zero parser changes."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=single-card: a port derivation corroborating the removal:artifact stem with a structurally distinct shape (to=exile, control=any, manner omitted, no subtype/token), no cycle closed and no edge (edges=[])."
+    }
+  ],
+  "cr": [
+    "109.2",
+    "301",
+    "406.1",
+    "406.2",
+    "601.2",
+    "601.2c"
+  ]
+}

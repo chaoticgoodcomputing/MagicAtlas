@@ -52,6 +52,7 @@
     "sanguine-bond-x-exquisite-blood",
     "scour-from-existence",
     "serum-visions",
+    "shattering-blow",
     "soul-warden-x-ajanis-pridemate",
     "spine-of-ish-sah",
     "stone-calendar",
@@ -539,6 +540,7 @@
       "parent": "removal:permanent",
       "status": "witnessed",
       "attrs": [
+        "control",
         "from",
         "manner",
         "subtype",
@@ -546,7 +548,8 @@
         "token"
       ],
       "witnesses": [
-        "chatterfang-x-pitiless-plunderer"
+        "chatterfang-x-pitiless-plunderer",
+        "shattering-blow"
       ]
     },
     "removal:creature": {
@@ -702,6 +705,7 @@
         "modification:keyword",
         "modification:spell",
         "recur",
+        "removal:artifact",
         "removal:creature",
         "removal:permanent",
         "structure:untap"
