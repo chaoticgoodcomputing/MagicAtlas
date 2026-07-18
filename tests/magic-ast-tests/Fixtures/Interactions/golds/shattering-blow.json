@@ -30,6 +30,10 @@
     "guards": [],
     "bridges": []
   },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge 2026-07-18 round-5 batch — removal:artifact (Shattering Blow, CR 406.1/406.2) corroborating witness, to=exile terminal facet + control=any genuinely distinct from the sacrifice-driven Treasure-token witness; PROCEED"
+  },
   "assertions": [
     {
       "claim": "stem.removal:artifact.witnessed",
