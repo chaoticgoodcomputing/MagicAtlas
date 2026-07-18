@@ -41,15 +41,23 @@ public static class SpanWitnessStep
     {
       ("sac", _) => ["sacrific"],
       ("etb", _) => ["enters"],
-      ("ltb", _) => ["dies", "graveyard", "leaves", "put into", "modular"], // modular's dies-trigger
-      ("trigger", "damage") => ["damage"],
+      // dies-trigger keywords whose own name says nothing about "dying": Modular's counter move,
+      // Afterlife's token creation, Blitz's death-turn draw, Persist/Undying's return, Soulshift's
+      // return-to-hand, all key off the same permanent-leaves-battlefield consume.
+      ("ltb", _) =>
+        ["dies", "graveyard", "leaves", "put into", "modular", "afterlife", "blitz", "persist", "soulshift", "undying"],
+      ("trigger", "damage") => ["damage", "ingest"], // ingest triggers off combat damage dealt
       ("emit", "damage") => ["damage", "deals"],
-      ("emit", "token") => ["create", "embalm"], // embalm makes a token copy
+      // token-creation keywords: embalm/afterlife/eternalize all create a token copy or Spirit token;
+      // squad creates a token copy per additional cost paid.
+      ("emit", "token") => ["create", "embalm", "afterlife", "eternalize", "squad"],
       ("emit", "rolldice") or ("trigger", "rolldice") => ["roll"],
-      ("trigger", "cast") => ["cast"],
+      // cast-trigger keywords: conspire/replicate both key off "as you cast this spell" without
+      // saying "cast" in the keyword name itself.
+      ("trigger", "cast") => ["cast", "conspire", "replicate"],
       ("emit", "mana") => ["add", "firebending"], // firebending adds red mana on attack
-      ("emit", "life") => ["life"],
-      ("tap", _) => ["{t}", "tap"],
+      ("emit", "life") => ["life", "afflict"], // afflict causes life LOSS but doesn't say "life"
+      ("tap", _) => ["{t}", "tap", "outlast"], // outlast is a {T} activated ability
       _ => null,
     };
   }
