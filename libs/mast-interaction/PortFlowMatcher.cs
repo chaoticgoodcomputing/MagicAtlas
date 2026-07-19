@@ -39,6 +39,7 @@ public sealed class PortFlowMatcher
     ReanimateToEtb,
     SpellRecursionToCast,
     SpellCopyToCast,
+    SacrificeDeathToTrigger,
   }
 
   /// <summary>
@@ -110,6 +111,12 @@ public sealed class PortFlowMatcher
     // copies; the guard rejects a bare permanent copy (no spell effects to re-fire, CR 707.10).
     if (E("copy") && C("cast") && consume.Attr("role") == "driver")
       return FlowArm.SpellCopyToCast;
+    // a sacrifice's death event → a dies / LTB / "when sacrificed" trigger (ADR-0003 §5). The emit is the
+    // narrowest rung (removal:creature[to=graveyard, manner=sacrificed]); a dies (to=graveyard), bare LTB,
+    // or sacrificed-trigger consume captures it by attribute subsumption (the guard). Replaces the retired
+    // consume→consume sac→dies label bridge.
+    if (E("removal:creature") && C("removal:creature"))
+      return FlowArm.SacrificeDeathToTrigger;
 
     return null;
   }
@@ -142,6 +149,7 @@ public sealed class PortFlowMatcher
       FlowArm.ReanimateToEtb => _engine.RecastSatisfies(emit, consume),
       FlowArm.SpellRecursionToCast => _engine.SpellRecursionSatisfiesCast(emit, consume),
       FlowArm.SpellCopyToCast => _engine.SpellCopyReFiresEffects(emit, consume),
+      FlowArm.SacrificeDeathToTrigger => _engine.SacrificeDeathFeedsTrigger(emit, consume),
       null => false,
     };
   }

@@ -33,6 +33,16 @@
   "DerivedEdges": [
     {
       "From": "Nantuko Husk::sac:creature:controlled",
+      "To": "Nantuko Husk::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Nantuko Husk::sac:creature:controlled",
       "To": "Nantuko Husk::modify:pt",
       "Provenance": "CardDefined",
       "Family": "Flow",

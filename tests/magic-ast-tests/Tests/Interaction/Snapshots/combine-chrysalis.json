@@ -144,6 +144,16 @@
     },
     {
       "From": "Combine Chrysalis::sac:controlled",
+      "To": "Combine Chrysalis::emit:removal:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Combine Chrysalis::sac:controlled",
       "To": "Combine Chrysalis::emit:token:creature:beast:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",

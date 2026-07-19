@@ -349,6 +349,18 @@ public static class PortLabel
     Join("sac", Subject(fodder, ontology), Scope(fodder) ?? "controlled", Exclusion(fodder));
 
   /// <summary>
+  /// ADR-0003 §5 — the death EVENT a sacrifice cost raises (CR 701.21a: sacrificing moves the fodder from
+  /// the battlefield directly to its owner's graveyard). The dual EMIT of the sac cost's fodder consume
+  /// (O2/O10 — one clause, two ports): its subject is the fodder, its narrowest rung is
+  /// <c>removal:creature[to=graveyard, manner=sacrificed]</c>, which a dies (<c>to=graveyard</c>), bare LTB,
+  /// or "when sacrificed" (<c>manner=sacrificed</c>) consume all capture by subsumption — retiring the
+  /// curated <c>sac→dies</c> bridge. The fodder carries the same <c>controlled</c> guarantee the sac cost
+  /// already floors it to, so <see cref="Scope"/> round-trips with <c>SacrificeCost</c>.
+  /// </summary>
+  public static string SacrificeDeathEmit(ObjectFilter fodder, TypeOntology ontology) =>
+    Join("emit", "removal", Subject(fodder, ontology), "to-graveyard", "sacrificed", Scope(fodder), Exclusion(fodder));
+
+  /// <summary>
   /// A mana cost (CR 118) → per-requirement consume resources with their quantities. Each colored
   /// symbol is a <c>pay:mana:&lt;color&gt;</c> requirement (grouped + counted), generic symbols sum
   /// into a color-less <c>pay:mana</c>, and <c>{C}</c> is <c>pay:mana:colorless</c>. <b><c>{0}</c>

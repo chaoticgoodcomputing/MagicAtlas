@@ -10,11 +10,15 @@ using MagicAST.Tests.Infrastructure;
 /// The second reconstruction gold on the new port model (S3b, porting <c>BloodArtistEngineTest</c>) —
 /// a <b>different</b> combo than Chatterfang × Pitiless, proving the walk + engine generalize. Ruthless
 /// Knave sacrifices a creature for Treasure; Blood Artist drains on <em>any</em> creature's death. The
-/// sac→death bridge discriminates within one gold: the creature-sac hop is <b>GREEN</b>
+/// sac→death hop discriminates within one gold: the creature-sac hop is <b>GREEN</b>
 /// (<c>creature ⊆ creature</c>, <c>you-control ⊆ any</c>) — the sound contrast to gold 1's irreducible
 /// <c>Squirrel ⊄ creature</c> AMBER — while Ruthless Knave's <em>Treasure</em>-sac hop is a sound
 /// negative (a Treasure is provably not a creature → AMBER "Types"). Tier reaches GREEN; gold 1's
 /// AMBER is the straddle, not a ceiling.
+/// <para>ADR-0003 §5: the hop is now the death EMIT the sac raises (<c>emit:removal:…:sacrificed</c>) →
+/// the dies consume (<c>ltb:…:to-graveyard</c>), matched by subsumption — not the retired consume→consume
+/// bridge. The emit carries the sac's fodder as its Subject, so the operator tiers on the identical
+/// (fodder, dying) pair the bridge did — the GREEN/AMBER verdicts are unchanged.</para>
 /// </summary>
 [TestFixture]
 public class BloodArtistPortGraphTest
@@ -51,7 +55,8 @@ public class BloodArtistPortGraphTest
   {
     var edge = Edges()
       .Single(e =>
-        e.From.Label == "sac:creature:controlled" && e.To.Label == "ltb:creature:to-graveyard"
+        e.From.Label == "emit:removal:creature:to-graveyard:sacrificed:controlled"
+        && e.To.Label == "ltb:creature:to-graveyard"
       );
     Assert.That(edge.Overlap, Is.EqualTo(FilterRelation.Overlaps));
     Assert.That(edge.Reliability, Is.EqualTo(Trilean.Yes));
@@ -59,14 +64,14 @@ public class BloodArtistPortGraphTest
     Assert.That(edge.Reason, Is.Null);
   }
 
-  // Treasure-sac → "a creature dies": a Treasure is provably an artifact, not a creature — the bridge
+  // Treasure-sac → "a creature dies": a Treasure is provably an artifact, not a creature — the hop
   // survives the Intersects prune (Overlaps) but the operator returns a definitive No. Sound negative.
   [Test]
   public void Treasure_sac_to_creature_death_is_amber_types()
   {
     var edge = Edges()
       .Single(e =>
-        e.From.Label == "sac:artifact:treasure:controlled"
+        e.From.Label == "emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled"
         && e.To.Label == "ltb:creature:to-graveyard"
       );
     Assert.That(edge.Overlap, Is.EqualTo(FilterRelation.Overlaps));

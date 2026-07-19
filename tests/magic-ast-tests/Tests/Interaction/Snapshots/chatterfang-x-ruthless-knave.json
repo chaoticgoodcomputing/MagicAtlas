@@ -247,6 +247,16 @@
     },
     {
       "From": "Chatterfang::sac:creature:squirrel:controlled",
+      "To": "Chatterfang::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Chatterfang::sac:creature:squirrel:controlled",
       "To": "Chatterfang::modify:pt",
       "Provenance": "CardDefined",
       "Family": "Flow",
@@ -338,6 +348,26 @@
     {
       "From": "Ruthless Knave::sac:artifact:treasure:controlled",
       "To": "Ruthless Knave::emit:mana:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:creature:controlled",
+      "To": "Ruthless Knave::emit:removal:creature:to-graveyard:sacrificed:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",

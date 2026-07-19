@@ -199,6 +199,26 @@
       "Reason": null
     },
     {
+      "From": "Ruthless Knave::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "To": "Blood Artist::ltb:creature:to-graveyard",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "Types"
+    },
+    {
+      "From": "Ruthless Knave::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "To": "Blood Artist::ltb:creature:to-graveyard",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
       "From": "Ruthless Knave::emit:token:artifact:treasure:controlled",
       "To": "Ruthless Knave::sac:artifact:treasure:controlled",
       "Provenance": "RulesDefined",
@@ -230,16 +250,6 @@
     },
     {
       "From": "Ruthless Knave::sac:artifact:treasure:controlled",
-      "To": "Blood Artist::ltb:creature:to-graveyard",
-      "Provenance": "RulesDefined",
-      "Family": "Flow",
-      "Overlap": "Overlaps",
-      "Reliability": "No",
-      "Tier": "Amber",
-      "Reason": "Types"
-    },
-    {
-      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
       "To": "Ruthless Knave::emit:drawcards",
       "Provenance": "CardDefined",
       "Family": "Flow",
@@ -259,9 +269,19 @@
       "Reason": null
     },
     {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
       "From": "Ruthless Knave::sac:creature:controlled",
-      "To": "Blood Artist::ltb:creature:to-graveyard",
-      "Provenance": "RulesDefined",
+      "To": "Ruthless Knave::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
       "Reliability": "Yes",

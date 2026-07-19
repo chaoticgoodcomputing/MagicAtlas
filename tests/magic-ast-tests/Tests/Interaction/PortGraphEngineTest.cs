@@ -54,11 +54,14 @@ public class PortGraphEngineTest
     var engine = new PortGraphEngine(Ontology);
     var cycles = engine.FindCycles(engine.Materialize(graphs));
 
-    // The free loop, in port-hops: sac -(bridge)-> dies -(card)-> treasure -(modifier)-> replace
-    //  -(card)-> squirrel -(flow)-> sac.
+    // The free loop, in port-hops (ADR-0003 §5): sac -(card)-> death -(flow)-> dies -(card)-> treasure
+    //  -(modifier)-> replace -(card)-> squirrel -(flow)-> sac. The sac→death→dies pair replaces the retired
+    // single sac→dies bridge edge — the sacrifice raises its own death event (emit:removal:…:sacrificed),
+    // which the "creature dies" trigger captures by subsumption.
     var expected = new HashSet<string>
     {
       "Chatterfang::sac:creature:squirrel:controlled",
+      "Chatterfang::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled",
       "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
       "Pitiless Plunderer::emit:token:artifact:treasure:controlled",
       "Chatterfang::replace:token-creation",
@@ -71,16 +74,16 @@ public class PortGraphEngineTest
 
     Assert.That(loop, Is.Not.Null, "the free loop should reconstruct from the parsed golds");
 
-    // GREEN is the correct, sound verdict (2026-07-18): the sac→dies bridge's "from" side is a
-    // SACRIFICE cost's fodder, which CR 701.21a guarantees is already a permanent on the battlefield —
-    // a Kindred Instant/Sorcery (the only way "Squirrel" could ride a non-creature card, CR 308.1) can
-    // never be that fodder, since it's never a permanent to begin with. So every sacrificed Squirrel
-    // IS provably a creature here, and the death trigger's "creature ... dies" filter is subsumed.
+    // GREEN is the correct, sound verdict (2026-07-18): the death hop's "from" side is a SACRIFICE cost's
+    // fodder, which CR 701.21a guarantees is already a permanent on the battlefield — a Kindred
+    // Instant/Sorcery (the only way "Squirrel" could ride a non-creature card, CR 308.1) can never be that
+    // fodder, since it's never a permanent to begin with. So every sacrificed Squirrel IS provably a
+    // creature here, and the death trigger's "creature ... dies" filter is subsumed.
     Assert.That(loop!.Tier, Is.EqualTo(CertaintyTier.Green));
 
     foreach (var edge in loop.Edges)
       if (
-        edge.From.Label == "sac:creature:squirrel:controlled"
+        edge.From.Label == "emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled"
         && edge.To.Label == "ltb:creature:to-graveyard:controlled"
       )
       {

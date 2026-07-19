@@ -136,6 +136,16 @@
   ],
   "DerivedEdges": [
     {
+      "From": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "To": "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
       "From": "Ashnod\u0027s Altar::sac:creature:controlled",
       "To": "Ashnod\u0027s Altar::emit:mana:colorless",
       "Provenance": "CardDefined",
@@ -147,8 +157,8 @@
     },
     {
       "From": "Ashnod\u0027s Altar::sac:creature:controlled",
-      "To": "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
-      "Provenance": "RulesDefined",
+      "To": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
       "Reliability": "Yes",
@@ -186,6 +196,16 @@
       "Reason": null
     },
     {
+      "From": "Pitiless Plunderer::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "To": "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "Types"
+    },
+    {
       "From": "Pitiless Plunderer::emit:token:artifact:treasure:controlled",
       "To": "Pitiless Plunderer::sac:artifact:treasure:controlled",
       "Provenance": "RulesDefined",
@@ -217,13 +237,13 @@
     },
     {
       "From": "Pitiless Plunderer::sac:artifact:treasure:controlled",
-      "To": "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
-      "Provenance": "RulesDefined",
+      "To": "Pitiless Plunderer::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
-      "Reliability": "No",
-      "Tier": "Amber",
-      "Reason": "Types"
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
     },
     {
       "From": "Pitiless Plunderer::tap:self",
@@ -246,7 +266,8 @@
       "Productive": true,
       "LimitingReason": null,
       "Edges": [
-        "Ashnod\u0027s Altar::sac:creature:controlled=\u003EPitiless Plunderer::ltb:creature:to-graveyard:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled=\u003EPitiless Plunderer::ltb:creature:to-graveyard:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Ashnod\u0027s Altar::sac:creature:controlled=\u003EAshnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
         "Gravecrawler::emit:returntobattlefield:self=\u003EAshnod\u0027s Altar::sac:creature:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
         "Gravecrawler::pay:mana:black=\u003EGravecrawler::emit:returntobattlefield:self|CardDefined|Flow|Overlaps|Yes|Green|",
         "Pitiless Plunderer::emit:mana:any=\u003EGravecrawler::pay:mana:black|RulesDefined|Flow|Overlaps|Yes|Green|",

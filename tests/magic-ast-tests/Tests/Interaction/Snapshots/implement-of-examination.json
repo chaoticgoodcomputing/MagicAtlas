@@ -62,6 +62,16 @@
   ],
   "DerivedEdges": [
     {
+      "From": "Implement of Examination::emit:removal:artifact:to-graveyard:sacrificed:self",
+      "To": "Implement of Examination::ltb:artifact:to-graveyard:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
       "From": "Implement of Examination::ltb:artifact:to-graveyard:self",
       "To": "Implement of Examination::emit:drawcards",
       "Provenance": "CardDefined",
@@ -93,8 +103,8 @@
     },
     {
       "From": "Implement of Examination::sac:artifact:self",
-      "To": "Implement of Examination::ltb:artifact:to-graveyard:self",
-      "Provenance": "RulesDefined",
+      "To": "Implement of Examination::emit:removal:artifact:to-graveyard:sacrificed:self",
+      "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
       "Reliability": "Yes",

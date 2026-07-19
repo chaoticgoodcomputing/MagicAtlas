@@ -224,6 +224,18 @@ public sealed class PortGraphEngine
       .SelectMany(g => g.Ports)
       .Select(p => p.Structure is null ? PortFamilyRegistry.Annotate(p, _ontology) : p)
       .ToList();
+
+    // ADR-0003 §5: a sacrifice cost intrinsically removes its fodder (CR 701.21a — battlefield → owner's
+    // graveyard), so it raises a death EVENT — a dual emit:removal:creature[to=graveyard, manner=sacrificed]
+    // whose subject IS the fodder (O2/O10), plus a card-defined edge (paying the sac is what causes the
+    // death). Dies / LTB / "when sacrificed" consumes then reach it by the structured Captures subsumption
+    // arm (PortFlowMatcher.SacrificeDeathToTrigger), which is what retired the curated consume→consume
+    // sac→dies label bridge (§5/§6). Synthesized at this materialization choke point so projected cards AND
+    // synthetic engine graphs get it uniformly; the emit inherits the sac's firability + oracle provenance.
+    // (A reconstruction port — the interaction EDGE is what carries downstream, not a per-card projection row.)
+    var (sacDeaths, sacDeathEdges) = SynthesizeSacrificeDeaths(ports);
+    ports.AddRange(sacDeaths);
+
     var edges = new List<PortEdge>();
 
     // (1) Card-defined edges — the walk's intra-ability causality, certain by construction (§5).
@@ -232,6 +244,7 @@ public sealed class PortGraphEngine
         edges.Add(
           new PortEdge { From = edge.From, To = edge.To, Provenance = EdgeProvenance.CardDefined }
         );
+    edges.AddRange(sacDeathEdges);
 
     // The graft's synthesized closing edges (an inherited target-untap renewing the copier's tap), tiered
     // by the operator in the pass (Decision 3/4) — added alongside the card-defined edges so FindCycles
@@ -269,12 +282,10 @@ public sealed class PortGraphEngine
       foreach (var pay in consumes.Where(p => IsPayMana(p.Label)))
         edges.Add(UntapLandsFeedsMana(untap, pay));
 
-    // (3) Bridge — a sacrificed creature dies (CR 701.21a→700.4), feeding a dies-trigger.
-    foreach (var sac in consumes.Where(p => Role(p.Label) == "sac"))
-      foreach (var dies in consumes.Where(p => Role(p.Label) == "ltb" && p.Label.Contains(":to-graveyard")))
-        AddRulesEdge(edges, sac, dies, EdgeFamily.Flow);
-
-    // (4) Modifier — a replacement intercepts a token emission (ADR-0001 §4).
+    // (3) Modifier — a replacement intercepts a token emission (ADR-0001 §4). The old sac→dies bridge that
+    // sat here retired into subsumption (ADR-0003 §5): a sac cost now projects a removal:creature emit
+    // (PortGraph.cs), matched to dies/LTB/"when sacrificed" consumes by the structured Captures arm
+    // (PortFlowMatcher.SacrificeDeathToTrigger) at step (2) above — no curated consume→consume edge.
     foreach (var emit in emits.Where(p => ResourceKind(p.Label) == "token"))
       foreach (var intercept in intercepts)
         AddRulesEdge(edges, emit, intercept, EdgeFamily.Modifier);
@@ -1820,36 +1831,117 @@ public sealed class PortGraphEngine
   }
 
   /// <summary>
-  /// ADR-0002 §8 — the sac→death <b>bridge respects the loop's token type</b>. A bridge claims "a
-  /// sacrificed creature dies, feeding a dies-trigger" (CR 701.21a→700.4), but the dies-trigger fires
-  /// only if the thing sacrificed is the type it requires. When the object the loop feeds into the sac
-  /// is a <em>created token</em> whose at-creation type can't be that (a Treasure — artifact, CR 111.10
-  /// — sacrificed into "a creature you control dies"), the bridge can never fire, so the loop can't
-  /// close → prune (Lithatog / Extruder × Pitiless Plunderer). The dual of the token→sac flow guard
-  /// (<see cref="TokenSatisfiesAtCreation"/>); like it, this lives in the engine as a loop-reconstruction
-  /// policy (an in-loop animation that makes the token a creature is an out-of-boundary false-negative),
-  /// keeping the <see cref="ObjectFilterRelations"/> operator a pure type relation.
+  /// ADR-0003 §5 — synthesize the death EMIT each sacrifice cost raises. Sacrificing moves the fodder from
+  /// the battlefield to its owner's graveyard (CR 701.21a), so every <c>sac:</c> consume gets a dual
+  /// <c>emit:removal:creature[to=graveyard, manner=sacrificed]</c> whose subject IS the fodder, plus a
+  /// card-defined <c>sac → death</c> edge (paying the cost is the cause). One death per (card, fodder). The
+  /// emit inherits the sac's firability + span so a gated sac's death is gated too. This is the projected
+  /// port that lets dies/LTB/"when sacrificed" consumes match by subsumption instead of the retired bridge.
+  /// </summary>
+  private (List<PortNode> Deaths, List<PortEdge> Edges) SynthesizeSacrificeDeaths(
+    IReadOnlyList<PortNode> ports
+  )
+  {
+    var deaths = new List<PortNode>();
+    var edges = new List<PortEdge>();
+    var seen = new HashSet<string>(ports.Select(p => p.Identity), StringComparer.Ordinal);
+    foreach (
+      var sac in ports.Where(p =>
+        p.Side == PortSide.Consume
+        && p.Subject is not null
+        && (p.Label == "sac" || p.Label.StartsWith("sac:", StringComparison.Ordinal))
+      )
+    )
+    {
+      var label = PortLabel.SacrificeDeathEmit(sac.Subject!, _ontology);
+      var identity = $"{sac.Card}::{label}";
+      if (!seen.Add(identity))
+        continue; // one death emit per (card, fodder)
+      var death = PortFamilyRegistry.Annotate(
+        new PortNode
+        {
+          Card = sac.Card,
+          Label = label,
+          Side = PortSide.Emit,
+          Identity = identity,
+          Quantity = sac.Quantity,
+          Subject = sac.Subject,
+          Gated = sac.Gated,
+          TapGated = sac.TapGated,
+          SourceSpan = sac.SourceSpan,
+          OracleLineIndex = sac.OracleLineIndex,
+        },
+        _ontology
+      );
+      deaths.Add(death);
+      edges.Add(new PortEdge { From = sac, To = death, Provenance = EdgeProvenance.CardDefined });
+    }
+    return (deaths, edges);
+  }
+
+  /// <summary>
+  /// ADR-0003 §5 — the sacrifice-death flow guard. A sac cost's death emit
+  /// (<c>removal:creature[to=graveyard, manner=sacrificed]</c>, the narrowest rung) feeds a dies / LTB /
+  /// "when sacrificed" consume iff every destination/manner constraint the CONSUME carries is satisfied by
+  /// the emit — plain attribute subsumption (an unconstrained consume attribute captures anything; a
+  /// non-graveyard rung, e.g. <c>to=exile</c>, would not match this death). The SUBJECT cover (is the fodder
+  /// the type the trigger watches?) is the operator's job — <see cref="AddRulesEdge"/> tiers GREEN vs AMBER
+  /// on the Subjects, exactly as the retired sac→dies bridge did.
+  /// </summary>
+  internal bool SacrificeDeathFeedsTrigger(PortNode emit, PortNode consume)
+  {
+    bool AttrCovered(string key)
+    {
+      var c = consume.Structure!.Attr(key);
+      return c is null || string.Equals(c, emit.Structure!.Attr(key), StringComparison.Ordinal);
+    }
+    return AttrCovered("to") && AttrCovered("manner");
+  }
+
+  /// <summary>
+  /// ADR-0003 §5/§8 — the sac-death hop <b>respects the loop's token type</b>. A sacrifice's death emit
+  /// feeds a dies-trigger, but that trigger fires only if the sacrificed object is the type it requires.
+  /// When the object the loop feeds into the sac is a <em>created token</em> whose at-creation type can't be
+  /// that (a Treasure — artifact, CR 111.10 — sacrificed into "a creature you control dies"), the hop can
+  /// never fire, so the loop can't close → prune (Lithatog / Extruder × Pitiless Plunderer). The dual of the
+  /// token→sac flow guard (<see cref="TokenSatisfiesAtCreation"/>); like it, this lives in the engine as a
+  /// loop-reconstruction policy (an in-loop animation that makes the token a creature is an out-of-boundary
+  /// false-negative), keeping the <see cref="ObjectFilterRelations"/> operator a pure type relation.
+  /// <para>Post-remodel the hop is two edges — the sac cost's card-defined <c>sac → emit:removal:creature</c>
+  /// then the flow <c>emit:removal:creature → dies</c> (ADR-0003 §5) — so the anchor is the death→dies flow
+  /// edge, traced back through the death emit to its sac and the token that feeds it.</para>
   /// </summary>
   private bool BridgeFedByIncompatibleToken(IReadOnlyList<PortEdge> cycle)
   {
-    foreach (var bridge in cycle)
+    foreach (var deathToDies in cycle)
     {
+      // the sac-death flow hop: an emit:removal:creature death → a dies (to-graveyard) trigger.
       if (
-        Role(bridge.From.Label) != "sac"
-        || Role(bridge.To.Label) != "ltb"
-        || !bridge.To.Label.Contains(":to-graveyard", StringComparison.Ordinal)
-        || bridge.To.Subject?.IsSelf == true // a :self death is the §8-B one-shot rule's domain, not a type mismatch
+        deathToDies.From.Side != PortSide.Emit
+        || deathToDies.From.Structure?.Stem != "removal:creature"
+        || deathToDies.To.Structure?.Stem != "removal:creature"
+        || deathToDies.To.Structure?.Attr("to") != "graveyard"
+        || deathToDies.To.Subject?.IsSelf == true // a :self death is the §8-B one-shot rule's domain, not a type mismatch
       )
         continue;
-      var dies = bridge.To;
-      foreach (var feed in cycle)
-        if (
-          string.Equals(feed.To.Identity, bridge.From.Identity, StringComparison.Ordinal)
-          && feed.From.Side == PortSide.Emit
-          && ResourceKind(feed.From.Label) == "token"
-          && !TokenSatisfiesAtCreation(feed.From, dies)
-        )
-          return true; // the sacrificed token can't be the dies-trigger's type — the bridge can't fire
+      var dies = deathToDies.To;
+      var death = deathToDies.From;
+      // the sac cost that raised this death (its card-defined sac → removal-emit edge), then the token that
+      // feeds THAT sac — the two-hop trace the retired single-edge bridge did in one.
+      foreach (var sacToDeath in cycle)
+      {
+        if (!string.Equals(sacToDeath.To.Identity, death.Identity, StringComparison.Ordinal))
+          continue;
+        var sac = sacToDeath.From;
+        foreach (var feed in cycle)
+          if (
+            string.Equals(feed.To.Identity, sac.Identity, StringComparison.Ordinal)
+            && feed.From.Side == PortSide.Emit
+            && ResourceKind(feed.From.Label) == "token"
+            && !TokenSatisfiesAtCreation(feed.From, dies)
+          )
+            return true; // the sacrificed token can't be the dies-trigger's type — the loop can't fire
+      }
     }
     return false;
   }

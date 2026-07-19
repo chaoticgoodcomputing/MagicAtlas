@@ -65,6 +65,16 @@
       "Reliability": "Yes",
       "Tier": "Green",
       "Reason": null
+    },
+    {
+      "From": "Barbarian Riftcutter::sac:creature:self",
+      "To": "Barbarian Riftcutter::emit:removal:creature:to-graveyard:sacrificed:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
     }
   ],
   "Cycles": []

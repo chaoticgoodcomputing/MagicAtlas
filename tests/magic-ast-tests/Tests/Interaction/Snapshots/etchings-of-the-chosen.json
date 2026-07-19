@@ -87,6 +87,16 @@
       "Reliability": "Yes",
       "Tier": "Green",
       "Reason": null
+    },
+    {
+      "From": "Etchings of the Chosen::sac:creature:controlled",
+      "To": "Etchings of the Chosen::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
     }
   ],
   "Cycles": []
