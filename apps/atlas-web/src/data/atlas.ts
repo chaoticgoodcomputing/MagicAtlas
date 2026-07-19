@@ -194,7 +194,16 @@ interface OraclePortRow {
  *  `replace:token-creation` intercept is *about* tokens even though its own
  *  family is the inert `replacement`. Returns the leading resource segment
  *  (`replace:token-creation` → `token`, `replace:life-gain` → `life`) so the
- *  clause can highlight in that resource's hue. Null when not a `replace:` label. */
+ *  clause can highlight in that resource's hue. Null when not a `replace:` label.
+ *
+ *  ADR-0003 gap (last remaining label-parse in the frontend, 2026-07-19 audit):
+ *  this SHOULD read a structured facet instead, but no port family recognizer
+ *  covers `PortSide.Intercept` (see `libs/mast-interaction/Families/`), so
+ *  replacement ports never get a `PortStructure` attached — `stem`/`manner` are
+ *  null on these rows all the way from the engine, not just unexposed by the
+ *  API. Revisit once an intercept-side family recognizer lands and PortRow
+ *  carries the watched-resource attribute; do not "fix" this by widening the
+ *  label regex or adding a second parallel parse. */
 function interceptedFamily(label: string): string | null {
   const m = /^replace:([a-z]+)/.exec(label);
   return m ? m[1] : null;
