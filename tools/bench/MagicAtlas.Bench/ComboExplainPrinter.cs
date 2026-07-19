@@ -46,7 +46,7 @@ public static class ComboExplainPrinter
     foreach (var hop in d.Edges)
     {
       Console.WriteLine(
-        $"    [{hop.Hop}] {hop.FromCard}::{hop.FromLabel}  ->  {hop.ToCard}::{hop.ToLabel}"
+        $"    [{hop.Hop}] {hop.FromCard}::{hop.FromLabel}  ->  {hop.ToCard}::{hop.ToLabel}  (id={hop.EdgeId})"
       );
       Console.WriteLine(
         $"        tier={hop.EdgeTier,-6} provenance={hop.Provenance,-12} family={hop.Family,-8} "

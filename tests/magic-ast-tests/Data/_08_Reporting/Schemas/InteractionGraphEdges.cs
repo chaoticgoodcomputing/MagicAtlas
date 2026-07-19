@@ -35,6 +35,12 @@ public partial record LabelEdgeRow
 [FlowthruSchema]
 public partial record CardEdgeRow
 {
+  /// <summary>Deterministic edge identity (ADR-0004 Migration Stage 0/1) — <c>PortEdge.Id</c>, stable
+  /// across separate materializations of the same corpus state. The natural key downstream consumers
+  /// (<c>port_edges</c>) key on, in place of a regeneration-unstable surrogate.</summary>
+  [SerializedLabel("id")]
+  public string Id { get; init; } = "";
+
   [SerializedLabel("fromCard")]
   public string FromCard { get; init; } = "";
 

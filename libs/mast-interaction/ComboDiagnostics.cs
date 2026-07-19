@@ -68,6 +68,10 @@ public sealed record HopDiagnostic
   /// <summary>Hop order within the cycle (0-based, matches <see cref="PortCycle.Edges"/> order).</summary>
   public required int Hop { get; init; }
 
+  /// <summary>The edge's deterministic identity (<see cref="PortEdge.Id"/>, ADR-0004 Migration Stage 0/1)
+  /// — stable across separate materializations of the same corpus state.</summary>
+  public required string EdgeId { get; init; }
+
   public required string FromCard { get; init; }
   public required string FromLabel { get; init; }
   public required string ToCard { get; init; }
@@ -98,6 +102,7 @@ public sealed record HopDiagnostic
     new()
     {
       Hop = hop,
+      EdgeId = edge.Id,
       FromCard = edge.From.Card,
       FromLabel = edge.From.Label,
       ToCard = edge.To.Card,

@@ -80,6 +80,11 @@ public class AtlasDbContext : DbContext
         var portEdge = modelBuilder.Entity<PortEdgeRow>();
         portEdge.HasKey(e => e.Id);
         portEdge.Property(e => e.Id).ValueGeneratedOnAdd();
+        // Not unique: two distinct materialized PortEdge instances can legitimately share the same
+        // (fromCard, fromLabel, toCard, toLabel, family) content — same logical edge produced by more
+        // than one derivation arm — and collapsing to the same EdgeId there is correct, not a collision
+        // to reject. A plain index still makes "find this edge across two seedings" a fast lookup.
+        portEdge.HasIndex(e => e.EdgeId);
 
         var family = modelBuilder.Entity<ResourceFamilyRow>();
         family.HasKey(f => f.Family);

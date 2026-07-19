@@ -26,10 +26,21 @@ namespace MagicAtlas.Api.Data;
 [Table("port_edges", Schema = "atlas")]
 public class PortEdgeRow
 {
-    /// <summary>Synthetic surrogate key (bigserial); the natural identity is (from/to card+label, relation).</summary>
+    /// <summary>Synthetic surrogate key (bigserial) — EF's row identity. The NATURAL identity is
+    /// <see cref="EdgeId"/> (ADR-0004 Migration Stage 0/1): a hash is regeneration-stable, a bigserial is
+    /// not (a reseed assigns different <see cref="Id"/> values in a different order), so anything that
+    /// must recognize "the same edge" across two separate seedings (a provenance annotation, a
+    /// cross-run diff) keys on <see cref="EdgeId"/>, never this column.</summary>
     [Key]
     [Column("id")]
     public long Id { get; set; }
+
+    /// <summary>The deterministic edge identity (<c>PortEdge.Id</c>, <c>CardEdgeRow.Id</c> upstream) —
+    /// hashed from <c>(fromCard, fromLabel, toCard, toLabel, family)</c>, byte-identical across separate
+    /// materializations of the same corpus state. The natural key; see <see cref="Id"/>.</summary>
+    [Required]
+    [Column("edge_id")]
+    public string EdgeId { get; set; } = "";
 
     [Required]
     [Column("from_card")]

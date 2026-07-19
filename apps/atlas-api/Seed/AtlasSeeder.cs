@@ -518,7 +518,7 @@ public sealed class AtlasSeeder
             "ix_port_edges_reaches", "ix_port_edges_source_reaches",
             "ix_port_edges_edhrec", "ix_port_edges_cmc",
             "ix_port_edges_from_edhrec", "ix_port_edges_from_cmc",
-            "ix_port_edges_popularity",
+            "ix_port_edges_popularity", "ix_port_edges_edge_id",
         };
         foreach (var ix in indexNames)
             db.Database.ExecuteSqlRaw($"DROP INDEX IF EXISTS atlas.{ix}");
@@ -531,7 +531,7 @@ public sealed class AtlasSeeder
         long total = 0;
 
         await using (var writer = await conn.BeginBinaryImportAsync(
-            "COPY atlas.port_edges (from_card, from_label, from_family, to_card, to_label, to_family, "
+            "COPY atlas.port_edges (edge_id, from_card, from_label, from_family, to_card, to_label, to_family, "
                 + "relation, tier, from_cmc, from_edhrec, from_colors, source_reaches, "
                 + "to_cmc, to_edhrec, to_colors, target_reaches, popularity) FROM STDIN (FORMAT BINARY)",
             ct))
@@ -558,6 +558,7 @@ public sealed class AtlasSeeder
                 var toLabel = e.ToLabel ?? "";
 
                 await writer.StartRowAsync(ct);
+                await writer.WriteAsync(e.Id ?? "", NpgsqlDbType.Text, ct);
                 await writer.WriteAsync(fromCard, NpgsqlDbType.Text, ct);
                 await writer.WriteAsync(fromLabel, NpgsqlDbType.Text, ct);
                 await writer.WriteAsync(famByPort.GetValueOrDefault((fromCard, fromLabel), ""), NpgsqlDbType.Text, ct);
@@ -595,6 +596,7 @@ public sealed class AtlasSeeder
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_from_edhrec ON atlas.port_edges (from_edhrec)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_from_cmc ON atlas.port_edges (from_cmc)");
         db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_popularity ON atlas.port_edges (popularity DESC)");
+        db.Database.ExecuteSqlRaw("CREATE INDEX IF NOT EXISTS ix_port_edges_edge_id ON atlas.port_edges (edge_id)");
 
         _logger.LogInformation("Port edges: {Total} rows.", total);
     }
@@ -950,6 +952,7 @@ public sealed class AtlasSeeder
     /// <summary>One row of <c>card-edges.json</c> (the engine's materialized port→port union).</summary>
     private sealed class RawEdge
     {
+        [JsonPropertyName("id")] public string? Id { get; set; }
         [JsonPropertyName("fromCard")] public string? FromCard { get; set; }
         [JsonPropertyName("fromLabel")] public string? FromLabel { get; set; }
         [JsonPropertyName("toCard")] public string? ToCard { get; set; }

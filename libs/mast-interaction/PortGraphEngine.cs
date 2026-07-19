@@ -25,6 +25,34 @@ public sealed record PortEdge
   public Trilean Reliability { get; init; } = Trilean.Yes;
   public string? Reason { get; init; }
 
+  /// <summary>
+  /// Deterministic, content-addressed edge identity (ADR-0004 "Edge-level provenance labeling",
+  /// Migration Stage 0/1). Hashed from <c>(fromCard, fromLabel, toCard, toLabel, family)</c> — stable
+  /// across repeated materializations of the same corpus state, unlike a positional/surrogate id, so
+  /// two separate runs (or a run and its regeneration) agree on which edge is which. Uses
+  /// <see cref="Family"/> (Flow/Modifier) as the "kind of link" component: the interaction golds'
+  /// fuller 6-valued <c>mechanism</c> (card-defined/subsumption/modifier/polarity/match_policy/bridge —
+  /// ADR-0004 Decision §2, the <c>Connector</c> facet) is not yet mapped onto live engine-materialized
+  /// edges — that mapping is a separate, later piece of work. <see cref="Family"/> is the closest
+  /// analogue the engine currently computes, and is present at every downstream layer (the golds,
+  /// <c>card-edges.json</c>, <c>port_edges</c>), so the identity stays computable everywhere.
+  /// </summary>
+  public string Id => ComputeId(From.Card, From.Label, To.Card, To.Label, Family);
+
+  /// <summary>
+  /// SHA-256 over the pipe-joined identity tuple, hex-encoded (first 16 bytes / 32 hex chars — ample
+  /// collision resistance for a corpus this size, short enough to read in <c>--explain</c> output and
+  /// to store as a natural key). A cryptographic hash (not <c>string.GetHashCode()</c>, which .NET does
+  /// not guarantee stable across processes) so the id is byte-identical across separate runs/processes,
+  /// not just within one.
+  /// </summary>
+  public static string ComputeId(string fromCard, string fromLabel, string toCard, string toLabel, EdgeFamily family)
+  {
+    var key = string.Join('|', fromCard, fromLabel, toCard, toLabel, family.ToString());
+    var hash = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(key));
+    return Convert.ToHexString(hash, 0, 16).ToLowerInvariant();
+  }
+
   public CertaintyTier Tier =>
     Provenance == EdgeProvenance.CardDefined ? CertaintyTier.Green // certain by construction (§5)
     : Overlap == FilterRelation.Disjoint ? CertaintyTier.Red

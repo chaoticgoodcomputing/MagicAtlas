@@ -47,6 +47,7 @@ public static class MaterializeCardEdgesStep
       var rows = edges
         .Select(e => new CardEdgeRow
         {
+          Id = e.Id,
           FromCard = e.From.Card,
           FromLabel = e.From.Label,
           ToCard = e.To.Card,
