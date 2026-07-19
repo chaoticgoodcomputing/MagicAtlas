@@ -193,77 +193,10 @@ public sealed class PortGraphEngine
 
   public PortGraphEngine(TypeOntology ontology) => _ontology = ontology;
 
-  /// <summary>
-  /// ADR-0003 Stage-3 shadow gate, FULL-corpus variant (env-gated by <c>MAST_CAPTURES_SHADOW=1</c>). For
-  /// every emit×consume pair the real reconstruction evaluates in <see cref="Materialize"/>, compares the
-  /// label-based <see cref="FlowFeasible"/> oracle against the structure-based
-  /// <see cref="PortFlowMatcher.Captures"/> and records any divergence — the proof (over the production
-  /// workload, not just the sentinel corpus) that swapping reconstruction onto the structured matcher is
-  /// behaviour-preserving. A null-Structure port that drops an edge surfaces here as Flow=true/Cap=false.
-  /// Zero behaviour change when disabled. Writes a summary to temp + stderr at process exit.
-  /// </summary>
+  /// <summary>The structured flow matcher (ADR-0003 §5, authoritative since the Stage-4 cutover): selects
+  /// each flow arm from the ports' <see cref="PortStructure"/> and applies the shared guards. Lazily built on
+  /// first <see cref="Materialize"/>.</summary>
   private PortFlowMatcher? _matcher;
-
-  internal static class CapturesShadow
-  {
-    public static readonly bool Enabled =
-      System.Environment.GetEnvironmentVariable("MAST_CAPTURES_SHADOW") == "1";
-
-    private static readonly object Gate = new();
-    private static bool _hookInstalled;
-    private static readonly System.Collections.Generic.List<string> Divergences = new();
-    private static long _pairs;
-    private static long _flowTrue;
-
-    /// <summary>Compares the retained label ORACLE (<see cref="FlowFeasible"/>) against the now-authoritative
-    /// structured <paramref name="captures"/> result for one reconstruction pair, recording any divergence —
-    /// the full-corpus regression guard that the structure and the label switch stay in lock-step.</summary>
-    public static void Record(PortGraphEngine engine, PortNode emit, PortNode consume, bool captures)
-    {
-      lock (Gate)
-      {
-        if (!_hookInstalled)
-        {
-          System.AppDomain.CurrentDomain.ProcessExit += (_, _) => Flush();
-          _hookInstalled = true;
-        }
-      }
-      var oracle = engine.FlowFeasible(emit, consume);
-      lock (Gate)
-      {
-        _pairs++;
-        if (oracle)
-          _flowTrue++;
-        if (oracle != captures)
-          Divergences.Add(
-            $"{emit.Card}::{emit.Label} -> {consume.Card}::{consume.Label} "
-              + $"| Flow={oracle} Cap={captures} "
-              + $"| emitStruct={emit.Structure?.Canonical() ?? "<null>"} "
-              + $"consumeStruct={consume.Structure?.Canonical() ?? "<null>"}"
-          );
-      }
-    }
-
-    private static void Flush()
-    {
-      lock (Gate)
-      {
-        var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "captures-shadow-report.txt");
-        var lines = new System.Collections.Generic.List<string>
-        {
-          $"pairs_checked={_pairs}",
-          $"flow_feasible_true={_flowTrue}",
-          $"divergences={Divergences.Count}",
-          "---",
-        };
-        lines.AddRange(System.Linq.Enumerable.Take(Divergences, 2000));
-        System.IO.File.WriteAllLines(path, lines);
-        System.Console.Error.WriteLine(
-          $"[captures-shadow] pairs={_pairs} flowTrue={_flowTrue} divergences={Divergences.Count} -> {path}"
-        );
-      }
-    }
-  }
 
   public IReadOnlyList<PortEdge> Materialize(IReadOnlyList<PortGraph> graphs, bool graftCopies = true)
   {
@@ -311,19 +244,14 @@ public sealed class PortGraphEngine
 
     // (2) Flow — an emitted object refuels a consume; mana refunds a mana cost. ADR-0003 Stage 4 cutover
     // (2026-07-17): the STRUCTURED matcher is AUTHORITATIVE — PortFlowMatcher.Captures selects the flow arm
-    // from the port PortStructure (SelectArm) and applies the shared guards. The label-based FlowFeasible is
-    // retained as the shadow ORACLE (the sentinel PortFlowMatcherShadowTest + the full-corpus
-    // MAST_CAPTURES_SHADOW gate), proven identical over the entire production corpus at Stage 3 (0 divergences
-    // across 3.0M pairs, 112,631 feasible). New flow arms are now added on the structure (SelectArm + a guard),
-    // not the label switch.
+    // from the port PortStructure (SelectArm) and applies the shared guards. Proven behaviour-preserving at
+    // cutover (0 divergences over 3.0M pairs vs the since-retired FlowFeasible label switch, Stage 3). New
+    // flow arms are added on the structure (SelectArm + a guard).
     _matcher ??= new PortFlowMatcher(this);
     foreach (var emit in emits)
       foreach (var consume in consumes)
       {
-        var feasible = _matcher.Captures(emit, consume);
-        if (CapturesShadow.Enabled)
-          CapturesShadow.Record(this, emit, consume, feasible);
-        if (feasible)
+        if (_matcher.Captures(emit, consume))
           AddRulesEdge(edges, emit, consume, EdgeFamily.Flow);
       }
 
@@ -709,73 +637,6 @@ public sealed class PortGraphEngine
       Label = label,
       Side = side,
       Identity = $"{card}::{label}",
-    };
-
-  /// <summary>The minimal derived flow grammar (§6) the gold needs: a created token refuels a sac; mana refunds a mana cost.</summary>
-  internal bool FlowFeasible(PortNode emit, PortNode consume) =>
-    (ResourceKind(emit.Label), Role(consume.Label)) switch
-    {
-      ("token", "sac") => TokenSatisfiesAtCreation(emit, consume),
-      ("mana", "pay") => ResourceKind(consume.Label) == "mana" // mana refunds a mana cost…
-        && ManaColorFeeds(ManaColor(emit.Label), ManaColor(consume.Label)), // …of a colour it can pay
-      ("life", "pay") => ResourceKind(consume.Label) == "paylife" // life replenishes a "Pay N life" cost…
-        && LifeGainFeedsCost(emit), // …only a GAIN emit (never a loss) can pay it, mirrors ManaToPay
-      ("life", "trigger") => LifeFlowFeasible(emit, consume), // a life event feeds a same-direction life trigger (CR 119)
-      // Die rolls (CR 706.2). A "roll [N] dice" emit refuels a "whenever you roll one or more dice"
-      // trigger, so a self-feeding roll engine closes (Brazen Dwarf, Mr. House). Feasibility only —
-      // AddRulesEdge's operator tiers certainty on the player Subjects (You↔You → GREEN; a result
-      // threshold on the trigger floors firability via §8, not the arm).
-      ("rolldice", "trigger") => ResourceKind(consume.Label) == "rolldice",
-      // Damage (CR 120 general / CR 510 combat). A "deals N damage" emit refuels a "whenever [source]
-      // deals [combat] damage [to recipient]" trigger — closing a deal→…→deal loop (Captain Rex Nebula's
-      // Crash Land: the Vehicle's own damage re-triggers its roll). Feasibility only — combat/noncombat +
-      // recipient facets gate it (a NON-combat emit must never feed a combat-specific trigger — the
-      // blocker-memory soundness; a player-recipient emit never feeds a creature-recipient trigger), a
-      // self-watching trigger is matched same-card-only (object identity the operator can't see), and
-      // AddRulesEdge's operator tiers certainty on the SOURCE Subjects.
-      ("damage", "trigger") => DamageSatisfiesTrigger(emit, consume),
-      // Extra-combat loop (CR 500.8). An additional combat phase lets a creature attack AGAIN: emit:
-      // additionalcombat satisfies an attacksorblocks consume — re-driving a creature's combat-damage emit
-      // (closing the Breath of Fury / Aggravated Assault infinite-combat loop) AND re-firing a card's own
-      // "whenever this attacks" roll trigger (the dice offshoot). Feasibility only — the combat-damage emit
-      // stays Gated so any loop through it floors to AMBER (never a false GREEN), and AddRulesEdge's operator
-      // tiers the {Controller:You}↔self Subjects (Overlaps, not Subsumes → Amber). Sound for any attacker.
-      ("additionalcombat", "attacksorblocks") => true,
-      // Cast-recursion (Displacer Kitten family). A RE-CAST spell (emit:cast — a noncreature permanent that
-      // bounced itself to hand and is cast again, CR 601) feeds a "whenever you cast a [noncreature] spell"
-      // trigger (CR 603.2) whose watched-spell filter is type-compatible. Feasibility only — AddRulesEdge's
-      // operator tiers the certainty on the Subjects (a bare "a spell" recast vs a "NONcreature spell"
-      // trigger → Intersects-Overlaps but not Subsumes → AMBER), and the recast's pay:mana co-cost floors
-      // the loop via §8 when the loop can't refill it. A copy of a spell (emit:copy:spell) is deliberately
-      // NOT this arm — CR 707.10 makes a copy uncast, so it never feeds a cast trigger (SpellCopyEmit docs).
-      ("cast", "trigger") => CastSatisfiesTrigger(emit, consume),
-      // Blink (CR 603.6e/400.7). A blinked permanent re-enters as a NEW object, so its ETB retriggers:
-      // emit:blink refuels an Enters-trigger whose entering filter is type-compatible with the blinked
-      // permanent (Felidar blinks Resto → Resto's ETB fires again). Feasibility only — AddRulesEdge's
-      // operator tiers the certainty on the Subjects (a blink of "a permanent" vs "this creature" enters
-      // → Intersects-Overlaps but not Subsumes → AMBER; the "you may" Gated floors it too).
-      ("blink", "etb") => BlinkSatisfiesEnter(emit, consume),
-      // Aristocrat recursion (aristocrat-recursion-scope.md, Decision 2b). A creature re-entering the
-      // battlefield via a cast-from-graveyard permission (emit:returntobattlefield:self) refuels a sac
-      // whose fodder Subsumes it (the structural twin of (token, sac)), and feeds an ETB-trigger payoff
-      // (Essence Warden / Suture Priest). Feasibility only — AddRulesEdge's operator tiers the certainty.
-      ("returntobattlefield", "sac") => RecastSatisfies(emit, consume),
-      ("returntobattlefield", "etb") => RecastSatisfies(emit, consume),
-      // Spell-recursion → recast (CR 601.2). An instant/sorcery returned to hand
-      // (emit:returntohand:spell, Archaeomancer/Izzet Chronarch's ETB returning Ghostly Flicker) can be
-      // recast, re-firing its effects: it refuels the spell's cast:spell consume, re-driving the spell's
-      // blink/effect emits. Feasibility only — AddRulesEdge's operator tiers GREEN vs AMBER on the
-      // Subjects (the returned {instant,sorcery} graveyard filter vs the cast spell's {instant,sorcery}
-      // self-type). A returned filter type-incompatible with the cast spell is pruned by the operator.
-      ("returntohand", "cast") => SpellRecursionSatisfiesCast(emit, consume),
-      // Stack spell-copy (CR 707.10). A copy of a spell resolves with the ORIGINAL's effects, so an
-      // emit:copy:spell:<types> re-fires a type-compatible spell's effect emits — modeled as feeding that
-      // spell's cast:spell driver (its effect source). Reverberate (copy instant/sorcery) re-fires Pair o'
-      // Dice Lost's roll/return effects, closing the magecraft-copy loop. NOT a cast TRIGGER (CR 707.10:
-      // a copy is never cast); this is the copy's own-effects re-fire, which IS real. Feasibility only —
-      // the operator tiers on the copied-type vs spell-self-type Subjects.
-      ("copy", "cast") => SpellCopyReFiresEffects(emit, consume),
-      _ => false,
     };
 
   /// <summary>

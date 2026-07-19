@@ -517,8 +517,8 @@ public class PortWalkSentinelSnapshotTest
       .Select(p => (p.Side, p.Structure!.Stem))
       .ToHashSet();
 
-    // The flow families converted at Stage 2 (emit/consume sides that the engine's FlowFeasible switch and
-    // the resource-graph stations name). Each must be present so Stage 3's matcher has real structures.
+    // The flow families converted at Stage 2 (emit/consume sides that the structured matcher's arms and
+    // the resource-graph stations name). Each must be present so the matcher has real structures.
     (PortSide Side, string Stem)[] required =
     [
       (PortSide.Emit, "damage"), (PortSide.Consume, "damage"), // deals-damage event (Barrage / Copper Dragon)

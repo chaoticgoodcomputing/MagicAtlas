@@ -19,7 +19,7 @@ namespace MagicAtlas.Ast.Tests.Flows.LabelCensus.Steps;
 [FlowthruStep]
 public static class CensusStep
 {
-  // Roles that form interaction edges (Materialize / FlowFeasible / the bridges). Everything else
+  // Roles that form interaction edges (Materialize / PortFlowMatcher / the bridges). Everything else
   // (modify, evasion, coarse emit:<x>, unprojected trigger events) is inert — never on a cycle.
   private static readonly HashSet<string> EdgeRoles = new(StringComparer.Ordinal)
   {

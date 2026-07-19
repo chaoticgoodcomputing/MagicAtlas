@@ -7,21 +7,23 @@ using MagicAST.Interaction;
 using MagicAST.Tests.Infrastructure;
 
 /// <summary>
-/// ADR-0003 Stage 3 — the <b>shadow-mode equivalence gate</b>. The engine's
-/// <see cref="PortGraphEngine.FlowFeasible"/> (the ADR-0002 per-arm label switch) is the ORACLE; the new
-/// <see cref="PortFlowMatcher.Captures"/> selects the flow arm from the structured <see cref="PortStructure"/>
-/// alone and applies the same guard. This test runs BOTH over every emit×consume pair across the sentinel
-/// corpus and asserts they render the identical accept/reject — the proof that the structured taxonomy
-/// losslessly reproduces the engine's flow decisions (ADR-0003 §5 "quotient re-proof"), so matching can
-/// move onto the structure at Stage 4 with no behaviour change.
+/// ADR-0003 — the structured flow matcher regression guard. Since the Stage-4 cutover
+/// <see cref="PortFlowMatcher.Captures"/> is authoritative (the ADR-0002 <c>FlowFeasible</c> label switch
+/// that once shadowed it has been deleted; the quotient-equivalence proof is banked in git history + the
+/// ADR). This fixture now pins <see cref="PortFlowMatcher.Captures"/>'s decisions directly:
 ///
-/// <para>Includes the two frontend over-sensitivity cases as concrete anchors: a non-combat damage emit
-/// must not feed a combat self-trigger (Barrage Ogre ✗→ Ancient Copper Dragon), and a token creation must
-/// not feed a cast trigger (Chatterfang ✗→ Aang) — both rejected by the matcher exactly as the engine
-/// rejects them.</para>
+/// <list type="bullet">
+/// <item>the set of accepted emit×consume pairs over the sentinel corpus is snapshotted to
+/// <c>Snapshots/captures-accepted-pairs.txt</c> (regenerate with <c>UPDATE_SNAPSHOTS=1</c>) — a stateless
+/// golden that makes any flow-adjacency drift a loud, reviewable diff (e.g. the ADR-0003 §5 sac→removal
+/// remodel is expected to grow this set);</item>
+/// <item>the two frontend over-sensitivity cases stay rejected: a non-combat damage emit must not feed a
+/// combat self-trigger (Barrage Ogre ✗→ Ancient Copper Dragon), and a token creation must not feed a cast
+/// trigger (Chatterfang ✗→ Aang).</item>
+/// </list>
 /// </summary>
 [TestFixture]
-public class PortFlowMatcherShadowTest
+public class PortFlowMatcherTest
 {
   private static readonly TypeOntology Ontology = JsonSerializer.Deserialize<TypeOntology>(
     File.ReadAllText(TestData.OntologyPath)
@@ -36,6 +38,12 @@ public class PortFlowMatcherShadowTest
   }
 
   private static string FixturesDir() => Path.Combine(RepoRoot(), "tests", "magic-ast-tests", "Fixtures");
+
+  private static string SnapshotPath() =>
+    Path.Combine(
+      RepoRoot(), "tests", "magic-ast-tests", "Tests", "Interaction", "Snapshots",
+      "captures-accepted-pairs.txt"
+    );
 
   private static IReadOnlyList<PortGraph> SentinelGraphs()
   {
@@ -62,8 +70,12 @@ public class PortFlowMatcherShadowTest
     return graphs;
   }
 
+  private static string PairKey(PortNode emit, PortNode consume) =>
+    $"{emit.Card}::{emit.Structure?.Canonical() ?? "<null>"}"
+    + $"  ->  {consume.Card}::{consume.Structure?.Canonical() ?? "<null>"}";
+
   [Test]
-  public void Captures_equals_FlowFeasible_over_the_sentinel_corpus()
+  public void Captures_accepts_the_snapshotted_pairs_over_the_sentinel_corpus()
   {
     var graphs = SentinelGraphs();
     var engine = new PortGraphEngine(Ontology);
@@ -73,37 +85,36 @@ public class PortFlowMatcherShadowTest
     var emits = ports.Where(p => p.Side == PortSide.Emit).ToList();
     var consumes = ports.Where(p => p.Side == PortSide.Consume).ToList();
 
-    var mismatches = new List<string>();
-    var flowPairs = 0;
+    var accepted = new List<string>();
     foreach (var emit in emits)
       foreach (var consume in consumes)
-      {
-        var oracle = engine.FlowFeasible(emit, consume);
-        var structured = matcher.Captures(emit, consume);
-        if (oracle != structured)
-          mismatches.Add(
-            $"{emit.Card}::{emit.Label}  ->  {consume.Card}::{consume.Label} "
-              + $"| FlowFeasible={oracle} Captures={structured} "
-              + $"| emit.Structure={emit.Structure?.Canonical() ?? "<null>"} "
-              + $"consume.Structure={consume.Structure?.Canonical() ?? "<null>"}"
-          );
-        if (oracle)
-          flowPairs++;
-      }
+        if (matcher.Captures(emit, consume))
+          accepted.Add(PairKey(emit, consume));
+    accepted.Sort(StringComparer.Ordinal);
 
+    var actual = string.Join("\n", accepted);
+    var path = SnapshotPath();
+
+    if (Environment.GetEnvironmentVariable("UPDATE_SNAPSHOTS") == "1" || !File.Exists(path))
+    {
+      File.WriteAllText(path, actual + "\n");
+      Assert.Pass($"wrote {accepted.Count} accepted pair(s) to {path}");
+    }
+
+    var expected = File.ReadAllText(path).TrimEnd('\n');
     Assert.Multiple(() =>
     {
-      Assert.That(flowPairs, Is.GreaterThan(0), "expected some FlowFeasible-accepted pairs across the corpus");
+      Assert.That(accepted, Is.Not.Empty, "expected some Captures-accepted pairs across the sentinel corpus");
       Assert.That(
-        mismatches,
-        Is.Empty,
-        $"PortFlowMatcher.Captures diverged from the engine oracle on {mismatches.Count} pair(s):\n"
-          + string.Join("\n", mismatches.Take(40))
+        actual,
+        Is.EqualTo(expected),
+        "PortFlowMatcher.Captures flow-adjacency drifted from the committed snapshot. If intended (e.g. a "
+          + "new/retired flow arm), review the diff and regenerate with UPDATE_SNAPSHOTS=1."
       );
     });
   }
 
-  // --- the two frontend over-sensitivity anchors, matched exactly as the engine matches them ---
+  // --- the two frontend over-sensitivity anchors, matched exactly as the matcher matches them ---
 
   private static PortNode Port(string card, string label, PortSide side, ObjectFilter? subject) =>
     PortFamilyRegistry.Annotate(
@@ -137,7 +148,6 @@ public class PortFlowMatcherShadowTest
       Assert.That(PortFlowMatcher.SelectArm(barrage.Structure!, copper.Structure!),
         Is.EqualTo(PortFlowMatcher.FlowArm.DamageToTrigger), "the pair does select the damage arm…");
       Assert.That(matcher.Captures(barrage, copper), Is.False, "…but the combat-manner guard rejects it");
-      Assert.That(engine.FlowFeasible(barrage, copper), Is.False, "engine oracle agrees");
     });
   }
 
@@ -159,7 +169,6 @@ public class PortFlowMatcherShadowTest
       Assert.That(PortFlowMatcher.SelectArm(chatterfang.Structure!, aang.Structure!),
         Is.Null, "token creation and a cast trigger share no flow arm — pruned structurally");
       Assert.That(matcher.Captures(chatterfang, aang), Is.False);
-      Assert.That(engine.FlowFeasible(chatterfang, aang), Is.False, "engine oracle agrees");
     });
   }
 }

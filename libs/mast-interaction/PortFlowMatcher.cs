@@ -3,24 +3,19 @@ namespace MagicAST.Interaction;
 using MagicAST.AST.References;
 
 /// <summary>
-/// ADR-0003 Stage 3 — the <b>structured flow matcher</b>. Selects which flow arm connects an emit to a
-/// consume <em>purely from their <see cref="PortStructure"/></em> (the is-a stem + attribute set), then
-/// applies that arm's guard. This is the "structure absorbs the structural content of the per-arm switch;
-/// the guards stay in code" split (ADR-0003 §5, Decision 1/2): <see cref="SelectArm"/> is the structural
-/// half — it reproduces <see cref="PortGraphEngine.FlowFeasible"/>'s <c>(ResourceKind(emit), Role(consume))</c>
-/// label switch from the structures alone — while the guards (token-at-creation types, the damage/blink
-/// self-source same-card refusals, mana colour, recast type cover) remain the engine's registered
-/// implementations, reused verbatim so there is one source of truth.
+/// ADR-0003 — the <b>structured flow matcher</b>, authoritative since the Stage-4 cutover. Selects which
+/// flow arm connects an emit to a consume <em>purely from their <see cref="PortStructure"/></em> (the is-a
+/// stem + attribute set), then applies that arm's guard. This is the "structure absorbs the structural
+/// content of the per-arm switch; the guards stay in code" split (ADR-0003 §5, Decision 1/2):
+/// <see cref="SelectArm"/> is the structural half — it maps <c>(emit-stem, consume-stem + facets)</c> to an
+/// arm — while the guards (token-at-creation types, the damage/blink self-source same-card refusals, mana
+/// colour, recast type cover) remain the engine's registered implementations, reused verbatim so there is
+/// one source of truth. A null <see cref="PortNode.Structure"/> (an unconverted family) yields no arm — the
+/// honest "not on the structure" answer, never a silent taxonomy drift.
 ///
-/// <para><b>Shadow mode (the engine is the oracle).</b> <see cref="Captures"/> must return the same
-/// accept/reject as <see cref="PortGraphEngine.FlowFeasible"/> for every emit×consume pair —
-/// <c>PortFlowMatcherShadowTest</c> proves it over the sentinel corpus. Any divergence is either a matcher
-/// bug or an unconverted family (a null Structure), never a silent taxonomy drift.</para>
-///
-/// <para>Once proven, <see cref="Arms"/> is the compact flow-adjacency the frontend consumes (Stage 5): the
-/// legal <c>emit-stem → consume-stem</c> hops plus the facet guards each needs, replacing the lossy
-/// family-ring re-expansion that invents edges the engine never drew (Chatterfang→Aang, Barrage→Copper
-/// Dragon).</para>
+/// <para>The accepted <c>emit-stem → consume-stem</c> hops (plus the facet guards each needs) are also the
+/// compact flow-adjacency the frontend consumes (Stage 5), replacing the lossy family-ring re-expansion
+/// that invented edges the engine never drew (Chatterfang→Aang, Barrage→Copper Dragon).</para>
 /// </summary>
 public sealed class PortFlowMatcher
 {
@@ -28,8 +23,7 @@ public sealed class PortFlowMatcher
 
   public PortFlowMatcher(PortGraphEngine engine) => _engine = engine;
 
-  /// <summary>The flow arms — one per <see cref="PortGraphEngine.FlowFeasible"/> switch case, named by the
-  /// structural hop it connects.</summary>
+  /// <summary>The flow arms — one per structural hop the matcher connects.</summary>
   public enum FlowArm
   {
     TokenToSac,
@@ -123,8 +117,7 @@ public sealed class PortFlowMatcher
   /// <summary>
   /// Does the emit feed the consume? Structural arm selection (<see cref="SelectArm"/>) then the arm's
   /// guard. Returns false for an unconverted family (either port has a null <see cref="PortNode.Structure"/>)
-  /// — the honest "not yet on the structure" answer, which the shadow gate scopes around. Equals
-  /// <see cref="PortGraphEngine.FlowFeasible"/> for every structured pair (the equivalence proof).
+  /// — the honest "not yet on the structure" answer.
   /// </summary>
   public bool Captures(PortNode emit, PortNode consume)
   {

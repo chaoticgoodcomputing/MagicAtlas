@@ -239,7 +239,7 @@ public static class PortLabel
   // --- Casting a spell as a flowing event (CR 601 / 603.2). -----------------------------------
   // A "whenever you cast a [noncreature] spell" TRIGGER is a consume; a RE-CAST of a bounced-to-hand
   // spell (a noncreature permanent that returns ITSELF to hand and is recast — Displacer Kitten ×
-  // Mourning/Conviction) is the matching emit. The flow arm (PortGraphEngine.FlowFeasible) connects an
+  // Mourning/Conviction) is the matching emit. The flow arm (PortFlowMatcher) connects an
   // emit:cast of a spell to a trigger:cast whose watched-spell filter is type-compatible. The
   // discriminating spell filter — the card-type axis ("a spell", "a NONcreature spell" via the trigger's
   // ExcludedCardTypes) — rides as the port Subject so the OPERATOR tiers the connection (ADR-0002 §7: the
@@ -270,7 +270,7 @@ public static class PortLabel
 
   // --- Life as a flowing resource (CR 119). ---------------------------------------------------
   // A life-gain/loss EFFECT is an emit; a "whenever [a player] gains/loses life" TRIGGER is a consume.
-  // The flow arm (PortGraphEngine.FlowFeasible) connects same-direction pairs; the PLAYER axis — who
+  // The flow arm (PortFlowMatcher) connects same-direction pairs; the PLAYER axis — who
   // gains/loses vs whom the trigger watches — rides as the port Subject so the operator tiers it
   // (You↔You is GREEN; "a player" ⊋ "an opponent" is a sound AMBER, ADR-0002 §3/§7). The label carries
   // only the scope name; the operator, not the label, decides certainty. The <c>who</c> filter is the
@@ -286,7 +286,7 @@ public static class PortLabel
 
   // --- Die rolls as a flowing resource (CR 706). -----------------------------------------------
   // A "roll [N] dice" EFFECT is an emit; a "whenever you roll one or more dice" TRIGGER is a consume.
-  // The flow arm (PortGraphEngine.FlowFeasible) connects emit→trigger so a self-feeding roll engine
+  // The flow arm (PortFlowMatcher) connects emit→trigger so a self-feeding roll engine
   // closes (roll → trigger → effect → … → roll). The ROLLING PLAYER (the controller — "you roll" watches
   // YOUR rolls) rides as the port Subject so the operator tiers it (You↔You is GREEN). Player-scoped,
   // never a null-default-GREEN scalar.
@@ -309,7 +309,7 @@ public static class PortLabel
 
   // --- Damage as a flowing resource (CR 119/120 general, CR 510 combat). -----------------------
   // A "deals N damage" EFFECT is an emit; a "whenever [a source] deals [combat] damage [to X]" TRIGGER is
-  // a consume. The flow arm (PortGraphEngine.FlowFeasible) connects an emit to a trigger whose COMBAT facet
+  // a consume. The flow arm (PortFlowMatcher) connects an emit to a trigger whose COMBAT facet
   // is compatible (a non-combat emit feeds a general "deals damage" trigger and a non-combat trigger, but
   // NEVER a combat-specific trigger — the combat-vs-noncombat soundness, CR 510 vs 120) and whose RECIPIENT
   // class is compatible (a player-recipient emit can't feed a "deals combat damage to a CREATURE" trigger).

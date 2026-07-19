@@ -1,0 +1,562 @@
+Absorb Vis::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Absorb Vis::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
+Absorb Vis::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Allied Reinforcements::emit:deployment:creature[token=true]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
+Allied Reinforcements::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Allied Reinforcements::emit:deployment:creature[token=true]  ->  Etchings of the Chosen::consume:creature[manner=sacrificed]
+Allied Reinforcements::emit:deployment:creature[token=true]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
+Allied Reinforcements::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Allied Reinforcements::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Barbarian Riftcutter::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Boggart Harbinger::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Bomat Bazaar Barge::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Bramble Armor::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Chasm Guide::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Corridor Monitor::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Dakmor Ghoul::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Dualcaster Mage::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Etchings of the Chosen::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Expedition Raptor::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Felidar Guardian::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Goblin Shortcutter::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Hulldrifter::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Peregrine Drake::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Restoration Angel::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Saurian Symbiote::consume:deployment:creature[event=etb]
+Artful Dodge::emit:recur[scope=self,to=battlefield]  ->  Undergrowth Leopard::consume:creature[manner=sacrificed]
+Ashnod's Altar::emit:mana[color=colorless]  ->  Absorb Vis::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Allied Reinforcements::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Bar the Door::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Bargain::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Black Mana Battery::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Blessing of Leeches::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Blood Tithe::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Bramble Armor::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Bring Down::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Bull's Strength::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Combine Chrysalis::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Conviction::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Deadeye Navigator::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Etchings of the Chosen::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Inspirit::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Reiterate::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Ruthless Knave::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Ruthless Knave::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Undergrowth Leopard::consume:mana
+Ashnod's Altar::emit:mana[color=colorless]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Absorb Vis::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Absorb Vis::consume:mana[color=black]
+Azorius Keyrune::emit:mana[color=any]  ->  Acrobatic Leap::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Ancestral Recall::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Artful Dodge::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Bar the Door::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Bar the Door::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Barbarian Riftcutter::consume:mana[color=red]
+Azorius Keyrune::emit:mana[color=any]  ->  Bargain::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Bargain::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Black Mana Battery::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Blessing of Leeches::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Blessing::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Blood Tithe::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Blood Tithe::consume:mana[color=black]
+Azorius Keyrune::emit:mana[color=any]  ->  Boomerang::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Bramble Armor::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Bring Down::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Bring Down::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Brute Force::consume:mana[color=red]
+Azorius Keyrune::emit:mana[color=any]  ->  Bull's Strength::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Bull's Strength::consume:mana[color=green]
+Azorius Keyrune::emit:mana[color=any]  ->  Chatterfang::consume:mana[color=black]
+Azorius Keyrune::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=green]
+Azorius Keyrune::emit:mana[color=any]  ->  Conviction::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Conviction::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Etchings of the Chosen::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Freed from the Real::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Gravecrawler::consume:mana[color=black]
+Azorius Keyrune::emit:mana[color=any]  ->  Implement of Examination::consume:mana[color=blue]
+Azorius Keyrune::emit:mana[color=any]  ->  Inspirit::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Inspirit::consume:mana[color=white]
+Azorius Keyrune::emit:mana[color=any]  ->  Reiterate::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Reiterate::consume:mana[color=red]
+Azorius Keyrune::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Azorius Keyrune::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Azorius Keyrune::emit:mana[color=any]  ->  Undergrowth Leopard::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Azorius Keyrune::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Bargain::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Black Mana Battery::emit:mana[color=black]  ->  Absorb Vis::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Absorb Vis::consume:mana[color=black]
+Black Mana Battery::emit:mana[color=black]  ->  Allied Reinforcements::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Bar the Door::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Bargain::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Black Mana Battery::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Blessing of Leeches::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Blood Tithe::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Blood Tithe::consume:mana[color=black]
+Black Mana Battery::emit:mana[color=black]  ->  Bramble Armor::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Bring Down::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Bull's Strength::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Chatterfang::consume:mana[color=black]
+Black Mana Battery::emit:mana[color=black]  ->  Combine Chrysalis::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Conviction::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Deadeye Navigator::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Etchings of the Chosen::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Gravecrawler::consume:mana[color=black]
+Black Mana Battery::emit:mana[color=black]  ->  Inspirit::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Reiterate::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Ruthless Knave::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Ruthless Knave::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Ruthless Knave::consume:mana[color=black]
+Black Mana Battery::emit:mana[color=black]  ->  Ruthless Knave::consume:mana[color=black]
+Black Mana Battery::emit:mana[color=black]  ->  Undergrowth Leopard::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Black Mana Battery::emit:mana[color=black]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Blessing of Leeches::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
+Blessing of Leeches::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Blood Artist::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Blood Artist::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
+Blood Artist::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Blood Tithe::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Blood Tithe::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
+Blood Tithe::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Bloodthirsty Conqueror::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Captain Rex Nebula::emit:damage[manner=noncombat,recipient=any]  ->  Captain Rex Nebula::consume:damage[manner=any,recipient=any]
+Captain Rex Nebula::emit:dice  ->  Brazen Dwarf::consume:dice
+Chatterfang::emit:deployment:creature[token=true]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
+Chatterfang::emit:deployment:creature[token=true]  ->  Chatterfang::consume:creature[manner=sacrificed]
+Chatterfang::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Chatterfang::emit:deployment:creature[token=true]  ->  Etchings of the Chosen::consume:creature[manner=sacrificed]
+Chatterfang::emit:deployment:creature[token=true]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
+Chatterfang::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Chatterfang::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Coldsteel Heart::emit:mana[color=any]  ->  Absorb Vis::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Absorb Vis::consume:mana[color=black]
+Coldsteel Heart::emit:mana[color=any]  ->  Acrobatic Leap::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Ancestral Recall::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Artful Dodge::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Bar the Door::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Bar the Door::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Barbarian Riftcutter::consume:mana[color=red]
+Coldsteel Heart::emit:mana[color=any]  ->  Bargain::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Bargain::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Black Mana Battery::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Blessing of Leeches::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Blessing::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Blood Tithe::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Blood Tithe::consume:mana[color=black]
+Coldsteel Heart::emit:mana[color=any]  ->  Boomerang::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Bramble Armor::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Bring Down::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Bring Down::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Brute Force::consume:mana[color=red]
+Coldsteel Heart::emit:mana[color=any]  ->  Bull's Strength::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Bull's Strength::consume:mana[color=green]
+Coldsteel Heart::emit:mana[color=any]  ->  Chatterfang::consume:mana[color=black]
+Coldsteel Heart::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=green]
+Coldsteel Heart::emit:mana[color=any]  ->  Conviction::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Conviction::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Etchings of the Chosen::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Freed from the Real::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Gravecrawler::consume:mana[color=black]
+Coldsteel Heart::emit:mana[color=any]  ->  Implement of Examination::consume:mana[color=blue]
+Coldsteel Heart::emit:mana[color=any]  ->  Inspirit::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Inspirit::consume:mana[color=white]
+Coldsteel Heart::emit:mana[color=any]  ->  Reiterate::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Reiterate::consume:mana[color=red]
+Coldsteel Heart::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Coldsteel Heart::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Coldsteel Heart::emit:mana[color=any]  ->  Undergrowth Leopard::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Coldsteel Heart::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Combine Chrysalis::emit:deployment:creature[token=true]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
+Combine Chrysalis::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Combine Chrysalis::emit:deployment:creature[token=true]  ->  Etchings of the Chosen::consume:creature[manner=sacrificed]
+Combine Chrysalis::emit:deployment:creature[token=true]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
+Combine Chrysalis::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Combine Chrysalis::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Conviction::emit:cast  ->  Dragon's Claw::consume:cast[role=trigger]
+Dakmor Ghoul::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Dakmor Ghoul::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
+Dakmor Ghoul::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Boggart Harbinger::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Bomat Bazaar Barge::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Bramble Armor::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Chasm Guide::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Corridor Monitor::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Dakmor Ghoul::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Dualcaster Mage::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Expedition Raptor::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Felidar Guardian::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Goblin Shortcutter::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Hulldrifter::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Peregrine Drake::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Restoration Angel::consume:deployment:creature[event=etb]
+Deadeye Navigator::emit:deployment:creature[manner=blink]  ->  Saurian Symbiote::consume:deployment:creature[event=etb]
+Dragon's Claw::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Absorb Vis::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Acrobatic Leap::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Allied Reinforcements::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Ancestral Recall::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Artful Dodge::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Bar the Door::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Bargain::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Blood Tithe::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Boomerang::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Bring Down::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Brute Force::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Bull's Strength::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Inspirit::consume:cast[role=driver]
+Dualcaster Mage::emit:copy[resource=spell]  ->  Reiterate::consume:cast[role=driver]
+Exquisite Blood::emit:life[direction=gain]  ->  Vito, Thorn of the Dusk Rose::consume:life[direction=gain]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Boggart Harbinger::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Bomat Bazaar Barge::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Bramble Armor::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Chasm Guide::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Corridor Monitor::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Dakmor Ghoul::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Dualcaster Mage::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Expedition Raptor::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Goblin Shortcutter::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Hulldrifter::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Peregrine Drake::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Restoration Angel::consume:deployment:creature[event=etb]
+Felidar Guardian::emit:deployment:creature[manner=blink]  ->  Saurian Symbiote::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Barbarian Riftcutter::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Boggart Harbinger::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Bomat Bazaar Barge::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Bramble Armor::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Chasm Guide::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Corridor Monitor::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Dakmor Ghoul::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Dualcaster Mage::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Etchings of the Chosen::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Expedition Raptor::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Felidar Guardian::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Goblin Shortcutter::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Hulldrifter::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Peregrine Drake::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Restoration Angel::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Saurian Symbiote::consume:deployment:creature[event=etb]
+Gravecrawler::emit:recur[scope=self,to=battlefield]  ->  Undergrowth Leopard::consume:creature[manner=sacrificed]
+Hollow Trees::emit:mana[color=green]  ->  Absorb Vis::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Allied Reinforcements::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Bar the Door::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Bargain::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Black Mana Battery::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Blessing of Leeches::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Blood Tithe::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Bramble Armor::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Bring Down::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Bull's Strength::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Bull's Strength::consume:mana[color=green]
+Hollow Trees::emit:mana[color=green]  ->  Combine Chrysalis::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Combine Chrysalis::consume:mana[color=green]
+Hollow Trees::emit:mana[color=green]  ->  Conviction::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Deadeye Navigator::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Etchings of the Chosen::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Inspirit::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Reiterate::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Ruthless Knave::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Ruthless Knave::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Undergrowth Leopard::consume:mana
+Hollow Trees::emit:mana[color=green]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Kari Zev, Skyship Raider::emit:deployment:creature[token=true]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
+Kari Zev, Skyship Raider::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Kari Zev, Skyship Raider::emit:deployment:creature[token=true]  ->  Etchings of the Chosen::consume:creature[manner=sacrificed]
+Kari Zev, Skyship Raider::emit:deployment:creature[token=true]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
+Kari Zev, Skyship Raider::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Kari Zev, Skyship Raider::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Pitiless Plunderer::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Pitiless Plunderer::emit:deployment:creature[token=true]  ->  Pitiless Plunderer::consume:creature[manner=sacrificed]
+Pitiless Plunderer::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Pitiless Plunderer::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Pitiless Plunderer::emit:mana[color=any]  ->  Absorb Vis::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Absorb Vis::consume:mana[color=black]
+Pitiless Plunderer::emit:mana[color=any]  ->  Acrobatic Leap::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Ancestral Recall::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Artful Dodge::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Bar the Door::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Bar the Door::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Barbarian Riftcutter::consume:mana[color=red]
+Pitiless Plunderer::emit:mana[color=any]  ->  Bargain::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Bargain::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Black Mana Battery::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Blessing of Leeches::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Blessing::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Blood Tithe::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Blood Tithe::consume:mana[color=black]
+Pitiless Plunderer::emit:mana[color=any]  ->  Boomerang::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Bramble Armor::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Bring Down::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Bring Down::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Brute Force::consume:mana[color=red]
+Pitiless Plunderer::emit:mana[color=any]  ->  Bull's Strength::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Bull's Strength::consume:mana[color=green]
+Pitiless Plunderer::emit:mana[color=any]  ->  Chatterfang::consume:mana[color=black]
+Pitiless Plunderer::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=green]
+Pitiless Plunderer::emit:mana[color=any]  ->  Conviction::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Conviction::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Etchings of the Chosen::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Freed from the Real::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Gravecrawler::consume:mana[color=black]
+Pitiless Plunderer::emit:mana[color=any]  ->  Implement of Examination::consume:mana[color=blue]
+Pitiless Plunderer::emit:mana[color=any]  ->  Inspirit::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Inspirit::consume:mana[color=white]
+Pitiless Plunderer::emit:mana[color=any]  ->  Reiterate::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Reiterate::consume:mana[color=red]
+Pitiless Plunderer::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Pitiless Plunderer::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Pitiless Plunderer::emit:mana[color=any]  ->  Undergrowth Leopard::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Pitiless Plunderer::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Reiterate::emit:cast  ->  Dragon's Claw::consume:cast[role=trigger]
+Reiterate::emit:copy[resource=spell]  ->  Absorb Vis::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Acrobatic Leap::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Allied Reinforcements::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Ancestral Recall::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Artful Dodge::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Bar the Door::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Bargain::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Blood Tithe::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Boomerang::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Bring Down::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Brute Force::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Bull's Strength::consume:cast[role=driver]
+Reiterate::emit:copy[resource=spell]  ->  Inspirit::consume:cast[role=driver]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Boggart Harbinger::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Bomat Bazaar Barge::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Bramble Armor::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Chasm Guide::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Corridor Monitor::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Dakmor Ghoul::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Dualcaster Mage::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Expedition Raptor::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Felidar Guardian::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Goblin Shortcutter::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Hulldrifter::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Peregrine Drake::consume:deployment:creature[event=etb]
+Restoration Angel::emit:deployment:creature[manner=blink]  ->  Saurian Symbiote::consume:deployment:creature[event=etb]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Combine Chrysalis::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Pitiless Plunderer::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Pitiless Plunderer::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
+Ruthless Knave::emit:mana[color=any]  ->  Absorb Vis::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Absorb Vis::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Absorb Vis::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Absorb Vis::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Acrobatic Leap::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Acrobatic Leap::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Ancestral Recall::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Ancestral Recall::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Artful Dodge::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Artful Dodge::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Bar the Door::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bar the Door::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bar the Door::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Bar the Door::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Barbarian Riftcutter::consume:mana[color=red]
+Ruthless Knave::emit:mana[color=any]  ->  Barbarian Riftcutter::consume:mana[color=red]
+Ruthless Knave::emit:mana[color=any]  ->  Bargain::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bargain::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bargain::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Bargain::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Black Mana Battery::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Black Mana Battery::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Blessing of Leeches::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Blessing of Leeches::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Blessing::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Blessing::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Blood Tithe::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Blood Tithe::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Blood Tithe::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Blood Tithe::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Boomerang::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Boomerang::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Bramble Armor::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bramble Armor::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bring Down::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bring Down::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bring Down::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Bring Down::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Brute Force::consume:mana[color=red]
+Ruthless Knave::emit:mana[color=any]  ->  Brute Force::consume:mana[color=red]
+Ruthless Knave::emit:mana[color=any]  ->  Bull's Strength::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bull's Strength::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Bull's Strength::consume:mana[color=green]
+Ruthless Knave::emit:mana[color=any]  ->  Bull's Strength::consume:mana[color=green]
+Ruthless Knave::emit:mana[color=any]  ->  Chatterfang::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Chatterfang::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=green]
+Ruthless Knave::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=green]
+Ruthless Knave::emit:mana[color=any]  ->  Conviction::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Conviction::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Conviction::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Conviction::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Etchings of the Chosen::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Etchings of the Chosen::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Freed from the Real::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Freed from the Real::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Gravecrawler::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Gravecrawler::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Implement of Examination::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Implement of Examination::consume:mana[color=blue]
+Ruthless Knave::emit:mana[color=any]  ->  Inspirit::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Inspirit::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Inspirit::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Inspirit::consume:mana[color=white]
+Ruthless Knave::emit:mana[color=any]  ->  Reiterate::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Reiterate::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Reiterate::consume:mana[color=red]
+Ruthless Knave::emit:mana[color=any]  ->  Reiterate::consume:mana[color=red]
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Undergrowth Leopard::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Undergrowth Leopard::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Ruthless Knave::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Ruthless Knave::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Vito, Thorn of the Dusk Rose::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
+Vito, Thorn of the Dusk Rose::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Vivid Marsh::emit:mana[color=any]  ->  Absorb Vis::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Absorb Vis::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=any]  ->  Acrobatic Leap::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Allied Reinforcements::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Ancestral Recall::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Artful Dodge::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Azorius Keyrune::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Bar the Door::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Bar the Door::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Barbarian Riftcutter::consume:mana[color=red]
+Vivid Marsh::emit:mana[color=any]  ->  Bargain::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Bargain::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Black Mana Battery::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Blessing of Leeches::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Blessing::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Blood Tithe::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Blood Tithe::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=any]  ->  Boomerang::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Bramble Armor::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Bring Down::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Bring Down::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Brute Force::consume:mana[color=red]
+Vivid Marsh::emit:mana[color=any]  ->  Bull's Strength::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Bull's Strength::consume:mana[color=green]
+Vivid Marsh::emit:mana[color=any]  ->  Chatterfang::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Combine Chrysalis::consume:mana[color=green]
+Vivid Marsh::emit:mana[color=any]  ->  Conviction::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Conviction::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Deadeye Navigator::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Etchings of the Chosen::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Freed from the Real::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Gravecrawler::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=any]  ->  Implement of Examination::consume:mana[color=blue]
+Vivid Marsh::emit:mana[color=any]  ->  Inspirit::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Inspirit::consume:mana[color=white]
+Vivid Marsh::emit:mana[color=any]  ->  Reiterate::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Reiterate::consume:mana[color=red]
+Vivid Marsh::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Ruthless Knave::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=any]  ->  Ruthless Knave::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=any]  ->  Undergrowth Leopard::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Vivid Marsh::emit:mana[color=any]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Absorb Vis::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Absorb Vis::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Allied Reinforcements::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Bar the Door::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Bargain::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Black Mana Battery::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Blessing of Leeches::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Blood Tithe::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Blood Tithe::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Bramble Armor::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Bring Down::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Bull's Strength::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Chatterfang::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Combine Chrysalis::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Conviction::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Deadeye Navigator::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Etchings of the Chosen::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Gravecrawler::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Inspirit::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Reiterate::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Ruthless Knave::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Ruthless Knave::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Ruthless Knave::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Ruthless Knave::consume:mana[color=black]
+Vivid Marsh::emit:mana[color=black]  ->  Undergrowth Leopard::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Vito, Thorn of the Dusk Rose::consume:mana
+Vivid Marsh::emit:mana[color=black]  ->  Vito, Thorn of the Dusk Rose::consume:mana[color=black]
