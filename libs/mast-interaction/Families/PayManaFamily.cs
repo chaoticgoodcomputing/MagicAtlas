@@ -21,12 +21,4 @@ public sealed class PayManaFamily : IPortFamily
       ? PortStructure.Of(PortSide.Consume, "mana", ("color", seg[2]))
       : PortStructure.Of(PortSide.Consume, "mana");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "mana")
-      return null;
-    var color = structure.Attr("color");
-    return string.IsNullOrEmpty(color) ? "pay:mana" : "pay:mana:" + color;
-  }
 }

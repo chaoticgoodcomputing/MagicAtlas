@@ -3,10 +3,11 @@ namespace MagicAST.Interaction;
 using MagicAST.AST.References;
 
 /// <summary>
-/// ADR-0003 Stage 2 — the reflection-discovered registry of <see cref="IPortFamily"/> implementations. It
-/// (1) <see cref="Annotate"/>s each projected port with its structured form (dual-emit) and (2) provides
-/// the compat-shim <see cref="ToLegacyLabel"/> the Stage-2 round-trip gate checks. Families are discovered
-/// once, so adding one is dropping a new file under <c>Families/</c> — no edit here (the fan-out property).
+/// ADR-0003 — the reflection-discovered registry of <see cref="IPortFamily"/> implementations.
+/// <see cref="Annotate"/>s each projected port with its structured form (dual-emit). Families are
+/// discovered once, so adding one is dropping a new file under <c>Families/</c> — no edit here (the fan-out
+/// property). (The structure→label <c>ToLegacyLabel</c> shim + its Stage-2 round-trip gate were retired
+/// with ADR-0003 §5's cleanup, now that <see cref="PortStructure"/> is the authoritative matcher input.)
 /// </summary>
 public static class PortFamilyRegistry
 {
@@ -30,22 +31,5 @@ public static class PortFamilyRegistry
         return port with { Structure = structure };
     }
     return port;
-  }
-
-  /// <summary>The compat-shim serialization (Stage-2 gate): the ADR-2 label for a structured port. Throws
-  /// if no family owns the structure — Stage 2 converts families incrementally, so a throw means "this
-  /// family isn't converted yet," never a silent wrong label.</summary>
-  public static string ToLegacyLabel(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    foreach (var family in Families)
-    {
-      var label = family.Serialize(structure, subject, ontology);
-      if (label is not null)
-        return label;
-    }
-    throw new InvalidOperationException(
-      $"PortFamilyRegistry: no family serializes structured port {structure.Canonical()} "
-        + "(Stage 2 converts families incrementally — this family is not converted yet)."
-    );
   }
 }

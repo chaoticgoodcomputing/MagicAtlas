@@ -21,11 +21,4 @@ public sealed class UntapFamily : IPortFamily
       ? PortStructure.Of(PortSide.Emit, "structure:untap", ("scope", "self"))
       : PortStructure.Of(PortSide.Emit, "structure:untap");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "structure:untap")
-      return null;
-    return structure.Attr("scope") == "self" ? "emit:untap:self" : "emit:untap";
-  }
 }

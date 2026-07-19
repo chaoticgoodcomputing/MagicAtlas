@@ -19,14 +19,4 @@ public sealed class DiceTriggerFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "dice");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "dice")
-      return null;
-    return Join("trigger", "rolldice", subject is null ? null : PortLabel.Scope(subject));
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

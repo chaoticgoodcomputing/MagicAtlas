@@ -21,20 +21,4 @@ public sealed class CastTriggerFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "cast", ("role", "trigger"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "cast" || structure.Attr("role") != "trigger")
-      return null;
-    return Join(
-      "trigger",
-      "cast",
-      subject is null ? "spell" : PortLabel.Subject(subject, ontology) ?? "spell",
-      subject is null ? null : PortLabel.Scope(subject),
-      subject is null ? null : PortLabel.Exclusion(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

@@ -26,27 +26,4 @@ public sealed class RemovalEmitFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "removal:creature", ("to", "graveyard"), ("manner", "sacrificed"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (
-      structure.Side != PortSide.Emit
-      || structure.Stem != "removal:creature"
-      || structure.Attr("to") != "graveyard"
-      || structure.Attr("manner") != "sacrificed"
-    )
-      return null;
-    return Join(
-      "emit",
-      "removal",
-      subject is null ? null : PortLabel.Subject(subject, ontology),
-      "to-graveyard",
-      "sacrificed",
-      subject is null ? null : PortLabel.Scope(subject),
-      subject is null ? null : PortLabel.Exclusion(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

@@ -21,22 +21,4 @@ public sealed class LifeFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "life", ("direction", seg[2]));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "life")
-      return null;
-    var direction = structure.Attr("direction");
-    if (direction is null)
-      return null;
-    return Join(
-      "emit",
-      "life",
-      direction,
-      subject is null ? null : PortLabel.Scope(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

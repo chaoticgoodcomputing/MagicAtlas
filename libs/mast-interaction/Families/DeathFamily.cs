@@ -20,20 +20,4 @@ public sealed class DeathFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "removal:creature", ("to", "graveyard"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "removal:creature" || structure.Attr("to") != "graveyard")
-      return null;
-    return Join(
-      "ltb",
-      subject is null ? null : PortLabel.Subject(subject, ontology),
-      "to-graveyard",
-      subject is null ? null : PortLabel.Scope(subject),
-      subject is null ? null : PortLabel.Exclusion(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

@@ -21,19 +21,4 @@ public sealed class TokenFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "deployment:creature", ("token", "true"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Attr("token") != "true")
-      return null;
-    return Join(
-      "emit",
-      "token",
-      subject is null ? null : PortLabel.Subject(subject, ontology),
-      subject is null ? null : PortLabel.Scope(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

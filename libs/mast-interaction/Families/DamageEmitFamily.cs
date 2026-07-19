@@ -25,14 +25,4 @@ public sealed class DamageEmitFamily : IPortFamily
       ? PortStructure.Of(PortSide.Emit, "damage", ("manner", seg[2]), ("recipient", seg[3]))
       : PortStructure.Of(PortSide.Emit, "damage", ("manner", seg[2]));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "damage" || structure.Attr("manner") is null)
-      return null;
-    return Join("emit", "damage", structure.Attr("manner"), structure.Attr("recipient"));
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

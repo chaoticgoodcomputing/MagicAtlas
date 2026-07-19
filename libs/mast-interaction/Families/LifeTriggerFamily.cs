@@ -20,17 +20,4 @@ public sealed class LifeTriggerFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "life", ("direction", seg[2]));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "life")
-      return null;
-    var direction = structure.Attr("direction");
-    if (direction is null)
-      return null;
-    return Join("trigger", "life", direction, subject is null ? null : PortLabel.Scope(subject));
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

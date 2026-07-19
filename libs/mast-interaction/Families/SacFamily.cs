@@ -21,21 +21,4 @@ public sealed class SacFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "creature", ("manner", "sacrificed"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "creature" || structure.Attr("manner") != "sacrificed")
-      return null;
-    if (subject is null)
-      return null;
-    return Join(
-      "sac",
-      PortLabel.Subject(subject, ontology),
-      PortLabel.Scope(subject) ?? "controlled",
-      PortLabel.Exclusion(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

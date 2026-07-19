@@ -25,16 +25,4 @@ public sealed class AttacksConsumeFamily : IPortFamily
       _ => null,
     };
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "combat")
-      return null;
-    return structure.Attr("scope") switch
-    {
-      "self" => "attacksorblocks:self",
-      "creature" => "attacksorblocks:creature",
-      _ => null,
-    };
-  }
 }

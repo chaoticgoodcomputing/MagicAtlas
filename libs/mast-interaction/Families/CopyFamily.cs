@@ -27,16 +27,4 @@ public sealed class CopyFamily : IPortFamily
       ? PortStructure.Of(PortSide.Emit, "copy", ("resource", "spell"))
       : PortStructure.Of(PortSide.Emit, "copy");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "copy")
-      return null;
-    if (structure.Attr("resource") == "spell")
-      return Join("emit", "copy", "spell", subject is null ? null : PortLabel.Subject(subject, ontology));
-    return "emit:copy";
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

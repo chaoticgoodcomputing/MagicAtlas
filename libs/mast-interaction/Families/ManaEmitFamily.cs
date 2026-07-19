@@ -19,14 +19,4 @@ public sealed class ManaEmitFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "mana", ("color", seg[2]));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "mana")
-      return null;
-    var color = structure.Attr("color");
-    if (string.IsNullOrEmpty(color))
-      return null;
-    return "emit:mana:" + color;
-  }
 }

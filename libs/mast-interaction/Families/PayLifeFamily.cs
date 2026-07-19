@@ -23,11 +23,4 @@ public sealed class PayLifeFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "paylife");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "paylife")
-      return null;
-    return "pay:paylife";
-  }
 }

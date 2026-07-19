@@ -19,14 +19,4 @@ public sealed class DiceEmitFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "dice");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "dice")
-      return null;
-    return Join("emit", "rolldice", subject is null ? null : PortLabel.Scope(subject));
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

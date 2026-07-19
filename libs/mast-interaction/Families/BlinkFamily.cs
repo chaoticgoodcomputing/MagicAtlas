@@ -20,19 +20,4 @@ public sealed class BlinkFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "deployment:creature", ("manner", "blink"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Attr("manner") != "blink")
-      return null;
-    return Join(
-      "emit",
-      "blink",
-      subject is null ? null : PortLabel.Subject(subject, ontology),
-      subject?.IsSelf == true ? "self" : null
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

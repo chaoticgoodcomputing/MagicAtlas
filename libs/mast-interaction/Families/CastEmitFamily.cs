@@ -20,14 +20,4 @@ public sealed class CastEmitFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "cast");
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "cast")
-      return null;
-    return Join("emit", "cast", subject is null ? "spell" : PortLabel.Subject(subject, ontology) ?? "spell");
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

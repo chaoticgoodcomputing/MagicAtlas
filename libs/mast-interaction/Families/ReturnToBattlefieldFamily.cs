@@ -31,13 +31,4 @@ public sealed class ReturnToBattlefieldFamily : IPortFamily
       _ => null,
     };
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "recur" || structure.Attr("to") != "battlefield")
-      return null;
-    return structure.Attr("scope") == "self"
-      ? "emit:returntobattlefield:self"
-      : "emit:returntobattlefield";
-  }
 }

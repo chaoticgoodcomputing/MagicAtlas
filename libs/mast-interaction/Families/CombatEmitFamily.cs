@@ -17,11 +17,4 @@ public sealed class CombatEmitFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Emit, "combat", ("phase", "additional"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "combat" || structure.Attr("phase") != "additional")
-      return null;
-    return "emit:additionalcombat";
-  }
 }

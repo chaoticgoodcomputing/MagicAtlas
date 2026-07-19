@@ -8,7 +8,7 @@ using MagicAST.AST.References;
 /// ADR-2 label <c>etb:&lt;subject&gt;[:&lt;scope&gt;][:&lt;exclusion&gt;]</c> ↔ ADR-3 structure
 /// <c>deployment:creature[event=etb]</c>. The entering object rides as the port Subject, so the
 /// subject/scope/exclusion facets of the label come from it (not the stem). The <c>event=etb</c> marker
-/// attr distinguishes this Consume-side deployment from other deployment structures at Serialize time.
+/// attr distinguishes this Consume-side deployment from other deployment structures.
 /// </summary>
 public sealed class EtbFamily : IPortFamily
 {
@@ -21,19 +21,4 @@ public sealed class EtbFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "deployment:creature", ("event", "etb"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Attr("event") != "etb")
-      return null;
-    return Join(
-      "etb",
-      subject is null ? null : PortLabel.Subject(subject, ontology),
-      subject is null ? null : PortLabel.Scope(subject),
-      subject is null ? null : PortLabel.Exclusion(subject)
-    );
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }

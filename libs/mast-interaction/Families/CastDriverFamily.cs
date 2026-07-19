@@ -18,11 +18,4 @@ public sealed class CastDriverFamily : IPortFamily
       return null;
     return PortStructure.Of(PortSide.Consume, "cast", ("role", "driver"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Consume || structure.Stem != "cast" || structure.Attr("role") != "driver")
-      return null;
-    return "cast:spell:self";
-  }
 }

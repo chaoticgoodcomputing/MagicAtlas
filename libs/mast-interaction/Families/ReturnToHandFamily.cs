@@ -28,18 +28,4 @@ public sealed class ReturnToHandFamily : IPortFamily
       ? PortStructure.Of(PortSide.Emit, "recur", ("to", "hand"), ("resource", "spell"))
       : PortStructure.Of(PortSide.Emit, "recur", ("to", "hand"));
   }
-
-  public string? Serialize(PortStructure structure, ObjectFilter? subject, TypeOntology ontology)
-  {
-    if (structure.Side != PortSide.Emit || structure.Stem != "recur" || structure.Attr("to") != "hand")
-      return null;
-    if (structure.Attr("resource") == "spell")
-      return Join("emit", "returntohand", "spell", subject is null ? null : PortLabel.Subject(subject, ontology));
-    return subject is null
-      ? "emit:returntohand"
-      : Join("emit", "returntohand", PortLabel.Subject(subject, ontology));
-  }
-
-  private static string Join(params string?[] facets) =>
-    string.Join(":", facets.Where(f => !string.IsNullOrEmpty(f)));
 }
