@@ -135,8 +135,8 @@ public sealed class PortFlowMatcher
     {
       FlowArm.TokenToSac => _engine.TokenSatisfiesAtCreation(emit, consume),
       FlowArm.ManaToPay => PortGraphEngine.ManaColorFeeds(
-        PortGraphEngine.ManaColor(emit.Label),
-        PortGraphEngine.ManaColor(consume.Label)
+        PortGraphEngine.ManaColor(emit),
+        PortGraphEngine.ManaColor(consume)
       ),
       FlowArm.LifeCostToPay => PortGraphEngine.LifeGainFeedsCost(emit),
       FlowArm.LifeToTrigger => PortGraphEngine.LifeFlowFeasible(emit, consume),

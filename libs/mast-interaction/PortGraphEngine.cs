@@ -236,20 +236,37 @@ public sealed class PortGraphEngine
     var (sacDeaths, sacDeathEdges) = SynthesizeSacrificeDeaths(ports);
     ports.AddRange(sacDeaths);
 
+    // Card-defined / closing edges reference the graph's PRE-annotation port objects (a projected graph
+    // annotates its Ports into new records but keeps its edges pointing at the originals). The cycle-layer
+    // rules now read PortStructure off the edge endpoints (ADR-0003 cleanup 2/3-B), so remap each endpoint
+    // to its annotated twin by Identity — else a card-defined edge would carry a null Structure and a
+    // structure predicate (tap-renewal, mana balance, self-death) would silently misfire.
+    var annotatedById = ports
+      .GroupBy(p => p.Identity, StringComparer.Ordinal)
+      .ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+    PortNode Anno(PortNode p) => annotatedById.GetValueOrDefault(p.Identity, p);
+
     var edges = new List<PortEdge>();
 
     // (1) Card-defined edges — the walk's intra-ability causality, certain by construction (§5).
     foreach (var graph in graphs)
       foreach (var edge in graph.CardDefinedEdges)
         edges.Add(
-          new PortEdge { From = edge.From, To = edge.To, Provenance = EdgeProvenance.CardDefined }
+          new PortEdge
+          {
+            From = Anno(edge.From),
+            To = Anno(edge.To),
+            Provenance = EdgeProvenance.CardDefined,
+          }
         );
     edges.AddRange(sacDeathEdges);
 
     // The graft's synthesized closing edges (an inherited target-untap renewing the copier's tap), tiered
     // by the operator in the pass (Decision 3/4) — added alongside the card-defined edges so FindCycles
     // closes the copy loop with no new arm (the connection layer doing its normal job, per §6 Track B).
-    edges.AddRange(closingEdges);
+    edges.AddRange(
+      closingEdges.Select(e => e with { From = Anno(e.From), To = Anno(e.To) })
+    );
 
     var emits = ports.Where(p => p.Side == PortSide.Emit).ToList();
     var consumes = ports.Where(p => p.Side == PortSide.Consume).ToList();
@@ -279,14 +296,14 @@ public sealed class PortGraphEngine
     // (NOT GREEN, NOT Red): the loop is structurally feasible but the mana is uncertain. The dual of the
     // blink arm's optional-ETB floor.
     foreach (var untap in emits.Where(p => IsLandUntap(p)))
-      foreach (var pay in consumes.Where(p => IsPayMana(p.Label)))
+      foreach (var pay in consumes.Where(p => IsPayMana(p)))
         edges.Add(UntapLandsFeedsMana(untap, pay));
 
     // (3) Modifier — a replacement intercepts a token emission (ADR-0001 §4). The old sac→dies bridge that
     // sat here retired into subsumption (ADR-0003 §5): a sac cost now projects a removal:creature emit
     // (PortGraph.cs), matched to dies/LTB/"when sacrificed" consumes by the structured Captures arm
     // (PortFlowMatcher.SacrificeDeathToTrigger) at step (2) above — no curated consume→consume edge.
-    foreach (var emit in emits.Where(p => ResourceKind(p.Label) == "token"))
+    foreach (var emit in emits.Where(p => IsTokenEmit(p)))
       foreach (var intercept in intercepts)
         AddRulesEdge(edges, emit, intercept, EdgeFamily.Modifier);
 
@@ -326,7 +343,7 @@ public sealed class PortGraphEngine
     // this an equality check; broadening it to StartsWith would wrongly graft a spell-copy as a permanent.
     var copies = graphs
       .SelectMany(g => g.Ports)
-      .Where(p => p.Side == PortSide.Emit && p.Label == "emit:copy" && p.Subject is not null)
+      .Where(p => p.Side == PortSide.Emit && p.Structure?.Stem == "copy" && p.Structure?.Attr("resource") == null && p.Subject is not null)
       .ToList();
     if (copies.Count == 0)
       return new GraftResult { Graphs = graphs, ClosingEdges = [] };
@@ -360,12 +377,12 @@ public sealed class PortGraphEngine
         // The copier definitely creates the copy object (CR 707.2): a card-defined GREEN edge from the
         // copy emit to each of the copy's entry/cost consumes (its ETB fires in the copier's loop).
         var graftEdges = graftGraph.CardDefinedEdges.ToList();
-        foreach (var entry in graftGraph.Ports.Where(p => p.Side == PortSide.Consume && Role(p.Label) == "etb"))
+        foreach (var entry in graftGraph.Ports.Where(p => IsEtbConsume(p)))
           graftEdges.Add(new CardDefinedEdge { From = copy, To = entry });
         extraGraphs[^1] = graftGraph with { CardDefinedEdges = graftEdges };
 
         // The closing hop (Decision 4): an inherited untap on the copy that renews the COPIER's tap.
-        foreach (var untap in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsUntap(p.Label)))
+        foreach (var untap in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsUntap(p)))
           if (UntapReachesSource(untap) is { } reliability)
             closingEdges.Add(CloseUntapToTap(untap, copier, graphByCard, reliability));
 
@@ -374,7 +391,7 @@ public sealed class PortGraphEngine
         // re-enters UNTAPPED (CR 603.6e/400.7), renewing the copier's tap — the dual of the inherited
         // untap. Feasible iff the blinked filter admits a creature (the copier is a creature). The blink is
         // Gated ("you may"), so the renewal is AMBER, never GREEN — soundly irreducible (the optional ETB).
-        foreach (var blink in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsBlink(p.Label)))
+        foreach (var blink in graftGraph.Ports.Where(p => p.Side == PortSide.Emit && IsBlink(p)))
           if (BlinkReachesSource(blink) is { } reliability)
             closingEdges.Add(CloseUntapToTap(blink, copier, graphByCard, reliability));
       }
@@ -508,12 +525,15 @@ public sealed class PortGraphEngine
   }
 
   /// <summary>An untap emit — self (<c>emit:untap:self</c>) or target (<c>emit:untap</c>).</summary>
-  private static bool IsUntap(string label) =>
-    label == "emit:untap:self" || label == "emit:untap";
+  private static bool IsUntap(PortNode p) =>
+    p.Side == PortSide.Emit && p.Structure?.Stem == "structure:untap";
 
-  /// <summary>A blink (flicker) emit — <c>emit:blink[:...]</c> (the re-entered permanent's renewal hop).</summary>
-  private static bool IsBlink(string label) =>
-    label.StartsWith("emit:blink", StringComparison.Ordinal);
+  /// <summary>A blink (flicker) emit — <c>deployment:creature[manner=blink]</c> (BlinkFamily), the
+  /// re-entered permanent's renewal hop.</summary>
+  private static bool IsBlink(PortNode p) =>
+    p.Side == PortSide.Emit
+    && p.Structure?.Stem == "deployment:creature"
+    && p.Structure?.Attr("manner") == "blink";
 
   /// <summary>
   /// The blink-arm dual of <see cref="UntapReachesSource"/> — does an inherited blink renew the tap-gated
@@ -549,7 +569,7 @@ public sealed class PortGraphEngine
   /// </summary>
   private static Trilean? UntapReachesSource(PortNode untap)
   {
-    if (untap.Label == "emit:untap:self")
+    if (untap.Structure?.Attr("scope") == "self")
       return null; // a self-untap renews the COPY, not the copier — needs the inherited-self path (D), not here
     // A bare target-untap (no Subject) targets any permanent → reaches a creature copier (unconstrained).
     if (untap.Subject is null)
@@ -583,7 +603,7 @@ public sealed class PortGraphEngine
   /// </summary>
   private static bool IsLandUntap(PortNode untap)
   {
-    if (!IsUntap(untap.Label) || untap.Label == "emit:untap:self" || untap.Subject is null)
+    if (!IsUntap(untap) || untap.Structure?.Attr("scope") == "self" || untap.Subject is null)
       return false;
     if (untap.Subject.CardTypes is not { Count: > 0 } types)
       return false; // an unconstrained untap could be any permanent, but we won't claim mana without a land
@@ -660,7 +680,7 @@ public sealed class PortGraphEngine
   /// </summary>
   internal bool SpellCopyReFiresEffects(PortNode emit, PortNode consume)
   {
-    if (!emit.Label.StartsWith("emit:copy:spell", StringComparison.Ordinal))
+    if (emit.Structure?.Stem != "copy" || emit.Structure?.Attr("resource") != "spell")
       return false; // a permanent token-copy (emit:copy) has no spell effects to re-fire
     if (string.Equals(emit.Card, consume.Card, StringComparison.Ordinal))
       return false; // a spell can't copy itself on the stack
@@ -723,7 +743,7 @@ public sealed class PortGraphEngine
     // sac needs a NON-NULL re-entry Subject whose types cover it: Gravecrawler ({creature}) still feeds
     // "sacrifice a creature" / "a permanent" (CR 110.4a); a creature never feeds a Treasure sac, and a
     // coarse unknown-type return feeds no typed sac.
-    if (Role(consume.Label) == "sac")
+    if (IsSacConsume(consume))
     {
       if (consume.Subject is null)
         return true; // an untyped sac (sacrifice any controlled permanent) — any re-entry satisfies it
@@ -806,7 +826,7 @@ public sealed class PortGraphEngine
   /// </summary>
   internal bool CastSatisfiesTrigger(PortNode emit, PortNode consume)
   {
-    if (ResourceKind(consume.Label) != "cast")
+    if (consume.Structure?.Stem != "cast")
       return false; // a non-cast trigger of the same role token — not this arm
     if (emit.Subject is null || consume.Subject is null)
       return true;
@@ -834,11 +854,11 @@ public sealed class PortGraphEngine
   /// </summary>
   internal bool DamageSatisfiesTrigger(PortNode emit, PortNode consume)
   {
-    if (ResourceKind(consume.Label) != "damage")
-      return false; // a non-damage trigger of the same Role token — not this arm
-    if (!CombatFacetFeeds(DamageFacet(emit.Label, 2), DamageFacet(consume.Label, 2)))
+    if (consume.Structure?.Stem != "damage")
+      return false; // a non-damage trigger — not this arm
+    if (!CombatFacetFeeds(DamageManner(emit), DamageManner(consume)))
       return false; // non-combat damage must not feed a combat-specific trigger (CR 510 vs 120)
-    if (!RecipientFeeds(DamageFacet(emit.Label, 3), DamageFacet(consume.Label, 3)))
+    if (!RecipientFeeds(DamageRecipient(emit), DamageRecipient(consume)))
       return false; // a player-recipient emit can't feed a creature-recipient trigger (CR 510.1)
     if (consume.Subject?.IsSelf == true)
       // a self-watching trigger fires only for THE SAME object's own damage (same card, self-source)
@@ -850,13 +870,12 @@ public sealed class PortGraphEngine
       != FilterRelation.Disjoint;
   }
 
-  /// <summary>The facet at <paramref name="index"/> of a damage label
-  /// (<c>role:damage:&lt;combat=2&gt;:&lt;recipient=3&gt;</c>); the permissive <c>any</c> when absent.</summary>
-  private static string DamageFacet(string label, int index)
-  {
-    var parts = label.Split(':');
-    return parts.Length > index ? parts[index] : "any";
-  }
+  /// <summary>The manner facet of a damage port (<c>damage[manner=combat|noncombat]</c>, Damage
+  /// Emit/TriggerFamily); the permissive <c>any</c> when absent (a bare "deals damage" trigger).</summary>
+  private static string DamageManner(PortNode p) => p.Structure?.Attr("manner") ?? "any";
+
+  /// <summary>The recipient-class facet of a damage port (<c>damage[recipient=…]</c>); <c>any</c> when absent.</summary>
+  private static string DamageRecipient(PortNode p) => p.Structure?.Attr("recipient") ?? "any";
 
   /// <summary>Combat-facet feasibility (CR 510 vs 120): a general trigger (<c>any</c> — a bare "deals
   /// damage") fires on either kind; a combat or non-combat trigger needs an emit of that same kind. An
@@ -885,28 +904,23 @@ public sealed class PortGraphEngine
   /// decides), so "you gain → whenever you gain" certifies GREEN while "a player loses → whenever an
   /// opponent loses" is a sound AMBER.</summary>
   internal static bool LifeFlowFeasible(PortNode emit, PortNode consume) =>
-    LifeDirection(emit.Label) is { } dir && dir == LifeDirection(consume.Label);
+    LifeDirection(emit) is { } dir && dir == LifeDirection(consume);
 
   /// <summary>Does a life event replenish a "Pay N life" cost (CR 118.1/119.4)? Only a life-GAIN emit can
   /// (mirrors <see cref="ManaColorFeeds"/> — the resource must actually be produced, not consumed, to
   /// refund a cost): a life-LOSS emit is a further drain, never a refund, so it must not feed a life cost
   /// (the false-GREEN this guard exists to prevent).</summary>
   internal static bool LifeGainFeedsCost(PortNode emit) =>
-    LifeDirection(emit.Label) == "gain";
+    LifeDirection(emit) == "gain";
 
-  /// <summary>The gain/loss facet of a <c>emit:life:&lt;dir&gt;</c> / <c>trigger:life:&lt;dir&gt;</c> label.</summary>
-  private static string? LifeDirection(string label)
-  {
-    var parts = label.Split(':');
-    return parts.Length >= 3 && parts[1] == "life" ? parts[2] : null;
-  }
+  /// <summary>The gain/loss facet of a life port (<c>life[direction=…]</c>, Life/LifeTriggerFamily); null
+  /// for a non-life port.</summary>
+  private static string? LifeDirection(PortNode p) =>
+    p.Structure?.Stem == "life" ? p.Structure?.Attr("direction") : null;
 
-  /// <summary>The colour facet of a mana label (<c>emit:mana:&lt;colour&gt;</c> / <c>pay:mana:&lt;colour&gt;</c>); <c>null</c> for a generic <c>pay:mana</c>.</summary>
-  internal static string? ManaColor(string label)
-  {
-    var parts = label.Split(':');
-    return parts.Length >= 3 ? parts[2] : null;
-  }
+  /// <summary>The colour facet of a mana port (<c>mana[color=…]</c>, ManaEmit/PayManaFamily); <c>null</c>
+  /// for a generic <c>pay:mana</c> (no colour attr).</summary>
+  internal static string? ManaColor(PortNode p) => p.Structure?.Attr("color");
 
   /// <summary>
   /// Does emitted mana of one colour satisfy a mana cost's colour? <c>any</c> satisfies anything (the
@@ -1519,18 +1533,18 @@ public sealed class PortGraphEngine
     // production is a flexible pool (a Treasure picks the colour, ADR-0002 §3b†); a specific colour pays
     // its own pip first and lends any surplus to the generic cost.
     var anyPool = producers
-      .Where(p => string.Equals(ManaColor(p.Label), "any", StringComparison.OrdinalIgnoreCase))
+      .Where(p => string.Equals(ManaColor(p), "any", StringComparison.OrdinalIgnoreCase))
       .Sum(p => p.Quantity!.Value);
     var supply = producers
-      .Where(p => !string.Equals(ManaColor(p.Label), "any", StringComparison.OrdinalIgnoreCase))
-      .GroupBy(p => ManaColor(p.Label) ?? "", StringComparer.OrdinalIgnoreCase)
+      .Where(p => !string.Equals(ManaColor(p), "any", StringComparison.OrdinalIgnoreCase))
+      .GroupBy(p => ManaColor(p) ?? "", StringComparer.OrdinalIgnoreCase)
       .ToDictionary(g => g.Key, g => g.Sum(p => p.Quantity!.Value), StringComparer.OrdinalIgnoreCase);
 
     var genericNeed = 0;
     var colouredNeed = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
     foreach (var c in costs)
     {
-      var colour = ManaColor(c.Label);
+      var colour = ManaColor(c);
       if (colour is null)
         genericNeed += c.Quantity!.Value;
       else
@@ -1576,7 +1590,7 @@ public sealed class PortGraphEngine
     var pureMana = cycle
       .SelectMany(e => new[] { e.From, e.To })
       .Where(p => p.Side == PortSide.Emit)
-      .All(p => IsEmitMana(p.Label));
+      .All(p => IsEmitMana(p));
     if (!pureMana)
       return true; // a non-mana output makes the loop productive even at net-zero mana
     var (costs, producers) = flow.Value;
@@ -1603,7 +1617,7 @@ public sealed class PortGraphEngine
     var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
     void AddIfMana(PortNode p)
     {
-      if (p.Side == PortSide.Consume && IsPayMana(p.Label))
+      if (p.Side == PortSide.Consume && IsPayMana(p))
         costs[p.Identity] = p;
     }
     foreach (var id in inCycle)
@@ -1621,7 +1635,7 @@ public sealed class PortGraphEngine
     var producers = edges
       .Where(e =>
         costs.ContainsKey(e.To.Identity)
-        && IsEmitMana(e.From.Label)
+        && IsEmitMana(e.From)
         && reachable.Contains(e.From.Identity)
       )
       .Select(e => e.From)
@@ -1690,7 +1704,7 @@ public sealed class PortGraphEngine
     var costs = new Dictionary<string, PortNode>(StringComparer.Ordinal);
     void AddIfLife(PortNode p)
     {
-      if (p.Side == PortSide.Consume && IsPayLife(p.Label))
+      if (p.Side == PortSide.Consume && IsPayLife(p))
         costs[p.Identity] = p;
     }
     foreach (var id in inCycle)
@@ -1708,7 +1722,7 @@ public sealed class PortGraphEngine
     var producers = edges
       .Where(e =>
         costs.ContainsKey(e.To.Identity)
-        && IsEmitLifeGain(e.From.Label)
+        && IsEmitLifeGain(e.From)
         && reachable.Contains(e.From.Identity)
       )
       .Select(e => e.From)
@@ -1740,7 +1754,7 @@ public sealed class PortGraphEngine
   {
     var selfDeaths = cycle
       .SelectMany(e => new[] { e.From, e.To })
-      .Where(p => p.Side == PortSide.Consume && IsSelfLeavesToGraveyard(p.Label))
+      .Where(p => p.Side == PortSide.Consume && IsSelfLeavesToGraveyard(p))
       .GroupBy(p => p.Identity, StringComparer.Ordinal)
       .Select(g => g.First());
 
@@ -1749,7 +1763,8 @@ public sealed class PortGraphEngine
       var returnsSelf = edges.Any(e =>
         e.Provenance == EdgeProvenance.CardDefined
         && string.Equals(e.From.Identity, death.Identity, StringComparison.Ordinal)
-        && e.To.Label.StartsWith("emit:returntobattlefield", StringComparison.Ordinal)
+        && e.To.Structure?.Stem == "recur"
+        && e.To.Structure?.Attr("to") == "battlefield"
       );
       if (!returnsSelf)
         return true; // a self-death with no self-return — the source dies once
@@ -1780,7 +1795,7 @@ public sealed class PortGraphEngine
     // Tokens the loop creates each iteration (they enter the battlefield, triggering an etb untap).
     var tokens = cycle
       .SelectMany(e => new[] { e.From, e.To })
-      .Where(p => p.Side == PortSide.Emit && ResourceKind(p.Label) == "token" && p.Subject is not null)
+      .Where(p => IsTokenEmit(p) && p.Subject is not null)
       .GroupBy(p => p.Identity, StringComparer.Ordinal)
       .Select(g => g.First())
       .ToList();
@@ -1794,8 +1809,9 @@ public sealed class PortGraphEngine
           e.Provenance == EdgeProvenance.CardDefined
           && string.Equals(e.From.Card, card, StringComparison.Ordinal)
           && e.From.Side == PortSide.Consume
-          && Role(e.From.Label) == "etb"
-          && e.To.Label == "emit:untap:self" // a SELF-untap — untapping a target renews someone else
+          && IsEtbConsume(e.From)
+          && e.To.Structure?.Stem == "structure:untap"
+          && e.To.Structure?.Attr("scope") == "self" // a SELF-untap — untapping a target renews someone else
           && e.From.Subject is not null
         )
         .Select(e => e.From)
@@ -1818,7 +1834,7 @@ public sealed class PortGraphEngine
       var copyRenewed = cycle.Any(e =>
         e.Provenance == EdgeProvenance.RulesDefined
         && e.From.Side == PortSide.Emit
-        && (IsUntap(e.From.Label) || IsBlink(e.From.Label))
+        && (IsUntap(e.From) || IsBlink(e.From))
         && string.Equals(e.From.Grafter, card, StringComparison.Ordinal) // a copy THIS card grafted
         && string.Equals(e.To.Card, card, StringComparison.Ordinal)
         && e.To.Label == "tap:self"
@@ -1847,9 +1863,7 @@ public sealed class PortGraphEngine
     var seen = new HashSet<string>(ports.Select(p => p.Identity), StringComparer.Ordinal);
     foreach (
       var sac in ports.Where(p =>
-        p.Side == PortSide.Consume
-        && p.Subject is not null
-        && (p.Label == "sac" || p.Label.StartsWith("sac:", StringComparison.Ordinal))
+        IsSacConsume(p) && p.Subject is not null
       )
     )
     {
@@ -1937,7 +1951,7 @@ public sealed class PortGraphEngine
           if (
             string.Equals(feed.To.Identity, sac.Identity, StringComparison.Ordinal)
             && feed.From.Side == PortSide.Emit
-            && ResourceKind(feed.From.Label) == "token"
+            && IsTokenEmit(feed.From)
             && !TokenSatisfiesAtCreation(feed.From, dies)
           )
             return true; // the sacrificed token can't be the dies-trigger's type — the loop can't fire
@@ -1973,7 +1987,7 @@ public sealed class PortGraphEngine
     var cards = cycle.SelectMany(e => new[] { e.From.Card, e.To.Card }).ToHashSet(StringComparer.Ordinal);
     var tokens = cycle
       .SelectMany(e => new[] { e.From, e.To })
-      .Where(p => p.Side == PortSide.Emit && ResourceKind(p.Label) == "token" && p.Subject is not null)
+      .Where(p => IsTokenEmit(p) && p.Subject is not null)
       .GroupBy(p => p.Identity, StringComparer.Ordinal)
       .Select(g => g.First())
       .ToList();
@@ -1984,7 +1998,7 @@ public sealed class PortGraphEngine
         e.Provenance == EdgeProvenance.CardDefined
         && cards.Contains(e.From.Card)
         && e.From.Side == PortSide.Consume
-        && Role(e.From.Label) == "etb"
+        && IsEtbConsume(e.From)
         && e.From.Subject is not null
         && e.From.Subject.IsSelf != true // a one-time self-ETB doesn't sustain the loop
         && e.To.Label.StartsWith($"emit:counter:{counter.ToLowerInvariant()}", StringComparison.Ordinal)
@@ -2000,32 +2014,43 @@ public sealed class PortGraphEngine
   }
 
   /// <summary>A self-scoped dies-trigger: <c>ltb</c> role, destination <c>to-graveyard</c> (CR 700.4), scope <c>self</c>.</summary>
-  private static bool IsSelfLeavesToGraveyard(string label)
-  {
-    var segments = label.Split(':');
-    return segments.Length > 0
-      && segments[0] == "ltb"
-      && segments.Contains("to-graveyard")
-      && segments.Contains("self");
-  }
+  // ADR-0003 §5/cleanup 2/3-B: the flow-family predicates read the structured PortStructure (stem +
+  // attribute set), not the ADR-0002 colon-label. Each keys on the family's Recognize output (see
+  // Families/*.cs). Kinds without a family yet (counter, tap, modify/set/switch-pt, evasion, replace) keep
+  // their label reads until those families land — flagged inline at their call sites.
+  private static bool IsSelfLeavesToGraveyard(PortNode p) =>
+    p.Side == PortSide.Consume
+    && p.Structure?.Stem == "removal:creature"
+    && p.Structure?.Attr("to") == "graveyard"
+    && p.Subject?.IsSelf == true;
 
-  private static bool IsPayMana(string label) =>
-    label.StartsWith("pay:mana", StringComparison.Ordinal);
+  private static bool IsPayMana(PortNode p) =>
+    p.Side == PortSide.Consume && p.Structure?.Stem == "mana";
 
-  private static bool IsEmitMana(string label) =>
-    label.StartsWith("emit:mana", StringComparison.Ordinal);
+  private static bool IsEmitMana(PortNode p) =>
+    p.Side == PortSide.Emit && p.Structure?.Stem == "mana";
 
-  private static bool IsPayLife(string label) =>
-    label.StartsWith("pay:paylife", StringComparison.Ordinal);
+  private static bool IsPayLife(PortNode p) =>
+    p.Side == PortSide.Consume && p.Structure?.Stem == "paylife";
 
-  private static bool IsEmitLifeGain(string label) =>
-    label.StartsWith("emit:life:gain", StringComparison.Ordinal);
+  private static bool IsEmitLifeGain(PortNode p) =>
+    p.Side == PortSide.Emit && p.Structure?.Stem == "life" && p.Structure?.Attr("direction") == "gain";
 
-  private static string Role(string label) => label.Split(':', 2)[0];
+  /// <summary>A created-token emit (<c>deployment:creature[token=true]</c>, TokenFamily).</summary>
+  private static bool IsTokenEmit(PortNode p) =>
+    p.Side == PortSide.Emit
+    && p.Structure?.Stem == "deployment:creature"
+    && p.Structure?.Attr("token") == "true";
 
-  private static string? ResourceKind(string label)
-  {
-    var parts = label.Split(':');
-    return parts.Length >= 2 ? parts[1] : null;
-  }
+  /// <summary>An enters-the-battlefield trigger consume (<c>deployment:creature[event=etb]</c>, EtbFamily).</summary>
+  private static bool IsEtbConsume(PortNode p) =>
+    p.Side == PortSide.Consume
+    && p.Structure?.Stem == "deployment:creature"
+    && p.Structure?.Attr("event") == "etb";
+
+  /// <summary>A sacrifice-cost fodder consume (<c>creature[manner=sacrificed]</c>, SacFamily).</summary>
+  private static bool IsSacConsume(PortNode p) =>
+    p.Side == PortSide.Consume
+    && p.Structure?.Stem == "creature"
+    && p.Structure?.Attr("manner") == "sacrificed";
 }
