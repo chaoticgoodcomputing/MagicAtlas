@@ -69,8 +69,20 @@ Load-bearing rules when authoring:
 - **`edges` name the mechanism** — `subsumption` / `card-defined` / `modifier` are structural (self-certifying); **anything else MUST cite a rule id** that exists in this gold's `declares` or another gold. Each edge carries a `tier` (GREEN/AMBER) and `residuals[]` (guard ids applied).
 - **`declares` only NEW rules** — `polarity` / `match_policy` / `guards` (impl in code) / `bridges`, each with a stable `id`, CR citations, and — if it corroborates an existing rule — a `corroborates:` pointer (that is how a rule climbs `observed → corroborated → confirmed`). Reusing an existing rule is a reference, not a re-declaration.
 - **`judge`** — set `{ verdict: "PASS", ref: "..." }` only after the `interaction-judge` blesses it; a judge-backed gold's rules may be `confirmed` (a GREEN edge/loop requires `confirmed` rules — ladder coherence).
-- **`assertions`** — the machine-checkable claims (tier equalities, reliability caps, `no_loop`); the gold IS its own test.
+- **`assertions`** — the machine-checkable claims (tier equalities, reliability caps, `no_loop`, `no_arm[P]`); the gold IS its own test.
 - **`source`** — provenance (`csb`, `popularity`, `absorbed_from`). **Give it a `popularity`** when known — that is what feeds `demand.witnessed`.
+
+### Asserted-absence golds (`no_arm[P]`) — ADR-0004 §1
+
+A domain judgment ("this port connects to nothing, on purpose") is **Evidence, not prose**: it is authored as a gold with `edges: []` and a `no_arm[P]` assertion, never as a whitelist entry or an ADR paragraph. `P` is named by its gold-local port id; the port's declared `side`/`stem`/`attrs` are its identity, and the claim is executed against `PortFlowMatcher.SelectArm` over the **current** witnessed stem universe (`TopologyRollupContractTests` Part B + `FlowProbes`). Live example: `rat-colony-deck-construction-terminal.json`.
+
+Three things to know before you author or triage one:
+
+- **Never assert "zero edges".** For a single-card gold that is vacuously true (there is no partner card) and it would keep passing after somebody armed the port. Assert against the *matcher*.
+- **An absence gold can go red with nobody touching the card.** It is evaluated against the taxonomy as it stands today, so a stem witnessed by an unrelated gold, or a new flow arm, can falsify it. **That is intended** — it forces the judgment to be re-derived instead of silently outliving its premise.
+- **Triage doctrine is fixed (ADR-0004, do not re-litigate): a firing is a HARD BUILD FAILURE, judge-resolved.** Either the new arm is correct — amend or delete the gold, judge-gated — or the arm is wrong and you fix it. It is *never* resolved by weakening the assertion, and never deferred to a report; a soft signal here reproduces the quiet-artifact-nobody-reconciles failure ADR-0004 exists to remove.
+
+Before authoring one, answer the judge's falsification prompt yourself — *what change would make this absence wrong, and would the assertion catch it?* If the answer is "a parser or engine gap someone will close later", you have a **backlog item, not a decision**: don't write the gold.
 
 ### The parse-inside-engine bridge (any currency)
 

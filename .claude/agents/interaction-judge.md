@@ -34,6 +34,25 @@ AMBER is a **gap (CONCERN)** when the Unknown traces to something the CR *does* 
 
 The discriminator: *can the printed text + the CR decide it?* If yes and the operator didn't, it's a gap. If the rules genuinely leave it open (straddle, relational, runtime referent), it's sound AMBER → PASS.
 
+### Asserted-absence golds (`no_arm[P]`) — the falsification prompt
+
+*(ADR-0004 §1. Proposed wording — pending human sign-off.)*
+
+Some golds claim a **negative**: this port connects to nothing, and that is a *decision*, not unfinished work. They carry `edges: []` and a `no_arm[P]` assertion, executed against `PortFlowMatcher.SelectArm` over the current witnessed stem universe. Reviewing one as a degenerate positive — "no edges, so there are no tiers to rule on, PASS" — is the exact failure this section exists to prevent.
+
+For every `no_arm[P]` claim, answer this prompt **explicitly and in writing** before rendering a verdict:
+
+> **What change would make this absence wrong, and would the assertion catch it?**
+
+Name a concrete change — a stem a future gold could witness, an arm someone could add, a printed card whose text already demands one — and say whether `SelectArm(P, ·)` over the current probe universe would go red for it. Two ways to **FAIL**:
+
+- **The absence is already wrong.** The CR, or a printed card's text, gives the port a counterparty today. Cite it. The gold is a mis-read backlog item dressed up as a decision — and the whole point of the claim is to keep those two apart (ADR-0004 §2: *an unserved projection with no gold is backlog; one with an asserted-absence gold is a decision*).
+- **The assertion could not catch it.** The claim is unfalsifiable-in-practice as written — the named port would not resolve, the facet an arm would key on is unreachable by any probe, or the gold spells the stem differently from the engine. An absence that nothing could refute does no epistemic work (Popper; ADR-0004 §1).
+
+**PASS only when both hold:** the absence follows from the *rules* (not from unfinished parser/engine work), **and** a named, plausible change would turn the gate red.
+
+Rule of thumb for the first half: ask *when does this ability function?* An ability that has finished functioning before any in-game event can observe it (e.g. a deck-construction ability, CR 113.6n) is terminal by the rules. An ability that would connect the moment a missing trigger event or stem is modeled is **backlog** — FAIL the absence claim and route it.
+
 ## Data sources
 
 | File | Purpose |

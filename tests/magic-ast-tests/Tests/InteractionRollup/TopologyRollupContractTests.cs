@@ -1,7 +1,10 @@
 namespace MagicAST.Tests.Tests.InteractionRollup;
 
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using MagicAST.AST.References;
+using MagicAST.Interaction;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 using MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 
@@ -18,11 +21,19 @@ using MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 /// via a human running <c>dotnet run -- --flow InteractionRollup</c> and eyeballing <c>git diff</c>.</para>
 ///
 /// <para><b>Part B — gold assertion execution.</b> Every gold's <c>assertions[]</c> array carries
-/// machine-checkable claims (see <c>Fixtures/Interactions/golds/README.md</c>). Two claim shapes are
-/// cheap to execute against the regenerated topology right now — <c>stem.&lt;S&gt;.witnessed</c> and
-/// <c>corroborates_hole.&lt;H&gt;</c> — this is the check that would have caught the
-/// <c>non-play-zone-move</c> hole-resolution bug the instant <c>archaeomancer.json</c> landed. Any other
-/// claim shape is SKIPPED (additive grammar, not a rewrite of assertion execution).</para>
+/// machine-checkable claims (see <c>Fixtures/Interactions/golds/README.md</c>). Three claim shapes are
+/// executable against the regenerated topology right now — <c>stem.&lt;S&gt;.witnessed</c>,
+/// <c>corroborates_hole.&lt;H&gt;</c> and (ADR-0004 §1) <c>no_arm[P]</c> — the first of which is the check
+/// that would have caught the <c>non-play-zone-move</c> hole-resolution bug the instant
+/// <c>archaeomancer.json</c> landed. Any other claim shape is SKIPPED (additive grammar, not a rewrite of
+/// assertion execution).</para>
+///
+/// <para><b>Asserted absence (ADR-0004 §1).</b> <c>no_arm[P]</c> is the sibling of the established
+/// <c>no_loop</c> claim: a domain judgment ("this port connects to nothing") carried as Evidence with an
+/// EXECUTABLE justification instead of prose in a whitelist. It is evaluated against
+/// <see cref="PortFlowMatcher.SelectArm"/> over the CURRENT witnessed stem universe
+/// (<see cref="FlowProbes"/>), so it strengthens as the taxonomy accretes — and a gold may go red because
+/// somebody armed a stem, with nobody touching the card. That is a hard build failure, judge-resolved.</para>
 ///
 /// <para><b>R2/R3 negative-path proofs.</b> A handful of tests construct malformed scaffolds in-memory
 /// (never touching the committed fixture) and assert <see cref="TopologyStep"/> throws — proving the
@@ -125,12 +136,21 @@ public class TopologyRollupContractTests
     RegexOptions.Compiled
   );
 
+  // "no_arm[<P>]" — ADR-0004 §1. P names a port by the gold-local `ports[card][].id` (the same identity
+  // convention `edges[].from/to` use, minus the card qualifier, which is only needed when a gold declares
+  // the same id on two cards — accepted here as "Card.Id" too).
+  private static readonly Regex NoArmClaim = new(
+    @"^no_arm\[(?<port>[^\]]+)\]$",
+    RegexOptions.Compiled
+  );
+
   [Test]
   public void Every_recognized_gold_assertion_holds_against_the_regenerated_topology()
   {
     var topology = Regenerated.Cited; // witnesses are only populated in the cited half
     var errors = new List<string>();
     var recognized = 0;
+    var noArmClaims = 0;
 
     foreach (var gn in GoldList)
     {
@@ -161,16 +181,197 @@ public class TopologyRollupContractTests
           continue;
         }
 
+        var noArmMatch = NoArmClaim.Match(claim);
+        if (noArmMatch.Success)
+        {
+          recognized++;
+          noArmClaims++;
+          CheckNoArm(topology, g, gid, claim, noArmMatch.Groups["port"].Value, errors);
+          continue;
+        }
+
         // Any other claim shape (loop_tier ==, edge.*, no_loop, R1.from ==, …) is not yet executable —
         // SKIP it (additive grammar; see golds/README.md "Stage 3 shadow mode").
       }
     }
 
-    // Sanity: the two claim shapes ARE present in the corpus (else this test would vacuously pass and
-    // silently stop testing anything the moment every gold using them was deleted/renamed).
+    // Sanity: the executable claim shapes ARE present in the corpus (else this test would vacuously pass
+    // and silently stop testing anything the moment every gold using them was deleted/renamed).
     Assert.That(recognized, Is.GreaterThan(0), "expected at least one stem.*.witnessed/corroborates_hole.* claim in the golds");
 
+    // ADR-0004 §1: the no_arm machinery must have a live user. An unexercised assertion runner is the
+    // same vacuity failure one level up — it would pass forever while testing nothing.
+    Assert.That(
+      noArmClaims,
+      Is.GreaterThan(0),
+      "expected at least one no_arm[P] claim in the golds — the asserted-absence machinery is shipped "
+        + "unexercised otherwise (ADR-0004 §1)"
+    );
+
     Assert.That(errors, Is.Empty, "gold assertion(s) failed against the regenerated topology:\n  " + string.Join("\n  ", errors));
+  }
+
+  /// <summary>
+  /// ADR-0004 §1 — execute a <c>no_arm[P]</c> claim. P is named by its gold-local port id; the port's
+  /// declared <c>side</c>/<c>stem</c>/<c>attrs</c> ARE its identity (the ADR-0003 structure canonical form),
+  /// so the claim reads: <em>were this port structured exactly as the gold declares it, no flow arm would
+  /// connect it to anything the current taxonomy knows about.</em>
+  ///
+  /// <para>Asserted against <see cref="PortFlowMatcher.SelectArm"/> over the probe universe
+  /// (<see cref="FlowProbes"/>), never against a materialized edge set — a single-card gold has no partner,
+  /// so "zero edges" would be vacuously true and would keep passing after someone armed the port.</para>
+  ///
+  /// <para><b>Triage doctrine (ADR-0004 Consequences):</b> a firing here is a HARD BUILD FAILURE, resolved
+  /// by the judge — either the new arm is correct (amend or delete the gold, judge-gated) or the arm is
+  /// wrong (fix it). It is never resolved by weakening this assertion, and never deferred to a report.</para>
+  /// </summary>
+  private static void CheckNoArm(
+    PortTopology topology,
+    JsonObject gold,
+    string goldId,
+    string claim,
+    string portRef,
+    List<string> errors
+  )
+  {
+    // ── resolve P (a non-resolving port is a FAILURE, never a silent skip — that is the vacuity trap) ──
+    var matches = new List<(string Card, JsonObject Port)>();
+    foreach (var cardKv in gold["ports"]!.AsObject())
+    {
+      if (cardKv.Value is not JsonArray plist)
+        continue;
+      foreach (var pn in plist)
+      {
+        if (pn is not JsonObject p)
+          continue;
+        var pid = p["id"]?.GetValue<string>();
+        if (pid == portRef || $"{cardKv.Key}.{pid}" == portRef)
+          matches.Add((cardKv.Key, p));
+      }
+    }
+
+    if (matches.Count == 0)
+    {
+      errors.Add($"{goldId}: claim '{claim}' — port '{portRef}' does not resolve to a declared port");
+      return;
+    }
+    if (matches.Count > 1)
+    {
+      errors.Add(
+        $"{goldId}: claim '{claim}' — port '{portRef}' is ambiguous across {matches.Count} cards; "
+          + "qualify it as 'Card.Id'"
+      );
+      return;
+    }
+
+    var (_, port) = matches[0];
+    var sideText = port["side"]!.GetValue<string>();
+    var side = sideText switch
+    {
+      "emit" => PortSide.Emit,
+      "consume" => PortSide.Consume,
+      _ => (PortSide?)null,
+    };
+    if (side is null)
+    {
+      // `intercept` has no SelectArm role at all (the matcher is emit×consume), so an absence claim over it
+      // would be vacuous by construction. Fail loudly rather than pass for free.
+      errors.Add(
+        $"{goldId}: claim '{claim}' — port side '{sideText}' is not assertable; no_arm is evaluated over "
+          + "SelectArm(emit, consume), so P must be side=emit or side=consume"
+      );
+      return;
+    }
+
+    var asserted = PortStructure.Of(
+      side.Value,
+      port["stem"]!.GetValue<string>(),
+      GoldAttrs(port["attrs"]).ToArray()
+    );
+
+    // ── the counterparty side, and the non-vacuity guards on it ──
+    var otherSide = side.Value == PortSide.Emit ? PortSide.Consume : PortSide.Emit;
+    var witnessed = FlowProbes.WitnessedStems(topology);
+    var probes = FlowProbes.For(topology, otherSide);
+    var liveOnSide = FlowProbes.Live.Count(p => p.Structure.Side == otherSide);
+
+    if (witnessed.Count == 0 || liveOnSide == 0 || probes.Count == 0)
+    {
+      errors.Add(
+        $"{goldId}: claim '{claim}' — the probe universe is degenerate (witnessed stems {witnessed.Count}, "
+          + $"live {otherSide.ToString().ToLowerInvariant()} structures {liveOnSide}, probes {probes.Count}); "
+          + "an absence claim evaluated against an empty universe is vacuous"
+      );
+      return;
+    }
+
+    // ── the assertion, over BOTH vocabularies the port can be spelled in ──
+    // The gold's canonical stem is the ADR-0003 spelling. An UNSTRUCTURED port additionally records the
+    // coarse label the engine actually emits (`coarse_label`), because that is the spelling a future family
+    // would arm — a probe keyed only on the canonical stem would sail past the likeliest wrong-making
+    // change (interaction-judge, 2026-07-20).
+    var spellings = new List<PortStructure> { asserted };
+    var coarseLabel = port["coarse_label"]?.GetValue<string>();
+    if (coarseLabel is not null)
+    {
+      // The recorded label must still be one the engine emits UNSTRUCTURED. If it is gone, either the label
+      // was renamed or (the case that matters) a family now recognizes it — in both cases the judgment must
+      // be re-derived, not silently carried.
+      var key = FlowProbes.CoarseKey(side.Value, coarseLabel);
+      if (!FlowProbes.UnstructuredLabels.Contains(key))
+      {
+        errors.Add(
+          $"{goldId}: claim '{claim}' — the recorded coarse label '{coarseLabel}' is no longer projected "
+            + $"unstructured on the {sideText} side anywhere in the hand-parsed corpus. Either it was "
+            + "renamed, or an IPortFamily now structures it — which is the first step to arming it. "
+            + "ADR-0004: re-derive the judgment (judge-gated); do not update the label to make this pass."
+        );
+        return;
+      }
+      spellings.Add(PortStructure.Of(side.Value, FlowProbes.CoarseStem(side.Value, coarseLabel)));
+    }
+
+    foreach (var spelling in spellings)
+    {
+      var hits = FlowProbes.ArmsFor(spelling, probes);
+      if (hits.Count > 0)
+        errors.Add(
+          $"{goldId}: claim '{claim}' FALSIFIED — {spelling.Canonical()} now selects "
+            + string.Join(
+              ", ",
+              hits.Select(h => $"{h.Arm} against {h.Counterparty}")
+            )
+            + ". ADR-0004: this is a hard failure resolved by the interaction-judge — either the arm is "
+            + "correct (amend/delete this gold) or the arm is wrong (fix the matcher). Never weaken the claim."
+        );
+    }
+  }
+
+  /// <summary>
+  /// A gold's <c>attrs</c> in the spelling the MATCHER uses. Values may be a bare scalar or the
+  /// provenance/polarity object form (<c>{"value": …, "provenance": "derived"}</c>) — provenance does not
+  /// participate in arm selection, so only the value is carried. Booleans render <c>true</c>/<c>false</c>
+  /// (the engine's own spelling, e.g. <c>emit.Attr("token") == "true"</c>) — deliberately NOT the rollup's
+  /// Python-style <c>True</c>/<c>False</c>, which is a serialization detail of the topology artifact.
+  /// </summary>
+  private static IEnumerable<(string Key, string Value)> GoldAttrs(JsonNode? attrs)
+  {
+    if (attrs is not JsonObject obj)
+      yield break;
+    foreach (var kv in obj)
+    {
+      var v = kv.Value is JsonObject o ? o["value"] : kv.Value;
+      if (v is null)
+        continue;
+      var text = v.GetValueKind() switch
+      {
+        JsonValueKind.True => "true",
+        JsonValueKind.False => "false",
+        JsonValueKind.String => v.GetValue<string>(),
+        _ => v.ToJsonString(),
+      };
+      yield return (kv.Key, text);
+    }
   }
 
   private static void CheckStemWitnessed(
