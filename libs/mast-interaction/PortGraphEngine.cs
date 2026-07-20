@@ -195,12 +195,30 @@ public sealed record PortCycle
           Firable && CoCostsSatisfied && Balanced && LifeBalanced && Productive ? 0 : (int)CertaintyTier.Amber
         );
 
-  /// <summary>The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>).</summary>
+  /// <summary>
+  /// The hop that limits the tier (and its operator <see cref="PortEdge.Reason"/>), or <c>null</c> when
+  /// <b>no hop limits anything</b> — every edge is GREEN, so the cycle is either GREEN outright or floored
+  /// by the §8 accounting (mana-negative, life-negative, gated, unfed co-cost), which is a property of the
+  /// cycle and not of any one edge. <see cref="LimitingReason"/> already reports that case and takes
+  /// precedence over this property; the two now agree instead of contradicting each other.
+  ///
+  /// <para>Returning the alphabetically-first edge for an all-GREEN cycle was actively harmful, not merely
+  /// uninformative. With every <c>Tier</c> equal, <c>OrderByDescending</c> is constant and the winner is
+  /// decided entirely by the <c>ThenBy</c> label tie-break — so a cycle's "limiting hop" changed whenever an
+  /// unrelated change introduced a port that happened to sort earlier. That is exactly what happened when
+  /// the sac→death bridge was retired into subsumption (ADR-0003 §5): the new
+  /// <c>emit:removal:creature:…</c> port sorts before <c>emit:token:…</c> ('r' &lt; 't'), so
+  /// <c>combo-expected-tiers.json</c>'s pin for Chatterfang × Pitiless Plunderer reported that "the REASON
+  /// it reconstructs at this tier silently changed" when nothing about the reasoning had moved. An
+  /// arbitrary tie-break frozen into a gate is precisely the ADR-0004 failure mode.</para>
+  /// </summary>
   public PortEdge? LimitingHop =>
-    Edges
-      .OrderByDescending(e => (int)e.Tier)
-      .ThenBy(e => e.From.Label, StringComparer.Ordinal)
-      .FirstOrDefault();
+    Edges.Any(e => e.Tier != CertaintyTier.Green)
+      ? Edges
+        .OrderByDescending(e => (int)e.Tier)
+        .ThenBy(e => e.From.Label, StringComparer.Ordinal)
+        .First()
+      : null;
 
   /// <summary>Why this cycle isn't a certified-GREEN infinite (for the viz hover): the cycle-level floor
   /// reason takes precedence (a gate / an unfed co-cost), else the worst hop's operator reason; <c>null</c> when GREEN.</summary>

@@ -23,14 +23,27 @@ public sealed record LimitingHopSummary
   public required string Reason { get; init; }
 
   /// <summary>
-  /// Picks the worst hop the SAME way <see cref="PortCycle.LimitingHop"/> does (highest edge tier,
-  /// tie-broken by FromLabel ordinal) — reduced from the already-projected <see cref="HopDiagnostic"/>
-  /// list rather than re-touching the engine, so this stays a pure, mechanical, byte-for-byte-derived
-  /// projection of <see cref="ComboDiagnostics"/>.
+  /// Picks the worst hop the SAME way <see cref="PortCycle.LimitingHop"/> does — <b>including its
+  /// null-when-nothing-limits rule</b>: an all-GREEN cycle has no limiting hop, because with every tier
+  /// equal the selection would collapse onto the <c>FromLabel</c> tie-break and report an arbitrary edge.
+  /// Reduced from the already-projected <see cref="HopDiagnostic"/> list rather than re-touching the
+  /// engine, so this stays a pure, mechanical, byte-for-byte-derived projection of
+  /// <see cref="ComboDiagnostics"/>.
+  ///
+  /// <para><b>This is a second implementation of the engine's rule, and it has already drifted once.</b>
+  /// The original comment claimed it picked "the SAME way" — true when written, false the moment
+  /// <see cref="PortCycle.LimitingHop"/> gained its null rule, because nothing checked the claim.
+  /// <c>LimitingHopAgreesWithEngineTest</c> now checks it, so the next divergence fails the bench instead
+  /// of silently re-pinning every GREEN combo to an alphabetical accident.</para>
   /// </summary>
   public static LimitingHopSummary? FromWorst(IReadOnlyList<HopDiagnostic> edges)
   {
     if (edges.Count == 0)
+      return null;
+
+    // Mirrors PortCycle.LimitingHop: nothing worse than GREEN ⇒ no hop is limiting. The cycle may still
+    // be AMBER via the §8 accounting flags, which are pinned separately and reported by LimitingReason.
+    if (edges.All(e => TierRank(e.EdgeTier) <= TierRank("Green")))
       return null;
 
     var worst = edges
