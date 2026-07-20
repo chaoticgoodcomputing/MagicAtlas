@@ -38,10 +38,6 @@
       "because": "T0 projects the bare BEHAVIOR stem modification:spell — the priority-1 sought hole 'cost-modification' proposed_stem — derived from Thorn of Amethyst's sole static ability (a costIncrease over noncreature spells, CR 601.2f). This is the SECOND independent witness of the stem (after stone-calendar), corroborating it was not a one-card fluke."
     },
     {
-      "claim": "hole.cost-modification.up_direction_witnessed",
-      "because": "the hole's own note records 'both directions (up tax / down reduction) homeless'; stone-calendar closed the down/reduction leg (control=you), and this gold closes the up/tax leg (control=any) — both directions of the priority-1 enabler hole now have a single-card witness."
-    },
-    {
       "claim": "T0.control == any",
       "because": "AffectedObjects carries NO Controller filter — 'Noncreature spells cost {1} more to cast' (no 'you cast' suffix, confirmed by the parser rule's own comment) taxes every player's matching spells; control axis licensed_by *, values_seen already contains 'any', lattice self ⊆ controlled ⊆ any — 'any' is the top of the lattice and the AST-derivable value when no filter is present."
     },

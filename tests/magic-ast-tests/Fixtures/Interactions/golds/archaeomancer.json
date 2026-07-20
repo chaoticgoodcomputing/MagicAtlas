@@ -69,10 +69,6 @@
       "because": "EffectType == returnToHand \u2014 the destination is definitionally the hand (bare value, AST-proven)"
     },
     {
-      "claim": "corroborates_hole.non-play-zone-move",
-      "because": "from=graveyard (not play) AND to=hand (not play) \u2014 a hidden-zone<->hidden-zone move that fits NEITHER Removal (from=play) NOR Deployment (to=play); the priority-6 sought hole's from->to primitive, now witnessed"
-    },
-    {
       "claim": "edge.E1.tier == GREEN",
       "because": "card-defined mechanism (self-certifying, structural) \u2014 the ETB trigger deterministically fires the recursion, no over-approximation to cap"
     },

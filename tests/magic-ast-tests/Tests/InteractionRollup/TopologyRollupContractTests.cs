@@ -21,12 +21,11 @@ using MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 /// via a human running <c>dotnet run -- --flow InteractionRollup</c> and eyeballing <c>git diff</c>.</para>
 ///
 /// <para><b>Part B — gold assertion execution.</b> Every gold's <c>assertions[]</c> array carries
-/// machine-checkable claims (see <c>Fixtures/Interactions/golds/README.md</c>). Three claim shapes are
-/// executable against the regenerated topology right now — <c>stem.&lt;S&gt;.witnessed</c>,
-/// <c>corroborates_hole.&lt;H&gt;</c> and (ADR-0004 §1) <c>no_arm[P]</c> — the first of which is the check
-/// that would have caught the <c>non-play-zone-move</c> hole-resolution bug the instant
-/// <c>archaeomancer.json</c> landed. Any other claim shape is SKIPPED (additive grammar, not a rewrite of
-/// assertion execution).</para>
+/// machine-checkable claims (see <c>Fixtures/Interactions/golds/README.md</c>). Two claim shapes are
+/// executable against the regenerated topology right now — <c>stem.&lt;S&gt;.witnessed</c> and (ADR-0004 §1)
+/// <c>no_arm[P]</c>. Any other claim shape is SKIPPED (additive grammar, not a rewrite of assertion
+/// execution) — EXCEPT the RETIRED <c>corroborates_hole.&lt;H&gt;</c> shape, which is failed explicitly so a
+/// claim against the deleted hole registry can never rot into a silent skip (ADR-0004 §7 / issue #26).</para>
 ///
 /// <para><b>Asserted absence (ADR-0004 §1).</b> <c>no_arm[P]</c> is the sibling of the established
 /// <c>no_loop</c> claim: a domain judgment ("this port connects to nothing") carried as Evidence with an
@@ -35,9 +34,13 @@ using MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 /// (<see cref="FlowProbes"/>), so it strengthens as the taxonomy accretes — and a gold may go red because
 /// somebody armed a stem, with nobody touching the card. That is a hard build failure, judge-resolved.</para>
 ///
-/// <para><b>R2/R3 negative-path proofs.</b> A handful of tests construct malformed scaffolds in-memory
-/// (never touching the committed fixture) and assert <see cref="TopologyStep"/> throws — proving the
-/// hole-shape gate (R2) and the axis-constraint validator (R3) actually fire, not just that they compile.</para>
+/// <para><b>Witness-derivation invariants (ADR-0004 §7 / issue #26).</b> The scaffold's declared half —
+/// <c>stems_representative</c>, <c>aliases</c>, <c>attribute_axes</c>, <c>holes</c> — is deleted, so
+/// <c>port-topology.json</c> is 100% witness-derived. Three stateless invariants pin that: the scaffold
+/// carries none of those keys; every stem in the artifact is <c>witnessed</c> and cites at least one gold;
+/// and adding scaffold sections back changes nothing (the step ignores them). The former R2/R3 negative-path
+/// proofs are gone with the machinery they proved — a hole-shape gate and an axis-constraint validator
+/// cannot fire when there are no declared holes and no declared axis constraints.</para>
 /// </summary>
 [TestFixture]
 public class TopologyRollupContractTests
@@ -130,9 +133,13 @@ public class TopologyRollupContractTests
     RegexOptions.Compiled
   );
 
-  // "corroborates_hole.<H>" — H is the hole's scaffold key.
-  private static readonly Regex CorroboratesHoleClaim = new(
-    @"^corroborates_hole\.(?<hole>[a-zA-Z0-9_-]+)$",
+  // RETIRED (ADR-0004 §7 / issue #26). Each of these names something the topology no longer stores: the
+  // `holes{}` registry (corroborates_hole / burns_down_hole / hole.*) or the per-stem `unpredicted` flag,
+  // which asserted a stem was absent from a declared prediction set that no longer exists. Matched only to
+  // FAIL. Without this they would fall into the "unrecognized claim shape" SKIP bucket and rot silently —
+  // which is precisely how a claim about a deleted field survives as documentation of a fiction.
+  private static readonly Regex RetiredClaimShape = new(
+    @"^(corroborates_hole\.|burns_down_hole\.|hole\.)|\.unpredicted",
     RegexOptions.Compiled
   );
 
@@ -173,11 +180,14 @@ public class TopologyRollupContractTests
           continue;
         }
 
-        var holeMatch = CorroboratesHoleClaim.Match(claim);
-        if (holeMatch.Success)
+        if (RetiredClaimShape.IsMatch(claim))
         {
-          recognized++;
-          CheckHoleCorroborated(topology, gid, claim, holeMatch.Groups["hole"].Value, errors);
+          errors.Add(
+            $"{gid}: claim '{claim}' uses a RETIRED shape — ADR-0004 §7 (issue #26) deleted the topology's "
+              + "holes{} registry and the per-stem `unpredicted` flag, so it resolves against nothing. A "
+              + "hole burn-down and a never-predicted stem are now the SAME claim: "
+              + "`stem.<S>.witnessed`. Restate it that way rather than reviving the field."
+          );
           continue;
         }
 
@@ -197,7 +207,7 @@ public class TopologyRollupContractTests
 
     // Sanity: the executable claim shapes ARE present in the corpus (else this test would vacuously pass
     // and silently stop testing anything the moment every gold using them was deleted/renamed).
-    Assert.That(recognized, Is.GreaterThan(0), "expected at least one stem.*.witnessed/corroborates_hole.* claim in the golds");
+    Assert.That(recognized, Is.GreaterThan(0), "expected at least one stem.*.witnessed claim in the golds");
 
     // ADR-0004 §1: the no_arm machinery must have a live user. An unexercised assertion runner is the
     // same vacuity failure one level up — it would pass forever while testing nothing.
@@ -396,117 +406,76 @@ public class TopologyRollupContractTests
       errors.Add($"{goldId}: claim '{claim}' — stem '{stem}' witnesses do not include this gold");
   }
 
-  private static void CheckHoleCorroborated(
-    PortTopology topology,
-    string goldId,
-    string claim,
-    string hole,
-    List<string> errors
-  )
+  // ── ADR-0004 §7 / issue #26: the topology is 100% witness-derived ───────────────────────────────
+
+  /// <summary>
+  /// The scaffold no longer carries a DECLARED half. This is the check that makes "no hand-typed
+  /// <c>status</c> can survive" structural rather than a claim: the four deleted sections were the only
+  /// places a human could type a stem, an axis constraint, an alias or a hole <c>status</c> into a file the
+  /// generator copies into <c>port-topology.json</c>. Re-adding any of them fails here.
+  /// </summary>
+  [Test]
+  public void The_scaffold_carries_no_declared_half()
   {
-    if (!topology.Holes.TryGetValue(hole, out var entry))
+    var deleted = new[] { "stems_representative", "aliases", "attribute_axes", "holes" };
+    var present = deleted.Where(k => Scaffold[k] is not null).ToList();
+    Assert.That(
+      present,
+      Is.Empty,
+      "topology-scaffold.json re-declared section(s) deleted by ADR-0004 §7 (issue #26): "
+        + string.Join(", ", present)
+        + ". stems/attribute_axes are derived from the golds, aliases and holes no longer exist in the "
+        + "artifact at all. A declared half is the drift surface that failed twice — do not reintroduce it."
+    );
+  }
+
+  /// <summary>
+  /// Every stem in the artifact is <c>witnessed</c> and names at least one witnessing gold. The status
+  /// field is retained only because the executable <c>stem.&lt;S&gt;.witnessed</c> claims read it; this
+  /// pins it as a derived constant so it cannot become a hand-set discriminator again.
+  /// </summary>
+  [Test]
+  public void Every_stem_in_the_topology_is_witnessed_by_at_least_one_gold()
+  {
+    var offenders = Regenerated
+      .Cited.Stems.Where(kv => kv.Value.Status != "witnessed" || kv.Value.Witnesses is not { Count: > 0 })
+      .Select(kv => $"{kv.Key} (status={kv.Value.Status}, witnesses={kv.Value.Witnesses?.Count ?? 0})")
+      .ToList();
+
+    Assert.That(
+      offenders,
+      Is.Empty,
+      "port-topology.json must be 100% witness-derived (ADR-0004 §7) — offending stem(s): "
+        + string.Join(", ", offenders)
+    );
+  }
+
+  /// <summary>
+  /// The deletion is enforced in the GENERATOR, not merely in the fixture: feeding the step a scaffold that
+  /// still carries all four declared sections produces byte-identical output. Without this, someone could
+  /// re-add the sections and the step would silently start merging them again.
+  /// </summary>
+  [Test]
+  public void Reintroducing_the_deleted_scaffold_sections_changes_nothing()
+  {
+    var resurrected = Scaffold.DeepClone();
+    resurrected["stems_representative"] = JsonNode.Parse(
+      """{ "a-stem-no-gold-projects": { "kind": "EVENT" } }"""
+    );
+    resurrected["aliases"] = JsonNode.Parse("""{ "fodder": "creature[pt=1/1]" }""");
+    resurrected["attribute_axes"] = JsonNode.Parse(
+      """{ "color": { "enum": ["nonsense"], "licensed_by": ["nothing:*"] }, "an-axis-no-gold-carries": {} }"""
+    );
+    resurrected["holes"] = JsonNode.Parse(
+      """{ "a-hole": { "priority": 1, "kind": "EVENT", "proposed_stem": "never:witnessed" } }"""
+    );
+
+    var (lean, cited) = TopologyStep.Create()((GoldList, resurrected));
+    Assert.Multiple(() =>
     {
-      errors.Add($"{goldId}: claim '{claim}' — hole '{hole}' is absent from the regenerated topology");
-      return;
-    }
-    if (entry.Status != "witnessed")
-    {
-      errors.Add($"{goldId}: claim '{claim}' — hole '{hole}' status is '{entry.Status}', expected 'witnessed'");
-      return;
-    }
-    if (entry.Witnesses is null || !entry.Witnesses.Contains(goldId))
-      errors.Add($"{goldId}: claim '{claim}' — hole '{hole}' witnesses do not include this gold");
-  }
-
-  // ── R2 negative-path proof: the hole proposed_stem shape gate ───────────────────────────────────
-
-  [Test]
-  public void A_malformed_hole_proposed_stem_throws_at_construction_instead_of_sitting_sought_forever()
-  {
-    // This is the EXACT bug class this session found by hand: a free-text placeholder that can never
-    // match a real projected stem name. Reproduced in-memory — never touches the committed scaffold.
-    var scaffold = JsonNode.Parse(
-      """
-      {
-        "holes": {
-          "bogus-hole": {
-            "priority": 1,
-            "kind": "EVENT",
-            "proposed_stem": "zonechange (neither removal nor deployment)"
-          }
-        }
-      }
-      """
-    )!;
-
-    var ex = Assert.Throws<InvalidOperationException>(
-      () => TopologyStep.Create()((Enumerable.Empty<JsonNode>(), scaffold))
-    );
-    Assert.That(ex!.Message, Does.Contain("bogus-hole"));
-    Assert.That(ex.Message, Does.Contain("zonechange (neither removal nor deployment)"));
-  }
-
-  [Test]
-  public void A_well_shaped_hole_proposed_stem_does_not_throw()
-  {
-    var scaffold = JsonNode.Parse(
-      """
-      {
-        "holes": {
-          "some-hole": {
-            "priority": 1,
-            "kind": "EVENT",
-            "proposed_stem": "modification:restriction"
-          }
-        }
-      }
-      """
-    )!;
-
-    Assert.DoesNotThrow(() => TopologyStep.Create()((Enumerable.Empty<JsonNode>(), scaffold)));
-  }
-
-  // ── R3 negative-path proof: reverting a fix reintroduces the drift and fails loud ───────────────
-
-  [Test]
-  public void Reverting_the_color_enum_fix_makes_the_axis_validator_fail_loud()
-  {
-    var mutated = Scaffold.DeepClone();
-    mutated["attribute_axes"]!["color"]!["enum"] = JsonNode.Parse(
-      """["W", "U", "B", "R", "G", "C", "any"]"""
-    );
-
-    var ex = Assert.Throws<InvalidOperationException>(
-      () => TopologyStep.Create()((GoldList, mutated))
-    );
-    Assert.That(ex!.Message, Does.Contain("'color'"));
-  }
-
-  [Test]
-  public void Reverting_the_counter_type_enum_fix_makes_the_axis_validator_fail_loud()
-  {
-    var mutated = Scaffold.DeepClone();
-    mutated["attribute_axes"]!["counter-type"]!["enum"] = JsonNode.Parse(
-      """["+1/+1", "loyalty", "charge", "energy", "experience", "poison"]"""
-    );
-
-    var ex = Assert.Throws<InvalidOperationException>(
-      () => TopologyStep.Create()((GoldList, mutated))
-    );
-    Assert.That(ex!.Message, Does.Contain("'counter-type'"));
-  }
-
-  [Test]
-  public void Reverting_the_from_to_licensed_by_fix_makes_the_axis_validator_fail_loud()
-  {
-    var mutated = Scaffold.DeepClone();
-    mutated["attribute_axes"]!["from"]!["licensed_by"] = JsonNode.Parse("""["removal:*", "deployment:*"]""");
-    mutated["attribute_axes"]!["to"]!["licensed_by"] = JsonNode.Parse("""["removal:*", "deployment:*"]""");
-
-    var ex = Assert.Throws<InvalidOperationException>(
-      () => TopologyStep.Create()((GoldList, mutated))
-    );
-    Assert.That(ex!.Message, Does.Contain("'from'").Or.Contain("'to'"));
+      Assert.That(JsonNode.DeepEquals(ToJson(lean), ToJson(Regenerated.Lean)), Is.True, "lean topology changed");
+      Assert.That(JsonNode.DeepEquals(ToJson(cited), ToJson(Regenerated.Cited)), Is.True, "cited topology changed");
+    });
   }
 
   // ── JSON mapping: PortTopology → JsonNode, mirroring the [SerializedLabel] wire shape exactly ────
@@ -528,8 +497,6 @@ public class TopologyRollupContractTests
       ),
       ["stems"] = ToObjectMap(t.Stems, StemToJson),
       ["attribute_axes"] = ToObjectMap(t.AttributeAxes, AxisToJson),
-      ["aliases"] = ToStringMap(t.Aliases),
-      ["holes"] = ToObjectMap(t.Holes, HoleToJson),
     };
     return root;
   }
@@ -541,55 +508,18 @@ public class TopologyRollupContractTests
       o["parent"] = s.Parent;
     o["status"] = s.Status;
     o["attrs"] = ToArray(s.Attrs);
-    if (s.Unpredicted is bool unpredicted)
-      o["unpredicted"] = unpredicted;
     if (s.Witnesses is { Count: > 0 } witnesses)
       o["witnesses"] = ToArray(witnesses);
     return o;
   }
 
-  private static JsonObject AxisToJson(AxisEntry a)
-  {
-    var o = new JsonObject
+  private static JsonObject AxisToJson(AxisEntry a) =>
+    new()
     {
       ["stems"] = ToArray(a.Stems),
       ["values_seen"] = ToArray(a.ValuesSeen),
       ["carries_provenance_or_polarity"] = a.CarriesProvenanceOrPolarity,
     };
-    if (a.LicensedBy is { Count: > 0 } licensedBy)
-      o["licensed_by"] = ToArray(licensedBy);
-    if (a.Lattice is not null)
-      o["lattice"] = a.Lattice;
-    if (a.Enum is { Count: > 0 } enumValues)
-      o["enum"] = ToArray(enumValues);
-    if (a.Bindable is { Count: > 0 } bindable)
-      o["bindable"] = ToArray(bindable);
-    if (a.Kind is not null)
-      o["kind"] = a.Kind;
-    if (a.Note is not null)
-      o["note"] = a.Note;
-    return o;
-  }
-
-  private static JsonObject HoleToJson(HoleEntry h)
-  {
-    var o = new JsonObject
-    {
-      ["priority"] = h.Priority,
-      ["kind"] = h.Kind,
-      ["proposed_stem"] = h.ProposedStem,
-    };
-    if (h.Attrs is { Count: > 0 } attrs)
-      o["attrs"] = ToArray(attrs);
-    if (h.Slang is { Count: > 0 } slang)
-      o["slang"] = ToArray(slang);
-    if (h.Note is not null)
-      o["note"] = h.Note;
-    o["status"] = h.Status;
-    if (h.Witnesses is { Count: > 0 } witnesses)
-      o["witnesses"] = ToArray(witnesses);
-    return o;
-  }
 
   private static JsonArray ToArray(IEnumerable<string> xs)
   {

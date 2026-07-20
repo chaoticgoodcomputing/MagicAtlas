@@ -204,10 +204,15 @@ public static class ArtifactClassifier
         + "carried now lives in a gold; the file itself is a residue. Deletion candidate, not a "
         + "classification.",
       ["tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json"] =
-        "ADR 0004's Context table names its holes{} as the archetypal frozen computation ('the report WAS "
-        + "the bug'). It is simultaneously a real declared input to InteractionRollup (the DECLARED half of "
-        + "the topology) and a stale derived claim. Splitting it is ADR-0004 §2 work (backlog becomes "
-        + "computed); classifying the file as it stands would freeze the conflation.",
+        "UPDATED 2026-07-20 (ADR-0004 §7, issue #26): the conflation this entry described is GONE. The "
+        + "four sections that made the file simultaneously a declared input and a stale derived claim — "
+        + "stems_representative, aliases, attribute_axes, and the archetypal frozen computation holes{} "
+        + "('the report WAS the bug') — are deleted, and port-topology.json is now 100% witness-derived. "
+        + "What remains is genuinely mixed in KIND, which is why it is still not classifiable as one thing: "
+        + "kinds/supergroups/event_verbs_no_supergroup are architectural rulings a gold cannot witness "
+        + "(ADR 0004 §1 routes those to ADR prose, but the generator has to consume them as data), while "
+        + "connectivity_predictions and reject are awaiting conversion to executable sweeps (#27) and "
+        + "asserted-absence golds (#28). The file is a transit lounge, not a category.",
 
       // ── Fixtures/Interactions/cards ─────────────────────────────────────────────────────────────
       ["tests/magic-ast-tests/Fixtures/Interactions/cards/BloodArtist.json"] = InteractionCardReason,

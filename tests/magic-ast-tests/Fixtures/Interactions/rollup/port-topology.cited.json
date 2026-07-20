@@ -151,7 +151,6 @@
         "qty",
         "to"
       ],
-      "unpredicted": true,
       "witnesses": [
         "diabolic-tutor",
         "vampiric-tutor"
@@ -165,7 +164,6 @@
         "control",
         "qty"
       ],
-      "unpredicted": true,
       "witnesses": [
         "serum-visions"
       ]
@@ -178,7 +176,6 @@
         "subject",
         "subtype"
       ],
-      "unpredicted": true,
       "witnesses": [
         "aang-the-last-airbender",
         "aetherflux-reservoir",
@@ -199,7 +196,6 @@
         "control",
         "subject"
       ],
-      "unpredicted": true,
       "witnesses": [
         "aggravated-assault-x-sword-of-feast-and-famine",
         "combat-celebrant",
@@ -210,7 +206,6 @@
       "kind": "EVENT",
       "status": "witnessed",
       "attrs": [],
-      "unpredicted": true,
       "witnesses": [
         "dualcaster-mage-x-ghostly-flicker",
         "kiki-jiki-mirror-breaker",
@@ -269,7 +264,6 @@
         "recipient",
         "subject"
       ],
-      "unpredicted": true,
       "witnesses": [
         "aetherflux-reservoir",
         "aggravated-assault-x-sword-of-feast-and-famine",
@@ -288,7 +282,6 @@
       "kind": "BEHAVIOR",
       "status": "witnessed",
       "attrs": [],
-      "unpredicted": true,
       "witnesses": [
         "rat-colony-deck-construction-terminal"
       ]
@@ -366,7 +359,6 @@
       "attrs": [
         "control"
       ],
-      "unpredicted": true,
       "witnesses": [
         "brazen-dwarf",
         "captain-rex-nebula",
@@ -439,7 +431,7 @@
     },
     "modification:evasion": {
       "kind": "BEHAVIOR",
-      "parent": "modification:keyword",
+      "parent": "modification",
       "status": "witnessed",
       "attrs": [
         "subject"
@@ -489,7 +481,6 @@
         "duration",
         "subject"
       ],
-      "unpredicted": true,
       "witnesses": [
         "fog",
         "glacial-chasm"
@@ -502,7 +493,6 @@
       "attrs": [
         "subject"
       ],
-      "unpredicted": true,
       "witnesses": [
         "moat",
         "pacifism"
@@ -515,7 +505,6 @@
       "attrs": [
         "control"
       ],
-      "unpredicted": true,
       "witnesses": [
         "stone-calendar",
         "thorn-of-amethyst"
@@ -530,7 +519,6 @@
         "self",
         "to"
       ],
-      "unpredicted": true,
       "witnesses": [
         "archaeomancer",
         "archaeomancer-x-ghostly-flicker",
@@ -547,7 +535,7 @@
     },
     "removal:artifact": {
       "kind": "EVENT",
-      "parent": "removal:permanent",
+      "parent": "removal",
       "status": "witnessed",
       "attrs": [
         "control",
@@ -564,7 +552,7 @@
     },
     "removal:creature": {
       "kind": "EVENT",
-      "parent": "removal:permanent",
+      "parent": "removal",
       "status": "witnessed",
       "attrs": [
         "control",
@@ -661,22 +649,7 @@
         "red",
         "white"
       ],
-      "carries_provenance_or_polarity": true,
-      "licensed_by": [
-        "mana",
-        "objects:*",
-        "deployment:*"
-      ],
-      "enum": [
-        "white",
-        "blue",
-        "black",
-        "red",
-        "green",
-        "colorless",
-        "generic",
-        "any"
-      ]
+      "carries_provenance_or_polarity": true
     },
     "combat": {
       "stems": [
@@ -687,16 +660,7 @@
         "combat",
         "noncombat"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "damage-dealt",
-        "combat-presence"
-      ],
-      "enum": [
-        "combat",
-        "noncombat",
-        "any"
-      ]
+      "carries_provenance_or_polarity": false
     },
     "control": {
       "stems": [
@@ -726,11 +690,7 @@
         "opponent",
         "you"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "*"
-      ],
-      "lattice": "self \u2286 controlled \u2286 any ; opponent \u2286 any"
+      "carries_provenance_or_polarity": false
     },
     "counter-type": {
       "stems": [
@@ -740,19 +700,7 @@
         "\u002B1/\u002B1",
         "-1/-1"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "counters"
-      ],
-      "enum": [
-        "\u002B1/\u002B1",
-        "-1/-1",
-        "loyalty",
-        "charge",
-        "energy",
-        "experience",
-        "poison"
-      ]
+      "carries_provenance_or_polarity": false
     },
     "delta": {
       "stems": [
@@ -762,11 +710,7 @@
         "\u002B2/\u002B2",
         "\u002BX/-X"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "modification:*"
-      ],
-      "lattice": "signed magnitude (\u002BX/-X)"
+      "carries_provenance_or_polarity": false
     },
     "direction": {
       "stems": [
@@ -776,14 +720,7 @@
         "gain",
         "loss"
       ],
-      "carries_provenance_or_polarity": true,
-      "licensed_by": [
-        "life"
-      ],
-      "enum": [
-        "gain",
-        "loss"
-      ]
+      "carries_provenance_or_polarity": true
     },
     "duration": {
       "stems": [
@@ -795,15 +732,7 @@
         "eot",
         "permanent"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "modification:*"
-      ],
-      "enum": [
-        "eot",
-        "permanent",
-        "your-next-turn"
-      ]
+      "carries_provenance_or_polarity": false
     },
     "exclude_self": {
       "stems": [
@@ -814,16 +743,7 @@
       "values_seen": [
         "True"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "removal:*",
-        "deployment:*",
-        "creature"
-      ],
-      "enum": [
-        "True"
-      ],
-      "note": "identity exclusion (:another); the attribute-axis key (matches the golds\u0027 attrs); the \u00A76 guard rule id is guard:exclude-self (kebab, a different namespace)"
+      "carries_provenance_or_polarity": false
     },
     "from": {
       "stems": [
@@ -838,14 +758,7 @@
         "graveyard",
         "library"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "removal:*",
-        "deployment:*",
-        "cards:*",
-        "recur"
-      ],
-      "lattice": "zones"
+      "carries_provenance_or_polarity": false
     },
     "keyword": {
       "stems": [
@@ -856,11 +769,7 @@
         "soulbond",
         "undying"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "modification:keyword"
-      ],
-      "lattice": "keyword ontology (forestwalk \u2282 landwalk \u2282 evasion)"
+      "carries_provenance_or_polarity": false
     },
     "manner": {
       "stems": [
@@ -875,32 +784,7 @@
         "destroyed",
         "sacrificed"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "removal:*",
-        "deployment:*",
-        "deployment"
-      ],
-      "enum": [
-        "sacrificed",
-        "destroyed",
-        "combat",
-        "state-based",
-        "blink",
-        "cast",
-        "copied"
-      ]
-    },
-    "owner": {
-      "stems": [],
-      "values_seen": [],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "objects:*",
-        "removal:*",
-        "deployment:*"
-      ],
-      "lattice": "owned (ownership, orthogonal to control)"
+      "carries_provenance_or_polarity": false
     },
     "pt": {
       "stems": [
@@ -910,13 +794,7 @@
         "1/1",
         "2/2"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "objects:*",
-        "modification:*",
-        "deployment:*"
-      ],
-      "lattice": "power/toughness comparisons"
+      "carries_provenance_or_polarity": false
     },
     "qty": {
       "stems": [
@@ -943,16 +821,7 @@
         "that-many",
         "up-to-5"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "*"
-      ],
-      "bindable": [
-        "X",
-        "that-many",
-        "up-to-N"
-      ],
-      "kind": "numeric|symbolic"
+      "carries_provenance_or_polarity": false
     },
     "recipient": {
       "stems": [
@@ -965,19 +834,7 @@
         "player",
         "you"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "life",
-        "damage-dealt"
-      ],
-      "enum": [
-        "you",
-        "opponent",
-        "any",
-        "player",
-        "creature",
-        "planeswalker"
-      ]
+      "carries_provenance_or_polarity": false
     },
     "self": {
       "stems": [
@@ -992,15 +849,7 @@
         "False",
         "True"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "*"
-      ],
-      "enum": [
-        "True",
-        "False"
-      ],
-      "note": "the port\u0027s subject is the source object itself"
+      "carries_provenance_or_polarity": false
     },
     "stat": {
       "stems": [
@@ -1009,13 +858,7 @@
       "values_seen": [
         "pt"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "modification:*"
-      ],
-      "enum": [
-        "pt"
-      ]
+      "carries_provenance_or_polarity": false
     },
     "subject": {
       "stems": [
@@ -1062,17 +905,7 @@
         "treasure",
         "zombie"
       ],
-      "carries_provenance_or_polarity": true,
-      "licensed_by": [
-        "objects:*",
-        "removal:*",
-        "deployment:*",
-        "artifact",
-        "cast",
-        "creature",
-        "structure:untap"
-      ],
-      "lattice": "type-ontology (creature:squirrel \u2286 creature)"
+      "carries_provenance_or_polarity": true
     },
     "target": {
       "stems": [
@@ -1082,15 +915,7 @@
       "values_seen": [
         "chosen"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "*"
-      ],
-      "enum": [
-        "self",
-        "any",
-        "chosen"
-      ]
+      "carries_provenance_or_polarity": false
     },
     "to": {
       "stems": [
@@ -1107,14 +932,7 @@
         "hand",
         "library"
       ],
-      "carries_provenance_or_polarity": true,
-      "licensed_by": [
-        "removal:*",
-        "deployment:*",
-        "cards:*",
-        "recur"
-      ],
-      "lattice": "zones"
+      "carries_provenance_or_polarity": true
     },
     "token": {
       "stems": [
@@ -1130,156 +948,7 @@
         "False",
         "True"
       ],
-      "carries_provenance_or_polarity": false,
-      "licensed_by": [
-        "objects:*",
-        "deployment:*",
-        "removal:*",
-        "artifact",
-        "creature",
-        "deployment"
-      ],
-      "enum": [
-        "True",
-        "False"
-      ]
-    }
-  },
-  "aliases": {
-    "fodder": "creature[pt=1/1]  (Skullclamp reading: creature[toughness=1])",
-    "dies": "removal:*[to=graveyard]",
-    "sacrifice": "removal:*[manner=sacrificed]",
-    "edict": "removal:creature[control=opponent, manner=sacrificed]",
-    "bounce": "removal:*[from=battlefield, to=hand]",
-    "mill": "removal:*[from=library, to=graveyard]",
-    "gy-hate": "removal:*[from=graveyard, to=exile]",
-    "counter-spell": "removal:*[from=stack, to=graveyard]",
-    "reanimate": "deployment:*[from=graveyard, to=battlefield]",
-    "blink": "removal:*[to=exile, manner=blink] \u002B deployment:*[manner=blink]"
-  },
-  "holes": {
-    "cost-modification": {
-      "priority": 1,
-      "kind": "BEHAVIOR",
-      "proposed_stem": "modification:spell",
-      "attrs": [
-        "cost-delta"
-      ],
-      "slang": [
-        "tax",
-        "cost-reduction",
-        "cheat-out"
-      ],
-      "note": "no cost-delta stem; both directions (\u2191 tax / \u2193 reduction) homeless. Most corroborated (panel \u002B full-slang \u002B checklist).",
-      "status": "witnessed",
-      "witnesses": [
-        "stone-calendar",
-        "thorn-of-amethyst"
-      ]
-    },
-    "restriction-grant": {
-      "priority": 2,
-      "kind": "BEHAVIOR",
-      "proposed_stem": "modification:restriction",
-      "attrs": [
-        "restrict=attack|block"
-      ],
-      "slang": [
-        "pacifism",
-        "prison",
-        "lock"
-      ],
-      "note": "\u0027can\u0027t attack/block\u0027 grant \u2014 a Behavior with no stem.",
-      "status": "witnessed",
-      "witnesses": [
-        "moat",
-        "pacifism"
-      ]
-    },
-    "prevention": {
-      "priority": 3,
-      "kind": "BEHAVIOR",
-      "proposed_stem": "modification:prevention",
-      "attrs": [
-        "prevents=combat-damage"
-      ],
-      "slang": [
-        "fog"
-      ],
-      "note": "a shield/replacement on the damage event.",
-      "status": "witnessed",
-      "witnesses": [
-        "fog",
-        "glacial-chasm"
-      ]
-    },
-    "library-search": {
-      "priority": 4,
-      "kind": "STATE",
-      "proposed_stem": "cards:search",
-      "attrs": [
-        "from=library",
-        "to=hand",
-        "by=criteria"
-      ],
-      "slang": [
-        "tutor",
-        "fetch"
-      ],
-      "note": "library\u2192hand by criteria; distinct from draw. A Cards-STATE op.",
-      "status": "witnessed",
-      "witnesses": [
-        "diabolic-tutor",
-        "vampiric-tutor"
-      ]
-    },
-    "library-selection": {
-      "priority": 5,
-      "kind": "STATE",
-      "proposed_stem": "cards:select",
-      "attrs": [
-        "peek=N",
-        "reorder"
-      ],
-      "slang": [
-        "dig",
-        "scry",
-        "surveil",
-        "impulse"
-      ],
-      "note": "peek/reorder top-N; a Cards-STATE op.",
-      "status": "witnessed",
-      "witnesses": [
-        "serum-visions"
-      ]
-    },
-    "non-play-zone-move": {
-      "priority": 6,
-      "kind": "EVENT",
-      "proposed_stem": "recur",
-      "attrs": [
-        "from",
-        "to"
-      ],
-      "slang": [
-        "reclamation (gy\u2192hand)",
-        "bounce-recur"
-      ],
-      "note": "the from\u2192to primitive is play-anchored; hidden-zone\u2194hidden-zone moves fit neither Removal (from=play) nor Deployment (to=play). Do NOT force into Removal. Opus-3\u0027s \u0027real hole\u0027. Scaffold reconciliation 2026-07-18: already witnessed by archaeomancer.json (recur stem, from=graveyard/to=hand) \u2014 proposed_stem updated from the placeholder \u0027zonechange (neither removal nor deployment)\u0027 to the landed stem name \u0027recur\u0027 so TopologyStep\u0027s literal proposed_stem match resolves this hole to witnessed; no new gold authored (would have duplicated archaeomancer.json).",
-      "status": "witnessed",
-      "witnesses": [
-        "archaeomancer",
-        "archaeomancer-x-ghostly-flicker",
-        "cloudstone-curio-x-priest-of-gix",
-        "fruit-of-tizerus-graveyard-cast",
-        "gravecrawler-x-ashnods-altar-x-blood-artist",
-        "gravecrawler-x-phyrexian-altar-x-blood-artist",
-        "izzet-chronarch-x-ghostly-flicker",
-        "mikaeus-the-unhallowed-x-walking-ballista",
-        "murderous-redcap-x-viscera-seer",
-        "nim-deathmantle-x-ashnods-altar-x-blood-artist",
-        "pair-o-dice-lost-x-brazen-dwarf"
-      ]
+      "carries_provenance_or_polarity": false
     }
   }
 }

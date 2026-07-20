@@ -41,26 +41,22 @@ public partial record PortTopology
   [SerializedLabel("event_verbs")]
   public required IReadOnlyDictionary<string, EventVerbEntry> EventVerbs { get; init; }
 
-  /// <summary>Stem → its topology entry, keyed by the is-a-spine stem name (sorted). The DECLARED half
-  /// (scaffold <c>stems_representative</c>) unioned with the WITNESSED half (gold-projected stems).</summary>
+  /// <summary>Stem → its topology entry, keyed by the is-a-spine stem name (sorted). 100% WITNESSED
+  /// (ADR-0004 §7 / issue #26): every entry exists because some gold projects it. The scaffold's declared
+  /// <c>stems_representative</c> spine is deleted — it was strictly subsumed and was pure drift surface.</summary>
   [SerializedLabel("stems")]
   public required IReadOnlyDictionary<string, StemEntry> Stems { get; init; }
 
-  /// <summary>Attribute axis → its scaffold-declared licensing/lattice unioned with the gold-witnessed
-  /// value lattice (sorted).</summary>
+  /// <summary>Attribute axis → the gold-witnessed carrying stems + value lattice (sorted). 100% WITNESSED
+  /// (ADR-0004 §7 / issue #26): the scaffold's declared closed-set licensing/lattice is deleted, so an axis
+  /// exists exactly when some gold's port carries it.</summary>
   [SerializedLabel("attribute_axes")]
   public required IReadOnlyDictionary<string, AxisEntry> AttributeAxes { get; init; }
-
-  /// <summary>Named attribute-constraints (aliases / slang views) — scaffold pass-through.</summary>
-  [SerializedLabel("aliases")]
-  public required IReadOnlyDictionary<string, string> Aliases { get; init; }
-
-  /// <summary>The six declared holes — the <c>witness:sought</c> targeted-witnessing backlog (scaffold).</summary>
-  [SerializedLabel("holes")]
-  public required IReadOnlyDictionary<string, HoleEntry> Holes { get; init; }
 }
 
-/// <summary>A supergroup — a VIEW over stems that may span kinds (scaffold-declared).</summary>
+/// <summary>A supergroup — a VIEW over stems that may span kinds (scaffold-declared). The scaffold's
+/// <c>stems</c> membership list is NOT carried into the artifact: it is a reporting input consumed directly
+/// from the scaffold by <c>TopologyDemandStep</c>, not part of the witness-derived topology.</summary>
 [FlowthruSchema]
 public partial record SupergroupEntry
 {
@@ -82,52 +78,24 @@ public partial record EventVerbEntry
   public required string Def { get; init; }
 }
 
-/// <summary>A declared hole — a proposed stem with no witness yet (<c>status: sought</c>).</summary>
-[FlowthruSchema]
-public partial record HoleEntry
-{
-  [SerializedLabel("priority")]
-  public required int Priority { get; init; }
-
-  [SerializedLabel("kind")]
-  public required string Kind { get; init; }
-
-  [SerializedLabel("proposed_stem")]
-  public required string ProposedStem { get; init; }
-
-  [SerializedLabel("attrs")]
-  public IReadOnlyList<string>? Attrs { get; init; }
-
-  [SerializedLabel("slang")]
-  public IReadOnlyList<string>? Slang { get; init; }
-
-  [SerializedLabel("note")]
-  public string? Note { get; init; }
-
-  /// <summary><c>sought</c> while no gold projects <see cref="ProposedStem"/>; <c>witnessed</c> once one
-  /// does (reconciled against the same gold-projection pass that computes <see cref="StemEntry.Status"/>
-  /// — a hole does not stay <c>sought</c> forever just because the scaffold entry is static).</summary>
-  [SerializedLabel("status")]
-  public required string Status { get; init; }
-
-  /// <summary>Gold ids that witness <see cref="ProposedStem"/>, set only when <see cref="Status"/> is
-  /// <c>witnessed</c>.</summary>
-  [SerializedLabel("witnesses")]
-  public IReadOnlyList<string>? Witnesses { get; init; }
-}
-
-/// <summary>One stem's topology entry (is-a parent + kind + observed attribute set + declared|witnessed status).</summary>
+/// <summary>One stem's topology entry (is-a parent + kind + observed attribute set).</summary>
 [FlowthruSchema]
 public partial record StemEntry
 {
   [SerializedLabel("kind")]
   public required string Kind { get; init; }
 
-  /// <summary>The is-a parent (scaffold-declared, else stem up to the last <c>:</c>), or null for a top-level stem.</summary>
+  /// <summary>The is-a parent — the stem up to the last <c>:</c>, or null for a top-level stem.</summary>
   [SerializedLabel("parent")]
   public string? Parent { get; init; }
 
-  /// <summary><c>witnessed</c> if any gold projects this stem, else <c>declared</c> (scaffold-only).</summary>
+  /// <summary>
+  /// Always <c>witnessed</c> since ADR-0004 §7 / issue #26 deleted the scaffold's declared spine: a stem is
+  /// in this dictionary exactly when some gold projects it, so there is no longer a <c>declared</c> value to
+  /// take. It is DERIVED, never hand-typed, and is retained because it is the field the executable
+  /// <c>stem.&lt;S&gt;.witnessed</c> gold claims read; <c>TopologyRollupContractTests</c> asserts the
+  /// invariant that no other value can appear.
+  /// </summary>
   [SerializedLabel("status")]
   public required string Status { get; init; }
 
@@ -135,52 +103,31 @@ public partial record StemEntry
   [SerializedLabel("attrs")]
   public required IReadOnlyList<string> Attrs { get; init; }
 
-  /// <summary>A gold projects this stem but the scaffold never predicted it (the "witnessed but never
-  /// predicted" diff). Omitted (null) when the stem was predicted.</summary>
-  [SerializedLabel("unpredicted")]
-  public bool? Unpredicted { get; init; }
-
-  /// <summary>Provenance (cited only): the golds that witnessed this stem (sorted). Null → omitted (lean,
-  /// and any declared-only stem with no witnesses).</summary>
+  /// <summary>Provenance (cited only): the golds that witnessed this stem (sorted). Null → omitted (lean).</summary>
   [SerializedLabel("witnesses")]
   public IReadOnlyList<string>? Witnesses { get; init; }
 }
 
-/// <summary>One attribute axis: the scaffold-declared closed-set licensing/lattice unioned with the
-/// gold-witnessed stems + value lattice.</summary>
+/// <summary>
+/// One attribute axis — 100% gold-witnessed since ADR-0004 §7 / issue #26. The scaffold's declared
+/// closed-set <c>licensed_by</c> / <c>lattice</c> / <c>enum</c> / <c>bindable</c> pass-throughs are DELETED
+/// along with the axis-constraint validator that cross-checked them: with no declared half there is no
+/// declared-vs-witnessed drift left to validate, and the closed sets were themselves hand-maintained state
+/// that had to be edited every time a gold witnessed a new value.
+/// </summary>
 [FlowthruSchema]
 public partial record AxisEntry
 {
-  /// <summary>Stems that carry this axis in the golds (witnessed; empty for a declared-only axis).</summary>
+  /// <summary>Stems that carry this axis in the golds.</summary>
   [SerializedLabel("stems")]
   public required IReadOnlyList<string> Stems { get; init; }
 
-  /// <summary>The value lattice actually witnessed in the golds (empty for a declared-only axis).</summary>
+  /// <summary>The value lattice actually witnessed in the golds.</summary>
   [SerializedLabel("values_seen")]
   public required IReadOnlyList<string> ValuesSeen { get; init; }
 
   [SerializedLabel("carries_provenance_or_polarity")]
   public required bool CarriesProvenanceOrPolarity { get; init; }
-
-  // ── scaffold-declared licensing / lattice (pass-through; omitted when absent) ──
-
-  [SerializedLabel("licensed_by")]
-  public IReadOnlyList<string>? LicensedBy { get; init; }
-
-  [SerializedLabel("lattice")]
-  public string? Lattice { get; init; }
-
-  [SerializedLabel("enum")]
-  public IReadOnlyList<string>? Enum { get; init; }
-
-  [SerializedLabel("bindable")]
-  public IReadOnlyList<string>? Bindable { get; init; }
-
-  [SerializedLabel("kind")]
-  public string? Kind { get; init; }
-
-  [SerializedLabel("note")]
-  public string? Note { get; init; }
 }
 
 /// <summary>

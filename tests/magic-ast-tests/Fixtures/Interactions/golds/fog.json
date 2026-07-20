@@ -38,10 +38,6 @@
       "because": "F0 projects the BEHAVIOR stem modification:prevention (modification supergroup, kind_view BEHAVIOR), derived from the preventDamage effect. This turns the SOUGHT 'prevention' hole (proposed_stem modification:prevention) into a witnessed stem."
     },
     {
-      "claim": "stem.modification:prevention.unpredicted",
-      "because": "the scaffold declared no such stem (prevention was a holes[] entry, not a stems[] entry), so the rollup sets unpredicted:true \u2014 the hole burn-down, not an error; parallels archaeomancer's recur."
-    },
-    {
       "claim": "F0.kind == BEHAVIOR",
       "because": "a prevention shield is a continuous effect (PreventDamageEffect : ContinuousEffect; CR 611/615) \u2014 a time-varying property watching the damage event, not a discrete occurrence; belongs to the modification supergroup."
     },

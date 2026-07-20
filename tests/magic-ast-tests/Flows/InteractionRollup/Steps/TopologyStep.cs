@@ -1,27 +1,29 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
 using Flowthru.Step;
 using MagicAtlas.Ast.Tests.Data._08_Reporting.Schemas;
 
 namespace MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 
 /// <summary>
-/// Builds artifact 1 — the port topology (ADR-0003 §8), now the MERGE of the negotiated Stage-0a scaffold
-/// (the DECLARED half) with the gold-projected ports (the WITNESSED half):
+/// Builds artifact 1 — the port topology (ADR-0003 §8) — now 100% WITNESS-DERIVED (ADR-0004 §7, issue #26).
 /// <list type="bullet">
-///   <item><c>kinds</c> / <c>supergroups</c> / <c>event_verbs</c> / <c>aliases</c> — passed through from
-///     the scaffold verbatim.</item>
-///   <item><c>holes</c> — scaffold-declared, but <c>status</c> is reconciled against the same
-///     gold-projection pass that computes <c>stems</c>: <c>sought</c> until some gold projects the hole's
-///     <c>proposed_stem</c>, then <c>witnessed</c> (with the witnessing gold ids carried on the hole). A
-///     hole does not stay <c>sought</c> forever just because the scaffold entry is static.</item>
-///   <item><c>stems</c> — the scaffold's is-a spine (declared) unioned with the stems the golds project
-///     (witnessed). Per stem <c>status</c> is <c>witnessed</c> when any gold projects it, else
-///     <c>declared</c>; a gold stem the scaffold never predicted carries <c>unpredicted: true</c>.</item>
-///   <item><c>attribute_axes</c> — the scaffold's closed licensing/lattice set unioned with the golds'
-///     witnessed stems + value lattices.</item>
+///   <item><c>kinds</c> / <c>supergroups</c> / <c>event_verbs</c> — passed through from the scaffold
+///     verbatim. These are the vocabulary NO gold can witness (a gold declares a port's stem, never a kind
+///     definition or a supergroup), so they remain declared input.</item>
+///   <item><c>stems</c> — exactly the stems the golds project. Every entry is <c>status: witnessed</c> with
+///     its witnessing gold ids; the scaffold's declared <c>stems_representative</c> spine is DELETED (it was
+///     strictly subsumed: 0 declared-but-unwitnessed, 12 witnessed-but-never-predicted), and with it the
+///     <c>unpredicted</c> flag, which was a claim about a prediction set that no longer exists.</item>
+///   <item><c>attribute_axes</c> — exactly the axes the golds' ports carry, with the stems carrying them and
+///     the value lattice witnessed. The scaffold's declared closed sets (<c>licensed_by</c>/<c>enum</c>/
+///     <c>lattice</c>/<c>bindable</c>) are DELETED, along with the validator that cross-checked them —
+///     without a declared half there is no drift to detect.</item>
 /// </list>
+/// <c>aliases</c> (slang → attribute-constraint query) and <c>holes</c> (the sought-stem backlog) are gone
+/// from the artifact entirely: the first was a pure scaffold pass-through nothing consumed, the second was a
+/// hand-typed <c>status</c> inside a generated file — the exact failure ADR-0004 exists to end. The backlog
+/// is a set difference (declared − witnessed), computed where it is asked for, per ADR-0004 §2 / issue #32.
 /// Emits the lean <see cref="PortTopology"/> and its cited twin (same entries + per-stem witnesses); lean
 /// is the cited with provenance nulled (the WhenWritingNull serializer omits it). Value stringification
 /// mirrors Python's <c>str()</c> (booleans render <c>True</c>/<c>False</c>).
@@ -31,31 +33,10 @@ public static class TopologyStep
 {
   private const string GeneratedStamp = "tools/interaction-rollup";
 
-  /// <summary>
-  /// R2 hardening: the well-formed shape of a real stem name (a colon-separated is-a spine; each segment
-  /// starts with a letter and may contain digits/hyphens, e.g. <c>modification:restriction</c>,
-  /// <c>cards:search</c>, <c>combat-presence</c>). A hole's <c>proposed_stem</c> that doesn't match this
-  /// shape is a human-typed placeholder (e.g. free text with spaces/parens) that can never resolve against
-  /// any real projected stem — it would sit <c>sought</c> forever with no signal. Reject it at construction
-  /// time instead. Deliberately no fuzzy/prefix/alias matching beyond this shape check.
-  ///
-  /// <para><b>Scope note (ADR-0003 §8 R2):</b> the companion "dead-prediction" gate — flag a well-shaped
-  /// <c>proposed_stem</c> that has sat unresolved for a long time with zero witness attempts — is NOT
-  /// implemented here. <see cref="TopologyStep"/> is a pure regeneration function of (golds, scaffold)
-  /// with no access to prior-run history (no "how many rollups has this hole been sought across" counter
-  /// exists, and inventing one would itself be a new hand-maintained artifact subject to drift — exactly
-  /// what this hardening pass exists to eliminate). A real implementation would need either git-history
-  /// mining (outside a pure function's scope) or a durable run-log the flow doesn't currently write.
-  /// Only the shape half is implemented; see the 2026-07-18 hardening report for detail.</para>
-  /// </summary>
-  private static readonly Regex StemShapeRegex = new(@"^[a-z][a-z0-9-]*(:[a-z][a-z0-9-]*)*$", RegexOptions.Compiled);
-
   private sealed class StemAccum
   {
     public required string Kind { get; set; }
     public required string? Parent { get; set; }
-    public bool Declared { get; set; }
-    public bool Projected { get; set; }
     public SortedSet<string> Attrs { get; } = new(StringComparer.Ordinal);
     public SortedSet<string> Witnesses { get; } = new(StringComparer.Ordinal);
   }
@@ -65,7 +46,6 @@ public static class TopologyStep
     public SortedSet<string> Stems { get; } = new(StringComparer.Ordinal);
     public SortedSet<string> Values { get; } = new(StringComparer.Ordinal);
     public bool ProvenanceOrPolarity { get; set; }
-    public JsonObject? Declared { get; set; }
   }
 
   public static Func<(IEnumerable<JsonNode> Golds, JsonNode Scaffold), (PortTopology, PortTopology)> Create() =>
@@ -79,9 +59,8 @@ public static class TopologyStep
         .OrderBy(x => x, StringComparer.Ordinal)
         .ToList();
 
-      // ── scaffold pass-through sections ──
+      // ── scaffold pass-through sections (the un-witnessable vocabulary only) ──
       var kinds = ScaffoldStringMap(scaffold["kinds"]);
-      var aliases = ScaffoldStringMap(scaffold["aliases"]);
 
       var supergroups = new Dictionary<string, SupergroupEntry>(StringComparer.Ordinal);
       foreach (var kv in Entries(scaffold["supergroups"]))
@@ -99,28 +78,9 @@ public static class TopologyStep
           Def = kv.Value["def"]!.GetValue<string>(),
         };
 
-      // Deferred: a hole's status depends on whether its proposed_stem ends up projected by a gold, which
-      // isn't known until the gold-projection pass below runs. Stash the scaffold entries now, materialize
-      // HoleEntry after `stems` is fully populated.
-      var holeScaffold = Entries(scaffold["holes"]).ToList();
-
-      // ── stems: scaffold spine (declared) ∪ gold projections (witnessed) ──
+      // ── stems + attribute axes: PURELY gold-projected (no declared seed) ──
       var stems = new Dictionary<string, StemAccum>(StringComparer.Ordinal);
-      foreach (var kv in Entries(scaffold["stems_representative"]))
-      {
-        var s = kv.Value;
-        stems[kv.Key] = new StemAccum
-        {
-          Kind = s["kind"]!.GetValue<string>(),
-          Parent = s["parent"]?.GetValue<string>() ?? DeriveParent(kv.Key),
-          Declared = true,
-        };
-      }
-
-      // ── attribute axes: scaffold closed set (declared) ∪ gold values (witnessed) ──
       var axes = new Dictionary<string, AxisAccum>(StringComparer.Ordinal);
-      foreach (var kv in Entries(scaffold["attribute_axes"]))
-        axes[kv.Key] = new AxisAccum { Declared = kv.Value };
 
       foreach (var gn in goldList)
       {
@@ -137,11 +97,7 @@ public static class TopologyStep
             var kind = p["kind"]!.GetValue<string>();
 
             if (!stems.TryGetValue(stem, out var s))
-            {
-              // Gold stem the scaffold never predicted.
               stems[stem] = s = new StemAccum { Kind = kind, Parent = DeriveParent(stem) };
-            }
-            s.Projected = true;
             s.Witnesses.Add(gid);
 
             foreach (var akv in p["attrs"]!.AsObject())
@@ -167,55 +123,15 @@ public static class TopologyStep
         }
       }
 
-      // ── materialize holes: resolved once a gold projects the proposed_stem, not hardcoded "sought" ──
-      var holes = new Dictionary<string, HoleEntry>(StringComparer.Ordinal);
-      foreach (var kv in holeScaffold)
-      {
-        var proposedStem = kv.Value["proposed_stem"]!.GetValue<string>();
-        if (!StemShapeRegex.IsMatch(proposedStem))
-          throw new InvalidOperationException(
-            $"topology scaffold hole '{kv.Key}' has a malformed proposed_stem '{proposedStem}' — "
-              + "must be a well-formed kebab-stem shape (colon-separated is-a spine, e.g. "
-              + "'modification:restriction' or 'cards:search'). A free-text placeholder can never resolve "
-              + "against a real projected stem and would sit 'sought' forever with no signal — fix the "
-              + "scaffold hole's proposed_stem to the actual (or intended) stem name."
-          );
-        var resolved = stems.TryGetValue(proposedStem, out var stemAccum) && stemAccum.Projected;
-        holes[kv.Key] = new HoleEntry
-        {
-          Priority = kv.Value["priority"]!.GetValue<int>(),
-          Kind = kv.Value["kind"]!.GetValue<string>(),
-          ProposedStem = proposedStem,
-          Attrs = StrListOrNull(kv.Value["attrs"]),
-          Slang = StrListOrNull(kv.Value["slang"]),
-          Note = kv.Value["note"]?.GetValue<string>(),
-          Status = resolved ? "witnessed" : "sought",
-          Witnesses = resolved ? stemAccum!.Witnesses.ToList() : null,
-        };
-      }
-
       // ── materialize axes ──
       var axesOut = new Dictionary<string, AxisEntry>(StringComparer.Ordinal);
       foreach (var kv in axes.OrderBy(k => k.Key, StringComparer.Ordinal))
-      {
-        var d = kv.Value.Declared;
         axesOut[kv.Key] = new AxisEntry
         {
           Stems = kv.Value.Stems.ToList(),
           ValuesSeen = kv.Value.Values.ToList(),
           CarriesProvenanceOrPolarity = kv.Value.ProvenanceOrPolarity,
-          LicensedBy = StrListOrNull(d?["licensed_by"]),
-          Lattice = d?["lattice"]?.GetValue<string>(),
-          Enum = StringifyListOrNull(d?["enum"]),
-          Bindable = StrListOrNull(d?["bindable"]),
-          Kind = d?["kind"]?.GetValue<string>(),
-          Note = d?["note"]?.GetValue<string>(),
         };
-      }
-
-      // R3 hardening: cross-validate the scaffold's declared enum/licensed_by constraints against what
-      // the golds actually witnessed — throws loudly on drift (see ValidateAxisConstraints).
-      ValidateAxisConstraints(axesOut);
 
       // ── materialize stems (lean + cited) ──
       var stemsLean = new Dictionary<string, StemEntry>(StringComparer.Ordinal);
@@ -224,25 +140,24 @@ public static class TopologyStep
       {
         var a = kv.Value;
         var attrs = a.Attrs.ToList();
-        var status = a.Projected ? "witnessed" : "declared";
-        bool? unpredicted = a.Projected && !a.Declared ? true : null;
 
+        // A stem is in `stems` exactly when a gold projected it, so the status is invariantly "witnessed".
+        // Kept as a field (not dropped) because it is what the executable `stem.<S>.witnessed` gold claims
+        // read; TopologyRollupContractTests pins the invariant so no other value can ever appear.
         stemsLean[kv.Key] = new StemEntry
         {
           Kind = a.Kind,
           Parent = a.Parent,
-          Status = status,
+          Status = "witnessed",
           Attrs = attrs,
-          Unpredicted = unpredicted,
         };
         stemsCited[kv.Key] = new StemEntry
         {
           Kind = a.Kind,
           Parent = a.Parent,
-          Status = status,
+          Status = "witnessed",
           Attrs = attrs,
-          Unpredicted = unpredicted,
-          Witnesses = a.Witnesses.Count > 0 ? a.Witnesses.ToList() : null,
+          Witnesses = a.Witnesses.ToList(),
         };
       }
 
@@ -255,8 +170,6 @@ public static class TopologyStep
         EventVerbs = eventVerbs,
         Stems = stemsLean,
         AttributeAxes = axesOut,
-        Aliases = aliases,
-        Holes = holes,
       };
       var cited = lean with { Stems = stemsCited };
       return (lean, cited);
@@ -268,63 +181,6 @@ public static class TopologyStep
     var colon = stem.LastIndexOf(':');
     return colon >= 0 ? stem[..colon] : null;
   }
-
-  /// <summary>
-  /// R3 hardening: an axis's declared <c>enum</c> and <c>licensed_by</c> are hand-maintained closed sets
-  /// that can silently drift from what the golds actually witness (ADR-0003 §8 — code/data as ultimate
-  /// source of truth). For every axis: (1) every witnessed value must be covered by the declared enum, if
-  /// one is declared; (2) every stem actually carrying the axis must be covered by some declared
-  /// licensed_by glob, if any are declared. Both checks are EXACT — no fuzzy/alias matching — so a
-  /// genuine vocabulary mismatch (e.g. letter-form vs word-form colors) fails the build instead of rotting
-  /// silently. Collects every offender across every axis before throwing once, loudly.
-  /// </summary>
-  private static void ValidateAxisConstraints(IReadOnlyDictionary<string, AxisEntry> axes)
-  {
-    var errors = new List<string>();
-    foreach (var (axisName, axis) in axes)
-    {
-      if (axis.Enum is { Count: > 0 } enumValues)
-      {
-        var allowed = new HashSet<string>(enumValues, StringComparer.Ordinal);
-        var offending = axis.ValuesSeen.Where(v => !allowed.Contains(v)).ToList();
-        if (offending.Count > 0)
-          errors.Add(
-            $"axis '{axisName}': values_seen not covered by declared enum {FormatList(enumValues)} "
-              + $"— offending: {FormatList(offending)}"
-          );
-      }
-
-      if (axis.LicensedBy is { Count: > 0 } globs)
-      {
-        var offendingStems = axis.Stems.Where(s => !globs.Any(g => StemMatchesGlob(s, g))).ToList();
-        if (offendingStems.Count > 0)
-          errors.Add(
-            $"axis '{axisName}': stems not covered by declared licensed_by {FormatList(globs)} "
-              + $"— offending: {FormatList(offendingStems)}"
-          );
-      }
-    }
-
-    if (errors.Count > 0)
-      throw new InvalidOperationException(
-        "Topology axis constraints diverged from witnessed reality (ADR-0003 §8 R3):\n  "
-          + string.Join("\n  ", errors)
-      );
-  }
-
-  /// <summary>A stem-glob match: <c>"*"</c> matches anything, <c>"prefix:*"</c> matches any stem starting
-  /// with <c>prefix:</c>, anything else is an exact stem-name match. No fuzzy/prefix-without-colon
-  /// matching — deliberately literal.</summary>
-  private static bool StemMatchesGlob(string stem, string glob)
-  {
-    if (glob == "*")
-      return true;
-    if (glob.EndsWith(":*", StringComparison.Ordinal))
-      return stem.StartsWith(glob[..^1], StringComparison.Ordinal);
-    return string.Equals(stem, glob, StringComparison.Ordinal);
-  }
-
-  private static string FormatList(IEnumerable<string> xs) => "[" + string.Join(", ", xs) + "]";
 
   /// <summary>Enumerate an object's entries, skipping <c>$</c>-prefixed metadata keys (e.g. <c>$note</c>).</summary>
   private static IEnumerable<KeyValuePair<string, JsonObject>> Entries(JsonNode? node)
@@ -350,12 +206,6 @@ public static class TopologyStep
           d[kv.Key] = kv.Value.GetValue<string>();
     return d;
   }
-
-  private static IReadOnlyList<string>? StrListOrNull(JsonNode? node) =>
-    node is JsonArray arr ? arr.Select(x => x!.GetValue<string>()).ToList() : null;
-
-  private static IReadOnlyList<string>? StringifyListOrNull(JsonNode? node) =>
-    node is JsonArray arr ? arr.Select(Stringify).ToList() : null;
 
   /// <summary>Reproduces Python's <c>str(av)</c>: <c>True</c>/<c>False</c> for booleans, the raw numeric
   /// text for numbers, the string itself for strings, and <c>None</c> for a null/absent value.</summary>
