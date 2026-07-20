@@ -5,6 +5,7 @@ using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
 using MagicAtlas.Ast.Tests.Flows.ArtifactCensus;
+using MagicAtlas.Ast.Tests.Flows.CrossTrackJoins;
 using MagicAtlas.Ast.Tests.Flows.DiceComboReport;
 using MagicAtlas.Ast.Tests.Flows.InteractionRollup;
 using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
@@ -340,6 +341,22 @@ public class Program
             + "classifies each Evidence / Derived / architectural-decision, flagging the genuinely "
             + "ambiguous residue → Data/_08_Reporting/artifact-census.json. The GATE over the "
             + "classification is the NUnit ArtifactClassificationGateTests."
+        );
+
+      // The ADR-0004 §4 cross-track joins. Hermetic (every input is a committed artifact), so this runs
+      // on a clean checkout with no corpus — a join that only runs when the corpus is present is a join
+      // that silently does not run.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "CrossTrackJoins",
+          catalog => CrossTrackJoinsFlow.Create(catalog, CrossTrackSources.RepoRoot(basePath))
+        )
+        .WithDescription(
+          "ADR-0004 §4 cross-track joins: (1) quarantined-oracle-text → gold → shipped combo tier → "
+            + "Data/_08_Reporting/quarantine-tier-join.json (a GREEN pin resting on quarantined text is the "
+            + "Suture Priest shape); (2) gold declares → rollup rule → engine guard → "
+            + "Data/_08_Reporting/guard-witness-join.json (the guard→witness map, grouped out of the golds' "
+            + "own declares blocks — no registry). The GATES are the NUnit CrossTrackJoins fixtures."
         );
 
       flowthru.ConfigureMetadata(meta =>

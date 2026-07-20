@@ -261,6 +261,28 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/artifact-census.json")
       .Build());
 
+  // ── ADR-0004 §4 cross-track joins: a fact known in one track, crossed with another track's claims. ──
+
+  /// <summary>Join 1 — <c>quarantined-oracle-text → gold → shipped combo tier</c>. Fails (via its NUnit
+  /// gate) if quarantined Parse-track text underwrites an Interaction-track GREEN: the Suture Priest
+  /// shape. Hermetic (all inputs committed), gitignored, never committed. The GATE is
+  /// <c>Tests/CrossTrackJoins/QuarantineTierJoinGateTests.cs</c>, which re-runs the same pure joiner.</summary>
+  public IItem<QuarantineTierJoin> QuarantineTierJoin =>
+    CreateItem(() => Item.Of<QuarantineTierJoin>("QuarantineTierJoin")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/quarantine-tier-join.json")
+      .Build());
+
+  /// <summary>Join 2 — <c>gold declares → rollup rule → engine guard</c>: the guard→witness map (ADR-0004
+  /// §2 soundness half; ADR-0003 §6's "every guard is registered with its witnessing golds", finally
+  /// materialized). Derived entirely from the golds' <c>declares</c> blocks — zero hand-authored entries,
+  /// no registry. A queryable output, deliberately: issue #34 closes the full bijection by reading it.</summary>
+  public IItem<GuardWitnessJoin> GuardWitnessJoin =>
+    CreateItem(() => Item.Of<GuardWitnessJoin>("GuardWitnessJoin")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/guard-witness-join.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")
