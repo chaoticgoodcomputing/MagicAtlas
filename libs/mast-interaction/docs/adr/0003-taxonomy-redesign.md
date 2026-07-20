@@ -148,6 +148,35 @@ in a migration log.
   Consequence: supergroup membership is **partial**, and code must treat "no supergroup" as a legal,
   terminal answer rather than a lookup miss.
 
+#### 4a.1 The is-a overrides the naming spine cannot express (recorded 2026-07-20)
+
+`port-topology.json` derives a stem's `parent` **by name** — the stem up to the last `:`, so
+`removal:creature`'s parent is `removal`. The Stage-0a scaffold additionally declared three overrides
+that insert an intermediate rung the spelling does not contain. When ADR-0004 #26 deleted the scaffold's
+declared half, these were the only facts in it that **no gold witnessed**, so they are recorded here
+rather than lost:
+
+- `removal:creature` ⊂ `removal:permanent`
+- `removal:artifact` ⊂ `removal:permanent`
+- `modification:evasion` ⊂ `modification:keyword`
+
+They are architectural by §8's test — statements about the shape of the is-a spine, not claims a card
+could falsify — though each is *grounded* in the rules: a creature and an artifact are permanent types
+(CR 110.1/205.2), and every `modification:evasion` port the projection emits comes from a **keyword**
+ability (CR 702) because `PortGraph` only builds one from `evasion:<keyword>`. That last grounding is
+narrower than the word "evasion" suggests — "can't be blocked" is evasion in the slang sense and is *not*
+a keyword ability — so the override is sound **as the taxonomy uses the stem**, and would need revisiting
+if `modification:evasion` were ever projected from non-keyword text.
+
+**No code reads these today.** They are recorded so that a future consumer of the is-a spine (a
+cross-stem subsumption check is the obvious one — see the open `removal:permanent` destroy →
+`removal:creature` dies question) starts from the ruling rather than re-deriving it.
+
+*Not recorded here: the scaffold's declared `owner` attribute axis, which 64 golds never witnessed. An
+unwitnessed prediction is not a ruling — it is **backlog**, and belongs in ADR-0004 §2's derived backlog
+(`projected − served − asserted-unarmable`), where it reappears the moment a gold's port carries an
+`owner` attribute.*
+
 ### 5. Events vs objects; dual ports; the sacrifice remodel
 
 Objects (creatures, permanents, tokens) **flow**; events **happen to them** — and a cost that removes an
