@@ -4,6 +4,7 @@ using Flowthru.Diagnostics;
 using Flowthru.Hosting;
 using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
+using MagicAtlas.Ast.Tests.Flows.ArtifactCensus;
 using MagicAtlas.Ast.Tests.Flows.DiceComboReport;
 using MagicAtlas.Ast.Tests.Flows.InteractionRollup;
 using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
@@ -324,6 +325,21 @@ public class Program
             + "compare), never a hand-maintained register — and joins each to the ports, and the GREENs, "
             + "that consequently rest on an unmodeled condition (Gravecrawler's \"as long as you control a "
             + "Zombie\") → Data/_08_Reporting/over-approximation-report.json. Run after --flow CardAtlas."
+        );
+
+      // The ADR-0004 §1 artifact census. Hermetic (working tree only) — the repo root is resolved by
+      // walking up from this project directory to the workspace marker.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "ArtifactCensus",
+          catalog => ArtifactCensusFlow.Create(catalog, ArtifactClassifier.RepoRoot(basePath))
+        )
+        .WithDescription(
+          "ADR-0004 §1 artifact census: enumerates every artifact under tests/**/Fixtures, "
+            + "**/Data/_08_Reporting, dumps/, libs/**/*.json (plus the committed snapshot families) and "
+            + "classifies each Evidence / Derived / architectural-decision, flagging the genuinely "
+            + "ambiguous residue → Data/_08_Reporting/artifact-census.json. The GATE over the "
+            + "classification is the NUnit ArtifactClassificationGateTests."
         );
 
       flowthru.ConfigureMetadata(meta =>
