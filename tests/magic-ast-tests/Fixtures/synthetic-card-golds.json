@@ -1,0 +1,95 @@
+{
+  "_doc": "Register of SYNTHETIC gold fixtures — golds whose Input.Name names no printed Magic card. Verified 2026-07-20 (ADR-0004 issue #37) against the full Scryfall bulk (oracle-cards.json): 15 of 1,583 golds resolve in neither the corpus (card-inputs.json) nor the bulk, and for every one of them the SIBLING golds filed under the same set folder DO resolve — so the absence is not a stale-bulk or corpus-filter artifact, it is the fixture being invented. That makes each entry a fact about Magic (no card bears this name), i.e. Evidence, NOT a claim about parser/corpus coverage. GATE (GoldOracleTextFidelityTests, three directions, no suppression): a gold naming a card absent from BOTH sources must be registered here (else loud failure — a wrong gold parses green on pure self-consistency); a registered gold whose name later resolves in EITHER source must be removed (it now gets real oracle-text validation); and every entry must name a gold that still exists. Renamed from fidelity-uncovered-allowlist.json — the old name framed a verified Evidence register as coverage debt.",
+  "entries": [
+    {
+      "card": "CMD/VineshapeHedron",
+      "name": "Vineshape Hedron",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 3 of the 4 golds filed under 'CMD' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "FIN/WarpFixture",
+      "name": "Gilgamesh, King of Heroes",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 1 of the 2 golds filed under 'FIN' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "GTC/BlindObedienceCreatureVariant",
+      "name": "Blind Obedience (creature variant)",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 10 of the 11 golds filed under 'GTC' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "HuntedWitnessAlt",
+      "name": "Hunted Witness Alt",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 613 of the 614 golds filed under '(root)' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "INV/Entangle",
+      "name": "Entangle",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 9 of the 10 golds filed under 'INV' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "MB6/ExileAllCreatures",
+      "name": "Exile All Creatures",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 0 of the 3 golds filed under 'MB6' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "MB6/ExileAllGraveyardCards",
+      "name": "Exile All Graveyard Cards",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 0 of the 3 golds filed under 'MB6' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "MB6/KickedBounce",
+      "name": "Kicked Bounce",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 0 of the 3 golds filed under 'MB6' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "MOM/EdictOfAgadeem",
+      "name": "Edict of Agadeem",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 6 of the 7 golds filed under 'MOM' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "ODY/ShamblingSentinel",
+      "name": "Shambling Sentinel",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 8 of the 9 golds filed under 'ODY' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "ONE/Goobling",
+      "name": "Goobling",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 6 of the 7 golds filed under 'ONE' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "P02/Gateway",
+      "name": "Gateway",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 3 of the 4 golds filed under 'P02' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "TDM/DromokaExpeller",
+      "name": "Dromoka Expeller",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 6 of the 8 golds filed under 'TDM' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "TDM/StormplainCondemner",
+      "name": "Stormplain Condemner",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 6 of the 8 golds filed under 'TDM' resolve in the bulk (sibling control)"
+    },
+    {
+      "card": "TLA/TheLegendOfRoku",
+      "name": "The Legend of Roku",
+      "tag": "synthetic",
+      "reason": "no printed card bears this name — absent from card-inputs.json AND oracle-cards.json, while 3 of the 4 golds filed under 'TLA' resolve in the bulk (sibling control)"
+    }
+  ]
+}

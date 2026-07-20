@@ -1,5 +1,0 @@
-[
-  { "_note": "Sacrificed Squirrels die → feed the death-payoff.", "from": "sac-outlet", "to": "death-payoff", "resource": "Death", "family": "Flow" },
-  { "_note": "Treasure-token creation is intercepted by the doubler.", "from": "death-payoff", "to": "token-doubler", "resource": "Token", "family": "Modifier" },
-  { "_note": "The doubler's Squirrel tokens refuel the sac fodder.", "from": "token-doubler", "to": "sac-outlet", "resource": "Token", "family": "Flow" }
-]
