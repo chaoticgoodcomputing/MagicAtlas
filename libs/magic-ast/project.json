@@ -46,18 +46,10 @@
       }
     },
     "lint-discriminators": {
-      "//": "Discriminator governance lint (alignment initiative 02): per-family duplicate (hard fail) + new near-duplicate vs baseline without justification (soft fail). Run after every merge group in the TDD loop.",
+      "//": "Discriminator governance lint (alignment initiative 02): per-family duplicate (hard fail) + ANY unjustified intra-family near-duplicate (soft fail). STATELESS as of 2026-07-20 — no baseline, no notion of 'new'; the retired discriminator-baseline.json was a debt baseline that went 398 entries stale. Also gated in the CORE ring by DiscriminatorNearDuplicateTests, so this target is a convenience, not the enforcement point.",
       "executor": "nx:run-commands",
       "options": {
         "command": "python3 scripts/lint-discriminators.py",
-        "cwd": "libs/magic-ast"
-      }
-    },
-    "lint-discriminators:baseline": {
-      "//": "Rewrite schema/discriminator-baseline.json from current source. Run after a clean lint per merge group so 'new' stays well-defined.",
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "python3 scripts/lint-discriminators.py --update-baseline",
         "cwd": "libs/magic-ast"
       }
     },

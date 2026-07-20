@@ -16,26 +16,34 @@ when two types in the SAME family claim the same string.
 Checks:
   - HARD FAIL: the same discriminator declared twice within one family (a real
     serialization collision — the polymorphic converter can't disambiguate).
-  - SOFT FAIL: a NEW discriminator (vs the committed baseline) that is a near-duplicate
-    of an existing one in the same family — within Levenshtein <= 2 (case-insensitive)
-    or where one is a prefix-stem of the other — unless a justification entry exists
-    in discriminator-justifications.json.
+  - SOFT FAIL: ANY two discriminators in the same family that are near-duplicates —
+    within Levenshtein <= 2 (case-insensitive) or where one is a prefix-stem of the
+    other — unless a justification entry exists in discriminator-justifications.json.
+
+STATELESS (2026-07-20). This lint has no baseline and no notion of a "new" discriminator.
+It previously compared against a committed `discriminator-baseline.json` snapshot, which is
+a debt baseline: it grandfathers everything that already existed and only asks about the
+delta. It drifted the way debt baselines do — 330 committed entries against 364 in source,
+so 34 discriminators had been permanently "new" (and re-reported on every run) because the
+baseline refresh step was a manual chore nobody had run. The obvious repair — regenerate the
+baseline — is worse than the drift: it makes every pair not-new and the check vacuous.
+
+The stateless form has no such failure mode. Every near-duplicate pair in the source must
+carry a named justification, asked and answered on every run, with the whitelist as the only
+state. This is the project's standing "stateless invariants + explicit named whitelists,
+never shrink-only debt baselines" rule, applied to the one place still violating it.
 
 Files (under libs/magic-ast/schema/, overridable):
-  - discriminator-baseline.json       {"discriminators": ["OracleEffect:dealDamage", ...]}
-                                       (sorted, family-qualified; defines "new")
   - discriminator-justifications.json  [{"name": "...", "near": "...", "reason": "..."}]
-                                       (append-only, judge-reviewed)
+                                       (judge-reviewed; matched symmetrically)
 
 Modes:
-  (default)            lint current source against the baseline; exit 1 on any hard/soft fail.
-  --update-baseline    rewrite the baseline from current source (run per merge group AFTER
-                       a clean lint). Also prints a full intra-family near-duplicate audit.
+  (default)            lint the current source; exit 1 on any hard/soft fail.
   --audit              print every intra-family near-duplicate pair (for seeding
                        justifications); exit 0.
   --list               dump all discriminators (family:value); exit 0.
 
-Overrides for self-tests: --source-root, --baseline, --justifications.
+Overrides for self-tests: --source-root, --justifications.
 """
 
 from __future__ import annotations
@@ -50,7 +58,6 @@ from dataclasses import dataclass
 LIB_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DEFAULT_SOURCE_ROOT = os.path.join(LIB_ROOT, "AST")
 SCHEMA_DIR = os.path.join(LIB_ROOT, "schema")
-DEFAULT_BASELINE = os.path.join(SCHEMA_DIR, "discriminator-baseline.json")
 DEFAULT_JUSTIFICATIONS = os.path.join(SCHEMA_DIR, "discriminator-justifications.json")
 
 # Attribute families whose single string argument is a polymorphic discriminator.
@@ -144,15 +151,7 @@ def is_near(a: str, b: str) -> bool:
     return levenshtein(a, b) <= LEVENSHTEIN_MAX or shares_stem(a, b)
 
 
-# ----- baseline / justifications ------------------------------------------------------
-
-def load_baseline(path: str) -> set[str]:
-    if not os.path.isfile(path):
-        return set()
-    with open(path) as f:
-        data = json.load(f)
-    return set(data.get("discriminators", []))
-
+# ----- justifications ------------------------------------------------------
 
 def load_justifications(path: str) -> set[tuple[str, str]]:
     """Return a set of (name, near) pairs that have been explained."""
@@ -169,14 +168,6 @@ def load_justifications(path: str) -> set[tuple[str, str]]:
             pairs.add((name, near))
             pairs.add((near, name))
     return pairs
-
-
-def write_baseline(path: str, discs: list[Discriminator]) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    qualified = sorted({d.qualified for d in discs})
-    with open(path, "w") as f:
-        json.dump({"discriminators": qualified}, f, indent=2)
-        f.write("\n")
 
 
 # ----- checks -------------------------------------------------------------------------
@@ -206,7 +197,12 @@ def find_near_pairs(discs: list[Discriminator]) -> list[tuple[str, Discriminator
 
 # ----- modes --------------------------------------------------------------------------
 
-def run_lint(discs, baseline, justifications) -> int:
+def run_lint(discs, justifications) -> int:
+    """STATELESS. Every near-duplicate pair in the CURRENT source must carry a justification.
+
+    There is deliberately no notion of "new" — see the module docstring for why the retired
+    `discriminator-baseline.json` had to go rather than be refreshed.
+    """
     failures = 0
 
     collisions = find_hard_collisions(discs)
@@ -217,30 +213,18 @@ def run_lint(discs, baseline, justifications) -> int:
             locs = ", ".join(f"{d.file}:{d.line}" for d in ds)
             sys.stderr.write(f"  [{fam}] \"{val}\" declared {len(ds)}x: {locs}\n")
 
-    current_qualified = {d.qualified for d in discs}
-    new_qualified = current_qualified - baseline
-    new_discs = [d for d in discs if d.qualified in new_qualified]
-
-    # Compare each NEW discriminator against every OTHER known one in the same family.
-    by_family: dict[str, set[str]] = {}
-    for d in discs:
-        by_family.setdefault(d.family, set()).add(d.value)
-    for q in baseline:
-        if ":" in q:
-            fam, val = q.split(":", 1)
-            by_family.setdefault(fam, set()).add(val)
-
-    soft = []
-    for nd in sorted(set((d.family, d.value) for d in new_discs)):
-        fam, val = nd
-        for other in sorted(by_family.get(fam, set())):
-            if is_near(val, other) and (val, other) not in justifications:
-                soft.append((fam, val, other))
+    soft = [
+        (fam, a, b)
+        for fam, a, b in find_near_pairs(discs)
+        if (a.value, b.value) not in justifications
+    ]
     if soft:
         failures += len(soft)
-        sys.stderr.write("SOFT FAIL — new near-duplicate discriminator(s) (add a justification or rename):\n")
-        for fam, val, other in soft:
-            sys.stderr.write(f"  [{fam}] new \"{val}\" ~ existing \"{other}\"\n")
+        sys.stderr.write("SOFT FAIL — unjustified near-duplicate discriminator(s) (justify or rename):\n")
+        for fam, a, b in soft:
+            sys.stderr.write(
+                f"  [{fam}] \"{a.value}\" ({a.file}:{a.line})  ~  \"{b.value}\" ({b.file}:{b.line})\n"
+            )
 
     if failures:
         sys.stderr.write(
@@ -250,7 +234,10 @@ def run_lint(discs, baseline, justifications) -> int:
         )
         return 1
 
-    print(f"discriminator lint OK ({len(discs)} discriminators, {len(new_qualified)} new vs baseline).")
+    print(
+        f"discriminator lint OK ({len(discs)} discriminators, "
+        f"{len(find_near_pairs(discs))} near-dup pair(s), all justified)."
+    )
     return 0
 
 
@@ -270,11 +257,9 @@ def run_audit(discs) -> int:
 
 def main() -> int:
     p = argparse.ArgumentParser(description="MagicAST discriminator governance lint.")
-    p.add_argument("--update-baseline", action="store_true", help="Rewrite the baseline from current source.")
     p.add_argument("--audit", action="store_true", help="List all intra-family near-duplicate pairs.")
     p.add_argument("--list", action="store_true", help="Dump all discriminators.")
     p.add_argument("--source-root", default=os.environ.get("MAST_AST_ROOT", DEFAULT_SOURCE_ROOT))
-    p.add_argument("--baseline", default=os.environ.get("MAST_DISC_BASELINE", DEFAULT_BASELINE))
     p.add_argument("--justifications", default=os.environ.get("MAST_DISC_JUSTIFICATIONS", DEFAULT_JUSTIFICATIONS))
     args = p.parse_args()
 
@@ -288,16 +273,8 @@ def main() -> int:
     if args.audit:
         return run_audit(discs)
 
-    if args.update_baseline:
-        # Surface near-dups even on baseline refresh (informational), then write.
-        run_audit(discs)
-        write_baseline(args.baseline, discs)
-        print(f"Wrote baseline {args.baseline} ({len({d.qualified for d in discs})} discriminators).")
-        return 0
-
-    baseline = load_baseline(args.baseline)
     justifications = load_justifications(args.justifications)
-    return run_lint(discs, baseline, justifications)
+    return run_lint(discs, justifications)
 
 
 if __name__ == "__main__":

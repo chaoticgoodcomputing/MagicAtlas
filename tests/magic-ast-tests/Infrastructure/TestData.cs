@@ -59,4 +59,73 @@ public static class TestData
       "External",
       "oracle-cards.json"
     );
+
+  /// <summary>
+  /// The Scryfall bulk indexed as <c>name → oracle_text</c>, or <c>null</c> when the (gitignored) bulk is
+  /// absent — callers <c>Assert.Ignore</c> loudly rather than passing vacuously. DFC/MDFC: the top-level
+  /// <c>oracle_text</c> is empty, so the per-face texts are joined with a blank line (the CensusStep idiom).
+  ///
+  /// <para><b>A real card wins over a non-card printing of the same name.</b> Scryfall's bulk contains
+  /// tokens, emblems and art-series entries that share a name with an actual card, and a naive
+  /// first-entry-wins index silently picks whichever the file happens to list first. That is not
+  /// hypothetical: <c>Aven Wind Guide</c> and <c>Ultramarines Honour Guard</c> both resolve to their
+  /// TOKEN printing first, whose oracle text is a truncated prefix of the card's (missing Embalm and Squad
+  /// respectively), and <c>Chatterfang, Squirrel General</c> resolves to an art-series entry whose text is
+  /// empty outright. Any fidelity check built on the naive index compares real oracle text against the
+  /// wrong string and reports drift that isn't there — or, for the empty case, passes an empty expectation.
+  /// Non-card layouts are therefore used only as a last resort, when no real printing carries the name.</para>
+  /// </summary>
+  public static Dictionary<string, string?>? LoadOracleCardsByName()
+  {
+    if (!File.Exists(OracleCardsPath))
+      return null;
+
+    // Layouts that are printings-of-something-else rather than cards in their own right.
+    var nonCard = new HashSet<string>(StringComparer.Ordinal)
+    {
+      "token",
+      "double_faced_token",
+      "emblem",
+      "art_series",
+      "vanguard",
+      "scheme",
+      "planar",
+    };
+
+    var dict = new Dictionary<string, string?>(StringComparer.Ordinal);
+    var fromNonCard = new HashSet<string>(StringComparer.Ordinal);
+
+    using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(OracleCardsPath));
+    foreach (var rec in doc.RootElement.EnumerateArray())
+    {
+      var name = rec.TryGetProperty("name", out var n) ? n.GetString() : null;
+      if (name is null)
+        continue;
+
+      var layout = rec.TryGetProperty("layout", out var l) ? l.GetString() : null;
+      var isNonCard = layout is not null && nonCard.Contains(layout);
+
+      // Keep the first real printing; let a real printing displace a provisional non-card one.
+      if (dict.ContainsKey(name) && !(isNonCard is false && fromNonCard.Contains(name)))
+        continue;
+
+      var text = rec.TryGetProperty("oracle_text", out var ot) ? ot.GetString() : null;
+      if (string.IsNullOrWhiteSpace(text) && rec.TryGetProperty("card_faces", out var faces))
+        text = string.Join(
+          "\n\n",
+          faces
+            .EnumerateArray()
+            .Select(f => f.TryGetProperty("oracle_text", out var fot) ? fot.GetString() : null)
+            .Where(t => !string.IsNullOrEmpty(t))
+        );
+
+      dict[name] = text;
+      if (isNonCard)
+        fromNonCard.Add(name);
+      else
+        fromNonCard.Remove(name);
+    }
+
+    return dict;
+  }
 }

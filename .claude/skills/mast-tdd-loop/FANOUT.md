@@ -291,7 +291,7 @@ e. GATE between merges (no-ratchet-tolerance — any red HALTS this merge):
      - dotnet test ...MagicAtlas.Ast.Tests.csproj --nologo   (CORE ring: gold fidelity,
        no-unparsed, round-trip, DestringSinkRatchet, DiscriminatorUniqueness,
        PortWalkExhaustiveness)
-     - nx run magic-ast:lint-discriminators (per merge group) + advance baseline
+     - nx run magic-ast:lint-discriminators (per merge group; stateless — no baseline to advance)
      - on an interaction merge: bench recall must not DECREASE (auto-advances on a gain)
 f. GREEN  → keep the merge; commit any advanced baselines/regenerated snapshots.
    RED    → git reset --hard HEAD@{1} (undo this merge only), leave <branch> intact,

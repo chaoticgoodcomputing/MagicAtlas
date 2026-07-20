@@ -227,15 +227,21 @@ Merge in **file-affinity order**, NUnit-gating after each group. **`nx run mast:
 3. Parser-orchestration agents last (rare): an agent that edited a thin dispatcher body in `TriggeredAbilityParser.cs`/`ActivatedAbilityParser.cs` (timing/split/multi-sentence only — adding a *rule* never lands here).
 4. `nx run mast:test` after each group; final joint run must be 100% green.
 
-**GATE — discriminator lint, after EACH merge group (initiative 02):** HALT on nonzero, then advance the baseline:
+**GATE — discriminator lint, after EACH merge group (initiative 02):** HALT on nonzero.
 
 ```bash
-nx run magic-ast:lint-discriminators            # per-family duplicate (hard) + new near-dup w/o justification (soft)
-nx run magic-ast:lint-discriminators:baseline   # advance schema/discriminator-baseline.json so "new" stays well-defined
-git add libs/magic-ast/schema/discriminator-baseline.json && git commit -m "chore(mast): advance discriminator baseline after merge group"
+nx run magic-ast:lint-discriminators            # per-family duplicate (hard) + unjustified near-dup (soft)
 ```
 
-Per-merge-group (not once at batch end) is the point: the lint reads the **merged source** directly, so it surfaces a concurrent duplicate/near-dup at the **first** merge that introduces it, not after the whole batch has landed (closing the concurrent-duplicate hole — initiative 02 #2). A hard fail (duplicate within a family) or an unexplained near-dup is an unconditional HALT — rename, or add a judge-reviewed entry to `libs/magic-ast/schema/discriminator-justifications.json` (`{name, near, reason}`). The same invariant is belt-and-braces in the core ring (`DiscriminatorUniquenessTests` in `nx run mast:test`) so anything that slips past the script still fails the suite. Uniqueness is **per-base, not global** — cross-base reuse (`untap` as Effect+Cost+ReplacementEvent) is legitimate.
+**There is no baseline step any more (2026-07-20).** `schema/discriminator-baseline.json` and the
+`lint-discriminators:baseline` target are **deleted**. The lint is now **stateless**: it asks whether
+*every* near-duplicate pair in the current source carries a justification, with no notion of a "new"
+discriminator. The old baseline was a debt baseline whose refresh was this manual chore — it went 34
+entries stale precisely because the chore is easy to skip, and "regenerate it" would have made the check
+vacuous (a baseline built from current source makes every pair not-new). If you were about to advance a
+baseline: don't, and delete the instruction if you find it somewhere else.
+
+Per-merge-group (not once at batch end) is the point: the lint reads the **merged source** directly, so it surfaces a concurrent duplicate/near-dup at the **first** merge that introduces it, not after the whole batch has landed (closing the concurrent-duplicate hole — initiative 02 #2). A hard fail (duplicate within a family) or an unexplained near-dup is an unconditional HALT — rename, or add a judge-reviewed entry to `libs/magic-ast/schema/discriminator-justifications.json` (`{name, near, reason}`). **Both halves now ride the core ring** (`DiscriminatorUniquenessTests` for the hard half, `DiscriminatorNearDuplicateTests` for the soft half, in `nx run mast:test`), so the script is a convenience for worktrees without `dotnet` — not the enforcement point. The ring also fails on a **dead** justification (one whose pair no longer collides), so the whitelist cannot rot the way the baseline did. Uniqueness is **per-base, not global** — cross-base reuse (`untap` as Effect+Cost+ReplacementEvent) is legitimate.
 
 **Projection exhaustiveness (initiative 03) rides the core ring too.** `PortWalkExhaustivenessTests` (in `nx run mast:test`) fails if a new discriminator is neither projected by PortWalk nor named in the explicit whitelist `libs/mast-interaction/known-coarse-projections.json` (each coarse discriminator carries a justification) — so a batch that adds an effect/cost/trigger/restriction discriminator must make a projection decision (worker contract). `PortWalkSentinelSnapshotTest` snapshots the full pipeline (parse → ports → flow edges → cycle tiers) over ~56 sentinels; a cross-pillar regression (a node-shape change silently dropping a port) fails it — regenerate via its `[Explicit]` test and justify the diff in the commit.
 

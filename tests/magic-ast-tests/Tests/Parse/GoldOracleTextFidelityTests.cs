@@ -94,44 +94,10 @@ public class GoldOracleTextFidelityTests
     return dict;
   }
 
-  // Loads the raw Scryfall seed (oracle-cards.json) as name -> oracle_text. snake_case schema, first
-  // entry per name wins (mirrors the corpus loader). DFC/MDFC: top-level oracle_text is empty, so join
-  // the per-face oracle_text with a blank line (the CensusStep idiom). Returns null when absent.
-  private static Dictionary<string, string?>? LoadOracleCards()
-  {
-    var path = TestData.OracleCardsPath;
-    if (!File.Exists(path))
-    {
-      return null;
-    }
-
-    var dict = new Dictionary<string, string?>(StringComparer.Ordinal);
-    using var doc = JsonDocument.Parse(File.ReadAllText(path));
-    foreach (var rec in doc.RootElement.EnumerateArray())
-    {
-      var name = rec.TryGetProperty("name", out var n) ? n.GetString() : null;
-      if (name is null || dict.ContainsKey(name))
-      {
-        continue;
-      }
-
-      var text = rec.TryGetProperty("oracle_text", out var ot) ? ot.GetString() : null;
-      if (string.IsNullOrWhiteSpace(text) && rec.TryGetProperty("card_faces", out var faces))
-      {
-        text = string.Join(
-          "\n\n",
-          faces
-            .EnumerateArray()
-            .Select(f => f.TryGetProperty("oracle_text", out var fot) ? fot.GetString() : null)
-            .Where(t => !string.IsNullOrEmpty(t))
-        );
-      }
-
-      dict[name] = text;
-    }
-
-    return dict;
-  }
+  // Loads the raw Scryfall seed as name -> oracle_text. Delegates to the shared index in TestData so
+  // the "a real card wins over a token/art-series printing of the same name" rule lives in exactly one
+  // place (see TestData.LoadOracleCardsByName). Returns null when the gitignored bulk is absent.
+  private static Dictionary<string, string?>? LoadOracleCards() => TestData.LoadOracleCardsByName();
 
   // Loads a committed Fixtures/*.json whitelist — { "entries": [ { "card": ..., "tag": ..., "reason": ... } ] }
   // — and returns the set of card names. tag/reason are documentation for humans; the test keys on the

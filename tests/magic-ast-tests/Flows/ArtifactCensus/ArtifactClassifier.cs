@@ -141,7 +141,18 @@ public static class ArtifactClassifier
   public static readonly IReadOnlyDictionary<string, (string Kind, string Basis)> HumanRulings =
     new Dictionary<string, (string, string)>(StringComparer.Ordinal)
     {
-      // (intentionally empty — ADR-0004 issue #21 flags rather than guesses; see AcknowledgedAmbiguous)
+      ["tests/magic-ast-tests/Fixtures/CardAtlas/sac-fixture.json"] = (
+        Evidence,
+        "RULED 2026-07-20. The census originally flagged this as a frozen slice of D1-D4 OUTPUT needing a "
+          + "regenerator. That reading was wrong: reading CardAtlasContractTests shows the file is an "
+          + "INPUT — five cards' oracle text plus three combo definitions, fed INTO the pipeline steps, "
+          + "with the test asserting invariants on the computed result. So there is no computation frozen "
+          + "here and no regenerator is owed. What the file records is a human's SELECTION ('these cards "
+          + "exercise the contract'), which nothing derives and nothing should — Evidence. Its oracle-text "
+          + "CONTENT is copied from Scryfall rather than authored, and that half is now gated byte-exact "
+          + "by SacFixtureOracleFidelityTests, closing the drift the Suture Priest fix (295f3506) hit in "
+          + "the parse-track golds."
+      ),
     };
 
   /// <summary>
@@ -176,13 +187,6 @@ public static class ArtifactClassifier
       ["tests/magic-ast-tests/Fixtures/whitelist-unparsed.json"] =
         "Same shape as whitelist-freetext.json — hand-curated, agent-script-appended, asserts a claim "
         + "about current parser coverage rather than recording a primary observation.",
-
-      // ── Fixtures/CardAtlas ──────────────────────────────────────────────────────────────────────
-      ["tests/magic-ast-tests/Fixtures/CardAtlas/sac-fixture.json"] =
-        "Committed contract fixture for CardAtlasContractTests. It is a frozen slice of CardAtlas D1-D4 "
-        + "OUTPUT (therefore Derived by ADR 0004's 'classify by how it is produced' test), but it has no "
-        + "regeneration path in source — so it is currently a hand-maintained copy of a computation. Needs "
-        + "a human to decide: give it a regenerator and call it Derived, or re-found it as Evidence.",
 
       // ── Fixtures/Interactions: the ADR 0003 Stage 0b retirement backlog ──────────────────────────
       ["tests/magic-ast-tests/Fixtures/Interactions/known-families.json"] =
@@ -219,18 +223,14 @@ public static class ArtifactClassifier
         + "about Magic.",
 
       // ── libs/magic-ast/schema ───────────────────────────────────────────────────────────────────
-      ["libs/magic-ast/schema/discriminator-baseline.json"] =
-        "lib/magic-ast/scripts/lint-discriminators.py DOES regenerate it (--update-baseline -> "
-        + "write_baseline), so by the ADR's production test it is Derived — but the classifier cannot see "
-        + "that, because write_baseline's target is a function parameter rather than a resolvable path "
-        + "symbol. A human should either rule it Derived or make the regeneration path visible (write to "
-        + "DEFAULT_BASELINE directly). Flagged rather than special-cased so the fix lands in the code, "
-        + "not in a table.",
       ["libs/magic-ast/schema/discriminator-justifications.json"] =
-        "Hand-written prose justifying discriminator choices. Exactly the ADR's 'derived claim' shape "
-        + "(a justification string that nothing checks) — but the justifications are architectural rulings "
-        + "about representation, which ADR 0004 §1 routes to ADR prose, not data. Needs a human to decide "
-        + "whether it dissolves into ADR text.",
+        "Hand-written prose justifying why two near-duplicate discriminators must both exist. UPDATED "
+        + "2026-07-20: no longer 'a justification string that nothing checks' — with discriminator-"
+        + "baseline.json retired, this file is the explicit named whitelist for the now-stateless lint, "
+        + "read by DiscriminatorNearDuplicateTests in the CORE ring, which also fails on a DEAD entry "
+        + "(one whose pair no longer near-collides) so it cannot rot the way the baseline did. Still "
+        + "ambiguous in kind: the entries are architectural rulings about representation (which ADR 0004 "
+        + "§1 routes to ADR prose) that a gate nonetheless has to consume as data.",
       ["libs/magic-ast/schema/destring-worklist.json"] =
         "Initiative-05 burn-down worklist: a frozen MEASUREMENT of which golds carry free-text sinks. "
         + "Recomputable from the golds (therefore Derived), but deliberately frozen to pin migration debt "

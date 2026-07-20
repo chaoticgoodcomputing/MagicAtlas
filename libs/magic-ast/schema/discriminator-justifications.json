@@ -53,5 +53,30 @@
     "name": "shuffleCardsFromGraveyardIntoLibrary",
     "near": "shuffle",
     "reason": "'shuffle' shuffles a library/zone in place; 'shuffleCardsFromGraveyardIntoLibrary' (Krosan Reclamation, CR 701.24) is a targeted-subset zone-change that moves separately-targeted graveyard cards into their owner's library and then shuffles. Shares only the 'shuffle' stem; carries both a targeted Player and a quantity-bounded Cards subset. Also distinct from whole-zone 'shuffleGraveyardIntoLibrary' and single-object 'shuffleIntoLibrary'. Not sprawl."
+  },
+  {
+    "name": "cantLoseGame",
+    "near": "cantLoseGameForZeroLife",
+    "reason": "Different scopes of exemption, not a naming variant. 'cantLoseGame' is the blanket static lock (Platinum Angel) exempting a player from EVERY way to lose (CR 104.3a-k); 'cantLoseGameForZeroLife' overrides exactly one state-based loss condition (Lich's Tomb, CR 704.5a) and leaves every other loss condition live. Collapsing them would silently widen the narrow form into the blanket one. Not sprawl."
+  },
+  {
+    "name": "gift",
+    "near": "graft",
+    "reason": "Unrelated keyword abilities that happen to sit at Levenshtein 2. Gift (CR 702.174) is an additional-cost/payoff pair on an instant or sorcery; Graft N (CR 702.58) is a +1/+1-counter keyword on a permanent. No shared mechanic, no shared stem, no consolidation possible. A coincidence of spelling, not sprawl."
+  },
+  {
+    "name": "maxHandSize",
+    "near": "noMaxHandSize",
+    "reason": "SET vs REMOVE on the same rule (CR 402.2). 'maxHandSize' sets the maximum to a fixed number ('Your maximum hand size is ten'); 'noMaxHandSize' removes the restriction entirely ('You have no maximum hand size'). The 'no-' prefix inverts rather than qualifies, exactly as tap/untap. Not sprawl."
+  },
+  {
+    "name": "revealUntil",
+    "near": "revealUntilExileRest",
+    "reason": "Same search, materially different disposition of the miss pile — which is the whole point of the cards that use each. 'revealUntil' returns the non-matching revealed cards to the BOTTOM of the library in random order; 'revealUntilExileRest' EXILES them (the Demonic Consultation / Tainted Pact shape), permanently removing them from the game. A shared prefix over an unshared outcome. Not sprawl."
+  },
+  {
+    "name": "shuffle",
+    "near": "shuffleGraveyardIntoLibrary",
+    "reason": "A primitive vs a whole-zone move that ends in it. 'shuffle' is the bare randomize action (CR 701.24a); 'shuffleGraveyardIntoLibrary' is a zone-wide move (CR 400.12) that relocates every card in the graveyard into the library AND THEN shuffles. Same relationship the already-justified shuffle ~ shuffleIntoLibrary and shuffle ~ shuffleCardsFromGraveyardIntoLibrary pairs carry. Not sprawl."
   }
 ]
