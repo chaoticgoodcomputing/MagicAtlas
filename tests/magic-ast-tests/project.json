@@ -42,6 +42,15 @@
         "parallel": false
       }
     },
+    "artifact-census": {
+      "//": "ADR-0004 §1 artifact census: enumerates every artifact under tests/**/Fixtures, **/Data/_08_Reporting, dumps/, libs/**/*.json (plus the committed snapshot families) and classifies each Evidence / Derived / architectural-decision, flagging the genuinely ambiguous residue for human classification — emits Data/_08_Reporting/artifact-census.json (gitignored). Hermetic: working tree only, no corpus, no network. Never a gate; the NUnit ArtifactClassificationGateTests is the gate ('an unclassified artifact fails the build').",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow ArtifactCensus"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
     "interaction-triage": {
       "//": "Fast data-triage: the InteractionTriage flow sliced (Flowthru --only auto-includes upstream) to ClassifyCombos + MaterializeCardEdges — emits interaction-triage-report.json (worklist) + card-edges.json + port-graph-metrics.json, EXCLUDING the intractable MaterializeCycles/PortNodes/PlotInteractionGraph viz tail (union cycle enumeration over a ~1.1M-edge graph). The canonical re-triage for the loop + the input to the corpus-edge-diff gate. Use 'interaction-graph' (full flow) only when the viz HTML is wanted.",
       "executor": "nx:run-commands",

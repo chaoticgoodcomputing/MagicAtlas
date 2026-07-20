@@ -241,6 +241,17 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/port-topology-demand.json")
       .Build());
 
+  /// <summary>The ADR-0004 §1 artifact classification manifest: every artifact on the declared surface
+  /// classified Evidence / Derived / architectural-decision, with the ambiguous residue flagged for human
+  /// classification. Output of the <c>ArtifactCensus</c> flow. Derivation is Flowthru's job; the GATE over
+  /// this classification is <c>Tests/ArtifactCensus/ArtifactClassificationGateTests.cs</c>, which re-runs
+  /// the same pure classifier rather than reading this (gitignored) file.</summary>
+  public IItem<ArtifactCensus> ArtifactCensus =>
+    CreateItem(() => Item.Of<ArtifactCensus>("ArtifactCensus")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/artifact-census.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")
