@@ -110,6 +110,44 @@ discriminator has a placement: dice-rolled and combat-presence are Events; tap/u
 store; a counter is a store whose P/T effect is a derived Behavior; a copy is a deployment event with
 provenance. Damage is a Life-store verb whose *lethality* is a derived edge into Removal.
 
+### 4a. The adjudicated forks — F1, F2, F3
+
+The Stage-0a panel (4 blind panelists, 2026-07-16) was unanimous on the kinds, the five supergroups, and
+the ~16 attribute axes, but **deadlocked on three questions**. Those were settled by human adjudication
+the same day. They are recorded here — in the Decision section — because they are **architectural
+rulings about representation, not claims about Magic**: no gold can witness them, no rules judge can
+adjudicate them, and no amount of corpus evidence would settle them differently. They constrain how
+every subsequent stem is placed, so they belong where a reader looks for standing decisions rather than
+in a migration log.
+
+- **F1 — a stem has ONE intrinsic kind; a supergroup is a *view* that may span kinds.** There is no
+  orthogonal kind×supergroup matrix. `Structure` is the motivating case: it spans phase/combat **Events**
+  and tap/untap availability **State**, and forcing it to pick one would either split a coherent slang
+  category or misclassify half its members. *The fork was:* whether supergroups partition the kinds
+  (clean matrix, but Structure fragments) or cut across them (Structure survives, but the two axes stop
+  being independent). Cutting across won: the kind is a property *of the stem*, fixed at declaration;
+  the supergroup is a **named filter over stems**, and filters are free to be heterogeneous. Practical
+  consequence: never infer a stem's kind from its supergroup, and never expect a supergroup to be
+  kind-homogeneous — a check that asserts either is asserting a fork we explicitly rejected.
+
+- **F2 — a new `Objects` STATE supergroup homes bare object-consumes.** `Objects = fold(deployment −
+  removal)` — the §10 SDF-balance substrate. *The fork was:* whether a bare object-consume (the
+  sacrifice fodder of §5, `consume: creature[…]`) belongs to an existing supergroup or needs its own.
+  It needs its own, because **addressable objects and fungible pools are different substrates**: mana
+  and life are interchangeable quantities where only the count matters, whereas a creature on the
+  battlefield is a specific object with a specific type line, and §10's balance accounting has to read
+  the two differently. Folding objects into `Resources` would have made the balance arithmetic silently
+  wrong for every object-consuming cost.
+
+- **F3 — dice-rolled / damage-dealt / combat-presence are bare EVENT verbs with no supergroup.** Per
+  O19/O21. *The fork was:* whether every stem must have a supergroup. It must not. These three are
+  genuine events with no natural slang category above them, and inventing one would be a category
+  fabricated to satisfy a totality constraint rather than to describe anything. Damage additionally
+  **edges into** `resources:life` and `removal` (its lethality is a derived edge, §4) — but an edge is
+  not membership, and modelling it as membership would have put damage in two supergroups at once.
+  Consequence: supergroup membership is **partial**, and code must treat "no supergroup" as a legal,
+  terminal answer rather than a lookup miss.
+
 ### 5. Events vs objects; dual ports; the sacrifice remodel
 
 Objects (creatures, permanents, tokens) **flow**; events **happen to them** — and a cost that removes an
@@ -153,6 +191,26 @@ same-card witness certifies it. Nothing uncited is GREEN.
 There is no centrally-authored rule file. **Per-gold interaction fixtures are the only hand-authored
 artifact**: each derivation run records its edges with their certifying mechanisms, declares any *new*
 rules with itself as witness, and asserts its own acceptance tests.
+
+**Where a judgment goes — the Evidence/architectural boundary.** §4a records three rulings in this ADR,
+which reads at first like a contradiction of the paragraph above. It is not, and the distinction is
+worth stating once so it does not have to be re-litigated per ruling:
+
+> A judgment about **Magic** is Evidence and becomes a **gold**. A judgment about **our representation
+> of Magic** is architectural and becomes **ADR prose**.
+
+The operative test is **falsifiability by witness**: *could a card, a pairwise interaction, or a combo
+show this to be wrong?* "Sacrifice is narrower than dies" (O1) is falsifiable by a card and is therefore
+a gold. "A supergroup is a view rather than a partition" (F1) is not — no card is evidence about it,
+because it is a statement about the shape of our schema. Asserted **absence** is on the Evidence side
+too, and gets the same treatment: "no arm can connect this port" is a claim about Magic, so it is a gold
+carrying a `no_arm` assertion, not a prose whitelist (ADR-0004 §2).
+
+The failure mode this boundary prevents runs in **both** directions. Routing domain judgments into ADRs
+recreates the central rule file this section exists to abolish — the reason a draft of ADR-0004 that
+did exactly that was rejected. Routing architectural rulings into golds is the subtler error: it
+manufactures a fake witness, since the gold would "prove" the ruling only by having been authored under
+it, and the ruling then silently constrains every future stem with nothing but a fixture to point at.
 
 **The witnessing unit is an *interaction gold*, not necessarily a combo.** A gold may be:
 - a **single card** — its port derivation (like a parse-layer hand fixture): witnesses that a stem /
@@ -285,15 +343,14 @@ scaffold (it is a revisable hypothesis, not an authority) or flags a bad derivat
   5. **library-selection** (dig/scry/surveil/impulse — peek/reorder top-N);
   6. **non-play zone moves / recur** (reclamation gy→hand, bounce-recur — the `from→to` primitive is
      play-anchored, so hidden-zone moves fit neither Removal nor Deployment; do NOT force into Removal).
-  Three forks, **resolved by human adjudication (2026-07-16)**: **(F1)** a stem has ONE intrinsic kind and a
-  supergroup is a *view* that may span kinds (Structure = phase/combat Events + tap/untap availability
-  State) — no orthogonal matrix; **(F2)** a new **`Objects`** State supergroup homes bare object-consumes
-  (`Objects = fold(deployment − removal)` — the §10 SDF-balance substrate; addressable objects kept distinct
-  from fungible pools); **(F3)** dice-rolled / damage-dealt / combat-presence are **bare EVENT verbs** with
-  no supergroup (per O19/O21; damage additionally edges into resources:life + removal). The negotiated
-  scaffold — `tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json` — merges the panel
-  consensus + these rulings and declares the six holes as the `witness: sought` backlog. Panel artifacts +
-  difference map under the session `stage0a/` scratch.
+  The panel also **deadlocked on three questions**, resolved by human adjudication the same day. These are
+  architectural rulings no gold can witness, so they live in the Decision section — **see §4a (F1/F2/F3)**
+  for the rulings, the fork each resolved, and the consequences for code. (They were previously duplicated
+  in the scaffold's `$forks_resolved` key, which has been removed: nothing read it, and a ruling with two
+  homes is a ruling that can disagree with itself.) The negotiated scaffold —
+  `tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json` — merges the panel consensus + these
+  rulings and declares the six holes as the `witness: sought` backlog. Panel artifacts + difference map
+  under the session `stage0a/` scratch.
 - **Stage 0b — formats + rollup generator.** Author the per-gold interaction-fixture schema + rollup
   generator with loud conflict detection; seed from the two worked golds **plus the absorbed third**
   (Ruthless Knave × Blood Artist from `blood-artist-engine.json` — the GREEN cover-policy witness); retire

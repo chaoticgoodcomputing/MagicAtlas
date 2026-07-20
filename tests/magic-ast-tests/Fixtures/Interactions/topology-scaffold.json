@@ -2,12 +2,7 @@
   "$scaffold": "port-topology target map (ADR-0003 Stage 0a)",
   "$status": "hypothesis — versioned; the DECLARED half of port-topology (golds provide the WITNESSED half). Revised as golds land.",
   "$version": 1,
-  "$provenance": "4-panelist blind sweep (3 Opus + 1 full-slang), 2026-07-16; unanimous kinds/supergroups/axes; forks F1/F2/F3 human-ruled.",
-  "$forks_resolved": {
-    "F1": "a stem has ONE intrinsic kind; a supergroup is a VIEW that may span kinds (Structure spans EVENT+STATE). No orthogonal kind×supergroup matrix.",
-    "F2": "a new Objects State supergroup homes bare object-consumes; Objects = fold(deployment − removal) = the §10 SDF-balance substrate.",
-    "F3": "dice-rolled / damage-dealt / combat-presence are bare EVENT verbs, no supergroup."
-  },
+  "$provenance": "4-panelist blind sweep (3 Opus + 1 full-slang), 2026-07-16; unanimous kinds/supergroups/axes; forks F1/F2/F3 human-ruled — the rulings live in ADR-0003 §4a, not here (they are architectural, not witnessable; a ruling with two homes can disagree with itself).",
 
   "kinds": {
     "EVENT":    "discrete occurrences with payloads — what subscriptions (triggered abilities) fire on.",
