@@ -10,12 +10,15 @@ while carrying an anti-drift mandate it did not structurally deliver — by its 
 "is **defined by** those same hand golds … adopting it does not itself reduce hand-artifact dependence." The
 full withdrawn text is in git history (`0004-edge-provenance-labeling.md`).
 
-**Two pieces are salvaged** as scoped follow-ups, not as this ADR's core:
+**Two pieces are salvaged:**
 1. the real bug where `PortEdge.Tier`'s `Provenance == CardDefined ? Green : …` lets **provenance leak into
    the certainty computation** (an intra-card edge declared certain *by construction* rather than *by
    proof*) — independent, cheap, should land regardless;
-2. **plain-language tier labels** in the frontend (retiring the bare colored chip) — a standalone UX fix,
-   unrelated to derivation discipline.
+2. the withdrawn ADR's §1 — *keep the certainty computation, retire the bare colour* — which turned out not
+   to be a detachable UX fix at all. It is **absorbed into §5**, where retiring the stored tier in favour of
+   its computed attribute vector is simultaneously the fix for the opaque frontend chip *and* the fix for the
+   hand-maintained tier pin. The withdrawn version got the display half right and left the hand-maintenance
+   untouched; §5 does both.
 
 *(The withdrawn ADR's third component — the `Source`/CSB attestation join — is absorbed here as §4, in
 reduced form: see §4's note on why `mastOnly` does not exist as a value.)*
@@ -86,16 +89,24 @@ structural (§3), relational (§4), and invariant-based (§6) — see each.
 
 Every artifact is classified into exactly one kind, and the kind determines its rule:
 
-- **Evidence** (hand-authored, irreducible): interaction golds, parse gold fixtures. Judge-gated; must cite
-  primary sources; immutable to workers per the existing fixture-immutability gate.
+- **Evidence** (hand-authored, irreducible): interaction golds, parse gold fixtures, **and combo
+  expectations** — an *expectation is not an output* (§5). Judge-gated; must cite primary sources; immutable
+  to workers per the existing fixture-immutability gate.
 - **Derived** (generated, never hand-edited): the rollup (`port-topology.json` / `port-interactions.json` +
-  `.cited` twins), all `_08_Reporting` outputs, the D1–D4 dumps, expected-tier pins, backlog/demand reports.
+  `.cited` twins), all `_08_Reporting` outputs, the D1–D4 dumps, backlog/demand reports.
   Derived artifacts are gitignored by default; the rollup is the one committed exception, and pays for it
   with a regeneration gate (§3).
 
 A third input class is neither: **external source data** (Scryfall, the Commander Spellbook snapshot) is
 ingested, not authored, and versioned by its fetch. The complete derivation base is therefore
 `Derived = f(external sources, Evidence, code)` — three inputs, nothing else.
+
+**Derivation is Flowthru's job; NUnit's job is gates.** Every artifact, census, join, and report this ADR
+introduces is produced by a **Flowthru flow** landing in `_08_Reporting` — Flowthru is the analytics and
+data-processing backbone, and a derivation that lives anywhere else is itself a hand-rolled artifact in
+disguise. NUnit is reserved for the **gates** that assert over those outputs (unclassified-artifact fails
+build, regeneration byte-identity, `no_arm`, the bijection). Where this ADR says "compute X," read "a
+Flowthru step computes X"; where it says "gate," read "an NUnit test asserts it."
 
 **Domain judgments are Evidence, not ADR prose.** An earlier draft of this ADR routed judgments ("we will
 not arm `emit:attach`") into ADRs. That was wrong, and contradicted ADR 0003 §8's central commitment —
@@ -213,15 +224,40 @@ redundant — **if a claim is in the system, it is MAST-derived by definition.**
 an **optional** field meaning "an external authority also attests this," with absence carrying the default.
 Only externally-attested claims need the join; the common case declares nothing.
 
-### 5. Derived prose
+### 5. Retire the stored tier; pin the derived attribute vector
 
-`combo-expected-tiers.json`'s `reason` is **rendered** from the engine's actual limiting state
-(`LimitingReason` / `Gated` / `CoCostsSatisfied` / `Balanced` / worst-hop `Reliability`), not written. Human
-color, where genuinely useful, moves to a separate `note` field that **no gate and no report treats as
-truth**, and that may never justify a tier.
+`combo-expected-tiers.json` bundles two different jobs, and both are broken in the same way — an **opaque
+rollup value is stored where computed attributes belong.**
 
-The general rule: **prose that asserts a fact must be generated; prose that adds narrative must be marked
-non-authoritative.** No prose is both.
+**The tier is already derived; it is just stored as if it weren't.** `Green`/`Amber` is a lossy summary of
+attributes the engine computes anyway — `Firable`, `CoCostsSatisfied`, `Balanced`, `LifeBalanced`,
+`Productive`, worst-hop `Reliability`/`Overlap`, `LimitingReason`. Collapsing them to a colour discards
+exactly the information a reader needs, which is why the vocabulary is opaque out of context — most acutely
+in the frontend, where a bare `"Green"`/`"Amber"` chip is unreadable without a legend.
+
+**Decision:** the tier stops being a stored value and becomes a **presentation** of the attribute vector.
+
+1. **What is pinned is the attribute vector, not a colour.** The expectation becomes judge-set **Evidence**
+   (§1): *this cycle is Firable, Balanced, CoCosts-satisfied, worst-hop Reliability = Yes.* A change then
+   fails the gate naming **which attribute moved**, instead of "Green → Amber, reason: ⟨stale prose⟩."
+2. **This is why the pin cannot be Derived.** Regenerating an expectation from the engine's own output makes
+   the gate assert *that the engine agrees with itself* — it can never fail, and a GREEN silently degrading
+   would regenerate its own pin and stay green. That is the same vacuity failure as a regeneration gate read
+   from a stale cache (§3), one layer up.
+3. **The prose `reason` disappears rather than being rendered.** The attribute vector *is* the reason.
+   Plain-language text is generated from it at display time and stored nowhere. Human narrative, where
+   genuinely useful, moves to a `note` field that **no gate and no report treats as truth**.
+4. **`Green`/`Amber` retires as a stored and user-facing vocabulary**, surviving only as an internal
+   shorthand if convenient. The frontend renders the attributes in plain language ("certified infinite";
+   "loop closes, but its mana cost is not covered"), which is strictly more informative than the colour and
+   needs no legend.
+
+This deliberately readopts the one part of the withdrawn ADR 0004 that was right — *"keep the certainty tier,
+relabeled for humans; retired only as a bare colour"* — in a form that also fixes the hand-maintenance the
+withdrawn version left untouched, because what is pinned is now a computed vector rather than prose.
+
+The general rule this generalizes: **prose that asserts a fact must be generated; prose that adds narrative
+must be marked non-authoritative.** No prose is both.
 
 ### 6. The invariant layer — catching absence, not drift
 
@@ -335,12 +371,15 @@ Materialize §4's join set with gates. Start with quarantine → gold → tier: 
 
 *Gate:* the quarantine join demonstrably fails on a reconstructed Suture-Priest-shaped input.
 
-### Stage 4 — Derived prose and the coarse-projection dissolution
-Render `reason` from engine state; demote human prose to a non-authoritative `note`; convert
-`known-coarse-projections.json`'s entries to asserted-absence golds (§1) and delete the file.
+### Stage 4 — Retire the stored tier; dissolve the coarse-projection whitelist
+Replace `combo-expected-tiers.json`'s stored tier + prose with a judge-set **attribute-vector expectation**
+(Evidence); render plain-language text from the vector at display time and store none of it; retire
+`Green`/`Amber` as a user-facing vocabulary. Convert `known-coarse-projections.json`'s entries to
+asserted-absence golds (§1) and delete the file.
 
-*Gate:* no gate or report consumes a hand-written field; the rendered reasons reproduce the current
-hand-written meaning on a judge-sampled subset (a correctness check, not a diff).
+*Gate:* no gate or report consumes a hand-written field; the attribute expectation fails naming **which
+attribute moved**; a judge-sampled subset confirms the rendered plain-language text carries the same meaning
+the hand-written `reason` did (a correctness check, not a diff).
 
 ### Stage 5 — The invariant layer
 Land §6: sibling-path metamorphic properties, and modeled-dependency completeness derived from AST condition
@@ -364,7 +403,10 @@ Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup)
 - **Asserted-absence golds strengthen over time, by design.** `no_arm` is evaluated against the *current*
   witnessed stem universe, not the universe at authoring time. A gold can therefore go red because a new stem
   appeared and unexpectedly matched — with no one touching the card. This is intended: it forces the
-  judgment to be re-derived rather than silently outliving its premise.
+  judgment to be re-derived rather than silently outliving its premise. **Triage is a hard build failure,
+  judge-resolved:** either the new arm is correct (amend or delete the gold, judge-gated) or the arm is wrong
+  (fix it). It is never resolved by weakening the assertion, and never deferred to a report — a soft signal
+  here would reproduce exactly the "quiet artifact nobody reconciles" failure this ADR exists to remove.
 - **Some reports get worse before better.** Generated prose is blunter than a rigorous worker's hand-written
   `reason`. Correct trade: an honest blunt sentence beats an eloquent one that stopped being true.
 - **This does not reduce the golds' load-bearing role — it makes it exact.** The system leans on hand
@@ -373,16 +415,18 @@ Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup)
 
 ## Open questions
 
-- **How do the API seed and `atlas-diag` consume Derived artifacts once gitignored (§3)?** They read
-  committed dumps today. Options: a published build artifact, a seed-on-boot generation step, or an artifact
-  store. Unresolved; blocks Stage 1's completion, not its start.
-- **Is `combo-expected-tiers.json` the second exception?** Once Stage 4 makes it fully derived, its diff
-  answers "did a combo silently change tier?" — arguably the highest-signal diff in the system after the
-  rollup's. It is the strongest remaining candidate for §3's committed-and-gated class; decide at Stage 4
-  using §3's test (*is its diff worth a gate?*) rather than by default.
-- **Does `no_arm` need a bounded evaluation universe for cost?** Semantics are settled (current taxonomy,
-  growing), but evaluating every absence gold against every witnessed consume stem on every run has a cost
-  curve worth measuring at Stage 2.
+*(The three questions carried by the 2026-07-19 draft were resolved on 2026-07-20 — see Provenance. What
+remains are the implementation details those decisions opened.)*
+
+- **Which attributes constitute the pinned vector (§5.1)?** `Firable` / `CoCostsSatisfied` / `Balanced` /
+  `LifeBalanced` / `Productive` / worst-hop `Reliability` is the obvious set, but whether `Overlap` and
+  `LimitingReason` are pinned or merely reported is a Stage-4 call — pin too much and every engine refinement
+  churns 33 expectations; pin too little and the gate goes slack.
+- **Plain-language wording for the retired colours (§5.4).** No concrete copy exists yet. Needs a pass that a
+  non-player can read without a legend, which is the bar the colour failed.
+- **Does the API seed run the full pipeline or a scoped flow?** Generate-on-demand is settled; whether the
+  seed target invokes the whole Flowthru graph or only the dump-producing steps is a Stage-1 ergonomics
+  question, answered by measuring a cold run once cache keying is fixed.
 
 ## Provenance
 
@@ -405,6 +449,13 @@ Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup)
   and the gitignore default **rolled back for the rollup**, whose inter-run diff is genuinely valuable drift
   information. That exception generalized into §3's decision procedure (*is its diff worth a gate?*) and
   restored the byte-identity check in narrow scope, as the price of committing.
+- **Open questions closed** (2026-07-20), owner decisions: **(a)** Derived artifacts are generated on demand,
+  and every derivation/census/join/report is a **Flowthru flow** in `_08_Reporting` — Flowthru is the
+  analytics backbone, and NUnit is reserved for gates; **(b)** the expected-tier pin was **misclassified as
+  Derived** in the 2026-07-19 draft — regenerating an expectation from the engine makes the gate vacuous, so
+  it is Evidence, and the deeper fix is retiring the stored tier in favour of its computed attribute vector
+  (§5), since `Green`/`Amber` is an opaque rollup — especially in the frontend; **(c)** an absence assertion
+  firing is a **hard build failure, judge-resolved**, never a soft report entry.
 
 ---
 
