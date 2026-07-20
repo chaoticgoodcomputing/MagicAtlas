@@ -20,6 +20,15 @@ using MagicAtlas.Ast.Tests.Flows.InteractionRollup.Steps;
 /// source-of-truth and the checked-in generated artifact fails the build — previously this only surfaced
 /// via a human running <c>dotnet run -- --flow InteractionRollup</c> and eyeballing <c>git diff</c>.</para>
 ///
+/// <para><b>Part A is now the SECTION-LEVEL diagnosis, not the gate of record.</b> ADR-0004 §3 (issue #24)
+/// makes the rollup's committed exception carry a full byte-identity regeneration gate —
+/// <see cref="RollupRegenerationGateTests"/> — which runs the real flow against a busted cache and covers
+/// all four artifacts, including the two <c>port-interactions</c> files this fixture never touched. Part A
+/// survives because its per-section report ("diverges in section: stems") localizes a failure that the byte
+/// gate can only report as an offset. It is deliberately NOT the byte gate: the <c>ToJson</c> mirror below
+/// is a hand-written restatement of the wire shape, so it can only ever prove the step and the mirror agree
+/// — which is exactly why the real serializer had to be brought into the loop next door.</para>
+///
 /// <para><b>Part B — gold assertion execution.</b> Every gold's <c>assertions[]</c> array carries
 /// machine-checkable claims (see <c>Fixtures/Interactions/golds/README.md</c>). Two claim shapes are
 /// executable against the regenerated topology right now — <c>stem.&lt;S&gt;.witnessed</c> and (ADR-0004 §1)
