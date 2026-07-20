@@ -1,0 +1,221 @@
+{
+  "Name": "kiki-jiki-x-restoration-angel",
+  "Ports": [
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:copy",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:createdelayedtrigger",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:keywordability",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Restoration Angel::emit:blink:creature",
+      "Card": "Restoration Angel",
+      "Label": "emit:blink:creature",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Restoration Angel::emit:timingmodification",
+      "Card": "Restoration Angel",
+      "Label": "emit:timingmodification",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Restoration Angel::etb:creature:self",
+      "Card": "Restoration Angel",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Restoration Angel::evasion:flying",
+      "Card": "Restoration Angel",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:copy"
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger"
+    },
+    {
+      "From": "Restoration Angel::etb:creature:self",
+      "To": "Restoration Angel::emit:blink:creature"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature",
+      "To": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "inherited untap is optional/conditional"
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature",
+      "To": "Restoration Angel::etb:creature:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "IsSelf"
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self",
+      "To": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "To": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Restoration Angel::emit:blink:creature",
+      "To": "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "IsSelf"
+    },
+    {
+      "From": "Restoration Angel::etb:creature:self",
+      "To": "Restoration Angel::emit:blink:creature",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Amber",
+      "Firable": false,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": true,
+      "Productive": true,
+      "LimitingReason": "gated (rate-limit / intervening-if)",
+      "Edges": [
+        "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature=\u003EKiki-Jiki, Mirror Breaker::tap:self|RulesDefined|Flow|Overlaps|Unknown|Amber|inherited untap is optional/conditional",
+        "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self=\u003EKiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Kiki-Jiki, Mirror Breaker::emit:copy=\u003EKiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Kiki-Jiki, Mirror Breaker::tap:self=\u003EKiki-Jiki, Mirror Breaker::emit:copy|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    },
+    {
+      "Tier": "Amber",
+      "Firable": false,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": true,
+      "Productive": true,
+      "LimitingReason": "gated (rate-limit / intervening-if)",
+      "Edges": [
+        "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature=\u003ERestoration Angel::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf",
+        "Kiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self=\u003EKiki-Jiki, Mirror Breaker copy of Restoration Angel::emit:blink:creature|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Restoration Angel::emit:blink:creature=\u003EKiki-Jiki, Mirror Breaker copy of Restoration Angel::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf",
+        "Restoration Angel::etb:creature:self=\u003ERestoration Angel::emit:blink:creature|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    }
+  ]
+}

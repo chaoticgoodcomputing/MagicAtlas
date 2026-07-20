@@ -1,0 +1,96 @@
+{
+  "Name": "diabolic-tutor",
+  "Ports": [
+    {
+      "Identity": "Diabolic Tutor::cast:spell:self",
+      "Card": "Diabolic Tutor",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Diabolic Tutor::emit:searchlibrary",
+      "Card": "Diabolic Tutor",
+      "Label": "emit:searchlibrary",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Diabolic Tutor::pay:mana",
+      "Card": "Diabolic Tutor",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Diabolic Tutor::pay:mana:black",
+      "Card": "Diabolic Tutor",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Diabolic Tutor::cast:spell:self",
+      "To": "Diabolic Tutor::emit:searchlibrary"
+    },
+    {
+      "From": "Diabolic Tutor::pay:mana:black",
+      "To": "Diabolic Tutor::emit:searchlibrary"
+    },
+    {
+      "From": "Diabolic Tutor::pay:mana",
+      "To": "Diabolic Tutor::emit:searchlibrary"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Diabolic Tutor::cast:spell:self",
+      "To": "Diabolic Tutor::emit:searchlibrary",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Diabolic Tutor::pay:mana:black",
+      "To": "Diabolic Tutor::emit:searchlibrary",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Diabolic Tutor::pay:mana",
+      "To": "Diabolic Tutor::emit:searchlibrary",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

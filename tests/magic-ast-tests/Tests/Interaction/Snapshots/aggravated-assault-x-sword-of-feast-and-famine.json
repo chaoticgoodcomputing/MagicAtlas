@@ -1,0 +1,259 @@
+{
+  "Name": "aggravated-assault-x-sword-of-feast-and-famine",
+  "Ports": [
+    {
+      "Identity": "Aggravated Assault::emit:additionalcombat",
+      "Card": "Aggravated Assault",
+      "Label": "emit:additionalcombat",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Aggravated Assault::emit:untap",
+      "Card": "Aggravated Assault",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Aggravated Assault::pay:mana",
+      "Card": "Aggravated Assault",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Aggravated Assault::pay:mana:red",
+      "Card": "Aggravated Assault",
+      "Label": "pay:mana:red",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Sword of Feast and Famine::emit:attach",
+      "Card": "Sword of Feast and Famine",
+      "Label": "emit:attach",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Sword of Feast and Famine::emit:discardcards",
+      "Card": "Sword of Feast and Famine",
+      "Label": "emit:discardcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Sword of Feast and Famine::emit:gainability",
+      "Card": "Sword of Feast and Famine",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Sword of Feast and Famine::emit:untap",
+      "Card": "Sword of Feast and Famine",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=land|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Sword of Feast and Famine::modify:pt",
+      "Card": "Sword of Feast and Famine",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Sword of Feast and Famine::pay:mana",
+      "Card": "Sword of Feast and Famine",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Sword of Feast and Famine::trigger:damage:combat:player",
+      "Card": "Sword of Feast and Famine",
+      "Label": "trigger:damage:combat:player",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Aggravated Assault::pay:mana:red",
+      "To": "Aggravated Assault::emit:additionalcombat"
+    },
+    {
+      "From": "Aggravated Assault::pay:mana:red",
+      "To": "Aggravated Assault::emit:untap"
+    },
+    {
+      "From": "Aggravated Assault::pay:mana",
+      "To": "Aggravated Assault::emit:additionalcombat"
+    },
+    {
+      "From": "Aggravated Assault::pay:mana",
+      "To": "Aggravated Assault::emit:untap"
+    },
+    {
+      "From": "Sword of Feast and Famine::pay:mana",
+      "To": "Sword of Feast and Famine::emit:attach"
+    },
+    {
+      "From": "Sword of Feast and Famine::trigger:damage:combat:player",
+      "To": "Sword of Feast and Famine::emit:discardcards"
+    },
+    {
+      "From": "Sword of Feast and Famine::trigger:damage:combat:player",
+      "To": "Sword of Feast and Famine::emit:untap"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Aggravated Assault::pay:mana:red",
+      "To": "Aggravated Assault::emit:additionalcombat",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Aggravated Assault::pay:mana:red",
+      "To": "Aggravated Assault::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Aggravated Assault::pay:mana",
+      "To": "Aggravated Assault::emit:additionalcombat",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Aggravated Assault::pay:mana",
+      "To": "Aggravated Assault::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Sword of Feast and Famine::emit:untap",
+      "To": "Aggravated Assault::pay:mana:red",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Sword of Feast and Famine::emit:untap",
+      "To": "Aggravated Assault::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Sword of Feast and Famine::emit:untap",
+      "To": "Sword of Feast and Famine::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Sword of Feast and Famine::pay:mana",
+      "To": "Sword of Feast and Famine::emit:attach",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Sword of Feast and Famine::trigger:damage:combat:player",
+      "To": "Sword of Feast and Famine::emit:discardcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Sword of Feast and Famine::trigger:damage:combat:player",
+      "To": "Sword of Feast and Famine::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

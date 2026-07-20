@@ -165,7 +165,11 @@ public sealed record CountQuantity : Quantity
 /// permanent". The kind of counter (<see cref="CounterType"/>) and the object
 /// bearing them (<see cref="On"/>) are the two axes.
 /// </summary>
-[OracleQuantity("counterCount")]
+[OracleQuantity(
+  "counterCount",
+  NearDuplicateOf = new[] { "count" },
+  Reason = "Distinct quantities: 'count' counts objects matching a filter; 'counterCount' counts counters of a given kind on a permanent. Different quantity sources."
+)]
 public sealed record CounterCountQuantity : Quantity
 {
   /// <summary>
@@ -224,7 +228,11 @@ public sealed record KeywordCostPaidCountQuantity : Quantity
 /// and have no characteristics"). The kind of counter removed is the one axis.
 /// </para>
 /// </summary>
-[OracleQuantity("countersRemovedThisWay")]
+[OracleQuantity(
+  "countersRemovedThisWay",
+  NearDuplicateOf = new[] { "count" },
+  Reason = "Distinct quantities: 'count' is a generic object/filter count; 'countersRemovedThisWay' is a linked back-reference to counters removed by the same effect (CR 607-style linkage). Different."
+)]
 public sealed record CountersRemovedThisWayQuantity : Quantity
 {
   /// <summary>

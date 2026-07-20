@@ -1,0 +1,19 @@
+{
+  "Name": "thorn-of-amethyst",
+  "Ports": [
+    {
+      "Identity": "Thorn of Amethyst::emit:costincrease",
+      "Card": "Thorn of Amethyst",
+      "Label": "emit:costincrease",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

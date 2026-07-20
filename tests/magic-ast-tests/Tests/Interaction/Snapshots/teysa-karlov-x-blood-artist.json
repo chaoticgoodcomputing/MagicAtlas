@@ -1,0 +1,71 @@
+{
+  "Name": "teysa-karlov-x-blood-artist",
+  "Ports": [
+    {
+      "Identity": "Blood Artist::emit:life:gain:controlled",
+      "Card": "Blood Artist",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::emit:life:loss",
+      "Card": "Blood Artist",
+      "Label": "emit:life:loss",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::ltb:creature:to-graveyard",
+      "Card": "Blood Artist",
+      "Label": "ltb:creature:to-graveyard",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

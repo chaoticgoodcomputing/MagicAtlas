@@ -1,0 +1,179 @@
+{
+  "Name": "dualcaster-mage-x-ghostly-flicker",
+  "Ports": [
+    {
+      "Identity": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery",
+      "Card": "Dualcaster Mage",
+      "Label": "emit:copy:spell:instant\u002Bsorcery",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Dualcaster Mage::emit:timingmodification",
+      "Card": "Dualcaster Mage",
+      "Label": "emit:timingmodification",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Dualcaster Mage::etb:creature:self",
+      "Card": "Dualcaster Mage",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Ghostly Flicker::cast:spell:self",
+      "Card": "Ghostly Flicker",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland",
+      "Card": "Ghostly Flicker",
+      "Label": "emit:blink:artifact\u002Bcreature\u002Bland",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact,creature,land|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ghostly Flicker::pay:mana",
+      "Card": "Ghostly Flicker",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ghostly Flicker::pay:mana:blue",
+      "Card": "Ghostly Flicker",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Dualcaster Mage::etb:creature:self",
+      "To": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery"
+    },
+    {
+      "From": "Ghostly Flicker::cast:spell:self",
+      "To": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland"
+    },
+    {
+      "From": "Ghostly Flicker::pay:mana:blue",
+      "To": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland"
+    },
+    {
+      "From": "Ghostly Flicker::pay:mana",
+      "To": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery",
+      "To": "Ghostly Flicker::cast:spell:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Unknown",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "Types"
+    },
+    {
+      "From": "Dualcaster Mage::etb:creature:self",
+      "To": "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ghostly Flicker::cast:spell:self",
+      "To": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland",
+      "To": "Dualcaster Mage::etb:creature:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "IsSelf"
+    },
+    {
+      "From": "Ghostly Flicker::pay:mana:blue",
+      "To": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ghostly Flicker::pay:mana",
+      "To": "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": false,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Dualcaster Mage::emit:copy:spell:instant\u002Bsorcery=\u003EGhostly Flicker::cast:spell:self|RulesDefined|Flow|Unknown|No|Amber|Types",
+        "Dualcaster Mage::etb:creature:self=\u003EDualcaster Mage::emit:copy:spell:instant\u002Bsorcery|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Ghostly Flicker::cast:spell:self=\u003EGhostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Ghostly Flicker::emit:blink:artifact\u002Bcreature\u002Bland=\u003EDualcaster Mage::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf"
+      ]
+    }
+  ]
+}

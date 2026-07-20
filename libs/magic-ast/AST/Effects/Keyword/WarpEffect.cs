@@ -18,7 +18,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// and FlashbackEffect shape.
 /// </para>
 /// </summary>
-[OracleEffect("warp")]
+[OracleEffect(
+  "warp",
+  NearDuplicateOf = new[] { "tap" },
+  Reason = "Unrelated concepts; heuristic false positive (Levenshtein 2). 'tap' is the tap action; 'warp' is the Warp keyword effect. Coincidental letter proximity, no semantic overlap."
+)]
 public sealed record WarpEffect : Effect
 {
   /// <summary>

@@ -22,7 +22,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// the player is able to blight at all (CR 701.68b) — is engine territory.
 /// </para>
 /// </summary>
-[OracleEffect("blight")]
+[OracleEffect(
+  "blight",
+  NearDuplicateOf = new[] { "fight" },
+  Reason = "Distinct effects: 'blight' (High Perfect Morcant) puts -1/-1 counters / affliction on a target; 'fight' (CR 701.12) makes two creatures deal damage equal to power to each other. Edit distance 1 (b/f) is coincidental; no semantic overlap."
+)]
 public sealed record BlightEffect : Effect
 {
   /// <summary>

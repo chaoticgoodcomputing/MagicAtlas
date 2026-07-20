@@ -22,7 +22,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// governs shuffle (its own CR example is Guile's "put into a graveyard … shuffle" text).
 /// </para>
 /// </summary>
-[OracleEffect("shuffleIntoLibrary")]
+[OracleEffect(
+  "shuffleIntoLibrary",
+  NearDuplicateOf = new[] { "shuffle" },
+  Reason = "'shuffle' shuffles a library/zone in place; 'shuffleIntoLibrary' is a zone-change moving object(s) into the library and then shuffling. Distinct effects."
+)]
 public sealed record ShuffleIntoLibraryEffect : Effect
 {
   public required ObjectReference Target { get; init; }

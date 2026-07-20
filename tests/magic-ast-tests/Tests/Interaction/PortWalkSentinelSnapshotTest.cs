@@ -6,13 +6,16 @@ using System.Text.Json.Serialization;
 using MagicAST.AST.References;
 using MagicAST.Interaction;
 using MagicAST.Tests.Infrastructure;
+using Sentinel = MagicAST.Interaction.Tests.SentinelSet.Sentinel;
 
 /// <summary>
 /// Alignment initiative 03, blocking criterion #3 — the end-to-end <b>sentinel snapshot</b> over the
 /// FULL interaction pipeline (<see cref="PortWalk"/> → <see cref="PortGraphEngine"/>). A committed,
-/// canonically-serialized snapshot of every currently-verified GREEN/AMBER combo plus a family-covering
-/// spread of single-card sentinels (≥50 cards, every ability Kind + every PortWalk-projected
-/// discriminator). Any pipeline change that alters an output fails the test until the snapshot is
+/// canonically-serialized snapshot of one sentinel per interaction gold — the loop's own record of the
+/// interactions it has witnessed and judged. The sentinel SET is DERIVED (see <see cref="SentinelSet"/>),
+/// not listed: the hand-written <c>sentinels.json</c> manifest was retired by ADR-0004 issue #38, since
+/// "which cards get a snapshot" was a human's coverage judgment that nothing recomputed. Any pipeline
+/// change that alters an output fails the test until the snapshot is
 /// regenerated (via the [Explicit] regen) and the diff is justified in the commit message. This is the
 /// only test that catches a <em>cross-pillar</em> regression — a parser node-shape change silently
 /// dropping a port — that the targeted per-feature tests cannot see.
@@ -44,51 +47,12 @@ public class PortWalkSentinelSnapshotTest
   private static string FixturesDir() =>
     Path.Combine(RepoRoot(), "tests", "magic-ast-tests", "Fixtures");
 
-  private static string ManifestPath() => Path.Combine(SnapshotsDir(), "sentinels.json");
-
   // --- the manifest model ---
+  //
+  // DERIVED, not listed: Snapshots/sentinels.json is gone. See SentinelSet for the selection rule and
+  // why it is the interaction golds rather than popularity, a set-cover, or every parse gold.
 
-  public sealed record SentinelCardRef
-  {
-    public required string Path { get; init; }
-    public required string Card { get; init; }
-  }
-
-  public sealed record Sentinel
-  {
-    public required string Name { get; init; }
-    public required string Kind { get; init; } // "card" | "combo"
-    public required IReadOnlyList<SentinelCardRef> Cards { get; init; }
-
-    public override string ToString() => $"{Kind}:{Name}";
-  }
-
-  private static IReadOnlyList<Sentinel> LoadManifest()
-  {
-    var root = JsonNode.Parse(File.ReadAllText(ManifestPath()))!;
-    var entries = root["entries"]!.AsArray();
-    var list = new List<Sentinel>();
-    foreach (var e in entries)
-    {
-      var cards = e!["cards"]!
-        .AsArray()
-        .Select(c => new SentinelCardRef
-        {
-          Path = c!["path"]!.ToString(),
-          Card = c!["card"]!.ToString(),
-        })
-        .ToList();
-      list.Add(
-        new Sentinel
-        {
-          Name = e!["name"]!.ToString(),
-          Kind = e!["kind"]!.ToString(),
-          Cards = cards,
-        }
-      );
-    }
-    return list;
-  }
+  private static IReadOnlyList<Sentinel> LoadManifest() => SentinelSet.Derive();
 
   public static IEnumerable<TestCaseData> Sentinels() =>
     LoadManifest().Select(s => new TestCaseData(s).SetName($"Snapshot_{Slug(s.Name)}"));
@@ -352,7 +316,7 @@ public class PortWalkSentinelSnapshotTest
   [Test]
   public void Perturbation_changes_the_canonical_output()
   {
-    var sentinel = LoadManifest().First(s => s.Kind == "combo");
+    var sentinel = LoadManifest().First(s => s.IsMultiCard);
     var output = Run(sentinel);
 
     var baseline = Canonical(output);
@@ -391,18 +355,37 @@ public class PortWalkSentinelSnapshotTest
     Assert.That(second, Is.EqualTo(first), "canonical serialization must be deterministic");
   }
 
-  /// <summary>Sanity: the manifest exercises every required ability family + projected discriminator,
-  /// and totals ≥50 cards across the sentinels. A future edit that drops coverage fails loudly.</summary>
+  /// <summary>Sanity: the derived sentinel set exercises every required ability family + projected
+  /// discriminator. A pipeline or fixture change that drops a family fails loudly.
+  ///
+  /// <para>The old "≥50 distinct cards" floor is gone with the hand-written manifest. Over a DERIVED
+  /// set a size floor is a shrink-only count baseline — the shape this project forbids — and it was
+  /// only ever a proxy for the family spread that the assertions below check directly. Corpus-wide
+  /// per-card port coverage is reported by the reporting layer (card-ports.json,
+  /// port-label-census.json), not pinned here. What IS structural, and asserted, is that every
+  /// interaction gold contributes a sentinel: a gold naming no resolvable card would silently vanish
+  /// from the guard.</para></summary>
   [Test]
-  public void Manifest_covers_the_families_and_at_least_fifty_cards()
+  public void Derived_sentinels_cover_the_families_and_every_interaction_gold()
   {
     var manifest = LoadManifest();
-    var distinctCards = manifest
-      .SelectMany(s => s.Cards.Select(c => c.Path))
-      .Distinct(StringComparer.Ordinal)
-      .Count();
-    Assert.That(distinctCards, Is.GreaterThanOrEqualTo(50), "≥50 sentinel cards required");
-    Assert.That(manifest.Any(s => s.Kind == "combo"), Is.True, "at least one combo sentinel required");
+    // Non-vacuity + visibility. An interaction gold contributes a sentinel unless NONE of the cards it
+    // names has a parse gold to project (many golds name cards the parse loop has not reached, and
+    // several name non-card port owners like "Treasure" or "Equipped Creature"). Those are logged, not
+    // asserted away: the count is a coverage fact about the parse frontier, and asserting a floor on it
+    // would be the shrink-only count baseline this project forbids.
+    var goldIds = Directory
+      .EnumerateFiles(SentinelSet.GoldsDir(), "*.json", SearchOption.TopDirectoryOnly)
+      .Select(f => JsonNode.Parse(File.ReadAllText(f))!["id"]!.ToString())
+      .OrderBy(id => id, StringComparer.Ordinal)
+      .ToList();
+    var unprojectable = goldIds.Except(manifest.Select(s => s.Name), StringComparer.Ordinal).ToList();
+    TestContext.Out.WriteLine(
+      $"{manifest.Count}/{goldIds.Count} interaction golds project a sentinel. No parse gold for any "
+        + $"card named by: {string.Join(", ", unprojectable)}"
+    );
+    Assert.That(manifest, Is.Not.Empty, "the derived sentinel set is empty — the guard would be vacuous");
+    Assert.That(manifest.Any(s => s.IsMultiCard), Is.True, "at least one multi-card sentinel required");
 
     // The projected ports of every sentinel, in aggregate, must touch every required label family.
     var allPorts = manifest

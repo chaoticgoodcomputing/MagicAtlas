@@ -41,7 +41,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// CR 701.20a (reveal); CR 701.13a (exile).
 /// </para>
 /// </summary>
-[OracleEffect("revealUntilExileRest")]
+[OracleEffect(
+  "revealUntilExileRest",
+  NearDuplicateOf = new[] { "revealUntil" },
+  Reason = "Same search, materially different disposition of the miss pile — which is the whole point of the cards that use each. 'revealUntil' returns the non-matching revealed cards to the BOTTOM of the library in random order; 'revealUntilExileRest' EXILES them (the Demonic Consultation / Tainted Pact shape), permanently removing them from the game. A shared prefix over an unshared outcome. Not sprawl."
+)]
 public sealed record RevealUntilExileRestEffect : Effect
 {
   /// <summary>

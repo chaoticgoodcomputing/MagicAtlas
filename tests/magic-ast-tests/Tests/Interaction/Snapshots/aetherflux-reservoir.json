@@ -1,0 +1,92 @@
+{
+  "Name": "aetherflux-reservoir",
+  "Ports": [
+    {
+      "Identity": "Aetherflux Reservoir::emit:damage:noncombat:any",
+      "Card": "Aetherflux Reservoir",
+      "Label": "emit:damage:noncombat:any",
+      "Side": "Emit",
+      "Quantity": 50,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Aetherflux Reservoir::emit:life:gain:controlled",
+      "Card": "Aetherflux Reservoir",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Aetherflux Reservoir::pay:paylife",
+      "Card": "Aetherflux Reservoir",
+      "Label": "pay:paylife",
+      "Side": "Consume",
+      "Quantity": 50,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Aetherflux Reservoir::trigger:cast:spell:controlled",
+      "Card": "Aetherflux Reservoir",
+      "Label": "trigger:cast:spell:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Aetherflux Reservoir::pay:paylife",
+      "To": "Aetherflux Reservoir::emit:damage:noncombat:any"
+    },
+    {
+      "From": "Aetherflux Reservoir::trigger:cast:spell:controlled",
+      "To": "Aetherflux Reservoir::emit:life:gain:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Aetherflux Reservoir::emit:life:gain:controlled",
+      "To": "Aetherflux Reservoir::pay:paylife",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Aetherflux Reservoir::pay:paylife",
+      "To": "Aetherflux Reservoir::emit:damage:noncombat:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Aetherflux Reservoir::trigger:cast:spell:controlled",
+      "To": "Aetherflux Reservoir::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

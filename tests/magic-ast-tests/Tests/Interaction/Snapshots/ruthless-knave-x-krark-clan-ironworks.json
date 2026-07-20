@@ -1,0 +1,263 @@
+{
+  "Name": "ruthless-knave-x-krark-clan-ironworks",
+  "Ports": [
+    {
+      "Identity": "Ruthless Knave::emit:drawcards",
+      "Card": "Ruthless Knave",
+      "Label": "emit:drawcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ruthless Knave::emit:mana:any",
+      "Card": "Ruthless Knave",
+      "Label": "emit:mana:any",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ruthless Knave::emit:token:artifact:treasure:controlled",
+      "Card": "Ruthless Knave",
+      "Label": "emit:token:artifact:treasure:controlled",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact|subtypes=Treasure|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ruthless Knave::pay:mana",
+      "Card": "Ruthless Knave",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ruthless Knave::pay:mana:black",
+      "Card": "Ruthless Knave",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "Card": "Ruthless Knave",
+      "Label": "sac:artifact:treasure:controlled",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact|subtypes=Treasure|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ruthless Knave::sac:creature:controlled",
+      "Card": "Ruthless Knave",
+      "Label": "sac:creature:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ruthless Knave::tap:self",
+      "Card": "Ruthless Knave",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Ruthless Knave::pay:mana:black",
+      "To": "Ruthless Knave::emit:token:artifact:treasure:controlled"
+    },
+    {
+      "From": "Ruthless Knave::pay:mana",
+      "To": "Ruthless Knave::emit:token:artifact:treasure:controlled"
+    },
+    {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:drawcards"
+    },
+    {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:mana:any"
+    },
+    {
+      "From": "Ruthless Knave::sac:creature:controlled",
+      "To": "Ruthless Knave::emit:token:artifact:treasure:controlled"
+    },
+    {
+      "From": "Ruthless Knave::tap:self",
+      "To": "Ruthless Knave::emit:mana:any"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Ruthless Knave::emit:mana:any",
+      "To": "Ruthless Knave::pay:mana:black",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::emit:mana:any",
+      "To": "Ruthless Knave::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::emit:token:artifact:treasure:controlled",
+      "To": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::pay:mana:black",
+      "To": "Ruthless Knave::emit:token:artifact:treasure:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::pay:mana",
+      "To": "Ruthless Knave::emit:token:artifact:treasure:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:mana:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:artifact:treasure:controlled",
+      "To": "Ruthless Knave::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:creature:controlled",
+      "To": "Ruthless Knave::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::sac:creature:controlled",
+      "To": "Ruthless Knave::emit:token:artifact:treasure:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ruthless Knave::tap:self",
+      "To": "Ruthless Knave::emit:mana:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": false,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Ruthless Knave::emit:mana:any=\u003ERuthless Knave::pay:mana:black|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Ruthless Knave::emit:token:artifact:treasure:controlled=\u003ERuthless Knave::sac:artifact:treasure:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Ruthless Knave::pay:mana:black=\u003ERuthless Knave::emit:token:artifact:treasure:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Ruthless Knave::sac:artifact:treasure:controlled=\u003ERuthless Knave::emit:mana:any|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    },
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": false,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Ruthless Knave::emit:mana:any=\u003ERuthless Knave::pay:mana|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Ruthless Knave::emit:token:artifact:treasure:controlled=\u003ERuthless Knave::sac:artifact:treasure:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Ruthless Knave::pay:mana=\u003ERuthless Knave::emit:token:artifact:treasure:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Ruthless Knave::sac:artifact:treasure:controlled=\u003ERuthless Knave::emit:mana:any|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "Name": "guttersnipe-x-niv-mizzet-visionary",
+  "Ports": [
+    {
+      "Identity": "Niv-Mizzet, Visionary::emit:drawcards",
+      "Card": "Niv-Mizzet, Visionary",
+      "Label": "emit:drawcards",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Niv-Mizzet, Visionary::emit:nomaxhandsize",
+      "Card": "Niv-Mizzet, Visionary",
+      "Label": "emit:nomaxhandsize",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Niv-Mizzet, Visionary::evasion:flying",
+      "Card": "Niv-Mizzet, Visionary",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Niv-Mizzet, Visionary::trigger:damage:noncombat:any",
+      "Card": "Niv-Mizzet, Visionary",
+      "Label": "trigger:damage:noncombat:any",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=source|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Niv-Mizzet, Visionary::trigger:damage:noncombat:any",
+      "To": "Niv-Mizzet, Visionary::emit:drawcards"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Niv-Mizzet, Visionary::trigger:damage:noncombat:any",
+      "To": "Niv-Mizzet, Visionary::emit:drawcards",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -1,0 +1,129 @@
+{
+  "Name": "heliod-sun-crowned-x-walking-ballista",
+  "Ports": [
+    {
+      "Identity": "Heliod, Sun-Crowned::emit:counter:\u002B1/\u002B1:target",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "emit:counter:\u002B1/\u002B1:target",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Heliod, Sun-Crowned::emit:gainability",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Heliod, Sun-Crowned::emit:keywordability",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Heliod, Sun-Crowned::emit:losetype",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "emit:losetype",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Heliod, Sun-Crowned::pay:mana",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Heliod, Sun-Crowned::pay:mana:white",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Heliod, Sun-Crowned::trigger:life:gain:controlled",
+      "Card": "Heliod, Sun-Crowned",
+      "Label": "trigger:life:gain:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Heliod, Sun-Crowned::pay:mana:white",
+      "To": "Heliod, Sun-Crowned::emit:gainability"
+    },
+    {
+      "From": "Heliod, Sun-Crowned::pay:mana",
+      "To": "Heliod, Sun-Crowned::emit:gainability"
+    },
+    {
+      "From": "Heliod, Sun-Crowned::trigger:life:gain:controlled",
+      "To": "Heliod, Sun-Crowned::emit:counter:\u002B1/\u002B1:target"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Heliod, Sun-Crowned::pay:mana:white",
+      "To": "Heliod, Sun-Crowned::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Heliod, Sun-Crowned::pay:mana",
+      "To": "Heliod, Sun-Crowned::emit:gainability",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Heliod, Sun-Crowned::trigger:life:gain:controlled",
+      "To": "Heliod, Sun-Crowned::emit:counter:\u002B1/\u002B1:target",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

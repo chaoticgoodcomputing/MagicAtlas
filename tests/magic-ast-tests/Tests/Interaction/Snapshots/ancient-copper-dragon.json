@@ -1,0 +1,163 @@
+{
+  "Name": "ancient-copper-dragon",
+  "Ports": [
+    {
+      "Identity": "Ancient Copper Dragon::emit:mana:any",
+      "Card": "Ancient Copper Dragon",
+      "Label": "emit:mana:any",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ancient Copper Dragon::emit:rolldice:controlled",
+      "Card": "Ancient Copper Dragon",
+      "Label": "emit:rolldice:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ancient Copper Dragon::emit:token:artifact:treasure:controlled",
+      "Card": "Ancient Copper Dragon",
+      "Label": "emit:token:artifact:treasure:controlled",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=artifact|subtypes=Treasure|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ancient Copper Dragon::evasion:flying",
+      "Card": "Ancient Copper Dragon",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ancient Copper Dragon::sac:artifact:treasure:controlled",
+      "Card": "Ancient Copper Dragon",
+      "Label": "sac:artifact:treasure:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=Treasure|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Ancient Copper Dragon::tap:self",
+      "Card": "Ancient Copper Dragon",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ancient Copper Dragon::trigger:damage:combat:player",
+      "Card": "Ancient Copper Dragon",
+      "Label": "trigger:damage:combat:player",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Ancient Copper Dragon::sac:artifact:treasure:controlled",
+      "To": "Ancient Copper Dragon::emit:mana:any"
+    },
+    {
+      "From": "Ancient Copper Dragon::tap:self",
+      "To": "Ancient Copper Dragon::emit:mana:any"
+    },
+    {
+      "From": "Ancient Copper Dragon::trigger:damage:combat:player",
+      "To": "Ancient Copper Dragon::emit:rolldice:controlled"
+    },
+    {
+      "From": "Ancient Copper Dragon::trigger:damage:combat:player",
+      "To": "Ancient Copper Dragon::emit:token:artifact:treasure:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Ancient Copper Dragon::emit:token:artifact:treasure:controlled",
+      "To": "Ancient Copper Dragon::sac:artifact:treasure:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ancient Copper Dragon::sac:artifact:treasure:controlled",
+      "To": "Ancient Copper Dragon::emit:mana:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ancient Copper Dragon::sac:artifact:treasure:controlled",
+      "To": "Ancient Copper Dragon::emit:removal:artifact:treasure:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ancient Copper Dragon::tap:self",
+      "To": "Ancient Copper Dragon::emit:mana:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ancient Copper Dragon::trigger:damage:combat:player",
+      "To": "Ancient Copper Dragon::emit:rolldice:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ancient Copper Dragon::trigger:damage:combat:player",
+      "To": "Ancient Copper Dragon::emit:token:artifact:treasure:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -1,0 +1,82 @@
+{
+  "Name": "combat-celebrant",
+  "Ports": [
+    {
+      "Identity": "Combat Celebrant::emit:additionalcombat",
+      "Card": "Combat Celebrant",
+      "Label": "emit:additionalcombat",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Combat Celebrant::emit:exert",
+      "Card": "Combat Celebrant",
+      "Label": "emit:exert",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Combat Celebrant::emit:untap",
+      "Card": "Combat Celebrant",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf=True"
+    },
+    {
+      "Identity": "Combat Celebrant::exerted:object",
+      "Card": "Combat Celebrant",
+      "Label": "exerted:object",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Combat Celebrant::exerted:object",
+      "To": "Combat Celebrant::emit:additionalcombat"
+    },
+    {
+      "From": "Combat Celebrant::exerted:object",
+      "To": "Combat Celebrant::emit:untap"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Combat Celebrant::exerted:object",
+      "To": "Combat Celebrant::emit:additionalcombat",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Combat Celebrant::exerted:object",
+      "To": "Combat Celebrant::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -45,27 +45,23 @@ public class PortFlowMatcherTest
       "captures-accepted-pairs.txt"
     );
 
+  /// <summary>Every distinct card graph over the DERIVED sentinel set (see <see cref="SentinelSet"/> —
+  /// the interaction golds, no hand-written manifest).</summary>
   private static IReadOnlyList<PortGraph> SentinelGraphs()
   {
-    var manifestPath = Path.Combine(
-      RepoRoot(), "tests", "magic-ast-tests", "Tests", "Interaction", "Snapshots", "sentinels.json"
-    );
-    var root = JsonNode.Parse(File.ReadAllText(manifestPath))!;
     var walk = new PortWalk(Ontology);
     var seen = new HashSet<string>(StringComparer.Ordinal);
     var graphs = new List<PortGraph>();
-    foreach (var e in root["entries"]!.AsArray())
-      foreach (var c in e!["cards"]!.AsArray())
+    foreach (var sentinel in SentinelSet.Derive())
+      foreach (var c in sentinel.Cards)
       {
-        var path = c!["path"]!.ToString();
-        if (!seen.Add(path))
+        if (!seen.Add(c.Path))
           continue;
-        var card = c!["card"]!.ToString();
-        var gold = JsonNode.Parse(File.ReadAllText(Path.Combine(FixturesDir(), path)));
+        var gold = JsonNode.Parse(File.ReadAllText(Path.Combine(FixturesDir(), c.Path)));
         var manaCost = (gold!["Output"]?["Attributes"] as JsonArray)
           ?.FirstOrDefault(a => a?["Kind"]?.ToString() == "manaCost")
           ?["Symbols"];
-        graphs.Add(walk.Project(card, gold!["Output"]!["Oracle"]!["Abilities"], manaCost));
+        graphs.Add(walk.Project(c.Card, gold!["Output"]!["Oracle"]!["Abilities"], manaCost));
       }
     return graphs;
   }

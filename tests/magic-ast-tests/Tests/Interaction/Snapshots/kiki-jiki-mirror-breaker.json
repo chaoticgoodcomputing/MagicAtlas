@@ -1,0 +1,82 @@
+{
+  "Name": "kiki-jiki-mirror-breaker",
+  "Ports": [
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:copy",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:createdelayedtrigger",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::emit:keywordability",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "Card": "Kiki-Jiki, Mirror Breaker",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:copy"
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:copy",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Kiki-Jiki, Mirror Breaker::tap:self",
+      "To": "Kiki-Jiki, Mirror Breaker::emit:createdelayedtrigger",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

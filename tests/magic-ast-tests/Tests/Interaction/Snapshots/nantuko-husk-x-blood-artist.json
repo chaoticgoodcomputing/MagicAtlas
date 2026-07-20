@@ -1,0 +1,127 @@
+{
+  "Name": "nantuko-husk-x-blood-artist",
+  "Ports": [
+    {
+      "Identity": "Blood Artist::emit:life:gain:controlled",
+      "Card": "Blood Artist",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::emit:life:loss",
+      "Card": "Blood Artist",
+      "Label": "emit:life:loss",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::ltb:creature:to-graveyard",
+      "Card": "Blood Artist",
+      "Label": "ltb:creature:to-graveyard",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Nantuko Husk::modify:pt",
+      "Card": "Nantuko Husk",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nantuko Husk::sac:creature:controlled",
+      "Card": "Nantuko Husk",
+      "Label": "sac:creature:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss"
+    },
+    {
+      "From": "Nantuko Husk::sac:creature:controlled",
+      "To": "Nantuko Husk::modify:pt"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Nantuko Husk::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "To": "Blood Artist::ltb:creature:to-graveyard",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Nantuko Husk::sac:creature:controlled",
+      "To": "Nantuko Husk::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Nantuko Husk::sac:creature:controlled",
+      "To": "Nantuko Husk::modify:pt",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

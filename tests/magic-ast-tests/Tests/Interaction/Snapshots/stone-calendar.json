@@ -1,0 +1,19 @@
+{
+  "Name": "stone-calendar",
+  "Ports": [
+    {
+      "Identity": "Stone Calendar::emit:costreduction",
+      "Card": "Stone Calendar",
+      "Label": "emit:costreduction",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

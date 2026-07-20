@@ -1,0 +1,71 @@
+{
+  "Name": "fog",
+  "Ports": [
+    {
+      "Identity": "Fog::cast:spell:self",
+      "Card": "Fog",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Fog::emit:preventdamage",
+      "Card": "Fog",
+      "Label": "emit:preventdamage",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Fog::pay:mana:green",
+      "Card": "Fog",
+      "Label": "pay:mana:green",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Fog::cast:spell:self",
+      "To": "Fog::emit:preventdamage"
+    },
+    {
+      "From": "Fog::pay:mana:green",
+      "To": "Fog::emit:preventdamage"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Fog::cast:spell:self",
+      "To": "Fog::emit:preventdamage",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Fog::pay:mana:green",
+      "To": "Fog::emit:preventdamage",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -1,0 +1,82 @@
+{
+  "Name": "devoted-druid",
+  "Ports": [
+    {
+      "Identity": "Devoted Druid::emit:mana:green",
+      "Card": "Devoted Druid",
+      "Label": "emit:mana:green",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Devoted Druid::emit:untap:self",
+      "Card": "Devoted Druid",
+      "Label": "emit:untap:self",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Devoted Druid::pay:putcounters",
+      "Card": "Devoted Druid",
+      "Label": "pay:putcounters",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Devoted Druid::tap:self",
+      "Card": "Devoted Druid",
+      "Label": "tap:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": true,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Devoted Druid::pay:putcounters",
+      "To": "Devoted Druid::emit:untap:self"
+    },
+    {
+      "From": "Devoted Druid::tap:self",
+      "To": "Devoted Druid::emit:mana:green"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Devoted Druid::pay:putcounters",
+      "To": "Devoted Druid::emit:untap:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Devoted Druid::tap:self",
+      "To": "Devoted Druid::emit:mana:green",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -1,0 +1,117 @@
+{
+  "Name": "emiel-the-blessed-x-mulldrifter",
+  "Ports": [
+    {
+      "Identity": "Emiel the Blessed::emit:blink:creature",
+      "Card": "Emiel the Blessed",
+      "Label": "emit:blink:creature",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Emiel the Blessed::emit:conditionalpay",
+      "Card": "Emiel the Blessed",
+      "Label": "emit:conditionalpay",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Emiel the Blessed::emit:exile",
+      "Card": "Emiel the Blessed",
+      "Label": "emit:exile",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Emiel the Blessed::etb:creature:controlled:another",
+      "Card": "Emiel the Blessed",
+      "Label": "etb:creature:controlled:another",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf=True"
+    },
+    {
+      "Identity": "Emiel the Blessed::pay:mana",
+      "Card": "Emiel the Blessed",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Emiel the Blessed::etb:creature:controlled:another",
+      "To": "Emiel the Blessed::emit:conditionalpay"
+    },
+    {
+      "From": "Emiel the Blessed::pay:mana",
+      "To": "Emiel the Blessed::emit:blink:creature"
+    },
+    {
+      "From": "Emiel the Blessed::pay:mana",
+      "To": "Emiel the Blessed::emit:exile"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Emiel the Blessed::emit:blink:creature",
+      "To": "Emiel the Blessed::etb:creature:controlled:another",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "Controller"
+    },
+    {
+      "From": "Emiel the Blessed::etb:creature:controlled:another",
+      "To": "Emiel the Blessed::emit:conditionalpay",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Emiel the Blessed::pay:mana",
+      "To": "Emiel the Blessed::emit:blink:creature",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Emiel the Blessed::pay:mana",
+      "To": "Emiel the Blessed::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

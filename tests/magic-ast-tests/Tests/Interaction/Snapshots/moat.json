@@ -1,0 +1,19 @@
+{
+  "Name": "moat",
+  "Ports": [
+    {
+      "Identity": "Moat::emit:cantattack",
+      "Card": "Moat",
+      "Label": "emit:cantattack",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

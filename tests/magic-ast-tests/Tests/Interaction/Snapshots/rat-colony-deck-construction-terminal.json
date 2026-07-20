@@ -1,0 +1,30 @@
+{
+  "Name": "rat-colony-deck-construction-terminal",
+  "Ports": [
+    {
+      "Identity": "Rat Colony::emit:anynumberindeck",
+      "Card": "Rat Colony",
+      "Label": "emit:anynumberindeck",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Rat Colony::modify:pt",
+      "Card": "Rat Colony",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

@@ -1,0 +1,167 @@
+{
+  "Name": "captain-rex-nebula",
+  "Ports": [
+    {
+      "Identity": "Captain Rex Nebula::at:combat",
+      "Card": "Captain Rex Nebula",
+      "Label": "at:combat",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Captain Rex Nebula::emit:becomespermanent",
+      "Card": "Captain Rex Nebula",
+      "Label": "emit:becomespermanent",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Captain Rex Nebula::emit:crew",
+      "Card": "Captain Rex Nebula",
+      "Label": "emit:crew",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Captain Rex Nebula::emit:damage:noncombat:any",
+      "Card": "Captain Rex Nebula",
+      "Label": "emit:damage:noncombat:any",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Captain Rex Nebula::emit:rolldice:controlled",
+      "Card": "Captain Rex Nebula",
+      "Label": "emit:rolldice:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Captain Rex Nebula::emit:sacrifice",
+      "Card": "Captain Rex Nebula",
+      "Label": "emit:sacrifice",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Captain Rex Nebula::trigger:damage:any:any",
+      "Card": "Captain Rex Nebula",
+      "Label": "trigger:damage:any:any",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Captain Rex Nebula::at:combat",
+      "To": "Captain Rex Nebula::emit:becomespermanent"
+    },
+    {
+      "From": "Captain Rex Nebula::trigger:damage:any:any",
+      "To": "Captain Rex Nebula::emit:damage:noncombat:any"
+    },
+    {
+      "From": "Captain Rex Nebula::trigger:damage:any:any",
+      "To": "Captain Rex Nebula::emit:rolldice:controlled"
+    },
+    {
+      "From": "Captain Rex Nebula::trigger:damage:any:any",
+      "To": "Captain Rex Nebula::emit:sacrifice"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Captain Rex Nebula::at:combat",
+      "To": "Captain Rex Nebula::emit:becomespermanent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Captain Rex Nebula::emit:damage:noncombat:any",
+      "To": "Captain Rex Nebula::trigger:damage:any:any",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Captain Rex Nebula::trigger:damage:any:any",
+      "To": "Captain Rex Nebula::emit:damage:noncombat:any",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Captain Rex Nebula::trigger:damage:any:any",
+      "To": "Captain Rex Nebula::emit:rolldice:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Captain Rex Nebula::trigger:damage:any:any",
+      "To": "Captain Rex Nebula::emit:sacrifice",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Amber",
+      "Firable": false,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": true,
+      "Productive": true,
+      "LimitingReason": "gated (rate-limit / intervening-if)",
+      "Edges": [
+        "Captain Rex Nebula::emit:damage:noncombat:any=\u003ECaptain Rex Nebula::trigger:damage:any:any|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Captain Rex Nebula::trigger:damage:any:any=\u003ECaptain Rex Nebula::emit:damage:noncombat:any|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    }
+  ]
+}

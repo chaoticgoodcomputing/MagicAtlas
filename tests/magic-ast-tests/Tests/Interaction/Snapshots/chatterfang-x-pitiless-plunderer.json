@@ -1,9 +1,9 @@
 {
-  "Name": "Chatterfang x Pitiless Plunderer",
+  "Name": "chatterfang-x-pitiless-plunderer",
   "Ports": [
     {
-      "Identity": "Chatterfang::emit:token:creature:squirrel:controlled",
-      "Card": "Chatterfang",
+      "Identity": "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled",
+      "Card": "Chatterfang, Squirrel General",
       "Label": "emit:token:creature:squirrel:controlled",
       "Side": "Emit",
       "Quantity": null,
@@ -13,8 +13,8 @@
       "Subject": "cardTypes=creature|subtypes=Squirrel|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Chatterfang::evasion:forestwalk",
-      "Card": "Chatterfang",
+      "Identity": "Chatterfang, Squirrel General::evasion:forestwalk",
+      "Card": "Chatterfang, Squirrel General",
       "Label": "evasion:forestwalk",
       "Side": "Emit",
       "Quantity": 1,
@@ -24,8 +24,8 @@
       "Subject": null
     },
     {
-      "Identity": "Chatterfang::modify:pt",
-      "Card": "Chatterfang",
+      "Identity": "Chatterfang, Squirrel General::modify:pt",
+      "Card": "Chatterfang, Squirrel General",
       "Label": "modify:pt",
       "Side": "Emit",
       "Quantity": 1,
@@ -35,8 +35,8 @@
       "Subject": null
     },
     {
-      "Identity": "Chatterfang::pay:mana:black",
-      "Card": "Chatterfang",
+      "Identity": "Chatterfang, Squirrel General::pay:mana:black",
+      "Card": "Chatterfang, Squirrel General",
       "Label": "pay:mana:black",
       "Side": "Consume",
       "Quantity": 1,
@@ -46,8 +46,8 @@
       "Subject": null
     },
     {
-      "Identity": "Chatterfang::replace:token-creation",
-      "Card": "Chatterfang",
+      "Identity": "Chatterfang, Squirrel General::replace:token-creation",
+      "Card": "Chatterfang, Squirrel General",
       "Label": "replace:token-creation",
       "Side": "Intercept",
       "Quantity": 1,
@@ -57,8 +57,8 @@
       "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
     },
     {
-      "Identity": "Chatterfang::sac:creature:squirrel:controlled",
-      "Card": "Chatterfang",
+      "Identity": "Chatterfang, Squirrel General::sac:creature:squirrel:controlled",
+      "Card": "Chatterfang, Squirrel General",
       "Label": "sac:creature:squirrel:controlled",
       "Side": "Consume",
       "Quantity": null,
@@ -125,16 +125,16 @@
   ],
   "CardDefinedEdges": [
     {
-      "From": "Chatterfang::pay:mana:black",
-      "To": "Chatterfang::modify:pt"
+      "From": "Chatterfang, Squirrel General::pay:mana:black",
+      "To": "Chatterfang, Squirrel General::modify:pt"
     },
     {
-      "From": "Chatterfang::replace:token-creation",
-      "To": "Chatterfang::emit:token:creature:squirrel:controlled"
+      "From": "Chatterfang, Squirrel General::replace:token-creation",
+      "To": "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled"
     },
     {
-      "From": "Chatterfang::sac:creature:squirrel:controlled",
-      "To": "Chatterfang::modify:pt"
+      "From": "Chatterfang, Squirrel General::sac:creature:squirrel:controlled",
+      "To": "Chatterfang, Squirrel General::modify:pt"
     },
     {
       "From": "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
@@ -151,7 +151,7 @@
   ],
   "DerivedEdges": [
     {
-      "From": "Chatterfang::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled",
+      "From": "Chatterfang, Squirrel General::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled",
       "To": "Pitiless Plunderer::ltb:creature:to-graveyard:controlled",
       "Provenance": "RulesDefined",
       "Family": "Flow",
@@ -161,8 +161,8 @@
       "Reason": null
     },
     {
-      "From": "Chatterfang::emit:token:creature:squirrel:controlled",
-      "To": "Chatterfang::replace:token-creation",
+      "From": "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled",
+      "To": "Chatterfang, Squirrel General::replace:token-creation",
       "Provenance": "RulesDefined",
       "Family": "Modifier",
       "Overlap": "Overlaps",
@@ -171,8 +171,8 @@
       "Reason": null
     },
     {
-      "From": "Chatterfang::emit:token:creature:squirrel:controlled",
-      "To": "Chatterfang::sac:creature:squirrel:controlled",
+      "From": "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled",
+      "To": "Chatterfang, Squirrel General::sac:creature:squirrel:controlled",
       "Provenance": "RulesDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -181,8 +181,8 @@
       "Reason": null
     },
     {
-      "From": "Chatterfang::pay:mana:black",
-      "To": "Chatterfang::modify:pt",
+      "From": "Chatterfang, Squirrel General::pay:mana:black",
+      "To": "Chatterfang, Squirrel General::modify:pt",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -191,8 +191,8 @@
       "Reason": null
     },
     {
-      "From": "Chatterfang::replace:token-creation",
-      "To": "Chatterfang::emit:token:creature:squirrel:controlled",
+      "From": "Chatterfang, Squirrel General::replace:token-creation",
+      "To": "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -201,8 +201,8 @@
       "Reason": null
     },
     {
-      "From": "Chatterfang::sac:creature:squirrel:controlled",
-      "To": "Chatterfang::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled",
+      "From": "Chatterfang, Squirrel General::sac:creature:squirrel:controlled",
+      "To": "Chatterfang, Squirrel General::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -211,8 +211,8 @@
       "Reason": null
     },
     {
-      "From": "Chatterfang::sac:creature:squirrel:controlled",
-      "To": "Chatterfang::modify:pt",
+      "From": "Chatterfang, Squirrel General::sac:creature:squirrel:controlled",
+      "To": "Chatterfang, Squirrel General::modify:pt",
       "Provenance": "CardDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -222,7 +222,7 @@
     },
     {
       "From": "Pitiless Plunderer::emit:mana:any",
-      "To": "Chatterfang::pay:mana:black",
+      "To": "Chatterfang, Squirrel General::pay:mana:black",
       "Provenance": "RulesDefined",
       "Family": "Flow",
       "Overlap": "Overlaps",
@@ -242,7 +242,7 @@
     },
     {
       "From": "Pitiless Plunderer::emit:token:artifact:treasure:controlled",
-      "To": "Chatterfang::replace:token-creation",
+      "To": "Chatterfang, Squirrel General::replace:token-creation",
       "Provenance": "RulesDefined",
       "Family": "Modifier",
       "Overlap": "Overlaps",
@@ -311,11 +311,11 @@
       "Productive": true,
       "LimitingReason": null,
       "Edges": [
-        "Chatterfang::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled=\u003EPitiless Plunderer::ltb:creature:to-graveyard:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
-        "Chatterfang::emit:token:creature:squirrel:controlled=\u003EChatterfang::sac:creature:squirrel:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
-        "Chatterfang::replace:token-creation=\u003EChatterfang::emit:token:creature:squirrel:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
-        "Chatterfang::sac:creature:squirrel:controlled=\u003EChatterfang::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
-        "Pitiless Plunderer::emit:token:artifact:treasure:controlled=\u003EChatterfang::replace:token-creation|RulesDefined|Modifier|Overlaps|Yes|Green|",
+        "Chatterfang, Squirrel General::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled=\u003EPitiless Plunderer::ltb:creature:to-graveyard:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled=\u003EChatterfang, Squirrel General::sac:creature:squirrel:controlled|RulesDefined|Flow|Overlaps|Yes|Green|",
+        "Chatterfang, Squirrel General::replace:token-creation=\u003EChatterfang, Squirrel General::emit:token:creature:squirrel:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Chatterfang, Squirrel General::sac:creature:squirrel:controlled=\u003EChatterfang, Squirrel General::emit:removal:creature:squirrel:to-graveyard:sacrificed:controlled|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Pitiless Plunderer::emit:token:artifact:treasure:controlled=\u003EChatterfang, Squirrel General::replace:token-creation|RulesDefined|Modifier|Overlaps|Yes|Green|",
         "Pitiless Plunderer::ltb:creature:to-graveyard:controlled=\u003EPitiless Plunderer::emit:token:artifact:treasure:controlled|CardDefined|Flow|Overlaps|Yes|Green|"
       ]
     },
@@ -328,8 +328,8 @@
       "Productive": true,
       "LimitingReason": null,
       "Edges": [
-        "Chatterfang::emit:token:creature:squirrel:controlled=\u003EChatterfang::replace:token-creation|RulesDefined|Modifier|Overlaps|Yes|Green|",
-        "Chatterfang::replace:token-creation=\u003EChatterfang::emit:token:creature:squirrel:controlled|CardDefined|Flow|Overlaps|Yes|Green|"
+        "Chatterfang, Squirrel General::emit:token:creature:squirrel:controlled=\u003EChatterfang, Squirrel General::replace:token-creation|RulesDefined|Modifier|Overlaps|Yes|Green|",
+        "Chatterfang, Squirrel General::replace:token-creation=\u003EChatterfang, Squirrel General::emit:token:creature:squirrel:controlled|CardDefined|Flow|Overlaps|Yes|Green|"
       ]
     }
   ]

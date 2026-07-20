@@ -1,0 +1,46 @@
+{
+  "Name": "cloudstone-curio-x-priest-of-gix",
+  "Ports": [
+    {
+      "Identity": "Cloudstone Curio::emit:returntohand:permanent",
+      "Card": "Cloudstone Curio",
+      "Label": "emit:returntohand:permanent",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=permanent|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf=True"
+    },
+    {
+      "Identity": "Cloudstone Curio::etb:permanent:controlled",
+      "Card": "Cloudstone Curio",
+      "Label": "etb:permanent:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=permanent|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Cloudstone Curio::etb:permanent:controlled",
+      "To": "Cloudstone Curio::emit:returntohand:permanent"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Cloudstone Curio::etb:permanent:controlled",
+      "To": "Cloudstone Curio::emit:returntohand:permanent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

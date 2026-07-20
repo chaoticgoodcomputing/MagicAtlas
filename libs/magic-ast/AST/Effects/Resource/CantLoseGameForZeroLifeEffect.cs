@@ -21,7 +21,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// (e.g. Platinum Angel), which would exempt a player from every loss condition,
 /// not just CR 704.5a.
 /// </remarks>
-[OracleEffect("cantLoseGameForZeroLife")]
+[OracleEffect(
+  "cantLoseGameForZeroLife",
+  NearDuplicateOf = new[] { "cantLoseGame" },
+  Reason = "Different scopes of exemption, not a naming variant. 'cantLoseGame' is the blanket static lock (Platinum Angel) exempting a player from EVERY way to lose (CR 104.3a-k); 'cantLoseGameForZeroLife' overrides exactly one state-based loss condition (Lich's Tomb, CR 704.5a) and leaves every other loss condition live. Collapsing them would silently widen the narrow form into the blanket one. Not sprawl."
+)]
 public sealed record CantLoseGameForZeroLifeEffect : Effect
 {
   /// <summary>

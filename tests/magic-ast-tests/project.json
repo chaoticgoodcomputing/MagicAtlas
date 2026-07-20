@@ -42,6 +42,24 @@
         "parallel": false
       }
     },
+    "discriminator-governance": {
+      "//": "Discriminator governance report: intra-family near-duplicate pairs joined to the declaration-site NearDuplicateOf/Reason rulings — emits Data/_08_Reporting/discriminator-governance.json (gitignored). Replaces discriminator-justifications.json + the retired DiscriminatorNearDuplicateTests gate (ADR-0004 issue #38). Never a gate; DiscriminatorUniquenessTests (hard per-family collision) is the gate, and libs/magic-ast/scripts/lint-discriminators.py is the dotnet-free equivalent.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow DiscriminatorGovernance"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
+    "free-text-census": {
+      "//": "Initiative-05 free-text (de-string) burn-down census: walks every committed gold under Fixtures/HandParsedCards/** for [FreeTextField] sinks + IResidual 'other' arms, joins the named Fixtures/whitelist-freetext.json carve-outs, and emits Data/_08_Reporting/free-text-residual-census.json (gitignored). Replaces the frozen libs/magic-ast/schema/destring-worklist.json (ADR-0004 issue #38). Hermetic: working tree only. Never a gate; the NUnit GoldFreeTextWhitelistTests is the gate.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["dotnet run -- --flow FreeTextResidualCensus"],
+        "cwd": "tests/magic-ast-tests",
+        "parallel": false
+      }
+    },
     "artifact-census": {
       "//": "ADR-0004 §1 artifact census: enumerates every artifact under tests/**/Fixtures, **/Data/_08_Reporting, dumps/, libs/**/*.json (plus the committed snapshot families) and classifies each Evidence / Derived / architectural-decision, flagging the genuinely ambiguous residue for human classification — emits Data/_08_Reporting/artifact-census.json (gitignored). Hermetic: working tree only, no corpus, no network. Never a gate; the NUnit ArtifactClassificationGateTests is the gate ('an unclassified artifact fails the build').",
       "executor": "nx:run-commands",
