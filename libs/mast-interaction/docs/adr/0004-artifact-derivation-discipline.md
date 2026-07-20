@@ -90,6 +90,12 @@ Every artifact is classified into exactly one kind, and the kind determines its 
   primary sources; immutable to workers per the existing fixture-immutability gate.
 - **Derived** (generated, never hand-edited): the rollup (`port-topology.json` / `port-interactions.json` +
   `.cited` twins), all `_08_Reporting` outputs, the D1–D4 dumps, expected-tier pins, backlog/demand reports.
+  Derived artifacts are gitignored by default; the rollup is the one committed exception, and pays for it
+  with a regeneration gate (§3).
+
+A third input class is neither: **external source data** (Scryfall, the Commander Spellbook snapshot) is
+ingested, not authored, and versioned by its fetch. The complete derivation base is therefore
+`Derived = f(external sources, Evidence, code)` — three inputs, nothing else.
 
 **Domain judgments are Evidence, not ADR prose.** An earlier draft of this ADR routed judgments ("we will
 not arm `emit:attach`") into ADRs. That was wrong, and contradicted ADR 0003 §8's central commitment —
@@ -150,22 +156,41 @@ asserted-absence golds. This replaces `holes{}` entirely, and formalizes what th
 backlog; an unserved projection with an asserted-absence gold is a decision.** That distinction is the whole
 job, and it is computed, never stored.
 
-### 3. Derived artifacts are build outputs, not repository contents
+### 3. Derived artifacts are build outputs — with one deliberate exception class
+
+Everything downstream derives from exactly three inputs: **external source data** (the Scryfall corpus, the
+Commander Spellbook snapshot), **Evidence** (the loop-authored fixtures), and **code**. Nothing else is an
+input, so nothing else needs to be stored — running the Flowthru pipeline reproduces the rest.
 
 Given the Context sharpening — regeneration-as-a-gate would have caught none of the four failures — the
-byte-identity gate is demoted. The structural fix is stronger and simpler: **derived artifacts are
-gitignored.** An artifact that does not exist in the repository cannot go stale in the repository. Drift
-becomes impossible by construction rather than detected after the fact.
+default is structural rather than procedural: **Derived artifacts are gitignored.** An artifact that does not
+exist in the repository cannot go stale in it.
 
-Two consequences must be handled rather than assumed:
+**The exception, and the rule for granting it.** One property is lost by not committing: the **inter-run
+diff**. The retro's actual working mechanism was not a gate — it was *independent re-verification compounding
+on itself*, humans and agents reading changes and refusing to take a layer's word for it. A committed derived
+artifact serves that mechanism directly: "this loop run added three stems and changed two rules" becomes
+visible in review. Where that diff is genuinely informative, the artifact stays committed.
 
-- **Cache correctness is the prerequisite.** Flowthru's cache is **code-blind** — keyed on inputs/config, not
-  on the code that transforms them — so a code change does not invalidate downstream artifacts. With
-  artifacts committed this produced silent staleness; with artifacts generated on demand it produces silently
-  *stale builds*, which is worse. Code-aware cache keying is therefore a hard prerequisite of this section,
-  not an optimization.
-- **Downstream consumers need a publishing step, not a commit.** The API seed and `atlas-diag` currently read
-  committed dumps. They move to consuming a published build output. See Open Questions.
+**The rollup** (`port-topology.json`, `port-interactions.json`, and their `.cited` twins) is that exception.
+It is the accretion loop's visible output — the surface on which taxonomy drift is legible to a reviewer —
+and it is small. The `.cited` diff is the highest-value of the four: it is where **witness attribution**
+changes surface. (Per ADR 0003 §8 the lean pair is a projection of the verbose pair, generated in one pass,
+so the two cannot drift from each other.)
+
+Granting the exception has a price — and this is where the byte-identity check earns its place after all,
+narrowly scoped: **a committed Derived artifact carries a regeneration gate** (regenerate, assert
+byte-identity), because a committed file can be hand-edited or left stale. An uncommitted one needs no gate.
+The decision procedure for any future artifact is therefore a single question: **is its diff worth a gate?**
+If yes, commit and gate it; if no, gitignore it.
+
+**Cache correctness is a hard prerequisite either way.** Flowthru's cache is **code-blind** — keyed on
+inputs/config, not on the code that transforms them. With artifacts committed this produced silent staleness;
+with artifacts generated on demand it produces silently *stale builds*, which is worse. Code-aware keying is
+a prerequisite of this section, not an optimization.
+
+**Downstream consumers need a publishing step, not a commit.** The API seed and `atlas-diag` read committed
+dumps today; for gitignored artifacts they move to consuming a published build output. See Open Questions.
 
 ### 4. Cross-track joins are first-class Derived artifacts
 
@@ -252,8 +277,9 @@ A Derived artifact is a **materialized view** over Evidence + code; drift is a *
 Mumick, *Maintenance of Materialized Views*, 1995). The literature's lesson is that a view goes stale not
 when its own contents change but **when any of its inputs move** — which is why a gate keyed on the artifact
 alone, or on a code-blind cache, is insufficient. §3 takes the stronger option the same literature implies:
-where a view need not be materialized, **don't materialize it**. The cheapest stale view is the one that
-doesn't exist.
+where a view need not be materialized, **don't materialize it** — the cheapest stale view is the one that
+doesn't exist. Materialization is then re-adopted deliberately, for the one view whose *diff* is a product
+in its own right (the rollup), and only with the refresh check that materialization has always required.
 
 ### Single source of truth
 
@@ -289,11 +315,12 @@ forgotten artifacts: `known-families.json`, `families.json`, `blood-artist-engin
 by the InteractionTriage flow despite ADR 0003 Stage 0b calling for their retirement.
 
 ### Stage 1 — Derived artifacts become build outputs
-Fix Flowthru cache keying to include code (hard prerequisite). Gitignore Derived artifacts; stand up a
-publishing step for the consumers that need them (API seed, `atlas-diag`).
+Fix Flowthru cache keying to include code (hard prerequisite). Gitignore Derived artifacts **except the
+rollup**; stand up a publishing step for the consumers that need the untracked ones (API seed, `atlas-diag`).
+Wire the rollup's regeneration gate — the price of its committed exception (§3).
 
-*Gate:* no Derived artifact is tracked in git; a clean checkout can produce every one of them; CORE ring
-green.
+*Gate:* every Derived artifact is either untracked, or tracked **and** covered by a byte-identical
+regeneration check run against a busted cache. A clean checkout can produce all of them. CORE ring green.
 
 ### Stage 2 — Dissolve the scaffold
 Execute §7's four-way split: delete the subsumed sections, promote P1–P6 to sweeps, convert `reject` to
@@ -349,9 +376,10 @@ Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup)
 - **How do the API seed and `atlas-diag` consume Derived artifacts once gitignored (§3)?** They read
   committed dumps today. Options: a published build artifact, a seed-on-boot generation step, or an artifact
   store. Unresolved; blocks Stage 1's completion, not its start.
-- **How is a topology change reviewed without a committed diff?** Committed derived artifacts served as a PR
-  review surface ("this change moved 12 edges"). Likely mitigation: CI emits the derived diff as a build
-  artifact or PR comment. Needs a concrete mechanism before Stage 1 lands.
+- **Is `combo-expected-tiers.json` the second exception?** Once Stage 4 makes it fully derived, its diff
+  answers "did a combo silently change tier?" — arguably the highest-signal diff in the system after the
+  rollup's. It is the strongest remaining candidate for §3's committed-and-gated class; decide at Stage 4
+  using §3's test (*is its diff worth a gate?*) rather than by default.
 - **Does `no_arm` need a bounded evaluation universe for cost?** Semantics are settled (current taxonomy,
   growing), but evaluating every absence gold against every witnessed consume stem on every run has a cost
   curve worth measuring at Stage 2.
@@ -372,6 +400,11 @@ Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup)
   guard→witness map is derived from golds' `declares` and lives in the rollup; the backlog is derived from
   corpus demand; `mastOnly` attestation dropped as redundant; absence assertions strengthen with the
   taxonomy; `reject` converts to golds.
+- **Refinement** (2026-07-20, same session): the derivation base stated as exactly three inputs (external
+  source data, Evidence fixtures, code) — everything else is reproducible by running the Flowthru pipeline;
+  and the gitignore default **rolled back for the rollup**, whose inter-run diff is genuinely valuable drift
+  information. That exception generalized into §3's decision procedure (*is its diff worth a gate?*) and
+  restored the byte-identity check in narrow scope, as the price of committing.
 
 ---
 
