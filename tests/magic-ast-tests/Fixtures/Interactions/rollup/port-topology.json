@@ -47,6 +47,7 @@
     "pacifism",
     "pair-o-dice-lost-x-brazen-dwarf",
     "pili-pala-x-grand-architect",
+    "rat-colony-deck-construction-terminal",
     "ruthless-knave-x-blood-artist",
     "ruthless-knave-x-krark-clan-ironworks",
     "sanguine-bond-x-exquisite-blood",
@@ -207,6 +208,12 @@
         "recipient",
         "subject"
       ],
+      "unpredicted": true
+    },
+    "deck-construction": {
+      "kind": "BEHAVIOR",
+      "status": "witnessed",
+      "attrs": [],
       "unpredicted": true
     },
     "deployment": {

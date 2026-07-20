@@ -68,6 +68,43 @@ All three are rules-judge-gated and climb the same promotion ladder (`observed`�
 }
 ```
 
+## Asserted-absence claims — `no_arm[P]` (ADR-0004 §1)
+
+A gold may claim a **negative**: that a port connects to nothing, deliberately. The judgment becomes Evidence
+with an *executable* justification instead of prose in a whitelist (which rots silently — that is the failure
+ADR-0004 was written for). The claim is the sibling of `no_loop`, and is executed by
+`Tests/InteractionRollup/TopologyRollupContractTests` Part B.
+
+```jsonc
+"ports": {
+  "Rat Colony": [
+    { "id": "P0", "side": "emit", "kind": "BEHAVIOR", "stem": "deck-construction",
+      "attrs": {}, "structured": false, "note": "…" }   // structured:false = deliberately no PortStructure
+  ]
+},
+"edges": [],
+"assertions": [
+  { "claim": "no_arm[P0]", "because": "for every consume probe in the current universe, SelectArm(P0, c) is null — …" }
+]
+```
+
+- **`P` is named by the gold-local port `id`** (`"Card.Id"` also accepted, and required if two cards in the
+  gold share an id). The port's declared `side`/`stem`/`attrs` **are** its identity — the ADR-0003 structure
+  canonical form — so the claim reads *"structured exactly as declared, nothing connects."*
+- **Asserted against the matcher, never against an edge set.** `PortFlowMatcher.SelectArm(P, consume)` must be
+  null for every probe (an emit-side `P`); a consume-side `P` is probed as `SelectArm(emit, P)`. "This card
+  produces zero edges" would be *vacuously* true for a single-card gold and would keep passing after somebody
+  armed the port.
+- **The probe universe is read at evaluation time** (`Tests/InteractionRollup/FlowProbes.cs`): every
+  `witnessed` stem in the regenerated rollup, plus every distinct `PortStructure` the engine projects over the
+  hand-parsed card corpus (which supplies the *facets* arms key on). Nothing is hardcoded, so the assertion
+  **strengthens as stems accrete**.
+- **A firing is a hard build failure, judge-resolved** — either the new arm is correct (amend/delete the gold,
+  judge-gated) or the arm is wrong (fix it). Never weaken the assertion; never defer it to a report.
+- **Non-vacuity is itself gated** by `NoArmNonVacuityTests`: the universe must be non-empty and carry facets,
+  every declared `FlowArm` must be selectable by some probe pair, and an armed control port (`emit:mana`) must
+  come back armed through the same evaluation path.
+
 ## What the flow validates (Stage 0b gate)
 
 1. Every gold parses and is well-formed (required keys, unique port ids per card, unique edge ids).
