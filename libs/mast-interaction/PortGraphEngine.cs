@@ -2,7 +2,13 @@ namespace MagicAST.Interaction;
 
 using MagicAST.AST.References;
 
-/// <summary>Who authored an edge (ADR-0002 §5). Card-defined hops are certain; rules-defined are operator-tiered.</summary>
+/// <summary>
+/// Who authored an edge (ADR-0002 §5) — the card's own text, or a rule the engine applied. This is
+/// <b>provenance only</b>: it records *how we learned the edge*, and per ADR 0004 it must never feed
+/// <see cref="PortEdge.Tier"/>, which answers the separate question *can we prove the edge holds*.
+/// Both kinds are operator-tiered; they differ in which proof discharges them (see
+/// <see cref="PortEdge.CardDefined"/>).
+/// </summary>
 public enum EdgeProvenance
 {
   CardDefined,
@@ -11,9 +17,10 @@ public enum EdgeProvenance
 
 /// <summary>
 /// A directed port→port edge over the single-role <see cref="PortNode"/> model (ADR-0002), carrying
-/// its provenance (§5) and — for rules-defined edges — the operator's verdicts. A card-defined edge
-/// is GREEN by construction (the card's own causality); a rules-defined edge is tiered like the
-/// classic <c>InteractionEdge</c>.
+/// its provenance (§5) and the operator's verdicts. <b>Every</b> edge is tiered from those verdicts
+/// (<see cref="Tier"/>); provenance only decides which proof discharged them — a card-defined edge is
+/// carried by ADR 0003 §7's same-card witness (<see cref="CardDefined"/>), a rules-defined edge by the
+/// filter operator, like the classic <c>InteractionEdge</c>.
 /// </summary>
 public sealed record PortEdge
 {
@@ -53,11 +60,65 @@ public sealed record PortEdge
     return Convert.ToHexString(hash, 0, 16).ToLowerInvariant();
   }
 
+  /// <summary>
+  /// The edge's certainty (ADR 0004 §"salvaged piece 1"). Derived <b>purely</b> from the operator's
+  /// verdicts — <see cref="Overlap"/>, <see cref="Reliability"/>, and the §8 accounting the cycle layer
+  /// applies on top. It deliberately does <b>not</b> read <see cref="Provenance"/>: provenance answers
+  /// *how did we learn this edge*, certainty answers *can we prove it holds*, and the previous
+  /// <c>Provenance == CardDefined ? Green</c> shortcut let the first silently answer the second — an
+  /// intra-card edge was certain *by construction* rather than *by proof*, so a card-defined edge that
+  /// failed its own proof obligation (see <see cref="CardDefined"/>) still reported GREEN.
+  /// <para>Card-defined edges are still overwhelmingly GREEN — but now because <see cref="CardDefined"/>
+  /// discharges ADR 0003 §7's <em>same-card witness</em> and records the resulting verdict on the edge,
+  /// not because the enum value short-circuits the computation.</para>
+  /// </summary>
   public CertaintyTier Tier =>
-    Provenance == EdgeProvenance.CardDefined ? CertaintyTier.Green // certain by construction (§5)
-    : Overlap == FilterRelation.Disjoint ? CertaintyTier.Red
+    Overlap == FilterRelation.Disjoint ? CertaintyTier.Red
     : Overlap == FilterRelation.Overlaps && Reliability == Trilean.Yes ? CertaintyTier.Green
     : CertaintyTier.Amber;
+
+  /// <summary>
+  /// Construct a card-defined edge (ADR 0002 §5) with its certainty <b>derived</b> rather than declared.
+  /// <para>The proof obligation is ADR 0003 §7's <em>same-card witness</em>: an intra-ability causal hop —
+  /// a trigger/cost driving that same ability's effect — holds because the card's own text says so
+  /// (CR 601.2h/602.2b: the cost is paid as part of activating; CR 608.2c: resolution carries out the
+  /// instructions), and the two endpoints being ports of the <em>same card</em> is what makes that a
+  /// witness rather than an assumption. <see cref="Overlap"/> is <see cref="FilterRelation.Overlaps"/>
+  /// because a causal hop is not a subject-matching hop — there is no filter pair that could be
+  /// Disjoint — and <see cref="Reliability"/> is the discharged obligation.</para>
+  /// <para>The obligation has a second, equally cited discharge: the <b>created-object witness</b>. The
+  /// copy graft synthesizes a hop from a card's own <c>emit:copy</c> to the entry consume of the token it
+  /// creates — endpoints on two different <see cref="PortNode.Card"/> identities, but still one card's own
+  /// causality, because the destination object <em>exists only as the product of this emit</em>
+  /// (CR 707.2 — the token copies the chosen permanent's copiable values; CR 603.6a — it triggers its own
+  /// enters-the-battlefield abilities as it enters). The engine records that provenance on the clone as
+  /// <see cref="PortNode.Grafter"/>, so the witness is <c>to.Grafter == from.Card</c> — a structural fact
+  /// about the graph, checkable here, not an assumption inherited from the edge's kind.</para>
+  /// <para>When <b>neither</b> obligation holds — an edge tagged card-defined whose endpoints span two
+  /// unrelated cards, which no single card's text can witness — <see cref="Reliability"/> is
+  /// <see cref="Trilean.Unknown"/> and the edge tiers AMBER. That case is exactly what the retired
+  /// provenance shortcut hid.</para>
+  /// </summary>
+  public static PortEdge CardDefined(PortNode from, PortNode to, EdgeFamily family = EdgeFamily.Flow)
+  {
+    var sameCardWitness = string.Equals(from.Card, to.Card, StringComparison.Ordinal);
+    var createdObjectWitness =
+      to.Grafter is { } grafter && string.Equals(grafter, from.Card, StringComparison.Ordinal);
+    var witnessed = sameCardWitness || createdObjectWitness;
+    return new PortEdge
+    {
+      From = from,
+      To = to,
+      Provenance = EdgeProvenance.CardDefined,
+      Family = family,
+      Overlap = FilterRelation.Overlaps,
+      Reliability = witnessed ? Trilean.Yes : Trilean.Unknown,
+      Reason = witnessed
+        ? null
+        : $"card-defined hop spans two cards ({from.Card} → {to.Card}) with no same-card "
+          + "or created-object witness (ADR 0003 §7)",
+    };
+  }
 }
 
 /// <summary>A reconstructed loop over the port graph; its tier is the worst hop.</summary>
@@ -248,17 +309,13 @@ public sealed class PortGraphEngine
 
     var edges = new List<PortEdge>();
 
-    // (1) Card-defined edges — the walk's intra-ability causality, certain by construction (§5).
+    // (1) Card-defined edges — the walk's intra-ability causality (§5). Built through
+    // PortEdge.CardDefined so each one *discharges* its §7 witness and carries the resulting
+    // Overlap/Reliability verdict; the tier is then read off those verdicts like any other edge
+    // (ADR 0004 — provenance never answers the certainty question on its own).
     foreach (var graph in graphs)
       foreach (var edge in graph.CardDefinedEdges)
-        edges.Add(
-          new PortEdge
-          {
-            From = Anno(edge.From),
-            To = Anno(edge.To),
-            Provenance = EdgeProvenance.CardDefined,
-          }
-        );
+        edges.Add(PortEdge.CardDefined(Anno(edge.From), Anno(edge.To)));
     edges.AddRange(sacDeathEdges);
 
     // The graft's synthesized closing edges (an inherited target-untap renewing the copier's tap), tiered
@@ -1888,7 +1945,7 @@ public sealed class PortGraphEngine
         _ontology
       );
       deaths.Add(death);
-      edges.Add(new PortEdge { From = sac, To = death, Provenance = EdgeProvenance.CardDefined });
+      edges.Add(PortEdge.CardDefined(sac, death));
     }
     return (deaths, edges);
   }
