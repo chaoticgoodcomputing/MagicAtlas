@@ -483,8 +483,32 @@ and which the scaffold no longer adds information to.
 
 ## Appendix B — worked asserted-absence gold
 
-The pattern §1 replaces `known-coarse-projections.json` with. `emit:attach` is a real, recurring surface —
-**141 ports corpus-wide** (Accorder's Shield, Aettir and Priwen, Amorphous Axe, Animate Dead, …).
+The pattern §1 replaces `known-coarse-projections.json` with.
+
+> **Correction (2026-07-20).** This appendix originally worked `emit:attach` as the example. **That example was
+> wrong, and its wrongness is instructive enough to keep.** The claim was that attaching "emits no event a
+> trigger subscribes to" (CR 301.5/701.3). It does: **13 corpus cards carry `becomes attached` triggers**,
+> several as explicit triggered abilities — *"Whenever this Equipment becomes attached to a creature, tap that
+> creature"* (Enormous Energy Blade), *"Whenever an Aura you control becomes attached to a creature you
+> control, create a 1/1 …"* (Siona, Captain of the Pyleas). Per CR 603.2 those are ordinary event triggers, so
+> `emit:attach` has a printed counterparty and is **backlog, not a decision** — blocked on a missing
+> `BecomesAttached` trigger event, exactly as `known-coarse-projections.json`'s own 2026-07-18 investigation
+> note says. (That note additionally miscites CR 701.3d, which defines becoming *un*attached.)
+>
+> **The lesson, which is the point of §1.** An asserted absence that is false is *worse* than the whitelist
+> prose it replaces: prose is inert, but a false `no_arm` gold actively subtracts a real port from the backlog
+> formula in §2 and gates the build in favour of the error. The falsification prompt now in the
+> `interaction-judge` checklist — *"what change would make this absence wrong?"* — exists to catch precisely
+> this, and it caught it. **Absence golds are only as good as the adversarial pass over them.**
+>
+> The worked example below is replaced by the shipped gold `rat-colony-deck-construction-terminal`
+> (`emit:anynumberindeck`), which is terminal *by the rules*: a deck-construction static ability (CR 604.1)
+> functions only before the game begins (CR 113.6n), raises no event, and grants no action, so no consume can
+> observe it. Note the near-miss the judge pinned there: **companion** (CR 702.139) also functions before the
+> game begins, yet carries an in-game special action (CR 116.2g) — so "functions before the game begins" is
+> *not* itself sufficient for terminality.
+
+The schema below remains the correct **shape**; read it for the mechanics, not for the ruling.
 
 **The trap this design avoids.** The naive form asserts *"this card produces zero edges."* For a single-card
 gold that is **vacuous** — with no partner cards, zero edges is trivially true, and the assertion would keep
@@ -502,7 +526,7 @@ backlog formula.
   "unit": "single-card",
   "cards": ["Accorder's Shield"],
   "source": {
-    "note": "Asserted-ABSENCE witness for the coarse emit:attach projection (141 ports corpus-wide). The claim under review is NOT 'attach is unparseable' — it parses — but 'attaching raises no flowing resource, so no flow arm follows from it'. Attachment changes an object's attached-to relation (CR 301.5 / 701.3); it emits no event a trigger subscribes to and decrements no store, so it has no ADR-0003 §4 supergroup placement and no consume it could refuel. Terminality is the correct modeling, not a gap."
+    "note": "ILLUSTRATIVE SHAPE ONLY — this card's ruling is FALSE; see the correction above. Retained because the field layout, the assertion pair, and the structured:false discipline are all still exactly right. For a TRUE worked example read Fixtures/Interactions/golds/rat-colony-deck-construction-terminal.json."
   },
   "judge": { "verdict": "PASS", "ref": "interaction-judge <date> — attach terminality, CR 301.5/701.3" },
   "ports": {
