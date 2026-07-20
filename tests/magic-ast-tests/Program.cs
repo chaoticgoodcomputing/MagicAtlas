@@ -14,6 +14,7 @@ using MagicAtlas.Ast.Tests.Flows.CardAtlas;
 using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
 using MagicAtlas.Ast.Tests.Flows.TopologyDemand;
 using MagicAtlas.Ast.Tests.Flows.SpanWitness;
+using MagicAtlas.Ast.Tests.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,11 +28,17 @@ namespace MagicAtlas.Ast.Tests;
 /// </summary>
 public class Program
 {
-  public static Task<int> Main(string[] args) =>
-    FlowthruCli.RunStandaloneAsync(
+  public static Task<int> Main(string[] args)
+  {
+    // ADR 0004 (#22): make every step's cache key aware of the code that actually performs
+    // its transform, not just the step class that declares it. Must run before any flow is
+    // built, because FlowBuilder.AddStep snapshots the identity at wire-up time.
+    StepCodeIdentity.EnsureAugmented();
+    return FlowthruCli.RunStandaloneAsync(
       args,
       services => ConfigureServices(services, ResolveHarnessDirectory())
     );
+  }
 
   private static string ResolveHarnessDirectory()
   {

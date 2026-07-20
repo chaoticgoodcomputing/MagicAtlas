@@ -108,9 +108,13 @@ Before closing out a round of this track — a wave of flow arms, precision-fixe
 Run it at the **orchestrator layer**, once per round — never delegate the corpus-wide refresh to a subagent, and never re-run it once per worker. Cost is real (a full `card-ports.json` + `span-witness-report.json` regeneration ran ~40-60s in practice) but is a one-time orchestration-layer expense per round, not a per-subagent multiplier:
 
 ```
-nx run mast:run --flow CardAtlas --no-cache   # refresh card-ports.json (or clear parse-records.json + .flowthru/cache.json first if it caches stale)
-dotnet run -- --flow SpanWitness --no-cache   # refresh span-witness-report.json
+nx run mast:run --flow CardAtlas   # refresh card-ports.json
+dotnet run -- --flow SpanWitness   # refresh span-witness-report.json
 ```
+
+**You no longer need `--no-cache` (or the `rm parse-records.json + .flowthru/cache.json` dance) after a parser change.** Since ADR 0004 #22 the step cache key folds in the first-party code the step actually executes, so editing anything in `libs/magic-ast/` invalidates `ParseCorpus` and everything downstream automatically. See `tests/magic-ast-tests/Infrastructure/StepCodeIdentity.cs`.
+
+`--no-cache` remains the **escape hatch** — reach for it only when the input file itself was touched out of band. Flowthru fingerprints file items on `mtime:size`, not content, so an in-place edit that preserves both is invisible to the cache. A code change is not that case.
 
 Diagnose and route anything the round newly introduced (pick → diagnose → route, full mechanics in [ERROR-CHECK.md](ERROR-CHECK.md)): fix the parser span mint, tighten a too-permissive gold, or extend the anchor-word vocabulary if the flag was a false alarm. Gate: `nx run mast:test` (span-provenance invariants) + the suspect clearing on the next `span-witness` run. A pre-existing suspect this round didn't touch is not this round's problem — leave it for the backlog.
 
