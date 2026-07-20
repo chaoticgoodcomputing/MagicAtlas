@@ -361,16 +361,30 @@ public static class ArtifactClassifier
     if (HumanRulings.TryGetValue(rel, out var ruling))
       return new ArtifactRecord(rel, ruling.Kind, "HumanRuling", ruling.Basis, true);
 
-    // 1. Declared Flowthru catalog output.
+    // 1. Declared Flowthru catalog output. Matched in BOTH directions, because a catalog path and an
+    // artifact path can each be the longer one:
+    //   - the artifact sits under a project's Data root, so its repo-relative path is the LONGER string
+    //     and ends with the catalog's declared suffix (tests/magic-ast-tests/Data/_08_Reporting/x.json
+    //     ends with _08_Reporting/x.json);
+    //   - or the artifact has been PROMOTED out to a shorter repo-root path, so the catalog suffix is the
+    //     longer string and ends with the artifact's whole path (the D1–D4 CardAtlas dumps are declared at
+    //     _08_Reporting/dumps/card-ports.json and promoted to dumps/card-ports.json for atlas-api /
+    //     atlas-diag to consume).
+    // Both directions require a full path-segment match, so a promoted artifact is recognized while a
+    // foreign file dropped into the same directory still falls through to the unclassified set.
+    var norm = rel.Replace('\\', '/');
     var catalogHit = catalogOutputs.FirstOrDefault(kv =>
-      rel.EndsWith(kv.Key, StringComparison.Ordinal)
+      norm.EndsWith(kv.Key, StringComparison.Ordinal)
+      || kv.Key.EndsWith("/" + norm, StringComparison.Ordinal)
     );
     if (catalogHit.Key is not null)
       return new ArtifactRecord(
         rel,
         Derived,
         "FlowthruCatalogOutput",
-        $"declared as a catalog item output at {catalogHit.Value}",
+        norm.EndsWith(catalogHit.Key, StringComparison.Ordinal)
+          ? $"declared as a catalog item output at {catalogHit.Value}"
+          : $"promoted copy of the catalog item output {catalogHit.Key}, declared at {catalogHit.Value}",
         false
       );
 
