@@ -115,7 +115,21 @@ public sealed class PortFlowMatcher
     // narrowest rung (removal:creature[to=graveyard, manner=sacrificed]); a dies (to=graveyard), bare LTB,
     // or sacrificed-trigger consume captures it by attribute subsumption (the guard). Replaces the retired
     // consume→consume sac→dies label bridge.
-    if (E("removal:creature") && C("removal:creature"))
+    //
+    // The pair must share a stem — that stem equality IS the type check, because
+    // `SacrificeDeathFeedsTrigger` covers only `to`/`manner` and does no type relation. It is NOT
+    // restricted to `removal:creature`: the CR ladder is permanent-general (CR 701.21a sacrifice moves a
+    // *permanent* to its graveyard; CR 700.4 dies; CR 603.6d leaves-the-battlefield; CR 603.10b "abilities
+    // that trigger when a player sacrifices a permanent"), and hardcoding `creature` pruned an artifact sac
+    // outlet from its own artifact-dies rung — a false prune, ruled a real topology gap by the
+    // interaction-judge (2026-07-20) against connectivity prediction P1 (ADR-0004 §7, issue #27).
+    // CROSS-stem arming (removal:permanent destroy → removal:creature dies, AMBER by CR 110.4) is a
+    // separate, larger change: it requires an ObjectFilterRelations type check inside the guard first,
+    // without which it re-opens the BridgeFedByIncompatibleToken false loop (CR 111.10). Filed, not bundled.
+    if (
+      emit.Stem == consume.Stem
+      && (emit.Stem == "removal" || emit.Stem.StartsWith("removal:", StringComparison.Ordinal))
+    )
       return FlowArm.SacrificeDeathToTrigger;
 
     return null;

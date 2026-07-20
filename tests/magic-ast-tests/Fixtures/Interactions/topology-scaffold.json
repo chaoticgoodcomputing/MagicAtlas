@@ -1,39 +1,66 @@
 {
   "$scaffold": "port-topology target map (ADR-0003 Stage 0a)",
-  "$status": "hypothesis — versioned. ADR-0004 §7 (issue #26, 2026-07-20) DELETED the sections that had become a hand-maintained DECLARED half of a generated artifact: stems_representative, aliases, attribute_axes, holes. Measured against the 64-gold rollup, all four were strictly subsumed by witnessed reality (0 declared-but-unwitnessed stems, 12 witnessed-but-never-predicted, axes a subset, all 6 holes witnessed). port-topology.json's stems/attribute_axes are now derived from golds ALONE and it no longer carries aliases/holes at all. What survives here is only the vocabulary NO gold can witness (kinds, supergroups, event_verbs_no_supergroup) plus connectivity_predictions, awaiting #27's executable sweeps. reject was DELETED by #28 (2026-07-20) after adjudicating all 35 of its terms NOT-A-PORT-CANDIDATE — see $deleted (5).",
-  "$version": 3,
+  "$status": "hypothesis — versioned. ADR-0004 §7 progressively emptied this file of everything a gold or a sweep could witness. (#26, 2026-07-20) DELETED stems_representative, aliases, attribute_axes and holes: measured against the 64-gold rollup all four were strictly subsumed by witnessed reality (0 declared-but-unwitnessed stems, 12 witnessed-but-never-predicted, axes a subset, all 6 holes witnessed), so port-topology.json's stems/attribute_axes now derive from golds ALONE and it carries no aliases/holes at all. (#28) DELETED reject after adjudicating all 35 terms NOT-A-PORT-CANDIDATE — see $deleted (5). (#27) DELETED connectivity_predictions: P1–P6 are now executable sweeps over the witnessed graph in Tests/InteractionRollup/ConnectivityPredictionSweeps.cs, each naming what would falsify it. Executing them for the first time found a real false prune in PortFlowMatcher (P1's removal:creature hardcode) and a gold-vocabulary defect (P2's nine bare sac-fodder consumes); P6 was re-expressed against the six former holes' now-witnessed stems, since #26 deleted the registry it named. A prediction checked by nothing is not falsifiable, so it does not live in a data file. WHAT SURVIVES is only the vocabulary NO gold can witness: kinds, supergroups, event_verbs_no_supergroup.",
+  "$version": 4,
   "$deleted": "Record of the FOUR facts the #26 deletion removed that no gold witnesses — kept as inert provenance prose (a $-key the generator skips), never as live declared data, so nothing is silently destroyed. (1-3) three is-a parent OVERRIDES the naming spine cannot express: removal:creature ⊂ removal:permanent, removal:artifact ⊂ removal:permanent, modification:evasion ⊂ modification:keyword. `parent` in port-topology.json is now purely name-derived (stem up to the last ':'), which is what its schema always documented it to be; no code ever read the overrides. (4) the attribute axis `owner` (lattice 'owned (ownership, orthogonal to control)', licensed_by objects:*/removal:*/deployment:*) — a DECLARED axis that 64 golds have never witnessed, carried in the artifact with empty stems[] and empty values_seen[]. It is the one unfalsified prediction the deletion drops; it returns to the artifact the moment a gold's port carries an owner attr. Full pre-deletion text: `git show HEAD~1 -- tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json`. These are is-a/ontology rulings, which ADR-0004 §1 routes to ADR-0003 prose rather than to a generated artifact. (5) ISSUE #28 (2026-07-20) deleted the `reject` block — 35 terms, all adjudicated NOT-A-PORT-CANDIDATE, none of them backlog and none of them an asserted-absence gold. The terms, verbatim: archetypes = aggro, control, combo, midrange, tempo, aristocrats, voltron, superfriends, pillowfort, group-hug, stax; judgments = value, engine, payoff, inevitability, tech, gas, jank, pile, goodstuff, bomb, haymaker, threat, answer, clock, out, win-con, finisher; social = durdle, brew, netdeck, spike/timmy/johnny, lucksack, whale, misplay. WHY NOT GOLDS (overturning ADR-0004 §7's table row, which said 'becomes asserted-absence golds, one per term'): an asserted-absence gold is `no_arm[P]` over a PORT the engine actually projects (see golds/rat-colony-deck-construction-terminal.json — P0 is the live coarse label emit:anynumberindeck). None of these 35 terms is a port, a stem, an AST discriminator, or a projection of any kind: they are deck-vocabulary, quality and social labels applied by PLAYERS to whole decks, lines of play and each other, not to card text. There is nothing for `SelectArm` to be null over, so `no_arm` is not merely unnecessary here, it is unstatable — and a gold asserting the absence of a port that was never projected would be vacuous in exactly the way ADR-0004 Appendix B's 'the trap this design avoids' describes. WHY NOT BACKLOG: backlog is `projected(corpus) − served − asserted-unarmable` (ADR-0004 §2), and these terms are not in `projected(corpus)` — no card text produces them AS THESE CONCEPTS, so no amount of parser or engine work would ever make one appear. Recording them as backlog would over-report demand that cannot exist. HOMONYM CAVEAT (interaction-judge, 2026-07-20): three spellings collide with live Magic vocabulary — Spike and Whale are CREATURE TYPES (type-ontology.json; Spike Feeder, Killer Whale), and `pile` is a CR 700.3 game term printed on ~32 cards (the Fact or Fiction shape); `value` also occurs inside 'mana value' (CR 202.3) and `control` is CR 110.2. Every one of those collisions is homonymous: what could become a port is a subtype attribute value on an objects:creature port, or a CR 700.3 grouping — a DIFFERENT REFERENT from the psychographic/archetype/judgment label rejected here. The ruling is about the labels, not the spellings. The original $note was already right and needed no conversion: a rejected archetype's MECHANISMS map (an 'aristocrats' deck is emit:removal:creature[manner=sacrificed] → consume:objects:creature plus a drain trigger, all of which ARE ports); the LABEL does not. This is a scope ruling about the taxonomy's vocabulary — architectural, not witnessable — so per ADR-0004 §1 its home is ADR prose (ADR-0004 Appendix C), and this record. Full pre-deletion text: `git log -p -- tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json`.",
   "$provenance": "4-panelist blind sweep (3 Opus + 1 full-slang), 2026-07-16; unanimous kinds/supergroups/axes; forks F1/F2/F3 human-ruled — the rulings live in ADR-0003 §4a, not here (they are architectural, not witnessable; a ruling with two homes can disagree with itself).",
-
   "kinds": {
-    "EVENT":    "discrete occurrences with payloads — what subscriptions (triggered abilities) fire on.",
-    "STATE":    "pools/stores folded over the event stream (state = fold(events)).",
+    "EVENT": "discrete occurrences with payloads — what subscriptions (triggered abilities) fire on.",
+    "STATE": "pools/stores folded over the event stream (state = fold(events)).",
     "BEHAVIOR": "continuous time-varying values — statics, anthems, keyword grants, 'as long as'."
   },
-
   "supergroups": {
     "$note": "`stems` lists the member stems whose NAME does not already begin with the supergroup's own name — the only membership fact a gold cannot witness (a gold declares a port's stem, never its supergroup). It moved here from the deleted stems_representative[*].supergroup field (#26): membership belongs with the definition it qualifies, and this section is not itself part of a generated artifact. Prefix-named stems (removal:*, deployment:*, modification:*, structure:*) resolve by name and are deliberately NOT listed.",
-    "removal":      { "kind_view": "EVENT",       "def": "a zone-change whose FROM endpoint is play (battlefield/stack): an object leaves play. Carries from/to/manner." },
-    "deployment":   { "kind_view": "EVENT",       "def": "a zone-change whose TO endpoint is play: an object enters play (cast/ETB/token/reanimate/blink-return/copy)." },
-    "modification": { "kind_view": "BEHAVIOR",    "def": "an object altered in place: P/T, keyword/ability grant, type/color/control change." },
-    "resources":    { "kind_view": "STATE",       "def": "fungible pools: mana, cards, life, counters.", "stems": ["mana", "life", "cards", "counters"] },
-    "objects":      { "kind_view": "STATE",       "def": "addressable permanents on the battlefield (F2). Objects = fold(deployment − removal). Bare object-consumes (a sac's fodder decrement) live here; the §10 balance substrate.", "stems": ["creature", "artifact"] },
-    "structure":   { "kind_view": "EVENT+STATE",  "def": "the clock — a VIEW spanning phase/combat/extra-turn Events and tap/untap availability State (F1: a supergroup may span kinds).", "stems": ["tap"] }
+    "removal": {
+      "kind_view": "EVENT",
+      "def": "a zone-change whose FROM endpoint is play (battlefield/stack): an object leaves play. Carries from/to/manner."
+    },
+    "deployment": {
+      "kind_view": "EVENT",
+      "def": "a zone-change whose TO endpoint is play: an object enters play (cast/ETB/token/reanimate/blink-return/copy)."
+    },
+    "modification": {
+      "kind_view": "BEHAVIOR",
+      "def": "an object altered in place: P/T, keyword/ability grant, type/color/control change."
+    },
+    "resources": {
+      "kind_view": "STATE",
+      "def": "fungible pools: mana, cards, life, counters.",
+      "stems": [
+        "mana",
+        "life",
+        "cards",
+        "counters"
+      ]
+    },
+    "objects": {
+      "kind_view": "STATE",
+      "def": "addressable permanents on the battlefield (F2). Objects = fold(deployment − removal). Bare object-consumes (a sac's fodder decrement) live here; the §10 balance substrate.",
+      "stems": [
+        "creature",
+        "artifact"
+      ]
+    },
+    "structure": {
+      "kind_view": "EVENT+STATE",
+      "def": "the clock — a VIEW spanning phase/combat/extra-turn Events and tap/untap availability State (F1: a supergroup may span kinds).",
+      "stems": [
+        "tap"
+      ]
+    }
   },
-
   "event_verbs_no_supergroup": {
-    "dice-rolled":     { "kind": "EVENT", "def": "a die roll produces a numeric payload; feeds 'whenever you roll one or more dice' (O19 — dice dissolved, no fourth axis)." },
-    "damage-dealt":    { "kind": "EVENT", "def": "damage as an event; edges into resources:life (loss) and, when lethal, removal (state-based death)." },
-    "combat-presence": { "kind": "EVENT", "def": "a permanent attacks or blocks (O21; the attacksorblocks subscription; emit:additionalcombat re-raises the phase that produces it)." }
-  },
-
-  "connectivity_predictions": {
-    "$note": "falsifiable null hypotheses for the topology sweeps (rollup-vs-scaffold).",
-    "P1": "every emit:removal:*[manner=sacrificed] (sac outlet) reaches all three consumer rungs — 'when sacrificed', 'when dies' (removal:*[to=graveyard]), 'when leaves battlefield' (removal:*) — by subsumption.",
-    "P2": "every emit:deployment:creature[token] (token maker) reaches every consume:objects:creature (sac/fodder consumer) via the object store.",
-    "P3": "color is topology-invariant — it never appears on a stem, only as an attribute; a mono-U and a B/G combo have the same supergroup shape.",
-    "P4": "irreducible cross-resource bridges (structure:untap → mana) stay AMBER by ceiling.",
-    "P5": "a self-watching subscription (subject=self) fed by a broad emit ('a creature') tiers AMBER (Overlaps), never GREEN.",
-    "P6": "every one of the six holes has ≥1 witnessable card in the corpus (else the hole is a taxonomy error, not a coverage gap)."
+    "dice-rolled": {
+      "kind": "EVENT",
+      "def": "a die roll produces a numeric payload; feeds 'whenever you roll one or more dice' (O19 — dice dissolved, no fourth axis)."
+    },
+    "damage-dealt": {
+      "kind": "EVENT",
+      "def": "damage as an event; edges into resources:life (loss) and, when lethal, removal (state-based death)."
+    },
+    "combat-presence": {
+      "kind": "EVENT",
+      "def": "a permanent attacks or blocks (O21; the attacksorblocks subscription; emit:additionalcombat re-raises the phase that produces it)."
+    }
   }
 }
