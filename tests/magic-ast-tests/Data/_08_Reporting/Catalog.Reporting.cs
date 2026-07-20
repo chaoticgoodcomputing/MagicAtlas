@@ -124,6 +124,15 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/span-witness-report.json")
       .Build());
 
+  /// <summary>The over-approximation report (ADR-0004 §6, modeled-dependency completeness): AST condition
+  /// nodes the projection dropped, joined to the ports — and the GREENs — that rest on them. Fully derived
+  /// by ablation; no hand-maintained register. Corpus report (gitignored, never committed).</summary>
+  public IItem<OverApproximationReport> OverApproximationReport =>
+    CreateItem(() => Item.Of<OverApproximationReport>("OverApproximationReport")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/over-approximation-report.json")
+      .Build());
+
   /// <summary>D4 — per-combo reconstructed loops (named cards, family-signature, tier, result).</summary>
   public IItem<IEnumerable<ComboInstanceRow>> ComboInstances =>
     CreateItem(() => Item.Of<IEnumerable<ComboInstanceRow>>("ComboInstances")

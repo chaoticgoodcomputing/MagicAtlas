@@ -381,12 +381,35 @@ asserted-absence golds (§1) and delete the file.
 attribute moved**; a judge-sampled subset confirms the rendered plain-language text carries the same meaning
 the hand-written `reason` did (a correctness check, not a diff).
 
-### Stage 5 — The invariant layer
+### Stage 5 — The invariant layer — **LANDED** (2026-07-20)
 Land §6: sibling-path metamorphic properties, and modeled-dependency completeness derived from AST condition
 nodes.
 
 *Gate:* the composite-recursion asymmetry is caught when deliberately reintroduced; "which GREENs rest on
 unmodeled conditions" is answerable by query.
+
+**As landed:**
+
+| §6 half | Artifact | Kind |
+|---|---|---|
+| Sibling-path consistency | `PortWalkSiblingPathConsistencyTest` — the six composite-capable `Effects()` paths (`optional.Inner`, `composite.Effects`, `conditional.Then`/`.Else`, `rollResultsTable.Rows`, `replacement.Replacement`) must project the same body emits as the top-level ability-effects path | **Gate** (CORE ring) |
+| Modeled-dependency completeness | `ConditionConsumption` (the delta, derived by **ablation** — delete the condition node, re-project, compare) + `ConditionConsumptionTest` (machinery + Gravecrawler witness, hermetic) + the `OverApproximation` Flowthru flow → `over-approximation-report.json` | **Gate** + **report** |
+
+The asymmetry §6 describes was itself already repaired in `9e319ea7`; the metamorphic test is what makes the
+repair non-regressible and forces any FUTURE composite-capable path to prove itself on arrival. Falsified at
+authoring time by reverting `Effects(e["Replacement"], …)` to a direct `EmitPort` call — 4 red, and the
+`single-createToken` case correctly stayed green (a non-composite body is not collapsed).
+
+"Consumed" is **derived, not declared**: a condition node is consumed iff ablating it moves the projection's
+fingerprint. So there is no register to maintain, and a slice that starts reading a condition removes it from
+the report with no edit. First corpus run (6,921 parse-ready union cards): **612 AST condition nodes, 335
+consumed, 277 dropped across 250 cards, underwriting 329 GREEN ports** — led by `other` (104), `count` (59,
+Gravecrawler's clause among them) and `keywordCostPaid` (47).
+
+This is adjacent to, and must not be conflated with, `known-coarse-projections.json`: that whitelist names
+**discriminators projected coarsely** (a resolution loss — hand-authored, gate-enforced, Stage 4 dissolves
+it); this report enumerates **condition nodes dropped entirely** (a guard loss — fully derived, diagnostic,
+nothing to dissolve).
 
 ### Stage 6 — Close the bijection
 Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup); no declared rule unrealized.

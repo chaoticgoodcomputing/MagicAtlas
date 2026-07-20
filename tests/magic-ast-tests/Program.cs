@@ -13,6 +13,7 @@ using MagicAtlas.Ast.Tests.Flows.MagicAstTriage;
 using MagicAtlas.Ast.Tests.Flows.CardAtlas;
 using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
 using MagicAtlas.Ast.Tests.Flows.TopologyDemand;
+using MagicAtlas.Ast.Tests.Flows.OverApproximation;
 using MagicAtlas.Ast.Tests.Flows.SpanWitness;
 using MagicAtlas.Ast.Tests.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -307,6 +308,22 @@ public class Program
             + "label asserts (a false-positive port or a span mis-attribution), and routes each to the golds "
             + "that witness its ADR-3 stem → Data/_08_Reporting/span-witness-report.json. Run after --flow "
             + "CardAtlas so the ports are current."
+        );
+
+      // The over-approximation report (ADR-0004 §6, modeled-dependency completeness). Reads the D1
+      // card-ports (card scope + Green/Amber tier) + card oracle text, re-parses each card, and derives
+      // AST-condition-nodes MINUS conditions-the-projection-consumed by ablation. No hand register.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "OverApproximation",
+          catalog => OverApproximationFlow.Create(catalog, ontologyPath)
+        )
+        .WithDescription(
+          "Over-approximation report (corpus-gated diagnostic; ADR-0004 §6): enumerates AST Condition "
+            + "nodes the PortWalk projection DROPS — derived by ablation (delete the node, re-project, "
+            + "compare), never a hand-maintained register — and joins each to the ports, and the GREENs, "
+            + "that consequently rest on an unmodeled condition (Gravecrawler's \"as long as you control a "
+            + "Zombie\") → Data/_08_Reporting/over-approximation-report.json. Run after --flow CardAtlas."
         );
 
       flowthru.ConfigureMetadata(meta =>
