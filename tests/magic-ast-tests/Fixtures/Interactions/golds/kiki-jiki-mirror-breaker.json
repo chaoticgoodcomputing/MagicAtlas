@@ -44,10 +44,6 @@
       "because": "a copy is a discrete object-creation occurrence with a payload (the new token/copy) that subscriptions fire on (CR 707.2, 111.2) \u2014 EVENT, matching the copy neighbourhood of the deployment supergroup (kind_view EVENT)."
     },
     {
-      "claim": "stem.copy.unpredicted",
-      "because": "the scaffold folds copy into deployment[manner=copied] (the deployment supergroup def names copy; the manner axis enum includes 'copied'), but the engine's CopyFamily projects a DISTINCT bare `copy` stem with no supergroup and manner=null \u2014 a taxonomy surprise surfaced unpredicted for a possible scaffold update."
-    },
-    {
       "claim": "no_loop",
       "because": "unit=single-card: a port derivation witnessing the bare `copy` stem, no cycle closed (edges=[]). The '{T}' tap cost and 'sacrifice it at the next end step' delayed trigger are incidental card context, not inter-card interaction edges."
     }

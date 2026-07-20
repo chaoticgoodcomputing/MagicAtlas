@@ -38,10 +38,6 @@
       "because": "P0 projects the BEHAVIOR stem modification:restriction (modification supergroup, CR 611.2c continuous effect from a static ability), derived from the CantAttackEffect + CantBlockEffect pair on Pacifism's second static ability. This is the first witness of the stem: it burns down the 'restriction-grant' sought hole (holes.restriction-grant.proposed_stem == modification:restriction)."
     },
     {
-      "claim": "stem.modification:restriction.unpredicted == true",
-      "because": "modification:restriction was NOT a declared stem (it lived only in holes with status=sought, no declared stem in stems_representative); a gold that projects a stem the scaffold never declared carries unpredicted:true. This is the intended hole burn-down, not an error \u2014 the scaffold should promote modification:restriction from a hole to a declared stem."
-    },
-    {
       "claim": "P0.subject == attached",
       "because": "Target.Kind=EnchantedOrEquipped \u2014 the restriction lands on the attached creature (CR 303.4 / 701.3 attach), not on Pacifism itself. subject axis (closed; licenses the modification:* stems), a new value 'attached' alongside the prior value_seen 'self'. attached is the restriction-*grant* case (source imposes on a distinct attached object) vs self (source restricts itself)."
     },

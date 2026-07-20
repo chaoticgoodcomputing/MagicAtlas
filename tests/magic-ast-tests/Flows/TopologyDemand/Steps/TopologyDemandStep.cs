@@ -7,13 +7,19 @@ namespace MagicAtlas.Ast.Tests.Flows.TopologyDemand.Steps;
 
 /// <summary>
 /// Ranks the ADR-3 topology concepts by combo demand (see <see cref="PortTopologyDemand"/>). Reads the
-/// committed hermetic topology (the CITED twin — it carries the per-stem <c>witnesses</c>, holes'
-/// <c>slang</c> + <c>priority</c>, and supergroup defs), the golds (for each gold's
-/// <c>source.popularity</c>), the scaffold (for the stem→supergroup membership of the non-prefixed stems),
-/// and the corpus-gated combo-anchor report (may be absent → graceful degrade). Emits a value-ranked
-/// overlay: witnessed stems by gold popularity, sought holes by corpus payoff-mass (tiebreak: hand
-/// priority), supergroups by rolled-up corpus. Never throws on a missing corpus; logs a warning and nulls
-/// the corpus signals.
+/// committed hermetic topology (the CITED twin — it carries the per-stem <c>witnesses</c> and the
+/// supergroup defs), the golds (for each gold's <c>source.popularity</c>), the scaffold (for the
+/// stem→supergroup membership of the non-prefixed stems), and the corpus-gated combo-anchor report (may be
+/// absent → graceful degrade). Emits a value-ranked overlay: witnessed stems by gold popularity,
+/// supergroups by rolled-up corpus. Never throws on a missing corpus; logs a warning and nulls the corpus
+/// signals.
+///
+/// <para><b>ADR-0004 §7 / issue #26.</b> The topology no longer carries a <c>holes{}</c> registry, so the
+/// <c>holes</c> section is always empty — as it already was in practice, every declared hole having been
+/// witnessed. Restoring a demand-ranked backlog is ADR-0004 §2 / issue #32 work: a hole becomes the set
+/// difference (proposed stems − witnessed stems), computed here rather than read from a stored status.
+/// Likewise <c>declared_stems</c> is always empty: every stem in the topology is witnessed by
+/// construction.</para>
 /// </summary>
 [FlowthruStep]
 public static partial class TopologyDemandStep
@@ -32,8 +38,6 @@ public static partial class TopologyDemandStep
     " CORPUS OVERLAY UNAVAILABLE — Data/_08_Reporting/combo-anchor-report.json was absent "
     + "(worktree / no corpus; regenerate via `nx run mast:combo-anchors`). All corpus signals are null; "
     + "holes are ranked by hand priority only; witnessed stems still rank by gold popularity.";
-
-  private const string EnablerNote = "enabler-side; payoff-invisible — panel priority governs";
 
   // Generic function words that would match payoff prose without signalling real demand (matters mostly
   // for the sentence-shaped supergroup defs). Content tokens (slang, stem/hole names) survive.
@@ -131,11 +135,16 @@ public static partial class TopologyDemandStep
 
       // ── stem → supergroup membership (prefix, else scaffold's explicit supergroup field) ──
       var supergroupNames = (topology["supergroups"]!.AsObject()).Select(kv => kv.Key).ToHashSet(StringComparer.Ordinal);
+      // Membership for stems whose NAME does not begin with the supergroup name (mana → resources, tap →
+      // structure, …). Declared on the surviving `supergroups` scaffold section since #26 deleted
+      // `stems_representative`; a gold declares a port's stem, never its supergroup, so this is not
+      // witnessable. Matched on the exact stem name, deliberately — no prefix/fuzzy widening.
       var scaffoldStemSupergroup = new Dictionary<string, string>(StringComparer.Ordinal);
-      if (scaffold["stems_representative"] is JsonObject srep)
-        foreach (var kv in srep)
-          if (!kv.Key.StartsWith('$') && kv.Value is JsonObject so && so["supergroup"] is JsonNode sg)
-            scaffoldStemSupergroup[kv.Key] = sg.GetValue<string>();
+      if (scaffold["supergroups"] is JsonObject sgs)
+        foreach (var kv in sgs)
+          if (!kv.Key.StartsWith('$') && kv.Value is JsonObject so && so["stems"] is JsonArray members)
+            foreach (var m in members)
+              scaffoldStemSupergroup[m!.GetValue<string>()] = kv.Key;
 
       string? SupergroupOf(string stem)
       {
@@ -192,42 +201,10 @@ public static partial class TopologyDemandStep
         }
       }
 
-      // ── holes (sought only — a hole TopologyStep has reconciled to "witnessed" already surfaces above,
-      //    under its real stem name in witnessedStems[]; listing it again here would be a stale duplicate) ──
+      // ── holes: ADR-0004 §7 removed the topology's holes{} registry (#26). Always empty until #32
+      //    recomputes the backlog as (proposed stems − witnessed stems); the section is retained so the
+      //    report's shape — and the mast-loop pick surface that reads it — does not change underneath it.
       var holes = new List<DemandEntry>();
-      foreach (var kv in topology["holes"]!.AsObject())
-      {
-        var hole = kv.Key;
-        var h = kv.Value!.AsObject();
-        if (h["status"]?.GetValue<string>() != "sought")
-          continue;
-        var kind = h["kind"]?.GetValue<string>();
-        var priority = h["priority"]?.GetValue<int>();
-        var proposedLeaf = LeafOf(h["proposed_stem"]?.GetValue<string>());
-
-        // Match vocabulary: the hole's slang tokens ∪ its concept-name/proposed-stem tokens. The name
-        // token is load-bearing — a hole's slang is often payoff-invisible (prevention's 'fog') while the
-        // concept word IS what the payoff prints ('Prevent all damage…').
-        var tokens = new List<string>();
-        tokens.AddRange(Tokenize(hole));
-        if (proposedLeaf is not null)
-          tokens.AddRange(Tokenize(proposedLeaf));
-        if (h["slang"] is JsonArray slang)
-          foreach (var sl in slang)
-            tokens.AddRange(Tokenize(sl!.GetValue<string>()));
-
-        var (corpusMass, matched) = Corpus(tokens);
-        holes.Add(new DemandEntry
-        {
-          Concept = hole,
-          Kind = kind,
-          Status = "sought",
-          Demand = new DemandCounts { Witnessed = null, Corpus = corpusMass },
-          Priority = priority,
-          MatchedPayoffs = matched,
-          Note = corpusMass == 0 ? EnablerNote : null,
-        });
-      }
 
       // ── supergroups (union over member-stem tokens ∪ def/name tokens — anchors counted once) ──
       var supergroups = new List<DemandEntry>();
@@ -311,11 +288,4 @@ public static partial class TopologyDemandStep
   private static string[] Tokenize(string s) =>
     NonAlnum().Split(s.ToLowerInvariant()).Where(t => t.Length > 0).ToArray();
 
-  private static string? LeafOf(string? stem)
-  {
-    if (string.IsNullOrEmpty(stem))
-      return null;
-    var colon = stem.LastIndexOf(':');
-    return colon >= 0 ? stem[(colon + 1)..] : stem;
-  }
 }

@@ -38,10 +38,6 @@
       "because": "S0 projects the bare BEHAVIOR stem modification:spell \u2014 the priority-1 sought hole 'cost-modification' proposed_stem \u2014 derived from Stone Calendar's sole static ability (a costReduction over spells you cast, CR 601.2f). This burns the hole's STEM down from status=sought to witnessed."
     },
     {
-      "claim": "stem.modification:spell.unpredicted",
-      "because": "modification:spell is NOT in the scaffold's declared stems set (it existed only as a hole proposed_stem); a gold that first-projects it is Projected && !Declared, so TopologyStep marks it unpredicted:true \u2014 a taxonomy surprise warranting a scaffold update (promote the hole to a declared stem)."
-    },
-    {
       "claim": "S0.control == you",
       "because": "AffectedObjects.Controller=You \u2014 'Spells YOU cast'; the modified objects are yours (control axis, licensed_by *, values_seen already contains 'you', lattice self subset controlled subset any). AST-derivable from an explicit Controller filter, the ONLY closed axis this witness attaches."
     },

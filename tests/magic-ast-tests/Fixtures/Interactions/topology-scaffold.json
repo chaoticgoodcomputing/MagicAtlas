@@ -1,7 +1,8 @@
 {
   "$scaffold": "port-topology target map (ADR-0003 Stage 0a)",
-  "$status": "hypothesis — versioned; the DECLARED half of port-topology (golds provide the WITNESSED half). Revised as golds land.",
-  "$version": 1,
+  "$status": "hypothesis — versioned. ADR-0004 §7 (issue #26, 2026-07-20) DELETED the sections that had become a hand-maintained DECLARED half of a generated artifact: stems_representative, aliases, attribute_axes, holes. Measured against the 64-gold rollup, all four were strictly subsumed by witnessed reality (0 declared-but-unwitnessed stems, 12 witnessed-but-never-predicted, axes a subset, all 6 holes witnessed). port-topology.json's stems/attribute_axes are now derived from golds ALONE and it no longer carries aliases/holes at all. What survives here is only the vocabulary NO gold can witness (kinds, supergroups, event_verbs_no_supergroup) plus the two sections awaiting their own issues: connectivity_predictions (→ #27, executable sweeps) and reject (→ #28, asserted-absence golds).",
+  "$version": 2,
+  "$deleted": "Record of the FOUR facts the #26 deletion removed that no gold witnesses — kept as inert provenance prose (a $-key the generator skips), never as live declared data, so nothing is silently destroyed. (1-3) three is-a parent OVERRIDES the naming spine cannot express: removal:creature ⊂ removal:permanent, removal:artifact ⊂ removal:permanent, modification:evasion ⊂ modification:keyword. `parent` in port-topology.json is now purely name-derived (stem up to the last ':'), which is what its schema always documented it to be; no code ever read the overrides. (4) the attribute axis `owner` (lattice 'owned (ownership, orthogonal to control)', licensed_by objects:*/removal:*/deployment:*) — a DECLARED axis that 64 golds have never witnessed, carried in the artifact with empty stems[] and empty values_seen[]. It is the one unfalsified prediction the deletion drops; it returns to the artifact the moment a gold's port carries an owner attr. Full pre-deletion text: `git show HEAD~1 -- tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json`. These are is-a/ontology rulings, which ADR-0004 §1 routes to ADR-0003 prose rather than to a generated artifact.",
   "$provenance": "4-panelist blind sweep (3 Opus + 1 full-slang), 2026-07-16; unanimous kinds/supergroups/axes; forks F1/F2/F3 human-ruled — the rulings live in ADR-0003 §4a, not here (they are architectural, not witnessable; a ruling with two homes can disagree with itself).",
 
   "kinds": {
@@ -11,12 +12,13 @@
   },
 
   "supergroups": {
+    "$note": "`stems` lists the member stems whose NAME does not already begin with the supergroup's own name — the only membership fact a gold cannot witness (a gold declares a port's stem, never its supergroup). It moved here from the deleted stems_representative[*].supergroup field (#26): membership belongs with the definition it qualifies, and this section is not itself part of a generated artifact. Prefix-named stems (removal:*, deployment:*, modification:*, structure:*) resolve by name and are deliberately NOT listed.",
     "removal":      { "kind_view": "EVENT",       "def": "a zone-change whose FROM endpoint is play (battlefield/stack): an object leaves play. Carries from/to/manner." },
     "deployment":   { "kind_view": "EVENT",       "def": "a zone-change whose TO endpoint is play: an object enters play (cast/ETB/token/reanimate/blink-return/copy)." },
     "modification": { "kind_view": "BEHAVIOR",    "def": "an object altered in place: P/T, keyword/ability grant, type/color/control change." },
-    "resources":    { "kind_view": "STATE",       "def": "fungible pools: mana, cards, life, counters." },
-    "objects":      { "kind_view": "STATE",       "def": "addressable permanents on the battlefield (F2). Objects = fold(deployment − removal). Bare object-consumes (a sac's fodder decrement) live here; the §10 balance substrate." },
-    "structure":   { "kind_view": "EVENT+STATE",  "def": "the clock — a VIEW spanning phase/combat/extra-turn Events and tap/untap availability State (F1: a supergroup may span kinds)." }
+    "resources":    { "kind_view": "STATE",       "def": "fungible pools: mana, cards, life, counters.", "stems": ["mana", "life", "cards", "counters"] },
+    "objects":      { "kind_view": "STATE",       "def": "addressable permanents on the battlefield (F2). Objects = fold(deployment − removal). Bare object-consumes (a sac's fodder decrement) live here; the §10 balance substrate.", "stems": ["creature", "artifact"] },
+    "structure":   { "kind_view": "EVENT+STATE",  "def": "the clock — a VIEW spanning phase/combat/extra-turn Events and tap/untap availability State (F1: a supergroup may span kinds).", "stems": ["tap"] }
   },
 
   "event_verbs_no_supergroup": {
@@ -25,82 +27,11 @@
     "combat-presence": { "kind": "EVENT", "def": "a permanent attacks or blocks (O21; the attacksorblocks subscription; emit:additionalcombat re-raises the phase that produces it)." }
   },
 
-  "stems_representative": {
-    "$note": "The is-a spine accretes via golds (status=witnessed there). These are the anchors per supergroup; parent derived by dropping the last ':' segment (permanent ⊃ creature). Witnesses are NEVER hand-listed here — TopologyStep recomputes them live from the golds (stems[*].witnesses in the rollup); a hand-typed list would silently drift from the growing gold set.",
-    "removal:permanent":       { "kind": "EVENT" },
-    "removal:creature":        { "kind": "EVENT", "parent": "removal:permanent" },
-    "removal:artifact":        { "kind": "EVENT", "parent": "removal:permanent" },
-    "deployment":              { "kind": "EVENT" },
-    "deployment:creature":     { "kind": "EVENT" },
-    "deployment:artifact":     { "kind": "EVENT" },
-    "modification:creature":   { "kind": "BEHAVIOR" },
-    "modification:keyword":    { "kind": "BEHAVIOR" },
-    "modification:evasion":    { "kind": "BEHAVIOR", "parent": "modification:keyword" },
-    "modification:evasion:flying": { "kind": "BEHAVIOR", "parent": "modification:evasion" },
-    "mana":                    { "kind": "STATE", "supergroup": "resources" },
-    "life":                    { "kind": "STATE", "supergroup": "resources" },
-    "cards":                   { "kind": "STATE", "supergroup": "resources" },
-    "counters":                { "kind": "STATE", "supergroup": "resources" },
-    "creature":                { "kind": "STATE", "supergroup": "objects" },
-    "artifact":                { "kind": "STATE", "supergroup": "objects" },
-    "tap":                     { "kind": "STATE", "supergroup": "structure" },
-    "structure:untap":         { "kind": "STATE", "supergroup": "structure" }
-  },
-
-  "attribute_axes": {
-    "$note": "Closed key set (unordered per port). value = the observed lattice/enum; licensed_by = stems that may carry it (TFS appropriateness). 'provenance' (asserted|derived) and 'polarity' (fixed|producer-choice) are per-VALUE modifiers, not axes.",
-    "subtype":      { "lattice": "type-ontology (creature:squirrel ⊆ creature)", "licensed_by": ["objects:*", "removal:*", "deployment:*", "artifact", "cast", "creature", "structure:untap"] },
-    "control":      { "lattice": "self ⊆ controlled ⊆ any ; opponent ⊆ any", "licensed_by": ["*"] },
-    "owner":        { "lattice": "owned (ownership, orthogonal to control)", "licensed_by": ["objects:*", "removal:*", "deployment:*"] },
-    "from":         { "lattice": "zones", "licensed_by": ["removal:*", "deployment:*", "cards:*", "recur"] },
-    "to":           { "lattice": "zones", "licensed_by": ["removal:*", "deployment:*", "cards:*", "recur"] },
-    "manner":       { "enum": ["sacrificed", "destroyed", "combat", "state-based", "blink", "cast", "copied"], "licensed_by": ["removal:*", "deployment:*", "deployment"] },
-    "pt":           { "lattice": "power/toughness comparisons", "licensed_by": ["objects:*", "modification:*", "deployment:*"] },
-    "stat":         { "enum": ["pt"], "licensed_by": ["modification:*"] },
-    "delta":        { "lattice": "signed magnitude (+X/-X)", "licensed_by": ["modification:*"] },
-    "color":        { "enum": ["white", "blue", "black", "red", "green", "colorless", "generic", "any"], "licensed_by": ["mana", "objects:*", "deployment:*"] },
-    "token":        { "enum": [true, false], "licensed_by": ["objects:*", "deployment:*", "removal:*", "artifact", "creature", "deployment"] },
-    "qty":          { "kind": "numeric|symbolic", "bindable": ["X", "that-many", "up-to-N"], "licensed_by": ["*"] },
-    "duration":     { "enum": ["eot", "permanent", "your-next-turn"], "licensed_by": ["modification:*"] },
-    "recipient":    { "enum": ["you", "opponent", "any", "player", "creature", "planeswalker"], "licensed_by": ["life", "damage-dealt"] },
-    "direction":    { "enum": ["gain", "loss"], "licensed_by": ["life"] },
-    "combat":       { "enum": ["combat", "noncombat", "any"], "licensed_by": ["damage-dealt", "combat-presence"] },
-    "counter-type": { "enum": ["+1/+1", "-1/-1", "loyalty", "charge", "energy", "experience", "poison"], "licensed_by": ["counters"] },
-    "keyword":      { "lattice": "keyword ontology (forestwalk ⊂ landwalk ⊂ evasion)", "licensed_by": ["modification:keyword"] },
-    "target":       { "enum": ["self", "any", "chosen"], "licensed_by": ["*"] },
-    "exclude_self":  { "enum": [true], "note": "identity exclusion (:another); the attribute-axis key (matches the golds' attrs); the §6 guard rule id is guard:exclude-self (kebab, a different namespace)", "licensed_by": ["removal:*", "deployment:*", "creature"] },
-    "self":         { "enum": [true, false], "note": "the port's subject is the source object itself", "licensed_by": ["*"] }
-  },
-
-  "aliases": {
-    "$note": "named attribute-constraints (O11); each pinned to exactly one query.",
-    "fodder":  "creature[pt=1/1]  (Skullclamp reading: creature[toughness=1])",
-    "dies":    "removal:*[to=graveyard]",
-    "sacrifice": "removal:*[manner=sacrificed]",
-    "edict":   "removal:creature[control=opponent, manner=sacrificed]",
-    "bounce":  "removal:*[from=battlefield, to=hand]",
-    "mill":    "removal:*[from=library, to=graveyard]",
-    "gy-hate": "removal:*[from=graveyard, to=exile]",
-    "counter-spell": "removal:*[from=stack, to=graveyard]",
-    "reanimate": "deployment:*[from=graveyard, to=battlefield]",
-    "blink":   "removal:*[to=exile, manner=blink] + deployment:*[manner=blink]"
-  },
-
   "reject": {
     "$note": "NOT AST-derivable — a game-plan/quality/social judgment, never a port. (A rejected archetype's MECHANISMS still map; the LABEL does not.)",
     "archetypes": ["aggro", "control", "combo", "midrange", "tempo", "aristocrats", "voltron", "superfriends", "pillowfort", "group-hug", "stax"],
     "judgments":  ["value", "engine", "payoff", "inevitability", "tech", "gas", "jank", "pile", "goodstuff", "bomb", "haymaker", "threat", "answer", "clock", "out", "win-con", "finisher"],
     "social":     ["durdle", "brew", "netdeck", "spike/timmy/johnny", "lucksack", "whale", "misplay"]
-  },
-
-  "holes": {
-    "$note": "DECLARED, status=witness:sought — the targeted-witnessing backlog (§8; ADR Migration Stage 0a). All six found blind by every panelist ⇒ structural, not slang-coverage artifacts. Ordered by corroboration; each seeds a search for a single-card/pairwise/combo witness for the first post-migration derivation run.",
-    "cost-modification":  { "priority": 1, "kind": "BEHAVIOR", "proposed_stem": "modification:spell", "attrs": ["cost-delta"], "slang": ["tax", "cost-reduction", "cheat-out"], "note": "no cost-delta stem; both directions (↑ tax / ↓ reduction) homeless. Most corroborated (panel + full-slang + checklist)." },
-    "restriction-grant":  { "priority": 2, "kind": "BEHAVIOR", "proposed_stem": "modification:restriction", "attrs": ["restrict=attack|block"], "slang": ["pacifism", "prison", "lock"], "note": "'can't attack/block' grant — a Behavior with no stem." },
-    "prevention":         { "priority": 3, "kind": "BEHAVIOR", "proposed_stem": "modification:prevention", "attrs": ["prevents=combat-damage"], "slang": ["fog"], "note": "a shield/replacement on the damage event." },
-    "library-search":     { "priority": 4, "kind": "STATE",    "proposed_stem": "cards:search", "attrs": ["from=library", "to=hand", "by=criteria"], "slang": ["tutor", "fetch"], "note": "library→hand by criteria; distinct from draw. A Cards-STATE op." },
-    "library-selection":  { "priority": 5, "kind": "STATE",    "proposed_stem": "cards:select", "attrs": ["peek=N", "reorder"], "slang": ["dig", "scry", "surveil", "impulse"], "note": "peek/reorder top-N; a Cards-STATE op." },
-    "non-play-zone-move":  { "priority": 6, "kind": "EVENT",    "proposed_stem": "recur", "attrs": ["from", "to"], "slang": ["reclamation (gy→hand)", "bounce-recur"], "note": "the from→to primitive is play-anchored; hidden-zone↔hidden-zone moves fit neither Removal (from=play) nor Deployment (to=play). Do NOT force into Removal. Opus-3's 'real hole'. Scaffold reconciliation 2026-07-18: already witnessed by archaeomancer.json (recur stem, from=graveyard/to=hand) — proposed_stem updated from the placeholder 'zonechange (neither removal nor deployment)' to the landed stem name 'recur' so TopologyStep's literal proposed_stem match resolves this hole to witnessed; no new gold authored (would have duplicated archaeomancer.json)." }
   },
 
   "connectivity_predictions": {

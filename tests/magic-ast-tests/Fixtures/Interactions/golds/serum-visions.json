@@ -39,10 +39,6 @@
       "because": "S1 projects the STATE stem 'cards:select' (the library-selection hole's proposed_stem), turning the SOUGHT hole into a witnessed stem. Derived by hand-mapping the ADR-2 coarse emit:scry up to the ADR-3 cards:select rung (peek/reorder top-N, CR 701.22a). This BURNS DOWN holes[library-selection]."
     },
     {
-      "claim": "stem.cards:select.unpredicted",
-      "because": "'cards:select' is NOT in the scaffold's declared stems spine -- it exists only as a sought hole's proposed_stem, never as a declared stem. Per the rollup rule (TopologyStep: Projected && !Declared => unpredicted:true) this gold-projected stem is unpredicted; the witness CREATES the rung. Contrast the divination gold, whose 'cards' stem was already declared (NOT unpredicted)."
-    },
-    {
       "claim": "S1.qty == 2",
       "because": "ScryEffect.Count={QuantityType:literal, Value:2} -- 'Scry 2' looks at the top TWO cards. The hole's proposed 'peek=N' depth is hand-mapped onto the closed 'qty' axis (licensed_by *, applies to cards; '2' already in qty.values_seen) rather than inventing a 'peek' axis. CR 701.22a: top N cards, N=2."
     },

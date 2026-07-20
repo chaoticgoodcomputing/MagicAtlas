@@ -57,10 +57,6 @@
       "because": "Count == {QuantityType:literal, Value:1} \u2014 'search your library for A card'; qty axis licensed_by * (applies to cards), value '1' already in qty.values_seen."
     },
     {
-      "claim": "burns_down_hole.library-search",
-      "because": "the sought hole's proposed_stem 'cards:search' is now witnessed by T1 (from=library, to=hand, control=you, qty=1) \u2014 a SOUGHT hole becomes a witnessed stem. distinct from library-selection (scry/surveil, peek/reorder, no zone move) and from recur (graveyard-source)."
-    },
-    {
       "claim": "by_criteria_omitted (unaxised)",
       "because": "the hole proposes an attr 'by=criteria' (the search predicate), but there is no closed by/criteria axis, and the subtype axis is not licensed for cards:*; Diabolic Tutor's criterion is the unrestricted 'a card' (Filter.CardTypes=[card]) anyway. Surfaced as an open scaffold question in the source note, NOT invented as an ad-hoc attrs key."
     },
