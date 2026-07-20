@@ -213,8 +213,11 @@ public static class ArtifactClassifier
         + "What remains is genuinely mixed in KIND, which is why it is still not classifiable as one thing: "
         + "kinds/supergroups/event_verbs_no_supergroup are architectural rulings a gold cannot witness "
         + "(ADR 0004 §1 routes those to ADR prose, but the generator has to consume them as data), while "
-        + "connectivity_predictions and reject are awaiting conversion to executable sweeps (#27) and "
-        + "asserted-absence golds (#28). The file is a transit lounge, not a category.",
+        + "connectivity_predictions is awaiting conversion to executable sweeps (#27). UPDATED AGAIN "
+        + "2026-07-20 (issue #28): reject is GONE — its 35 terms were adjudicated not-a-port-candidate "
+        + "(deck-vocabulary and social labels are neither ports nor corpus-projected, so they are neither "
+        + "asserted-absence golds nor backlog), and the ruling lives in ADR-0004 Appendix C plus the "
+        + "scaffold's own $deleted record. The file is a transit lounge, not a category.",
 
       // Retired by ADR-0004 issue #38 (all four artifacts DELETED, so their acknowledgments go with
       // them — Acknowledgments_are_live enforces exactly this):

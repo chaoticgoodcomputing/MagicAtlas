@@ -128,6 +128,17 @@ rulings) — belong in ADRs.
 Consequently `known-coarse-projections.json` **dissolves**: its entries (`attach`, `preventable`,
 `keywordability`) each become an asserted-absence gold. See Appendix B for a fully worked example.
 
+> **Correction (2026-07-20, issue #28 — read with Appendix C).** Two factual errors in the paragraph above.
+> (a) The file does not hold three entries; it holds **288** (220 `effectType`, 16 `costType`,
+> 46 `triggerEvent`, 6 `restriction`). (b) Under the inverted prior — *an unserved projection is backlog
+> until a CR argument proves no consume could ever exist* — **285 of them are backlog, 1 is already a
+> decision (`anyNumberInDeck`), and 2 are not port candidates at all** (`unparsed` / `unstructured`, which
+> denote parse failure rather than any Magic concept). Converting the file to golds is therefore not the
+> disposition; **deriving it away is** (§2's formula computes the same names from
+> `all discriminators − PortWalkProjection − asserted-unarmable(golds)`), which is issue #32's job. The file
+> survives until #32 ships, because `PortWalkExhaustivenessTests` is currently the only executable statement
+> of the blind-spot set. Adjudication and evidence: **Appendix C**.
+
 ### 2. The closure condition — what "derived from the fixtures" means, testably
 
 The goal "the interaction set is derived fully from the loop-generated fixtures" cannot mean *no knowledge
@@ -288,7 +299,7 @@ The file is not demoted; it **dissolves**, each part to its correct home under �
 |---|---|
 | `stems_representative`, `aliases`, `attribute_axes`, `holes` | **Delete.** Fully subsumed; the rollup derives these from golds. A hand-maintained "declared half" is pure drift surface — the exact surface that failed twice. |
 | `connectivity_predictions` P1–P6 | **Promote to executable topology sweeps.** The first time they would actually be falsifiable. |
-| `reject` (terms deemed non-AST-derivable) | **Becomes asserted-absence golds**, one per term — a domain judgment, so Evidence per §1, not ADR prose. Converts a 4-line data block into 4 authored + judged fixtures; that cost buys executable justification. |
+| `reject` (terms deemed non-AST-derivable) | ~~Becomes asserted-absence golds, one per term.~~ **Superseded by issue #28 (2026-07-20): deleted outright, ruled NOT-A-PORT-CANDIDATE (35/35).** An absence gold is `no_arm` over a *projected port*; none of these terms is a port, a stem, or an AST discriminator, so the assertion is unstatable and would be vacuous. Not backlog either — they are absent from `projected(corpus)`, so §2's formula never yields them. A scope ruling about the taxonomy's vocabulary is architectural, hence ADR prose: **Appendix C**, plus the scaffold's own `$deleted` record. |
 | `$forks_resolved` (F1/F2/F3) | **Move into ADR 0003's prose** — these are architectural rulings about kinds/supergroups that no gold could witness. |
 
 `port-topology.json` becomes 100% witness-derived, and `holes.status` ceases to exist as a stored field — it
@@ -359,8 +370,8 @@ Wire the rollup's regeneration gate — the price of its committed exception (§
 regeneration check run against a busted cache. A clean checkout can produce all of them. CORE ring green.
 
 ### Stage 2 — Dissolve the scaffold
-Execute §7's four-way split: delete the subsumed sections, promote P1–P6 to sweeps, convert `reject` to
-asserted-absence golds, move F1/F2/F3 into ADR 0003.
+Execute §7's four-way split: delete the subsumed sections, promote P1–P6 to sweeps, delete `reject`
+(adjudicated not-a-port-candidate — Appendix C, *not* converted to golds), move F1/F2/F3 into ADR 0003.
 
 *Gate:* the sweeps run and pass (or produce a real, judged falsification); `topology-scaffold.json` is gone;
 no `status` field survives anywhere it could be hand-typed.
@@ -629,3 +640,101 @@ backlog formula.
   "cr": ["301.5", "701.3"]
 }
 ```
+
+## Appendix C — the `reject` / `known-coarse-projections` adjudication (issue #28, 2026-07-20)
+
+### The prior this appendix applies
+
+> **An unserved projection is backlog until proven otherwise.** An asserted-absence gold is the rare
+> exception. The bar for a decision is not "no consume exists today" — that is the *definition* of backlog —
+> but a **CR argument that no consume could ever exist**.
+
+The asymmetry that makes the prior correct: a false absence gold is **worse** than the whitelist prose it
+replaces. Prose is inert; a false `no_arm` gold subtracts a real port from §2's backlog formula *and* gates
+the build in favour of the error. Over-reporting the backlog costs nothing. Under-reporting hides work.
+
+Forced by three findings: Appendix B's own worked example (`emit:attach`) was **wrong**; the hit rate on
+absence claims was 1-wrong-of-2; and a full taxonomy sweep found exactly **one** genuinely terminal port
+(`emit:anynumberindeck`).
+
+### Outcome
+
+| Population | Terms | Ruling |
+|---|---|---|
+| `topology-scaffold.json` `reject` | 35 (11 archetypes, 17 judgments, 7 social) | **not-a-port-candidate ×35** — deleted, recorded in the scaffold's `$deleted` (5) |
+| `known-coarse-projections.json` | 288 (220 `effectType`, 16 `costType`, 46 `triggerEvent`, 6 `restriction`) | **backlog ×283**, **decision ×1** (`anyNumberInDeck`, already golded), **not-a-port-candidate ×4** (`effectType.unparsed`, `effectType.unstructured`, `triggerEvent.Other`, `restriction.Other`) |
+
+**New absence golds authored: zero.** That is the expected outcome, not a shortfall.
+
+### `reject` — why 35 category errors, not 35 golds
+
+`no_arm[P]` asserts that `SelectArm` returns null for a **port the engine projects**. `aggro`, `value` and
+`netdeck` are not ports, stems, `EffectType`s, `CostType`s, `TriggerEvent`s or restrictions; they are labels
+players apply to decks, lines of play and each other. There is nothing for the matcher to be null over, so
+the assertion is unstatable — and asserting the absence of a port that was never projected is vacuous in
+exactly the way Appendix B's "the trap this design avoids" describes. Nor are they backlog: §2's formula
+starts from `projected(corpus)`, and no card text yields them, so no parser or engine work would ever
+surface them. The scaffold's original `$note` was already correct — *a rejected archetype's mechanisms map;
+the label does not* — and needed conversion into nothing.
+
+### `known-coarse-projections` — the three tempting terminality candidates, all falsified against the corpus
+
+Every entry was tested against step 1 of the prior (*does any printed card demand a counterparty?*). The
+only entries where a terminality argument was even plausible are the ones that function **outside the
+game** — the class `anyNumberInDeck` belongs to. All were checked against
+`Data/_01_Raw/Datasets/External/oracle-cards.json` (38,279 oracle rows, 2026-07-18 snapshot):
+
+| Entry | Counterparty found | Ruling |
+|---|---|---|
+| `attach` | **13** cards print `becomes attached` — **10** as triggered abilities (*"Whenever this Equipment becomes attached to a creature, tap that creature"* — Enormous Energy Blade; *"Whenever an Aura you control becomes attached to a creature you control, create a 1/1 white Human Soldier creature token"* — Siona, Captain of the Pyleas; plus Assimilation Aegis, Eriette the Beguiler, Animate Spell, Blade of Shared Souls, Bramble Elemental, Brood Keeper, Inchblade Companion, Killer Cosplay), **3** as *"**As** this … becomes attached"* choices (Psychic Paper, Sanctuary Blade, Paleontologist's Pick-Axe), which CR 603.1 excludes from triggered abilities but which need the same undiscriminated event. CR **603.2e** names the event outright: *"Some trigger events use the word 'becomes' (for example, 'becomes attached' or 'becomes blocked')…"* — so Appendix B's premise is not unsupported, it is **contradicted**. | **backlog** — blocked on a missing `BecomesAttached` `TriggerEvent` (the enum has `BecomesUnattached` only, itself coarse) |
+| `commanderDesignation` | **39** cards say *"… can be your commander"*, and **11** read that designation back in game (*"Whenever your commander enters, you become the monarch"* — Nakia, Wakandan Operative; *"Whenever your commander deals combat damage to a player …"* — Jocasta, Automaton Avenger). CR 903.8 (commander tax) and 903.9a (command-zone replacement) consume it too. | **backlog** |
+| `openingHand` | **23** cards say *"begin the game with"* and **9** *"reveal this card from your opening hand"* — the Chancellor cycle hangs an explicit delayed in-game trigger off it (*"… at the beginning of the first upkeep …"*), and Leylines start on the battlefield with ordinary in-game abilities. | **backlog** |
+| `partner` | **152** `Partner` rows; *"Partner with …"* carries an in-game ETB tutor (Lore Weaver / Ley Weaver). | **backlog** |
+| `wish` | **104** rows say *"outside the game"*, every one resolving into an in-game action (Spike, Tournament Grinder). | **backlog** |
+
+The contrast that makes `anyNumberInDeck` the sole survivor: of the **10** deck-construction cards (Rat
+Colony, Relentless Rats, Shadowborn Apostle, Persistent Petitioners, Dragon's Approach, Hare Apparent, Slime
+Against Humanity, Templar Knight, Tempest Hawk, Cid Timeless Artificer), **not one** reads another card's
+deck-construction ability in game — the in-game text ("count Rats", "sacrifice six creatures named
+Shadowborn Apostle") is always a *separate ability with its own ports*. (Judge correction: an earlier
+`any number of cards named` regex returned 13 by also catching three *search* effects — Battalion Foot
+Soldier, Gathering Throng, Legion Conquistador — which carry no deck-construction ability. The same 13, plus
+Seven Dwarves and Nazgûl — CR 100.2a-style *raised* caps, a different rule — propagated into the
+`rat-colony-deck-construction-terminal` gold's `source.note`; that gold is immutable to workers, so the
+correction is flagged for orchestrator back-prop. The ruling is unaffected.) CR 113.6n gives the
+deck-construction static no in-game window in which a consume could observe it. (And per the judge's
+near-miss on that gold, "functions before the game begins" is **not** sufficient — companion, CR 702.139,
+also does, yet carries the CR 116.2g special action.)
+
+Every remaining entry fails step 2 by inspection: prohibition statics (`cantGainLife`, `cantDrawCards`,
+`cantPreventDamage`, …), permission grants (`grantAlternativeCost`, `canAttackIgnoringDefender`, …), keyword
+actions (`amass`, `connive`, `explore`, `forage`, …), choice declarations (`chooseColor`, `choosePlayer`, …)
+and the 46 unread trigger events all describe things that demonstrably happen *during* a game and change its
+outcome. "No flow rule reads it **yet**" — which is what ~150 of the reasons literally say — is the textbook
+statement of backlog.
+
+**Four** entries are the genuine third category — recognition-failure escape hatches, not Magic concepts:
+`effectType.unparsed` and `effectType.unstructured` (`IUnparsed` residue nodes carrying `RawText`, the
+parser's record of its own failure), plus `triggerEvent.Other` (*"Unrecognized trigger event"*) and
+`restriction.Other` (*"Other restriction captured as raw text"*), which the interaction-judge's falsification
+pass correctly pulled out of the backlog under this same criterion. No card can print "unparsed" or "other",
+so no consume could key on the label itself and no CR argument applies either way. They belong on the
+**parse** ledger (the fidelity ladder / L2 coverage), never on the interaction backlog — #32 must exclude
+them or the backlog double-counts parse debt as interaction debt.
+
+### Why the file is still on disk
+
+Its **names** are already derivable — `PortWalkExhaustivenessTests.Regenerate_coarse_projection_whitelist`
+computes exactly `all discriminators − PortWalkProjection`, which is §2's backlog before the
+asserted-unarmable subtrahend. What is *not* derivable is (a) the loud gate that a new discriminator is
+neither projected nor consciously accepted, and (b) the handful of reasons that are genuine investigation
+notes rather than the boilerplate default. So deletion is gated on **issue #32**:
+
+1. #32 emits the derived backlog as a `_08_Reporting` Flowthru output: `projected − served − asserted-unarmable`, keyed by discriminator and dimension.
+2. `PortWalkExhaustivenessTests` re-points at that output — the invariant becomes *every unprojected discriminator appears in the derived backlog, and every asserted-unarmable one has a gold* — preserving the loud signal without a hand-maintained name list.
+3. The ~15 substantive investigation notes (`attach`, `exert`, `forage`, `TapsForMana`, `ExcessNoncombatDamageDealt`, …) move to wherever #32 keeps per-item annotation, or are dropped as re-derivable.
+4. Then, and only then, the file is deleted.
+
+Deleting it before #32 exists would trade a hand-maintained list for **no** statement at all, and would take
+the exhaustiveness gate red or vacuous. Issue #28 therefore leaves it in place deliberately, having
+adjudicated its contents.
