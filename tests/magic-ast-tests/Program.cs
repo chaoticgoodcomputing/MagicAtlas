@@ -16,6 +16,7 @@ using MagicAtlas.Ast.Tests.Flows.PortGraphAtlas;
 using MagicAtlas.Ast.Tests.Flows.TopologyDemand;
 using MagicAtlas.Ast.Tests.Flows.OverApproximation;
 using MagicAtlas.Ast.Tests.Flows.SpanWitness;
+using MagicAtlas.Ast.Tests.Flows.WidenedAttributes;
 using MagicAtlas.Ast.Tests.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -325,6 +326,26 @@ public class Program
             + "compare), never a hand-maintained register — and joins each to the ports, and the GREENs, "
             + "that consequently rest on an unmodeled condition (Gravecrawler's \"as long as you control a "
             + "Zombie\") → Data/_08_Reporting/over-approximation-report.json. Run after --flow CardAtlas."
+        );
+
+      // The widened-attribute report (ADR-0004 §6). The SIBLING class the one above cannot see: not a
+      // dropped condition NODE (a lost guard) but a dropped FACET (a lost scope) — a controller/owner/
+      // exclusion the AST states and the port does not carry. Same ablation technique, structurally
+      // disjoint domain (an attribute site contains no polymorphic node; a Condition is one).
+      flowthru
+        .RegisterFlow<Catalog>(
+          "WidenedAttributes",
+          catalog => WidenedAttributesFlow.Create(catalog, ontologyPath)
+        )
+        .WithDescription(
+          "Widened-attribute report (corpus-gated diagnostic; ADR-0004 §6): enumerates narrowing AST "
+            + "FACETS the PortWalk projection drops from the ports it produces, so the port names more of "
+            + "the game than the card does (Chatterfang's \"under your control\" missing from "
+            + "replace:token-creation) — derived by ablation, never a register — and joins each to the "
+            + "ports, and the GREENs, that are consequently broader than their card → "
+            + "Data/_08_Reporting/widened-attribute-report.json. Complements, never replaces, "
+            + "OverApproximation (dropped condition nodes) and known-coarse-projections.json (coarse "
+            + "discriminators). Run after --flow CardAtlas."
         );
 
       // The ADR-0004 §1 artifact census. Hermetic (working tree only) — the repo root is resolved by

@@ -2,15 +2,15 @@
   "Name": "Bruvac the Grandiloquent",
   "Ports": [
     {
-      "Identity": "Bruvac the Grandiloquent::replace:mill",
+      "Identity": "Bruvac the Grandiloquent::replace:mill:opponent",
       "Card": "Bruvac the Grandiloquent",
-      "Label": "replace:mill",
+      "Label": "replace:mill:opponent",
       "Side": "Intercept",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=True|isSelf=|excludeSelf="
     }
   ],
   "CardDefinedEdges": [],

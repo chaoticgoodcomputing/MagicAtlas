@@ -133,6 +133,17 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/over-approximation-report.json")
       .Build());
 
+  /// <summary>The widened-attribute report (ADR-0004 §6): narrowing AST facets the projection dropped
+  /// from the ports it produced, joined to the ports — and the GREENs — that are consequently broader
+  /// than their card. Sibling of <see cref="OverApproximationReport"/> (dropped condition NODES, a lost
+  /// guard); this one is dropped FACETS, a lost scope. Fully derived by ablation; no hand-maintained
+  /// register. Corpus report (gitignored, never committed).</summary>
+  public IItem<WidenedAttributeReport> WidenedAttributeReport =>
+    CreateItem(() => Item.Of<WidenedAttributeReport>("WidenedAttributeReport")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/widened-attribute-report.json")
+      .Build());
+
   /// <summary>D4 — per-combo reconstructed loops (named cards, family-signature, tier, result).</summary>
   public IItem<IEnumerable<ComboInstanceRow>> ComboInstances =>
     CreateItem(() => Item.Of<IEnumerable<ComboInstanceRow>>("ComboInstances")

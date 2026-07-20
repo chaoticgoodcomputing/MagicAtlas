@@ -414,12 +414,21 @@ public static class PortLabel
 
   /// <summary>
   /// A replacement effect (CR 614) — the <c>replace</c> role over the event it intercepts (ADR-0002
-  /// §3). Chatterfang's "if tokens would be created … created instead" → <c>replace:token-creation</c>.
-  /// The intercept scope ("under your control") is carried <em>only when the parsed event provides a
-  /// controller</em>; the current parser drops it from the <c>tokenCreation</c> event, so Chatterfang
-  /// projects <b>unscoped</b> — the projection surfacing a parser-fidelity gap (ADR-0002 §10), and the
-  /// unscoped label over-approximates safely (§6). A parser fix that carries the event controller
-  /// promotes it to <c>replace:token-creation:controlled</c> with no change here.
+  /// §3). Anointed Procession's "if one or more tokens would be created under your control … instead" →
+  /// <c>replace:token-creation:controlled</c>; Bruvac the Grandiloquent's "if an OPPONENT would mill …"
+  /// → <c>replace:mill:opponent</c>.
+  ///
+  /// <para>The intercept scope is carried whenever the parsed event provides a controller, and
+  /// <c>PortGraph</c> now reads it (ADR-0004 §6, the widened-attribute fix). CR 614.1 replaces a
+  /// SPECIFIC event, so a scoped event must project a scoped intercept: dropping the facet modelled
+  /// these cards as replacing anyone's event, which for Bruvac meant doubling the controller's OWN mill
+  /// — flatly unsupported by the printed text, and a false GREEN in any self-mill loop.</para>
+  ///
+  /// <para><b>Remaining gap (parse-side, not here):</b> Chatterfang, Squirrel General prints the same
+  /// "under your control" as its four siblings, but <c>TokenAugmentationReplacementRule</c> alone omits
+  /// <c>Controller</c> from the <c>tokenCreation</c> event it builds, so Chatterfang still projects
+  /// <b>unscoped</b>. That is a parser-fidelity gap (ADR-0002 §10), not a projection one — the moment
+  /// the rule states the facet, the port is born correct with no change here.</para>
   /// </summary>
   public static string Replacement(string replacedEventType, ControllerFilter? eventController = null) =>
     Join("replace", ReplacedEvent(replacedEventType), ScopeToken(eventController));
