@@ -102,7 +102,7 @@ phase-gated (low priority).
   `PowerToughnessOverride`, `TypeAdder`).
 
 The one soft spot is `AbilityAdder.AbilityText` is **free text** (`"haste"`), a known initiative-05
-sink (`destring-worklist.json` → `AbilityText_keyword_as_string_old_form` lists exactly
+sink (the `AbilityText` bucket of `nx run mast:free-text-census`, which replaced the frozen `destring-worklist.json`, lists exactly
 `HelmOfTheHost` + `KikiJikiMirrorBreaker`). This does **not** block copy-inheritance: the graft reads
 the **copied card's** abilities, and the *added* keyword (haste) is irrelevant to the untap loop
 (haste only matters for the copy attacking, which the engine doesn't model). So:

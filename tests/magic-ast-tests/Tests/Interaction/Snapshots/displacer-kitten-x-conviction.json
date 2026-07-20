@@ -1,0 +1,251 @@
+{
+  "Name": "displacer-kitten-x-conviction",
+  "Ports": [
+    {
+      "Identity": "Conviction::emit:cast:spell",
+      "Card": "Conviction",
+      "Label": "emit:cast:spell",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=spell|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Conviction::emit:enchantrestriction",
+      "Card": "Conviction",
+      "Label": "emit:enchantrestriction",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::modify:pt",
+      "Card": "Conviction",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::pay:mana",
+      "Card": "Conviction",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Conviction::pay:mana:white",
+      "Card": "Conviction",
+      "Label": "pay:mana:white",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Displacer Kitten::emit:blink:permanent",
+      "Card": "Displacer Kitten",
+      "Label": "emit:blink:permanent",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=permanent|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Displacer Kitten::trigger:cast:spell:controlled",
+      "Card": "Displacer Kitten",
+      "Label": "trigger:cast:spell:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=spell|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Peregrine Drake::emit:untap",
+      "Card": "Peregrine Drake",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=land|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Peregrine Drake::etb:creature:self",
+      "Card": "Peregrine Drake",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Peregrine Drake::evasion:flying",
+      "Card": "Peregrine Drake",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Conviction::pay:mana:white",
+      "To": "Conviction::emit:cast:spell"
+    },
+    {
+      "From": "Conviction::pay:mana",
+      "To": "Conviction::emit:cast:spell"
+    },
+    {
+      "From": "Displacer Kitten::trigger:cast:spell:controlled",
+      "To": "Displacer Kitten::emit:blink:permanent"
+    },
+    {
+      "From": "Peregrine Drake::etb:creature:self",
+      "To": "Peregrine Drake::emit:untap"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Conviction::emit:cast:spell",
+      "To": "Displacer Kitten::trigger:cast:spell:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "Types"
+    },
+    {
+      "From": "Conviction::pay:mana:white",
+      "To": "Conviction::emit:cast:spell",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Conviction::pay:mana",
+      "To": "Conviction::emit:cast:spell",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Displacer Kitten::emit:blink:permanent",
+      "To": "Peregrine Drake::etb:creature:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "IsSelf"
+    },
+    {
+      "From": "Displacer Kitten::trigger:cast:spell:controlled",
+      "To": "Displacer Kitten::emit:blink:permanent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Peregrine Drake::emit:untap",
+      "To": "Conviction::pay:mana:white",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Peregrine Drake::emit:untap",
+      "To": "Conviction::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Peregrine Drake::etb:creature:self",
+      "To": "Peregrine Drake::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Conviction::emit:cast:spell=\u003EDisplacer Kitten::trigger:cast:spell:controlled|RulesDefined|Flow|Overlaps|Unknown|Amber|Types",
+        "Conviction::pay:mana:white=\u003EConviction::emit:cast:spell|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Displacer Kitten::emit:blink:permanent=\u003EPeregrine Drake::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf",
+        "Displacer Kitten::trigger:cast:spell:controlled=\u003EDisplacer Kitten::emit:blink:permanent|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Peregrine Drake::emit:untap=\u003EConviction::pay:mana:white|RulesDefined|Flow|Overlaps|Unknown|Amber|untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)",
+        "Peregrine Drake::etb:creature:self=\u003EPeregrine Drake::emit:untap|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    },
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Conviction::emit:cast:spell=\u003EDisplacer Kitten::trigger:cast:spell:controlled|RulesDefined|Flow|Overlaps|Unknown|Amber|Types",
+        "Conviction::pay:mana=\u003EConviction::emit:cast:spell|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Displacer Kitten::emit:blink:permanent=\u003EPeregrine Drake::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf",
+        "Displacer Kitten::trigger:cast:spell:controlled=\u003EDisplacer Kitten::emit:blink:permanent|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Peregrine Drake::emit:untap=\u003EConviction::pay:mana|RulesDefined|Flow|Overlaps|Unknown|Amber|untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)",
+        "Peregrine Drake::etb:creature:self=\u003EPeregrine Drake::emit:untap|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "Name": "titanias-boon-x-doubling-season",
+  "Ports": [
+    {
+      "Identity": "Doubling Season::replace:counterplacement",
+      "Card": "Doubling Season",
+      "Label": "replace:counterplacement",
+      "Side": "Intercept",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Doubling Season::replace:token-creation",
+      "Card": "Doubling Season",
+      "Label": "replace:token-creation",
+      "Side": "Intercept",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Titania\u0027s Boon::cast:spell:self",
+      "Card": "Titania\u0027s Boon",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target",
+      "Card": "Titania\u0027s Boon",
+      "Label": "emit:counter:\u002B1/\u002B1:target",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Titania\u0027s Boon::pay:mana",
+      "Card": "Titania\u0027s Boon",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Titania\u0027s Boon::pay:mana:green",
+      "Card": "Titania\u0027s Boon",
+      "Label": "pay:mana:green",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Titania\u0027s Boon::cast:spell:self",
+      "To": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target"
+    },
+    {
+      "From": "Titania\u0027s Boon::pay:mana:green",
+      "To": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target"
+    },
+    {
+      "From": "Titania\u0027s Boon::pay:mana",
+      "To": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Titania\u0027s Boon::cast:spell:self",
+      "To": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Titania\u0027s Boon::pay:mana:green",
+      "To": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Titania\u0027s Boon::pay:mana",
+      "To": "Titania\u0027s Boon::emit:counter:\u002B1/\u002B1:target",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

@@ -10,7 +10,11 @@ using MagicAST.AST.Effects.Traits;
 /// <summary>
 /// "untap [target]"
 /// </summary>
-[OracleEffect("untap")]
+[OracleEffect(
+  "untap",
+  NearDuplicateOf = new[] { "tap" },
+  Reason = "Opposite operations, distinct as both Cost and Effect: 'tap' taps a permanent, 'untap' untaps it (CR 701.21 / 701.22). The shared root is the verb; the 'un-' prefix inverts it. Not sprawl."
+)]
 public sealed record UntapEffect : Effect
 {
   public required ObjectReference Target { get; init; }

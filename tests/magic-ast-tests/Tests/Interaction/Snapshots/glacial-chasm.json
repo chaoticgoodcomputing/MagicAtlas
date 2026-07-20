@@ -1,0 +1,129 @@
+{
+  "Name": "glacial-chasm",
+  "Ports": [
+    {
+      "Identity": "Glacial Chasm::at:upkeep",
+      "Card": "Glacial Chasm",
+      "Label": "at:upkeep",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Glacial Chasm::emit:cantattack",
+      "Card": "Glacial Chasm",
+      "Label": "emit:cantattack",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Glacial Chasm::emit:counter:age:self",
+      "Card": "Glacial Chasm",
+      "Label": "emit:counter:age:self",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Glacial Chasm::emit:preventable",
+      "Card": "Glacial Chasm",
+      "Label": "emit:preventable",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Glacial Chasm::emit:preventdamage",
+      "Card": "Glacial Chasm",
+      "Label": "emit:preventdamage",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Glacial Chasm::emit:sacrifice",
+      "Card": "Glacial Chasm",
+      "Label": "emit:sacrifice",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Glacial Chasm::etb:land:self",
+      "Card": "Glacial Chasm",
+      "Label": "etb:land:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=land|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Glacial Chasm::at:upkeep",
+      "To": "Glacial Chasm::emit:counter:age:self"
+    },
+    {
+      "From": "Glacial Chasm::at:upkeep",
+      "To": "Glacial Chasm::emit:preventable"
+    },
+    {
+      "From": "Glacial Chasm::etb:land:self",
+      "To": "Glacial Chasm::emit:sacrifice"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Glacial Chasm::at:upkeep",
+      "To": "Glacial Chasm::emit:counter:age:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Glacial Chasm::at:upkeep",
+      "To": "Glacial Chasm::emit:preventable",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Glacial Chasm::etb:land:self",
+      "To": "Glacial Chasm::emit:sacrifice",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

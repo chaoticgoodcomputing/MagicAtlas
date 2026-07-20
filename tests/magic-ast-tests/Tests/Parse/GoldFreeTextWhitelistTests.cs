@@ -1,6 +1,6 @@
 namespace MagicAST.Tests.Tests;
 
-using System.Text.Json;
+using MagicAtlas.Ast.Tests.Flows.Common;
 
 /// <summary>
 /// Free-text cleanliness invariant (de-string, initiative 05 — de-ratcheted 2026-06-16). A committed
@@ -29,22 +29,11 @@ using System.Text.Json;
 [TestFixture]
 public class GoldFreeTextWhitelistTests
 {
-  /// <summary>JSON keys carrying <c>[FreeTextField]</c> interior free text. Non-empty = one instance.</summary>
-  private static readonly string[] FreeTextKeys = ["AbilityText", "Instructions", "Timeframe"];
-
-  /// <summary><c>IResidual</c> residual-arm nodes, keyed by (discriminator JSON property, value) → sink name.</summary>
-  private static readonly (string Prop, string Value, string Sink)[] ResidualArms =
-  [
-    ("CharacteristicType", "other", "OtherCharacteristic"),
-    ("ConditionType", "other", "OtherCondition"),
-    ("PredicateType", "other", "OtherHistoryPredicate"),
-    // Fidelity-ladder L1 residual: a recognised ability shell whose effect interior
-    // is held verbatim (the shell fallback). Detected by its EffectType discriminator
-    // (its FreeTextField JSON key "Text" is too generic — Parenthetical reuses it),
-    // so a gold carrying an L1 shell must name (card, "UnstructuredEffect") here —
-    // accounted debt, burned down when the interior is structured (L1 → L2).
-    ("EffectType", "unstructured", "UnstructuredEffect"),
-  ];
+  // The sink DEFINITION (which JSON keys and which IResidual "other" arms count) lives in
+  // Flows/Common/FreeTextSinkScanner, shared with the FreeTextResidualCensus reporting flow so the gate
+  // and the burn-down report cannot disagree about what a sink is. The scanner is a pure static walk
+  // over the committed golds — not a Flowthru step — so this gate still holds on a clean checkout with
+  // no _08_Reporting present.
 
   // card → the set of free-text sinks that card's gold carries (one walk over the corpus).
   private static readonly Lazy<IReadOnlyDictionary<string, IReadOnlySet<string>>> _live = new(
@@ -105,120 +94,16 @@ public class GoldFreeTextWhitelistTests
       .ThenBy(p => p.Sink, StringComparer.Ordinal)
       .Select(p => new TestCaseData(p.Card, p.Sink));
 
-  private static IReadOnlyDictionary<string, IReadOnlySet<string>> ScanLiveSinks()
-  {
-    var root = Path.Combine(GoldRoot(), "tests", "magic-ast-tests", "Fixtures", "HandParsedCards");
-    var result = new Dictionary<string, IReadOnlySet<string>>(StringComparer.Ordinal);
+  private static IReadOnlyDictionary<string, IReadOnlySet<string>> ScanLiveSinks() =>
+    FreeTextSinkScanner
+      .ScanAll(GoldRoot())
+      .Where(g => g.Sinks.Count > 0)
+      .ToDictionary(g => g.Card, g => g.Sinks, StringComparer.Ordinal);
 
-    foreach (var file in GoldFiles())
-    {
-      var card = Path
-        .GetRelativePath(root, file)
-        .Replace('\\', '/')[..^".json".Length];
+  private static IReadOnlySet<(string Card, string Sink)> LoadWhitelist() =>
+    FreeTextSinkScanner.LoadWhitelist(GoldRoot()).Keys.ToHashSet();
 
-      using var doc = JsonDocument.Parse(File.ReadAllText(file));
-      var sinks = new HashSet<string>(StringComparer.Ordinal);
-      if (doc.RootElement.TryGetProperty("Output", out var output))
-      {
-        CollectSinks(output, sinks);
-      }
-
-      if (sinks.Count > 0)
-      {
-        result[card] = sinks;
-      }
-    }
-
-    return result;
-  }
-
-  private static void CollectSinks(JsonElement node, HashSet<string> sinks)
-  {
-    switch (node.ValueKind)
-    {
-      case JsonValueKind.Object:
-        foreach (var key in FreeTextKeys)
-        {
-          if (node.TryGetProperty(key, out var v) && IsNonEmptyFreeText(v))
-          {
-            sinks.Add(key);
-          }
-        }
-
-        foreach (var (prop, value, sink) in ResidualArms)
-        {
-          if (
-            node.TryGetProperty(prop, out var disc)
-            && disc.ValueKind == JsonValueKind.String
-            && disc.GetString() == value
-          )
-          {
-            sinks.Add(sink);
-          }
-        }
-
-        foreach (var member in node.EnumerateObject())
-        {
-          CollectSinks(member.Value, sinks);
-        }
-
-        break;
-
-      case JsonValueKind.Array:
-        foreach (var item in node.EnumerateArray())
-        {
-          CollectSinks(item, sinks);
-        }
-
-        break;
-    }
-  }
-
-  private static bool IsNonEmptyFreeText(JsonElement v) =>
-    v.ValueKind switch
-    {
-      JsonValueKind.String => !string.IsNullOrWhiteSpace(v.GetString()),
-      JsonValueKind.Array => v.GetArrayLength() > 0,
-      _ => false,
-    };
-
-  private static IReadOnlySet<(string Card, string Sink)> LoadWhitelist()
-  {
-    var path = Path.Combine(
-      TestContext.CurrentContext.TestDirectory,
-      "Fixtures",
-      "whitelist-freetext.json"
-    );
-    var set = new HashSet<(string, string)>();
-    if (!File.Exists(path))
-    {
-      return set;
-    }
-
-    using var doc = JsonDocument.Parse(File.ReadAllText(path));
-    if (doc.RootElement.TryGetProperty("entries", out var entries))
-    {
-      foreach (var e in entries.EnumerateArray())
-      {
-        var card = e.TryGetProperty("card", out var c) ? c.GetString() : null;
-        var sink = e.TryGetProperty("sink", out var s) ? s.GetString() : null;
-        if (card is not null && sink is not null)
-        {
-          set.Add((card, sink));
-        }
-      }
-    }
-
-    return set;
-  }
-
-  private static IReadOnlyList<string> GoldFiles()
-  {
-    var dir = Path.Combine(GoldRoot(), "tests", "magic-ast-tests", "Fixtures", "HandParsedCards");
-    return Directory.Exists(dir)
-      ? Directory.EnumerateFiles(dir, "*.json", SearchOption.AllDirectories).ToList()
-      : [];
-  }
+  private static IReadOnlyList<string> GoldFiles() => FreeTextSinkScanner.GoldFiles(GoldRoot());
 
   // The committed gold JSON is the artifact under contract — walk the source tree, not the output
   // mirror. Locate the repo root by the nx.json sentinel (same pattern as SchemaExportTests).

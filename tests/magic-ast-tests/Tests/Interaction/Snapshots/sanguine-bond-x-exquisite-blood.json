@@ -1,0 +1,46 @@
+{
+  "Name": "sanguine-bond-x-exquisite-blood",
+  "Ports": [
+    {
+      "Identity": "Exquisite Blood::emit:life:gain:controlled",
+      "Card": "Exquisite Blood",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": null,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Exquisite Blood::trigger:life:loss:opponent",
+      "Card": "Exquisite Blood",
+      "Label": "trigger:life:loss:opponent",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Exquisite Blood::trigger:life:loss:opponent",
+      "To": "Exquisite Blood::emit:life:gain:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Exquisite Blood::trigger:life:loss:opponent",
+      "To": "Exquisite Blood::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

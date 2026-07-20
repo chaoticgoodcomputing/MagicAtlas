@@ -32,7 +32,11 @@ using MagicAST.AST.Effects.Traits;
 /// of that player's graveyard cards being recycled.
 /// </para>
 /// </summary>
-[OracleEffect("shuffleCardsFromGraveyardIntoLibrary")]
+[OracleEffect(
+  "shuffleCardsFromGraveyardIntoLibrary",
+  NearDuplicateOf = new[] { "shuffle" },
+  Reason = "'shuffle' shuffles a library/zone in place; 'shuffleCardsFromGraveyardIntoLibrary' (Krosan Reclamation, CR 701.24) is a targeted-subset zone-change that moves separately-targeted graveyard cards into their owner's library and then shuffles. Shares only the 'shuffle' stem; carries both a targeted Player and a quantity-bounded Cards subset. Also distinct from whole-zone 'shuffleGraveyardIntoLibrary' and single-object 'shuffleIntoLibrary'. Not sprawl."
+)]
 public sealed record ShuffleCardsFromGraveyardIntoLibraryEffect : Effect
 {
   public required ObjectReference Player { get; init; }

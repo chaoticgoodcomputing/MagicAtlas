@@ -6,6 +6,8 @@ using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
 using MagicAtlas.Ast.Tests.Flows.ArtifactCensus;
 using MagicAtlas.Ast.Tests.Flows.DiceComboReport;
+using MagicAtlas.Ast.Tests.Flows.DiscriminatorGovernance;
+using MagicAtlas.Ast.Tests.Flows.FreeTextResidualCensus;
 using MagicAtlas.Ast.Tests.Flows.InteractionRollup;
 using MagicAtlas.Ast.Tests.Flows.InteractionTriage;
 using MagicAtlas.Ast.Tests.Flows.LabelCensus;
@@ -340,6 +342,36 @@ public class Program
             + "classifies each Evidence / Derived / architectural-decision, flagging the genuinely "
             + "ambiguous residue → Data/_08_Reporting/artifact-census.json. The GATE over the "
             + "classification is the NUnit ArtifactClassificationGateTests."
+        );
+
+      // ADR-0004 §1, issue #38: the initiative-05 free-text burn-down, recomputed rather than frozen in
+      // libs/magic-ast/schema/destring-worklist.json. Hermetic (working tree only).
+      flowthru
+        .RegisterFlow<Catalog>(
+          "FreeTextResidualCensus",
+          catalog =>
+            FreeTextResidualCensusFlow.Create(catalog, ArtifactClassifier.RepoRoot(basePath))
+        )
+        .WithDescription(
+          "Initiative-05 free-text (de-string) burn-down census: per-sink instance/card counts over "
+            + "every committed gold under Fixtures/HandParsedCards/**, joined to the named "
+            + "Fixtures/whitelist-freetext.json carve-outs → "
+            + "Data/_08_Reporting/free-text-residual-census.json. Replaces the frozen "
+            + "destring-worklist.json. Never a gate; the GATE is the NUnit GoldFreeTextWhitelistTests."
+        );
+
+      // ADR-0004 §1, issue #38: the near-duplicate discriminator check, demoted from a CORE-ring gate to
+      // a report once its JSON whitelist moved to the declaration sites.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "DiscriminatorGovernance",
+          DiscriminatorGovernanceFlow.Create
+        )
+        .WithDescription(
+          "Discriminator governance report: every intra-family near-duplicate discriminator pair, split "
+            + "into the ones a declaration-site NearDuplicateOf/Reason ruling explains and the ones "
+            + "nobody has ruled on → Data/_08_Reporting/discriminator-governance.json. Never a gate; the "
+            + "GATE is the NUnit DiscriminatorUniquenessTests (hard per-family collision)."
         );
 
       flowthru.ConfigureMetadata(meta =>

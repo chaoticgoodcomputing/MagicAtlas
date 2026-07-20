@@ -1,0 +1,46 @@
+{
+  "Name": "archaeomancer",
+  "Ports": [
+    {
+      "Identity": "Archaeomancer::emit:returntohand:spell:instant\u002Bsorcery",
+      "Card": "Archaeomancer",
+      "Label": "emit:returntohand:spell:instant\u002Bsorcery",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Archaeomancer::etb:creature:self",
+      "Card": "Archaeomancer",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Archaeomancer::etb:creature:self",
+      "To": "Archaeomancer::emit:returntohand:spell:instant\u002Bsorcery"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Archaeomancer::etb:creature:self",
+      "To": "Archaeomancer::emit:returntohand:spell:instant\u002Bsorcery",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

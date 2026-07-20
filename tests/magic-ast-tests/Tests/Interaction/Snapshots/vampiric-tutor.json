@@ -1,0 +1,110 @@
+{
+  "Name": "vampiric-tutor",
+  "Ports": [
+    {
+      "Identity": "Vampiric Tutor::cast:spell:self",
+      "Card": "Vampiric Tutor",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Vampiric Tutor::emit:life:loss:controlled",
+      "Card": "Vampiric Tutor",
+      "Label": "emit:life:loss:controlled",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Vampiric Tutor::emit:searchlibrary",
+      "Card": "Vampiric Tutor",
+      "Label": "emit:searchlibrary",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Vampiric Tutor::pay:mana:black",
+      "Card": "Vampiric Tutor",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Vampiric Tutor::cast:spell:self",
+      "To": "Vampiric Tutor::emit:life:loss:controlled"
+    },
+    {
+      "From": "Vampiric Tutor::cast:spell:self",
+      "To": "Vampiric Tutor::emit:searchlibrary"
+    },
+    {
+      "From": "Vampiric Tutor::pay:mana:black",
+      "To": "Vampiric Tutor::emit:life:loss:controlled"
+    },
+    {
+      "From": "Vampiric Tutor::pay:mana:black",
+      "To": "Vampiric Tutor::emit:searchlibrary"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Vampiric Tutor::cast:spell:self",
+      "To": "Vampiric Tutor::emit:life:loss:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Vampiric Tutor::cast:spell:self",
+      "To": "Vampiric Tutor::emit:searchlibrary",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Vampiric Tutor::pay:mana:black",
+      "To": "Vampiric Tutor::emit:life:loss:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Vampiric Tutor::pay:mana:black",
+      "To": "Vampiric Tutor::emit:searchlibrary",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

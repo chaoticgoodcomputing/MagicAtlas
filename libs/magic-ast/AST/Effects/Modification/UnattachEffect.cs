@@ -30,7 +30,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// attached permanent from its host.
 /// </para>
 /// </summary>
-[OracleEffect("unattach")]
+[OracleEffect(
+  "unattach",
+  NearDuplicateOf = new[] { "attach" },
+  Reason = "Opposite operations: attach an Aura/Equipment to a permanent vs unattach it (CR 701.3 / 701.42). Distinct effects."
+)]
 public sealed record UnattachEffect : Effect
 {
 }

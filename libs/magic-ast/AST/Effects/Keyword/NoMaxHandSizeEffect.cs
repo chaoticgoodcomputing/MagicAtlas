@@ -23,7 +23,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// hand size" (the symmetric, all-players case, e.g. Price of Knowledge) →
 /// <see cref="ObjectReferenceKind.EachPlayer"/>.
 /// </remarks>
-[OracleEffect("noMaxHandSize")]
+[OracleEffect(
+  "noMaxHandSize",
+  NearDuplicateOf = new[] { "maxHandSize" },
+  Reason = "SET vs REMOVE on the same rule (CR 402.2). 'maxHandSize' sets the maximum to a fixed number ('Your maximum hand size is ten'); 'noMaxHandSize' removes the restriction entirely ('You have no maximum hand size'). The 'no-' prefix inverts rather than qualifies, exactly as tap/untap. Not sprawl."
+)]
 public sealed record NoMaxHandSizeEffect : Effect
 {
   /// <summary>

@@ -1,0 +1,71 @@
+{
+  "Name": "shattering-blow",
+  "Ports": [
+    {
+      "Identity": "Shattering Blow::cast:spell:self",
+      "Card": "Shattering Blow",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Shattering Blow::emit:exile",
+      "Card": "Shattering Blow",
+      "Label": "emit:exile",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Shattering Blow::pay:mana",
+      "Card": "Shattering Blow",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Shattering Blow::cast:spell:self",
+      "To": "Shattering Blow::emit:exile"
+    },
+    {
+      "From": "Shattering Blow::pay:mana",
+      "To": "Shattering Blow::emit:exile"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Shattering Blow::cast:spell:self",
+      "To": "Shattering Blow::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Shattering Blow::pay:mana",
+      "To": "Shattering Blow::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

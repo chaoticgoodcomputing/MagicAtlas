@@ -24,7 +24,11 @@ using MagicAST.AST.Effects.Traits;
 /// is discoverable in the interaction/port graph.
 /// </para>
 /// </summary>
-[OracleEffect("shuffleGraveyardIntoLibrary")]
+[OracleEffect(
+  "shuffleGraveyardIntoLibrary",
+  NearDuplicateOf = new[] { "shuffle" },
+  Reason = "A primitive vs a whole-zone move that ends in it. 'shuffle' is the bare randomize action (CR 701.24a); 'shuffleGraveyardIntoLibrary' is a zone-wide move (CR 400.12) that relocates every card in the graveyard into the library AND THEN shuffles. Same relationship the already-justified shuffle ~ shuffleIntoLibrary and shuffle ~ shuffleCardsFromGraveyardIntoLibrary pairs carry. Not sprawl."
+)]
 public sealed record ShuffleGraveyardIntoLibraryEffect : Effect
 {
   public required ObjectReference Player { get; init; }

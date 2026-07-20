@@ -127,8 +127,10 @@ public static class ArtifactClassifier
       ["tests/magic-ast-tests/Tests/Interaction/Snapshots"] =
         "PortWalkSentinelSnapshotTest.Regenerate_snapshots writes one canonical pipeline snapshot per "
         + "sentinel, named Slug(sentinel.Name) + \".json\" — a frozen computation, Derived by ADR 0004 "
-        + "§1 despite being committed. Files in here whose names DO appear in source (the sentinels.json "
-        + "manifest, captures-accepted-pairs.txt) are classified on their own merits.",
+        + "§1 despite being committed. The sentinel SET is itself derived (SentinelSet.Derive over the "
+        + "interaction golds) since issue #38 retired the hand-written sentinels.json manifest. Files in "
+        + "here whose names DO appear in source (captures-accepted-pairs.txt) are classified on their "
+        + "own merits.",
     };
 
   // ── The two hand-maintained tables. Keep them SMALL; see the class remarks. ──────────────────────
@@ -209,40 +211,18 @@ public static class ArtifactClassifier
         + "the topology) and a stale derived claim. Splitting it is ADR-0004 §2 work (backlog becomes "
         + "computed); classifying the file as it stands would freeze the conflation.",
 
-      // ── Fixtures/Interactions/cards ─────────────────────────────────────────────────────────────
-      ["tests/magic-ast-tests/Fixtures/Interactions/cards/BloodArtist.json"] = InteractionCardReason,
-      ["tests/magic-ast-tests/Fixtures/Interactions/cards/Chatterfang.json"] = InteractionCardReason,
-      ["tests/magic-ast-tests/Fixtures/Interactions/cards/PitilessPlunderer.json"] = InteractionCardReason,
-      ["tests/magic-ast-tests/Fixtures/Interactions/cards/RuthlessKnave.json"] = InteractionCardReason,
-
-      // ── Test-adjacent snapshots ─────────────────────────────────────────────────────────────────
-      ["tests/magic-ast-tests/Tests/Interaction/Snapshots/sentinels.json"] =
-        "The snapshot MANIFEST — the hand-curated list of which cards/combos get a pipeline snapshot. Not "
-        + "written by Regenerate_snapshots (which only writes the slug files it enumerates). Evidence-like "
-        + "in that a human chose the sentinels, but it records a coverage decision, not an observation "
-        + "about Magic.",
-
-      // ── libs/magic-ast/schema ───────────────────────────────────────────────────────────────────
-      ["libs/magic-ast/schema/discriminator-justifications.json"] =
-        "Hand-written prose justifying why two near-duplicate discriminators must both exist. UPDATED "
-        + "2026-07-20: no longer 'a justification string that nothing checks' — with discriminator-"
-        + "baseline.json retired, this file is the explicit named whitelist for the now-stateless lint, "
-        + "read by DiscriminatorNearDuplicateTests in the CORE ring, which also fails on a DEAD entry "
-        + "(one whose pair no longer near-collides) so it cannot rot the way the baseline did. Still "
-        + "ambiguous in kind: the entries are architectural rulings about representation (which ADR 0004 "
-        + "§1 routes to ADR prose) that a gate nonetheless has to consume as data.",
-      ["libs/magic-ast/schema/destring-worklist.json"] =
-        "Initiative-05 burn-down worklist: a frozen MEASUREMENT of which golds carry free-text sinks. "
-        + "Recomputable from the golds (therefore Derived), but deliberately frozen to pin migration debt "
-        + "at a point in time — the ADR does not say whether a deliberately-frozen measurement is Derived "
-        + "or a decision record.",
+      // Retired by ADR-0004 issue #38 (all four artifacts DELETED, so their acknowledgments go with
+      // them — Acknowledgments_are_live enforces exactly this):
+      //   Fixtures/Interactions/cards/{BloodArtist,Chatterfang,PitilessPlunderer,RuthlessKnave}.json —
+      //     a hand-rolled AST is a parse gold, not an interaction subset. All four were content-identical
+      //     to their HandParsedCards twins (modulo the SourceSpan/OracleLineIndex provenance the parse
+      //     golds additionally carry), so the duplicates went and the consumers read the golds.
+      //   Tests/Interaction/Snapshots/sentinels.json — the sentinel SET is now derived from the
+      //     interaction golds (SentinelSet.Derive), so there is no manifest to classify.
+      //   libs/magic-ast/schema/discriminator-justifications.json — the rulings moved to the declaration
+      //     sites ([OracleEffect("gift", NearDuplicateOf = …, Reason = …)]), where liveness is structural.
+      //   libs/magic-ast/schema/destring-worklist.json — recomputed by the FreeTextResidualCensus flow.
     };
-
-  private const string InteractionCardReason =
-    "Card AST input for the interaction tests (BloodArtistPortGraphTest / the sentinel manifest). Each is "
-    + "a card's parsed AST — Derived if it was produced by running the parser over oracle text, Evidence if "
-    + "it was hand-parsed like a HandParsedCards gold. Indistinguishable from the file alone, and it "
-    + "duplicates a card that also exists under Fixtures/HandParsedCards.";
 
   // ── The scan ─────────────────────────────────────────────────────────────────────────────────────
 
@@ -417,7 +397,7 @@ public static class ArtifactClassifier
     // 5. Computed-filename member of a named, machine-confirmed generated directory.
     var dir = (Path.GetDirectoryName(rel) ?? "").Replace('\\', '/');
     if (
-      !source.MentionsFileName(Path.GetFileName(rel))
+      !source.MentionsFileName(Path.GetFileName(rel), dir)
       && GeneratedDirectories.ContainsKey(dir)
       && source.DirectoryRegeneratorFor(rel) is { } dirRegen
     )
@@ -553,7 +533,13 @@ public static class ArtifactClassifier
     );
 
     /// <summary>Filenames mentioned anywhere in indexed source (rule 5's negative precondition).</summary>
-    private readonly HashSet<string> _mentioned = new(StringComparer.Ordinal);
+    /// <summary>filename → the directory segments it was mentioned UNDER (empty string = a bare,
+    /// unqualified mention). Rule 5's veto only fires on a mention that could actually be about the
+    /// artifact in question: <c>"golds/archaeomancer.json"</c> in a comment is a reference to the
+    /// interaction gold, not to the identically-named snapshot beside it — and since issue #38 made a
+    /// snapshot's filename the interaction gold's id, that collision is now systematic rather than
+    /// incidental.</summary>
+    private readonly Dictionary<string, HashSet<string>> _mentioned = new(StringComparer.Ordinal);
 
     /// <summary>filename -> the source site that writes it.</summary>
     private readonly Dictionary<string, string> _writers = new(StringComparer.Ordinal);
@@ -600,8 +586,14 @@ public static class ArtifactClassifier
       {
         if (RegenerationMarker.IsMatch(line))
           hasRegenMarker = true;
+        // XML doc-comment prose is description, not reference. A filename named in a /// comment must
+        // not veto rule 5 — rule 4 (an actual write site, resolved through symbols) is unaffected.
+        if (line.TrimStart().StartsWith("///", StringComparison.Ordinal))
+          continue;
         foreach (Match m in FileLiteral.Matches(line))
-          _mentioned.Add(m.Value);
+          _mentioned.TryAdd(m.Value, new HashSet<string>(StringComparer.Ordinal));
+        foreach (Match m in FileLiteral.Matches(line))
+          _mentioned[m.Value].Add(PrecedingSegment(line, m.Index));
       }
 
       for (var i = 0; i < lines.Length; i++)
@@ -753,7 +745,34 @@ public static class ArtifactClassifier
       return normalized.Contains('/') ? "/" + normalized : "";
     }
 
-    public bool MentionsFileName(string fileName) => _mentioned.Contains(fileName);
+    /// <summary>Is <paramref name="fileName"/> mentioned in source in a way that could be about an
+    /// artifact in <paramref name="directory"/>? A bare mention could be about anything, so it counts; a
+    /// mention qualified by a DIFFERENT directory segment does not.</summary>
+    public bool MentionsFileName(string fileName, string directory)
+    {
+      if (!_mentioned.TryGetValue(fileName, out var segments))
+        return false;
+      var tail = directory.Split('/').LastOrDefault() ?? "";
+      return segments.Any(seg => seg.Length == 0 || seg.Equals(tail, StringComparison.Ordinal));
+    }
+
+    /// <summary>The path segment immediately preceding a filename literal at <paramref name="index"/>,
+    /// or "" when the mention is unqualified.</summary>
+    private static string PrecedingSegment(string line, int index)
+    {
+      if (index == 0 || (line[index - 1] != '/' && line[index - 1] != '\\'))
+        return "";
+      var end = index - 1;
+      var start = end;
+      while (start > 0)
+      {
+        var c = line[start - 1];
+        if (c == '/' || c == '\\' || c == '"' || c == '\'' || char.IsWhiteSpace(c))
+          break;
+        start--;
+      }
+      return line[start..end];
+    }
 
     /// <summary>The source site that writes <paramref name="fileName"/>, or null.</summary>
     public string? WriterFor(string fileName) =>

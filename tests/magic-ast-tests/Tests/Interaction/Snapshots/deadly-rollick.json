@@ -1,0 +1,96 @@
+{
+  "Name": "deadly-rollick",
+  "Ports": [
+    {
+      "Identity": "Deadly Rollick::cast:spell:self",
+      "Card": "Deadly Rollick",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Deadly Rollick::emit:exile",
+      "Card": "Deadly Rollick",
+      "Label": "emit:exile",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Deadly Rollick::pay:mana",
+      "Card": "Deadly Rollick",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Deadly Rollick::pay:mana:black",
+      "Card": "Deadly Rollick",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Deadly Rollick::cast:spell:self",
+      "To": "Deadly Rollick::emit:exile"
+    },
+    {
+      "From": "Deadly Rollick::pay:mana:black",
+      "To": "Deadly Rollick::emit:exile"
+    },
+    {
+      "From": "Deadly Rollick::pay:mana",
+      "To": "Deadly Rollick::emit:exile"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Deadly Rollick::cast:spell:self",
+      "To": "Deadly Rollick::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Deadly Rollick::pay:mana:black",
+      "To": "Deadly Rollick::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Deadly Rollick::pay:mana",
+      "To": "Deadly Rollick::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

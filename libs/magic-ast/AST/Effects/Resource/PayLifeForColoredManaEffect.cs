@@ -31,7 +31,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// all-costs, color-targeted life-substitution permission.
 /// </para>
 /// </summary>
-[OracleEffect("payLifeForColoredMana")]
+[OracleEffect(
+  "payLifeForColoredMana",
+  NearDuplicateOf = new[] { "payLife" },
+  Reason = "Distinct: 'payLife' is a life-payment effect/cost; 'payLifeForColoredMana' (K'rrik) is a mana-substitution permission — pay N life rather than a colored mana symbol in a cost (CR 107.4f analogue). Different concepts; prefix overlap only."
+)]
 public sealed record PayLifeForColoredManaEffect : Effect
 {
   /// <summary>

@@ -53,7 +53,11 @@ public sealed record TapCost : Cost
 /// <summary>
 /// The untap symbol {Q}.
 /// </summary>
-[OracleCost("untap")]
+[OracleCost(
+  "untap",
+  NearDuplicateOf = new[] { "tap" },
+  Reason = "Opposite operations, distinct as both Cost and Effect: 'tap' taps a permanent, 'untap' untaps it (CR 701.21 / 701.22). The shared root is the verb; the 'un-' prefix inverts it. Not sprawl."
+)]
 public sealed record UntapCost : Cost
 {
   /// <summary>

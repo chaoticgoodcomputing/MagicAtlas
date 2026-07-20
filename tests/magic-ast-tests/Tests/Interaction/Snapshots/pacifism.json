@@ -1,0 +1,41 @@
+{
+  "Name": "pacifism",
+  "Ports": [
+    {
+      "Identity": "Pacifism::emit:cantattack",
+      "Card": "Pacifism",
+      "Label": "emit:cantattack",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Pacifism::emit:cantblock",
+      "Card": "Pacifism",
+      "Label": "emit:cantblock",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Pacifism::emit:enchantrestriction",
+      "Card": "Pacifism",
+      "Label": "emit:enchantrestriction",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [],
+  "DerivedEdges": [],
+  "Cycles": []
+}

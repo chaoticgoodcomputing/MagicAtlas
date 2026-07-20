@@ -1,0 +1,263 @@
+{
+  "Name": "nim-deathmantle-x-ashnods-altar-x-blood-artist",
+  "Ports": [
+    {
+      "Identity": "Ashnod\u0027s Altar::emit:mana:colorless",
+      "Card": "Ashnod\u0027s Altar",
+      "Label": "emit:mana:colorless",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "Card": "Ashnod\u0027s Altar",
+      "Label": "sac:creature:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::emit:life:gain:controlled",
+      "Card": "Blood Artist",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::emit:life:loss",
+      "Card": "Blood Artist",
+      "Label": "emit:life:loss",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::ltb:creature:to-graveyard",
+      "Card": "Blood Artist",
+      "Label": "ltb:creature:to-graveyard",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Nim Deathmantle::emit:attach",
+      "Card": "Nim Deathmantle",
+      "Label": "emit:attach",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nim Deathmantle::emit:changecolor",
+      "Card": "Nim Deathmantle",
+      "Label": "emit:changecolor",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nim Deathmantle::emit:changesubtype",
+      "Card": "Nim Deathmantle",
+      "Label": "emit:changesubtype",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nim Deathmantle::emit:conditionalpay",
+      "Card": "Nim Deathmantle",
+      "Label": "emit:conditionalpay",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": true,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nim Deathmantle::emit:gainability",
+      "Card": "Nim Deathmantle",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nim Deathmantle::ltb:creature:to-graveyard:controlled",
+      "Card": "Nim Deathmantle",
+      "Label": "ltb:creature:to-graveyard:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=False|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Nim Deathmantle::modify:pt",
+      "Card": "Nim Deathmantle",
+      "Label": "modify:pt",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Nim Deathmantle::pay:mana",
+      "Card": "Nim Deathmantle",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 4,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "To": "Ashnod\u0027s Altar::emit:mana:colorless"
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss"
+    },
+    {
+      "From": "Nim Deathmantle::ltb:creature:to-graveyard:controlled",
+      "To": "Nim Deathmantle::emit:conditionalpay"
+    },
+    {
+      "From": "Nim Deathmantle::pay:mana",
+      "To": "Nim Deathmantle::emit:attach"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Ashnod\u0027s Altar::emit:mana:colorless",
+      "To": "Nim Deathmantle::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "To": "Blood Artist::ltb:creature:to-graveyard",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "To": "Nim Deathmantle::ltb:creature:to-graveyard:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "IsToken"
+    },
+    {
+      "From": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "To": "Ashnod\u0027s Altar::emit:mana:colorless",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "To": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Nim Deathmantle::ltb:creature:to-graveyard:controlled",
+      "To": "Nim Deathmantle::emit:conditionalpay",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Nim Deathmantle::pay:mana",
+      "To": "Nim Deathmantle::emit:attach",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

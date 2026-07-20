@@ -1,0 +1,240 @@
+{
+  "Name": "deadeye-x-peregrine-drake",
+  "Ports": [
+    {
+      "Identity": "Deadeye Navigator::emit:blink:creature",
+      "Card": "Deadeye Navigator",
+      "Label": "emit:blink:creature",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Deadeye Navigator::emit:exile",
+      "Card": "Deadeye Navigator",
+      "Label": "emit:exile",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Deadeye Navigator::emit:gainability",
+      "Card": "Deadeye Navigator",
+      "Label": "emit:gainability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Deadeye Navigator::emit:keywordability",
+      "Card": "Deadeye Navigator",
+      "Label": "emit:keywordability",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Deadeye Navigator::pay:mana",
+      "Card": "Deadeye Navigator",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Deadeye Navigator::pay:mana:blue",
+      "Card": "Deadeye Navigator",
+      "Label": "pay:mana:blue",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Peregrine Drake::emit:untap",
+      "Card": "Peregrine Drake",
+      "Label": "emit:untap",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=land|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Peregrine Drake::etb:creature:self",
+      "Card": "Peregrine Drake",
+      "Label": "etb:creature:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Peregrine Drake::evasion:flying",
+      "Card": "Peregrine Drake",
+      "Label": "evasion:flying",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Deadeye Navigator::pay:mana:blue",
+      "To": "Deadeye Navigator::emit:blink:creature"
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana:blue",
+      "To": "Deadeye Navigator::emit:exile"
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana",
+      "To": "Deadeye Navigator::emit:blink:creature"
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana",
+      "To": "Deadeye Navigator::emit:exile"
+    },
+    {
+      "From": "Peregrine Drake::etb:creature:self",
+      "To": "Peregrine Drake::emit:untap"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Deadeye Navigator::emit:blink:creature",
+      "To": "Peregrine Drake::etb:creature:self",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "No",
+      "Tier": "Amber",
+      "Reason": "IsSelf"
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana:blue",
+      "To": "Deadeye Navigator::emit:blink:creature",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana:blue",
+      "To": "Deadeye Navigator::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana",
+      "To": "Deadeye Navigator::emit:blink:creature",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Deadeye Navigator::pay:mana",
+      "To": "Deadeye Navigator::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Peregrine Drake::emit:untap",
+      "To": "Deadeye Navigator::pay:mana:blue",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Peregrine Drake::emit:untap",
+      "To": "Deadeye Navigator::pay:mana",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Unknown",
+      "Tier": "Amber",
+      "Reason": "untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)"
+    },
+    {
+      "From": "Peregrine Drake::etb:creature:self",
+      "To": "Peregrine Drake::emit:untap",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": [
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Deadeye Navigator::emit:blink:creature=\u003EPeregrine Drake::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf",
+        "Deadeye Navigator::pay:mana:blue=\u003EDeadeye Navigator::emit:blink:creature|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Peregrine Drake::emit:untap=\u003EDeadeye Navigator::pay:mana:blue|RulesDefined|Flow|Overlaps|Unknown|Amber|untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)",
+        "Peregrine Drake::etb:creature:self=\u003EPeregrine Drake::emit:untap|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    },
+    {
+      "Tier": "Amber",
+      "Firable": true,
+      "TapRenewed": true,
+      "CoCostsSatisfied": true,
+      "Balanced": false,
+      "Productive": true,
+      "LimitingReason": "mana-negative",
+      "Edges": [
+        "Deadeye Navigator::emit:blink:creature=\u003EPeregrine Drake::etb:creature:self|RulesDefined|Flow|Overlaps|No|Amber|IsSelf",
+        "Deadeye Navigator::pay:mana=\u003EDeadeye Navigator::emit:blink:creature|CardDefined|Flow|Overlaps|Yes|Green|",
+        "Peregrine Drake::emit:untap=\u003EDeadeye Navigator::pay:mana|RulesDefined|Flow|Overlaps|Unknown|Amber|untapped lands\u0027 colours/count are unknown \u2014 can\u0027t certify they cover the cost (CR 107.4)",
+        "Peregrine Drake::etb:creature:self=\u003EPeregrine Drake::emit:untap|CardDefined|Flow|Overlaps|Yes|Green|"
+      ]
+    }
+  ]
+}

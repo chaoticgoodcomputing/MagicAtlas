@@ -10,7 +10,11 @@ using MagicAST.AST.Effects.Traits;
 /// <summary>
 /// "remove [count] [counter type] counters from [target]"
 /// </summary>
-[OracleEffect("removeCounters")]
+[OracleEffect(
+  "removeCounters",
+  NearDuplicateOf = new[] { "moveCounters" },
+  Reason = "Distinct counter operations (CR 122): 'moveCounters' relocates counters between permanents; 'removeCounters' takes them off entirely. Different effects."
+)]
 public sealed record RemoveCountersEffect : Effect
 {
   public required ObjectReference Target { get; init; }

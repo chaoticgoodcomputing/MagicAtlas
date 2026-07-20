@@ -1,0 +1,46 @@
+{
+  "Name": "brazen-dwarf",
+  "Ports": [
+    {
+      "Identity": "Brazen Dwarf::emit:damage:noncombat:opponent",
+      "Card": "Brazen Dwarf",
+      "Label": "emit:damage:noncombat:opponent",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Brazen Dwarf::trigger:rolldice:controlled",
+      "Card": "Brazen Dwarf",
+      "Label": "trigger:rolldice:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Brazen Dwarf::trigger:rolldice:controlled",
+      "To": "Brazen Dwarf::emit:damage:noncombat:opponent"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Brazen Dwarf::trigger:rolldice:controlled",
+      "To": "Brazen Dwarf::emit:damage:noncombat:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

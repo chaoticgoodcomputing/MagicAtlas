@@ -14,36 +14,39 @@ and common in this codebase: `untap` is an Effect, a Cost, AND a ReplacementEven
 when two types in the SAME family claim the same string.
 
 Checks:
-  - HARD FAIL: the same discriminator declared twice within one family (a real
-    serialization collision — the polymorphic converter can't disambiguate).
-  - SOFT FAIL: ANY two discriminators in the same family that are near-duplicates —
-    within Levenshtein <= 2 (case-insensitive) or where one is a prefix-stem of the
-    other — unless a justification entry exists in discriminator-justifications.json.
+  - HARD FAIL (the GATE): the same discriminator declared twice within one family — a real
+    serialization collision, the polymorphic converter cannot disambiguate. Exits nonzero.
+    Needs no whitelist: a genuine duplicate is always a bug.
+  - REPORT ONLY: every intra-family near-duplicate pair — Levenshtein <= 2 (case-insensitive)
+    or one a prefix-stem of the other — split into EXPLAINED (some declaration site names the
+    other in [Family("x", NearDuplicateOf = new[] { "y" }, Reason = "...")]) and UNEXPLAINED.
+    Printed, never fatal.
 
-STATELESS (2026-07-20). This lint has no baseline and no notion of a "new" discriminator.
-It previously compared against a committed `discriminator-baseline.json` snapshot, which is
-a debt baseline: it grandfathers everything that already existed and only asks about the
-delta. It drifted the way debt baselines do — 330 committed entries against 364 in source,
-so 34 discriminators had been permanently "new" (and re-reported on every run) because the
-baseline refresh step was a manual chore nobody had run. The obvious repair — regenerate the
-baseline — is worse than the drift: it makes every pair not-new and the check vacuous.
+STATELESS, and no whitelist FILE (2026-07-20, ADR-0004 issue #38). The lint has no baseline: the
+committed `discriminator-baseline.json` snapshot was a debt baseline that drifted (330 committed
+entries against 364 in source), and regenerating it would have made the check vacuous.
 
-The stateless form has no such failure mode. Every near-duplicate pair in the source must
-carry a named justification, asked and answered on every run, with the whitelist as the only
-state. This is the project's standing "stateless invariants + explicit named whitelists,
-never shrink-only debt baselines" rule, applied to the one place still violating it.
+The justification whitelist has now gone the same way, for the same reason one step removed. It was
+`discriminator-justifications.json`, a JSON file naming pairs; a file like that can outlive its
+subject — delete a type and its justification survives, describing a discriminator that no longer
+exists. The rulings now live as named arguments on the discriminator attribute at the DECLARATION
+SITE, so liveness is structural: deleting the type deletes its justification in the same edit.
 
-Files (under libs/magic-ast/schema/, overridable):
-  - discriminator-justifications.json  [{"name": "...", "near": "...", "reason": "..."}]
-                                       (judge-reviewed; matched symmetrically)
+With no whitelist to enforce, the near-duplicate half stops being a gate and becomes a report — the
+Flowthru `DiscriminatorGovernance` flow, plus this lint's own printout. What a report is FOR is
+distinguishing an explained pair from a new one, which is why the Reason survived even though the
+gate did not. The hard-collision half is still a gate and still exits nonzero.
+
+Source of truth (no data files):
+  - libs/magic-ast/AST/**/*.cs   [Family("value", NearDuplicateOf = new[] { "other" }, Reason = "…")]
 
 Modes:
-  (default)            lint the current source; exit 1 on any hard/soft fail.
-  --audit              print every intra-family near-duplicate pair (for seeding
-                       justifications); exit 0.
+  (default)            hard-collision GATE + near-duplicate REPORT; exit 1 only on a collision.
+  --audit              print every intra-family near-duplicate pair with its explanation
+                       status (and a stub attribute for the unexplained ones); exit 0.
   --list               dump all discriminators (family:value); exit 0.
 
-Overrides for self-tests: --source-root, --justifications.
+Override for self-tests: --source-root.
 """
 
 from __future__ import annotations
@@ -57,8 +60,6 @@ from dataclasses import dataclass
 
 LIB_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DEFAULT_SOURCE_ROOT = os.path.join(LIB_ROOT, "AST")
-SCHEMA_DIR = os.path.join(LIB_ROOT, "schema")
-DEFAULT_JUSTIFICATIONS = os.path.join(SCHEMA_DIR, "discriminator-justifications.json")
 
 # Attribute families whose single string argument is a polymorphic discriminator.
 FAMILIES = (
@@ -77,10 +78,19 @@ FAMILIES = (
     "AbilityReferenceKind",
 )
 
-# [Family("value"  -> capture family + value. Tolerates extra args after the string.
+# [Family("value" ... )] -> capture family, value and the named-argument tail. Attributes carrying a
+# NearDuplicateOf/Reason ruling span several lines, so this matches across newlines and stops at the
+# first attribute terminator.
 _ATTR_RE = re.compile(
-    r'\[(' + "|".join(FAMILIES) + r')\(\s*"([^"]+)"'
+    r'\[(' + "|".join(FAMILIES) + r')\(\s*"([^"]+)"(.*?)\)\]',
+    re.DOTALL,
 )
+
+# The declaration-site justification: NearDuplicateOf = new[] { "a", "b" } , Reason = "…"
+_NEAR_RE = re.compile(r'NearDuplicateOf\s*=\s*(?:new(?:\s*\[\s*\])?\s*)?\{([^}]*)\}')
+_NEAR_SINGLE_RE = re.compile(r'NearDuplicateOf\s*=\s*"([^"]+)"')
+_REASON_RE = re.compile(r'Reason\s*=\s*"([^"]*)"', re.DOTALL)
+_STRING_RE = re.compile(r'"([^"]*)"')
 
 # Near-duplicate thresholds.
 LEVENSHTEIN_MAX = 2
@@ -93,6 +103,8 @@ class Discriminator:
     value: str
     file: str  # relative to source root
     line: int
+    near: tuple[str, ...] = ()   # declared NearDuplicateOf counterparts
+    reason: str | None = None    # the ruling behind them
 
     @property
     def qualified(self) -> str:
@@ -104,15 +116,34 @@ class Discriminator:
 def extract(source_root: str) -> list[Discriminator]:
     found: list[Discriminator] = []
     for dirpath, _, filenames in os.walk(source_root):
-        for fn in filenames:
+        for fn in sorted(filenames):
             if not fn.endswith(".cs"):
                 continue
             path = os.path.join(dirpath, fn)
             rel = os.path.relpath(path, source_root)
             with open(path, "r") as f:
-                for lineno, line in enumerate(f, start=1):
-                    for m in _ATTR_RE.finditer(line):
-                        found.append(Discriminator(m.group(1), m.group(2), rel, lineno))
+                text = f.read()
+            for m in _ATTR_RE.finditer(text):
+                tail = m.group(3)
+                near: tuple[str, ...] = ()
+                nm = _NEAR_RE.search(tail)
+                if nm:
+                    near = tuple(_STRING_RE.findall(nm.group(1)))
+                else:
+                    single = _NEAR_SINGLE_RE.search(tail)
+                    if single:
+                        near = (single.group(1),)
+                rm = _REASON_RE.search(tail)
+                found.append(
+                    Discriminator(
+                        m.group(1),
+                        m.group(2),
+                        rel,
+                        text.count("\n", 0, m.start()) + 1,
+                        near,
+                        rm.group(1) if rm else None,
+                    )
+                )
     return found
 
 
@@ -151,23 +182,43 @@ def is_near(a: str, b: str) -> bool:
     return levenshtein(a, b) <= LEVENSHTEIN_MAX or shares_stem(a, b)
 
 
-# ----- justifications ------------------------------------------------------
+# ----- justifications (read from the DECLARATION SITES, no data file) ----------------------
 
-def load_justifications(path: str) -> set[tuple[str, str]]:
-    """Return a set of (name, near) pairs that have been explained."""
-    if not os.path.isfile(path):
-        return set()
-    with open(path) as f:
-        data = json.load(f)
-    pairs: set[tuple[str, str]] = set()
-    for entry in data:
-        name = entry.get("name")
-        near = entry.get("near")
-        if name and near:
-            # Justification is symmetric — a pair is explained either direction.
-            pairs.add((name, near))
-            pairs.add((near, name))
+def load_justifications(discs: list[Discriminator]) -> dict[tuple[str, str], tuple[str, str]]:
+    """(a, b) -> (declaring discriminator, reason), for every declared near-duplicate ruling.
+
+    Symmetric: a pair is explained if EITHER side names the other. Convention is that the ruling sits
+    on the more specific member, but the lint does not care which.
+    """
+    pairs: dict[tuple[str, str], tuple[str, str]] = {}
+    for d in discs:
+        for other in d.near:
+            reason = d.reason or ""
+            pairs[(d.value, other)] = (d.value, reason)
+            pairs.setdefault((other, d.value), (d.value, reason))
     return pairs
+
+
+def find_dead_justifications(discs: list[Discriminator]) -> list[tuple[Discriminator, str]]:
+    """A declared NearDuplicateOf counterpart that no longer exists in the same family, or that is no
+    longer actually near. Reported (not fatal) — the structural liveness the attribute buys is that the
+    ruling dies with its OWN type; this catches the other side going away."""
+    by_family: dict[str, set[str]] = {}
+    for d in discs:
+        by_family.setdefault(d.family, set()).add(d.value)
+    dead: list[tuple[Discriminator, str]] = []
+    for d in discs:
+        for other in d.near:
+            if other not in by_family.get(d.family, set()):
+                dead.append((d, f'"{other}" is not declared in [{d.family}]'))
+            elif not is_near(d.value, other):
+                dead.append((d, f'"{other}" is no longer a near-duplicate of "{d.value}"'))
+    return dead
+
+
+def find_missing_reasons(discs: list[Discriminator]) -> list[Discriminator]:
+    """NearDuplicateOf without a Reason — an unexplained explanation."""
+    return [d for d in discs if d.near and not (d.reason or "").strip()]
 
 
 # ----- checks -------------------------------------------------------------------------
@@ -198,69 +249,79 @@ def find_near_pairs(discs: list[Discriminator]) -> list[tuple[str, Discriminator
 # ----- modes --------------------------------------------------------------------------
 
 def run_lint(discs, justifications) -> int:
-    """STATELESS. Every near-duplicate pair in the CURRENT source must carry a justification.
+    """The GATE is the hard per-family collision only. The near-duplicate half is a REPORT.
 
-    There is deliberately no notion of "new" — see the module docstring for why the retired
-    `discriminator-baseline.json` had to go rather than be refreshed.
+    See the module docstring: with the justification whitelist relocated to the declaration sites there
+    is no data file for a soft gate to enforce, and a near-duplicate is a design question (is this
+    sprawl?) rather than a defect. A collision is always a defect, so it stays fatal.
     """
-    failures = 0
-
     collisions = find_hard_collisions(discs)
     if collisions:
-        failures += len(collisions)
         sys.stderr.write("HARD FAIL — duplicate discriminator(s) within a family:\n")
         for fam, val, ds in collisions:
             locs = ", ".join(f"{d.file}:{d.line}" for d in ds)
             sys.stderr.write(f"  [{fam}] \"{val}\" declared {len(ds)}x: {locs}\n")
 
-    soft = [
-        (fam, a, b)
-        for fam, a, b in find_near_pairs(discs)
-        if (a.value, b.value) not in justifications
-    ]
-    if soft:
-        failures += len(soft)
-        sys.stderr.write("SOFT FAIL — unjustified near-duplicate discriminator(s) (justify or rename):\n")
-        for fam, a, b in soft:
-            sys.stderr.write(
-                f"  [{fam}] \"{a.value}\" ({a.file}:{a.line})  ~  \"{b.value}\" ({b.file}:{b.line})\n"
-            )
+    pairs = find_near_pairs(discs)
+    unexplained = [(fam, a, b) for fam, a, b in pairs if (a.value, b.value) not in justifications]
+    dead = find_dead_justifications(discs)
+    missing_reasons = find_missing_reasons(discs)
 
-    if failures:
+    print(
+        f"discriminator report: {len(discs)} discriminators, {len(pairs)} intra-family near-duplicate "
+        f"pair(s), {len(pairs) - len(unexplained)} explained at their declaration site, "
+        f"{len(unexplained)} unexplained."
+    )
+    for fam, a, b in unexplained:
+        print(
+            f'  UNEXPLAINED [{fam}] "{a.value}" ({a.file}:{a.line})  ~  "{b.value}" ({b.file}:{b.line})'
+        )
+    for d, why in dead:
+        print(f'  DEAD RULING  [{d.family}] "{d.value}" ({d.file}:{d.line}): {why}')
+    for d in missing_reasons:
+        print(f'  NO REASON    [{d.family}] "{d.value}" ({d.file}:{d.line}) declares NearDuplicateOf')
+    if unexplained:
+        print(
+            "\nUnexplained pairs are a REPORT, not a failure. Either rename/consolidate, or record the "
+            "ruling on the more specific type:\n"
+            '  [OracleEffect("gift", NearDuplicateOf = new[] { "graft" }, Reason = "…CR citation…")]'
+        )
+
+    if collisions:
         sys.stderr.write(
-            f"\ndiscriminator lint FAILED ({len(collisions)} collision(s), {len(soft)} unexplained near-dup(s)).\n"
-            "Resolve collisions by renaming; resolve near-dups by renaming or adding an entry to\n"
-            f"{os.path.relpath(DEFAULT_JUSTIFICATIONS, LIB_ROOT)} ({{name, near, reason}}).\n"
+            f"\ndiscriminator lint FAILED ({len(collisions)} collision(s)). Resolve by renaming — a "
+            "duplicate discriminator inside one family is a serialization bug, never a judgement call.\n"
         )
         return 1
 
-    print(
-        f"discriminator lint OK ({len(discs)} discriminators, "
-        f"{len(find_near_pairs(discs))} near-dup pair(s), all justified)."
-    )
+    print("discriminator lint OK (no intra-family collisions).")
     return 0
 
 
 def run_audit(discs) -> int:
+    justifications = load_justifications(discs)
     pairs = find_near_pairs(discs)
     if not pairs:
         print("No intra-family near-duplicate pairs.")
         return 0
-    print(f"{len(pairs)} intra-family near-duplicate pair(s) — seed justifications or a consolidation TODO:")
+    print(f"{len(pairs)} intra-family near-duplicate pair(s):")
     for fam, a, b in pairs:
-        print(f'  [{fam}] "{a.value}" ({a.file}:{a.line})  ~  "{b.value}" ({b.file}:{b.line})')
-    print("\nJustification stub:")
-    stub = [{"name": a.value, "near": b.value, "reason": "TODO"} for _, a, b in pairs]
-    print(json.dumps(stub, indent=2))
+        held = justifications.get((a.value, b.value))
+        mark = f"explained on \"{held[0]}\"" if held else "UNEXPLAINED"
+        print(f'  [{fam}] "{a.value}" ({a.file}:{a.line})  ~  "{b.value}" ({b.file}:{b.line})  — {mark}')
+    unexplained = [(fam, a, b) for fam, a, b in pairs if (a.value, b.value) not in justifications]
+    if unexplained:
+        print("\nDeclaration-site stub for the unexplained pair(s) — put it on the more specific type:")
+        for fam, a, b in unexplained:
+            print(f'  [{fam}("{b.value}", NearDuplicateOf = new[] {{ "{a.value}" }}, Reason = "TODO")]')
     return 0
 
 
 def main() -> int:
     p = argparse.ArgumentParser(description="MagicAST discriminator governance lint.")
-    p.add_argument("--audit", action="store_true", help="List all intra-family near-duplicate pairs.")
+    p.add_argument("--audit", action="store_true", help="List all intra-family near-duplicate pairs + their explanation status.")
     p.add_argument("--list", action="store_true", help="Dump all discriminators.")
     p.add_argument("--source-root", default=os.environ.get("MAST_AST_ROOT", DEFAULT_SOURCE_ROOT))
-    p.add_argument("--justifications", default=os.environ.get("MAST_DISC_JUSTIFICATIONS", DEFAULT_JUSTIFICATIONS))
     args = p.parse_args()
 
     discs = extract(args.source_root)
@@ -273,8 +334,7 @@ def main() -> int:
     if args.audit:
         return run_audit(discs)
 
-    justifications = load_justifications(args.justifications)
-    return run_lint(discs, justifications)
+    return run_lint(discs, load_justifications(discs))
 
 
 if __name__ == "__main__":

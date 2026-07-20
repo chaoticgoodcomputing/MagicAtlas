@@ -21,7 +21,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// <see cref="MagicAST.AST.Effects.Core.OptionalEffect"/> wrapping a
 /// <see cref="ChoosePlayerEffect"/> on the same keyword ability.</para>
 /// </summary>
-[OracleEffect("gift")]
+[OracleEffect(
+  "gift",
+  NearDuplicateOf = new[] { "graft" },
+  Reason = "Unrelated keyword abilities that happen to sit at Levenshtein 2. Gift (CR 702.174) is an additional-cost/payoff pair on an instant or sorcery; Graft N (CR 702.58) is a +1/+1-counter keyword on a permanent. No shared mechanic, no shared stem, no consolidation possible. A coincidence of spelling, not sprawl."
+)]
 public sealed record GiftEffect : Effect
 {
   /// <summary>

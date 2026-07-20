@@ -1,0 +1,184 @@
+{
+  "Name": "gravecrawler-x-ashnods-altar-x-blood-artist",
+  "Ports": [
+    {
+      "Identity": "Ashnod\u0027s Altar::emit:mana:colorless",
+      "Card": "Ashnod\u0027s Altar",
+      "Label": "emit:mana:colorless",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "Card": "Ashnod\u0027s Altar",
+      "Label": "sac:creature:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::emit:life:gain:controlled",
+      "Card": "Blood Artist",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::emit:life:loss",
+      "Card": "Blood Artist",
+      "Label": "emit:life:loss",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=player|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Blood Artist::ltb:creature:to-graveyard",
+      "Card": "Blood Artist",
+      "Label": "ltb:creature:to-graveyard",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Gravecrawler::emit:cantblock",
+      "Card": "Gravecrawler",
+      "Label": "emit:cantblock",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Gravecrawler::emit:returntobattlefield:self",
+      "Card": "Gravecrawler",
+      "Label": "emit:returntobattlefield:self",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Gravecrawler::pay:mana:black",
+      "Card": "Gravecrawler",
+      "Label": "pay:mana:black",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "To": "Ashnod\u0027s Altar::emit:mana:colorless"
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled"
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss"
+    },
+    {
+      "From": "Gravecrawler::pay:mana:black",
+      "To": "Gravecrawler::emit:returntobattlefield:self"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "To": "Blood Artist::ltb:creature:to-graveyard",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "To": "Ashnod\u0027s Altar::emit:mana:colorless",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "To": "Ashnod\u0027s Altar::emit:removal:creature:to-graveyard:sacrificed:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Blood Artist::ltb:creature:to-graveyard",
+      "To": "Blood Artist::emit:life:loss",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Gravecrawler::emit:returntobattlefield:self",
+      "To": "Ashnod\u0027s Altar::sac:creature:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Gravecrawler::pay:mana:black",
+      "To": "Gravecrawler::emit:returntobattlefield:self",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

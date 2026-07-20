@@ -36,7 +36,11 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 /// payer explicitly. Null means the ability's controller pays (the implicit
 /// "you" default — CR 117.3).</para>
 /// </summary>
-[OracleEffect("conditionalPay")]
+[OracleEffect(
+  "conditionalPay",
+  NearDuplicateOf = new[] { "conditional" },
+  Reason = "Distinct effects sharing only the 'conditional' prefix. 'conditional' (ConditionalEffect) is an effect-level 'If [condition], [effect]' gate checked mid-ability-resolution (fires AFTER the preceding effects). 'conditionalPay' (ConditionalPayEffect) is the 'you may pay [cost]' optional-cost effect (CR 117.7), wrapped by OptionalEffect with its consequent on IfYouDo. Different concepts (a state gate vs an optional payment); not sprawl. Pre-existing pair surfaced when the lint first ran post-batch-8."
+)]
 public sealed record ConditionalPayEffect : Effect
 {
   /// <summary>

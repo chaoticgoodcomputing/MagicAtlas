@@ -261,6 +261,29 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/artifact-census.json")
       .Build());
 
+  /// <summary>The initiative-05 free-text ("de-string") burn-down census: per-sink instance/card counts
+  /// over every committed gold, joined to the named free-text whitelist. Output of the
+  /// <c>FreeTextResidualCensus</c> flow; replaces the frozen hand-committed
+  /// <c>libs/magic-ast/schema/destring-worklist.json</c> (ADR-0004 §1, issue #38). Diagnostic only — the
+  /// GATE is <c>GoldFreeTextWhitelistTests</c>, which keys on named (card, sink) pairs.</summary>
+  public IItem<FreeTextResidualCensus> FreeTextResidualCensus =>
+    CreateItem(() => Item.Of<FreeTextResidualCensus>("FreeTextResidualCensus")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/free-text-residual-census.json")
+      .Build());
+
+  /// <summary>The discriminator governance report: every intra-family near-duplicate discriminator pair,
+  /// split into explained (a declaration-site <c>NearDuplicateOf</c>/<c>Reason</c> ruling) and
+  /// unexplained. Output of the <c>DiscriminatorGovernance</c> flow; replaces the deleted
+  /// <c>libs/magic-ast/schema/discriminator-justifications.json</c> and the CORE-ring
+  /// <c>DiscriminatorNearDuplicateTests</c> (ADR-0004 §1, issue #38). Diagnostic only — the surviving
+  /// GATE is <c>DiscriminatorUniquenessTests</c>, the hard per-family collision check.</summary>
+  public IItem<DiscriminatorGovernance> DiscriminatorGovernance =>
+    CreateItem(() => Item.Of<DiscriminatorGovernance>("DiscriminatorGovernance")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/discriminator-governance.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")

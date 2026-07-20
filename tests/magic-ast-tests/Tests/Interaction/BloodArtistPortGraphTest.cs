@@ -27,14 +27,16 @@ public class BloodArtistPortGraphTest
     File.ReadAllText(TestData.OntologyPath)
   )!;
 
-  private static PortGraph Walk(string file, string card)
+  /// <summary>Project a card from its parse gold. These used to read a private copy under
+  /// <c>Fixtures/Interactions/cards/</c>; those four ASTs were byte-equivalent (modulo the SourceSpan /
+  /// OracleLineIndex provenance the parse golds additionally carry) to their <c>HandParsedCards</c>
+  /// twins, so the duplicate was deleted and this reads the single hand-parsed gold.</summary>
+  private static PortGraph Walk(string relativePath, string card)
   {
     var path = Path.Combine(
       TestContext.CurrentContext.TestDirectory,
       "Fixtures",
-      "Interactions",
-      "cards",
-      file
+      Path.Combine(relativePath.Split('/'))
     );
     var gold = JsonNode.Parse(File.ReadAllText(path));
     return new PortWalk(Ontology).Project(card, gold!["Output"]!["Oracle"]!["Abilities"]);
@@ -44,8 +46,8 @@ public class BloodArtistPortGraphTest
     new PortGraphEngine(Ontology).Materialize(
       new[]
       {
-        Walk("BloodArtist.json", "Blood Artist"),
-        Walk("RuthlessKnave.json", "Ruthless Knave"),
+        Walk("HandParsedCards/BloodArtist.json", "Blood Artist"),
+        Walk("HandParsedCards/XLN/RuthlessKnave.json", "Ruthless Knave"),
       }
     );
 

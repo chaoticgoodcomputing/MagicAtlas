@@ -1,0 +1,46 @@
+{
+  "Name": "young-pyromancer",
+  "Ports": [
+    {
+      "Identity": "Young Pyromancer::emit:token:creature:elemental:controlled",
+      "Card": "Young Pyromancer",
+      "Label": "emit:token:creature:elemental:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=Elemental|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Young Pyromancer::trigger:cast:instant\u002Bsorcery\u002Bspell:controlled",
+      "Card": "Young Pyromancer",
+      "Label": "trigger:cast:instant\u002Bsorcery\u002Bspell:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery,spell|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Young Pyromancer::trigger:cast:instant\u002Bsorcery\u002Bspell:controlled",
+      "To": "Young Pyromancer::emit:token:creature:elemental:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Young Pyromancer::trigger:cast:instant\u002Bsorcery\u002Bspell:controlled",
+      "To": "Young Pyromancer::emit:token:creature:elemental:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

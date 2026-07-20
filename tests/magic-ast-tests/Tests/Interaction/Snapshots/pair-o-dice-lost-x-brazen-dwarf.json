@@ -1,0 +1,248 @@
+{
+  "Name": "pair-o-dice-lost-x-brazen-dwarf",
+  "Ports": [
+    {
+      "Identity": "Brazen Dwarf::emit:damage:noncombat:opponent",
+      "Card": "Brazen Dwarf",
+      "Label": "emit:damage:noncombat:opponent",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Brazen Dwarf::trigger:rolldice:controlled",
+      "Card": "Brazen Dwarf",
+      "Label": "trigger:rolldice:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "Card": "Pair o\u0027 Dice Lost",
+      "Label": "cast:spell:self",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=instant,sorcery|subtypes=|supertypes=|controller=|isToken=|isSelf=True|excludeSelf="
+    },
+    {
+      "Identity": "Pair o\u0027 Dice Lost::emit:exile",
+      "Card": "Pair o\u0027 Dice Lost",
+      "Label": "emit:exile",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Pair o\u0027 Dice Lost::emit:returntohand:card",
+      "Card": "Pair o\u0027 Dice Lost",
+      "Label": "emit:returntohand:card",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=card|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Pair o\u0027 Dice Lost::emit:rolldice:controlled",
+      "Card": "Pair o\u0027 Dice Lost",
+      "Label": "emit:rolldice:controlled",
+      "Side": "Emit",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Pair o\u0027 Dice Lost::pay:mana",
+      "Card": "Pair o\u0027 Dice Lost",
+      "Label": "pay:mana",
+      "Side": "Consume",
+      "Quantity": 3,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    },
+    {
+      "Identity": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "Card": "Pair o\u0027 Dice Lost",
+      "Label": "pay:mana:green",
+      "Side": "Consume",
+      "Quantity": 2,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": null
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Brazen Dwarf::trigger:rolldice:controlled",
+      "To": "Brazen Dwarf::emit:damage:noncombat:opponent"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "To": "Pair o\u0027 Dice Lost::emit:exile"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "To": "Pair o\u0027 Dice Lost::emit:returntohand:card"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "To": "Pair o\u0027 Dice Lost::emit:rolldice:controlled"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "To": "Pair o\u0027 Dice Lost::emit:exile"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "To": "Pair o\u0027 Dice Lost::emit:returntohand:card"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "To": "Pair o\u0027 Dice Lost::emit:rolldice:controlled"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana",
+      "To": "Pair o\u0027 Dice Lost::emit:exile"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana",
+      "To": "Pair o\u0027 Dice Lost::emit:returntohand:card"
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana",
+      "To": "Pair o\u0027 Dice Lost::emit:rolldice:controlled"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Brazen Dwarf::trigger:rolldice:controlled",
+      "To": "Brazen Dwarf::emit:damage:noncombat:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "To": "Pair o\u0027 Dice Lost::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "To": "Pair o\u0027 Dice Lost::emit:returntohand:card",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::cast:spell:self",
+      "To": "Pair o\u0027 Dice Lost::emit:rolldice:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::emit:rolldice:controlled",
+      "To": "Brazen Dwarf::trigger:rolldice:controlled",
+      "Provenance": "RulesDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "To": "Pair o\u0027 Dice Lost::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "To": "Pair o\u0027 Dice Lost::emit:returntohand:card",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana:green",
+      "To": "Pair o\u0027 Dice Lost::emit:rolldice:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana",
+      "To": "Pair o\u0027 Dice Lost::emit:exile",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana",
+      "To": "Pair o\u0027 Dice Lost::emit:returntohand:card",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Pair o\u0027 Dice Lost::pay:mana",
+      "To": "Pair o\u0027 Dice Lost::emit:rolldice:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}

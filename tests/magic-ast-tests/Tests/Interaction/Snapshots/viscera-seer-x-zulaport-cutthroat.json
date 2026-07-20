@@ -1,0 +1,71 @@
+{
+  "Name": "viscera-seer-x-zulaport-cutthroat",
+  "Ports": [
+    {
+      "Identity": "Zulaport Cutthroat::emit:life:gain:controlled",
+      "Card": "Zulaport Cutthroat",
+      "Label": "emit:life:gain:controlled",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Zulaport Cutthroat::emit:life:loss:opponent",
+      "Card": "Zulaport Cutthroat",
+      "Label": "emit:life:loss:opponent",
+      "Side": "Emit",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=Opponent|isToken=|isSelf=|excludeSelf="
+    },
+    {
+      "Identity": "Zulaport Cutthroat::ltb:creature:to-graveyard:controlled",
+      "Card": "Zulaport Cutthroat",
+      "Label": "ltb:creature:to-graveyard:controlled",
+      "Side": "Consume",
+      "Quantity": 1,
+      "Gated": false,
+      "TapGated": false,
+      "RequiresCounter": null,
+      "Subject": "cardTypes=creature|subtypes=|supertypes=|controller=You|isToken=|isSelf=|excludeSelf="
+    }
+  ],
+  "CardDefinedEdges": [
+    {
+      "From": "Zulaport Cutthroat::ltb:creature:to-graveyard:controlled",
+      "To": "Zulaport Cutthroat::emit:life:gain:controlled"
+    },
+    {
+      "From": "Zulaport Cutthroat::ltb:creature:to-graveyard:controlled",
+      "To": "Zulaport Cutthroat::emit:life:loss:opponent"
+    }
+  ],
+  "DerivedEdges": [
+    {
+      "From": "Zulaport Cutthroat::ltb:creature:to-graveyard:controlled",
+      "To": "Zulaport Cutthroat::emit:life:gain:controlled",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    },
+    {
+      "From": "Zulaport Cutthroat::ltb:creature:to-graveyard:controlled",
+      "To": "Zulaport Cutthroat::emit:life:loss:opponent",
+      "Provenance": "CardDefined",
+      "Family": "Flow",
+      "Overlap": "Overlaps",
+      "Reliability": "Yes",
+      "Tier": "Green",
+      "Reason": null
+    }
+  ],
+  "Cycles": []
+}
