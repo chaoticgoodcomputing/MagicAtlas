@@ -411,6 +411,60 @@ This is adjacent to, and must not be conflated with, `known-coarse-projections.j
 it); this report enumerates **condition nodes dropped entirely** (a guard loss — fully derived, diagnostic,
 nothing to dissolve).
 
+#### Stage 5b — widened attributes: the third class — **LANDED** (2026-07-20)
+
+Dropped conditions are not the only over-approximation. A **widened attribute** is a narrowing FACET the AST
+carries that the projection did not put on the port — the port is rightly projected, but it names more of the
+game than the card does. `AttributeConsumption` + `AttributeConsumptionTest` + the `WidenedAttributes` flow →
+`widened-attribute-report.json`. This is the gap left by removing ADR-0003 §7's `asserted`/`derived` marker
+(`5e1b2f0e`): detection replaces annotation.
+
+**Ablation transfers directly**, and that was the design question. Deleting an attribute *is* widening it —
+an absent facet is the broadest value, since `PortLabel`'s facet join simply drops the segment — so "the
+projection ignores this facet" and "the AST without it projects identically" are the same statement. The
+rejected alternative, comparing AST filter facets against projected label facets, needs a hand-maintained
+AST-property → label-segment correspondence table (the exact drift surface this ADR exists to remove) and is
+blind to facets riding the port `Subject` rather than the label.
+
+Two boundaries make the three classes non-launderable:
+
+| | Unit | Derivation | Loss |
+|---|---|---|---|
+| `known-coarse-projections.json` | a discriminator NAME | hand-authored, gate-enforced | **resolution** |
+| over-approximation report | a condition NODE instance | ablation, diagnostic | **guard** |
+| widened-attribute report | an attribute SITE | ablation, diagnostic | **scope** |
+
+The node/attribute split is *structural*, not agreed: an attribute site is a subtree containing no
+polymorphic node (registry read in-process from `SchemaExport.Build`), and a `Condition` **is** a node — so
+neither report can ever contain the other's rows. Reading registered discriminator *values*, not just key
+names, is load-bearing: `Kind` is a discriminator key on `Ability`, but `{"Kind":"You"}` is an
+`ObjectReference` facet.
+
+A second derived filter keeps the report a burn-down list rather than a field dump. A facet name is
+**narrowing** iff ablating it *somewhere* shed a label facet (`replace:token-creation` is a proper
+facet-prefix of `replace:token-creation:controlled`). Filtering on mere readership instead was measured at
+**58,306** rows dominated by `SourceSpan`/`OracleLineIndex` provenance; the narrowing filter yields **6,435**
+rows over 3,714 cards underwriting **7,110 GREEN** ports — led by `evasion.CardTypes` (845), `mana.Kind`
+(822), `drawCards.Player` (623), `gainAbility.Target` (478), `modifyPT.Target` (415).
+
+**First finding, closed in the same commit.** The report flagged **26 replacement-event `Controller` facets
+across 25 cards, every one GREEN**, spanning six event kinds — `lifeChange` (12: Rhox Faithmender, Boon
+Reflection, Angel of Vitality…), `tokenCreation` (8: Doubling Season, Parallel Lives, Anointed Procession,
+Mondrak, Elspeth Storm Slayer, Adrix and Nev, Exalted Sunborn, Peregrin Took), `counterPlacement` (3),
+`mill`, `spellCopy`, `diceRoll`. CR 614.1 replaces a *specific* event, so a scoped event must project a
+scoped intercept; unscoped, Bruvac the Grandiloquent was modelled as doubling the controller's **own** mill,
+and Vorinclex's two opposed clauses ("you … twice", "an opponent … half") collapsed onto one identical
+`replace:counterplacement` port. `PortGraph`'s replacement branch now reads the event controller onto both
+the label and the `Subject`; the 26 rows cleared to **0** with no edit to the report — which is the property
+being claimed.
+
+**Not found, and correctly so:** Chatterfang, Squirrel General. It prints the same "under your control" as
+its four siblings, but `TokenAugmentationReplacementRule` alone omits `Controller` from the `tokenCreation`
+event it builds. A facet the AST never states cannot be a facet the projection dropped — that is a **parse**
+gap, not a widening, and ablation is blind to it by construction. The one-line rule fix re-points
+`Fixtures/HandParsedCards/MH2/Chatterfang.json`, so it is orchestrator back-prop rather than worker work; the
+projection already carries the facet, so the port is born correct the moment the rule states it.
+
 ### Stage 6 — Close the bijection
 Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup); no declared rule unrealized.
 

@@ -770,16 +770,25 @@ public sealed class PortWalk
       // ports for this intercept to reach). Never a null-default {IsToken:true} GREEN when a narrower,
       // AST-derivable filter is right there on the event (the same anti-pattern-3 discipline this file
       // applies throughout).
+      //
+      // The event's CONTROLLER rides too (ADR-0004 §6, the widened-attribute fix). "If one or more tokens
+      // would be created UNDER YOUR CONTROL" (Doubling Season / Parallel Lives / Anointed Procession /
+      // Peregrin Took / Chatterfang) scopes the intercepted event to the replacement-effect controller's
+      // own tokens — CR 614.1 replaces a specific event, and this one is only the event of YOU creating
+      // tokens. Dropping it modelled these cards as doubling ANYONE's tokens, opponents included: the
+      // create side already kept the scope (emit:token:…:controlled, CR 111.2 — a token's creator controls
+      // it), so one oracle clause projected two ports that disagreed about whose tokens it is about. The
+      // facet rides BOTH the label (replace:token-creation:controlled) and the port Subject, so the
+      // operator prunes an opponent-scoped counterpart rather than merely failing to match a prefix.
       var eventType = e["Event"]?["EventType"]?.ToString() ?? "event";
+      var eventController = ControllerOf(e["Event"]?["Controller"]);
       var tokenFilter = Filter(e["Event"]?["TokenFilter"]);
-      consumes.Add(
-        Port(
-          card,
-          PortLabel.Replacement(eventType),
-          PortSide.Intercept,
-          subject: tokenFilter is null ? new ObjectFilter { IsToken = true } : tokenFilter with { IsToken = true }
-        )
-      );
+      var intercepted = tokenFilter is null
+        ? new ObjectFilter { IsToken = true }
+        : tokenFilter with { IsToken = true };
+      if (eventController is { } scope)
+        intercepted = intercepted with { Controller = intercepted.Controller ?? scope };
+      consumes.Add(Port(card, PortLabel.Replacement(eventType, eventController), PortSide.Intercept, subject: intercepted));
       // Emit side: the replacement's own effect(s) (Chatterfang's added Squirrels — a single createToken;
       // Academy Manufactor's Clue/Food/Treasure triple — EffectType:composite of 3x createToken). Recurse
       // back through THIS SAME Effects() entry point (not a direct EmitPort call) so a composite Replacement
@@ -1280,6 +1289,17 @@ public sealed class PortWalk
       "DealsDamage" => ("any", "any"),
       "DealsDamageToOpponent" => ("any", "opponent"),
       "DealsDamageToOpponents" => ("any", "opponent"),
+      _ => null,
+    };
+
+  /// <summary>The control-axis value of a player <c>ObjectReference</c> ("you" / "an opponent"), or
+  /// <c>null</c> when the reference names no controller axis (or is absent — the genuinely unscoped
+  /// case, which must stay unscoped rather than defaulting to <c>You</c>).</summary>
+  private static ControllerFilter? ControllerOf(JsonNode? player) =>
+    player?["Kind"]?.ToString() switch
+    {
+      "You" => ControllerFilter.You,
+      "Opponent" or "EachOpponent" => ControllerFilter.Opponent,
       _ => null,
     };
 

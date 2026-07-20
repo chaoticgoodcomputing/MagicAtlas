@@ -77,14 +77,20 @@ public sealed record PortAttribute
   // It was removed rather than completed because an over-approximation is an ERROR, not a licensed state.
   // Per-attribute capping is a carve-out: it makes over-approximating legal provided you annotate it,
   // which turns a defect into paperwork that nothing can compel — the annotation is invisible in the
-  // output, so a projection that quietly widens a filter looks identical to one that doesn't. Chatterfang
-  // is the live case: `replace:token-creation` drops the printed "under your control" scope (see
-  // PortLabel.Replacement), so the engine models it as doubling anyone's tokens. The fix is to carry the
-  // controller through, not to label the port lossy and lower its tier.
+  // output, so a projection that quietly widens a filter looks identical to one that doesn't. The
+  // token/mill/life/counter replacement family was the live case: `replace:token-creation` dropped the
+  // printed "under your control" scope and `replace:mill` dropped Bruvac's "an opponent", so the engine
+  // modelled them as replacing ANYONE's event. The fix was to carry the controller through (PortGraph's
+  // replacement branch + PortLabel.Replacement), not to label the ports lossy and lower their tier.
   //
-  // Detection replaces annotation: ADR-0004 §6's over-approximation report derives dropped AST condition
-  // nodes by ablation and joins them to the GREENs that rest on them, producing a burn-down list rather
-  // than a licence. See ADR-0003 §7's 2026-07-20 amendment.
+  // Detection replaces annotation, in two complementary derived reports — both by ablation, both without
+  // a register (ADR-0004 §6, Stage 5):
+  //   * over-approximation-report.json — AST Condition NODES the projection dropped (a lost GUARD),
+  //     joined to the GREENs that rest on them. See ConditionConsumption.
+  //   * widened-attribute-report.json — narrowing FACETS the projection dropped (a lost SCOPE), joined to
+  //     the GREENs that are broader than their card. See AttributeConsumption. This is the report that
+  //     found the replacement family above, and the rows cleared themselves when the fix landed.
+  // See ADR-0003 §7's 2026-07-20 amendment.
 
   /// <summary>The §6 polarity for producer-choice axes (e.g. <c>producer-choice</c> on <c>color</c>); null
   /// for a fixed value.</summary>

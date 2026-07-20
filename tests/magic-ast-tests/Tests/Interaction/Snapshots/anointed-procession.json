@@ -2,15 +2,15 @@
   "Name": "Anointed Procession",
   "Ports": [
     {
-      "Identity": "Anointed Procession::replace:token-creation",
+      "Identity": "Anointed Procession::replace:token-creation:controlled",
       "Card": "Anointed Procession",
-      "Label": "replace:token-creation",
+      "Label": "replace:token-creation:controlled",
       "Side": "Intercept",
       "Quantity": 1,
       "Gated": false,
       "TapGated": false,
       "RequiresCounter": null,
-      "Subject": "cardTypes=|subtypes=|supertypes=|controller=|isToken=True|isSelf=|excludeSelf="
+      "Subject": "cardTypes=|subtypes=|supertypes=|controller=You|isToken=True|isSelf=|excludeSelf="
     }
   ],
   "CardDefinedEdges": [],
