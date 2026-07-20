@@ -6,41 +6,83 @@ pipeline in **`libs/atlas-flows`** and run through the **`tests/atlas-flow-test`
 harness. As of the W3 promotion, a fresh clone can regenerate everything
 end-to-end from the shippable lib (no test-project-only step in the path).
 
-The intermediate + output datasets are **gitignored** (`Data/**`), so a clean
-checkout has none of them. Run the flows in order:
+The intermediate + output datasets are **gitignored** (`Data/**`, `dumps/`), so a
+clean checkout has none of them. That is deliberate — see *Generate on demand*
+below.
+
+## The one target: `nx run flowthru:dumps`
 
 ```bash
-# from repo root — each writes into tests/atlas-flow-test/Data/… (gitignored)
-dotnet run --project tests/atlas-flow-test -- --flow CorpusParse
-#   Scryfall oracle-cards bulk → card-inputs.json + parse-records.json
-#   (includes the ~38k-card MagicAST corpus parse — the slow step, minutes)
-
-dotnet run --project tests/atlas-flow-test -- --flow FetchCombos
-#   Commander Spellbook variants dump (~510 MB) → combos.json
-
-dotnet run --project tests/atlas-flow-test -- --flow CardAtlas
-#   → card-ports.json, card-meta.json, combo-instances.json,
-#     resource-graph.json, archetype-catalog.json  (~20–30s; reads the above)
-
-dotnet run --project tests/atlas-flow-test -- --flow ComboAnchors
-#   → combo-anchor-report.json
+nx run flowthru:dumps
 ```
 
-Equivalently via nx: `nx run atlas-flow-test:run -- --flow <Name>`.
+That is the whole recipe. It runs the four flows in dependency order and then
+**publishes** the results to the repo-root `dumps/` directory the consumers read:
+
+| Step | Produces |
+| --- | --- |
+| `--flow CorpusParse` | Scryfall oracle-cards bulk → `card-inputs.json` + `parse-records.json` (includes the ~38k-card MagicAST corpus parse — the slow step) |
+| `--flow FetchCombos` | Commander Spellbook variants dump (~510 MB) → `combos.json` |
+| `--flow CardAtlas` | `card-ports.json`, `card-meta.json`, `combo-instances.json`, `resource-graph.json`, `archetype-catalog.json`, `extended-recall-report.json` |
+| `--flow ComboAnchors` | `combo-anchor-report.json` |
+| publish | `cp Data/_08_Reporting/dumps/*.json` → `<repo>/dumps/` |
+
+Any step can still be run alone —
+`dotnet run --project tests/atlas-flow-test -- --flow <Name>` — when you want a
+single dataset and know its inputs are already present.
 
 Raw fetches (Scryfall bulk, the CSB dump) are HTTP-cached (~weekly), so
 re-running is cheap after the first pull. `CorpusParse` and `FetchCombos` are
 the only steps that touch the network / do the heavy parse; `CardAtlas` and
 `ComboAnchors` just read the cached intermediates.
 
+**The publish step copies leaves only.** It never writes back into
+`_01_Raw`/`_02_Intermediate`/`_07_ModelOutput`, which matters more than it looks:
+Flowthru fingerprints file items on `mtime:size` rather than content (see the
+caveat below), so rewriting an upstream artifact — even byte-identically —
+cascades a full re-run of everything downstream.
+
+## Generate on demand (ADR 0004 §3, issue #23)
+
+Derived artifacts are **build outputs**: gitignored, and reproduced by running
+the pipeline. The derivation base is exactly three inputs — external source data
+(Scryfall, the CSB snapshot), Evidence fixtures, and code — so nothing else needs
+storing, and an artifact that does not exist in the repository cannot go stale in
+it.
+
+The consumers therefore **do not fall back to a committed copy**. They read the
+known gitignored path and fail loudly, naming the target that fixes it:
+
+- **`atlas-api` seeder** (`AtlasSeeder.RequireFile`) throws on startup rather
+  than half-seeding the database:
+
+  > `Card ports dataset not found at '…/dumps/card-ports.json'. This is a Derived artifact (ADR 0004 §3): it is gitignored and produced on demand by the Flowthru pipeline, so a clean checkout does not have it. Run `nx run flowthru:dumps` first, then start the API again. See docs/design/pipeline-regeneration.md.`
+
+  (`card-edges.json` is the exception in provenance, not in shape: it comes from
+  the MAST InteractionTriage flow, so its runbook line names
+  `nx run mast:interaction-triage`.)
+
+- **`atlas-diag`** exits 2 with the same shape, naming `nx run mast:run` /
+  `nx run mast:recall-report` for the MAST-side datasets it reads.
+
+The rationale, recorded in #23: if `f` is too slow or too fragile to run, that is
+a defect in `f` worth surfacing — not a reason to cache its output in git. Making
+the pipeline the required path keeps it load-bearing; a pipeline nobody runs rots.
+
+**The invariant is gated.** `DerivedArtifactTrackingGateTests` (CORE ring) checks
+the census's Derived set against git's index: a Derived artifact that gets
+committed is red on the first run. The committed exceptions are named in that
+file, each with the gate that re-derives it — the rollup (whose inter-run diff is
+the point), the sentinel snapshots and `ast-schema.json` (whose committed copy
+*is* the expectation their gates diff against), plus two carve-outs recorded
+there in full.
+
 ## Getting the dumps into the API
 
-The `atlas-api` seeder reads the dumps from a `dumps/` directory (config keys
-under `Atlas:*Path` in `apps/atlas-api/appsettings.json`). Copy the produced
-files there, then (re)seed:
+`nx run flowthru:dumps` already lands them in `dumps/` (the config keys under
+`Atlas:*Path` in `apps/atlas-api/appsettings.json` resolve there). Then:
 
 ```bash
-cp tests/atlas-flow-test/Data/_08_Reporting/dumps/*.json dumps/   # path per harness output
 # truncate the analytics tables (or DROP a table whose schema changed), then:
 nx serve atlas-api      # idempotent-by-emptiness reseed on startup
 ```
@@ -120,6 +162,15 @@ on demand, regenerating any upstream artifact cascades a full re-run of everythi
 below it even when nothing about the content changed. Scope the seed target
 accordingly, or fix it upstream with a content-hashing fingerprint variant
 (Flowthru's own docs name this as a planned "deep fingerprint").
+
+### The cache manifest is no longer committed (#23)
+
+`tests/atlas-flow-test/.flowthru/cache.json` was tracked in git — a leftover from
+before the `.flowthru` ignore rule existed. It is *runtime state*, and committing
+it is worse than committing a derived artifact: the manifest records which steps
+are FRESH, so a clean checkout inherited a cache claiming steps were satisfied by
+output files that clone did not have. `git rm --cached` removed it; the ignore
+rule (`tests/atlas-flow-test/.gitignore:24`) already covered it.
 
 ### Not yet closed: `libs/atlas-flows` / `tests/atlas-flow-test`
 

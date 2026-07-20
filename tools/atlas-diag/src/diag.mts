@@ -86,21 +86,51 @@ function resolveDataRoot(flag?: string | boolean): string {
   if (process.env.ATLAS_DATA_DIR) return path.resolve(process.env.ATLAS_DATA_DIR);
   return path.join(WORKSPACE, "tests", "magic-ast-tests", "Data");
 }
-function loadJson<T>(file: string): T {
+// The dumps atlas-diag reads are Derived artifacts (ADR 0004 §3): gitignored build outputs,
+// reproduced on demand by the Flowthru pipeline from (external sources, Evidence, code). A clean
+// checkout legitimately has none of them, so "missing" is not a corrupt-file case — it is the
+// not-generated-yet case, and the only useful thing to print is the command that generates it.
+// Each dump therefore carries the nx target that writes it; see docs/design/pipeline-regeneration.md.
+const RUNBOOK = {
+  /** MagicAstTriage: Scryfall bulk → card-inputs.json (+ parse-records.json). */
+  corpus: "nx run mast:run",
+  /** CardAtlas over the parsed corpus: card-ports / card-meta / combo-instances. */
+  cardAtlas: "nx run mast:recall-report",
+} as const;
+
+function loadJson<T>(file: string, runbook: string): T {
+  let raw: string;
   try {
-    return JSON.parse(readFileSync(file, "utf8")) as T;
+    raw = readFileSync(file, "utf8");
   } catch (e) {
-    console.error(red(`✗ cannot read ${path.relative(WORKSPACE, file)}: ${(e as Error).message}`));
+    const rel = path.relative(WORKSPACE, file);
+    if ((e as NodeJS.ErrnoException).code === "ENOENT") {
+      console.error(red(`✗ ${rel} is missing.`));
+      console.error(
+        `  It is a Derived artifact (ADR 0004 §3): gitignored, generated on demand.\n` +
+          `  Run \`${runbook}\` first. See docs/design/pipeline-regeneration.md.`,
+      );
+    } else {
+      console.error(red(`✗ cannot read ${rel}: ${(e as Error).message}`));
+    }
+    process.exit(2);
+  }
+  try {
+    return JSON.parse(raw) as T;
+  } catch (e) {
+    console.error(red(`✗ ${path.relative(WORKSPACE, file)} is not valid JSON: ${(e as Error).message}`));
+    console.error(`  Regenerate it with \`${runbook}\`.`);
     process.exit(2);
   }
 }
 function loadData(dataRoot: string) {
   const rep = path.join(dataRoot, "_08_Reporting");
-  const ports = loadJson<PortRow[]>(path.join(rep, "card-ports.json"));
-  const metas = loadJson<MetaRow[]>(path.join(rep, "card-meta.json"));
-  const combos = loadJson<ComboRow[]>(path.join(rep, "combo-instances.json"));
+  const ports = loadJson<PortRow[]>(path.join(rep, "card-ports.json"), RUNBOOK.cardAtlas);
+  const metas = loadJson<MetaRow[]>(path.join(rep, "card-meta.json"), RUNBOOK.cardAtlas);
+  const combos = loadJson<ComboRow[]>(path.join(rep, "combo-instances.json"), RUNBOOK.cardAtlas);
   const rawInputs = loadJson<{ Input: CardInput }[]>(
     path.join(dataRoot, "_02_Intermediate", "Datasets", "card-inputs.json"),
+    RUNBOOK.corpus,
   );
   const oracleByName = new Map<string, string>();
   for (const r of rawInputs) if (!oracleByName.has(r.Input.Name)) oracleByName.set(r.Input.Name, oracleTextOf(r.Input));
