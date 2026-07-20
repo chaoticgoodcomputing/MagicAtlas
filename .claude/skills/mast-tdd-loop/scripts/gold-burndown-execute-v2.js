@@ -71,7 +71,7 @@ const POINTERS =
   'MAIN working tree, branch feat/mast-improvements — you have it to yourself this step (slices are serial). ' +
   'Parser: libs/magic-ast/ (Parsing/Parsers/{Static,Triggered,Spell,Activated}/, AST/, AST/Effects/ObjectFilter.cs, AST/Residual.cs). ' +
   'Golds: tests/magic-ast-tests/Fixtures/HandParsedCards/**.json (Output subtree = AST). ' +
-  'THREE stateless whitelists (the gates): tests/magic-ast-tests/Fixtures/whitelist-freetext.json (entries {card,sink,tag,reason}), whitelist-unparsed.json (entries {card,tag,reason}), oracle-text-quarantine.json (drift) + fidelity-uncovered-allowlist.json (uncovered). ' +
+  'THREE stateless whitelists (the gates): tests/magic-ast-tests/Fixtures/whitelist-freetext.json (entries {card,sink,tag,reason}), whitelist-unparsed.json (entries {card,tag,reason}), oracle-text-quarantine.json (drift) + synthetic-card-golds.json (golds naming no printed card). ' +
   'WHITELIST SEMANTICS (read carefully — this is the partial-commit contract): the free-text gate scans each gold for the SET of free-text sinks it carries (presence, not count). ' +
   'Test (1) fails a sink that is PRESENT but NOT listed (no new debt). Test (2) fails a (card,sink) entry whose gold no longer carries that sink AT ALL. ' +
   'So you remove a (card,sink) entry IFF the card stops carrying that sink ENTIRELY. If a card has TWO instances of the SAME sink (e.g. two OtherCharacteristic) and your slice structures ONLY ONE, the sink is STILL set-present ⇒ KEEP the entry (removing it would make Test (2) fail). ' +

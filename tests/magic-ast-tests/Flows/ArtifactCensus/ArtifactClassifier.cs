@@ -155,6 +155,21 @@ public static class ArtifactClassifier
           + "by SacFixtureOracleFidelityTests, closing the drift the Suture Priest fix (295f3506) hit in "
           + "the parse-track golds."
       ),
+      ["tests/magic-ast-tests/Fixtures/synthetic-card-golds.json"] = (
+        Evidence,
+        "RULED 2026-07-20 (issue #37). Formerly fidelity-uncovered-allowlist.json, acknowledged as 'every "
+          + "entry asserts this gold's oracle text is legitimately uncoverable — a claim about the "
+          + "parser/corpus state'. Measured, that reading is wrong. All 15 entries were checked against the "
+          + "full Scryfall bulk with a SIBLING CONTROL: for every entry, the other golds filed under the "
+          + "same set folder DO resolve (CMD 3/4, GTC 10/11, INV 9/10, TDM 6/8, the flat root 613/614; MB6 "
+          + "is 0/3, a wholly synthetic folder). So the absence is neither stale-bulk drift nor the "
+          + "commander-legal-paper corpus filter — the fixture simply invents a card. 'No printed card bears "
+          + "this name' is a fact about Magic, not about coverage: Evidence. The file is renamed to say so, "
+          + "and each entry now carries the name it asserts plus its sibling-control count. Gated in three "
+          + "directions by GoldOracleTextFidelityTests with no suppression path — an unresolvable gold must "
+          + "be registered, a registered gold that becomes resolvable must be deregistered, and (new) every "
+          + "entry must name a live gold, the liveness direction the 'allowlist' framing never had."
+      ),
     };
 
   /// <summary>
@@ -173,22 +188,38 @@ public static class ArtifactClassifier
         + "batch legitimately reprojects a non-target card — but each entry is a frozen claim about a "
         + "cross-card reprojection that the corpus could invalidate. Evidence (a human's ruling that "
         + "this diff was intended) or a Derived expectation pin (recomputable from the batch diff)?",
-      ["tests/magic-ast-tests/Fixtures/fidelity-uncovered-allowlist.json"] =
-        "Allowlist read by GoldOracleTextFidelityTests. Hand-added, but every entry asserts 'this gold's "
-        + "oracle text is legitimately uncoverable', which is a claim about the parser/corpus state — the "
-        + "ADR's named failure shape (known-coarse-projections.json). Should likely become asserted-absence "
-        + "golds (§1) rather than be classified.",
       ["tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json"] =
         "Named directly in ADR 0004's Context table as one of the four failure artifacts (the "
         + "quarantine↔combo-tier JOIN that was never wrong, merely disconnected). Hand-maintained "
         + "shrink-only quarantine; its classification is entangled with issue #24's join work.",
       ["tests/magic-ast-tests/Fixtures/whitelist-freetext.json"] =
-        "Hand-curated parser free-text whitelist. No product-source writer; the only regeneration path is "
-        + "an agent skill script (.claude/skills/mast-tdd-loop), which is agent tooling, not the product's "
-        + "derivation path. Evidence-shaped (a human ruling) but content-wise a claim about parser state.",
+        "DIAGNOSED 2026-07-20 (issue #37), NOT resolved — the acknowledgment stands and now says why. The "
+        + "original doubt ('Evidence-shaped but content-wise a claim about parser state') resolves against "
+        + "Evidence: 110 of its 167 entries are tagged `debt` and 12 reason strings cover all 167 (one "
+        + "PB-7 string covers 45), so the judgment is FAMILY-level backlog, not a per-(card, sink) ruling. "
+        + "Its two checks together assert that the set of free-text-carrying (card, sink) pairs EQUALS the "
+        + "committed set — snapshot equality, i.e. the debt baseline bce69ad7 retired in "
+        + "discriminator-baseline.json, grandfathering 167 sinks and policing only the delta. Every "
+        + "elimination path was tried and each is blocked or vacuous: (a) derive membership from the golds "
+        + "— vacuous, FreeTextSinkScanner already computes exactly this set; (b) require each residual to "
+        + "be a verbatim slice of the gold's own Input.OracleText — 64/180 instances fail, and requiring "
+        + "only word-grounding still leaves 25 genuine paraphrases (Glacial Chasm's 'this permanent is on "
+        + "the battlefield', OTJ saddle conditions) plus 12 standard-token reminder bodies; (c) anchor each "
+        + "residual by a SourceSpan — only 31/180 sites carry one; (d) move the ruling onto the gold at its "
+        + "site — the right shape, but it modifies existing golds, which tools/gate-fixture-immutability.sh "
+        + "forbids and no ADR-0004 slice has done. NEEDS AN OWNER RULING on (d): if orchestrator-class gold "
+        + "annotation is sanctioned, this file dies and the residual census reports the burn-down.",
       ["tests/magic-ast-tests/Fixtures/whitelist-unparsed.json"] =
-        "Same shape as whitelist-freetext.json — hand-curated, agent-script-appended, asserts a claim "
-        + "about current parser coverage rather than recording a primary observation.",
+        "DIAGNOSED 2026-07-20 (issue #37), NOT resolved. All 4 entries are tagged `debt` with one verbatim "
+        + "reason ('PB-8 unparsed grammar gap') and the file's own _doc says 'TARGET: empty' — there is no "
+        + "irreducible carve-out here, so it is pure backlog: a debt baseline whose only teeth is 'no NEW "
+        + "unparsed gold may land' while grandfathering 4. There is no derived replacement: the obvious one "
+        + "(a gold's unparsed node must match what the parser itself produces) is already implied by "
+        + "HandParsedCardTests, hence vacuous. Elimination means reaching zero, which is 4 real parser "
+        + "slices — DGM/WearTear (split card + Fuse), EOE/PlasmaBolt and EOE/TragicTrajectory (the Void "
+        + "ability word + 'instead if' replacement), SOM/PrecursorGolem (copy-for-each-targeted) — each of "
+        + "which must then re-point its gold, again orchestrator-class work off the worker path. NEEDS AN "
+        + "OWNER RULING: schedule the 4 slices, or accept the file as a named backlog until they land.",
 
       // ── Fixtures/Interactions: the ADR 0003 Stage 0b retirement backlog ──────────────────────────
       ["tests/magic-ast-tests/Fixtures/Interactions/known-families.json"] =
@@ -196,15 +227,6 @@ public static class ArtifactClassifier
         + "InteractionTriageFlow (Program.cs knownFamiliesPath -> LabelEdgesStep) and still gated by "
         + "PortGraphEngineTest's grammar-figure guard. Live input, scheduled for death: classifying it "
         + "either way pre-empts the retirement decision.",
-      ["tests/magic-ast-tests/Fixtures/Interactions/families.json"] =
-        "ORPHAN. No product source references it (only ADRs 0002/0003/0004, an agent definition, and a "
-        + "2026-06-02 judgment doc). It is the pre-ADR-0003 abstract family grammar, superseded by the "
-        + "rollup. Ambiguous only in that it may be deletable rather than classifiable.",
-      ["tests/magic-ast-tests/Fixtures/Interactions/blood-artist-engine.json"] =
-        "ORPHAN, and provably absorbed: golds/ruthless-knave-x-blood-artist.json records "
-        + "source.absorbed_from = 'Fixtures/Interactions/blood-artist-engine.json'. The Evidence it "
-        + "carried now lives in a gold; the file itself is a residue. Deletion candidate, not a "
-        + "classification.",
       ["tests/magic-ast-tests/Fixtures/Interactions/topology-scaffold.json"] =
         "UPDATED 2026-07-20 (ADR-0004 §7, issue #26): the conflation this entry described is GONE. The "
         + "four sections that made the file simultaneously a declared input and a stale derived claim — "
@@ -227,6 +249,18 @@ public static class ArtifactClassifier
       //   libs/magic-ast/schema/discriminator-justifications.json — the rulings moved to the declaration
       //     sites ([OracleEffect("gift", NearDuplicateOf = …, Reason = …)]), where liveness is structural.
       //   libs/magic-ast/schema/destring-worklist.json — recomputed by the FreeTextResidualCensus flow.
+      //
+      // Retired by ADR-0004 issue #37 (two orphan DELETIONS + one reclassification):
+      //   Fixtures/Interactions/families.json — orphan, deleted. Independently re-verified: the only
+      //     "families.json" any product source names is known-families.json (Program.cs), a substring
+      //     match; nothing loads this file, and the csproj's Fixtures/**/*.json glob merely copied it to
+      //     the output. Its three abstract role edges (sac-outlet → death-payoff → token-doubler) are the
+      //     pre-ADR-0003 family grammar, superseded by the rollup.
+      //   Fixtures/Interactions/blood-artist-engine.json — orphan, deleted. Its single edge is recorded
+      //     verbatim by golds/ruthless-knave-x-blood-artist.json, whose source.absorbed_from names this
+      //     exact path. Nothing but that gold and the docs referenced it.
+      //   Fixtures/fidelity-uncovered-allowlist.json — renamed to synthetic-card-golds.json and RULED
+      //     Evidence; see HumanRulings.
     };
 
   // ── The scan ─────────────────────────────────────────────────────────────────────────────────────

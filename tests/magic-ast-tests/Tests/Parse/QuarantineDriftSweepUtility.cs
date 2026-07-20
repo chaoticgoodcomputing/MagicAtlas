@@ -121,7 +121,7 @@ public class QuarantineDriftSweepUtility
       }
 
       if (authoritative is null)
-        continue; // neither source has this card — cannot judge drift (fidelity-uncovered-allowlist territory)
+        continue; // neither source has this card — cannot judge drift (synthetic-card-golds territory)
 
       checkedCount++;
       var isQuarantined = quarantined.Contains(testCase.Name);
