@@ -179,6 +179,26 @@ classes stay dead; Deadeye×Peregrine's E1/E2 stay AMBER.
 
 ### 7. Provenance and certainty
 
+> **Amended 2026-07-20 (ADR-0004).** The per-attribute `asserted`/`derived` marker described below was
+> **removed, not implemented.** `PortAttribute.Provenance` and its `Provenance` enum existed for months as
+> **dead code**: `Provenance.Derived` was never assigned anywhere, `PortStructure.Of` — the sole
+> construction path — accepts only `(key, value)` pairs and had no way to express it, and nothing read the
+> field. So the "caps Reliability at Unknown" rule below could never fire even in principle.
+>
+> It was removed rather than wired up because **an over-approximation is an error, not a licensed state.**
+> A per-attribute cap is a carve-out: it makes over-approximating *legal as long as you annotate it*, which
+> converts a defect into paperwork and — worse — into paperwork nobody can be made to file, since the
+> annotation is invisible in the output. The live example is Chatterfang, whose `replace:token-creation`
+> intercept **drops the printed "under your control" scope** (documented at `PortLabel.cs`), so the engine
+> currently models it as doubling *anyone's* tokens. Under the rule below that port would be annotated and
+> tier-capped. The correct response is to carry the controller through the projection so the port is right.
+>
+> **What replaces it is detection, not annotation.** ADR-0004 §6's over-approximation report derives dropped
+> AST condition nodes by ablation (delete the node, re-project, compare) and joins them to the ports and
+> GREENs that consequently rest on an unmodeled precondition — 277 dropped nodes across 250 cards at first
+> run. Nothing is hand-declared and nothing is licensed; the residue is a **burn-down list**. The remaining
+> sentences of §7 (null-Subject, nothing-uncited-is-GREEN) are unaffected and still hold.
+
 Every projected attribute instance carries **asserted vs derived (over-approximated)** provenance. A
 derived attribute (`to=graveyard` under CR-614 redirects; the subtype→type lift) may gate feasibility but
 **caps Reliability at Unknown** — over-approximation stays principled: the projection over-proposes, the

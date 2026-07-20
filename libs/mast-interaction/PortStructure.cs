@@ -8,7 +8,7 @@ using MagicAST.AST.References;
 /// (dual-emit). A port is <c>side : stem [attribute-set]</c> (ADR-0003 §2): the <see cref="Stem"/> is the
 /// event-named is-a spine (<c>removal:creature</c>, <c>deployment:creature</c>, <c>mana</c>), and
 /// <see cref="Attributes"/> is the unordered set of orthogonal facets (<c>manner</c>, <c>from</c>/<c>to</c>,
-/// <c>control</c>, <c>color</c>, …), each carrying <see cref="Provenance"/>.
+/// <c>control</c>, <c>color</c>, …).
 ///
 /// <para><b>Migration role.</b> Matching moves onto this structure at Stage 3; until then the legacy engine
 /// still matches on the string label. The invariant Stage 2 must hold (the byte-for-byte gate) is
@@ -35,8 +35,8 @@ public sealed record PortStructure
     Attributes.FirstOrDefault(a => string.Equals(a.Key, key, StringComparison.Ordinal))?.Value;
 
   /// <summary>Canonical ADR-3 serialization (display/debug) — <c>side:stem[k=v,k=v]</c> with attributes in
-  /// key order. NOT the legacy label; see <see cref="ToLegacyLabel"/>. Provenance/polarity are omitted here
-  /// (they live in the rollup, not the port identity).</summary>
+  /// key order. NOT the legacy label; see <see cref="ToLegacyLabel"/>. Polarity is omitted here (it lives
+  /// in the rollup, not the port identity).</summary>
   public string Canonical()
   {
     var sb = new StringBuilder();
@@ -67,19 +67,26 @@ public sealed record PortAttribute
   public required string Key { get; init; }
   public required string Value { get; init; }
 
-  /// <summary>Asserted (the parse states it) vs Derived (over-approximated — caps Reliability at Unknown,
-  /// ADR-0003 §7).</summary>
-  public Provenance Provenance { get; init; } = Provenance.Asserted;
+  // ADR-0003 §7 originally gave every attribute an `asserted` / `derived` provenance marker, where a
+  // derived (over-approximated) value capped the edge's Reliability at Unknown. It is deliberately absent.
+  //
+  // It was never implemented: `Provenance.Derived` was assigned nowhere, `PortStructure.Of` — the only
+  // construction path — takes bare (key, value) pairs and could not express it, and no code read the
+  // field. The cap could not have fired even in principle.
+  //
+  // It was removed rather than completed because an over-approximation is an ERROR, not a licensed state.
+  // Per-attribute capping is a carve-out: it makes over-approximating legal provided you annotate it,
+  // which turns a defect into paperwork that nothing can compel — the annotation is invisible in the
+  // output, so a projection that quietly widens a filter looks identical to one that doesn't. Chatterfang
+  // is the live case: `replace:token-creation` drops the printed "under your control" scope (see
+  // PortLabel.Replacement), so the engine models it as doubling anyone's tokens. The fix is to carry the
+  // controller through, not to label the port lossy and lower its tier.
+  //
+  // Detection replaces annotation: ADR-0004 §6's over-approximation report derives dropped AST condition
+  // nodes by ablation and joins them to the GREENs that rest on them, producing a burn-down list rather
+  // than a licence. See ADR-0003 §7's 2026-07-20 amendment.
 
   /// <summary>The §6 polarity for producer-choice axes (e.g. <c>producer-choice</c> on <c>color</c>); null
   /// for a fixed value.</summary>
   public string? Polarity { get; init; }
-}
-
-/// <summary>ADR-0003 §7 — whether a projected attribute value is asserted by the parse or derived
-/// (over-approximated by the projection).</summary>
-public enum Provenance
-{
-  Asserted,
-  Derived,
 }
