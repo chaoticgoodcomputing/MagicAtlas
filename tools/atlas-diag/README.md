@@ -1,12 +1,27 @@
 # atlas-diag
 
-One-off card diagnostics over the committed **CardAtlas** datasets — for "why does
+One-off card diagnostics over the generated **CardAtlas** datasets — for "why does
 card X look wrong in the explorer?" without spinning up the frontend.
 
 It is a **consumer** of the `_08_Reporting` dumps (the same data the API seeds
 from and the frontend eventually serves), not a Flowthru flow. Flowthru's job
 ends when the datasets are written; this reads them back. Runs under Node's
 native TS type-stripping — no build, no deps.
+
+Those dumps are **Derived artifacts** (ADR 0004 §3): gitignored build outputs,
+generated on demand, so a clean checkout has none of them. `atlas-diag` does not
+fall back to a committed copy — it exits 2 naming the target that produces the
+missing file:
+
+```
+✗ tests/magic-ast-tests/Data/_08_Reporting/card-ports.json is missing.
+  It is a Derived artifact (ADR 0004 §3): gitignored, generated on demand.
+  Run `nx run mast:recall-report` first. See docs/design/pipeline-regeneration.md.
+```
+
+Against the default `--data` root (`tests/magic-ast-tests/Data`),
+`nx run mast:run` produces `card-inputs.json` and `nx run mast:recall-report`
+produces the CardAtlas dumps.
 
 ## Why this exists — bisecting the data chain
 

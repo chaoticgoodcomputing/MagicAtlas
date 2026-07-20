@@ -13,6 +13,22 @@
         "parallel": false
       }
     },
+    "dumps": {
+      "//": "ADR-0004 §3 / issue #23 — THE regeneration target for the D1–D4 CardAtlas dumps. Runs the four flows in dependency order (CorpusParse → FetchCombos → CardAtlas → ComboAnchors), then PUBLISHES the produced dumps to the repo-root gitignored `dumps/` — the known path the atlas-api seeder reads (Atlas:*Path in apps/atlas-api/appsettings.json). Consumers never fall back to a committed copy: they fail loudly naming this target. Cold cost is dominated by the ~38k-card corpus parse (measured 48.8 s in the mast harness, issue #22); warm runs are cache-served in well under a second. Only the LEAF copy is rewritten — no upstream artifact is touched, which matters because Flowthru fingerprints file items on mtime:size, not content (flowthru#148), so rewriting an upstream file cascades a full re-run of everything below it even when the bytes are identical.",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "dotnet run -- --flow CorpusParse",
+          "dotnet run -- --flow FetchCombos",
+          "dotnet run -- --flow CardAtlas",
+          "dotnet run -- --flow ComboAnchors",
+          "mkdir -p ../../dumps",
+          "cp Data/_08_Reporting/dumps/*.json ../../dumps/"
+        ],
+        "cwd": "tests/atlas-flow-test",
+        "parallel": false
+      }
+    },
     "purge": {
       "//": "Wipe all auto-generated data files from intermediate/primary layers.",
       "executor": "nx:run-commands",

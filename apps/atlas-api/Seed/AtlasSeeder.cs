@@ -393,7 +393,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_cardPortsPath, "Card ports")) return;
+        RequireFile(_cardPortsPath, "Card ports", "nx run flowthru:dumps");
 
         _logger.LogInformation("Seeding ports from {Path}...", _cardPortsPath);
 
@@ -466,7 +466,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_cardEdgesPath, "Card edges")) return;
+        RequireFile(_cardEdgesPath, "Card edges", "nx run mast:interaction-triage");
 
         _logger.LogInformation("Seeding port edges from {Path}...", _cardEdgesPath);
 
@@ -611,7 +611,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_resourceGraphPath, "Resource graph")) return;
+        RequireFile(_resourceGraphPath, "Resource graph", "nx run flowthru:dumps");
 
         _logger.LogInformation("Seeding resource families from {Path}...", _resourceGraphPath);
 
@@ -641,7 +641,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_resourceGraphPath, "Resource graph")) return;
+        RequireFile(_resourceGraphPath, "Resource graph", "nx run flowthru:dumps");
 
         _logger.LogInformation("Seeding resource edges from {Path}...", _resourceGraphPath);
 
@@ -675,7 +675,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_comboInstancesPath, "Combo instances")) return;
+        RequireFile(_comboInstancesPath, "Combo instances", "nx run flowthru:dumps");
 
         _logger.LogInformation("Seeding combos from {Path}...", _comboInstancesPath);
 
@@ -732,7 +732,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_archetypeCatalogPath, "Archetype catalog")) return;
+        RequireFile(_archetypeCatalogPath, "Archetype catalog", "nx run flowthru:dumps");
 
         _logger.LogInformation("Seeding archetypes from {Path}...", _archetypeCatalogPath);
 
@@ -771,7 +771,7 @@ public sealed class AtlasSeeder
             return;
         }
 
-        if (!FileReady(_comboAnchorReportPath, "Combo anchor report")) return;
+        RequireFile(_comboAnchorReportPath, "Combo anchor report", "nx run flowthru:dumps");
 
         _logger.LogInformation("Seeding combo anchors from {Path}...", _comboAnchorReportPath);
 
@@ -868,15 +868,34 @@ public sealed class AtlasSeeder
 
     // ── CardAtlas seeding helpers ────────────────────────────────────────
 
-    /// <summary>True if the dataset file is present; logs a skip note and returns false otherwise.</summary>
-    private bool FileReady(string? path, string label)
+    /// <summary>
+    /// Asserts a Derived dataset is present, and <b>throws with its runbook line</b> when it is not.
+    /// </summary>
+    /// <remarks>
+    /// <para>ADR 0004 §3, issue #23: Derived artifacts are gitignored build outputs, reproduced by
+    /// running the Flowthru pipeline (<c>Derived = f(external sources, Evidence, code)</c>). A clean
+    /// checkout therefore has none of these files, and that is the expected state — not an error
+    /// condition to route around.</para>
+    /// <para>This used to log "skipping" and continue, which is the wrong shape for a
+    /// generate-on-demand world: a silently half-seeded database is indistinguishable from a healthy
+    /// one until a GraphQL field comes back empty, and the operator has no idea which of thirteen
+    /// seeders declined. The decision recorded in #23 is that if the pipeline is too slow or too
+    /// fragile to run, that is a defect in the pipeline worth surfacing — never a reason to cache its
+    /// output in git, and never a reason to boot a half-empty API. So the failure is loud, immediate,
+    /// and carries the exact command that fixes it.</para>
+    /// </remarks>
+    /// <param name="path">The resolved absolute path, or null when the config key is unset.</param>
+    /// <param name="label">Human name of the dataset, for the message.</param>
+    /// <param name="runbook">The nx target that regenerates it. See docs/design/pipeline-regeneration.md.</param>
+    private void RequireFile(string? path, string label, string runbook)
     {
-        if (!string.IsNullOrWhiteSpace(path) && File.Exists(path)) return true;
+        if (!string.IsNullOrWhiteSpace(path) && File.Exists(path)) return;
 
-        _logger.LogInformation(
-            "{Label} file not found at '{Path}' — skipping. Run the CardAtlas pipeline to generate it.",
-            label, path ?? "<unset>");
-        return false;
+        throw new InvalidOperationException(
+            $"{label} dataset not found at '{path ?? "<unset>"}'. This is a Derived artifact "
+            + $"(ADR 0004 §3): it is gitignored and produced on demand by the Flowthru pipeline, so a "
+            + $"clean checkout does not have it. Run `{runbook}` first, then start the API again. "
+            + "See docs/design/pipeline-regeneration.md.");
     }
 
     /// <summary>Builds a name → CardRow.Id map once, so name-keyed datasets can carry a joinable Guid.</summary>

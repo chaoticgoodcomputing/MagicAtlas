@@ -61,11 +61,23 @@ public static class ArtifactClassifier
   ];
 
   /// <summary>Directory segments never scanned: build output, dependency trees, VCS, agent worktrees,
-  /// and Flowthru's own memoization cache (runtime state, not an artifact).</summary>
+  /// and the caches that are runtime state rather than artifacts (Flowthru's step memoization, and the
+  /// two HTTP conditional-GET caches).</summary>
+  /// <remarks>
+  /// <b><c>.http-cache-medium/</c> was found the hard way (issue #23).</b> Flowthru's
+  /// <c>HttpStorageMedium</c> parks a fetched body as <c>{sha}.dat</c> beside a <c>{sha}.meta.json</c>
+  /// holding the URL, ETag and Last-Modified — under the layer's own <c>Datasets/</c> directory, so the
+  /// census walks straight into it. Because it only appears once something has actually fetched over
+  /// HTTP, the classification gate was green on a clean checkout and red the moment anyone ran the
+  /// regeneration path this issue makes mandatory. A gate that fails <i>because</i> you rebuilt is
+  /// worse than no gate: it trains people to expect red. The hand-written <c>.http-cache/</c> above is
+  /// the same idea one directory over (see <c>FilesystemHttpCacheHandler</c>) and was already excluded —
+  /// the segment match is exact, so the suffixed sibling slipped past it.
+  /// </remarks>
   private static readonly string[] ExcludedSegments =
   [
     "/bin/", "/obj/", "/node_modules/", "/.git/", "/.flowthru/", "/.venv/", "/__pycache__/",
-    "/.http-cache/", "/.claude/worktrees/", "/Metadata/",
+    "/.http-cache/", "/.http-cache-medium/", "/.claude/worktrees/", "/Metadata/",
   ];
 
   // ── Named exclusions: files inside a scan root that are not data artifacts at all ────────────────

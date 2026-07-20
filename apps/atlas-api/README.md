@@ -17,10 +17,13 @@ mkdir -p dumps
 curl -L -o dumps/oracle-cards.json \
   "$(curl -s https://api.scryfall.com/bulk-data/oracle-cards | jq -r .download_uri)"
 
-# 3. Run the API (will seed on first launch — takes a minute)
+# 3. Generate the CardAtlas dumps (Derived artifacts — gitignored, see below)
+nx run flowthru:dumps
+
+# 4. Run the API (will seed on first launch — takes a minute)
 dotnet run --project apps/atlas-api
 
-# 4. Run the web app
+# 5. Run the web app
 cd apps/atlas-web && pnpm install && pnpm dev
 ```
 
@@ -55,6 +58,13 @@ query {
 - `ScryfallSeeder` streams the oracle bulk JSON — the file can exceed 400 MB, so it deserializes
   cards one at a time rather than loading the whole array.
 - Seed is idempotent-by-emptiness: rows present → no-op. To re-seed, drop the `atlas` schema.
+- The CardAtlas analytics datasets (ports, edges, combos, archetypes, anchors) are **Derived
+  artifacts** under ADR 0004 §3: gitignored build outputs, produced on demand by the Flowthru
+  pipeline. The seeder reads them from `dumps/` (`Atlas:*Path` in `appsettings.json`) and **throws on
+  startup** if one is missing, naming the target that makes it — `nx run flowthru:dumps` for the
+  CardAtlas dumps, `nx run mast:interaction-triage` for `card-edges.json`. It deliberately does not
+  skip-and-continue: a half-seeded database looks healthy until a GraphQL field comes back empty. See
+  [`docs/design/pipeline-regeneration.md`](../../docs/design/pipeline-regeneration.md).
 
 ## Known gap: MagicAtlas pipeline integration
 

@@ -361,13 +361,49 @@ classified), never a shrink-only count. This stops new hand-state accreting duri
 forgotten artifacts: `known-families.json`, `families.json`, `blood-artist-engine.json` are still referenced
 by the InteractionTriage flow despite ADR 0003 Stage 0b calling for their retirement.
 
-### Stage 1 — Derived artifacts become build outputs
+### Stage 1 — Derived artifacts become build outputs — **LANDED** (2026-07-20, issue #23)
 Fix Flowthru cache keying to include code (hard prerequisite). Gitignore Derived artifacts **except the
 rollup**; stand up a publishing step for the consumers that need the untracked ones (API seed, `atlas-diag`).
 Wire the rollup's regeneration gate — the price of its committed exception (§3).
 
 *Gate:* every Derived artifact is either untracked, or tracked **and** covered by a byte-identical
 regeneration check run against a busted cache. A clean checkout can produce all of them. CORE ring green.
+
+**As landed.** The gitignore half turned out to be nearly complete already — `Data/**` and `/dumps/`
+cover the whole reporting surface — so the substance of #23 is the two halves that were *not* in place:
+a single regeneration target, and consumers that stop pretending a missing artifact is normal.
+
+| Piece | Shape |
+|---|---|
+| The target | `nx run flowthru:dumps` — `CorpusParse → FetchCombos → CardAtlas → ComboAnchors`, then publishes `_08_Reporting/dumps/*.json` into the gitignored repo-root `dumps/`. Publishes **leaves only**; no upstream artifact is rewritten (see below). |
+| API seeder | `AtlasSeeder.RequireFile` **throws** with the runbook line, replacing a `FileReady` that logged "skipping" and continued. A half-seeded database is indistinguishable from a healthy one until a field comes back empty. |
+| `atlas-diag` | exits 2 with the same message shape, naming the MAST-side targets for the datasets it reads. |
+| The gate | `DerivedArtifactTrackingGateTests` (CORE ring) — the census's Derived set × git's index. Stateless membership, with liveness on the exception table in both directions, and a teeth check that force-adds a probe past `.gitignore`. |
+
+**The committed exceptions, and why the list is longer than "the rollup".** §3 names the rollup, but
+two artifacts already in the tree meet §3's own test (*is its diff worth a gate?*) more strongly than
+the rollup does, because for them the committed copy **is** the gate's expectation:
+`Tests/Interaction/Snapshots/` and `libs/magic-ast/schema/ast-schema.json`. Gitignoring either would
+make its gate compare the engine to itself — the identical vacuity §5.2 rejects for the expected-tier
+pin, one layer down. They are recorded as exceptions rather than quietly tolerated.
+
+Two further entries are honest carve-outs rather than endorsements.
+`libs/mast-interaction/known-coarse-projections.json` is in transit (Stage 4 deletes it; #28 was in
+flight concurrently). `libs/mtg-rules/Data/_03_Primary/Datasets/type-ontology.json` is the one place
+**the three-input derivation base does not close**: its input is the raw comprehensive-rules text,
+which that project deliberately does not redistribute, so no clean checkout can rebuild it and there is
+nothing for a gate to re-derive it against. The exception table makes that admission explicit — an
+entry must carry *either* a gate that re-derives it *or* a stated reason nothing can, never neither.
+
+**The `mtime:size` fingerprint (flowthru#148) shaped the target, not just its docs.** Because Flowthru
+fingerprints file items on `{LastWriteTimeUtc.Ticks}:{Length}` rather than content, regenerating an
+upstream artifact busts the cache and cascades a full re-run downstream even when the bytes are
+identical (measured: 42 s for a byte-identical `card-inputs.json` with an unchanged SHA-256). The
+target therefore never writes back into `_01_Raw`/`_02_Intermediate`/`_07_ModelOutput` — the publish
+step copies leaves outward only. This is a documented constraint, not a blocker; the third open
+question below ("does the API seed run the full pipeline or a scoped flow?") is answered by it: the
+full graph, because cold is affordable (48.8 s, issue #22) and scoping it would mean touching upstream
+files to force partial re-derivation.
 
 ### Stage 2 — Dissolve the scaffold
 Execute §7's four-way split: delete the subsumed sections, promote P1–P6 to sweeps, delete `reject`
@@ -512,9 +548,11 @@ remains are the implementation details those decisions opened.)*
   churns 33 expectations; pin too little and the gate goes slack.
 - **Plain-language wording for the retired colours (§5.4).** No concrete copy exists yet. Needs a pass that a
   non-player can read without a legend, which is the bar the colour failed.
-- **Does the API seed run the full pipeline or a scoped flow?** Generate-on-demand is settled; whether the
-  seed target invokes the whole Flowthru graph or only the dump-producing steps is a Stage-1 ergonomics
-  question, answered by measuring a cold run once cache keying is fixed.
+- ~~**Does the API seed run the full pipeline or a scoped flow?**~~ **Closed (2026-07-20, issue #23):
+  the full graph.** Cold is 48.8 s and warm is 0.14 s (issue #22), so the ergonomic saving from scoping
+  is negligible — and scoping is actively harmful under flowthru#148, since forcing a partial
+  re-derivation means touching an upstream file, which busts its `mtime:size` fingerprint and re-runs
+  everything below it anyway. `nx run flowthru:dumps` runs all four flows and publishes leaves only.
 
 ## Provenance
 
