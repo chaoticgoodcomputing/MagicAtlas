@@ -17,8 +17,8 @@ A card that **already parses** can still project to a coarse `emit:<x>` / `emit:
 
 Lift a reconstructed edge **AMBER → GREEN** (usually a `Subsumes` type-proof the operator can't yet make), or kill a **false-GREEN** (an over-approximating port that fabricates an "infinite combo" — e.g. a death-payoff arm conflating self-death and other-death). Until GREENs are trustworthy the novel-combo product is worthless, so precision work retroactively raises the value of every parse and projection unit.
 
-- **Entry report:** the `bench:recall` AMBER/missed combos (`tools/bench/MagicAtlas.Bench/bench-report.json` + `combo-expected-tiers.json`) and the `interaction-judge` findings under `docs/judgments/`.
-- **Gold artifact:** an operator/port fix + a re-pinned `combo-expected-tiers.json` entry (a named pin edit, never a silent baseline rewrite).
+- **Entry report:** the `bench:recall` AMBER/missed combos (`tools/bench/MagicAtlas.Bench/bench-report.json` + `combo-axis-expectations.json`) and the `interaction-judge` findings under `docs/judgments/`.
+- **Gold artifact:** an operator/port fix + a re-pinned `combo-axis-expectations.json` entry (a named pin edit, never a silent baseline rewrite).
 - **Gates:** `nx run bench:recall` (per-combo expected-tier; a regression HALTs, an improvement re-pins) + the `interaction-judge` (the false-GREEN guard).
 - **Signal:** RecallAtGreen ↑, judge-PASS rate ↑.
 

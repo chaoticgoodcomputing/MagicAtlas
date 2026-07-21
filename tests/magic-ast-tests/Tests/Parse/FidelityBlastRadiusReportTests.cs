@@ -10,7 +10,7 @@ using MagicAST.Tests.Infrastructure;
 /// <see cref="GoldOracleTextFidelityTests"/> only asserts pass/fail on a drifted/quarantined fixture; it
 /// never says WHAT depends on it. This walks the SAME <c>Input.Name → fixturePath</c> join that report
 /// uses (via <see cref="HandParsedTestCaseLoader"/>) and, for each quarantined fixture, computes which
-/// combos in <c>tools/bench/MagicAtlas.Bench/combo-expected-tiers.json</c> name that card and which
+/// combos in <c>tools/bench/MagicAtlas.Bench/combo-axis-expectations.json</c> name that card and which
 /// interaction golds under <c>Fixtures/Interactions/golds/*.json</c> name it (their <c>cards[]</c> field)
 /// — making "which pins/golds are at risk if this fixture's text is wrong" a GENERATED fact instead of
 /// something a human cross-references by hand.
@@ -54,7 +54,7 @@ public class FidelityBlastRadiusReportTests
     }
 
     var combosByCard = LoadCombosByCard(
-      Path.Combine(repoRoot, "tools", "bench", "MagicAtlas.Bench", "combo-expected-tiers.json")
+      Path.Combine(repoRoot, "tools", "bench", "MagicAtlas.Bench", "combo-axis-expectations.json")
     );
     var goldsByCard = LoadGoldsByCard(
       Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", "Interactions", "golds")
@@ -153,7 +153,9 @@ public class FidelityBlastRadiusReportTests
     return list;
   }
 
-  // cardName -> the pins (id + tier) on combo-expected-tiers.json whose cards[] names it.
+  // cardName -> the combos (id + DERIVED tier) on combo-axis-expectations.json whose cards[] names it.
+  // The tier is not stored there any more (ADR 0004 §5): no axis exceptions and reconstructing = Green,
+  // one or more exceptions = Amber, listed under `unreconstructed` = Missed.
   private static IReadOnlyDictionary<string, List<ComboHit>> LoadCombosByCard(string path)
   {
     var map = new Dictionary<string, List<ComboHit>>(StringComparer.Ordinal);
@@ -164,12 +166,26 @@ public class FidelityBlastRadiusReportTests
     if (root?["combos"] is not JsonArray combos)
       return map;
 
+    var withExceptions = new HashSet<string>(StringComparer.Ordinal);
+    if (root["axisExceptions"] is JsonArray exceptions)
+      foreach (var e in exceptions)
+        if (e?["combo"]?.ToString() is { } c)
+          withExceptions.Add(c);
+
+    var unreconstructed = new HashSet<string>(StringComparer.Ordinal);
+    if (root["unreconstructed"] is JsonArray missed)
+      foreach (var u in missed)
+        if (u?["combo"]?.ToString() is { } c)
+          unreconstructed.Add(c);
+
     foreach (var combo in combos)
     {
       var id = combo?["id"]?.ToString();
-      var tier = combo?["expectedTier"]?.ToString();
-      if (id is null || tier is null || combo?["cards"] is not JsonArray cards)
+      if (id is null || combo?["cards"] is not JsonArray cards)
         continue;
+      var tier = unreconstructed.Contains(id) ? "Missed"
+        : withExceptions.Contains(id) ? "Amber"
+        : "Green";
       foreach (var cardNode in cards)
       {
         var card = cardNode?.ToString();
@@ -217,7 +233,7 @@ public class FidelityBlastRadiusReportTests
   }
 
   // Walks up from the test directory to the repo root (the dir holding tests/magic-ast-tests's csproj) —
-  // same idiom GoldRegenerationUtility uses — so this reads combo-expected-tiers.json from the SOURCE
+  // same idiom GoldRegenerationUtility uses — so this reads combo-axis-expectations.json from the SOURCE
   // tree (a sibling project), not a build-output copy that doesn't exist for a cross-project artifact.
   private static string FindRepoRoot()
   {

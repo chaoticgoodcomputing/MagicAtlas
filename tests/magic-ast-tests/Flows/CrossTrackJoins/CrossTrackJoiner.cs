@@ -36,7 +36,7 @@ public static class CrossTrackJoiner
   /// <c>Input.OracleText</c> is known to drift from its authoritative source.</summary>
   public sealed record QuarantinedFixture(string Fixture, string Tag, string Reason);
 
-  /// <summary>One pin of the Interaction track's <c>combo-expected-tiers.json</c>.</summary>
+  /// <summary>One combo of the Interaction track's <c>combo-axis-expectations.json</c>. <c>Tier</c> is DERIVED here (ADR 0004 §5 retired the stored tier) — see <c>CrossTrackSources.LoadPins</c>.</summary>
   public sealed record ComboPin(string Id, string Tier, IReadOnlyList<string> Cards);
 
   /// <summary>A materialized crossing: pin <see cref="ComboId"/> (tier <see cref="Tier"/>) rests on

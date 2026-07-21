@@ -43,13 +43,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- The explicit per-combo expected-tier whitelist — the combo-recall GATE. Read from the source
+    <!-- The axis-level combo expectations (ADR 0004 §5, issue #31) — the combo-recall GATE. Read from the source
          tree by the test (BenchPaths.ExpectedTiersPath), so it is listed here for IDE/build visibility
          only, not copied to output. -->
-    <None Include="combo-expected-tiers.json" />
+    <None Include="combo-axis-expectations.json" />
     <!-- The fidelityRisk gate's human-reviewed, shrink-only acknowledgment carve-out (item R1) — read
          from the source tree by FidelityRiskGateTest (BenchPaths.FidelityRiskAcknowledgedPath), like
-         combo-expected-tiers.json above. -->
+         combo-axis-expectations.json above. -->
     <None Include="fidelity-risk-acknowledged.json" />
     <!-- The pinned, checksummed Spellbook combo snapshot + the committed baseline report. -->
     <None Include="Data/**/*.json" CopyToOutputDirectory="PreserveNewest" />

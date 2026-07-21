@@ -428,6 +428,38 @@ asserted-absence golds (§1) and delete the file.
 attribute moved**; a judge-sampled subset confirms the rendered plain-language text carries the same meaning
 the hand-written `reason` did (a correctness check, not a diff).
 
+#### Stage 4a — the COMBO half — **LANDED** (2026-07-21, issue #31)
+
+`Green`/`Amber` names **two unrelated ladders** in this repo, and issue #31 as filed conflated them: a
+*combo's reconstruction* (`combo-expected-tiers.json`, values Green/Amber/Missed, axes `Firable` /
+`CoCostsSatisfied` / `Balanced` / `LifeBalanced` / `Productive`) and a *single port label* (`PortRow.Tier`,
+values Green/Amber/Inferred/Declared). **Stage 4a is the combo half only**; the port half and the
+`known-coarse-projections.json` dissolution (which is #32's) remain open.
+
+| Piece | Shape |
+|---|---|
+| The expectation | `combo-axis-expectations.json`. Default is **stateless**: every eligible combo is expected to satisfy all five axes. An exception is `{combo, axis, verdict}` — the engine computes *that* an axis fails, a human rules *that it is genuine*. **24 exception rows + 4 unreconstructed** replace **33 tier+diagnostics snapshots**. |
+| Only the verdict is hand-set | `--regenerate-expected-tiers` is **deleted**; `--regenerate-roster` rewrites only the derived `combos` roster (id + cards). A gate failure prints the exact entry to paste stamped `UNJUDGED`, which is itself a hard failure. |
+| No hop-level resolution | Pinned deliberately at axis level, knowingly giving up `b3a2455c`'s *"stayed Amber but the reason changed"* resolution. Measured: reverting `776ff939`'s null-when-nothing-limits rule moves **18 of 29 reconstructing combos' old-schema `limitingHop` pins** and **0 axis vectors**. |
+| The renderer | `MagicAST.Interaction.ComboPlainLanguage` — pure, total, stored nowhere. Copy is **PROVISIONAL**, pending §5.4 sign-off. `ComboPlainLanguageTest` is the metamorphic keeper (128 cases over the full flag × gate space): the renderer and `PortCycle.LimitingReason` must never disagree about which axis speaks. It replaces `LimitingHopAgreesWithEngineTest`, whose subject (the pinned limiting hop) no longer exists. |
+| Non-vacuity, proven | `TapRenewed = false` → 1 red naming `+Firable` with the paste block; `CoCostsSatisfied = true` (a GREEN-ward *loosening* — §5.2's exact vacuity concern) → 9 red naming `-CoCostsSatisfied`. |
+
+**Two admissions the migration text did not anticipate.** (a) 8 of the 24 exceptions carry the verdict
+`carried-over` — inherited from prose that carried **no** judge attestation. That is DEBT recorded honestly,
+not an endorsement, and is a burn-down list for the interaction-judge; the alternative (stamping them
+`genuine`) would have been the fabricated derived claim §1 exists to forbid. (b) The `combos` **roster** is
+committed Derived data, because two CORE-ring consumers (§4's quarantine→tier join and the fidelity
+blast-radius report) need `card → combo` without being able to run the interaction engine; it pays for its
+exception with the roster-equals-the-live-eligible-set gate, per §3's decision procedure.
+
+**`Missed` did not leave the gate, because there is nowhere for it to go.** §5/#31 route the four
+no-reconstruction combos to #32's derived demand backlog, but **#32 does not exist**. They stay in an
+`unreconstructed` section of the same file rather than being dropped (coverage removed with nothing
+replacing it) or moved to a new hand-maintained backlog file (the exact artifact this ADR removes). They
+stay load-bearing: the gate fails if one starts reconstructing, and fails if a reconstructing combo stops.
+**#32 inherits the four ids** — `2577-3983-4871`, `618-1692`, `618-4222--140`, `618-7624` — as unserved
+demand, at which point the section and its assertions are deleted.
+
 ### Stage 5 — The invariant layer — **LANDED** (2026-07-20)
 Land §6: sibling-path metamorphic properties, and modeled-dependency completeness derived from AST condition
 nodes.

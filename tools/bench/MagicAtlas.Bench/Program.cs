@@ -7,21 +7,24 @@ using MagicAtlas.Bench;
 //   dotnet run -- --write                                → run the bench and WRITE bench-report.json
 //                                                          (the derived report artifact)
 //   dotnet run -- --explain <comboId>                    → pretty-print WHY a pinned snapshot combo
-//                                                          (by id from combo-expected-tiers.json)
+//                                                          (by id from combo-axis-expectations.json)
 //                                                          reconstructs at its tier — the edge trail,
 //                                                          per-hop verdicts, cycle-level verdict
 //   dotnet run -- --explain-cards "Card A" "Card B" ...  → same, for an AD-HOC card set not in the
 //                                                          pinned snapshot
-//   dotnet run -- --regenerate-expected-tiers            → recompute combo-expected-tiers.json's
-//                                                          mechanistic `expected` block from a live run
-//                                                          (never hand-typed); carries `narrative` over
-//                                                          verbatim and refuses if any pin's `expectedTier`
-//                                                          doesn't already match the live run
+//   dotnet run -- --regenerate-roster                    → recompute combo-axis-expectations.json's
+//                                                          `combos` ROSTER (id + cards) from a live run.
+//                                                          It rewrites NOTHING else: `axisExceptions` and
+//                                                          `unreconstructed` carry a judge-set `verdict`,
+//                                                          and a tool that could write those would make
+//                                                          the gate assert that the engine agrees with
+//                                                          itself (ADR 0004 §5.2). There is deliberately
+//                                                          no --regenerate-expectations.
 //
-// bench-report.json is a DERIVED REPORT, not the gate. The gate is the NUnit ComboExpectedTierTest: it
-// asserts each eligible combo's CURRENT reconstruction tier equals the tier explicitly pinned for it on
-// combo-expected-tiers.json (a loud, per-combo, stateless whitelist — no moving aggregate baseline) AND
-// that its live ComboDiagnostics structurally matches the pinned `expected` block.
+// bench-report.json is a DERIVED REPORT, not the gate. The gate is the NUnit ComboAxisExpectationTest:
+// every eligible combo is expected to satisfy all five ADR-0002 §8 axes (a certified infinite) unless
+// combo-axis-expectations.json carries a judged {combo, axis, verdict} exception for it. A failure names
+// WHICH AXIS moved.
 
 var snapshot = ComboSnapshot.Load(BenchPaths.SnapshotPath);
 var runner = ComboRecallRunner.Create(BenchPaths.FixturesRoot, BenchPaths.OntologyPath);
@@ -41,7 +44,7 @@ if (explainIndex >= 0)
   {
     Console.Error.WriteLine(
       $"No combo '{comboId}' in the pinned snapshot ({BenchPaths.SnapshotPath}). "
-        + "IDs come from combo-expected-tiers.json / the snapshot — check spelling."
+        + "IDs come from combo-axis-expectations.json / the snapshot — check spelling."
     );
     return 1;
   }
@@ -76,16 +79,11 @@ if (explainCardsIndex >= 0)
   return 0;
 }
 
-if (args.Contains("--regenerate-expected-tiers"))
+if (args.Contains("--regenerate-roster"))
 {
-  ExpectedTiersMigration.Regenerate(
-    BenchPaths.ExpectedTiersPath,
-    runner,
-    snapshot,
-    DateOnly.FromDateTime(DateTime.Now)
-  );
+  ComboRosterRegeneration.Regenerate(BenchPaths.ExpectedTiersPath, runner, snapshot);
   Console.WriteLine(
-    $"Regenerated the mechanistic `expected` block for every pin (narrative carried over verbatim) → {BenchPaths.ExpectedTiersPath}"
+    $"Regenerated the eligible-set roster (id + cards only; verdicts untouched) → {BenchPaths.ExpectedTiersPath}"
   );
   return 0;
 }

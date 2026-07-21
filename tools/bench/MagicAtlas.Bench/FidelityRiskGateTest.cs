@@ -1,20 +1,22 @@
 namespace MagicAtlas.Bench.Tests;
 
 using System.Text.Json;
+using MagicAST.Interaction;
 
 /// <summary>
-/// Item R1 — the fidelityRisk GATE: a pinned Green or Amber combo must not rest on a card whose gold
+/// Item R1 — the fidelityRisk GATE: a combo that reconstructs a cycle must not rest on a card whose gold
 /// fixture is on <c>tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json</c> (known-drifted oracle
 /// text). <c>GoldCorpus</c> reads each fixture's committed <c>Output.Oracle.Abilities</c> directly — never
 /// re-parses <c>Input.OracleText</c> against the live corpus — so a fixture whose <c>Output</c> was
-/// derived from stale/wrong <c>Input</c> text silently props up whatever tier its combo(s) certify at, for
+/// derived from stale/wrong <c>Input</c> text silently props up whatever its combo(s) certify at, for
 /// ANY combo the card feeds. This is the exact check that would have caught this session's Suture Priest
-/// incident (a Green tier resting on a fixture already flagged as debt) automatically, without a judge
-/// needing to go digging.
+/// incident (a certified-infinite combo resting on a fixture already flagged as debt) automatically,
+/// without a judge needing to go digging.
 ///
 /// <para>
-/// Scoped to Green/Amber only (not Missed): a quarantined card feeding a Missed combo isn't a false-
-/// positive risk — nothing certified reconstruction on top of it, so there is nothing to distrust.
+/// Scoped to combos that RECONSTRUCT (the old Green/Amber scope, restated after ADR 0004 §5 retired the
+/// stored tier): a quarantined card feeding a combo with no reconstruction isn't a false-positive risk —
+/// nothing certified reconstruction on top of it, so there is nothing to distrust.
 /// </para>
 ///
 /// <para>
@@ -37,7 +39,7 @@ using System.Text.Json;
 [TestFixture]
 public class FidelityRiskGateTest
 {
-  // The current bench run, keyed by combo id (independent run from ComboExpectedTierTest's — cheap, and
+  // The current bench run, keyed by combo id (independent run from ComboAxisExpectationTest's — cheap, and
   // keeps this gate's failure self-contained/greppable without depending on that fixture's private state).
   private static readonly Lazy<IReadOnlyDictionary<string, ComboResult>> _current = new(RunCurrent);
 
@@ -58,18 +60,30 @@ public class FidelityRiskGateTest
     Assert.That(_current.Value, Is.Not.Empty, "The bench produced no eligible combos — unexpected.");
   }
 
-  [TestCaseSource(nameof(PinnedGreenOrAmberCases))]
-  public void Pinned_green_or_amber_combo_has_no_unacknowledged_fidelity_risk(
+  [TestCaseSource(nameof(ReconstructingComboCases))]
+  public void Reconstructing_combo_has_no_unacknowledged_fidelity_risk(
     string id,
-    string tier,
     IReadOnlyList<string> cards
   )
   {
     Assert.That(
       _current.Value.ContainsKey(id),
       Is.True,
-      $"Combo '{id}' is pinned '{tier}' but is no longer eligible in the run — see ComboExpectedTierTest."
+      $"Combo '{id}' is rostered but is no longer eligible in the run — see ComboAxisExpectationTest."
     );
+
+    // The case source is scoped to combos that reconstruct SOMETHING (the old Green/Amber scope): a
+    // quarantined card feeding a combo with no reconstruction is not a false-positive risk, because
+    // nothing was certified on top of it. So a null here is a genuine, separate regression.
+    var diagnostics = _current.Value[id].Diagnostics;
+    Assert.That(
+      diagnostics,
+      Is.Not.Null,
+      $"Combo '{id}' reconstructs no cycle but is not listed under 'unreconstructed' — see "
+        + "ComboAxisExpectationTest, which owns that drift."
+    );
+
+    var certification = ComboPlainLanguage.Describe(ComboAxisVector.FromDiagnostics(diagnostics!));
 
     var risk = RiskOrEmpty(_current.Value[id].FidelityRisk);
     var currentFixtures = risk.Select(r => r.Fixture).ToHashSet(StringComparer.Ordinal);
@@ -86,7 +100,7 @@ public class FidelityRiskGateTest
       unacknowledged,
       Is.Empty,
       unacknowledged.Count > 0
-        ? BuildMessage(id, tier, cards, risk.Where(r => unacknowledged.Contains(r.Fixture)).ToList())
+        ? BuildMessage(id, certification, cards, risk.Where(r => unacknowledged.Contains(r.Fixture)).ToList())
         : ""
     );
 
@@ -106,7 +120,7 @@ public class FidelityRiskGateTest
 
   private static string BuildMessage(
     string id,
-    string tier,
+    string certification,
     IReadOnlyList<string> cards,
     IReadOnlyList<QuarantinedCard>? risk
   )
@@ -121,23 +135,28 @@ public class FidelityRiskGateTest
       })
     );
 
-    return $"Combo '{id}' ({string.Join(" + ", cards)}) is pinned '{tier}' but rests on QUARANTINED "
+    return $"Combo '{id}' ({string.Join(" + ", cards)}) reconstructs as '{certification}' but rests on QUARANTINED "
       + $"fixture(s): {detail}. GoldCorpus reads each fixture's committed Output.Oracle.Abilities directly "
       + "(never re-parses Input.OracleText), so a fixture already known to drift from its authoritative "
       + "oracle text (tests/magic-ast-tests/Fixtures/oracle-text-quarantine.json) silently props up "
-      + $"whatever tier '{id}' certifies at — the pin is not trustworthy until the fixture is fixed. Either "
+      + $"whatever '{id}' certifies at — the expectation is not trustworthy until the fixture is fixed. Either "
       + "fix the fixture's Input.OracleText (removing it from the quarantine), or, if this is pre-existing, "
       + "already-tracked debt you are knowingly accepting for now, add a named entry to "
       + "fidelity-risk-acknowledged.json (a human-reviewed, shrink-only carve-out — never silently mutate "
       + "it).";
   }
 
-  public static IEnumerable<TestCaseData> PinnedGreenOrAmberCases() =>
-    ExpectedTiersJson
-      .Read(BenchPaths.ExpectedTiersPath)
-      .Combos.Where(c => c.ExpectedTier is "Green" or "Amber")
+  /// <summary>Every rostered combo that is expected to reconstruct a cycle (i.e. is NOT on the
+  /// 'unreconstructed' list) — the successor to the old "pinned Green or Amber" scope.</summary>
+  public static IEnumerable<TestCaseData> ReconstructingComboCases()
+  {
+    var doc = ComboAxisExpectationsJson.Read(BenchPaths.ExpectedTiersPath);
+    var unreconstructed = doc.Unreconstructed.Select(u => u.Combo).ToHashSet(StringComparer.Ordinal);
+    return doc
+      .Combos.Where(c => !unreconstructed.Contains(c.Id))
       .OrderBy(c => c.Id, StringComparer.Ordinal)
-      .Select(c => new TestCaseData(c.Id, c.ExpectedTier, c.Cards).SetName($"FidelityRisk_{c.Id}"));
+      .Select(c => new TestCaseData(c.Id, c.Cards).SetName($"FidelityRisk_{c.Id}"));
+  }
 
   private static IReadOnlyDictionary<string, ComboResult> RunCurrent()
   {
