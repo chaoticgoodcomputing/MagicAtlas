@@ -44,12 +44,14 @@ public static class BenchPaths
     Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "bench-report.json");
 
   /// <summary>
-  /// The explicit per-combo expected-tier whitelist — the GATE for the combo-recall test (it replaced the
-  /// moving-baseline ratchet). Resolved in the SOURCE tree (like <see cref="BaselineReportPath"/>), since
-  /// it is the version-controlled contract the test asserts against, not a build artifact.
+  /// The AXIS-LEVEL combo expectations (ADR 0004 §5, issue #31) — the GATE for the combo-recall test.
+  /// Resolved in the SOURCE tree (like <see cref="BaselineReportPath"/>), since it is the
+  /// version-controlled contract the test asserts against, not a build artifact.
+  /// <para>Replaced <c>combo-expected-tiers.json</c>, which stored a per-combo copy of the engine's own
+  /// tier + diagnostics snapshot.</para>
   /// </summary>
   public static string ExpectedTiersPath =>
-    Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "combo-expected-tiers.json");
+    Path.Combine(RepoRoot, "tools", "bench", "MagicAtlas.Bench", "combo-axis-expectations.json");
 
   /// <summary>
   /// The fidelityRisk gate's human-reviewed, shrink-only acknowledgment carve-out (item R1) — resolved

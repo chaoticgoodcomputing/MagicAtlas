@@ -53,7 +53,7 @@ connections live in the engine. A flow arm is always the latter.
   explicit named whitelist, not a shrinking count).
 - `PortWalkSentinelSnapshotTest` regenerated with a justified diff (tier/label changes are *expected*).
 - `nx run bench:recall` — the per-combo expected-tier gate holds: any combo that flips is a **reviewed
-  pin edit** in `combo-expected-tiers.json` (the gate is loud on *any* drift, improvement or
+  pin edit** in `combo-axis-expectations.json` (the gate is loud on *any* drift, improvement or
   regression — de-ratcheted from the old aggregate moving baseline).
 - **`interaction-judge` PROCEED** — every new GREEN is genuinely reliable (the false-positive guard),
   every AMBER soundly irreducible. A GREEN it can't justify is a FAIL: stop.

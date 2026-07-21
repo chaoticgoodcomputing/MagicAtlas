@@ -171,7 +171,7 @@ public class SpellCopyFlowArmScopeTest
   /// Ghostly Flicker's own IsSelf cast:spell:self driver. Both edges float on the caster's free choice of
   /// legal target — a choice the AST cannot statically prove selects THIS card — so the loop is capped
   /// AMBER by construction, not by a temporary gap. Audited 2026-07-18 (Currency-B precision-fix pass):
-  /// confirmed genuinely AMBER, matches the pin in <c>combo-expected-tiers.json</c>; no GREEN is reachable
+  /// confirmed genuinely AMBER, matches the expectation in <c>combo-axis-expectations.json</c>; no GREEN is reachable
   /// through this 2-card cycle.</summary>
   [Test]
   public void Ghostly_flicker_x_dualcaster_reconstructs_amber_the_double_identity_floor()

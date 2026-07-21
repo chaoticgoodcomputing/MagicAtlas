@@ -20,7 +20,7 @@ public static class CrossTrackSources
   public const string HandParsedCardsRelPath = "tests/magic-ast-tests/Fixtures/HandParsedCards";
   public const string InteractionGoldsRelPath = "tests/magic-ast-tests/Fixtures/Interactions/golds";
   public const string RollupCitedRelPath = "tests/magic-ast-tests/Fixtures/Interactions/rollup/port-interactions.cited.json";
-  public const string ExpectedTiersRelPath = "tools/bench/MagicAtlas.Bench/combo-expected-tiers.json";
+  public const string ExpectedTiersRelPath = "tools/bench/MagicAtlas.Bench/combo-axis-expectations.json";
   public const string AcknowledgedRelPath = "tools/bench/MagicAtlas.Bench/fidelity-risk-acknowledged.json";
 
   /// <summary>The engine sources scanned for rule-id references (the rule → code leg of §2).</summary>
@@ -106,7 +106,16 @@ public static class CrossTrackSources
 
   // ── Interaction track ────────────────────────────────────────────────────────────────────────────
 
-  /// <summary>The shipped combo tier pins (Interaction track).</summary>
+  /// <summary>
+  /// The shipped combo expectations (Interaction track), read from <c>combo-axis-expectations.json</c>.
+  ///
+  /// <para><b>The tier is DERIVED here, not stored there</b> (ADR 0004 §5, issue #31). The file pins which
+  /// §8 AXES a combo is expected to fail; <c>Green</c>/<c>Amber</c>/<c>Missed</c> survives only as the
+  /// internal shorthand this join's violation predicate is written in:
+  /// no exceptions and reconstructing ⇒ <c>Green</c> (a certified infinite — the tier that makes a
+  /// quarantine crossing a violation); one or more axis exceptions ⇒ <c>Amber</c>; listed under
+  /// <c>unreconstructed</c> ⇒ <c>Missed</c>.</para>
+  /// </summary>
   public static IReadOnlyList<CrossTrackJoiner.ComboPin> LoadPins(string repoRoot)
   {
     var path = Path.Combine(repoRoot, ExpectedTiersRelPath);
@@ -118,12 +127,26 @@ public static class CrossTrackSources
     if (root?["combos"] is not JsonArray combos)
       return list;
 
+    var withExceptions = new HashSet<string>(StringComparer.Ordinal);
+    if (root["axisExceptions"] is JsonArray exceptions)
+      foreach (var e in exceptions)
+        if (e?["combo"]?.ToString() is { } c)
+          withExceptions.Add(c);
+
+    var unreconstructed = new HashSet<string>(StringComparer.Ordinal);
+    if (root["unreconstructed"] is JsonArray missed)
+      foreach (var u in missed)
+        if (u?["combo"]?.ToString() is { } c)
+          unreconstructed.Add(c);
+
     foreach (var combo in combos)
     {
       var id = combo?["id"]?.ToString();
-      var tier = combo?["expectedTier"]?.ToString();
-      if (id is null || tier is null)
+      if (id is null)
         continue;
+      var tier = unreconstructed.Contains(id) ? "Missed"
+        : withExceptions.Contains(id) ? "Amber"
+        : "Green";
       var cards = (combo?["cards"] as JsonArray)?.Select(c => c?.ToString() ?? "").Where(s => s.Length > 0).ToList() ?? [];
       list.Add(new CrossTrackJoiner.ComboPin(id, tier, cards));
     }
