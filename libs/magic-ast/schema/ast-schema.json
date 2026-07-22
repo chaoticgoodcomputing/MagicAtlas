@@ -2544,6 +2544,17 @@
           ]
         },
         {
+          "Type": "PutChosenKeywordCounterEffect",
+          "Discriminator": "putChosenKeywordCounter",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "Options",
+            "SourceSpan",
+            "Target"
+          ]
+        },
+        {
           "Type": "PutCountersEffect",
           "Discriminator": "putCounters",
           "IsUnparsed": false,
@@ -3551,5 +3562,5 @@
       ]
     }
   ],
-  "SchemaHash": "0622727f3e57811fa34f4ae7b64bac1890fd3a67f181e7bde1fe6452749cee31"
+  "SchemaHash": "b88e79422addfedfeac0730840576f15e2d19901b0fb15cb808f0f975608e3d1"
 }

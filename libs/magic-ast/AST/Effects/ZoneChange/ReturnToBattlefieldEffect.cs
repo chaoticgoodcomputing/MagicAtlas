@@ -17,6 +17,19 @@ public sealed record ReturnToBattlefieldEffect : Effect
 
   public bool Tapped { get; init; }
 
+  /// <summary>
+  /// "put [it] onto the battlefield … attacking" — the permanent enters already
+  /// declared as an attacker (CR 508.4: "an effect can put a creature onto the
+  /// battlefield attacking"; it was never declared during the Declare Attackers step
+  /// and doesn't count as having attacked for cost/trigger purposes). The reanimation
+  /// analogue of <see cref="MagicAST.AST.Effects.TokenDefinition.EntersAttacking"/>
+  /// (token creation) — Chorale of the Void puts a creature card from the defending
+  /// player's graveyard "onto the battlefield under your control tapped and attacking".
+  /// Null/false when it enters without attacking (the common case).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? Attacking { get; init; }
+
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? UnderControl { get; init; }
 

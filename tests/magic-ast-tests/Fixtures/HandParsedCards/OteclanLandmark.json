@@ -282,11 +282,59 @@
               },
               "Effects": [
                 {
-                  "EffectType": "unstructured",
-                  "Text": "target attacking creature without flying gains flying until end of turn.",
+                  "EffectType": "gainAbility",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Characteristics": [
+                        {
+                          "CharacteristicType": "combatState",
+                          "State": "Attacking"
+                        }
+                      ],
+                      "LacksKeywords": [
+                        "Flying"
+                      ]
+                    }
+                  },
+                  "GainedAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Flying",
+                    "Effects": [
+                      {
+                        "EffectType": "evasion",
+                        "CanBeBlockedBy": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Characteristics": [
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Flying"
+                            },
+                            {
+                              "CharacteristicType": "keyword",
+                              "Keyword": "Reach"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "OracleLineIndex": 0
+                  },
+                  "Duration": {
+                    "DurationType": "untilTime",
+                    "Until": {
+                      "Part": "Turn",
+                      "Edge": "End"
+                    }
+                  },
                   "SourceSpan": {
-                    "Start": 7,
-                    "Length": 104
+                    "Start": 38,
+                    "Length": 73
                   }
                 }
               ],

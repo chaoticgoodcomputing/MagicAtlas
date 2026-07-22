@@ -62,7 +62,9 @@ public sealed class ExileTopCardFaceDownAndLookRule : IActivatedEffectRule, IMul
         CardTypes = ["card"],
         Zone = Zone.Library,
         Controller = ControllerFilter.You,
-        Characteristics = [Characteristic.Other("top")],
+        // "the top card of your library" — positional designation (CR 401.1), the
+        // merged ordered-zone axis; replaces the old Other("top") free-text residual.
+        LibraryPosition = new LibraryPosition { Position = ZonePosition.Top },
       },
     };
 

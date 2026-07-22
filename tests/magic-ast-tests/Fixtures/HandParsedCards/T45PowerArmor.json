@@ -114,11 +114,46 @@
           },
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "you may pay {E}. If you do, untap equipped creature, then put your choice of a menace, trample, or lifelink counter on it.",
+              "EffectType": "optional",
+              "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "payEnergy",
+                  "Amount": {
+                    "QuantityType": "literal",
+                    "Value": 1
+                  }
+                }
+              },
+              "IfYouDo": {
+                "EffectType": "composite",
+                "Effects": [
+                  {
+                    "EffectType": "untap",
+                    "Target": {
+                      "Kind": "EnchantedOrEquipped"
+                    }
+                  },
+                  {
+                    "EffectType": "putChosenKeywordCounter",
+                    "Target": {
+                      "Kind": "It"
+                    },
+                    "Options": [
+                      "Menace",
+                      "Trample",
+                      "Lifelink"
+                    ],
+                    "Count": {
+                      "QuantityType": "literal",
+                      "Value": 1
+                    }
+                  }
+                ]
+              },
               "SourceSpan": {
-                "Start": 149,
-                "Length": 155
+                "Start": 181,
+                "Length": 123
               }
             }
           ],
