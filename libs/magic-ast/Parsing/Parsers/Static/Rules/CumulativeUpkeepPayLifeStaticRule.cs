@@ -32,8 +32,11 @@ using MagicAST.AST.Triggers;
 /// Mirrors <see cref="MagicAST.Keywords.Definitions.EchoKeyword"/> (also CR "is a
 /// triggered ability", also an upkeep sacrifice-unless-pay tax): a
 /// <see cref="TriggeredAbility"/> with an upkeep <see cref="TriggerCondition"/>, an
-/// <see cref="OtherCondition"/> intervening-if for "this permanent is on the
-/// battlefield", and two ordered <see cref="Effects"/>: putting the age counter
+/// <see cref="ObjectInZoneCondition"/> intervening-if for "this permanent is on the
+/// battlefield" (<see cref="ObjectReferenceKind.Self"/> in
+/// <see cref="MagicAST.AST.References.Zone.Battlefield"/>, the CR 702.24a intervening-if
+/// structured rather than left as a free-text residual), and two ordered
+/// <see cref="Effects"/>: putting the age counter
 /// (<see cref="PutCountersEffect"/>), then the <see cref="PreventableEffect"/>
 /// wrapping a <see cref="SacrificeEffect"/> whose <see cref="UnlessClause"/> cost is
 /// a <see cref="ScaledCost"/> — the stated per-age-counter cost
@@ -61,8 +64,6 @@ public sealed class CumulativeUpkeepPayLifeStaticRule : IStaticRule
     Edge = TimeBoundary.Beginning,
     Whose = ControllerFilter.You,
   };
-
-  private const string InterveningIfText = "this permanent is on the battlefield";
 
   // Matches: "Cumulative upkeep—Pay N life." with optional trailing reminder text.
   private static readonly Regex _pattern = new(
@@ -100,7 +101,7 @@ public sealed class CumulativeUpkeepPayLifeStaticRule : IStaticRule
           Timing = TriggerTiming.At,
           Event = new TimeOccurrence { Time = UpkeepTime },
         },
-        InterveningIf = new OtherCondition { Text = InterveningIfText },
+        InterveningIf = new ObjectInZoneCondition { Reference = ObjectReference.Self(), Zone = Zone.Battlefield },
         Effects =
         [
           new PutCountersEffect

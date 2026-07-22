@@ -53,8 +53,6 @@ public sealed class CumulativeUpkeepDrawCardStaticRule : IStaticRule
     Whose = ControllerFilter.You,
   };
 
-  private const string InterveningIfText = "this permanent is on the battlefield";
-
   // Matches: "Cumulative upkeep—Draw a card." / "Cumulative upkeep—Draw N cards."
   // with optional trailing reminder text.
   private static readonly Regex _pattern = new(
@@ -92,7 +90,7 @@ public sealed class CumulativeUpkeepDrawCardStaticRule : IStaticRule
           Timing = TriggerTiming.At,
           Event = new TimeOccurrence { Time = UpkeepTime },
         },
-        InterveningIf = new OtherCondition { Text = InterveningIfText },
+        InterveningIf = new ObjectInZoneCondition { Reference = ObjectReference.Self(), Zone = Zone.Battlefield },
         Effects =
         [
           new PutCountersEffect

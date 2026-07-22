@@ -39,8 +39,11 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "this permanent is on the battlefield"
+            "ConditionType": "objectInZone",
+            "Reference": {
+              "Kind": "Self"
+            },
+            "Zone": "Battlefield"
           },
           "Effects": [
             {

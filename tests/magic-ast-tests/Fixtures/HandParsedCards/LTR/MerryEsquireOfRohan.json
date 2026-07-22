@@ -70,8 +70,10 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "it's equipped"
+                  "ConditionType": "objectIsEquipped",
+                  "Reference": {
+                    "Kind": "It"
+                  }
                 }
               }
             }
