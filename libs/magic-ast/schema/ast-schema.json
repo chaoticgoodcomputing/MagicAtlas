@@ -592,6 +592,14 @@
           ]
         },
         {
+          "Type": "KeywordAbilityAdder",
+          "Discriminator": "keywordAbilityAdder",
+          "IsUnparsed": false,
+          "Fields": [
+            "Keywords"
+          ]
+        },
+        {
           "Type": "PowerToughnessOverride",
           "Discriminator": "powerToughnessOverride",
           "IsUnparsed": false,
@@ -3420,5 +3428,5 @@
       ]
     }
   ],
-  "SchemaHash": "4b39e99d0e86c7b0451eef8697c7a17f71a28de297373de2daddd5834ac28ce4"
+  "SchemaHash": "f5b2787661cf874f3576c27cbd430ae1a00b835c71e3d2a3db4dddc1ef301728"
 }

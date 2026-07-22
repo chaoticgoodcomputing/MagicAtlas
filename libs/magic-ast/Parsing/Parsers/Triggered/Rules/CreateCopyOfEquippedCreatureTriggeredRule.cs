@@ -62,7 +62,7 @@ public sealed class CreateCopyOfEquippedCreatureTriggeredRule : ITriggeredRule
       Modifications =
       [
         new SupertypeRemover { Supertypes = ["Legendary"] },
-        new AbilityAdder { AbilityText = abilityText },
+        CopyModificationHelpers.AbilityGrant(abilityText),
       ],
     };
     return true;

@@ -38,8 +38,10 @@
               },
               "Modifications": [
                 {
-                  "ModificationType": "abilityAdder",
-                  "AbilityText": "haste"
+                  "ModificationType": "keywordAbilityAdder",
+                  "Keywords": [
+                    "Haste"
+                  ]
                 },
                 {
                   "ModificationType": "triggeredAbilityAdder",

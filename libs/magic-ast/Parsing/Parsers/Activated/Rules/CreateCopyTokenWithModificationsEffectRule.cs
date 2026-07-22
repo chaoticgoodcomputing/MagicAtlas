@@ -65,7 +65,7 @@ public sealed class CreateCopyTokenWithModificationsEffectRule : IActivatedEffec
           ExcludedSupertypes = isNonlegendary ? ["Legendary"] : null,
         },
       },
-      Modifications = [new AbilityAdder { AbilityText = abilityText }],
+      Modifications = [CopyModificationHelpers.AbilityGrant(abilityText)],
     };
   }
 }
