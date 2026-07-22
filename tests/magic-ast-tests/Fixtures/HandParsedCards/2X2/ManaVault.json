@@ -96,8 +96,11 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "this artifact is tapped"
+            "ConditionType": "objectStatus",
+            "Reference": {
+              "Kind": "Self"
+            },
+            "Status": "Tapped"
           },
           "Effects": [
             {

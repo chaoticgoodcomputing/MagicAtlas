@@ -176,6 +176,27 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "this artifact is tapped" / "this artifact remains tapped" / "it's untapped" /
+  /// "this permanent is saddled" — the source (or back-referenced) object's own
+  /// status/designation gate (Mana Vault's draw-step intervening-if; Endoskeleton's
+  /// "for as long as this artifact remains tapped"; Giant Tortoise's "as long as it's
+  /// untapped"; the OTJ Mounts' "attacks while saddled"). CR 110.6: a permanent is
+  /// either tapped or untapped; CR 702.166: a Mount that has resolved its saddle
+  /// ability is "saddled". Structured to an <see cref="ObjectStatusCondition"/> — the
+  /// status-state sibling of the zone-state <see cref="ObjectInZoneCondition"/>, the
+  /// attachment-state <see cref="ObjectIsEquippedCondition"/>, and the combat-state
+  /// <see cref="SourceCombatStateCondition"/> — rather than left as a free-text
+  /// <see cref="OtherCondition"/> residual. The subject is preserved as-written
+  /// (reference-not-resolution, ADR 0004): "this artifact/permanent/land/creature" →
+  /// <see cref="ObjectReferenceKind.Self"/>, the bare pronoun "it's" →
+  /// <see cref="ObjectReferenceKind.It"/>; "untapped" survives as its own status value,
+  /// not folded to a negation. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex ObjectStatusState = new(
+    @"^(?:this\s+(?<self>artifact|land|permanent|creature|card)|it)(?:'s|\s+is|\s+remains)\s+(?<status>tapped|untapped|saddled)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "it's a Unicorn" / "it's an Elf" — a subtype predicate on the "it" pronoun,
   /// checking whether the designated object has the stated creature subtype. The standard
   /// oracle form for subtype-conditional counter boosts and similar effects
@@ -495,6 +516,24 @@ public static class ConditionParser
         Reference = sie.Groups["self"].Success
           ? ObjectReference.Self()
           : new ObjectReference { Kind = ObjectReferenceKind.It },
+      };
+    }
+
+    if (ObjectStatusState.Match(body) is { Success: true } oss)
+    {
+      var status = oss.Groups["status"].Value.ToLowerInvariant() switch
+      {
+        "tapped" => ObjectStatus.Tapped,
+        "untapped" => ObjectStatus.Untapped,
+        "saddled" => ObjectStatus.Saddled,
+        _ => ObjectStatus.Tapped,
+      };
+      return new ObjectStatusCondition
+      {
+        Reference = oss.Groups["self"].Success
+          ? ObjectReference.Self()
+          : new ObjectReference { Kind = ObjectReferenceKind.It },
+        Status = status,
       };
     }
 

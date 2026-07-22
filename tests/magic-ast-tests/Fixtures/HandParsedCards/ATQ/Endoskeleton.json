@@ -79,8 +79,11 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "this artifact remains tapped"
+                  "ConditionType": "objectStatus",
+                  "Reference": {
+                    "Kind": "Self"
+                  },
+                  "Status": "Tapped"
                 }
               },
               "SourceSpan": {
