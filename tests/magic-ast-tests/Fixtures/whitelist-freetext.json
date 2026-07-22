@@ -700,8 +700,8 @@
     {
       "card": "USG/GiantTrapDoorSpider",
       "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 batch 3: (1) 'without flying' -> ObjectFilter.LacksKeywords=[Flying] STRUCTURED (cluster A, axis EXISTS); (2) 'that's attacking you' combat-defender predicate remains IRREDUCIBLE (no defender/attacked-player CombatState axis; deferred whole per ADR 0001) — sink persists on this residual alone."
+      "tag": "debt",
+      "reason": "PB-9 partial: 'without flying' half structured (LacksKeywords); 'that's attacking you' half is a combat-state predicate (creature attacking the controller, CR 508/509) — DEFERRED-DEBT structurable via an attacking-player/combat-defender axis, NOT irreducible (per the 2026-07-22 adjudication: singleton/combat-state != irreducible; the CR has a word for it). Batch-4 combat-predicate slice."
     },
     {
       "card": "USG/GoblinWarBuggy",
