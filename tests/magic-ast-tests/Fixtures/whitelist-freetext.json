@@ -128,46 +128,10 @@
       "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
     },
     {
-      "card": "EOE/ElegyAcolyte",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "EOE/Hylderblade",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "L1 shell surfaced a previously-hidden intervening-if condition residual (was buried in the whole-ability UnparsedAbility); PB-7 structured-condition burndown"
-    },
-    {
       "card": "EOE/Hylderblade",
       "sink": "UnstructuredEffect",
       "tag": "debt",
       "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
-    },
-    {
-      "card": "EOE/InsatiableSkittermaw",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "EOE/InterceptorMechan",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "EOE/KavaronSkywarden",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "EOE/VoidforgedTitan",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "EVE/GiftOfTheDeity",
@@ -440,12 +404,6 @@
       "reason": "PB-9 (c): 'targeting this creature' - relational spell-targets-self predicate (Heroic, CR 702.85). Targeting is stack-time engine state; same irreducible category as BFZ/FathomFeeder 'targeting'."
     },
     {
-      "card": "TSP/Stingscourger",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
       "card": "TheChainVeil",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -476,28 +434,10 @@
       "reason": "PB-7 structured-condition buckets — 'it’s legendary' is a supertype-presence predicate on the equipped creature; no IsLegendary/SuptertypeCondition arm exists yet in ConditionParser"
     },
     {
-      "card": "ULG/AlbinoTroll",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
       "card": "USG/GiantTrapDoorSpider",
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 partial: 'without flying' half structured (LacksKeywords); 'that's attacking you' half is a combat-state predicate (creature attacking the controller, CR 508/509) — DEFERRED-DEBT structurable via an attacking-player/combat-defender axis, NOT irreducible (per the 2026-07-22 adjudication: singleton/combat-state != irreducible; the CR has a word for it). Batch-4 combat-predicate slice."
-    },
-    {
-      "card": "USG/GoblinWarBuggy",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "USG/ViashinoOutrider",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "UgintheIneffable",

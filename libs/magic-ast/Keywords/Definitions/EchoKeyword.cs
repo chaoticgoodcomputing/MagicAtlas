@@ -20,8 +20,8 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 ///
 /// MAST shape: TriggeredAbility{ KeywordSource:"Echo",
 ///   Trigger:{ Timing:"At", Event:{ Part:"Upkeep", Edge:"Beginning", Whose:"You" } },
-///   InterveningIf:{ ConditionType:"other", Text:"this permanent came under your
-///     control since the beginning of your last upkeep" } (CR 603.4 intervening-if),
+///   InterveningIf:{ ConditionType:"controlSinceLastUpkeep" } (CR 603.4 intervening-if;
+///     the fixed control-provenance gate — see <see cref="ControlSinceLastUpkeepCondition"/>),
 ///   Effects:[ PreventableEffect{ Inner:SacrificeEffect{ Target:{Kind:"Self"} },
 ///     Unless:{ Player:{Kind:"Controller"}, Cost:[echo cost] } } ] }
 ///
@@ -36,9 +36,6 @@ public sealed class EchoKeyword : IKeyword
     Edge = TimeBoundary.Beginning,
     Whose = ControllerFilter.You,
   };
-
-  private const string InterveningIfText =
-    "this permanent came under your control since the beginning of your last upkeep";
 
   /// <inheritdoc/>
   public KeywordTier Tier => KeywordTier.Parameterized;
@@ -59,10 +56,7 @@ public sealed class EchoKeyword : IKeyword
         Timing = TriggerTiming.At,
         Event = new TimeOccurrence { Time = UpkeepTime },
       },
-      InterveningIf = new OtherCondition
-      {
-        Text = InterveningIfText,
-      },
+      InterveningIf = new ControlSinceLastUpkeepCondition(),
       Effects =
       [
         new PreventableEffect
