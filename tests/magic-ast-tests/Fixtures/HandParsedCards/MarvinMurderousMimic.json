@@ -41,12 +41,9 @@
                   "creature"
                 ],
                 "Controller": "You",
-                "Characteristics": [
-                  {
-                    "CharacteristicType": "other",
-                    "Description": "don't have the same name as this creature"
-                  }
-                ]
+                "ExcludesNameOf": {
+                  "Kind": "Self"
+                }
               }
             }
           ],

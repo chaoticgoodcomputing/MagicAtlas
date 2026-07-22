@@ -55,17 +55,14 @@ public sealed class MarvinHasAllActivatedAbilitiesRule : IStaticRule
     var subject = ObjectReference.Self();
 
     // SourceFilter: creatures you control that don't have the same name as this creature.
-    // "that don't have the same name as this creature" is a relational name predicate
-    // without a first-class ObjectFilter field; it is encoded as an OtherCharacteristic
-    // typed residual (ADR 0001 — typed residual arm, not interior free text).
+    // "that don't have the same name as this creature" is the relational name-EXCLUSION
+    // predicate — the first-class ObjectFilter.ExcludesNameOf axis (negation sibling of
+    // SharesNameWith), whose referent "this creature" is Marvin itself (Self, CR 109).
     var sourceFilter = new ObjectFilter
     {
       CardTypes = ["creature"],
       Controller = ControllerFilter.You,
-      Characteristics =
-      [
-        Characteristic.Other("don't have the same name as this creature"),
-      ],
+      ExcludesNameOf = ObjectReference.Self(),
     };
 
     return

@@ -174,6 +174,23 @@ public sealed record ObjectFilter
   public ObjectReference? SharesNameWith { get; init; }
 
   /// <summary>
+  /// Relational name-EXCLUSION axis: the negation sibling of <see cref="SharesNameWith"/> —
+  /// filters to objects that do NOT have the same name as a referenced object. "creatures you
+  /// control that don't have the same name as this creature" (Marvin, Murderous Mimic: "Marvin
+  /// has all activated abilities of creatures you control that don't have the same name as this
+  /// creature."). CR 201.2 (two objects have the same name if the English versions of their names
+  /// are identical) applied under negation. Parallels how <see cref="ExcludedCardTypes"/>/
+  /// <see cref="ExcludedColors"/> pair as the negation of their positive axes: where
+  /// <see cref="SharesNameWith"/> keeps name-sharing objects, this keeps name-DIFFERING ones. The
+  /// name to compare against is the one the referenced object CURRENTLY has, resolved by a consumer
+  /// — the referent is an <see cref="ObjectReference"/> (Marvin's "this creature" =
+  /// <c>{Kind:Self}</c>, CR 109). The type-honest home the free-text whitelist named for the
+  /// "ExcludesSameNameAsSelf" residual.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? ExcludesNameOf { get; init; }
+
+  /// <summary>
   /// Relational card-type axis: filters to objects that share a card type with a referenced
   /// object — "Spells you cast that share a card type with the exiled card cost {2} less to
   /// cast" (Semblance Anvil, CR 118.7 cost reduction). CR 110.4 (card types: artifact,

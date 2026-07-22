@@ -79,6 +79,7 @@ public static class QualifierAxisMapper
     var cardTypes = filter.CardTypes?.ToList();
     bool? isToken = filter.IsToken;
     ObjectReference? sharesColorWith = filter.SharesColorWith;
+    ControllerFilter? owner = filter.Owner;
     var characteristics = filter.Characteristics?.ToList();
 
     foreach (var raw in labels)
@@ -138,6 +139,14 @@ public static class QualifierAxisMapper
         continue;
       }
 
+      // "you own" → Owner=You (CR 108.3 ownership qualifier, distinct from the
+      // "you control" controller axis) — the first-class ownership home, not a residual.
+      if (label is "you own")
+      {
+        owner = ControllerFilter.You;
+        continue;
+      }
+
       // Bare card type → CardTypes.
       if (_cardTypes.Contains(label))
       {
@@ -160,6 +169,7 @@ public static class QualifierAxisMapper
       CardTypes = cardTypes,
       IsToken = isToken,
       SharesColorWith = sharesColorWith,
+      Owner = owner,
       Characteristics = characteristics is { Count: > 0 } ? characteristics : null,
     };
   }

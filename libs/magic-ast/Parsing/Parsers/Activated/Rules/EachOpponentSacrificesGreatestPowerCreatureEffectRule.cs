@@ -56,9 +56,22 @@ public sealed class EachOpponentSacrificesGreatestPowerCreatureEffectRule : IAct
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
+          // "with the greatest power among creatures that player controls" is the
+          // superlative predicate: the first-class ExtremeStatCharacteristic (greatest
+          // power) whose population Scope is "creatures that player controls" — "that
+          // player" is the sacrificing opponent (Controller=ThatPlayer). CR 208 power.
           Characteristics =
           [
-            Characteristic.Other("with the greatest power among creatures that player controls"),
+            new ExtremeStatCharacteristic
+            {
+              Stat = RelativeCharacteristic.Power,
+              Extreme = StatExtreme.Greatest,
+              Scope = new ObjectFilter
+              {
+                CardTypes = ["creature"],
+                Controller = ControllerFilter.ThatPlayer,
+              },
+            },
           ],
         },
       },

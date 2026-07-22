@@ -81,12 +81,7 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "ExcludeSelf": true
                 },
                 "Quantity": {
                   "QuantityType": "upTo",

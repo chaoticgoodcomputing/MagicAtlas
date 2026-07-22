@@ -136,8 +136,15 @@
                   ],
                   "Characteristics": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "with the greatest power among creatures that player controls"
+                      "CharacteristicType": "extremeStat",
+                      "Stat": "Power",
+                      "Extreme": "Greatest",
+                      "Scope": {
+                        "CardTypes": [
+                          "creature"
+                        ],
+                        "Controller": "ThatPlayer"
+                      }
                     }
                   ]
                 }
