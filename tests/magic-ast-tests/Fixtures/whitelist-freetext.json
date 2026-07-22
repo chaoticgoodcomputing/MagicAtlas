@@ -23,13 +23,7 @@
       "card": "AnimateDead",
       "sink": "AbilityText",
       "tag": "debt",
-      "reason": "PB-9 LoseAbilityEffect residual — 'enchant creature card in a graveyard' is an ability text reference (the ability being removed is named verbatim); no structured ability-scope node yet"
-    },
-    {
-      "card": "AnimateDead",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'it's on the battlefield' is a self-zone check (ZoneSelfCondition shape not yet structured)"
+      "reason": "PB-9 LoseAbilityEffect residual — 'enchant creature card in a graveyard' names a SPECIFIC printed ability verbatim, not an unbounded scope; distinct from StopCold/VraskaBetrayalsSting's 'all'/'all other' determiner, which now has a structured LoseAbilityEffect.Scope (AbilityScope.All/AllOther, ADR 0004 #40 wave-2) — that field doesn't apply here since there is no enum value for 'this exact named ability'"
     },
     {
       "card": "ApproachoftheSecondSun",
@@ -332,12 +326,6 @@
       "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
     },
     {
-      "card": "StopCold",
-      "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "PB-9 LoseAbilityEffect residual — 'all abilities' has no structured ability-scope node yet; same family as AnimateDead's 'enchant creature card in a graveyard' and VraskaBetrayalsSting's 'all other abilities'"
-    },
-    {
       "card": "SwiftReconfiguration",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -395,7 +383,7 @@
       "card": "VraskaBetrayalsSting",
       "sink": "AbilityText",
       "tag": "debt",
-      "reason": "PB-9 LoseAbilityEffect residual — 'all other abilities' has no structured ability-scope node yet"
+      "reason": "PB-9 LoseAbilityEffect residual — 'all other abilities' is the AbilityScope.AllOther case; the field now exists (LoseAbilityEffect.Scope, ADR 0004 #40 wave-2, closed via StopCold's plain 'all abilities' exemplar) but wasn't extended to this card's more entangled 4-effect BecomesTreasureArtifactEffectRule — wave-3 mechanical follow-up"
     },
     {
       "card": "VraskaBetrayalsSting",
