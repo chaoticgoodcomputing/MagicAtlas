@@ -109,8 +109,7 @@
             "Controller": "Opponent"
           },
           "Condition": {
-            "ConditionType": "other",
-            "Text": "During your turn"
+            "ConditionType": "duringYourTurn"
           },
           "SourceSpan": {
             "Start": 48,

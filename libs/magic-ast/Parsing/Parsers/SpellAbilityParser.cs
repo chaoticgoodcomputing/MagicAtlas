@@ -49,7 +49,7 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// <inheritdoc/>
   public IReadOnlyList<Ability> Parse(OracleClause clause, ClauseClassification classification)
   {
-    var (effectsText, instructions) = StripAbilityWordConditionalPreamble(
+    var (effectsText, interveningIf) = StripAbilityWordConditionalPreamble(
       clause.RawText,
       classification.DashPrefix
     );
@@ -75,7 +75,7 @@ public sealed class SpellAbilityParser : IAbilityParser
               new UnstructuredEffect { Text = effectsText, SourceSpan = clause.SourceSpan },
             },
             AbilityWord = classification.AbilityWord,
-            Instructions = instructions,
+            InterveningIf = interveningIf,
           },
         ];
       }
@@ -97,7 +97,7 @@ public sealed class SpellAbilityParser : IAbilityParser
       {
         Effects = dispatch.Effects,
         AbilityWord = classification.AbilityWord,
-        Instructions = instructions,
+        InterveningIf = interveningIf,
       },
     ];
   }
@@ -106,7 +106,7 @@ public sealed class SpellAbilityParser : IAbilityParser
   /// Peels the "[Prefix] — If &lt;condition&gt;," preamble off a spell line, where
   /// [Prefix] is a CR 207.2c ability word or a printed flavor label.
   /// </summary>
-  private static (string EffectsText, IReadOnlyList<string>? Instructions) StripAbilityWordConditionalPreamble(
+  private static (string EffectsText, Condition? InterveningIf) StripAbilityWordConditionalPreamble(
     string rawText,
     string? dashPrefix
   )
@@ -130,9 +130,14 @@ public sealed class SpellAbilityParser : IAbilityParser
     {
       return (rawText, null);
     }
+    // The ability-word conditional preamble ("Fateful hour — If you have 5 or less
+    // life, …") is a CR 603.4 intervening-if gating the spell's effect. Structure it
+    // via ConditionParser onto SpellAbility.InterveningIf (the life-total predicate is a
+    // QuantityComparisonCondition) rather than holding the phrase verbatim on the
+    // free-text Instructions sink (ADR 0004 de-string).
     var condition = ifMatch.Groups["cond"].Value.Trim();
     var rest = ifMatch.Groups["rest"].Value;
-    return (rest, new[] { condition });
+    return (rest, MagicAST.Parsing.ConditionParser.Parse(condition));
   }
 
   /// <summary>

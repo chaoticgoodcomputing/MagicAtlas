@@ -89,11 +89,14 @@ public sealed class IfPutSubtypeOntoBattlefieldThisWayGainLifeRule : ITriggeredR
     }
 
     // The condition: "you put a [Subtype] onto the battlefield this way" is a
-    // causation-gate + subtype filter. No dedicated structured arm exists for
-    // this compound shape, so we defer honestly via OtherCondition (ADR 0001 residual).
-    var condition = new OtherCondition
+    // within-resolution causation-gate keyed on a subtype of the object the preceding
+    // "put a land onto the battlefield" acted on (CR 608.2c). Structured to
+    // ActionThisWayCondition (Action=PutOntoBattlefield + subtype filter), the
+    // action-general sibling of DiedThisWayCondition.
+    var condition = new ActionThisWayCondition
     {
-      Text = $"you put a {subtype} onto the battlefield this way",
+      Action = PrecedingAction.PutOntoBattlefield,
+      Filter = new ObjectFilter { Subtypes = [subtype] },
     };
 
     var gainLife = new GainLifeEffect

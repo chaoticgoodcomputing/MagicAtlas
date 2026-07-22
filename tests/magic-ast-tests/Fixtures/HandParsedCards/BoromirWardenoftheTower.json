@@ -60,8 +60,7 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "no mana was spent to cast it"
+            "ConditionType": "noManaSpentToCast"
           },
           "Effects": [
             {

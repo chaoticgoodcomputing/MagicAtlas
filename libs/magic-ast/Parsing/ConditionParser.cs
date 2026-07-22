@@ -405,6 +405,67 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "during your turn" — the turn-scope timing gate (Daggersail Aeronaut, Dragonlord
+  /// Dromoka, Mental Modulation, …). Structured to the field-less
+  /// <see cref="DuringYourTurnCondition"/> marker rather than a free-text residual. The
+  /// producers (<c>OpponentsCantCastDuringYourTurnRule</c>,
+  /// <c>SelfKeywordDuringTurnSuffixRule</c>, …) all normalise to "During your turn" and
+  /// route it here. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex DuringYourTurn = new(
+    @"^during\s+your\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "no mana was spent to cast it" — the cost-zero cast gate (Boromir, Warden of the
+  /// Tower). Structured to the field-less <see cref="NoManaSpentToCastCondition"/> marker.
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex NoManaSpentToCast = new(
+    @"^no\s+mana\s+was\s+spent\s+to\s+cast\s+it$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "tribute was paid" / "tribute wasn't paid" — the Tribute keyword's entry gate (CR
+  /// 702.108; Snake of the Golden Grove). Structured to <see cref="TributeCondition"/>;
+  /// the <c>neg</c> group carries the declined polarity. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex TributePaid = new(
+    @"^tribute\s+(?:was(?<neg>n'?t| not)?)\s+paid$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "[object] is attached to a creature" — the attachment-state gate read from the
+  /// attached object's side (The Reality Chip). Structured to
+  /// <see cref="ObjectAttachedCondition"/>. The subject is the source (its own name or
+  /// "this [permanent]") → <see cref="ObjectReferenceKind.Self"/>, the bare pronoun "it"
+  /// → <see cref="ObjectReferenceKind.It"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex ObjectAttachedToCreature = new(
+    @"^(?<subj>.+?)\s+is\s+attached\s+to\s+a\s+creature$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "an opponent was dealt damage this turn" — the Bloodthirst damage-history gate (CR
+  /// 702.54a; Carnage Wurm). Structured to <see cref="PlayerDealtDamageThisTurnCondition"/>
+  /// (Player=Opponent). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex OpponentDealtDamage = new(
+    @"^an\s+opponent\s+was\s+dealt\s+damage\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "it targets a tapped creature" / "it targets a tapped permanent" — the tapped-target
+  /// cost-reduction gate (Quicksand Whirlpool). Structured to
+  /// <see cref="TargetsFilterCondition"/> over a filter with
+  /// <see cref="ObjectFilter.IsTapped"/> — the "tapped" sibling of the "colored spell"
+  /// <see cref="ItTargetsColoredSpell"/> arm. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex ItTargetsTapped = new(
+    @"^it\s+targets\s+a\s+tapped\s+(?<noun>creature|permanent)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "this is the [Nth] time this ability has resolved this turn" and its elided continuation
   /// "it's the [Nth] time" — the per-turn ability-resolution ordinal gate (CR 608.1). Structured
   /// to <see cref="NthTimeAbilityResolvedCondition"/> keyed on the ordinal. Anchored (^…$).
@@ -916,6 +977,52 @@ public static class ConditionParser
     if (DiscardedThisCard.IsMatch(body))
     {
       return new DiscardedThisTurnCondition { Reference = ObjectReference.Self() };
+    }
+
+    if (DuringYourTurn.IsMatch(body))
+    {
+      return new DuringYourTurnCondition();
+    }
+
+    if (NoManaSpentToCast.IsMatch(body))
+    {
+      return new NoManaSpentToCastCondition();
+    }
+
+    if (TributePaid.Match(body) is { Success: true } trib)
+    {
+      return new TributeCondition { Paid = !trib.Groups["neg"].Success };
+    }
+
+    if (ObjectAttachedToCreature.Match(body) is { Success: true } oatc)
+    {
+      var subj = oatc.Groups["subj"].Value.Trim();
+      var reference = subj.Equals("it", StringComparison.OrdinalIgnoreCase)
+        ? new ObjectReference { Kind = ObjectReferenceKind.It }
+        : ObjectReference.Self();
+      return new ObjectAttachedCondition
+      {
+        Reference = reference,
+        AttachedTo = new ObjectFilter { CardTypes = ["creature"] },
+      };
+    }
+
+    if (OpponentDealtDamage.IsMatch(body))
+    {
+      return new PlayerDealtDamageThisTurnCondition { Player = ControllerFilter.Opponent };
+    }
+
+    if (ItTargetsTapped.Match(body) is { Success: true } itt)
+    {
+      return new TargetsFilterCondition
+      {
+        Subject = "It",
+        Filter = new ObjectFilter
+        {
+          CardTypes = [itt.Groups["noun"].Value.ToLowerInvariant()],
+          IsTapped = true,
+        },
+      };
     }
 
     return new OtherCondition { Text = verbatim };

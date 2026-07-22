@@ -51,10 +51,9 @@ public sealed class AttacksPlayerAndIsntBlockedConditionRule : ITriggerCondition
     // expressible on TriggerCondition (which has no AttackTarget or Unblocked field).
     // Communicate it as a pending InterveningIf via the thread-local below, mirroring
     // the PendingAdditionalTrigger approach used by EntersAndOpponentDrawsNotFirstConditionRule.
-    PendingInterveningIf = new OtherCondition
-    {
-      Text = "this creature attacks a player and isn't blocked",
-    };
+    // Structured to the dedicated AttacksPlayerAndIsntBlockedCondition marker (CR
+    // 508.1a / 509.1h) rather than an OtherCondition free-text residual.
+    PendingInterveningIf = new AttacksPlayerAndIsntBlockedCondition();
 
     return new TriggerCondition
     {
@@ -77,5 +76,5 @@ public sealed class AttacksPlayerAndIsntBlockedConditionRule : ITriggerCondition
   /// </para>
   /// </summary>
   [ThreadStatic]
-  public static OtherCondition? PendingInterveningIf;
+  public static Condition? PendingInterveningIf;
 }

@@ -77,13 +77,16 @@ public sealed class IfSacrificeSubtypeThisWayDealsDamageToYouRule : ITriggeredRu
       return false;
     }
 
-    // The condition: "you sacrifice a[n] [Subtype] this way" is a causation-gate +
-    // subtype filter on the object affected by the preceding effect. No dedicated
-    // structured arm exists for this compound shape, so we defer honestly via
-    // OtherCondition (ADR 0001 residual), matching the Spelunking precedent.
-    var condition = new OtherCondition
+    // The condition: "you sacrifice a[n] [Subtype] this way" is a within-resolution
+    // causation-gate keyed on a subtype of the object the preceding "sacrifice a land"
+    // acted on (CR 608.2c). Structured to ActionThisWayCondition (Action=Sacrificed +
+    // subtype filter), the action-general sibling of DiedThisWayCondition, matching the
+    // Spelunking precedent.
+    _ = article;
+    var condition = new ActionThisWayCondition
     {
-      Text = $"you sacrifice {article} {subtype} this way",
+      Action = PrecedingAction.Sacrificed,
+      Filter = new ObjectFilter { Subtypes = [subtype] },
     };
 
     var dealDamage = new DealDamageEffect

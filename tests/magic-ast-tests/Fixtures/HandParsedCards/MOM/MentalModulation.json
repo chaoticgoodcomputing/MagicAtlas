@@ -36,8 +36,7 @@
             }
           ],
           "Condition": {
-            "ConditionType": "other",
-            "Text": "during your turn"
+            "ConditionType": "duringYourTurn"
           },
           "SourceSpan": {
             "Start": 0,

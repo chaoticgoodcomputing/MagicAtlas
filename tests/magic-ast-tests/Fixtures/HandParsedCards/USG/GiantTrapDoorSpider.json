@@ -89,12 +89,7 @@
                   "LacksKeywords": [
                     "Flying"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "attackingYou"
-                    }
-                  ]
+                  "IsAttackingYou": true
                 }
               },
               "SourceSpan": {

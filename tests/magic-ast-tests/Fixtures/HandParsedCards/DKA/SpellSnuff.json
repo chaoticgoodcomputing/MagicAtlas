@@ -60,14 +60,24 @@
               }
             }
           ],
-          "Instructions": [
-            "If you have 5 or less life"
-          ],
           "SourceSpan": {
             "Start": 22,
             "Length": 55
           },
-          "OracleLineIndex": 1
+          "OracleLineIndex": 1,
+          "InterveningIf": {
+            "ConditionType": "quantityComparison",
+            "Left": {
+              "QuantityType": "derived",
+              "DerivedFrom": "LifeTotal",
+              "Source": "you"
+            },
+            "Operator": "LessThanOrEqual",
+            "Right": {
+              "QuantityType": "literal",
+              "Value": 5
+            }
+          }
         }
       ]
     },

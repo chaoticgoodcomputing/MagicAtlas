@@ -73,11 +73,14 @@ public sealed class ExileSelfAndTargetCreatureRule : IActivatedEffectRule, IMult
     var lacksKeywords = Enum.TryParse<KeywordAbility>(keyword, ignoreCase: true, out var kw)
       ? new List<KeywordAbility> { kw }
       : null;
-    var characteristics = new List<Characteristic> { Characteristic.Other("attackingYou") };
+    // "without [keyword]" routes to LacksKeywords for a recognised keyword; an
+    // unrecognised keyword keeps the honest "withoutX" free-text fallback. The
+    // combat-defender "that's attacking you" now rides the first-class
+    // ObjectFilter.IsAttackingYou axis (CR 508.1a/b) rather than an OtherCharacteristic.
+    var characteristics = new List<Characteristic>();
     if (lacksKeywords is null)
     {
-      characteristics.Insert(
-        0,
+      characteristics.Add(
         Characteristic.Other($"without{char.ToUpperInvariant(keyword[0])}{keyword[1..]}")
       );
     }
@@ -94,7 +97,8 @@ public sealed class ExileSelfAndTargetCreatureRule : IActivatedEffectRule, IMult
           {
             CardTypes = ["creature"],
             LacksKeywords = lacksKeywords,
-            Characteristics = characteristics,
+            IsAttackingYou = true,
+            Characteristics = characteristics.Count > 0 ? characteristics : null,
           },
         },
       },

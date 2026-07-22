@@ -20,31 +20,7 @@
       "reason": "PB-7 structured-condition buckets — upkeep intervening-if 'you had another creature enter the battlefield under your control last turn' is a last-turn history predicate with no structured node yet (line 3; out of scope for the devotion-gated status family targeting line 2)"
     },
     {
-      "card": "BNG/SnakeOfTheGoldenGrove",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "BoromirWardenoftheTower",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
-    },
-    {
       "card": "CN2/MarchesasEmissary",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "DKA/SpellSnuff",
-      "sink": "Instructions",
-      "tag": "debt",
-      "reason": "MISFILED under may-pay-cost: this SpellAbility.Instructions holds an ability-word conditional preamble ('Fateful hour — If you have 5 or less life', CR 207.2c) — a life-total intervening condition gating the draw, NOT a 'you may pay {cost}' adjunct. Reducible under the PB-7 structured-condition-buckets initiative, not the may-pay de-string (ADR 0004 #40)."
-    },
-    {
-      "card": "DaggersailAeronaut",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
@@ -54,12 +30,6 @@
       "sink": "UnstructuredEffect",
       "tag": "debt",
       "reason": "RESIDUAL NARROWED (ADR 0004 #40 wave-3): the attack-trigger reanimation ('put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking') is now structured (ReturnToBattlefieldEffect with the new Attacking bool + Controller=DefendingPlayer). The remaining UnstructuredEffect is the Void end-step 'sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn' — a compound unless-condition (PB-7 structured-condition buckets, sibling ConditionParser territory), not an effect-grammar gap"
-    },
-    {
-      "card": "FreshFacedRecruit",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
@@ -86,22 +56,10 @@
       "reason": "PB-7 structured-condition buckets — 'it wasn't put onto the battlefield with this ability' is a loop-prevention anti-recursion gate unique to Kodama of the East Tree; requires a new NotEnteredByAbilityCondition arm with no current peer"
     },
     {
-      "card": "LCI/QuicksandWhirlpool",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
       "card": "LRW/WindbriskHeights",
       "sink": "UnstructuredEffect",
       "tag": "debt",
       "reason": "BLOCKED ON CONDITION SLICE (ADR 0004 #40 wave-3): the effect half 'you may play the exiled card without paying its mana cost' is structurable (MayPlayFromExileEffect over Cards={Zone:Exile, ExiledWith:Self}, plus a WithoutPayingManaCost adjunct), but the trailing gate 'if you attacked with three or more creatures this turn' is a COUNT-gated attack-history condition with no structured node (YouAttackedThisTurnCondition is the field-less Raid yes/no, not a >=N attacker count) — sibling ConditionParser territory. Structuring the effect alone would relocate the sink UnstructuredEffect->OtherCondition without reducing debt, so held whole pending a coordinated condition slice"
-    },
-    {
-      "card": "M12/CarnageWurm",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "M21/BarrinTolarianArchmage",
@@ -116,18 +74,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "MOM/MentalModulation",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "MasterofCruelties",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
-    },
-    {
       "card": "OGW/ContainmentMembrane",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -140,70 +86,10 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "PouncingLynx",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "RazorkinNeedlehead",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "DragonlordDromoka",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — 'during your turn' timing scope on the opponents' cast-prohibition, same bucket as RazorkinNeedlehead's suffix-form 'during your turn'"
-    },
-    {
-      "card": "MyrelShieldOfArgive",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — 'during your turn' timing scope shared by BOTH the cast-prohibition and the activate-prohibition, same bucket as DragonlordDromoka/RazorkinNeedlehead's 'during your turn'"
-    },
-    {
-      "card": "STX/FurycalmSnarl",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "STX/NecroblossomSnarl",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
       "card": "SelvalaHeartoftheWilds",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'its power is greater than each other creature's power' is a relative-maximum-power comparison (no structured GreatestPowerCondition node exists yet; the predicate spans the full set of creatures rather than a single comparator)"
-    },
-    {
-      "card": "SerendibDjinn",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'you sacrifice an Island this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound on the land sacrificed by the ability's own preceding effect; same family as Spelunking's 'you put a Cave onto the battlefield this way', requires a new SacrificeSubtypeThisWayCondition arm with no current peer"
-    },
-    {
-      "card": "Spelunking",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
-    },
-    {
-      "card": "TheRealityChip",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'The Reality Chip is attached to a creature' is an attachment-state predicate; no IsAttachedToCreature condition arm exists yet (CR 702.151b)"
-    },
-    {
-      "card": "USG/GiantTrapDoorSpider",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 partial: 'without flying' half structured (LacksKeywords); 'that's attacking you' half is a combat-state predicate (creature attacking the controller, CR 508/509) — DEFERRED-DEBT structurable via an attacking-player/combat-defender axis, NOT irreducible (per the 2026-07-22 adjudication: singleton/combat-state != irreducible; the CR has a word for it). Batch-4 combat-predicate slice."
     }
   ]
 }

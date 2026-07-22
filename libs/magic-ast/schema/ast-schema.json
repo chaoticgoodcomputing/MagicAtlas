@@ -327,6 +327,15 @@
       "DiscriminatorKey": "ConditionType",
       "Types": [
         {
+          "Type": "ActionThisWayCondition",
+          "Discriminator": "actionThisWay",
+          "IsUnparsed": false,
+          "Fields": [
+            "Action",
+            "Filter"
+          ]
+        },
+        {
           "Type": "AdditionalCostPaidCondition",
           "Discriminator": "additionalCostPaid",
           "IsUnparsed": false,
@@ -343,6 +352,12 @@
         {
           "Type": "AlternativeCostPaidCondition",
           "Discriminator": "alternativeCostPaid",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "AttacksPlayerAndIsntBlockedCondition",
+          "Discriminator": "attacksPlayerAndIsntBlocked",
           "IsUnparsed": false,
           "Fields": []
         },
@@ -401,6 +416,14 @@
           ]
         },
         {
+          "Type": "PlayerDealtDamageThisTurnCondition",
+          "Discriminator": "dealtDamageThisTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
           "Type": "PlayerDesignationCondition",
           "Discriminator": "designation",
           "IsUnparsed": false,
@@ -423,6 +446,12 @@
           "Fields": [
             "Reference"
           ]
+        },
+        {
+          "Type": "DuringYourTurnCondition",
+          "Discriminator": "duringYourTurn",
+          "IsUnparsed": false,
+          "Fields": []
         },
         {
           "Type": "EscapedCondition",
@@ -488,11 +517,26 @@
           ]
         },
         {
+          "Type": "NoManaSpentToCastCondition",
+          "Discriminator": "noManaSpentToCast",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "NthTimeAbilityResolvedCondition",
           "Discriminator": "nthTimeResolved",
           "IsUnparsed": false,
           "Fields": [
             "Ordinal"
+          ]
+        },
+        {
+          "Type": "ObjectAttachedCondition",
+          "Discriminator": "objectAttached",
+          "IsUnparsed": false,
+          "Fields": [
+            "AttachedTo",
+            "Reference"
           ]
         },
         {
@@ -597,6 +641,15 @@
           ]
         },
         {
+          "Type": "RevealCardCondition",
+          "Discriminator": "revealCard",
+          "IsUnparsed": false,
+          "Fields": [
+            "Card",
+            "Revealer"
+          ]
+        },
+        {
           "Type": "SourceCombatStateCondition",
           "Discriminator": "sourceCombatState",
           "IsUnparsed": false,
@@ -611,6 +664,14 @@
           "Fields": [
             "Filter",
             "Subject"
+          ]
+        },
+        {
+          "Type": "TributeCondition",
+          "Discriminator": "tribute",
+          "IsUnparsed": false,
+          "Fields": [
+            "Paid"
           ]
         },
         {
@@ -3562,5 +3623,5 @@
       ]
     }
   ],
-  "SchemaHash": "b88e79422addfedfeac0730840576f15e2d19901b0fb15cb808f0f975608e3d1"
+  "SchemaHash": "85f3ff9c65799c8a1caa565729518f6d9f315d383d72741ab9e50def85959723"
 }

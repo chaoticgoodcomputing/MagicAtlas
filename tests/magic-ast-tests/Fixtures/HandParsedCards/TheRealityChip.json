@@ -60,8 +60,15 @@
             }
           ],
           "Condition": {
-            "ConditionType": "other",
-            "Text": "The Reality Chip is attached to a creature"
+            "ConditionType": "objectAttached",
+            "Reference": {
+              "Kind": "Self"
+            },
+            "AttachedTo": {
+              "CardTypes": [
+                "creature"
+              ]
+            }
           },
           "SourceSpan": {
             "Start": 55,
