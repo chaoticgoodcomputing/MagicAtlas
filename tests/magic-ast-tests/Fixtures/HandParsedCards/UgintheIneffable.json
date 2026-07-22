@@ -169,12 +169,7 @@
                   "CardTypes": [
                     "permanent"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "one or more colors"
-                    }
-                  ]
+                  "IsColored": true
                 }
               },
               "SourceSpan": {

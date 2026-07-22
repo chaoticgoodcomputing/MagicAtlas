@@ -87,7 +87,7 @@ public sealed class AsLongAsEnchantedColorConditionalRule : IStaticRule
       [
         new StaticAbility
         {
-          Condition = new MagicAST.AST.Abilities.OtherCondition { Text = condText },
+          Condition = MagicAST.Parsing.ConditionParser.Parse(condText),
           Effects =
           [
             new ModifyPTEffect
@@ -119,7 +119,7 @@ public sealed class AsLongAsEnchantedColorConditionalRule : IStaticRule
       [
         new StaticAbility
         {
-          Condition = new MagicAST.AST.Abilities.OtherCondition { Text = condText },
+          Condition = MagicAST.Parsing.ConditionParser.Parse(condText),
           Effects =
           [
             new ModifyPTEffect

@@ -55,8 +55,18 @@
             {
               "EffectType": "conditional",
               "Condition": {
-                "ConditionType": "other",
-                "Text": "you control seven or more lands with different names"
+                "ConditionType": "count",
+                "Filter": {
+                  "CardTypes": [
+                    "land"
+                  ],
+                  "DifferentNames": true,
+                  "Controller": "You"
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 7
+                }
               },
               "Then": {
                 "EffectType": "createToken",

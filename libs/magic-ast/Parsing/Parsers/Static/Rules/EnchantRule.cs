@@ -146,17 +146,16 @@ public sealed class EnchantRule : IStaticRule
 
       // Mixed card-type / subtype disjunction: "creature or Vehicle", "creature or Equipment",
       // etc. — one half is a recognised card-type noun, the other is a subtype (not a simple
-      // card-type noun). ObjectFilter has no cross-axis OR field, so the full phrase is
-      // captured as an OtherCharacteristic residual (ADR 0001 free-text doctrine), consistent
-      // with the "creature or Vehicle card" encoding in BroodheartEngine.
-      // The oracle phrase is preserved verbatim (original case from the descriptor).
+      // card-type noun). Structured on the cross-axis disjunction field
+      // <see cref="ObjectFilter.AnyOf"/> (CardTypes ∨ Subtypes), consistent with the
+      // "creature or Vehicle card" encoding in BroodheartEngine.
       if (simpleTypes.Contains(typeA) || simpleTypes.Contains(typeB))
       {
-        return new ObjectFilter
+        var anyOf = TypeDisjunctionParser.TryParse(d);
+        if (anyOf is not null)
         {
-          Characteristics = [Characteristic.Other(d)],
-          Controller = controller,
-        };
+          return new ObjectFilter { AnyOf = anyOf, Controller = controller };
+        }
       }
     }
 

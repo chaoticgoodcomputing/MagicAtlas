@@ -68,12 +68,6 @@
       "reason": "PB-7 structured-condition buckets — 'hasn't been exerted this turn' is a per-turn history predicate; no HistoryCondition arm exists yet"
     },
     {
-      "card": "DFT/BroodheartEngine",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle card' is a cross-axis OR (CardTypes:creature OR Subtypes:Vehicle). No structured OR spanning the CardTypes and Subtypes axes. NOVEL (Opus) - needs a disjunctive-filter representation; shared with SilkenStrength/SwiftReconfiguration."
-    },
-    {
       "card": "DGM/WearTear",
       "sink": "UnstructuredEffect",
       "tag": "debt",
@@ -96,12 +90,6 @@
       "sink": "UnstructuredEffect",
       "tag": "debt",
       "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
-    },
-    {
-      "card": "EVE/GiftOfTheDeity",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
       "card": "ElectrosBolt",
@@ -176,12 +164,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "MH3/PestRescuer",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'you don't control a Pest creature token' is a control-count intervening-if gate with no current structured-condition arm; deferred exactly as ISD/VillagersOfEstwald's intervening-if on the same 'At the beginning of each upkeep, if …' trigger shape"
-    },
-    {
       "card": "MID/HopefulInitiate",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -248,12 +230,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "RTR/RakdosDrake",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
       "card": "RazorkinNeedlehead",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -302,22 +278,10 @@
       "reason": "PB-7 structured-condition buckets — 'you sacrifice an Island this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound on the land sacrificed by the ability's own preceding effect; same family as Spelunking's 'you put a Cave onto the battlefield this way', requires a new SacrificeSubtypeThisWayCondition arm with no current peer"
     },
     {
-      "card": "SilkenStrength",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle' cross-axis OR (card type OR artifact subtype). No structured OR field. NOVEL (Opus). Same family as SwiftReconfiguration/DFT-BroodheartEngine."
-    },
-    {
       "card": "Spelunking",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
-    },
-    {
-      "card": "SwiftReconfiguration",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle' cross-axis OR (card type OR artifact subtype). No structured OR field. NOVEL (Opus). Same family as SilkenStrength/DFT-BroodheartEngine."
     },
     {
       "card": "T45PowerArmor",
@@ -326,34 +290,16 @@
       "reason": "the upkeep 'you may pay {E}. If you do, untap equipped creature, then put your choice of a menace, trample, or lifelink counter on it.' consequent needs a choice-among-enumerated-named-counter-types node (menace/trample/lifelink keyword counters, CR 122.1e) that doesn't exist yet — PutCountersEffect.CounterType is a fixed required string across every counter node (PutCountersEffect/RemoveCountersEffect/MoveCountersEffect/PutCountersCost/ObjectHasCounterCondition/TriggerCondition), so recording a controller-chosen SUBSET of named options (not the open ChosenColor-style full domain) requires a new node; the trigger itself (At the beginning of your upkeep) and the ETB energy gain both parse fully structured"
     },
     {
-      "card": "TDM/EnduringTenacity",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'it was a creature' is a last-known-information type predicate (LKI on card type at dies-trigger look-back time, CR 603.10); no TriggeringObjectTypeCondition node exists yet"
-    },
-    {
       "card": "TheChainVeil",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'you didn't activate a loyalty ability of a planeswalker this turn' is an activation-history predicate (CR 606.3 once-per-turn gate, checked at end step); no ActivationHistoryCondition arm exists yet"
     },
     {
-      "card": "TheNecrobloom",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition: CountCondition needs a DifferentNames axis on ObjectFilter to express \"seven or more lands with different names\" without free-text residual"
-    },
-    {
       "card": "TheRealityChip",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'The Reality Chip is attached to a creature' is an attachment-state predicate; no IsAttachedToCreature condition arm exists yet (CR 702.151b)"
-    },
-    {
-      "card": "ToralfGodofFuryToralfsHammer",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'it’s legendary' is a supertype-presence predicate on the equipped creature; no IsLegendary/SuptertypeCondition arm exists yet in ConditionParser"
     },
     {
       "card": "USG/GiantTrapDoorSpider",
@@ -372,12 +318,6 @@
       "sink": "AbilityText",
       "tag": "debt",
       "reason": "PB-9 LoseAbilityEffect residual — 'all other abilities' is the AbilityScope.AllOther case; the field now exists (LoseAbilityEffect.Scope, ADR 0004 #40 wave-2, closed via StopCold's plain 'all abilities' exemplar) but wasn't extended to this card's more entangled 4-effect BecomesTreasureArtifactEffectRule — wave-3 mechanical follow-up"
-    },
-    {
-      "card": "VraskaBetrayalsSting",
-      "sink": "OtherCondition",
-      "tag": "debt",
-      "reason": "PB-7 structured-condition buckets — 'target player has fewer than nine poison counters' (quantity-comparison on poison counters) not yet a structured QuantityComparisonCondition"
     },
     {
       "card": "ZEN/BloodchiefAscension",

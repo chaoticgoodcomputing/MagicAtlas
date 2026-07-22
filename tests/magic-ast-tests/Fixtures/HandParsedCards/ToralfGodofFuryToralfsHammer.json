@@ -320,8 +320,9 @@
                   "Duration": {
                     "DurationType": "asLongAs",
                     "Condition": {
-                      "ConditionType": "other",
-                      "Text": "it's legendary"
+                      "ConditionType": "objectHasSupertype",
+                      "Supertype": "Legendary",
+                      "Subject": "It"
                     }
                   }
                 }

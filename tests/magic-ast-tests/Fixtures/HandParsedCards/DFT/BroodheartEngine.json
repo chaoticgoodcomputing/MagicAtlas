@@ -118,13 +118,19 @@
               "Target": {
                 "Kind": "Target",
                 "Filter": {
-                  "Characteristics": [
+                  "Zone": "Graveyard",
+                  "AnyOf": [
                     {
-                      "CharacteristicType": "other",
-                      "Description": "creature or Vehicle card"
+                      "CardTypes": [
+                        "creature"
+                      ]
+                    },
+                    {
+                      "Subtypes": [
+                        "Vehicle"
+                      ]
                     }
-                  ],
-                  "Zone": "Graveyard"
+                  ]
                 }
               },
               "SourceSpan": {

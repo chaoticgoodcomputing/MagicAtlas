@@ -81,8 +81,9 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it was a creature"
+            "ConditionType": "triggeringObjectType",
+            "CardType": "creature",
+            "Present": true
           },
           "Effects": [
             {

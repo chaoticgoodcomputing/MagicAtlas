@@ -48,10 +48,16 @@
             {
               "EffectType": "enchantRestriction",
               "LegalTargets": {
-                "Characteristics": [
+                "AnyOf": [
                   {
-                    "CharacteristicType": "other",
-                    "Description": "creature or Vehicle"
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  },
+                  {
+                    "Subtypes": [
+                      "Vehicle"
+                    ]
                   }
                 ]
               }
