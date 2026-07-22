@@ -93,10 +93,7 @@ public sealed class ExertStaticRule : IStaticRule
     Condition? condition = null;
     if (m.Groups["cond"].Success)
     {
-      condition = new OtherCondition
-      {
-        Text = m.Groups["cond"].Value.Trim(),
-      };
+      condition = ConditionParser.Parse(m.Groups["cond"].Value.Trim());
     }
 
     // Ability 1 (CR 701.43d, first part): static ability with the optional

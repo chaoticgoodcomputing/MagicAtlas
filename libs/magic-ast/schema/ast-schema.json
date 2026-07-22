@@ -401,8 +401,24 @@
           ]
         },
         {
+          "Type": "PlayerDesignationCondition",
+          "Discriminator": "designation",
+          "IsUnparsed": false,
+          "Fields": [
+            "Designation"
+          ]
+        },
+        {
           "Type": "DiedThisWayCondition",
           "Discriminator": "diedThisWay",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference"
+          ]
+        },
+        {
+          "Type": "DiscardedThisTurnCondition",
+          "Discriminator": "discardedThisTurn",
           "IsUnparsed": false,
           "Fields": [
             "Reference"
@@ -413,6 +429,14 @@
           "Discriminator": "escaped",
           "IsUnparsed": false,
           "Fields": []
+        },
+        {
+          "Type": "SelfExertedThisTurnCondition",
+          "Discriminator": "exerted",
+          "IsUnparsed": false,
+          "Fields": [
+            "Exerted"
+          ]
         },
         {
           "Type": "GiftPromisedCondition",
@@ -426,6 +450,22 @@
           "IsUnparsed": false,
           "Fields": [
             "Keyword"
+          ]
+        },
+        {
+          "Type": "PlayerLostLifeCondition",
+          "Discriminator": "lifeLost",
+          "IsUnparsed": false,
+          "Fields": [
+            "Player"
+          ]
+        },
+        {
+          "Type": "LoyaltyAbilityActivatedThisTurnCondition",
+          "Discriminator": "loyaltyAbilityActivated",
+          "IsUnparsed": false,
+          "Fields": [
+            "Activated"
           ]
         },
         {
@@ -445,6 +485,14 @@
             "Among",
             "Color",
             "IncludeTies"
+          ]
+        },
+        {
+          "Type": "NthTimeAbilityResolvedCondition",
+          "Discriminator": "nthTimeResolved",
+          "IsUnparsed": false,
+          "Fields": [
+            "Ordinal"
           ]
         },
         {
@@ -509,6 +557,12 @@
           ]
         },
         {
+          "Type": "PairedCondition",
+          "Discriminator": "paired",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "PrecedingActionPerformedCondition",
           "Discriminator": "precedingActionPerformed",
           "IsUnparsed": false,
@@ -561,6 +615,12 @@
         {
           "Type": "VoidCondition",
           "Discriminator": "void",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "YouAttackedThisTurnCondition",
+          "Discriminator": "youAttackedThisTurn",
           "IsUnparsed": false,
           "Fields": []
         }
@@ -3455,5 +3515,5 @@
       ]
     }
   ],
-  "SchemaHash": "c76fe10859e3c97b12864346eb064d092d3da7e685f3e6bcaec92e849dbbdbcf"
+  "SchemaHash": "6c96af55835676e2fe72edca8c8b84669fb63528bdf2e1146aa995788f3fd3d8"
 }

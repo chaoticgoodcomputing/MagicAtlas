@@ -1293,10 +1293,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       new DrawCardsEffect { Count = LiteralQuantity.Of(1), Player = ObjectReference.You() },
       new ConditionalEffect
       {
-        Condition = new OtherCondition
-        {
-          Text = "this is the second time this ability has resolved this turn",
-        },
+        Condition = ConditionParser.Parse("this is the second time this ability has resolved this turn"),
         Then = new CompositeEffect
         {
           Effects =
@@ -1326,7 +1323,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       },
       new ConditionalEffect
       {
-        Condition = new OtherCondition { Text = "it's the third time" },
+        Condition = ConditionParser.Parse("it's the third time"),
         Then = new AddManaEffect { Mana = mana },
       },
     };
@@ -1445,7 +1442,7 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       },
       new ConditionalEffect
       {
-        Condition = new OtherCondition { Text = condText },
+        Condition = ConditionParser.Parse(condText),
         Then = new TransformEffect { Target = ObjectReference.Self() },
       },
     };

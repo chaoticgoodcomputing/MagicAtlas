@@ -84,9 +84,9 @@ public sealed class AddManaThenIfSecondTimeRevealUntilRule : ITriggeredRule
 
     // Effect 2: conditional reveal-until-found.
     //   Condition: "this is the second time this ability has resolved this turn" —
-    //   an ordinal history predicate with no structured Condition variant yet;
-    //   carried as OtherCondition (typed IResidual, ADR 0001).
-    var condition = new OtherCondition { Text = condText };
+    //   an ordinal ability-resolution gate (CR 608.1), structured to
+    //   NthTimeAbilityResolvedCondition via ConditionParser.
+    var condition = ConditionParser.Parse(condText);
 
     // The reveal target: "an Elf or Elemental card" → CardTypes: ["card"], Subtypes: ["Elf", "Elemental"]
     // Subtypes is OR-semantics in ObjectFilter (CR 205.3 — a card has zero or more subtypes).

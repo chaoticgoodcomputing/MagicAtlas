@@ -36,8 +36,8 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "you didn't activate a loyalty ability of a planeswalker this turn"
+            "ConditionType": "loyaltyAbilityActivated",
+            "Activated": false
           },
           "Effects": [
             {

@@ -64,8 +64,8 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "you have the city's blessing"
+                  "ConditionType": "designation",
+                  "Designation": "CityBlessing"
                 }
               }
             }

@@ -38,8 +38,12 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "an opponent lost 2 or more life this turn"
+            "ConditionType": "lifeLost",
+            "Player": "Opponent",
+            "Amount": {
+              "Operator": "GreaterThanOrEqual",
+              "Value": 2
+            }
           },
           "Effects": [
             {

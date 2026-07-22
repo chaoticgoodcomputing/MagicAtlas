@@ -60,8 +60,8 @@
                 {
                   "EffectType": "conditional",
                   "Condition": {
-                    "ConditionType": "other",
-                    "Text": "this is the second time this ability has resolved this turn"
+                    "ConditionType": "nthTimeResolved",
+                    "Ordinal": 2
                   },
                   "Then": {
                     "EffectType": "revealUntil",

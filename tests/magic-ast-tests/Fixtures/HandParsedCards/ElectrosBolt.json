@@ -75,8 +75,10 @@
                 ]
               },
               "Condition": {
-                "ConditionType": "other",
-                "Text": "you discarded this card this turn"
+                "ConditionType": "discardedThisTurn",
+                "Reference": {
+                  "Kind": "Self"
+                }
               }
             }
           ],
