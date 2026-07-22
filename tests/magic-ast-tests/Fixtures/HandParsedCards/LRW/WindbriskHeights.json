@@ -102,8 +102,27 @@
           ],
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "You may play the exiled card without paying its mana cost if you attacked with three or more creatures this turn.",
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "attackedWithCreaturesThisTurn",
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 3
+                }
+              },
+              "Then": {
+                "EffectType": "mayPlayFromExile",
+                "Cards": {
+                  "Zone": "Exile",
+                  "ExiledWith": {
+                    "Kind": "Self"
+                  }
+                },
+                "Actions": [
+                  "PlayCards"
+                ],
+                "WithoutPayingManaCost": true
+              },
               "SourceSpan": {
                 "Start": 175,
                 "Length": 114

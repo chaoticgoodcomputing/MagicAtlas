@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Ephara, God of the Polis",
     "ManaCost": "{2}{W}{U}",
-    "TypeLine": "Legendary Enchantment Creature — God",
+    "TypeLine": "Legendary Enchantment Creature \u2014 God",
     "OracleText": "Indestructible\nAs long as your devotion to white and blue is less than seven, Ephara isn't a creature.\nAt the beginning of each upkeep, if you had another creature enter the battlefield under your control last turn, draw a card.",
     "Power": "6",
     "Toughness": "5",
@@ -18,7 +18,7 @@
   "Output": {
     "Name": "Ephara, God of the Polis",
     "TypeLine": {
-      "Raw": "Legendary Enchantment Creature — God",
+      "Raw": "Legendary Enchantment Creature \u2014 God",
       "Supertypes": [
         "Legendary"
       ],
@@ -97,8 +97,14 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "you had another creature enter the battlefield under your control last turn"
+            "ConditionType": "objectEnteredLastTurn",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Controller": "You",
+              "ExcludeSelf": true
+            }
           },
           "Effects": [
             {

@@ -721,6 +721,19 @@ public enum ControllerFilter
   Any,
 
   /// <summary>
+  /// "you or one of your teammates" — the controller is either the ability's controller or a
+  /// teammate of theirs (CR 102.2: "In a Two-Headed Giant game … the two players … are
+  /// teammates."; more generally CR 810/811 team variants). Surge's cast-history precondition
+  /// (CR 702.117a, Containment Membrane: "if you or one of your teammates has cast another spell
+  /// this turn"). Distinct from <see cref="You"/> (only the controller) and <see cref="Any"/>
+  /// (any player, opponents included): a named team grouping that widens "you" to the controller's
+  /// side without admitting opponents. In non-team formats a player has no teammates, so this
+  /// collapses to <see cref="You"/> — but the AST records the printed team scope, not the
+  /// format-resolved membership (reference-not-resolution, ADR 0004).
+  /// </summary>
+  YouOrTeammate,
+
+  /// <summary>
   /// Objects controlled by a targeted player or opponent — "creatures target player controls",
   /// "each creature target opponent controls". The targeting requirement is expressed by the
   /// parent <see cref="ObjectReference.Kind"/> being <see cref="ObjectReferenceKind.Target"/>

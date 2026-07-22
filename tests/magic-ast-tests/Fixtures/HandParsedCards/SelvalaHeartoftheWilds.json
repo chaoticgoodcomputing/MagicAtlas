@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Selvala, Heart of the Wilds",
     "ManaCost": "{1}{G}{G}",
-    "TypeLine": "Legendary Creature — Elf Scout",
+    "TypeLine": "Legendary Creature \u2014 Elf Scout",
     "OracleText": "Whenever another creature enters, its controller may draw a card if its power is greater than each other creature's power.\n{G}, {T}: Add X mana in any combination of colors, where X is the greatest power among creatures you control.",
     "Power": "2",
     "Toughness": "3",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Selvala, Heart of the Wilds",
     "TypeLine": {
-      "Raw": "Legendary Creature — Elf Scout",
+      "Raw": "Legendary Creature \u2014 Elf Scout",
       "Supertypes": [
         "Legendary"
       ],
@@ -51,8 +51,16 @@
             {
               "EffectType": "conditional",
               "Condition": {
-                "ConditionType": "other",
-                "Text": "its power is greater than each other creature's power"
+                "ConditionType": "greatestPower",
+                "Subject": {
+                  "Kind": "It"
+                },
+                "Among": {
+                  "CardTypes": [
+                    "creature"
+                  ]
+                },
+                "IncludeTies": false
               },
               "Then": {
                 "EffectType": "optional",

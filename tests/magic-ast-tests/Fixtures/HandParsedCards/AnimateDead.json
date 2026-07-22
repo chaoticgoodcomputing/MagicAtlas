@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Animate Dead",
     "ManaCost": "{1}{B}",
-    "TypeLine": "Enchantment — Aura",
+    "TypeLine": "Enchantment \u2014 Aura",
     "OracleText": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Return enchanted creature card to the battlefield under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets -1/-0.",
     "Colors": [
       "B"
@@ -14,7 +14,7 @@
   "Output": {
     "Name": "Animate Dead",
     "TypeLine": {
-      "Raw": "Enchantment — Aura",
+      "Raw": "Enchantment \u2014 Aura",
       "Types": [
         "Enchantment"
       ],
@@ -77,7 +77,21 @@
                   "Target": {
                     "Kind": "Self"
                   },
-                  "AbilityText": "enchant creature card in a graveyard"
+                  "LostAbility": {
+                    "Kind": "static",
+                    "KeywordSource": "Enchant",
+                    "Effects": [
+                      {
+                        "EffectType": "enchantRestriction",
+                        "LegalTargets": {
+                          "CardTypes": [
+                            "creature"
+                          ],
+                          "Zone": "Graveyard"
+                        }
+                      }
+                    ]
+                  }
                 },
                 {
                   "EffectType": "gainAbility",

@@ -3,6 +3,7 @@ namespace MagicAST.Keywords.Definitions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.References;
+using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
@@ -49,7 +50,7 @@ public sealed class ProwlKeyword : IKeyword
         {
           FromZone = Zone.Hand,
           Cost = cost,
-          Condition = new OtherCondition { Text = ConditionText },
+          Condition = ConditionParser.Parse(ConditionText),
         },
       ],
       Reminder = reminder,

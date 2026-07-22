@@ -137,11 +137,22 @@ public sealed record TriggeringAbilityIsManaCondition : Condition
 /// source object entered the battlefield by being CAST (CR 601), as opposed to being created by a
 /// copy effect, reanimated, blinked, or otherwise put onto the battlefield (CR 707.10 — a copy isn't
 /// cast). The structured form of The One Ring's "if you cast it" — NOT a free-text
-/// <see cref="OtherCondition"/> residual. A marker (no fields): the affirmative "you cast it" is the
-/// only form; a copy/reanimate entry fails this gate so the consequent (the protection) does not apply.
+/// <see cref="OtherCondition"/> residual. The bare "you cast it" form leaves <see cref="FromZone"/>
+/// null; a stated origin zone ("this spell was cast from your hand", Approach of the Second Sun) sets it.
 /// </summary>
 [ConditionKind("castThisObject")]
-public sealed record CastThisObjectCondition : Condition;
+public sealed record CastThisObjectCondition : Condition
+{
+  /// <summary>
+  /// The zone the object was cast FROM, when the oracle text states one — "this spell was cast
+  /// from your hand" → <see cref="Zone.Hand"/> (Approach of the Second Sun's win-condition
+  /// conjunct, CR 601.2). Null for the bare "you cast it" form (The One Ring), which checks only
+  /// that the object entered by being cast at all (CR 601), not from which zone — so that form
+  /// serializes unchanged (the field is omitted via <c>WhenWritingNull</c>).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Zone? FromZone { get; init; }
+}
 
 /// <summary>
 /// "if it's a Unicorn" / "if it's an Elf" — a condition that checks whether a designated

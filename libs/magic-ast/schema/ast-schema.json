@@ -356,8 +356,22 @@
           "Fields": []
         },
         {
+          "Type": "AttackedWithCreaturesThisTurnCondition",
+          "Discriminator": "attackedWithCreaturesThisTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count"
+          ]
+        },
+        {
           "Type": "AttacksPlayerAndIsntBlockedCondition",
           "Discriminator": "attacksPlayerAndIsntBlocked",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "AttacksWithHigherPowerAllyCondition",
+          "Discriminator": "attacksWithHigherPowerAlly",
           "IsUnparsed": false,
           "Fields": []
         },
@@ -474,6 +488,16 @@
           "Fields": []
         },
         {
+          "Type": "GreatestPowerCondition",
+          "Discriminator": "greatestPower",
+          "IsUnparsed": false,
+          "Fields": [
+            "Among",
+            "IncludeTies",
+            "Subject"
+          ]
+        },
+        {
           "Type": "KeywordCostPaidCondition",
           "Discriminator": "keywordCostPaid",
           "IsUnparsed": false,
@@ -517,8 +541,31 @@
           ]
         },
         {
+          "Type": "PlayerHasMostLifeCondition",
+          "Discriminator": "mostLife",
+          "IsUnparsed": false,
+          "Fields": [
+            "IncludeTies",
+            "Player"
+          ]
+        },
+        {
+          "Type": "NamedSpellCastThisGameCondition",
+          "Discriminator": "namedSpellCastThisGame",
+          "IsUnparsed": false,
+          "Fields": [
+            "Name"
+          ]
+        },
+        {
           "Type": "NoManaSpentToCastCondition",
           "Discriminator": "noManaSpentToCast",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
+          "Type": "NotEnteredWithThisAbilityCondition",
+          "Discriminator": "notEnteredWithThisAbility",
           "IsUnparsed": false,
           "Fields": []
         },
@@ -537,6 +584,14 @@
           "Fields": [
             "AttachedTo",
             "Reference"
+          ]
+        },
+        {
+          "Type": "ObjectEnteredLastTurnCondition",
+          "Discriminator": "objectEnteredLastTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter"
           ]
         },
         {
@@ -602,6 +657,16 @@
           ]
         },
         {
+          "Type": "ObjectPutIntoHandThisTurnCondition",
+          "Discriminator": "objectPutIntoHandThisTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Filter",
+            "FromZone",
+            "HandOwner"
+          ]
+        },
+        {
           "Type": "ObjectStatusCondition",
           "Discriminator": "objectStatus",
           "IsUnparsed": false,
@@ -655,6 +720,15 @@
           "IsUnparsed": false,
           "Fields": [
             "State"
+          ]
+        },
+        {
+          "Type": "SpellsCastLastTurnCondition",
+          "Discriminator": "spellsCastLastTurn",
+          "IsUnparsed": false,
+          "Fields": [
+            "Count",
+            "PerPlayer"
           ]
         },
         {
@@ -3623,5 +3697,5 @@
       ]
     }
   ],
-  "SchemaHash": "85f3ff9c65799c8a1caa565729518f6d9f315d383d72741ab9e50def85959723"
+  "SchemaHash": "c5fa1705cd952b2b723e5f889976d9ff06a3a4db6b1c85c3a6ae11087059ee21"
 }

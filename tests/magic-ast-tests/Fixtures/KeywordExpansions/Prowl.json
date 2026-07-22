@@ -24,8 +24,15 @@
           ]
         },
         "Condition": {
-          "ConditionType": "other",
-          "Text": "a player was dealt combat damage this turn by a source that, at the time it dealt that damage, was under your control and had any of the creature types of this spell"
+          "ConditionType": "dealtDamageThisTurn",
+          "Player": "Any",
+          "Combat": true,
+          "Source": {
+            "Controller": "You",
+            "SharesCreatureTypeWith": {
+              "Kind": "Self"
+            }
+          }
         }
       }
     ]

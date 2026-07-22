@@ -28,8 +28,18 @@
             {
               "EffectType": "conditional",
               "Condition": {
-                "ConditionType": "other",
-                "Text": "this spell was cast from your hand and you've cast another spell named Approach of the Second Sun this game"
+                "ConditionType": "all",
+                "Conditions": [
+                  {
+                    "ConditionType": "castThisObject",
+                    "FromZone": "Hand"
+                  },
+                  {
+                    "ConditionType": "namedSpellCastThisGame",
+                    "ExcludeSelf": true,
+                    "Name": "Approach of the Second Sun"
+                  }
+                ]
               },
               "Then": {
                 "EffectType": "winTheGame",
