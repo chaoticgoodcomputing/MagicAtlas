@@ -25,13 +25,15 @@ using MagicAST.AST.References;
 /// <para>
 /// The first exile targets <see cref="ObjectReferenceKind.Self"/> ("this creature", CR 109).
 /// The second exiles a <see cref="ObjectReferenceKind.Target"/> creature carrying two
-/// characteristic predicates that have no first-class <see cref="ObjectFilter"/> home yet, so
-/// they ride as typed <see cref="OtherCharacteristic"/> residuals (IResidual, a deliberate
-/// scope deferral per ADR 0001 — NOT IUnparsed): the keyword-absence "without flying"
-/// ("withoutFlying", the M10/Falter · ODY/Ashen Firebeast convention) and the combat-defender
-/// predicate "that's attacking you" ("attackingYou" — the object is attacking the ability's
-/// controller; there is no <c>CombatStateCharacteristic</c> defender axis, so the compound is
-/// deferred whole rather than split into a structured "attacking" plus a dangling "you").
+/// characteristic predicates. The keyword-absence "without flying" routes to the
+/// first-class <see cref="ObjectFilter.LacksKeywords"/> axis for a recognised keyword
+/// (the M10/Falter · ODY/Ashen Firebeast convention; unrecognised keywords keep the
+/// honest "withoutX" free-text fallback). The combat-defender predicate "that's attacking
+/// you" has no first-class <see cref="ObjectFilter"/> home yet, so it still rides as a
+/// typed <see cref="OtherCharacteristic"/> residual (IResidual, a deliberate scope deferral
+/// per ADR 0001 — NOT IUnparsed): "attackingYou" — the object is attacking the ability's
+/// controller; there is no <c>CombatStateCharacteristic</c> defender axis, so the predicate
+/// is deferred whole rather than split into a structured "attacking" plus a dangling "you".
 /// </para>
 ///
 /// CR 701.13a (verbatim): "To exile an object, move it to the exile zone from wherever it is."
@@ -68,7 +70,17 @@ public sealed class ExileSelfAndTargetCreatureRule : IActivatedEffectRule, IMult
     }
 
     var keyword = match.Groups["keyword"].Value.ToLowerInvariant();
-    var withoutKeyword = $"without{char.ToUpperInvariant(keyword[0])}{keyword[1..]}";
+    var lacksKeywords = Enum.TryParse<KeywordAbility>(keyword, ignoreCase: true, out var kw)
+      ? new List<KeywordAbility> { kw }
+      : null;
+    var characteristics = new List<Characteristic> { Characteristic.Other("attackingYou") };
+    if (lacksKeywords is null)
+    {
+      characteristics.Insert(
+        0,
+        Characteristic.Other($"without{char.ToUpperInvariant(keyword[0])}{keyword[1..]}")
+      );
+    }
 
     effects = new List<Effect>
     {
@@ -81,11 +93,8 @@ public sealed class ExileSelfAndTargetCreatureRule : IActivatedEffectRule, IMult
           Filter = new ObjectFilter
           {
             CardTypes = ["creature"],
-            Characteristics =
-            [
-              Characteristic.Other(withoutKeyword),
-              Characteristic.Other("attackingYou"),
-            ],
+            LacksKeywords = lacksKeywords,
+            Characteristics = characteristics,
           },
         },
       },

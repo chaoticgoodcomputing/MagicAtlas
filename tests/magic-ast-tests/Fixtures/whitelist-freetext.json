@@ -284,12 +284,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "IKO/LuminousBroodmoth",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster A keyword-absence: 'creature you control without flying' -> ObjectFilter.LacksKeywords=[Flying] (axis EXISTS). MECHANICAL (Sonnet). Exemplar structured this batch: M10/Falter."
-    },
-    {
       "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -398,24 +392,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "MIR/BenalishCavalry",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster A keyword-absence: 'creature without flanking' -> ObjectFilter.LacksKeywords=[Flanking] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
-    },
-    {
-      "card": "MIR/BurningShieldAskari",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster A keyword-absence: 'creature without flanking' -> ObjectFilter.LacksKeywords=[Flanking] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
-    },
-    {
-      "card": "MIR/MtendaHerder",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster A keyword-absence: 'creature without flanking' -> ObjectFilter.LacksKeywords=[Flanking] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
-    },
-    {
       "card": "MOM/MentalModulation",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -446,22 +422,10 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "ODY/AshenFirebeast",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster A keyword-absence: 'creature without flying' -> ObjectFilter.LacksKeywords=[Flying] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
-    },
-    {
       "card": "OGW/ContainmentMembrane",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "ONS/IxidorRealitySculptor",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 cluster E face-down: 'face-down creature' -> ObjectFilter.IsFaceDown=true (axis EXISTS). MECHANICAL (Sonnet); emission spread across LordPTBuffRule + the turn-face-up activated rule (route 'face-down' label through IsFaceDown, mirroring this batch's QualifierAxisMapper 'you own'->Owner)."
     },
     {
       "card": "ONS/IxidorRealitySculptor",
@@ -736,8 +700,8 @@
     {
       "card": "USG/GiantTrapDoorSpider",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 MIXED: (1) 'without flying' -> ObjectFilter.LacksKeywords=[Flying] (cluster A, axis EXISTS, MECHANICAL/Sonnet); (2) 'that's attacking you' combat-defender predicate remains IRREDUCIBLE (no defender/attacked-player CombatState axis; deferred whole per ADR 0001)."
+      "tag": "irreducible",
+      "reason": "PB-9 batch 3: (1) 'without flying' -> ObjectFilter.LacksKeywords=[Flying] STRUCTURED (cluster A, axis EXISTS); (2) 'that's attacking you' combat-defender predicate remains IRREDUCIBLE (no defender/attacked-player CombatState axis; deferred whole per ADR 0001) — sink persists on this residual alone."
     },
     {
       "card": "USG/GoblinWarBuggy",

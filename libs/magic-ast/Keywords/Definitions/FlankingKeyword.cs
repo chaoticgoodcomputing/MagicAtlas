@@ -21,11 +21,16 @@ using static MagicAST.Keywords.Definitions.KeywordCombinators;
 ///
 /// MAST shape (ADR 0003 decomposition): TriggeredAbility{ KeywordSource:"Flanking",
 ///   Trigger:{ Timing:"Whenever", Event:"BecomesBlocked",
-///             Filter:{CardTypes:["creature"],
-///                     Characteristics:[OtherCharacteristic{Description:"withoutFlanking"}]} },
+///             Filter:{CardTypes:["creature"], LacksKeywords:["Flanking"]} },
 ///   Effects:[ ModifyPTEffect{ Target:{Kind:ThatCreature},
 ///                             PowerModifier:-1, ToughnessModifier:-1,
 ///                             Duration:untilEndOfTurn } ] }.
+///
+/// <para>
+/// "without flanking" is the keyword-absence axis (CR 702.25) — routed to
+/// <see cref="ObjectFilter.LacksKeywords"/> rather than the <see cref="OtherCharacteristic"/>
+/// residual, per the convention established by Falter (M10) / Ashen Firebeast (ODY).
+/// </para>
 ///
 /// <para>
 /// The trigger's Filter encodes the blocker qualification ("by a creature without
@@ -75,7 +80,7 @@ public sealed class FlankingKeyword : IKeyword
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = [Characteristic.Other("withoutFlanking")],
+          LacksKeywords = [KeywordAbility.Flanking],
         },
       },
       Effects =

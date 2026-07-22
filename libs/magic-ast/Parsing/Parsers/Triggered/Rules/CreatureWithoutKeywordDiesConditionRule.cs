@@ -10,17 +10,11 @@ using MagicAST.AST.Triggers;
 /// dies", "a creature you control without flying or reach dies", etc.
 ///
 /// <para>
-/// The filter encodes the keyword absence as a typed <see cref="OtherCharacteristic"/>
-/// residual ("withoutFlying", "withoutFlanking", etc.) per the convention established
-/// by Falter (M10). <see cref="OtherCharacteristic"/> is <c>IResidual</c>, not
-/// <c>IUnparsed</c> — a deliberate scope deferral (ADR 0001), not a parse failure.
-/// </para>
-///
-/// <para>
-/// "without flying" is not a structured negation of the keyword-presence axis on
-/// <see cref="ObjectFilter.Characteristics"/> because there is currently no
-/// <c>NegatedKeywordCharacteristic</c> node; the "withoutX" residual is the
-/// approved frontier encoding. See: Falter (M10), Cosmotronic Wave (GRN).
+/// "without &lt;keyword&gt;" is the first-class keyword-absence axis (CR 702.9 flying,
+/// etc.): a recognised keyword routes to <see cref="ObjectFilter.LacksKeywords"/> rather
+/// than the <see cref="OtherCharacteristic"/> residual, per the convention established by
+/// <c>CreaturesCantBlockThisTurnRule</c> (Falter, M10). Unknown keywords keep the honest
+/// free-text fallback.
 /// </para>
 ///
 /// CR 700.4 ("dies" = moves from battlefield to graveyard, see also TriggerEvent.Dies).
@@ -45,12 +39,9 @@ public sealed class CreatureWithoutKeywordDiesConditionRule : ITriggerConditionR
     }
 
     var keyword = m.Groups["keyword"].Value.ToLowerInvariant();
-
-    return new TriggerCondition
-    {
-      Timing = timing,
-      Event = TriggerEvent.Dies,
-      Filter = new ObjectFilter
+    var filter = Enum.TryParse<KeywordAbility>(keyword, ignoreCase: true, out var kw)
+      ? new ObjectFilter { CardTypes = ["creature"], Controller = ControllerFilter.You, LacksKeywords = [kw] }
+      : new ObjectFilter
       {
         CardTypes = ["creature"],
         Controller = ControllerFilter.You,
@@ -58,7 +49,13 @@ public sealed class CreatureWithoutKeywordDiesConditionRule : ITriggerConditionR
         [
           Characteristic.Other($"without{char.ToUpperInvariant(keyword[0])}{keyword[1..]}"),
         ],
-      },
+      };
+
+    return new TriggerCondition
+    {
+      Timing = timing,
+      Event = TriggerEvent.Dies,
+      Filter = filter,
     };
   }
 }

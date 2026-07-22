@@ -19,13 +19,12 @@ using MagicAST.AST.References;
 /// the named keyword ability.
 ///
 /// <para>
-/// The keyword-absence predicate is encoded as a typed <see cref="OtherCharacteristic"/>
-/// residual ("withoutFlying", etc.) per the convention established by
-/// <c>CreaturesCantBlockThisTurnRule</c> (Falter, Cosmotronic Wave) and
-/// <c>CreatureWithoutKeywordDiesConditionRule</c> (Luminous Broodmoth family):
-/// <see cref="OtherCharacteristic"/> is <c>IResidual</c>, not <c>IUnparsed</c> — a
-/// deliberate scope deferral (ADR 0001), not a parse failure, since there is currently no
-/// <c>NegatedKeywordCharacteristic</c> node.
+/// The keyword-absence predicate routes to the first-class
+/// <see cref="ObjectFilter.LacksKeywords"/> axis for a recognised keyword, per the
+/// convention established by <c>CreaturesCantBlockThisTurnRule</c> (Falter) and
+/// <c>CreatureWithoutKeywordDiesConditionRule</c> (Luminous Broodmoth family). An
+/// unrecognised keyword keeps the honest <see cref="OtherCharacteristic"/> free-text
+/// fallback ("withoutX").
 /// </para>
 ///
 /// <para>
@@ -78,6 +77,16 @@ public sealed class SelfDealsDamageToEachCreatureWithoutKeywordEffectRule : IAct
     };
 
     var keyword = m.Groups["keyword"].Value.ToLowerInvariant();
+    var filter = Enum.TryParse<KeywordAbility>(keyword, ignoreCase: true, out var kw)
+      ? new ObjectFilter { CardTypes = ["creature"], LacksKeywords = [kw] }
+      : new ObjectFilter
+      {
+        CardTypes = ["creature"],
+        Characteristics =
+        [
+          Characteristic.Other($"without{char.ToUpperInvariant(keyword[0])}{keyword[1..]}"),
+        ],
+      };
 
     return new DealDamageEffect
     {
@@ -86,14 +95,7 @@ public sealed class SelfDealsDamageToEachCreatureWithoutKeywordEffectRule : IAct
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Each,
-        Filter = new ObjectFilter
-        {
-          CardTypes = ["creature"],
-          Characteristics =
-          [
-            Characteristic.Other($"without{char.ToUpperInvariant(keyword[0])}{keyword[1..]}"),
-          ],
-        },
+        Filter = filter,
       },
     };
   }

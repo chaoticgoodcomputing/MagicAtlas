@@ -66,11 +66,8 @@
                 "creature"
               ],
               "Controller": "You",
-              "Characteristics": [
-                {
-                  "CharacteristicType": "other",
-                  "Description": "withoutFlying"
-                }
+              "LacksKeywords": [
+                "Flying"
               ]
             },
             "SourceSpan": {
