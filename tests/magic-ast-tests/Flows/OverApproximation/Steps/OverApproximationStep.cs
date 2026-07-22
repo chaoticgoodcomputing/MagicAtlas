@@ -53,14 +53,16 @@ public static class OverApproximationStep
       foreach (var ci in inputs.CardInputs)
         byName.TryAdd(ci.Input.Name, ci.Input);
 
-      // The D1 tier index: (card, label) → tier. The join that turns "a dropped condition" into
-      // "a GREEN resting on a dropped condition".
-      var tier = new Dictionary<(string, string), string>();
+      // The D1 conditionality index (ADR 0004 #43): (card, label) → conditionality, over PARSED ports only
+      // (Provenance == ""). The join that turns "a dropped condition" into "an UNCONDITIONAL port resting on
+      // a dropped condition" — the old "GREEN" signal, now read off the split-out conditionality dimension.
+      var cond = new Dictionary<(string, string), string>();
       var cardSet = new HashSet<string>(StringComparer.Ordinal);
       foreach (var p in inputs.Ports)
       {
         cardSet.Add(p.Card);
-        tier[(p.Card, p.Label)] = p.Tier;
+        if (string.IsNullOrEmpty(p.Provenance))
+          cond[(p.Card, p.Label)] = p.Conditionality;
       }
       var cards = cardSet.OrderBy(c => c, StringComparer.Ordinal).ToList();
 
@@ -90,7 +92,8 @@ public static class OverApproximationStep
         {
           var greens = d
             .AffectedPortLabels.Where(l =>
-              tier.TryGetValue((card, l), out var t) && string.Equals(t, "Green", StringComparison.Ordinal)
+              cond.TryGetValue((card, l), out var c)
+              && string.Equals(c, PortConditionality.Unconditional, StringComparison.Ordinal)
             )
             .ToList();
           dropped.Add(
@@ -138,7 +141,8 @@ public static class OverApproximationStep
         AmberPortsOnUnmodeledConditions = dropped
           .SelectMany(d =>
             d.AffectedPorts.Where(l =>
-                tier.TryGetValue((d.Card, l), out var t) && string.Equals(t, "Amber", StringComparison.Ordinal)
+                cond.TryGetValue((d.Card, l), out var c)
+                && !string.Equals(c, PortConditionality.Unconditional, StringComparison.Ordinal)
               )
               .Select(l => (d.Card, l))
           )

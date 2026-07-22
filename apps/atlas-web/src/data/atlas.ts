@@ -46,7 +46,7 @@ import {
   edgeKey, ensureFamily,
   type Archetype, type Candidate, type CoverRow, type CoverSide, type Edge,
   type Family, type NearMiss, type NearMissCand, type OracleCard, type OracleSeg,
-  type Ring, type Side, type Tier,
+  type Ring, type Side, type Tier, type PortProvenance,
 } from "./mock";
 
 /** Uniform result envelope so views can render loading/empty without caring
@@ -312,6 +312,11 @@ const KNOWN_TIERS = new Set<string>(["Green", "Amber", "Inferred", "Declared"]);
 const tierOf = (raw: string | null | undefined): Tier =>
   raw && KNOWN_TIERS.has(raw) ? (raw as Tier) : FALLBACK_TIER;
 
+/** ADR 0004 #43 — coerce a live port `provenance` string into the marker union.
+ *  Anything unrecognized (incl. null/"") is treated as parsed (""), the default. */
+const provenanceOf = (raw: string | null | undefined): PortProvenance =>
+  raw === "Inferred" || raw === "Declared" ? raw : "";
+
 /** Dedupe candidate portRows into one Candidate per card, keeping ONLY those the
  *  engine's flow matcher (`feeds`) actually connects to one of the focus card's
  *  ports on the pairing side — the ADR-0003 Stage 5 port-level match. This is what
@@ -514,7 +519,13 @@ export interface CardPort {
    *  role beyond emit/consume — kept distinct so the Ports listing is honest;
    *  it matches neither column side, so it never joins the explore/exploit set. */
   side: Side | "intercept";
-  tier: Tier;
+  /** ADR 0004 #43 — the two dimensions the retired port tier conflated.
+   *  `conditionality` is the plain-language "is it conditional, and how" phrase
+   *  (PROVISIONAL copy; `PORT_UNCONDITIONAL` = the old Green); `""` for a
+   *  backfill port. `provenance` is where it came from, independent of
+   *  conditionality — so a conditional inferred port shows both. */
+  conditionality: string;
+  provenance: PortProvenance;
   confidence: number | null;
   label: string;
   /** ADR-0003 provenance: the 0-based oracle line this port projects from, and
@@ -554,7 +565,8 @@ interface CardProfileCardRow {
   colors: string[] | null; keywords: string[] | null;
 }
 interface CardProfilePortRow {
-  family: string; side: string; tier: string | null;
+  family: string; side: string;
+  conditionality: string | null; provenance: string | null;
   confidence: number | null; label: string;
   oracleLineIndex: number | null; spans: number[][] | null;
   stem: string | null; manner: string | null; isSelf: boolean | null;
@@ -574,7 +586,8 @@ export function useCardProfile(name: string): AtlasResult<CardProfile | null> {
     const ports: CardPort[] = portRows.map((p) => ({
       family: p.family,
       side: p.side === "emit" ? "emit" : p.side === "intercept" ? "intercept" : "consume",
-      tier: tierOf(p.tier),
+      conditionality: p.conditionality ?? "",
+      provenance: provenanceOf(p.provenance),
       confidence: p.confidence,
       label: p.label,
       lineIndex: p.oracleLineIndex ?? 0,
@@ -797,14 +810,17 @@ export interface DeckPortRow {
   card: string;
   family: string;
   side: string; // "emit" | "consume" | "" (side-less inferred port)
-  tier: Tier;
+  // ADR 0004 #43 — the split port fidelity dimensions (was `tier`).
+  conditionality: string;
+  provenance: PortProvenance;
   confidence: number | null;
   label: string;
 }
 
 interface RawDeckPortRow {
   card: string; family: string; side: string | null;
-  tier: string | null; confidence: number | null; label: string | null;
+  conditionality: string | null; provenance: string | null;
+  confidence: number | null; label: string | null;
 }
 
 export function useDeckPorts(cards: string[]): AtlasResult<DeckPortRow[]> {
@@ -820,7 +836,8 @@ export function useDeckPorts(cards: string[]): AtlasResult<DeckPortRow[]> {
       card: r.card,
       family: r.family,
       side: r.side ?? "",
-      tier: tierOf(r.tier),
+      conditionality: r.conditionality ?? "",
+      provenance: provenanceOf(r.provenance),
       confidence: r.confidence,
       label: r.label ?? "",
     }));

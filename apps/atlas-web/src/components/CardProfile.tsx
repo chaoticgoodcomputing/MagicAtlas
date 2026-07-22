@@ -5,7 +5,7 @@
 import {
   type CardPort, type CardCombo, type CardAnchor, type CardRuling,
 } from "../data/atlas";
-import { FamilyDot, TierChip, ConfidenceMeter, SectionHead } from "./primitives";
+import { FamilyDot, TierChip, PortFidelity, SectionHead } from "./primitives";
 import { CardLink } from "./CardLink";
 
 const panelStyle = { marginBottom: "var(--space-4)" } as const;
@@ -15,7 +15,8 @@ export function PortsPanel({ ports }: { ports: CardPort[] }) {
   return (
     <div className="panel" style={panelStyle}>
       <SectionHead title="Ports">
-        What this card consumes and emits, one row per parsed port, with its fidelity tier.
+        What this card consumes and emits, one row per port — with its conditionality (is the mechanism
+        conditional, and how) and, separately, its provenance (parsed, inferred, or catalogued).
       </SectionHead>
       {ports.length ? (
         ports.map((p, i) => (
@@ -32,8 +33,7 @@ export function PortsPanel({ ports }: { ports: CardPort[] }) {
             >
               {p.label}
             </span>
-            {p.tier === "Inferred" && p.confidence != null && <ConfidenceMeter value={p.confidence} />}
-            <TierChip tier={p.tier} conf={p.confidence ?? undefined} />
+            <PortFidelity conditionality={p.conditionality} provenance={p.provenance} confidence={p.confidence} />
           </div>
         ))
       ) : (

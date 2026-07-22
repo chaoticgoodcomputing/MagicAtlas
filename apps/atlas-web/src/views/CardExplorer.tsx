@@ -235,7 +235,7 @@ function PortChip({ p }: { p: CardPort }) {
   return (
     <span
       className="ws-mono"
-      title={`${p.side} · ${p.label} · ${p.tier}`}
+      title={[p.side, p.label, p.conditionality, p.provenance].filter(Boolean).join(" · ")}
       style={{
         fontSize: 9.5, display: "inline-flex", alignItems: "center", gap: 3, padding: "1px 5px",
         borderRadius: 4, whiteSpace: "nowrap",
