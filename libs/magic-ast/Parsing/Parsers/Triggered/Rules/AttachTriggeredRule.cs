@@ -26,13 +26,18 @@ using MagicAST.AST.References;
 [TriggeredRule]
 public sealed class AttachTriggeredRule : ITriggeredRule
 {
-  // Matches "attach it to target <filter> you control"
+  // Matches "attach it to target <filter> you control" and the equivalent explicit
+  // self-naming form "attach this <Equipment|Aura|Fortification> to target <filter>
+  // you control" (Hylderblade: "…attach this Equipment to target creature you
+  // control."). The named-object form is the same instruction as the "it" form —
+  // "this Equipment" is the source object naming itself rather than a back-reference
+  // — so both collapse to the same AttachEffect on the targeted object.
   // Filter can be:
   //   - a card type: "creature", "artifact", "land", etc.
   //   - a creature type / subtype: "Pirate", "Warrior", "Vehicle", etc.
   // The "you control" qualifier sets Controller = You.
   private static readonly Regex AttachPattern = new(
-    @"\battach\s+it\s+to\s+target\s+(?<filter>[A-Za-z]+(?:\s+[A-Za-z]+)?)\s+you\s+control\b",
+    @"\battach\s+(?:it|this\s+(?:Equipment|Aura|Fortification))\s+to\s+target\s+(?<filter>[A-Za-z]+(?:\s+[A-Za-z]+)?)\s+you\s+control\b",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

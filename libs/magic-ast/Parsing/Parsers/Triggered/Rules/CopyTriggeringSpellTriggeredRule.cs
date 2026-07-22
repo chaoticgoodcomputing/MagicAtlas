@@ -38,10 +38,15 @@ using MagicAST.AST.References;
 [TriggeredRule(Priority = 74)]
 public sealed class CopyTriggeringSpellTriggeredRule : ITriggeredRule
 {
-  // "copy it[. You may choose new targets for the copy]"
+  // "copy it[. You may choose new targets for the copy]" and the equivalent
+  // "copy that spell or ability[. …]" surface used when the trigger fires on EITHER
+  // a spell OR an activated ability (Bill Potts: "Whenever you cast an instant or
+  // sorcery spell that targets only Bill Potts or activate an ability that targets
+  // only Bill Potts, copy that spell or ability."). "that spell or ability" is the
+  // same It back-reference to the triggering object as the bare "it".
   // The trailing terminal period is stripped by the dispatcher before TryMatch.
   private static readonly Regex _pattern = new(
-    @"^copy\s+it(?:\.\s+(?<newtargets>you\s+may\s+choose\s+new\s+targets\s+for\s+the\s+copy))?\.?$",
+    @"^copy\s+(?:it|that\s+spell\s+or\s+ability)(?:\.\s+(?<newtargets>you\s+may\s+choose\s+new\s+targets\s+for\s+the\s+copy))?\.?$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
 

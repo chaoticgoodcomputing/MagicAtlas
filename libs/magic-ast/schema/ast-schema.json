@@ -3002,6 +3002,15 @@
           ]
         },
         {
+          "Type": "TurnFaceUpEffect",
+          "Discriminator": "turnFaceUp",
+          "IsUnparsed": false,
+          "Fields": [
+            "SourceSpan",
+            "Target"
+          ]
+        },
+        {
           "Type": "TypecyclingEffect",
           "Discriminator": "typecycling",
           "IsUnparsed": false,
@@ -3455,5 +3464,5 @@
       ]
     }
   ],
-  "SchemaHash": "c76fe10859e3c97b12864346eb064d092d3da7e685f3e6bcaec92e849dbbdbcf"
+  "SchemaHash": "c5d90db6fdbf8ffd2409eea6a3f9b444fa3f4e855ebb0972eb21c35985a5ba00"
 }
