@@ -72,12 +72,24 @@ public sealed class AuraLosesGainsEnchantReturnAndAttachRule : ITriggeredRule
 
     var lostAbilityText = m.Groups["lost"].Value.Trim();
 
-    // Effect 1: it loses the named enchant ability (LoseAbilityEffect with AbilityText residual)
-    var loseAbility = new LoseAbilityEffect
-    {
-      Target = ObjectReference.Self(),
-      AbilityText = lostAbilityText,
-    };
+    // Effect 1: it loses the named enchant ability. The lost ability is a structurable Enchant
+    // clause ("enchant creature card in a graveyard" — a static Enchant ability over
+    // {CardTypes:["creature"], Zone:Graveyard}, the very ability the following gainAbility
+    // replaces), so it is carried as the structured LoseAbilityEffect.LostAbility subtree (the
+    // loss-side mirror of GainAbilityEffect.GainedAbility) rather than the free-text AbilityText
+    // residual. Falls back to AbilityText only if the lost clause is not a recognised enchant form.
+    var lostAbility = BuildLostEnchantAbility(lostAbilityText);
+    var loseAbility = lostAbility is not null
+      ? new LoseAbilityEffect
+      {
+        Target = ObjectReference.Self(),
+        LostAbility = lostAbility,
+      }
+      : new LoseAbilityEffect
+      {
+        Target = ObjectReference.Self(),
+        AbilityText = lostAbilityText,
+      };
 
     // Effect 2: it gains "enchant creature" (the new battlefield enchant restriction)
     // CR 702.5a: the replacement enchant ability is "enchant creature" — the Aura can
@@ -123,5 +135,37 @@ public sealed class AuraLosesGainsEnchantReturnAndAttachRule : ITriggeredRule
       Effects = [loseAbility, gainAbility, returnCreature, attachAura],
     };
     return true;
+  }
+
+  // "enchant creature card in a graveyard" → a static Enchant ability over
+  // {CardTypes:["creature"], Zone:Graveyard} (CR 702.5). Returns null for any lost clause that
+  // is not a recognised enchant form, so the caller falls back to the AbilityText residual.
+  private static readonly Regex _lostEnchant = new(
+    @"^enchant\s+creature\s+card\s+in\s+a\s+graveyard$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled
+  );
+
+  private static Ability? BuildLostEnchantAbility(string lostText)
+  {
+    if (!_lostEnchant.IsMatch(lostText.Trim()))
+    {
+      return null;
+    }
+
+    return new StaticAbility
+    {
+      KeywordSource = KeywordAbility.Enchant,
+      Effects =
+      [
+        new EnchantRestrictionEffect
+        {
+          LegalTargets = new ObjectFilter
+          {
+            CardTypes = ["creature"],
+            Zone = Zone.Graveyard,
+          },
+        },
+      ],
+    };
   }
 }

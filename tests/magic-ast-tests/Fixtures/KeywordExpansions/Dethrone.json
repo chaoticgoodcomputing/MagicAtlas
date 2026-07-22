@@ -13,8 +13,11 @@
       }
     },
     "InterveningIf": {
-      "ConditionType": "other",
-      "Text": "the player you attacked has the most life or is tied for most life"
+      "ConditionType": "mostLife",
+      "Player": {
+        "Kind": "DefendingPlayer"
+      },
+      "IncludeTies": true
     },
     "Effects": [
       {

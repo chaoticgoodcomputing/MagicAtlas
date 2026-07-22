@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Containment Membrane",
     "ManaCost": "{2}{U}",
-    "TypeLine": "Enchantment — Aura",
+    "TypeLine": "Enchantment \u2014 Aura",
     "OracleText": "Surge {U} (You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)\nEnchant creature\nEnchanted creature doesn't untap during its controller's untap step.",
     "Power": null,
     "Toughness": null,
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Containment Membrane",
     "TypeLine": {
-      "Raw": "Enchantment — Aura",
+      "Raw": "Enchantment \u2014 Aura",
       "Types": [
         "Enchantment"
       ],
@@ -48,8 +48,22 @@
                 ]
               },
               "Condition": {
-                "ConditionType": "other",
-                "Text": "you or one of your teammates has cast another spell this turn"
+                "ConditionType": "count",
+                "Filter": {
+                  "CardTypes": [
+                    "spell"
+                  ],
+                  "ExcludeSelf": true,
+                  "Controller": "YouOrTeammate",
+                  "History": {
+                    "PredicateType": "castThisTurn",
+                    "Caster": "YouOrTeammate"
+                  }
+                },
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 1
+                }
               }
             }
           ],

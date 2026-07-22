@@ -1,7 +1,7 @@
 {
   "Input": {
     "Name": "Villagers of Estwald // Howlpack of Estwald",
-    "TypeLine": "Creature — Human Werewolf // Creature — Werewolf",
+    "TypeLine": "Creature \u2014 Human Werewolf // Creature \u2014 Werewolf",
     "ColorIdentity": [
       "G"
     ],
@@ -12,7 +12,7 @@
       {
         "Name": "Villagers of Estwald",
         "ManaCost": "{1}{G}{G}",
-        "TypeLine": "Creature — Human Werewolf",
+        "TypeLine": "Creature \u2014 Human Werewolf",
         "OracleText": "At the beginning of each upkeep, if a player cast two or more spells last turn, transform this creature.",
         "Power": "2",
         "Toughness": "2",
@@ -23,7 +23,7 @@
       {
         "Name": "Howlpack of Estwald",
         "ManaCost": "",
-        "TypeLine": "Creature — Werewolf",
+        "TypeLine": "Creature \u2014 Werewolf",
         "OracleText": "Trample\nAt the beginning of each upkeep, if no spells were cast last turn, transform this creature.",
         "Power": "5",
         "Toughness": "5",
@@ -36,7 +36,7 @@
   "Output": {
     "Name": "Villagers of Estwald // Howlpack of Estwald",
     "TypeLine": {
-      "Raw": "Creature — Human Werewolf // Creature — Werewolf",
+      "Raw": "Creature \u2014 Human Werewolf // Creature \u2014 Werewolf",
       "Types": [
         "Creature"
       ],
@@ -45,7 +45,7 @@
         "Werewolf",
         "//",
         "Creature",
-        "—",
+        "\u2014",
         "Werewolf"
       ]
     },
@@ -73,7 +73,7 @@
       {
         "Name": "Villagers of Estwald",
         "TypeLine": {
-          "Raw": "Creature — Human Werewolf",
+          "Raw": "Creature \u2014 Human Werewolf",
           "Types": [
             "Creature"
           ],
@@ -99,8 +99,12 @@
                 }
               },
               "InterveningIf": {
-                "ConditionType": "other",
-                "Text": "a player cast two or more spells last turn"
+                "ConditionType": "spellsCastLastTurn",
+                "Count": {
+                  "Operator": "GreaterThanOrEqual",
+                  "Value": 2
+                },
+                "PerPlayer": true
               },
               "Effects": [
                 {
@@ -170,7 +174,7 @@
       {
         "Name": "Howlpack of Estwald",
         "TypeLine": {
-          "Raw": "Creature — Werewolf",
+          "Raw": "Creature \u2014 Werewolf",
           "Types": [
             "Creature"
           ],
@@ -210,8 +214,12 @@
                 }
               },
               "InterveningIf": {
-                "ConditionType": "other",
-                "Text": "no spells were cast last turn"
+                "ConditionType": "spellsCastLastTurn",
+                "Count": {
+                  "Operator": "Equal",
+                  "Value": 0
+                },
+                "PerPlayer": false
               },
               "Effects": [
                 {

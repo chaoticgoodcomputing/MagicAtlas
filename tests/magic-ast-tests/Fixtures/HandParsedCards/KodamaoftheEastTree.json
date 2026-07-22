@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Kodama of the East Tree",
     "ManaCost": "{4}{G}{G}",
-    "TypeLine": "Legendary Creature — Spirit",
+    "TypeLine": "Legendary Creature \u2014 Spirit",
     "OracleText": "Reach\nWhenever another permanent you control enters, if it wasn't put onto the battlefield with this ability, you may put a permanent card with equal or lesser mana value from your hand onto the battlefield.\nPartner (You can have two commanders if both have partner.)",
     "Power": "6",
     "Toughness": "6",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Kodama of the East Tree",
     "TypeLine": {
-      "Raw": "Legendary Creature — Spirit",
+      "Raw": "Legendary Creature \u2014 Spirit",
       "Supertypes": [
         "Legendary"
       ],
@@ -63,8 +63,7 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it wasn't put onto the battlefield with this ability"
+            "ConditionType": "notEnteredWithThisAbility"
           },
           "Effects": [
             {

@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Hopeful Initiate",
     "ManaCost": "{W}",
-    "TypeLine": "Creature — Human Warlock",
+    "TypeLine": "Creature \u2014 Human Warlock",
     "OracleText": "Training (Whenever this creature attacks with another creature with greater power, put a +1/+1 counter on this creature.)\n{2}{W}, Remove two +1/+1 counters from among creatures you control: Destroy target artifact or enchantment.",
     "Power": "1",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Hopeful Initiate",
     "TypeLine": {
-      "Raw": "Creature — Human Warlock",
+      "Raw": "Creature \u2014 Human Warlock",
       "Types": [
         "Creature"
       ],
@@ -41,8 +41,7 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "this creature attacks with at least one other creature with greater power"
+            "ConditionType": "attacksWithHigherPowerAlly"
           },
           "Effects": [
             {

@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Marchesa's Emissary",
     "ManaCost": "{3}{U}",
-    "TypeLine": "Creature — Human Rogue",
+    "TypeLine": "Creature \u2014 Human Rogue",
     "OracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)\nDethrone (Whenever this creature attacks the player with the most life or tied for most life, put a +1/+1 counter on it.)",
     "Power": "2",
     "Toughness": "2",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Marchesa's Emissary",
     "TypeLine": {
-      "Raw": "Creature — Human Rogue",
+      "Raw": "Creature \u2014 Human Rogue",
       "Types": [
         "Creature"
       ],
@@ -59,8 +59,11 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "the player you attacked has the most life or is tied for most life"
+            "ConditionType": "mostLife",
+            "Player": {
+              "Kind": "DefendingPlayer"
+            },
+            "IncludeTies": true
           },
           "Effects": [
             {

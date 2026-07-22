@@ -24,8 +24,22 @@
           ]
         },
         "Condition": {
-          "ConditionType": "other",
-          "Text": "you or one of your teammates has cast another spell this turn"
+          "ConditionType": "count",
+          "Filter": {
+            "CardTypes": [
+              "spell"
+            ],
+            "ExcludeSelf": true,
+            "Controller": "YouOrTeammate",
+            "History": {
+              "PredicateType": "castThisTurn",
+              "Caster": "YouOrTeammate"
+            }
+          },
+          "Count": {
+            "Operator": "GreaterThanOrEqual",
+            "Value": 1
+          }
         }
       }
     ]

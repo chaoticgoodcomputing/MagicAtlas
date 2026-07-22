@@ -13,8 +13,7 @@
       }
     },
     "InterveningIf": {
-      "ConditionType": "other",
-      "Text": "this creature attacks with at least one other creature with greater power"
+      "ConditionType": "attacksWithHigherPowerAlly"
     },
     "Effects": [
       {

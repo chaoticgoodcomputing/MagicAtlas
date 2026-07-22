@@ -53,6 +53,16 @@ public sealed record MayPlayFromExileEffect : Effect
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ManaSpendRelaxation? ManaSpend { get; init; }
+
+  /// <summary>
+  /// "without paying its mana cost" — the card may be played/cast paying no mana cost at all
+  /// (CR 118.5 / 601.2f alternative cost of nothing), as opposed to merely relaxing WHICH mana
+  /// pays (<see cref="ManaSpend"/>). Windbrisk Heights: "you may play the exiled card without
+  /// paying its mana cost". Null/false when the normal cost still applies. Distinct from
+  /// <see cref="ManaSpend"/>: that keeps the cost but frees its colour; this waives the cost.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? WithoutPayingManaCost { get; init; }
 }
 
 /// <summary>

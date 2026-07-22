@@ -24,8 +24,25 @@
           ]
         },
         "Condition": {
-          "ConditionType": "other",
-          "Text": "a player was dealt combat damage this turn by a creature that, at the time it dealt that damage, was an Assassin creature or a commander under your control"
+          "ConditionType": "dealtDamageThisTurn",
+          "Player": "Any",
+          "Combat": true,
+          "Source": {
+            "Controller": "You",
+            "AnyOf": [
+              {
+                "CardTypes": [
+                  "creature"
+                ],
+                "Subtypes": [
+                  "Assassin"
+                ]
+              },
+              {
+                "IsCommander": true
+              }
+            ]
+          }
         }
       }
     ]

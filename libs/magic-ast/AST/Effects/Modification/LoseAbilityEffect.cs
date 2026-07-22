@@ -39,12 +39,26 @@ public sealed record LoseAbilityEffect : ContinuousEffect
   public AbilityScope? Scope { get; init; }
 
   /// <summary>
-  /// The ability text that is lost when it is NOT a single structurable keyword and
-  /// NOT an unbounded scope — a SPECIFIC ability named verbatim (Animate Dead: "it
-  /// loses 'enchant creature card in a graveyard'", naming its own printed enchant
-  /// ability by text) or an ability described by prose the keyword enum can't
-  /// capture. A bare keyword must use <see cref="Keyword"/>; an unbounded "all"/"all
-  /// other" scope must use <see cref="Scope"/>.
+  /// The single SPECIFIC ability that is lost, structured as a full <see cref="Ability"/> —
+  /// the loss-side mirror of <see cref="MagicAST.AST.Effects.Modification.GainAbilityEffect.GainedAbility"/>.
+  /// Animate Dead loses <c>"enchant creature card in a graveyard"</c>, which is a static Enchant
+  /// ability (an <c>enchantRestriction</c> over <c>{CardTypes:["creature"], Zone:Graveyard}</c>) —
+  /// the very ability the immediately following <c>gainAbility</c> replaces with
+  /// <c>"enchant creature put onto the battlefield with this Aura"</c>. Preferred over
+  /// <see cref="AbilityText"/> whenever the named lost ability has a structured representation
+  /// (a keyword ability, a quoted granted ability, an enchant clause). Exactly one of
+  /// <see cref="Keyword"/> / <see cref="Scope"/> / <see cref="LostAbility"/> / <see cref="AbilityText"/>
+  /// is set.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Ability? LostAbility { get; init; }
+
+  /// <summary>
+  /// The ability text that is lost when it is NOT a single structurable keyword, NOT an
+  /// unbounded scope, and NOT a structurable named ability — prose the keyword enum and the
+  /// structured <see cref="LostAbility"/> subtree both fail to capture. A bare keyword must use
+  /// <see cref="Keyword"/>; an unbounded "all"/"all other" scope must use <see cref="Scope"/>;
+  /// a named ability with a structured shape must use <see cref="LostAbility"/>.
   /// </summary>
   [FreeTextField]
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

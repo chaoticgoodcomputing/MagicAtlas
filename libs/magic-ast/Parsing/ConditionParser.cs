@@ -538,6 +538,111 @@ public static class ConditionParser
   [ThreadStatic]
   public static int? PendingHandSizeUpperBound;
 
+  /// <summary>
+  /// "you had another creature enter the battlefield under your control last turn" — Ephara,
+  /// God of the Polis's each-upkeep last-turn ETB gate. Structured to
+  /// <see cref="ObjectEnteredLastTurnCondition"/> (a PREVIOUS-turn window no existing history
+  /// predicate covers). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex EnteredLastTurn = new(
+    @"^you\s+had\s+another\s+creature\s+enter\s+the\s+battlefield\s+under\s+your\s+control\s+last\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// The werewolf transform gates: "no spells were cast last turn" (day→night) and "a player
+  /// cast two or more spells last turn" (night→day). Structured to
+  /// <see cref="SpellsCastLastTurnCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex NoSpellsCastLastTurn = new(
+    @"^no\s+spells\s+were\s+cast\s+last\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  private static readonly Regex PlayerCastSpellsLastTurn = new(
+    @"^a\s+player\s+cast\s+(?<quant>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or\s+more\s+spells\s+last\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "its power is greater than each other creature's power" — Selvala, Heart of the Wilds's
+  /// relative-maximum-power superlative. Structured to <see cref="GreatestPowerCondition"/>.
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex GreatestPower = new(
+    @"^its\s+power\s+is\s+greater\s+than\s+each\s+other\s+creature's\s+power$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "the player you attacked has the most life or is tied for most life" — the Dethrone
+  /// most-life superlative (Marchesa's Emissary). Structured to
+  /// <see cref="PlayerHasMostLifeCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex AttackedPlayerMostLife = new(
+    @"^the\s+player\s+you\s+attacked\s+has\s+the\s+most\s+life(?<ties>\s+or\s+is\s+tied\s+for\s+most\s+life)?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "a permanent was put into your hand from the battlefield this turn" — Barrin, Tolarian
+  /// Archmage's bounce-history end-step gate. Structured to
+  /// <see cref="ObjectPutIntoHandThisTurnCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex PermanentPutIntoHand = new(
+    @"^a\s+permanent\s+was\s+put\s+into\s+your\s+hand\s+from\s+the\s+battlefield\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "it wasn't put onto the battlefield with this ability" — Kodama of the East Tree's
+  /// anti-recursion gate. Structured to <see cref="NotEnteredWithThisAbilityCondition"/>.
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex NotEnteredWithThisAbility = new(
+    @"^it\s+wasn'?t\s+put\s+onto\s+the\s+battlefield\s+with\s+this\s+ability$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "this creature attacks with at least one other creature with greater power" — the Training
+  /// gate (Hopeful Initiate). Structured to <see cref="AttacksWithHigherPowerAllyCondition"/>.
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex TrainingAttack = new(
+    @"^this\s+creature\s+attacks\s+with\s+at\s+least\s+one\s+other\s+creature\s+with\s+greater\s+power$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you attacked with three or more creatures this turn" — Windbrisk Heights's
+  /// count-thresholded attack-history gate. Structured to
+  /// <see cref="AttackedWithCreaturesThisTurnCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex AttackedWithNCreatures = new(
+    @"^you\s+attacked\s+with\s+(?<quant>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or\s+more\s+creatures\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you or one of your teammates has cast another spell this turn" — the Surge cast-history
+  /// gate (Containment Membrane; CR 702.117a). Structured to a <see cref="CountCondition"/> over
+  /// a spell filter cast by <see cref="ControllerFilter.YouOrTeammate"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex SurgeCastHistory = new(
+    @"^you\s+or\s+one\s+of\s+your\s+teammates\s+has\s+cast\s+another\s+spell\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// The Freerunning cast precondition (CR 702.173a) — the fixed verbatim prose the keyword
+  /// definition passes here. Structured to <see cref="PlayerDealtDamageThisTurnCondition"/> with
+  /// <c>Combat=true</c> and a source filter for "an Assassin creature or a commander under your
+  /// control".
+  /// </summary>
+  private const string FreerunningConditionText =
+    "a player was dealt combat damage this turn by a creature that, at the time it dealt that damage, was an Assassin creature or a commander under your control";
+
+  /// <summary>
+  /// The Prowl cast precondition (CR 702.76a) — the fixed verbatim prose the keyword definition
+  /// passes here. Structured to <see cref="PlayerDealtDamageThisTurnCondition"/> with
+  /// <c>Combat=true</c> and a source filter for "under your control and had any of the creature
+  /// types of this spell" (the <see cref="ObjectFilter.SharesCreatureTypeWith"/> relational axis
+  /// keyed on the spell itself).
+  /// </summary>
+  private const string ProwlConditionText =
+    "a player was dealt combat damage this turn by a source that, at the time it dealt that damage, was under your control and had any of the creature types of this spell";
+
   /// <summary>Parse a condition phrase; never throws — unrecognised phrases become a residual.</summary>
   public static Condition Parse(string phrase)
   {
@@ -1021,6 +1126,142 @@ public static class ConditionParser
         {
           CardTypes = [itt.Groups["noun"].Value.ToLowerInvariant()],
           IsTapped = true,
+        },
+      };
+    }
+
+    if (EnteredLastTurn.IsMatch(body))
+    {
+      return new ObjectEnteredLastTurnCondition
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = ControllerFilter.You,
+          ExcludeSelf = true,
+        },
+      };
+    }
+
+    if (NoSpellsCastLastTurn.IsMatch(body))
+    {
+      return new SpellsCastLastTurnCondition
+      {
+        Count = new Comparison { Operator = ComparisonOperator.Equal, Value = 0 },
+        PerPlayer = false,
+      };
+    }
+
+    if (PlayerCastSpellsLastTurn.Match(body) is { Success: true } pcs)
+    {
+      var value = NumberWords.TryGetValue(pcs.Groups["quant"].Value, out var pv)
+        ? pv
+        : int.Parse(pcs.Groups["quant"].Value);
+      return new SpellsCastLastTurnCondition
+      {
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = value },
+        PerPlayer = true,
+      };
+    }
+
+    if (GreatestPower.IsMatch(body))
+    {
+      return new GreatestPowerCondition
+      {
+        Subject = new ObjectReference { Kind = ObjectReferenceKind.It },
+        Among = new ObjectFilter { CardTypes = ["creature"] },
+        IncludeTies = false,
+      };
+    }
+
+    if (AttackedPlayerMostLife.Match(body) is { Success: true } apml)
+    {
+      return new PlayerHasMostLifeCondition
+      {
+        Player = new ObjectReference { Kind = ObjectReferenceKind.DefendingPlayer },
+        IncludeTies = apml.Groups["ties"].Success,
+      };
+    }
+
+    if (PermanentPutIntoHand.IsMatch(body))
+    {
+      return new ObjectPutIntoHandThisTurnCondition
+      {
+        Filter = new ObjectFilter { CardTypes = ["permanent"] },
+        FromZone = Zone.Battlefield,
+        HandOwner = ControllerFilter.You,
+      };
+    }
+
+    if (NotEnteredWithThisAbility.IsMatch(body))
+    {
+      return new NotEnteredWithThisAbilityCondition();
+    }
+
+    if (TrainingAttack.IsMatch(body))
+    {
+      return new AttacksWithHigherPowerAllyCondition();
+    }
+
+    if (AttackedWithNCreatures.Match(body) is { Success: true } awn)
+    {
+      var value = NumberWords.TryGetValue(awn.Groups["quant"].Value, out var av)
+        ? av
+        : int.Parse(awn.Groups["quant"].Value);
+      return new AttackedWithCreaturesThisTurnCondition
+      {
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = value },
+      };
+    }
+
+    if (SurgeCastHistory.IsMatch(body))
+    {
+      return new CountCondition
+      {
+        Filter = new ObjectFilter
+        {
+          CardTypes = ["spell"],
+          ExcludeSelf = true,
+          Controller = ControllerFilter.YouOrTeammate,
+          History = new CastThisTurnPredicate { Caster = ControllerFilter.YouOrTeammate },
+        },
+        Count = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = 1 },
+      };
+    }
+
+    if (body.Equals(FreerunningConditionText, StringComparison.OrdinalIgnoreCase))
+    {
+      // "a player was dealt combat damage this turn by [a creature that was an Assassin
+      // creature or a commander, under your control]" (CR 702.173a Freerunning).
+      return new PlayerDealtDamageThisTurnCondition
+      {
+        Player = ControllerFilter.Any,
+        Combat = true,
+        Source = new ObjectFilter
+        {
+          Controller = ControllerFilter.You,
+          AnyOf =
+          [
+            new ObjectFilter { CardTypes = ["creature"], Subtypes = ["Assassin"] },
+            new ObjectFilter { IsCommander = true },
+          ],
+        },
+      };
+    }
+
+    if (body.Equals(ProwlConditionText, StringComparison.OrdinalIgnoreCase))
+    {
+      // "a player was dealt combat damage this turn by [a source under your control that had
+      // any of the creature types of this spell]" (CR 702.76a Prowl). The shared-creature-type
+      // relation keys on the spell itself (Self).
+      return new PlayerDealtDamageThisTurnCondition
+      {
+        Player = ControllerFilter.Any,
+        Combat = true,
+        Source = new ObjectFilter
+        {
+          Controller = ControllerFilter.You,
+          SharesCreatureTypeWith = new ObjectReference { Kind = ObjectReferenceKind.Self },
         },
       };
     }

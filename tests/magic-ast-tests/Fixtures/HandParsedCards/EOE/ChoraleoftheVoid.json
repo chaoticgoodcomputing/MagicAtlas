@@ -2,8 +2,8 @@
   "Input": {
     "Name": "Chorale of the Void",
     "ManaCost": "{3}{B}",
-    "TypeLine": "Enchantment — Aura",
-    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "TypeLine": "Enchantment \u2014 Aura",
+    "OracleText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid \u2014 At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
     "Power": null,
     "Toughness": null,
     "Colors": [
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Chorale of the Void",
     "TypeLine": {
-      "Raw": "Enchantment — Aura",
+      "Raw": "Enchantment \u2014 Aura",
       "Types": [
         "Enchantment"
       ],
@@ -25,7 +25,7 @@
       ]
     },
     "Oracle": {
-      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid — At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "RawText": "Enchant creature you control\nWhenever enchanted creature attacks, put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.\nVoid \u2014 At the beginning of your end step, sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
       "Abilities": [
         {
           "Kind": "static",
@@ -109,11 +109,16 @@
           },
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+              "EffectType": "sacrifice",
+              "Target": {
+                "Kind": "Self"
+              },
+              "UnlessCondition": {
+                "ConditionType": "void"
+              },
               "SourceSpan": {
-                "Start": 187,
-                "Length": 152
+                "Start": 228,
+                "Length": 111
               }
             }
           ],

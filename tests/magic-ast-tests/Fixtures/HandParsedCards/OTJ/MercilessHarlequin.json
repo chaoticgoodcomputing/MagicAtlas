@@ -2,7 +2,7 @@
   "Input": {
     "Name": "Merciless Harlequin",
     "ManaCost": "{2}{B}",
-    "TypeLine": "Creature — Human Assassin",
+    "TypeLine": "Creature \u2014 Human Assassin",
     "OracleText": "Freerunning {1}{B} (You may cast this spell for its freerunning cost if you dealt combat damage to a player this turn with an Assassin or commander.)\nWhen this creature enters, you draw a card and you lose 1 life.",
     "Power": "2",
     "Toughness": "1",
@@ -16,7 +16,7 @@
   "Output": {
     "Name": "Merciless Harlequin",
     "TypeLine": {
-      "Raw": "Creature — Human Assassin",
+      "Raw": "Creature \u2014 Human Assassin",
       "Types": [
         "Creature"
       ],
@@ -51,8 +51,25 @@
                 ]
               },
               "Condition": {
-                "ConditionType": "other",
-                "Text": "a player was dealt combat damage this turn by a creature that, at the time it dealt that damage, was an Assassin creature or a commander under your control"
+                "ConditionType": "dealtDamageThisTurn",
+                "Player": "Any",
+                "Combat": true,
+                "Source": {
+                  "Controller": "You",
+                  "AnyOf": [
+                    {
+                      "CardTypes": [
+                        "creature"
+                      ],
+                      "Subtypes": [
+                        "Assassin"
+                      ]
+                    },
+                    {
+                      "IsCommander": true
+                    }
+                  ]
+                }
               }
             }
           ],

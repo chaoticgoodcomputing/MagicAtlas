@@ -55,12 +55,22 @@ public sealed class ApproachOfTheSecondSunRule : ISpellRule
       return false;
     }
 
-    // Condition: "this spell was cast from your hand and you've cast another spell
-    // named Approach of the Second Sun this game" — compound history predicate with
-    // no general structured form yet; lands in OtherCondition (ADR 0001/0007 residual).
-    var condition = new OtherCondition
+    // Condition: "this spell was cast from your hand AND you've cast another spell named
+    // Approach of the Second Sun this game" — an honest conjunction (AllCondition) of two
+    // structured cast-history predicates: the origin-zone gate (CastThisObjectCondition with
+    // FromZone=Hand, CR 601.2) and the whole-game named-spell gate
+    // (NamedSpellCastThisGameCondition, CR 104.2b — the two-copy win).
+    var condition = new AllCondition
     {
-      Text = "this spell was cast from your hand and you've cast another spell named Approach of the Second Sun this game",
+      Conditions =
+      [
+        new CastThisObjectCondition { FromZone = Zone.Hand },
+        new NamedSpellCastThisGameCondition
+        {
+          Name = "Approach of the Second Sun",
+          ExcludeSelf = true,
+        },
+      ],
     };
 
     // Then-branch: you win the game (CR 104.2b).

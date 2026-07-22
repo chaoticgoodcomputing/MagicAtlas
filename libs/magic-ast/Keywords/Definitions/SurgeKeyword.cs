@@ -3,6 +3,7 @@ namespace MagicAST.Keywords.Definitions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.References;
+using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
@@ -38,10 +39,9 @@ public sealed class SurgeKeyword : IKeyword
       {
         FromZone = Zone.Hand,
         Cost = cost,
-        Condition = new OtherCondition
-        {
-          Text = "you or one of your teammates has cast another spell this turn",
-        },
+        Condition = ConditionParser.Parse(
+          "you or one of your teammates has cast another spell this turn"
+        ),
       }],
       Reminder = reminder,
     }

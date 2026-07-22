@@ -64,10 +64,9 @@ public sealed class ControllerMayDrawIfGreatestPowerTriggeredRule : ITriggeredRu
 
     effect = new ConditionalEffect
     {
-      Condition = new OtherCondition
-      {
-        Text = "its power is greater than each other creature's power",
-      },
+      Condition = ConditionParser.Parse(
+        "its power is greater than each other creature's power"
+      ),
       Then = new OptionalEffect
       {
         Inner = new DrawCardsEffect
