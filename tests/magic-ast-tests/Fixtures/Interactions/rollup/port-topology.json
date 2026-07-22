@@ -8,6 +8,7 @@
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
     "birds-of-paradise-x-horseshoe-crab",
+    "bloodthirsty-conqueror-x-aetherflux-reservoir",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -333,6 +334,13 @@
         "control"
       ]
     },
+    "paylife": {
+      "kind": "STATE",
+      "status": "witnessed",
+      "attrs": [
+        "qty"
+      ]
+    },
     "recur": {
       "kind": "EVENT",
       "status": "witnessed",
@@ -578,6 +586,7 @@
         "deployment:creature",
         "life",
         "mana",
+        "paylife",
         "removal:creature",
         "structure:untap"
       ],

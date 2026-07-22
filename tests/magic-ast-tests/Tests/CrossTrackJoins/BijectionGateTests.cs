@@ -75,12 +75,11 @@ public class BijectionGateTests
   /// </summary>
   private static readonly IReadOnlyDictionary<string, string> AcknowledgedUnwitnessed = new Dictionary<string, string>(StringComparer.Ordinal)
   {
-    ["FlowArm/LifeCostToPay [life → paylife]"] =
-      "the life-gain → pay-life-cost arm (PortFlowMatcher.LifeCostToPay, added for the life-cost-balance "
-      + "dimension) is exercised live only by Aetherflux Reservoir — a single-card gold whose two edges are "
-      + "both card-defined, so it declares no rules-mechanism — and there is NO rollup rule for it. BACKLOG: "
-      + "author a life-cost combo gold (e.g. a lifegain engine feeding a pay-life outlet) that DECLARES this "
-      + "mechanism. Not fixed here: authoring an interaction gold is judge-gated loop work (#34 scope).",
+    // FlowArm/LifeCostToPay [life → paylife] — RESOLVED (ADR-0004 #40, 2026-07-22). The life-gain →
+    // pay-life-cost arm is now witnessed cross-card by the bloodthirsty-conqueror-x-aetherflux-reservoir
+    // interaction gold: Bloodthirsty Conqueror's emit:life:gain feeds Aetherflux Reservoir's consume:paylife (Pay 50 life) —
+    // a rules-defined edge declaring policy:life-supplies-cost — so the arm no longer fires only intra-card
+    // on Aetherflux. The gate now requires the unwitnessed set to be EMPTY.
   };
 
   /// <summary>THE GATE (§2.1 soundness): every RulesDefined structural mechanism the live engine forms is

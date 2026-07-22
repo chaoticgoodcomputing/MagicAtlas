@@ -60,7 +60,10 @@ Ashnod's Altar::emit:mana[color=colorless]  ->  Sword of Feast and Famine::consu
 Ashnod's Altar::emit:mana[color=colorless]  ->  Titania's Boon::consume:mana
 Blood Artist::emit:life[direction=gain]  ->  Aetherflux Reservoir::consume:paylife
 Blood Artist::emit:life[direction=gain]  ->  Heliod, Sun-Crowned::consume:life[direction=gain]
+Blood Artist::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
 Blood Artist::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
+Bloodthirsty Conqueror::emit:life[direction=gain]  ->  Aetherflux Reservoir::consume:paylife
+Bloodthirsty Conqueror::emit:life[direction=gain]  ->  Heliod, Sun-Crowned::consume:life[direction=gain]
 Brazen Dwarf::emit:damage[manner=noncombat,recipient=opponent]  ->  Niv-Mizzet, Visionary::consume:damage[manner=noncombat,recipient=any]
 Captain Rex Nebula::emit:damage[manner=noncombat,recipient=any]  ->  Captain Rex Nebula::consume:damage[manner=any,recipient=any]
 Captain Rex Nebula::emit:damage[manner=noncombat,recipient=any]  ->  Niv-Mizzet, Visionary::consume:damage[manner=noncombat,recipient=any]
@@ -234,10 +237,12 @@ Ruthless Knave::emit:mana[color=any]  ->  Sword of Feast and Famine::consume:man
 Ruthless Knave::emit:mana[color=any]  ->  Titania's Boon::consume:mana
 Ruthless Knave::emit:mana[color=any]  ->  Titania's Boon::consume:mana[color=green]
 Ruthless Knave::emit:mana[color=any]  ->  Vampiric Tutor::consume:mana[color=black]
+Vampiric Tutor::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
 Vampiric Tutor::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
 Young Pyromancer::emit:deployment:creature[token=true]  ->  Ashnod's Altar::consume:creature[manner=sacrificed]
 Young Pyromancer::emit:deployment:creature[token=true]  ->  Nantuko Husk::consume:creature[manner=sacrificed]
 Young Pyromancer::emit:deployment:creature[token=true]  ->  Ruthless Knave::consume:creature[manner=sacrificed]
 Zulaport Cutthroat::emit:life[direction=gain]  ->  Aetherflux Reservoir::consume:paylife
 Zulaport Cutthroat::emit:life[direction=gain]  ->  Heliod, Sun-Crowned::consume:life[direction=gain]
+Zulaport Cutthroat::emit:life[direction=loss]  ->  Bloodthirsty Conqueror::consume:life[direction=loss]
 Zulaport Cutthroat::emit:life[direction=loss]  ->  Exquisite Blood::consume:life[direction=loss]
