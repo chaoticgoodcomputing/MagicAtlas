@@ -2,7 +2,23 @@
 
 ## Status
 
-**Proposed (2026-07-19; revised 2026-07-20 after design workshop).** **Replaces the previous ADR 0004
+**Accepted and largely implemented (2026-07-19; revised through 2026-07-22).** 15 of 18 slices have landed
+on `feat/atlas-explorer-frontend` (census, cache keying, gitignore/on-demand, rollup regeneration gate,
+`no_arm`, scaffold deletion, P1–P6 sweeps, `reject` adjudication, F1/F2/F3, cross-track joins, the combo
+half of the tier retirement, the invariant layer, the widened-attribute report, the Provenance/Tier fix,
+and the raw-input consolidation), CORE ring green at every merge. Three remain: the **derived backlog**
+(§2, in progress), the **frontend/API tier retirement** (§5, sequenced behind the CardAtlas-fork fix), and
+the **bijection gate** (§6/§2, whose soundness half is elaborated below). The **terminal forward-migration**
+(§ "Migration endgame") is the last step and closes the ADR.
+
+**Two clarifications from the 2026-07-22 workshop are folded in below and supersede earlier text where they
+conflict:** (a) the bijection's soundness half is closed by a **structural edge-provenance join**, never by
+hand-annotating guards with rule-id strings (§2 — that would relocate a hand-maintained artifact, not remove
+it); and (b) the parse-track debt whitelists are not *relocated* anywhere — they are **emptied** by a
+one-time forward-migration of every gold, which is itself orchestrator-owned back-prop and needs no new
+policy (§ "Migration endgame").
+
+**Replaces the previous ADR 0004
 ("Edge-level provenance labeling — retiring the combo-level trust color"), withdrawn.** That proposal was
 accepted 2026-07-18 after a six-panelist review but never started migration; on re-reading against the
 mast-loop retro that generated it, it was aimed at the *display* problem (the confusing Green/Amber chip)
@@ -165,6 +181,34 @@ ADR 0003 §6 already *states* (1) — "every guard is registered with its witnes
   unrealized cannot land.** So (2) needs no exception list — it reduces to the one case merge discipline
   does not cover: a rollup rule with no implementing guard, which is a set difference.
 
+**Soundness — how the guard leg is closed WITHOUT annotating guards (clarified 2026-07-22).** Issue #30
+materialized the guard→witness map from golds' `declares` and found the leg that does not close from golds
+alone: `impl: "code"` names no symbol, and **0 of 29 rule ids appear anywhere in `libs/**/*.cs`**. The
+tempting fix — a `[WitnessedRule("bridge:sacrifice-to-dies")]` attribute on each guard — is **rejected**: it
+moves a hand-maintained correspondence from JSON into C#, where nothing checks the string names the right
+guard. That is the very disease this ADR removes, wearing a compiler's clothes.
+
+The soundness half is instead closed by making **golds the arbiter of the code, structurally**:
+
+  1. **The engine tags each edge, at formation, with the *structural* mechanism that formed it** — the
+     `FlowArm` (or the subsumption facets) it already computes, not a hand-typed rule id. This is one
+     instrumentation seam, not a per-guard label.
+  2. **The rollup rule's identity derives from the same structural facts.** So the join is
+     `structure ↔ structure`: the arm/facets an edge was built from, matched against the gold-derived
+     rollup. No hand-typed identity enters on either side.
+  3. **An edge the engine can form via a mechanism no gold declares is an *unwitnessed capability*** —
+     surfaced as a finding (like the backlog below), never papered over. The fix is the loop's own move:
+     **author the witnessing gold** — and for a subsumption, that may be *two* golds demonstrating the
+     rungs (the way `sacrifice ⊂ dies` is witnessed today, not by a coded rule but by golds whose ports the
+     is-a lattice relates). The residual code `C` — the ~7 genuine guards ADR 0003 §6 keeps in code
+     (token-at-creation, damage/blink self-source refusals, mana colour, recast cover) — is small and
+     fixed; each is witnessed by a gold that exercises it, or it is a soundness finding to fix by authoring
+     one.
+
+Continuous detection of unwitnessed capabilities belongs in the **mast-loop skill** (a standing check every
+run, not a one-time ADR gate) — filed as its own ticket. This ADR's §6/Stage 6 gate is the one-time
+closure; the skill keeps it closed.
+
 **The backlog is derived from corpus demand, not from gold status.** Because golds cannot carry unrealized
 claims (above), the backlog cannot be sourced from them. It is:
 
@@ -258,10 +302,9 @@ in the frontend, where a bare `"Green"`/`"Amber"` chip is unreadable without a l
 3. **The prose `reason` disappears rather than being rendered.** The attribute vector *is* the reason.
    Plain-language text is generated from it at display time and stored nowhere. Human narrative, where
    genuinely useful, moves to a `note` field that **no gate and no report treats as truth**.
-4. **`Green`/`Amber` retires as a stored and user-facing vocabulary**, surviving only as an internal
-   shorthand if convenient. The frontend renders the attributes in plain language ("certified infinite";
-   "loop closes, but its mana cost is not covered"), which is strictly more informative than the colour and
-   needs no legend.
+4. **`Green`/`Amber` retires as a stored and user-facing vocabulary** — the colour enum is **dropped**, not
+   relabeled. The frontend renders attributes in plain language ("certified infinite"; "loop closes, but its
+   mana cost is not covered"), strictly more informative than the colour and needing no legend.
 
 This deliberately readopts the one part of the withdrawn ADR 0004 that was right — *"keep the certainty tier,
 relabeled for humans; retired only as a bare colour"* — in a form that also fixes the hand-maintenance the
@@ -269,6 +312,23 @@ withdrawn version left untouched, because what is pinned is now a computed vecto
 
 The general rule this generalizes: **prose that asserts a fact must be generated; prose that adds narrative
 must be marked non-authoritative.** No prose is both.
+
+**Two ladders, not one — the port tier is a separate surface (clarified 2026-07-21).** `Green`/`Amber` names
+two unrelated things, and retiring it means decomposing *both*:
+
+- **The combo tier** (`combo-expected-tiers.json`) — a combo's reconstruction: Green / Amber / Missed over
+  the five §10 axes. **Landed** as axis-level expectations (Stage 4a, issue #31a).
+- **The port tier** (`PortRow.Tier`, the frontend chip) — a single port label, and it collapses **two
+  orthogonal questions** into one four-valued enum (`Green`/`Amber`/`Inferred`/`Declared`): *is this
+  mechanism conditional?* (`!Gated && !TapGated && RequiresCounter is null`) and *where did the port come
+  from?* (parsed vs statistically backfilled). A port can be conditional **and** inferred, and the enum
+  cannot say so — the same conflation, one layer down. The frontend/API half (Stage 4b, issue #31b) splits
+  these into **a conditionality facet** (fires unconditionally / needs to tap / needs a counter /
+  rate-limited) and **a separate provenance marker** (parsed by default; *inferred from similar cards* with
+  its confidence fraction; *catalogued, not yet parsed*). Because `queries.ts` filters `tier: { eq: "Green" }`
+  **server-side**, this changes the GraphQL contract, not only the rendering — the API must expose the facets
+  before the client stops asking for `tier`. Sequenced behind the CardAtlas-fork fix, whose stale copy would
+  otherwise feed the new surface blanked `stem`/`side` data.
 
 ### 6. The invariant layer — catching absence, not drift
 
@@ -545,9 +605,45 @@ gap, not a widening, and ablation is blind to it by construction. The one-line r
 projection already carries the facet, so the port is born correct the moment the rule states it.
 
 ### Stage 6 — Close the bijection
-Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup); no declared rule unrealized.
+Gate §2. The completeness half (no declared rule unrealized) is the loop's existing TDD discipline. The
+soundness half (no guard/mechanism without a witnessing gold) is the **structural edge-provenance join**
+of §2: the engine tags each edge with the arm/facets that formed it, the join matches that against the
+gold-derived rollup, and an edge formed by an undeclared mechanism is surfaced as an unwitnessed-capability
+finding — fixed by authoring the gold, never by annotating the guard.
 
-*Gate:* the bijection holds, or every exception is registered **as a gold**, never as a list.
+*Gate:* the bijection holds, or every exception is registered **as a gold**, never as a list. Ongoing
+detection of unwitnessed capabilities moves into the mast-loop skill (a standing per-run check), so the
+gate closes once and the skill keeps it closed.
+
+### Migration endgame — the terminal forward-migration (the step that closes the ADR)
+
+Every acceptance criterion above is about *artifacts and gates*. One thing they do not by themselves
+achieve is the literal truth of the governing principle — *the only hand-authored data artifacts are
+MAST-loop fixtures* — because a residue of golds still carries **de-string debt**: free-text residual sinks
+(`OtherCondition`, `AbilityText`, paraphrase bodies) the parser has not yet structured. That residue is
+enumerated, today, by two hand-maintained whitelists — `whitelist-freetext.json` (167 golds) and
+`whitelist-unparsed.json` (4). They are **debt ledgers, not carveouts**: nothing is relocated when they go;
+they are **emptied** when each listed gold is re-derived under the current parser and taxonomy and no longer
+carries the debt. When the count reaches zero, the ledger and its gate are deleted.
+
+This is a **one-time forward-migration of every gold**, and it is the ADR's last step for two reasons:
+first, it is what makes "every fixture is loop-touched" literally true, so it belongs *inside* the ADR that
+warrants it rather than being deferred to some later run; second, it must run against a *stable* engine and
+taxonomy, so it comes after Stages 1–6 have landed (migrating golds against a moving engine is wasted work).
+
+**It needs no new permission.** Forward-migrating all golds under a systemic change is the textbook case of
+**orchestrator-owned back-prop** — already the sanctioned exception to the fixture-immutability gate (a
+*worker* may not edit an existing gold; the *orchestrator* re-pointing many golds under a systemic change
+may, gated by CORE-green + a mandatory judge re-pass). The earlier framing of this as an open "may agents
+annotate golds?" policy question was a mis-frame: the debt is *paid* by re-parsing, not *annotated*.
+
+**Execution shape (owner-directed, 2026-07-22):** batches of up to 10 subagents, **Opus-first** to
+solidify and demonstrate the pattern on the opening batches, then **Sonnet** once the Opus batches have laid
+down good worked examples to feed-forward from. Standard mast-loop discipline throughout — worktree
+isolation, serial merge under the CORE ring, judge gate per batch. Genuinely irreducible residues (a
+paraphrase with no structured form, a standard reminder-text body) are ruled so **by the gold's own
+re-derivation**, recorded in the gold, not moved to a side file — which is exactly why the whitelist can be
+deleted rather than migrated.
 
 ## Consequences
 
@@ -574,12 +670,17 @@ Gate §2: no rule or guard without a witnessing gold (via `declares` → rollup)
 *(The three questions carried by the 2026-07-19 draft were resolved on 2026-07-20 — see Provenance. What
 remains are the implementation details those decisions opened.)*
 
-- **Which attributes constitute the pinned vector (§5.1)?** `Firable` / `CoCostsSatisfied` / `Balanced` /
-  `LifeBalanced` / `Productive` / worst-hop `Reliability` is the obvious set, but whether `Overlap` and
-  `LimitingReason` are pinned or merely reported is a Stage-4 call — pin too much and every engine refinement
-  churns 33 expectations; pin too little and the gate goes slack.
-- **Plain-language wording for the retired colours (§5.4).** No concrete copy exists yet. Needs a pass that a
-  non-player can read without a legend, which is the bar the colour failed.
+- ~~**Which attributes constitute the pinned vector (§5.1)?**~~ **Resolved (2026-07-21, issue #31a):** the
+  five §10 axes (`Firable` / `CoCostsSatisfied` / `Balanced` / `LifeBalanced` / `Productive`) at **axis
+  level, no hop-level resolution.** The evidence forced it: the `LimitingHop` fix (`776ff939`) churned 18 of
+  33 pins for zero semantic change, so hop resolution was mostly noise. Existence is derived, acceptance is
+  judged (`{combo, axis, verdict}`); the 4 `Missed` combos move to the derived backlog (§2).
+- **Plain-language wording for the retired colours (§5.4).** Combo-side copy exists and is provisional
+  pending sign-off (e.g. all axes → "certified infinite"; `!Balanced` → "loop closes, but it costs more mana
+  than it makes"). One gloss is known-wrong and flagged: "can only fire once per turn" for `Gated`, which has
+  five distinct causes and is, for the currently-gated combos, an *optional blink ETB* — not a rate limit.
+  The **port-side** copy (§5, "two ladders") is undecided and is #31b's: a conditionality facet plus a
+  provenance marker, the colour enum dropped.
 - ~~**Does the API seed run the full pipeline or a scoped flow?**~~ **Closed (2026-07-20, issue #23):
   the full graph.** Cold is 48.8 s and warm is 0.14 s (issue #22), so the ergonomic saving from scoping
   is negligible — and scoping is actively harmful under flowthru#148, since forcing a partial
