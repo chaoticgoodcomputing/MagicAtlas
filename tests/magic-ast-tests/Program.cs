@@ -6,6 +6,7 @@ using Flowthru.Step.Python;
 using MagicAtlas.Ast.Tests.Data;
 using MagicAtlas.Ast.Tests.Flows.ArtifactCensus;
 using MagicAtlas.Ast.Tests.Flows.CrossTrackJoins;
+using MagicAtlas.Ast.Tests.Flows.DerivedBacklog;
 using MagicAtlas.Ast.Tests.Flows.DiceComboReport;
 using MagicAtlas.Ast.Tests.Flows.DiscriminatorGovernance;
 using MagicAtlas.Ast.Tests.Flows.FreeTextResidualCensus;
@@ -410,6 +411,23 @@ public class Program
             + "into the ones a declaration-site NearDuplicateOf/Reason ruling explains and the ones "
             + "nobody has ruled on → Data/_08_Reporting/discriminator-governance.json. Never a gate; the "
             + "GATE is the NUnit DiscriminatorUniquenessTests (hard per-family collision)."
+        );
+
+      // ADR-0004 §2, issue #32: the derived backlog — projected(corpus) − served − asserted-unarmable,
+      // computed never stored. Hermetic (reflects the engine + reads committed golds/pins), so it runs on a
+      // clean checkout with no corpus. Retires holes{} (#26) and known-coarse-projections.json.
+      flowthru
+        .RegisterFlow<Catalog>(
+          "DerivedBacklog",
+          catalog => DerivedBacklogFlow.Create(catalog, ArtifactClassifier.RepoRoot(basePath))
+        )
+        .WithDescription(
+          "ADR-0004 §2 derived backlog (issue #32): projected(corpus) − served(rollup ∪ guards) − "
+            + "asserted-unarmable(golds), keyed by dispatch dimension + discriminator, plus the decisions "
+            + "subtrahend, the owner attribute-axis backlog, and combo-level unserved demand → "
+            + "Data/_08_Reporting/derived-backlog.json. An unserved projection with no gold is BACKLOG; one "
+            + "with an asserted-absence gold is a DECISION. Retires holes{} and known-coarse-projections.json. "
+            + "Hermetic — no corpus. The GATE is PortWalkExhaustivenessTests, which re-runs the pure derivation."
         );
 
       flowthru.ConfigureMetadata(meta =>

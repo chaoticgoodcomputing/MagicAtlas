@@ -317,6 +317,19 @@ public partial class Catalog
       .AtPath($"{_basePath}/_08_Reporting/discriminator-governance.json")
       .Build());
 
+  /// <summary>The ADR-0004 §2 derived backlog (issue #32): <c>projected(corpus) − served(rollup ∪ guards) −
+  /// asserted-unarmable(golds)</c>, keyed by dispatch dimension + discriminator, plus the decisions (the
+  /// asserted-unarmable subtrahend), the attribute-axis backlog (<c>owner</c>), and combo-level unserved
+  /// demand. Replaces the retired <c>holes{}</c> (#26) and the deleted <c>known-coarse-projections.json</c>.
+  /// Output of the <c>DerivedBacklog</c> flow; hermetic (no corpus), gitignored, never committed. The GATE
+  /// is <c>PortWalkExhaustivenessTests</c>, which re-runs the pure derivation rather than reading this
+  /// file.</summary>
+  public IItem<DerivedBacklog> DerivedBacklog =>
+    CreateItem(() => Item.Of<DerivedBacklog>("DerivedBacklog")
+      .Json()
+      .AtPath($"{_basePath}/_08_Reporting/derived-backlog.json")
+      .Build());
+
   /// <summary>The interaction-graph Plotly viz (label grammar | card-card expansion) — interactive HTML.</summary>
   public IItem<string> InteractionGraphHtml =>
     CreateItem(() => Item.Of<string>("InteractionGraphHtml")
