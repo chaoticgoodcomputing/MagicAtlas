@@ -145,9 +145,6 @@
               }
             }
           ],
-          "Instructions": [
-            "you may pay {5}{R}{R}"
-          ],
           "SourceSpan": {
             "Start": 14,
             "Length": 154

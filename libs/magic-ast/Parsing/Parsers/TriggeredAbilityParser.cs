@@ -366,7 +366,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     // Stamp the clause-accurate effect-half span on every top-level effect the ability
     // produced (half-granularity: all emits share the post-comma region). Only SourceSpan
     // changes; the parsed effect kinds/values are untouched.
-    var instructions = ExtractInstructions(effectPart, effects);
     effects = effects.Select(e => e with { SourceSpan = effectSpan }).ToList();
 
     return new TriggeredAbility
@@ -376,7 +375,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
       AdditionalTriggers = additionalTriggers,
       InterveningIf = interveningIf,
       Effects = effects,
-      Instructions = instructions,
       Reminder = reminder,
       AbilityWord = abilityWord,
       Restrictions = triggeredRestrictions,
@@ -498,31 +496,6 @@ public sealed class TriggeredAbilityParser : IAbilityParser
     }
 
     return restrictions;
-  }
-
-  /// <summary>
-  /// Returns the "you may pay {X}" instruction list when the effect-half
-  /// starts with that phrasing and the parsed effects include the
-  /// "If you do, ..." follow-up flagged as optional. The Instruction text
-  /// is the bare "you may pay {X}" fragment (without the period or follow-up
-  /// clause), matching the gold convention for Mana-Vault-style upkeep
-  /// triggers.
-  /// </summary>
-  private static IReadOnlyList<string>? ExtractInstructions(
-    string effectPart,
-    IReadOnlyList<Effect> effects
-  )
-  {
-    var match = Regex.Match(
-      effectPart,
-      @"^(?<instr>you\s+may\s+pay\s+(?:\{[^}]+\})+)\.\s*If\s+you\s+do,",
-      RegexOptions.IgnoreCase
-    );
-    if (!match.Success)
-    {
-      return null;
-    }
-    return new List<string> { match.Groups["instr"].Value.Trim() };
   }
 
   /// <summary>

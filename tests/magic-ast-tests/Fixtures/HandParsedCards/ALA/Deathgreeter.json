@@ -74,9 +74,6 @@
               }
             }
           ],
-          "Instructions": [
-            "you may pay {1}"
-          ],
           "SourceSpan": {
             "Start": 0,
             "Length": 70

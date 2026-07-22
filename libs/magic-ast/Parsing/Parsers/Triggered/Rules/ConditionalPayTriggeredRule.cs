@@ -52,6 +52,7 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
   private static readonly ItGainsKeywordUntilEndOfTurnRule _itGainsKeywordRule = new();
   private static readonly ThisCreatureDealsDamageToAnyTargetTriggeredRule _selfDealsDamageAnyTargetRule = new();
   private static readonly CantBlockThisTurnTriggeredRule _cantBlockThisTurnRule = new();
+  private static readonly UntapSelfRule _untapSelfRule = new();
 
   // ── Pattern 1: "you may pay {COST}. If you do, [effect]" ──────────────
   // The cost is one or more {X} symbols; the consequent effect is everything
@@ -158,6 +159,15 @@ public sealed class ConditionalPayTriggeredRule : ITriggeredRule
     // Duration = end of turn }.
     if (_cantBlockThisTurnRule.TryMatch(text, out var cantBlock) && cantBlock is not null)
       return cantBlock;
+    // "untap this artifact" / "untap it" — the Mana-Vault-style self-untap consequent
+    // (Mana Vault, 2X2: "At the beginning of your upkeep, you may pay {4}. If you do,
+    // untap this artifact."). UntapSelfRule emits a bare UntapEffect{ Target = Self }
+    // for the un-gated "untap this/it" text (the "you may pay" gate lives on the outer
+    // ConditionalPayEffect here, so the inner consequent is non-optional), letting the
+    // cost be structured on ConditionalPayEffect.Cost instead of dropped to the
+    // ability's free-text Instructions list (ADR 0004 may-pay-cost de-string).
+    if (_untapSelfRule.TryMatch(text, out var untapSelf) && untapSelf is not null)
+      return untapSelf;
 
     // No match: return null so the caller (TryMatch) rejects the whole text
     // rather than emitting a partially-parsed effect. The dispatcher will

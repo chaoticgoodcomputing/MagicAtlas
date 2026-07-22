@@ -88,9 +88,6 @@
               }
             }
           ],
-          "Instructions": [
-            "you may pay {B}"
-          ],
           "Reminder": {
             "Text": "Targeting opponents, anything they control, and/or cards in their graveyards is a crime."
           },
