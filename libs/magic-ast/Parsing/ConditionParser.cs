@@ -210,6 +210,23 @@ public static class ConditionParser
     RegexOptions.Compiled);
 
   /// <summary>
+  /// "a nonland permanent left the battlefield this turn or a spell was warped this turn"
+  /// — the fixed backward-looking event-history disjunction the Edge of Eternities
+  /// <em>Void</em> ability word denotes (CR 207.2c: "void" is an ability word with no
+  /// special rules meaning, so this printed disjunction — byte-identical on every Void
+  /// card — is the whole condition). The two disjuncts are two independent this-turn
+  /// events: a nonland permanent left the battlefield this turn (a leaves-the-battlefield
+  /// event, CR 603.6c / 603.10a) OR a spell was warped this turn (CR 702.185c: a spell
+  /// was cast for its warp cost this turn). Structured to a fixed-idiom marker
+  /// <see cref="VoidCondition"/> — the disjunction never varies, so there is nothing to
+  /// parameterise — rather than left as a free-text <see cref="OtherCondition"/> residual.
+  /// Anchored (^…$).
+  /// </summary>
+  private static readonly Regex VoidEventHistory = new(
+    @"^a\s+nonland\s+permanent\s+left\s+the\s+battlefield\s+this\s+turn\s+or\s+a\s+spell\s+was\s+warped\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "there are four or more card types among cards in your graveyard" — the Delirium
   /// mechanic's activation gate (CR 207.2c: Delirium is an ability word with no special
   /// rules meaning; the condition is the diversity-count predicate). Structured to a
@@ -535,6 +552,11 @@ public static class ConditionParser
           : new ObjectReference { Kind = ObjectReferenceKind.It },
         Status = status,
       };
+    }
+
+    if (VoidEventHistory.IsMatch(body))
+    {
+      return new VoidCondition();
     }
 
     if (CardTypeDiversity.Match(body) is { Success: true } ctd)

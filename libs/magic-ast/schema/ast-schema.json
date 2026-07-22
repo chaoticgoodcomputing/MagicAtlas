@@ -377,6 +377,12 @@
           ]
         },
         {
+          "Type": "ControlSinceLastUpkeepCondition",
+          "Discriminator": "controlSinceLastUpkeep",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "ControlledObjectCondition",
           "Discriminator": "controlledObject",
           "IsUnparsed": false,
@@ -551,6 +557,12 @@
             "CounterType",
             "Present"
           ]
+        },
+        {
+          "Type": "VoidCondition",
+          "Discriminator": "void",
+          "IsUnparsed": false,
+          "Fields": []
         }
       ]
     },
@@ -3437,5 +3449,5 @@
       ]
     }
   ],
-  "SchemaHash": "b7d99e80007c31de60ecf7c57b12f81eae96b826a3e1e2aaf4206ff17e973ef5"
+  "SchemaHash": "dbee58c23c0580eb24c4abea1e5e7b48d71a549b1e4f1a990e0dd0f645ce4a8a"
 }

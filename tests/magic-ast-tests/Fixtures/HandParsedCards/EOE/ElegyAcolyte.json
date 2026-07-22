@@ -111,8 +111,7 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "a nonland permanent left the battlefield this turn or a spell was warped this turn"
+            "ConditionType": "void"
           },
           "Effects": [
             {
