@@ -176,6 +176,24 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "it's on the battlefield" / "this Aura is on the battlefield" — the source (or
+  /// back-referenced) object's own zone-membership gate (Animate Dead's ETB
+  /// intervening-if: "When this Aura enters, if it's on the battlefield, …" — guards
+  /// the reanimation resolution against the Aura having already left the battlefield,
+  /// e.g. because its enchant target became illegal, CR 603.3c/608.2b). Structured to
+  /// an <see cref="ObjectInZoneCondition"/> — the same zone-state node
+  /// <see cref="YouMayPlayThatCardForAsLongAsExiledTriggeredRule"/> uses for
+  /// Reference=It/Zone=Exile — rather than left as a free-text
+  /// <see cref="OtherCondition"/> residual. The subject is preserved as-written
+  /// (reference-not-resolution, ADR 0004): "this Aura/creature/permanent/card" →
+  /// <see cref="ObjectReferenceKind.Self"/>, the bare pronoun "it's" →
+  /// <see cref="ObjectReferenceKind.It"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex ObjectOnBattlefield = new(
+    @"^(?:this\s+(?<self>\w+)\s+is|it's|it\s+is)\s+on\s+the\s+battlefield$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "this artifact is tapped" / "this artifact remains tapped" / "it's untapped" /
   /// "this permanent is saddled" — the source (or back-referenced) object's own
   /// status/designation gate (Mana Vault's draw-step intervening-if; Endoskeleton's
@@ -533,6 +551,17 @@ public static class ConditionParser
         Reference = sie.Groups["self"].Success
           ? ObjectReference.Self()
           : new ObjectReference { Kind = ObjectReferenceKind.It },
+      };
+    }
+
+    if (ObjectOnBattlefield.Match(body) is { Success: true } oob)
+    {
+      return new ObjectInZoneCondition
+      {
+        Reference = oob.Groups["self"].Success
+          ? ObjectReference.Self()
+          : new ObjectReference { Kind = ObjectReferenceKind.It },
+        Zone = Zone.Battlefield,
       };
     }
 

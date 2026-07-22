@@ -62,8 +62,11 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "it's on the battlefield"
+            "ConditionType": "objectInZone",
+            "Reference": {
+              "Kind": "It"
+            },
+            "Zone": "Battlefield"
           },
           "Effects": [
             {
