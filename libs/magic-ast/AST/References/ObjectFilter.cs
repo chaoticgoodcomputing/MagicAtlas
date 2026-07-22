@@ -214,6 +214,52 @@ public sealed record ObjectFilter
   public bool? IsColorless { get; init; }
 
   /// <summary>
+  /// Filters to colored objects — those that have one or more colors (CR 105.1:
+  /// "There are five colors in the Magic game … Colorless is not a color."). The exact
+  /// complement of <see cref="IsColorless"/>: an object passes iff it has at least one of
+  /// the five colors. Ugin, the Ineffable: "Destroy target permanent that's one or more
+  /// colors." → <c>CardTypes=["permanent"], IsColored=true</c>. Distinct from
+  /// <see cref="Colors"/> ("has any of THESE literal colors"): "one or more colors" names
+  /// no specific color, only the presence of colour, so it cannot be expressed as a
+  /// <see cref="Colors"/> list. Mirrors <see cref="IsColorless"/> as a boolean colour-quality
+  /// axis; the two are mutually exclusive.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsColored { get; init; }
+
+  /// <summary>
+  /// Filters to a set whose members all have DIFFERENT names from one another — "seven or
+  /// more lands with different names" (The Necrobloom: "If you control seven or more lands
+  /// with different names, …"). CR 201.2 (two objects have the same name if the English
+  /// versions of their names are identical): the "with different names" qualifier constrains
+  /// the COUNTED set to distinct-named members, so a <see cref="MagicAST.AST.Abilities.CountCondition"/>
+  /// over such a filter counts distinct names rather than raw objects. A set-level uniqueness
+  /// predicate, not a per-object characteristic — distinct from the relational
+  /// <see cref="SharesNameWith"/>/<see cref="ExcludesNameOf"/> axes (which compare one object
+  /// against a specific referent): this asserts pairwise-distinctness across the whole matched
+  /// population, which no per-object or relational axis can express.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? DifferentNames { get; init; }
+
+  /// <summary>
+  /// A cross-axis DISJUNCTION — the object matches this filter if it matches ANY of the
+  /// listed sub-filters (in addition to the base axes on this filter, which are ANDed as
+  /// usual). The structured home for an "[A] or [B]" phrase whose alternatives live on
+  /// DIFFERENT axes and so cannot be folded into a single multi-valued axis: "creature or
+  /// Vehicle" is a card-type (<see cref="CardTypes"/>) OR a subtype (<see cref="Subtypes"/>)
+  /// — <c>AnyOf=[{CardTypes:["creature"]}, {Subtypes:["Vehicle"]}]</c> (Silken Strength,
+  /// Swift Reconfiguration, Broodheart Engine's "creature or Vehicle card"). Distinct from a
+  /// multi-valued <see cref="CardTypes"/> list (which is itself a disjunction, but only WITHIN
+  /// the card-type axis — "artifact or creature"): a sub-filter here may set any axis, so the
+  /// disjuncts can straddle the card-type/subtype/colour boundary. Each disjunct is a full
+  /// <see cref="ObjectFilter"/> (recursive), evaluated independently; the outer match is the
+  /// logical OR over them.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<ObjectFilter>? AnyOf { get; init; }
+
+  /// <summary>
   /// Filters to historic objects — those that have the legendary supertype, the
   /// artifact card type, or the Saga subtype (CR 700.6: "The term historic refers
   /// to an object that has the legendary supertype, the artifact card type, or the

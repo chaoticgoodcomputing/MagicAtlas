@@ -163,7 +163,7 @@ public static class CreateTokenOrInsteadIfConditionRule
 
     return new ConditionalEffect
     {
-      Condition = new OtherCondition { Text = condText },
+      Condition = MagicAST.Parsing.ConditionParser.Parse(condText),
       Then = replacementToken,
       Else = defaultToken,
     };

@@ -13,12 +13,9 @@ using MagicAST.AST.References;
 /// "One or more colors" means the permanent has at least one of the five Magic
 /// colors (CR 105.1: "There are five colors in the Magic game: white, blue, black,
 /// red, and green. Colorless is not a color."). This is the negation of colorless —
-/// any permanent that has a color satisfies this filter. The characteristic
-/// "one or more colors" is encoded as an <see cref="OtherCharacteristic"/> residual
-/// since <see cref="ObjectFilter"/> does not yet have a structured <c>IsColored</c>
-/// axis (the complement of <see cref="ObjectFilter.IsColorless"/>). It is a
-/// meaningful, rules-distinct filter — not arbitrary free text — and is a candidate
-/// for a future first-class boolean axis on <c>ObjectFilter</c>.
+/// any permanent that has a color satisfies this filter. Encoded on the first-class
+/// <see cref="ObjectFilter.IsColored"/> boolean axis (the complement of
+/// <see cref="ObjectFilter.IsColorless"/>).
 /// </para>
 ///
 /// <para>
@@ -58,7 +55,7 @@ public sealed class DestroyColoredPermanentEffectRule : IActivatedEffectRule
         Filter = new ObjectFilter
         {
           CardTypes = ["permanent"],
-          Characteristics = [Characteristic.Other("one or more colors")],
+          IsColored = true,
         },
       },
     };

@@ -42,8 +42,21 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "you don't control a Pest creature token"
+            "ConditionType": "count",
+            "Filter": {
+              "CardTypes": [
+                "creature"
+              ],
+              "Subtypes": [
+                "Pest"
+              ],
+              "IsToken": true,
+              "Controller": "You"
+            },
+            "Count": {
+              "Operator": "Equal",
+              "Value": 0
+            }
           },
           "Effects": [
             {

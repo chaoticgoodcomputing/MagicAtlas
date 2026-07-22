@@ -38,16 +38,24 @@ public sealed class ReturnToBattlefieldEffectRule : IActivatedEffectRule
       _ => Zone.Graveyard,
     };
 
+    // "creature or Vehicle card" — a cross-axis type disjunction (card type ∨ subtype);
+    // structure it onto ObjectFilter.AnyOf. Otherwise the whole type-phrase is captured as a
+    // single Characteristic (FromLabel routes recognised keywords to their structured axis and
+    // the rest to the typed residual).
+    var anyOf = what.Contains(" or ", StringComparison.OrdinalIgnoreCase)
+      ? TypeDisjunctionParser.TryParse(what)
+      : null;
+
+    var filter = anyOf is not null
+      ? new ObjectFilter { Zone = zone, AnyOf = anyOf }
+      : new ObjectFilter { Zone = zone, Characteristics = [Characteristic.FromLabel(what)] };
+
     return new ReturnToBattlefieldEffect
     {
       Target = new ObjectReference
       {
         Kind = ObjectReferenceKind.Target,
-        Filter = new ObjectFilter
-        {
-          Zone = zone,
-          Characteristics = [Characteristic.FromLabel(what)],
-        },
+        Filter = filter,
       },
     };
   }

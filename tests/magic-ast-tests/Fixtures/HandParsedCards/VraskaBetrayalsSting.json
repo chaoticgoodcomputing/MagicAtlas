@@ -198,8 +198,22 @@
             {
               "EffectType": "conditional",
               "Condition": {
-                "ConditionType": "other",
-                "Text": "target player has fewer than nine poison counters"
+                "ConditionType": "quantityComparison",
+                "Left": {
+                  "QuantityType": "counterCount",
+                  "CounterType": "poison",
+                  "On": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "EntityType": "player"
+                    }
+                  }
+                },
+                "Operator": "LessThan",
+                "Right": {
+                  "QuantityType": "literal",
+                  "Value": 9
+                }
               },
               "Then": {
                 "EffectType": "putCounters",

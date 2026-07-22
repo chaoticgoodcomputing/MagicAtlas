@@ -294,6 +294,83 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "you don't control a Pest creature token" — a control-count intervening-if whose
+  /// polarity is "none" (the controller has zero objects matching the filter). Pest Rescuer's
+  /// upkeep gate. Structured to a <see cref="CountCondition"/> with an
+  /// <see cref="ComparisonOperator.Equal"/>-0 threshold — the negation of the affirmative
+  /// <see cref="Control"/> arm — rather than left as a free-text residual. The noun phrase is
+  /// mapped through <see cref="NounToFilter"/> (subtype + card type + token axes), then scoped
+  /// to <see cref="ControllerFilter.You"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex DontControl = new(
+    @"^you\s+don'?t\s+control\s+(?:a|an|any)\s+(?<noun>.+?)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "it has a +1/+1 counter on it" — a present-tense counter-PRESENCE gate on the source
+  /// object (Unleash's "This permanent can't block as long as it has a +1/+1 counter on it",
+  /// CR 702.98a). Structured to <see cref="ObjectHasCounterCondition"/> with
+  /// <see cref="ObjectReference.Self"/> as the subject (the doc's stated convention for the
+  /// "it has a [counter] on it" self-reference) rather than left as a free-text residual.
+  /// Present tense ("has"), distinct from the past-tense look-back
+  /// <see cref="TriggeringObjectCounter"/> ("it HAD a +1/+1 counter") and the threshold form
+  /// <see cref="SelfCounterThreshold"/> ("this permanent has N or more … counters"). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex ObjectHasCounterPresent = new(
+    @"^it\s+has\s+(?:a|an|one)\s+(?<counter>[+\-]?\d+/[+\-]?\d+|[A-Za-z][\w\-]*)\s+counters?\s+on\s+it$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "enchanted creature is black" — a present-tense COLOR gate on the enchanted permanent
+  /// (Gift of the Deity: "As long as enchanted creature is black, …" / "… is green, …";
+  /// CR 105.1). Structured to <see cref="ObjectHasColorCondition"/> keyed on
+  /// <see cref="ObjectReferenceKind.EnchantedOrEquipped"/> rather than left as a free-text
+  /// residual — the colour sibling of <see cref="MagicAST.AST.Abilities.ObjectHasCardTypeCondition"/>
+  /// ("enchanted permanent is a creature"). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex EnchantedColorState = new(
+    @"^enchanted\s+creature\s+is\s+(?<color>white|blue|black|red|green)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "it's legendary" / "it is legendary" — a present-tense SUPERTYPE gate on the "it" object
+  /// (Toralf's Hammer: "Equipped creature gets +3/+0 as long as it's legendary."; CR 205.4a).
+  /// Structured to <see cref="ObjectHasSupertypeCondition"/> keyed on
+  /// <see cref="ObjectReferenceKind.It"/> rather than left as a free-text residual — the
+  /// supertype sibling of <see cref="MagicAST.AST.Abilities.ObjectHasCardTypeCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex ItsLegendary = new(
+    @"^it(?:'s|\s+is)\s+legendary$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "it was a creature" / "it wasn't a creature" — a PAST-TENSE last-known-information card-type
+  /// gate on the triggering object of a leaves-the-battlefield trigger (Enduring Tenacity:
+  /// "When Enduring Tenacity dies, if it was a creature, …"; CR 603.10a). Structured to
+  /// <see cref="MagicAST.AST.Abilities.TriggeringObjectTypeCondition"/> rather than left as a
+  /// free-text residual — the past-tense sibling of the present-tense
+  /// <see cref="MagicAST.AST.Abilities.ObjectHasCardTypeCondition"/>. The <c>neg</c> group carries
+  /// the polarity. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex TriggeringObjectType = new(
+    @"^it\s+was(?<neg>n'?t)?\s+an?\s+(?<type>creature|artifact|enchantment|land|planeswalker|permanent|instant|sorcery)$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "target player has fewer than nine poison counters" — a poison-counter threshold on a
+  /// player (Vraska, Betrayal's Sting's −9). Structured to a
+  /// <see cref="QuantityComparisonCondition"/> whose left operand is a
+  /// <see cref="CounterCountQuantity"/> of poison counters on the referenced player, rather than
+  /// left as a free-text residual. Poison is a per-player counter (CR 122.1d / 104.3d), so its
+  /// count is a <see cref="CounterCountQuantity"/> on a player <see cref="ObjectReference"/>, not
+  /// an object count. Covers "target player"/"you"/"that player" subjects and both the strict
+  /// "fewer than N" prefix form and the inclusive "N or more/fewer" suffix form. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex PoisonCounterThreshold = new(
+    @"^(?<who>target\s+player|you|that\s+player)\s+(?:has|have)\s+(?:(?<prefixdir>fewer|more|less)\s+than\s+)?(?<quant>\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer|less))?\s+poison\s+counters?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// The most recent hand-size upper-bound threshold parsed by <see cref="Parse"/>'s
   /// <see cref="HandSize"/> arm (e.g. 10 for "fewer than ten cards in hand"), for a
   /// paired effect rule that needs the numeral — see the hand-off note on the
@@ -607,6 +684,85 @@ public static class ConditionParser
       };
     }
 
+    if (DontControl.Match(body) is { Success: true } dcm)
+    {
+      var filter = NounToFilter(dcm.Groups["noun"].Value.Trim()) with { Controller = ControllerFilter.You };
+      return new CountCondition
+      {
+        Filter = filter,
+        Count = new Comparison { Operator = ComparisonOperator.Equal, Value = 0 },
+      };
+    }
+
+    if (ObjectHasCounterPresent.Match(body) is { Success: true } ohc)
+    {
+      return new ObjectHasCounterCondition
+      {
+        Subject = ObjectReference.Self(),
+        CounterType = ohc.Groups["counter"].Value,
+      };
+    }
+
+    if (EnchantedColorState.Match(body) is { Success: true } ecs)
+    {
+      return new ObjectHasColorCondition
+      {
+        Color = ColorWordToCode[ecs.Groups["color"].Value],
+        Subject = "EnchantedOrEquipped",
+      };
+    }
+
+    if (ItsLegendary.IsMatch(body))
+    {
+      return new ObjectHasSupertypeCondition { Supertype = "Legendary", Subject = "It" };
+    }
+
+    if (TriggeringObjectType.Match(body) is { Success: true } tot)
+    {
+      return new TriggeringObjectTypeCondition
+      {
+        CardType = tot.Groups["type"].Value.ToLowerInvariant(),
+        Present = !tot.Groups["neg"].Success,
+      };
+    }
+
+    if (PoisonCounterThreshold.Match(body) is { Success: true } pct)
+    {
+      var value = NumberWords.TryGetValue(pct.Groups["quant"].Value, out var pv)
+        ? pv
+        : int.Parse(pct.Groups["quant"].Value);
+      ComparisonOperator op;
+      if (pct.Groups["prefixdir"].Success)
+      {
+        op = pct.Groups["prefixdir"].Value.Equals("more", StringComparison.OrdinalIgnoreCase)
+          ? ComparisonOperator.GreaterThan
+          : ComparisonOperator.LessThan;
+      }
+      else
+      {
+        op = pct.Groups["dir"].Value.ToLowerInvariant() switch
+        {
+          "more" => ComparisonOperator.GreaterThanOrEqual,
+          "fewer" or "less" => ComparisonOperator.LessThanOrEqual,
+          _ => ComparisonOperator.Equal,
+        };
+      }
+
+      var who = pct.Groups["who"].Value.ToLowerInvariant();
+      var on = who.StartsWith("target", StringComparison.Ordinal)
+        ? new ObjectReference { Kind = ObjectReferenceKind.Target, Filter = new ObjectFilter { EntityType = "player" } }
+        : who.StartsWith("that", StringComparison.Ordinal)
+          ? new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer }
+          : new ObjectReference { Kind = ObjectReferenceKind.You };
+
+      return new QuantityComparisonCondition
+      {
+        Left = new CounterCountQuantity { CounterType = "poison", On = on },
+        Operator = op,
+        Right = new LiteralQuantity { Value = value },
+      };
+    }
+
     return new OtherCondition { Text = verbatim };
   }
 
@@ -627,10 +783,51 @@ public static class ConditionParser
   {
     // Drop a leading "other" qualifier (e.g. "other lands") — not a structured axis yet.
     noun = Regex.Replace(noun, @"^other\s+", "", RegexOptions.IgnoreCase).Trim();
-    var singular = noun.EndsWith("s", StringComparison.Ordinal) ? noun[..^1] : noun;
-    return CardTypeNouns.Contains(singular)
-      ? new ObjectFilter { CardTypes = [singular.ToLowerInvariant()] }
-      : new ObjectFilter { Subtypes = [singular] };
+
+    // "… with different names" — a set-level uniqueness qualifier on the counted population
+    // (The Necrobloom: "seven or more lands with different names"). Strip it onto the
+    // DifferentNames axis, leaving the base noun for type classification.
+    var differentNames = false;
+    var dnMatch = Regex.Match(noun, @"^(?<base>.+?)\s+with\s+different\s+names$", RegexOptions.IgnoreCase);
+    if (dnMatch.Success)
+    {
+      noun = dnMatch.Groups["base"].Value.Trim();
+      differentNames = true;
+    }
+
+    // Classify each word of the (possibly multi-word) noun phrase onto its axis: a card-type
+    // noun ("creature") → CardTypes, "token"/"tokens" → the IsToken axis (CR 111), anything
+    // else → a subtype ("Pest"). A single-word card-type/subtype noun round-trips exactly as
+    // the former single-noun mapping did.
+    var words = noun.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    var cardTypes = new List<string>();
+    var subtypes = new List<string>();
+    var sawToken = false;
+    foreach (var w in words)
+    {
+      var singular = w.EndsWith("s", StringComparison.Ordinal) ? w[..^1] : w;
+      if (w.Equals("token", StringComparison.OrdinalIgnoreCase)
+        || w.Equals("tokens", StringComparison.OrdinalIgnoreCase))
+      {
+        sawToken = true;
+      }
+      else if (CardTypeNouns.Contains(singular))
+      {
+        cardTypes.Add(singular.ToLowerInvariant());
+      }
+      else
+      {
+        subtypes.Add(singular);
+      }
+    }
+
+    return new ObjectFilter
+    {
+      CardTypes = cardTypes.Count > 0 ? cardTypes : null,
+      Subtypes = subtypes.Count > 0 ? subtypes : null,
+      IsToken = sawToken ? true : null,
+      DifferentNames = differentNames ? true : null,
+    };
   }
 
   private static Zone ZoneOf(string zone) =>

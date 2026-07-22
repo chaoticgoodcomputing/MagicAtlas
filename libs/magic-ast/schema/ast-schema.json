@@ -457,6 +457,15 @@
           ]
         },
         {
+          "Type": "ObjectHasColorCondition",
+          "Discriminator": "objectHasColor",
+          "IsUnparsed": false,
+          "Fields": [
+            "Color",
+            "Subject"
+          ]
+        },
+        {
           "Type": "ObjectHasCounterCondition",
           "Discriminator": "objectHasCounter",
           "IsUnparsed": false,
@@ -472,6 +481,15 @@
           "Fields": [
             "Subject",
             "Subtype"
+          ]
+        },
+        {
+          "Type": "ObjectHasSupertypeCondition",
+          "Discriminator": "objectHasSupertype",
+          "IsUnparsed": false,
+          "Fields": [
+            "Subject",
+            "Supertype"
           ]
         },
         {
@@ -555,6 +573,15 @@
           "IsUnparsed": false,
           "Fields": [
             "CounterType",
+            "Present"
+          ]
+        },
+        {
+          "Type": "TriggeringObjectTypeCondition",
+          "Discriminator": "triggeringObjectType",
+          "IsUnparsed": false,
+          "Fields": [
+            "CardType",
             "Present"
           ]
         },
@@ -3455,5 +3482,5 @@
       ]
     }
   ],
-  "SchemaHash": "c76fe10859e3c97b12864346eb064d092d3da7e685f3e6bcaec92e849dbbdbcf"
+  "SchemaHash": "b5e4493b22cb0b3c668b2ef7a51adff16acbf4628702da4ef7f7629b12ec42f8"
 }

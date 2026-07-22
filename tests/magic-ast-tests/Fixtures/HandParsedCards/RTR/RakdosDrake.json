@@ -94,8 +94,11 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "it has a +1/+1 counter on it"
+                  "ConditionType": "objectHasCounter",
+                  "Subject": {
+                    "Kind": "Self"
+                  },
+                  "CounterType": "+1/+1"
                 }
               }
             }

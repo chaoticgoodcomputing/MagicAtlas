@@ -14,9 +14,11 @@ using MagicAST.AST.References;
 /// loyalty ability.
 ///
 /// <para>
-/// A <see cref="ConditionalEffect"/> whose condition is an
-/// <see cref="OtherCondition"/> ("target player has fewer than nine poison counters")
-/// and whose <c>Then</c> branch is a <see cref="PutCountersEffect"/> giving that
+/// A <see cref="ConditionalEffect"/> whose condition is a
+/// <see cref="QuantityComparisonCondition"/> over a <see cref="CounterCountQuantity"/> of
+/// poison counters on the target player ("target player has fewer than nine poison counters",
+/// parsed by <see cref="MagicAST.Parsing.ConditionParser"/>) and whose <c>Then</c> branch is a
+/// <see cref="PutCountersEffect"/> giving that
 /// player a <see cref="CalculatedQuantity"/> equal to <c>"the difference"</c>
 /// (i.e. 9 minus the current poison counter count — engine territory per the
 /// descriptive-not-engine doctrine; MAST records the reference, not the resolved
@@ -53,18 +55,14 @@ public sealed class PoisonCounterDifferenceEffectRule : IActivatedEffectRule
       return null;
     }
 
-    var targetPlayer = new ObjectReference
-    {
-      Kind = ObjectReferenceKind.Target,
-      Filter = new ObjectFilter { CardTypes = ["player"] },
-    };
-
     // "They" back-references the targeted player.
     var they = new ObjectReference { Kind = ObjectReferenceKind.It };
 
     return new ConditionalEffect
     {
-      Condition = Condition.Other("target player has fewer than nine poison counters"),
+      Condition = MagicAST.Parsing.ConditionParser.Parse(
+        "target player has fewer than nine poison counters"
+      ),
       Then = new PutCountersEffect
       {
         Target = they,
