@@ -158,6 +158,24 @@ public static class ConditionParser
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
+  /// "this creature is equipped" / "it's equipped" — the source object's own
+  /// attachment-state gate for an "as long as …" grant (Leonin Den-Guard: "As long
+  /// as this creature is equipped, it gets +1/+1."; Merry, Esquire of Rohan: "Merry
+  /// has first strike as long as it's equipped."). CR 702.6f: a creature that has an
+  /// Equipment attached to it is "equipped". Structured to an
+  /// <see cref="ObjectIsEquippedCondition"/> — the attachment-state sibling of the
+  /// zone-state <see cref="ObjectInZoneCondition"/> and combat-state
+  /// <see cref="SourceCombatStateCondition"/> — rather than left as a free-text
+  /// <see cref="OtherCondition"/> residual. The pronoun is preserved as-written
+  /// (reference-not-resolution, ADR 0004): "this creature" →
+  /// <see cref="ObjectReferenceKind.Self"/>, the bare pronoun "it's" →
+  /// <see cref="ObjectReferenceKind.It"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex SourceIsEquipped = new(
+    @"^(?:this\s+(?<self>creature|permanent|card)\s+is|it's|it\s+is)\s+equipped$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
   /// "it's a Unicorn" / "it's an Elf" — a subtype predicate on the "it" pronoun,
   /// checking whether the designated object has the stated creature subtype. The standard
   /// oracle form for subtype-conditional counter boosts and similar effects
@@ -468,6 +486,16 @@ public static class ConditionParser
         _ => CombatState.Attacking,
       };
       return new SourceCombatStateCondition { State = state };
+    }
+
+    if (SourceIsEquipped.Match(body) is { Success: true } sie)
+    {
+      return new ObjectIsEquippedCondition
+      {
+        Reference = sie.Groups["self"].Success
+          ? ObjectReference.Self()
+          : new ObjectReference { Kind = ObjectReferenceKind.It },
+      };
     }
 
     if (CardTypeDiversity.Match(body) is { Success: true } ctd)

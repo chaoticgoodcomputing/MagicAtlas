@@ -46,8 +46,10 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "this creature is equipped"
+                  "ConditionType": "objectIsEquipped",
+                  "Reference": {
+                    "Kind": "Self"
+                  }
                 }
               }
             }
