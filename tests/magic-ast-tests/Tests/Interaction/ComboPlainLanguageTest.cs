@@ -116,7 +116,7 @@ public class ComboPlainLanguageTest
       );
       Assert.That(
         ComboPlainLanguage.Describe(ComboAxisVector.FromCycle(Cycle(gated: true))),
-        Is.EqualTo("can only fire once per turn")
+        Is.EqualTo("loop closes, but a condition limits each repeat")
       );
     });
   }
@@ -136,7 +136,7 @@ public class ComboPlainLanguageTest
   public void A_hard_gate_outranks_an_unrenewed_tap_gate()
   {
     var v = ComboAxisVector.FromCycle(Cycle(gated: true, tapGated: true));
-    Assert.That(ComboPlainLanguage.Describe(v), Is.EqualTo("can only fire once per turn"));
+    Assert.That(ComboPlainLanguage.Describe(v), Is.EqualTo("loop closes, but a condition limits each repeat"));
   }
 
   [Test]

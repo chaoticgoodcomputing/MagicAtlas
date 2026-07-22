@@ -40,7 +40,7 @@ public class PortConditionalityTest
         PortConditionality.Describe(Axes(counter: true)),
         Is.EqualTo("needs a counter on it")
       );
-      Assert.That(PortConditionality.Describe(Axes(rate: true)), Is.EqualTo("rate-limited"));
+      Assert.That(PortConditionality.Describe(Axes(rate: true)), Is.EqualTo("fires only under a condition"));
     });
   }
 
@@ -55,9 +55,9 @@ public class PortConditionalityTest
       Assert.That(a.Unconditional, Is.False);
       Assert.That(
         PortConditionality.DescribeAll(a),
-        Is.EqualTo(new[] { "needs to tap", "rate-limited" })
+        Is.EqualTo(new[] { "needs to tap", "fires only under a condition" })
       );
-      Assert.That(PortConditionality.Describe(a), Is.EqualTo("needs to tap · rate-limited"));
+      Assert.That(PortConditionality.Describe(a), Is.EqualTo("needs to tap · fires only under a condition"));
     });
   }
 
@@ -67,7 +67,7 @@ public class PortConditionalityTest
     var a = Axes(tap: true, counter: true, rate: true);
     Assert.That(
       PortConditionality.Describe(a),
-      Is.EqualTo("needs to tap · needs a counter on it · rate-limited")
+      Is.EqualTo("needs to tap · needs a counter on it · fires only under a condition")
     );
   }
 

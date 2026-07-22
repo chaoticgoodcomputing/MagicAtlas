@@ -67,9 +67,9 @@ public partial record CardPortRow
   /// answer to "is this mechanism conditional, and how?" — rendered by <see cref="PortConditionality"/> from
   /// the port's <see cref="PortNode.Gated"/>/<see cref="PortNode.TapGated"/>/<see cref="PortNode.RequiresCounter"/>
   /// axes: <c>fires unconditionally</c> (the old Green), or a "·"-joined list of the gates that apply
-  /// (<c>needs to tap</c>, <c>needs a counter on it</c>, <c>rate-limited</c>). PROVISIONAL copy pending
+  /// (<c>needs to tap</c>, <c>needs a counter on it</c>, <c>fires only under a condition</c>). PROVISIONAL copy pending
   /// sign-off. <c>""</c> for a backfill row (no parsed mechanism to describe). Unlike the old Amber this is
-  /// lossless — a tap-and-rate-limited port says both.</summary>
+  /// lossless — a tap-and-gated port says both.</summary>
   [SerializedLabel("conditionality")]
   public required string Conditionality { get; init; }
 

@@ -36,12 +36,14 @@ public sealed record PortConditionAxes
 /// port tier. Generated at display time, never persisted opaquely, never gated on.
 ///
 /// <para><b>PROVISIONAL COPY (2026-07-21).</b> Every sentence below is pending the owner's sign-off — the
-/// same open question ADR 0004 records for the combo side (§5.4). In particular
-/// <see cref="RateLimited"/> is a deliberately rough gloss: <see cref="PortNode.Gated"/> has at least five
-/// distinct causes (an intervening-if, <c>OnlyOnceEachTurn</c>, <c>OnlyOnce</c>/exhaust, a boolean
-/// <c>Conditional</c>, <c>OnlyIfNoUntappedLands</c>, plus self-bounce costs and optional effects), so
-/// "rate-limited" over-commits. They are <c>const</c> strings precisely so a wording change is one edit
-/// with a compiler-checked blast radius.</para>
+/// same open question ADR 0004 records for the combo side (§5.4). NOTE the <see cref="RateLimited"/>
+/// <em>const/field name</em> is historical (it predates the wording fix and is kept to avoid rippling a
+/// rename through the pipeline/GraphQL surface #43 just landed); its rendered <em>string</em> was
+/// corrected 2026-07-22 from the over-committed "rate-limited" to an honest umbrella, because
+/// <see cref="PortNode.Gated"/> has ≥5 distinct causes (an intervening-if, <c>OnlyOnceEachTurn</c>,
+/// <c>OnlyOnce</c>/exhaust, a boolean <c>Conditional</c>, <c>OnlyIfNoUntappedLands</c>, plus self-bounce
+/// costs and optional effects) and no specific gloss fits all of them. They are <c>const</c> strings so a
+/// further wording change is one edit with a compiler-checked blast radius.</para>
 /// </summary>
 public static class PortConditionality
 {
@@ -53,10 +55,11 @@ public static class PortConditionality
   public const string TapGated = "needs to tap";
   public const string RequiresCounter = "needs a counter on it";
 
-  /// <summary>PROVISIONAL and the weakest of the set — "rate-limited" is one gloss over ≥5 gate causes
-  /// (see the type doc). Kept as the owner proposed it, with the disagreement recorded rather than
-  /// silently resolved.</summary>
-  public const string RateLimited = "rate-limited";
+  /// <summary>A hard gate, cause-agnostic. The rendered string deliberately does NOT name the gate,
+  /// because <see cref="PortNode.Gated"/> has ≥5 causes (see the type doc) and no specific claim ("once
+  /// per turn") fits most of them. Corrected 2026-07-22 from "rate-limited"; the const NAME stays
+  /// historical. Still provisional pending the full copy pass.</summary>
+  public const string RateLimited = "fires only under a condition";
 
   /// <summary>The conditionality phrases in the canonical order they are reported in.</summary>
   public static readonly IReadOnlyList<string> Phrases = [TapGated, RequiresCounter, RateLimited];

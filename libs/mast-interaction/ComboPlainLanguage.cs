@@ -106,15 +106,14 @@ public static class ComboPlainLanguage
 
   public const string CertifiedInfinite = "certified infinite";
 
-  /// <summary>A hop touches a HARD gate. <b>The wording is the weakest of the set</b> and is flagged as
-  /// such: <see cref="PortNode.Gated"/> is set by an intervening-if, by any of the
-  /// <c>GatingRestrictions</c> (<c>OnlyOnceEachTurn</c>, <c>OnlyOnce</c>, <c>Conditional</c>,
-  /// <c>OnlyIfNoUntappedLands</c>), by a <c>returnToHand</c> self-bounce cost, and by an
-  /// <c>optional</c> ("you may") effect — so "once per turn" is only ONE of at least five causes, and is
-  /// not even the common one in the current pin set (all three gated combos are optional-blink cards).
-  /// Kept verbatim as the owner proposed it, with the disagreement recorded here rather than silently
-  /// resolved.</summary>
-  public const string Gated = "can only fire once per turn";
+  /// <summary>A hop touches a HARD gate. Deliberately does NOT name the specific gate: <see
+  /// cref="PortNode.Gated"/> has ≥5 causes (an intervening-if; the <c>GatingRestrictions</c>
+  /// <c>OnlyOnceEachTurn</c>/<c>OnlyOnce</c>/<c>Conditional</c>/<c>OnlyIfNoUntappedLands</c>; a
+  /// <c>returnToHand</c> self-bounce cost; an <c>optional</c> "you may" effect), so a specific claim like
+  /// "once per turn" is false for most of them — all three currently-gated combos are optional-blink
+  /// cards, not per-turn limits. This umbrella is honest for every cause. (Corrected 2026-07-22 from the
+  /// provisional "can only fire once per turn", which over-committed; still pending the full copy pass.)</summary>
+  public const string Gated = "loop closes, but a condition limits each repeat";
 
   /// <summary>Not firable, and no hard gate — i.e. an unrenewed <see cref="PortNode.TapGated"/> hop.</summary>
   public const string TapNotRenewed = "needs a way to untap between iterations";
