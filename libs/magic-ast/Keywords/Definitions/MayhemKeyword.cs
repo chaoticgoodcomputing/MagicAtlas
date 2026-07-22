@@ -3,6 +3,7 @@ namespace MagicAST.Keywords.Definitions;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Effects.CardFlow;
 using MagicAST.AST.References;
+using MagicAST.Parsing;
 using MagicAST.Parsing.Tokens;
 using Superpower;
 using static MagicAST.Keywords.Definitions.KeywordCombinators;
@@ -50,7 +51,7 @@ public sealed class MayhemKeyword : IKeyword
       {
         FromZone = Zone.Graveyard,
         Cost = cost,
-        Condition = Condition.Other("you discarded this card this turn"),
+        Condition = ConditionParser.Parse("you discarded this card this turn"),
       }],
       Reminder = reminder,
     }

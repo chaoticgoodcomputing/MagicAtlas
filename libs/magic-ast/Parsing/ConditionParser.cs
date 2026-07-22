@@ -28,6 +28,13 @@ public static class ConditionParser
     ["five"] = 5, ["six"] = 6, ["seven"] = 7, ["eight"] = 8, ["nine"] = 9, ["ten"] = 10,
   };
 
+  /// <summary>Ordinal words → the occurrence number they name (for the Nth-time-resolved gate).</summary>
+  private static readonly Dictionary<string, int> OrdinalWords = new(StringComparer.OrdinalIgnoreCase)
+  {
+    ["first"] = 1, ["second"] = 2, ["third"] = 3, ["fourth"] = 4, ["fifth"] = 5,
+    ["sixth"] = 6, ["seventh"] = 7, ["eighth"] = 8, ["ninth"] = 9, ["tenth"] = 10,
+  };
+
   /// <summary>"you control a Wizard", "you control two or more other lands".</summary>
   private static readonly Regex Control = new(
     @"^you\s+control\s+(?<quant>a|an|\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer))?\s+(?<noun>.+?)$",
@@ -386,6 +393,76 @@ public static class ConditionParser
   /// </summary>
   private static readonly Regex PoisonCounterThreshold = new(
     @"^(?<who>target\s+player|you|that\s+player)\s+(?:has|have)\s+(?:(?<prefixdir>fewer|more|less)\s+than\s+)?(?<quant>\d+|one|two|three|four|five|six|seven|eight|nine|ten)(?:\s+or\s+(?<dir>more|fewer|less))?\s+poison\s+counters?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+  /// "[this creature] is paired with another creature" — the Soulbond pairing gate (CR 702.95a).
+  /// The printed subject is the source (its own name, e.g. "Deadeye Navigator is paired …", or the
+  /// bare "this creature is paired …"); soulbond is self-referential, so the referent is always the
+  /// source and is not captured. Structured to <see cref="PairedCondition"/> rather than left as a
+  /// free-text residual. Anchored on the fixed " is paired with another creature" tail (^…$).
+  /// </summary>
+  private static readonly Regex PairedWithAnother = new(
+    @"^.+\s+is\s+paired\s+with\s+another\s+creature$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "this is the [Nth] time this ability has resolved this turn" and its elided continuation
+  /// "it's the [Nth] time" — the per-turn ability-resolution ordinal gate (CR 608.1). Structured
+  /// to <see cref="NthTimeAbilityResolvedCondition"/> keyed on the ordinal. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex NthTimeResolved = new(
+    @"^(?:this\s+is|it's|it\s+is)\s+the\s+(?<ord>\w+)\s+time(?:\s+this\s+ability\s+has\s+resolved\s+this\s+turn)?$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you have the city's blessing" — the Ascend consumer gate (CR 702.131b): whether you hold the
+  /// city's-blessing designation. Structured to <see cref="PlayerDesignationCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex HasCityBlessing = new(
+    @"^you\s+have\s+the\s+city's\s+blessing$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "an opponent lost life this turn" / "an opponent lost N or more life this turn" — the
+  /// turn-scoped life-loss gate (CR 119.3; Spectacle's cast precondition CR 702.137a; Bloodchief
+  /// Ascension's thresholded end-step intervening-if). Structured to
+  /// <see cref="PlayerLostLifeCondition"/> — the optional "N or more" tail sets the amount
+  /// threshold, its absence leaves it null (a bare existence check). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex OpponentLostLife = new(
+    @"^an\s+opponent\s+lost\s+(?:(?<amt>\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or\s+more\s+)?life\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "this creature hasn't been exerted this turn" — Combat Celebrant's per-turn exert-history gate
+  /// (CR 701.43). Structured to <see cref="SelfExertedThisTurnCondition"/> (Exerted=false). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex SelfExerted = new(
+    @"^this\s+creature\s+hasn't\s+been\s+exerted\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you didn't activate a loyalty ability of a planeswalker this turn" — The Chain Veil's per-turn
+  /// loyalty-activation-history gate (CR 606.3). Structured to
+  /// <see cref="LoyaltyAbilityActivatedThisTurnCondition"/> (Activated=false). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex LoyaltyActivated = new(
+    @"^you\s+didn't\s+activate\s+a\s+loyalty\s+ability\s+of\s+a\s+planeswalker\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you attacked this turn" — the Raid gate (CR 508.1 declare attackers; "raid" is an ability
+  /// word, CR 207.2c). Structured to <see cref="YouAttackedThisTurnCondition"/>. Anchored (^…$).
+  /// </summary>
+  private static readonly Regex YouAttacked = new(
+    @"^you\s+attacked\s+this\s+turn$",
+    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+  /// <summary>
+  /// "you discarded this card this turn" — the Mayhem gate (CR 702.187a). Structured to
+  /// <see cref="DiscardedThisTurnCondition"/> (Reference=Self, "this card"). Anchored (^…$).
+  /// </summary>
+  private static readonly Regex DiscardedThisCard = new(
+    @"^you\s+discarded\s+this\s+card\s+this\s+turn$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   /// <summary>
@@ -790,6 +867,55 @@ public static class ConditionParser
         Operator = op,
         Right = new LiteralQuantity { Value = value },
       };
+    }
+    if (PairedWithAnother.IsMatch(body))
+    {
+      return new PairedCondition();
+    }
+
+    if (NthTimeResolved.Match(body) is { Success: true } ntr
+      && OrdinalWords.TryGetValue(ntr.Groups["ord"].Value, out var ordinal))
+    {
+      return new NthTimeAbilityResolvedCondition { Ordinal = ordinal };
+    }
+
+    if (HasCityBlessing.IsMatch(body))
+    {
+      return new PlayerDesignationCondition { Designation = PlayerDesignation.CityBlessing };
+    }
+
+    if (OpponentLostLife.Match(body) is { Success: true } oll)
+    {
+      Comparison? amount = null;
+      if (oll.Groups["amt"].Success)
+      {
+        var value = NumberWords.TryGetValue(oll.Groups["amt"].Value, out var av)
+          ? av
+          : int.Parse(oll.Groups["amt"].Value);
+        amount = new Comparison { Operator = ComparisonOperator.GreaterThanOrEqual, Value = value };
+      }
+
+      return new PlayerLostLifeCondition { Player = ControllerFilter.Opponent, Amount = amount };
+    }
+
+    if (SelfExerted.IsMatch(body))
+    {
+      return new SelfExertedThisTurnCondition { Exerted = false };
+    }
+
+    if (LoyaltyActivated.IsMatch(body))
+    {
+      return new LoyaltyAbilityActivatedThisTurnCondition { Activated = false };
+    }
+
+    if (YouAttacked.IsMatch(body))
+    {
+      return new YouAttackedThisTurnCondition();
+    }
+
+    if (DiscardedThisCard.IsMatch(body))
+    {
+      return new DiscardedThisTurnCondition { Reference = ObjectReference.Self() };
     }
 
     return new OtherCondition { Text = verbatim };

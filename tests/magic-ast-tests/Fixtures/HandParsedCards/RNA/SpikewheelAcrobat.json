@@ -50,8 +50,8 @@
                 ]
               },
               "Condition": {
-                "ConditionType": "other",
-                "Text": "an opponent lost life this turn"
+                "ConditionType": "lifeLost",
+                "Player": "Opponent"
               }
             }
           ],
@@ -81,8 +81,8 @@
             }
           ],
           "Condition": {
-            "ConditionType": "other",
-            "Text": "an opponent lost life this turn"
+            "ConditionType": "lifeLost",
+            "Player": "Opponent"
           },
           "When": "asThisEnters",
           "SourceSpan": {

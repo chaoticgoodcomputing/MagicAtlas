@@ -24,8 +24,8 @@
           ]
         },
         "Condition": {
-          "ConditionType": "other",
-          "Text": "an opponent lost life this turn"
+          "ConditionType": "lifeLost",
+          "Player": "Opponent"
         }
       }
     ]

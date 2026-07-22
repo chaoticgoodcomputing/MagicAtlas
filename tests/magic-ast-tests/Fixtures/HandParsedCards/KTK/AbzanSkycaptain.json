@@ -74,8 +74,7 @@
             }
           ],
           "Condition": {
-            "ConditionType": "other",
-            "Text": "you attacked this turn"
+            "ConditionType": "youAttackedThisTurn"
           },
           "When": "asThisEnters",
           "SourceSpan": {

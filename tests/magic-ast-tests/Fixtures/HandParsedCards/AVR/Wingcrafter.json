@@ -82,8 +82,7 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "Wingcrafter is paired with another creature"
+                  "ConditionType": "paired"
                 }
               }
             }
