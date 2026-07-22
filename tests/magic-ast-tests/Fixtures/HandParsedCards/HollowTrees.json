@@ -67,8 +67,11 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "this land is tapped"
+            "ConditionType": "objectStatus",
+            "Reference": {
+              "Kind": "Self"
+            },
+            "Status": "Tapped"
           },
           "Effects": [
             {

@@ -46,8 +46,11 @@
               "Duration": {
                 "DurationType": "asLongAs",
                 "Condition": {
-                  "ConditionType": "other",
-                  "Text": "it's untapped"
+                  "ConditionType": "objectStatus",
+                  "Reference": {
+                    "Kind": "It"
+                  },
+                  "Status": "Untapped"
                 }
               }
             }

@@ -60,8 +60,11 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "this permanent is saddled"
+            "ConditionType": "objectStatus",
+            "Reference": {
+              "Kind": "Self"
+            },
+            "Status": "Saddled"
           },
           "Effects": [
             {

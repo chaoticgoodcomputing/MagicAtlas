@@ -486,6 +486,15 @@
           ]
         },
         {
+          "Type": "ObjectStatusCondition",
+          "Discriminator": "objectStatus",
+          "IsUnparsed": false,
+          "Fields": [
+            "Reference",
+            "Status"
+          ]
+        },
+        {
           "Type": "OtherCondition",
           "Discriminator": "other",
           "IsUnparsed": false,
@@ -3420,5 +3429,5 @@
       ]
     }
   ],
-  "SchemaHash": "4b39e99d0e86c7b0451eef8697c7a17f71a28de297373de2daddd5834ac28ce4"
+  "SchemaHash": "118a49f1a4b8ae3bb0e5807ab90840dd48c67931853572f6f3175e7c1eac606d"
 }
