@@ -86,11 +86,10 @@
                   "CardTypes": [
                     "creature"
                   ],
+                  "LacksKeywords": [
+                    "Flying"
+                  ],
                   "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "withoutFlying"
-                    },
                     {
                       "CharacteristicType": "other",
                       "Description": "attackingYou"

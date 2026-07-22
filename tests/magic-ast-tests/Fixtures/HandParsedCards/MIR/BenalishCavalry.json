@@ -38,11 +38,8 @@
               "CardTypes": [
                 "creature"
               ],
-              "Characteristics": [
-                {
-                  "CharacteristicType": "other",
-                  "Description": "withoutFlanking"
-                }
+              "LacksKeywords": [
+                "Flanking"
               ]
             }
           },

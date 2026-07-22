@@ -220,24 +220,27 @@ public sealed class LordPTBuffRule : IStaticRule
       );
     }
 
-    // --- Shape: "Face-down creatures" — characteristic filter (Rule 707, face-down permanents) ---
-    // "Face-down creatures" is a game-state predicate, not a subtype (Rule 707.2):
-    // the creature's subtype is hidden while it is face-down. The predicate lives on
-    // Characteristics: ["face-down"] so the filter accurately encodes the oracle
-    // intent (e.g. Ixidor, Reality Sculptor).
+    // --- Shape: "Face-down creatures" — ObjectFilter.IsFaceDown (Rule 708, face-down permanents) ---
+    // "Face-down creatures" is a game-state predicate, not a subtype (Rule 708.1):
+    // the creature's subtype is hidden while it is face-down. Routed through
+    // QualifierAxisMapper's "face-down" → IsFaceDown=true axis so the filter accurately
+    // encodes the oracle intent as a first-class predicate (e.g. Ixidor, Reality Sculptor),
+    // not a free-text residual.
     if (text.Equals("face-down creatures", StringComparison.OrdinalIgnoreCase) ||
         text.Equals("face-down creature", StringComparison.OrdinalIgnoreCase))
     {
       var chars = characteristics is null
         ? (IReadOnlyList<string>)["face-down"]
         : [..characteristics, "face-down"];
-      return new ObjectFilter
-      {
-        CardTypes = ["creature"],
-        Controller = controller,
-        ExcludeSelf = excludeSelf,
-        Characteristics = chars?.Select(Characteristic.FromLabel).ToList(),
-      };
+      return QualifierAxisMapper.Apply(
+        new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Controller = controller,
+          ExcludeSelf = excludeSelf,
+        },
+        chars
+      );
     }
 
     // --- Shape: "[SubtypeA] [SubtypeB] creatures" (e.g. "Goblin Warrior creatures") ---

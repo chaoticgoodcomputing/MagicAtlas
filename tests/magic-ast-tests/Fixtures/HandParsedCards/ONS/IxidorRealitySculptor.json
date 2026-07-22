@@ -42,12 +42,7 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "face-down"
-                    }
-                  ]
+                  "IsFaceDown": true
                 }
               },
               "PowerModifier": {

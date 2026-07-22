@@ -9,7 +9,8 @@ using MagicAST.AST.References;
 /// each label to its first-class home — <see cref="ObjectFilter.ExcludedCardTypes"/>,
 /// <see cref="ObjectFilter.ExcludedSupertypes"/>, <see cref="ObjectFilter.ExcludedColors"/>,
 /// <see cref="ObjectFilter.Colors"/>, <see cref="ObjectFilter.CardTypes"/>,
-/// <see cref="ObjectFilter.IsToken"/>, <see cref="ObjectFilter.SharesColorWith"/> — or,
+/// <see cref="ObjectFilter.IsToken"/>, <see cref="ObjectFilter.SharesColorWith"/>,
+/// <see cref="ObjectFilter.Owner"/>, <see cref="ObjectFilter.IsFaceDown"/> — or,
 /// for state/counter predicates, a structured <see cref="Characteristic"/> variant
 /// (<see cref="TappedStateCharacteristic"/>, <see cref="CounterCharacteristic"/>,
 /// <see cref="CombatStateCharacteristic"/>). Anything not recognised falls back to the
@@ -80,6 +81,7 @@ public static class QualifierAxisMapper
     bool? isToken = filter.IsToken;
     ObjectReference? sharesColorWith = filter.SharesColorWith;
     ControllerFilter? owner = filter.Owner;
+    bool? isFaceDown = filter.IsFaceDown;
     var characteristics = filter.Characteristics?.ToList();
 
     foreach (var raw in labels)
@@ -147,6 +149,14 @@ public static class QualifierAxisMapper
         continue;
       }
 
+      // "face-down" → IsFaceDown=true (CR 708 game-state axis) — the first-class
+      // home, not a residual (Ixidor, Reality Sculptor: "Face-down creatures get +1/+1.").
+      if (label is "face-down")
+      {
+        isFaceDown = true;
+        continue;
+      }
+
       // Bare card type → CardTypes.
       if (_cardTypes.Contains(label))
       {
@@ -170,6 +180,7 @@ public static class QualifierAxisMapper
       IsToken = isToken,
       SharesColorWith = sharesColorWith,
       Owner = owner,
+      IsFaceDown = isFaceDown,
       Characteristics = characteristics is { Count: > 0 } ? characteristics : null,
     };
   }
