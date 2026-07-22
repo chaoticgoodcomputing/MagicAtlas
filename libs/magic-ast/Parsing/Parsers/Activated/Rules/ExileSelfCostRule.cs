@@ -46,7 +46,9 @@ public sealed class ExileSelfCostRule : IActivatedCostRule
       Filter = new ObjectFilter
       {
         CardTypes = [typeRaw],
-        Characteristics = [Characteristic.Other("this permanent")],
+        // "this permanent"/"this artifact" is the source object itself (CR 109) — the
+        // first-class IsSelf axis, not a free-text residual.
+        IsSelf = true,
       },
       Quantity = LiteralQuantity.Of(1),
       FromZone = Zone.Battlefield,

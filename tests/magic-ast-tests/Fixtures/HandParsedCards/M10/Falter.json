@@ -35,11 +35,8 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "withoutFlying"
-                    }
+                  "LacksKeywords": [
+                    "Flying"
                   ]
                 }
               },

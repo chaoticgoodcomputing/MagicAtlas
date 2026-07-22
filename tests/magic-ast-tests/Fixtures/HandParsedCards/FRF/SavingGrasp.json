@@ -35,12 +35,7 @@
                   "CardTypes": [
                     "creature"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "you own"
-                    }
-                  ]
+                  "Owner": "You"
                 }
               }
             }

@@ -8,12 +8,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "5DN/BrittleEffigy",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
-    },
-    {
       "card": "AFR/UnexpectedWindfall",
       "sink": "AbilityText",
       "tag": "irreducible",
@@ -89,7 +83,7 @@
       "card": "BFZ/FathomFeeder",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
-      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+      "reason": "PB-9 (c): positional 'top' (top card of a library - library order, no Position axis on ObjectFilter) plus owner-of-actor 'that player's'. No clean structured node. Same residual category as M20/MysticForge, DemonicConsultation."
     },
     {
       "card": "BNG/EpharaGodOfThePolis",
@@ -119,7 +113,7 @@
       "card": "CN2/GrenzoSRuffians",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
-      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+      "reason": "PB-9 (c): anaphoric 'each other opponent' - exclusion relative to the opponent just dealt combat damage (CR 109.5 'other'), a runtime-bound referent, NOT the ability source (so not ObjectFilter.ExcludeSelf). No structured axis."
     },
     {
       "card": "CN2/MarchesasEmissary",
@@ -137,7 +131,7 @@
       "card": "DFT/BroodheartEngine",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle card' is a cross-axis OR (CardTypes:creature OR Subtypes:Vehicle). No structured OR spanning the CardTypes and Subtypes axes. NOVEL (Opus) - needs a disjunctive-filter representation; shared with SilkenStrength/SwiftReconfiguration."
     },
     {
       "card": "DGM/WearTear",
@@ -161,13 +155,13 @@
       "card": "DemonicConsultation",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
-      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as M20/MysticForge and UgintheIneffable"
+      "reason": "PB-9 (c): positional 'top' (top card of library - library order, no Position axis on ObjectFilter). Same residual category as M20/MysticForge and BFZ/FathomFeeder."
     },
     {
       "card": "Divert",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
-      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
+      "reason": "PB-9 (c): 'single target' - spell target-COUNT metadata ('target spell with a single target', CR 115). Out-of-scope targeting predicate; no structured target-count axis."
     },
     {
       "card": "ELD/FierceWitchstalker",
@@ -254,18 +248,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "ExpeditionRaptor",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "out-of-scope/positional predicate (opponent/support/top/targeting) — no clean structured node"
-    },
-    {
-      "card": "FRF/SavingGrasp",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
-    },
-    {
       "card": "FreshFacedRecruit",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -305,7 +287,7 @@
       "card": "IKO/LuminousBroodmoth",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "reason": "PB-9 cluster A keyword-absence: 'creature you control without flying' -> ObjectFilter.LacksKeywords=[Flying] (axis EXISTS). MECHANICAL (Sonnet). Exemplar structured this batch: M10/Falter."
     },
     {
       "card": "ISD/VillagersOfEstwaldHowlpackOfEstwald",
@@ -376,8 +358,8 @@
     {
       "card": "LRW/GaddockTeeg",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "tag": "irreducible",
+      "reason": "PB-9 (c): '{X} in their mana costs' - mana-cost-symbol-presence predicate (CR 107.3 {X}); no structured mana-cost-symbol axis; singleton."
     },
     {
       "card": "LRW/WindbriskHeights",
@@ -398,12 +380,6 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "M10/Falter",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
-    },
-    {
       "card": "M12/CarnageWurm",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -413,7 +389,7 @@
       "card": "M20/MysticForge",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
-      "reason": "positional predicate 'top' (library top-card position) — no structured Position field on ObjectFilter; same residual category as BFZ/FathomFeeder and Ingest keyword expansion"
+      "reason": "PB-9 (c): positional 'top' (top card of library - library order, no Position axis on ObjectFilter). Same residual category as BFZ/FathomFeeder and DemonicConsultation."
     },
     {
       "card": "M21/BarrinTolarianArchmage",
@@ -443,19 +419,19 @@
       "card": "MIR/BenalishCavalry",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "reason": "PB-9 cluster A keyword-absence: 'creature without flanking' -> ObjectFilter.LacksKeywords=[Flanking] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
     },
     {
       "card": "MIR/BurningShieldAskari",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "reason": "PB-9 cluster A keyword-absence: 'creature without flanking' -> ObjectFilter.LacksKeywords=[Flanking] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
     },
     {
       "card": "MIR/MtendaHerder",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "reason": "PB-9 cluster A keyword-absence: 'creature without flanking' -> ObjectFilter.LacksKeywords=[Flanking] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
     },
     {
       "card": "MOM/MentalModulation",
@@ -482,12 +458,6 @@
       "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
-      "card": "MarvinMurderousMimic",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 relational name-exclusion predicate — 'don't have the same name as this creature' is a self-referential name filter with no structured ObjectFilter field; a future ExcludesSameNameAsSelf axis would close it"
-    },
-    {
       "card": "MasterofCruelties",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -503,7 +473,7 @@
       "card": "ODY/AshenFirebeast",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref) — 'without flying' keyword-absence predicate, same convention as M10/Falter and IKO/LuminousBroodmoth"
+      "reason": "PB-9 cluster A keyword-absence: 'creature without flying' -> ObjectFilter.LacksKeywords=[Flying] (axis EXISTS). MECHANICAL (Sonnet). Exemplar: M10/Falter."
     },
     {
       "card": "OGW/ContainmentMembrane",
@@ -515,7 +485,7 @@
       "card": "ONS/IxidorRealitySculptor",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "L1 shell surfaced a hidden characteristic residual; PB-9 burndown"
+      "reason": "PB-9 cluster E face-down: 'face-down creature' -> ObjectFilter.IsFaceDown=true (axis EXISTS). MECHANICAL (Sonnet); emission spread across LordPTBuffRule + the turn-face-up activated rule (route 'face-down' label through IsFaceDown, mirroring this batch's QualifierAxisMapper 'you own'->Owner)."
     },
     {
       "card": "ONS/IxidorRealitySculptor",
@@ -564,12 +534,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "ProfessorOnyx",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic — 'with the greatest power among creatures that player controls' is a comparative game-state predicate (no dedicated CR); no MaxStatFilter or RelativePowerFilter node exists yet"
     },
     {
       "card": "RIX/DuskCharger",
@@ -628,8 +592,8 @@
     {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "tag": "irreducible",
+      "reason": "PB-9 (c): 'your commander' - CR 903 format-defined commander status; no structured IsCommander axis; singleton."
     },
     {
       "card": "RosieCottonofSouthLane",
@@ -683,7 +647,7 @@
       "card": "SilkenStrength",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic — 'creature or Vehicle' is a cross-axis disjunction (card type OR artifact subtype); ObjectFilter has no structured OR field spanning CardTypes and Subtypes axes; same family as SwiftReconfiguration/DFT/BroodheartEngine 'creature or Vehicle' encoding"
+      "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle' cross-axis OR (card type OR artifact subtype). No structured OR field. NOVEL (Opus). Same family as SwiftReconfiguration/DFT-BroodheartEngine."
     },
     {
       "card": "SmotheringTithe",
@@ -707,7 +671,7 @@
       "card": "SwiftReconfiguration",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic — 'creature or Vehicle' is a cross-axis disjunction (card type OR artifact subtype); ObjectFilter has no structured OR field spanning CardTypes and Subtypes axes; consistent with DFT/BroodheartEngine 'creature or Vehicle card' encoding"
+      "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle' cross-axis OR (card type OR artifact subtype). No structured OR field. NOVEL (Opus). Same family as SilkenStrength/DFT-BroodheartEngine."
     },
     {
       "card": "T45PowerArmor",
@@ -724,8 +688,8 @@
     {
       "card": "THS/TritonFortuneHunter",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "tag": "irreducible",
+      "reason": "PB-9 (c): 'targeting this creature' - relational spell-targets-self predicate (Heroic, CR 702.85). Targeting is stack-time engine state; same irreducible category as BFZ/FathomFeeder 'targeting'."
     },
     {
       "card": "TLA/ForecastingFortuneTeller",
@@ -754,8 +718,8 @@
     {
       "card": "TheDeathOfGwenStacy",
       "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
+      "tag": "irreducible",
+      "reason": "PB-9 (c): 'in any number of target players' graveyards' - multi-target-player zone-ownership predicate (CR 115 multi-target). No structured axis."
     },
     {
       "card": "TheNecrobloom",
@@ -797,7 +761,7 @@
       "card": "USG/GiantTrapDoorSpider",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "PB-9 misc structured-characteristic (keyword-absence/combat-defender) — 'without flying' keyword-absence predicate (same convention as M10/Falter and ODY/AshenFirebeast) and 'that's attacking you' combat-defender predicate (no CombatStateCharacteristic defender axis; deferred whole per ADR 0001)"
+      "reason": "PB-9 MIXED: (1) 'without flying' -> ObjectFilter.LacksKeywords=[Flying] (cluster A, axis EXISTS, MECHANICAL/Sonnet); (2) 'that's attacking you' combat-defender predicate remains IRREDUCIBLE (no defender/attacked-player CombatState axis; deferred whole per ADR 0001)."
     },
     {
       "card": "USG/GoblinWarBuggy",
@@ -815,7 +779,7 @@
       "card": "UgintheIneffable",
       "sink": "OtherCharacteristic",
       "tag": "debt",
-      "reason": "two PB-9 structured-characteristic residuals: (1) positional 'top' on library exile target (no Position axis on ObjectFilter; same residual as M20/MysticForge and BFZ/FathomFeeder); (2) 'one or more colors' is a color-presence filter (complement of IsColorless) with no dedicated IsColored boolean axis yet"
+      "reason": "PB-9 MIXED: (1) '-3 target permanent that's one or more colors' -> new ObjectFilter.IsColored bool (complement of IsColorless, CR 105.2), cluster I NOVEL (Opus); (2) '+1 top card of library' positional 'top' remains IRREDUCIBLE (library order, no Position axis)."
     },
     {
       "card": "VOW/BloodServitor",

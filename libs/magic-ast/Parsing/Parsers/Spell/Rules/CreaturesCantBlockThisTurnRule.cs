@@ -47,16 +47,22 @@ public sealed class CreaturesCantBlockThisTurnRule : ISpellRule
     if (m.Success)
     {
       var keyword = m.Groups["keyword"].Value.ToLowerInvariant();
+      // "without <keyword>" is the first-class keyword-absence axis (CR 702.9 flying,
+      // etc.): route a recognised keyword to ObjectFilter.LacksKeywords rather than the
+      // OtherCharacteristic residual. Unknown keywords keep the honest free-text fallback.
+      var filter = Enum.TryParse<KeywordAbility>(keyword, ignoreCase: true, out var kw)
+        ? new ObjectFilter { CardTypes = ["creature"], LacksKeywords = [kw] }
+        : new ObjectFilter
+        {
+          CardTypes = ["creature"],
+          Characteristics = [Characteristic.FromLabel("without" + char.ToUpperInvariant(keyword[0]) + keyword[1..])],
+        };
       effect = new CantBlockEffect
       {
         Target = new ObjectReference
         {
           Kind = ObjectReferenceKind.Each,
-          Filter = new ObjectFilter
-          {
-            CardTypes = ["creature"],
-            Characteristics = [Characteristic.FromLabel("without" + char.ToUpperInvariant(keyword[0]) + keyword[1..])],
-          },
+          Filter = filter,
         },
         Duration = UntilTimeDuration.EndOfTurn,
       };

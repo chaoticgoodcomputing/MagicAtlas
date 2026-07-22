@@ -63,7 +63,9 @@ public sealed class SupportTriggeredRule : ITriggeredRule
         Filter = new ObjectFilter
         {
           CardTypes = ["creature"],
-          Characteristics = [Characteristic.Other("other")],
+          // "other target creatures" — support excludes the source object itself
+          // (CR 702.100a / 109.5): the first-class ExcludeSelf axis, not a residual.
+          ExcludeSelf = true,
         },
       },
       CounterType = "+1/+1",
