@@ -74,8 +74,13 @@
             {
               "EffectType": "conditional",
               "Condition": {
-                "ConditionType": "other",
-                "Text": "you put a Cave onto the battlefield this way"
+                "ConditionType": "actionThisWay",
+                "Action": "PutOntoBattlefield",
+                "Filter": {
+                  "Subtypes": [
+                    "Cave"
+                  ]
+                }
               },
               "Then": {
                 "EffectType": "gainLife",

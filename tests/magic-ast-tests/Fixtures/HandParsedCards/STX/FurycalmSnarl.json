@@ -35,8 +35,19 @@
           ],
           "When": "asThisEnters",
           "Condition": {
-            "ConditionType": "other",
-            "Text": "you reveal a Mountain or Plains card from your hand"
+            "ConditionType": "revealCard",
+            "Revealer": "You",
+            "Card": {
+              "CardTypes": [
+                "card"
+              ],
+              "Subtypes": [
+                "Mountain",
+                "Plains"
+              ],
+              "Owner": "You",
+              "Zone": "Hand"
+            }
           },
           "SourceSpan": {
             "Start": 0,

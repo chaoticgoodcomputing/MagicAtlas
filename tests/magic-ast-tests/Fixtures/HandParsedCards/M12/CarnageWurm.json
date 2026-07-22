@@ -32,8 +32,8 @@
           "KeywordSource": "Bloodthirst",
           "When": "asThisEnters",
           "Condition": {
-            "ConditionType": "other",
-            "Text": "an opponent was dealt damage this turn"
+            "ConditionType": "dealtDamageThisTurn",
+            "Player": "Opponent"
           },
           "Effects": [
             {

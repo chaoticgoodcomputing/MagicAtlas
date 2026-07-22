@@ -90,8 +90,7 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "this creature attacks a player and isn't blocked"
+            "ConditionType": "attacksPlayerAndIsntBlocked"
           },
           "Effects": [
             {

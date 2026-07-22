@@ -438,6 +438,39 @@ public sealed record ObjectFilter
   public bool? IsEquipped { get; init; }
 
   /// <summary>
+  /// "that's attacking you" — the combat-defender axis: filters to attacking creatures
+  /// whose declared defending player is the ability's controller (Giant Trap Door Spider:
+  /// "target creature without flying that's attacking you"). CR 508.1a: each attacking
+  /// creature is declared as attacking a player, planeswalker, or battle; "attacking you"
+  /// is the subset whose declared defender is this controller (CR 508.1b, defending
+  /// player). A named combat-state predicate on the object, not a card characteristic: it
+  /// cannot be expressed on the type/keyword axes (an attacker is any creature; the axis
+  /// asserts WHOM it is attacking). Flat boolean axis mirroring
+  /// <see cref="IsEquipped"/> / <see cref="IsEnchanted"/> / <see cref="IsFaceDown"/> — the
+  /// first-class home for the "attackingYou" combat-defender residual (ADR 0001), keyed to
+  /// the controller as the standard "you" defender; a different defender ("attacking a
+  /// player", "attacking one of your opponents") would earn its own axis. Descriptive-only:
+  /// MAST records the declared-defender predicate, not the runtime attack assignment.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsAttackingYou { get; init; }
+
+  /// <summary>
+  /// Tapped-status axis: <c>true</c> matches only tapped objects ("a tapped creature",
+  /// CR 110.6a), <c>false</c> only untapped ones. Null when the oracle text does not
+  /// qualify tapped-ness. A permanent's tapped status (CR 110.6: "A permanent is either
+  /// tapped or untapped.") is a game state, not a card characteristic, so it is a
+  /// separate boolean axis mirroring <see cref="IsFaceDown"/> / <see cref="IsAttackingYou"/>
+  /// rather than a type/keyword entry — the <see cref="ObjectFilter"/>-side analogue of
+  /// the <see cref="MagicAST.AST.Abilities.ObjectStatusCondition"/> status predicate.
+  /// Quicksand Whirlpool: "this spell costs {2} less to cast if it targets a tapped
+  /// creature" → a <see cref="MagicAST.AST.Abilities.TargetsFilterCondition"/> whose
+  /// filter is <c>{CardTypes:["creature"], IsTapped:true}</c>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsTapped { get; init; }
+
+  /// <summary>
   /// Additional characteristic constraints beyond the structured axes above —
   /// a keyword-ability requirement (<see cref="KeywordCharacteristic"/>) or the
   /// typed residual (<see cref="OtherCharacteristic"/>) for shapes not yet

@@ -32,10 +32,14 @@ public sealed class RevealOrEntersTappedRule : IStaticRule
   // from your hand. If you don't, [it|this [permanent]] enters tapped."
   private static readonly Regex _revealOrTappedPattern = new(
     @"^\s*As\s+this\s+(?:permanent|land|creature|artifact|enchantment)\s+enters,\s+"
-    + @"you\s+may\s+(?<reveal>reveal\s+an?\s+.+?\s+card\s+from\s+your\s+hand)\.\s+"
+    + @"you\s+may\s+reveal\s+an?\s+(?<types>.+?)\s+card\s+from\s+your\s+hand\.\s+"
     + @"If\s+you\s+don'?t,\s+(?:it|this\s+(?:permanent|land|creature|artifact|enchantment))\s+enters\s+tapped\.?\s*$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled
   );
+
+  // Splits the revealed-card type phrase ("Mountain or Plains") into its disjuncts.
+  private static readonly Regex _orSplit = new(
+    @"\s+or\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
   public IReadOnlyList<Ability>? TryParse(OracleClause clause, ClauseClassification classification)
   {
@@ -45,7 +49,11 @@ public sealed class RevealOrEntersTappedRule : IStaticRule
       return null;
     }
 
-    var revealText = match.Groups["reveal"].Value.Trim();
+    var subtypes = _orSplit
+      .Split(match.Groups["types"].Value.Trim())
+      .Select(t => t.Trim())
+      .Where(t => t.Length > 0)
+      .ToList();
 
     return
     [
@@ -56,7 +64,17 @@ public sealed class RevealOrEntersTappedRule : IStaticRule
         {
           Target = new ObjectReference { Kind = ObjectReferenceKind.Self },
         }],
-        Condition = new OtherCondition { Text = $"you {revealText}" },
+        Condition = new RevealCardCondition
+        {
+          Revealer = ControllerFilter.You,
+          Card = new ObjectFilter
+          {
+            CardTypes = ["card"],
+            Subtypes = subtypes,
+            Zone = Zone.Hand,
+            Owner = ControllerFilter.You,
+          },
+        },
       },
     ];
   }

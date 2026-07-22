@@ -62,8 +62,8 @@
             }
           },
           "InterveningIf": {
-            "ConditionType": "other",
-            "Text": "tribute wasn't paid"
+            "ConditionType": "tribute",
+            "Paid": false
           },
           "Effects": [
             {

@@ -94,8 +94,13 @@
             {
               "EffectType": "conditional",
               "Condition": {
-                "ConditionType": "other",
-                "Text": "you sacrifice an Island this way"
+                "ConditionType": "actionThisWay",
+                "Action": "Sacrificed",
+                "Filter": {
+                  "Subtypes": [
+                    "Island"
+                  ]
+                }
               },
               "Then": {
                 "EffectType": "dealDamage",
