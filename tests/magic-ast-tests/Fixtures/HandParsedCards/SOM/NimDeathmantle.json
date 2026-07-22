@@ -145,9 +145,6 @@
               }
             }
           ],
-          "Instructions": [
-            "you may pay {4}"
-          ],
           "SourceSpan": {
             "Start": 189,
             "Length": 174

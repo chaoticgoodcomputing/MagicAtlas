@@ -124,9 +124,6 @@
               }
             }
           ],
-          "Instructions": [
-            "you may pay {C}{C}"
-          ],
           "Reminder": {
             "Text": "Mana abilities can't be copied."
           },

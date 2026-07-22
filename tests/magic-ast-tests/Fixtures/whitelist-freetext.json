@@ -3,12 +3,6 @@
   "entries": [
     {
       "card": "2X2/ManaVault",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
-    },
-    {
-      "card": "2X2/ManaVault",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
@@ -24,12 +18,6 @@
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
-      "card": "ALA/Deathgreeter",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
     },
     {
       "card": "ATQ/Endoskeleton",
@@ -160,8 +148,8 @@
     {
       "card": "DKA/SpellSnuff",
       "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
+      "tag": "debt",
+      "reason": "MISFILED under may-pay-cost: this SpellAbility.Instructions holds an ability-word conditional preamble ('Fateful hour — If you have 5 or less life', CR 207.2c) — a life-total intervening condition gating the draw, NOT a 'you may pay {cost}' adjunct. Reducible under the PB-7 structured-condition-buckets initiative, not the may-pay de-string (ADR 0004 #40)."
     },
     {
       "card": "DaggersailAeronaut",
@@ -266,12 +254,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "EmieltheBlessed",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {G/W})"
-    },
-    {
       "card": "ExpeditionRaptor",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
@@ -282,12 +264,6 @@
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 misc structured-characteristic (keyword-absence/disjunctive-type/owner/self-ref)"
-    },
-    {
-      "card": "ForsakenMiner",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
     },
     {
       "card": "FreshFacedRecruit",
@@ -314,22 +290,10 @@
       "reason": "recursive token/granted-ability body parsing — haste keyword in AbilityAdder CopyModification"
     },
     {
-      "card": "HellkiteCharger",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {5}{R}{R})"
-    },
-    {
       "card": "HelmOfTheHost",
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
-      "card": "HematiteTalisman",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
       "card": "HollowTrees",
@@ -366,12 +330,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "KeyToTheCity",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {2})"
     },
     {
       "card": "KikiJikiMirrorBreaker",
@@ -440,12 +398,6 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "LapisLazuliTalisman",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
-    },
-    {
       "card": "M10/Falter",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -512,12 +464,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "MOR/OrderOfTheGoldenCricket",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/ForsakenMiner; the ConditionalPayEffect.Cost carries the structured {W})"
-    },
-    {
       "card": "MRD/LeoninDenGuard",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -528,12 +474,6 @@
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "MalachiteTalisman",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
       "card": "MalcolmKeenEyedNavigator",
@@ -560,12 +500,6 @@
       "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
-      "card": "NacreTalisman",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
-    },
-    {
       "card": "ODY/AshenFirebeast",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -576,12 +510,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "ONS/FrenziedGoblin",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/OrderOfTheGoldenCricket; the ConditionalPayEffect.Cost carries the structured {R})"
     },
     {
       "card": "ONS/IxidorRealitySculptor",
@@ -618,12 +546,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "OnyxTalisman",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Emiel/HellkiteCharger; the ConditionalPayEffect.Cost carries the structured {3})"
     },
     {
       "card": "OteclanLandmark",
@@ -704,24 +626,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — 'during your turn' timing scope shared by BOTH the cast-prohibition and the activate-prohibition, same bucket as DragonlordDromoka/RazorkinNeedlehead's 'during your turn'"
     },
     {
-      "card": "JUD/SearingMeditation",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/RingsOfBrighthearth; the ConditionalPayEffect.Cost carries the structured {2})"
-    },
-    {
-      "card": "RingsOfBrighthearth",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Nim Deathmantle/Ulalek; the ConditionalPayEffect.Cost carries the structured {2})"
-    },
-    {
-      "card": "JUD/Mirari",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as RingsOfBrighthearth/SearingMeditation; the ConditionalPayEffect.Cost carries the structured {3})"
-    },
-    {
       "card": "RoadOfReturn",
       "sink": "OtherCharacteristic",
       "tag": "debt",
@@ -732,12 +636,6 @@
       "sink": "AbilityText",
       "tag": "irreducible",
       "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "SOM/NimDeathmantle",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
     },
     {
       "card": "SPM/HotDogCart",
@@ -920,12 +818,6 @@
       "reason": "two PB-9 structured-characteristic residuals: (1) positional 'top' on library exile target (no Position axis on ObjectFilter; same residual as M20/MysticForge and BFZ/FathomFeeder); (2) 'one or more colors' is a color-presence filter (complement of IsColorless) with no dedicated IsColored boolean axis yet"
     },
     {
-      "card": "UlalekFusedAtrocity",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct"
-    },
-    {
       "card": "VOW/BloodServitor",
       "sink": "AbilityText",
       "tag": "irreducible",
@@ -960,12 +852,6 @@
       "sink": "OtherHistoryPredicate",
       "tag": "irreducible",
       "reason": "bespoke history predicate — deferred adjunct"
-    },
-    {
-      "card": "WWK/KalastriaHighborn",
-      "sink": "Instructions",
-      "tag": "irreducible",
-      "reason": "may-pay-cost effort structuring — deferred adjunct (same as Deathgreeter/EmieltheBlessed; the ConditionalPayEffect.Cost carries the structured {B})"
     },
     {
       "card": "XLN/RuthlessKnave",

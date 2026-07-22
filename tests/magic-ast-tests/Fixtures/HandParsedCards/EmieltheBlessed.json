@@ -165,9 +165,6 @@
               }
             }
           ],
-          "Instructions": [
-            "you may pay {G/W}"
-          ],
           "Reminder": {
             "Text": "{G/W} can be paid with either {G} or {W}."
           },

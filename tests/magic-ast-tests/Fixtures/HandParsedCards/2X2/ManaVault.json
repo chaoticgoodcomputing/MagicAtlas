@@ -52,6 +52,18 @@
             {
               "EffectType": "optional",
               "Inner": {
+                "EffectType": "conditionalPay",
+                "Cost": {
+                  "CostType": "mana",
+                  "Symbols": [
+                    {
+                      "Kind": "generic",
+                      "GenericAmount": 4
+                    }
+                  ]
+                }
+              },
+              "IfYouDo": {
                 "EffectType": "untap",
                 "Target": {
                   "Kind": "Self"
@@ -62,9 +74,6 @@
                 "Length": 49
               }
             }
-          ],
-          "Instructions": [
-            "you may pay {4}"
           ],
           "SourceSpan": {
             "Start": 52,
