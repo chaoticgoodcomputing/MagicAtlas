@@ -421,7 +421,8 @@ public sealed class AtlasSeeder
                 Label = raw.Label ?? "",
                 Family = raw.Family ?? "",
                 Side = raw.Side ?? "",
-                Tier = raw.Tier,
+                Conditionality = raw.Conditionality,
+                Provenance = raw.Provenance,
                 Confidence = raw.Confidence,
                 OracleLineIndex = raw.OracleLineIndex ?? 0,
                 Spans = raw.Spans,
@@ -957,8 +958,9 @@ public sealed class AtlasSeeder
         [JsonPropertyName("label")] public string? Label { get; set; }
         [JsonPropertyName("family")] public string? Family { get; set; }
         [JsonPropertyName("side")] public string? Side { get; set; }
-        // §4 provenance / backfill fields — absent in the current dump, populated once those passes land.
-        [JsonPropertyName("tier")] public string? Tier { get; set; }
+        // ADR 0004 #43: the port tier split into two orthogonal dimensions + the backfill confidence.
+        [JsonPropertyName("conditionality")] public string? Conditionality { get; set; }
+        [JsonPropertyName("provenance")] public string? Provenance { get; set; }
         [JsonPropertyName("confidence")] public double? Confidence { get; set; }
         [JsonPropertyName("oracleLineIndex")] public int? OracleLineIndex { get; set; }
         [JsonPropertyName("spans")] public int[][]? Spans { get; set; }

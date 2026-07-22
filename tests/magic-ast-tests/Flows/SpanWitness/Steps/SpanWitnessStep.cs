@@ -91,7 +91,8 @@ public static class SpanWitnessStep
 
       foreach (var p in ports)
       {
-        if (p.Tier is not ("Green" or "Amber") || p.Spans is not { Length: > 0 } spans)
+        // ADR 0004 #43: parsed ports only (Provenance == "") — the backfill markers carry no source span.
+        if (!string.IsNullOrEmpty(p.Provenance) || p.Spans is not { Length: > 0 } spans)
           continue;
         var anchors = AnchorsFor(p.Label);
         if (anchors is null)

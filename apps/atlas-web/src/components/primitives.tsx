@@ -3,11 +3,12 @@
 // tokens from ../data/mock so the encoding stays in one place.
 
 import type { CSSProperties, ReactNode } from "react";
-import { FAM, TIERS, famHue, type Tier } from "../data/mock";
+import { FAM, TIERS, famHue, PORT_UNCONDITIONAL, type Tier, type PortProvenance } from "../data/mock";
 
 const tierName = (t: Tier) => TIERS.find((x) => x.key === t)?.name ?? t;
 
-/** A tier badge. Where hue is free the tier owns hue; Inferred adds a
+/** A COMBO / EDGE certainty badge (ADR 0004 #43: no longer used for ports — see
+ *  `PortFidelity`). Where hue is free the tier owns hue; Inferred adds a
  *  confidence read-out, Declared is a dotted outline. */
 export function TierChip({ tier, conf }: { tier: Tier; conf?: number }) {
   return (
@@ -15,6 +16,72 @@ export function TierChip({ tier, conf }: { tier: Tier; conf?: number }) {
       <span className="tier-dot" />
       {tierName(tier)}
       {tier === "Inferred" && conf != null && <> · {conf.toFixed(2)}</>}
+    </span>
+  );
+}
+
+// ── Port fidelity, as two independent facts (ADR 0004 #43) ────────────────────
+// The retired four-valued port tier conflated "is the mechanism conditional?"
+// with "where did the port come from?". These render the two dimensions
+// separately, so a port that is BOTH conditional AND inferred shows both — the
+// conflation the old single chip could not express.
+
+/** Dimension 1 — the conditionality phrase (PROVISIONAL copy from the pipeline).
+ *  `PORT_UNCONDITIONAL` reads as a quiet, neutral chip; any gate reads amber. */
+export function ConditionChip({ conditionality }: { conditionality: string }) {
+  if (!conditionality) return null; // backfill port: no parsed mechanism to describe
+  const unconditional = conditionality === PORT_UNCONDITIONAL;
+  const hue = unconditional ? "#3fbf7f" : "#E0A53C";
+  return (
+    <span
+      className="ws-mono"
+      title={unconditional ? "fires unconditionally" : `conditional — ${conditionality}`}
+      style={{
+        fontSize: 10, padding: "1px 6px", borderRadius: 4, whiteSpace: "nowrap",
+        color: hue,
+        background: `color-mix(in srgb, ${hue} 13%, transparent)`,
+        border: `1px solid color-mix(in srgb, ${hue} 34%, transparent)`,
+      }}
+    >
+      {conditionality}
+    </span>
+  );
+}
+
+/** Dimension 2 — the provenance marker. Parsed renders nothing (the default);
+ *  Inferred adds its confidence; Declared is a dotted "catalogued" badge. */
+export function ProvenanceMark({
+  provenance, confidence,
+}: { provenance: PortProvenance; confidence?: number | null }) {
+  if (provenance === "") return null; // parsed — the default, no marker
+  const inferred = provenance === "Inferred";
+  const hue = inferred ? "#9184d9" : "#7f8399";
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+      <span
+        className="ws-mono"
+        title={inferred ? "inferred from similar cards" : "catalogued, not yet parsed"}
+        style={{
+          fontSize: 10, padding: "1px 6px", borderRadius: 4, whiteSpace: "nowrap", color: hue,
+          border: `1px ${inferred ? "dashed" : "dotted"} color-mix(in srgb, ${hue} 60%, transparent)`,
+        }}
+      >
+        {inferred ? "inferred" : "declared"}
+        {inferred && confidence != null && <> · {confidence.toFixed(2)}</>}
+      </span>
+      {inferred && confidence != null && <ConfidenceMeter value={confidence} />}
+    </span>
+  );
+}
+
+/** Both port fidelity facts, side by side — the ADR 0004 #43 conflation undone. */
+export function PortFidelity({
+  conditionality, provenance, confidence,
+}: { conditionality: string; provenance: PortProvenance; confidence?: number | null }) {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+      <ConditionChip conditionality={conditionality} />
+      <ProvenanceMark provenance={provenance} confidence={confidence} />
     </span>
   );
 }

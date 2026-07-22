@@ -97,7 +97,11 @@ public static partial class CardPortsStep
               PortSide.Intercept => "intercept",
               _ => "consume",
             },
-            Tier = TierOf(g),
+            // ADR 0004 #43 — the two dimensions the retired four-valued tier conflated.
+            // Conditionality (is it conditional, and how) + Provenance (where from). A parsed
+            // port has provenance "" (the default); the backfill rows below set Inferred/Declared.
+            Conditionality = PortConditionality.Describe(ConditionAxesOf(g)),
+            Provenance = "",
             OracleLineIndex = p.OracleLineIndex,
             Spans = p.SourceSpan is MagicAST.AST.TextSpan s
               ? new[] { new[] { s.Start, s.End } }
@@ -188,7 +192,9 @@ public static partial class CardPortsStep
             Label = $"inferred:{modal.Key}",
             Family = modal.Key,
             Side = "", // inferred: side is unknown (no parsed emit/consume role)
-            Tier = "Inferred",
+            // Provenance = Inferred; conditionality is "" — there is no parsed mechanism to describe.
+            Conditionality = "",
+            Provenance = "Inferred",
             Confidence = Math.Round(modal.Value / (double)parseReadyStars.Count, 3),
           });
           inferredCount++;
@@ -201,7 +207,8 @@ public static partial class CardPortsStep
             Label = "declared",
             Family = "", // no usable signal — catalogued only
             Side = "",
-            Tier = "Declared",
+            Conditionality = "",
+            Provenance = "Declared",
           });
           declaredCount++;
         }
@@ -222,14 +229,30 @@ public static partial class CardPortsStep
       return (metas, ports);
     };
 
-  /// <summary>Green/Amber tier for a distinct port label (upstream-atlas-data-plan §1.3): GREEN iff at
-  /// least one <see cref="PortNode"/> carrying the label fires unconditionally — not
-  /// <see cref="PortNode.Gated"/>, not <see cref="PortNode.TapGated"/>, and no
-  /// <see cref="PortNode.RequiresCounter"/>; else AMBER (a hard rate limit, a tap gate, a counter-gate,
-  /// or an intervening-if makes the mechanism conditional). Grouping by label first means the mechanism is
-  /// GREEN when it can fire unconditionally through <em>any</em> of the card's abilities that mint it.</summary>
-  private static string TierOf(IEnumerable<PortNode> sameLabel) =>
-    sameLabel.Any(p => !p.Gated && !p.TapGated && p.RequiresCounter is null) ? "Green" : "Amber";
+  /// <summary>ADR 0004 #43 — the conditionality axes for a distinct port label (replacing the retired
+  /// Green/Amber tier). Grouping by label first means the mechanism is UNCONDITIONAL when it can fire
+  /// unconditionally through <em>any</em> of the card's abilities that mint it (the old Green rule:
+  /// not <see cref="PortNode.Gated"/>, not <see cref="PortNode.TapGated"/>, no
+  /// <see cref="PortNode.RequiresCounter"/>). Otherwise every minting ability is gated somehow, so we report
+  /// the axes of the LEAST-gated one — the easiest way to fire the mechanism — deterministically. Unlike the
+  /// old tier this preserves <em>which</em> gates apply.</summary>
+  private static PortConditionAxes ConditionAxesOf(IEnumerable<PortNode> sameLabel)
+  {
+    var members = sameLabel.ToList();
+    if (members.Any(p => !p.Gated && !p.TapGated && p.RequiresCounter is null))
+      return new PortConditionAxes { TapGated = false, RequiresCounter = false, RateLimited = false };
+
+    var best = members
+      .OrderBy(p => (p.TapGated ? 1 : 0) + (p.RequiresCounter is null ? 0 : 1) + (p.Gated ? 1 : 0))
+      .ThenBy(p => p.Identity, StringComparer.Ordinal)
+      .First();
+    return new PortConditionAxes
+    {
+      TapGated = best.TapGated,
+      RequiresCounter = best.RequiresCounter is not null,
+      RateLimited = best.Gated,
+    };
+  }
 
   /// <summary>Mana value from a mana-cost string: <c>{3}{G}</c> → 4. Generic <c>{N}</c> adds N; a hybrid /
   /// phyrexian symbol (<c>{2/W}</c>, <c>{W/U}</c>, <c>{W/P}</c>) adds the max of its parts (numeric or 1);

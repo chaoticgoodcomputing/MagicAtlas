@@ -21,9 +21,19 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { famHue, subsumes, GROUPS, tierRank, type Tier } from "../data/mock";
+import { famHue, subsumes, GROUPS, PORT_UNCONDITIONAL, type PortProvenance } from "../data/mock";
 import { sampleDeck, useDeckPorts, type DeckPortRow } from "../data/atlas";
-import { SectionHead, SegControl, TierChip } from "../components/primitives";
+import { SectionHead, SegControl, PortFidelity } from "../components/primitives";
+
+/** ADR 0004 #43 — a single fidelity ordering over the two split port dimensions,
+ *  mirroring the old tierRank (Green<Amber<Inferred<Declared): parsed-unconditional
+ *  < parsed-conditional < inferred < declared. Used only to pick a card's "best"
+ *  port and to rank nodes; the two dimensions themselves are shown separately. */
+const fidelityRank = (conditionality: string, provenance: PortProvenance): number =>
+  provenance === "Declared" ? 3
+  : provenance === "Inferred" ? 2
+  : conditionality === PORT_UNCONDITIONAL ? 0
+  : 1;
 import { CardLink } from "../components/CardLink";
 import { orthoPath, arrowHeadPath, rotate, endAngle, type Pt } from "../lib/ortho";
 
@@ -66,12 +76,21 @@ interface LiveNode {
   consumes: string[]; // every real consume family (for wiring)
   emits: string[]; // every real emit family (for wiring)
   extra: number; // count of secondary families not shown as a dot
-  tier: Tier; // best (lowest-rank) tier across the card's ports
+  // ADR 0004 #43 — the best (highest-fidelity) port's two split dimensions, shown separately.
+  conditionality: string;
+  provenance: PortProvenance;
+  confidence: number | null;
   col: string;
   sub: string;
 }
 
-interface FamPort { fam: string; tier: Tier; label: string; }
+interface FamPort {
+  fam: string;
+  conditionality: string;
+  provenance: PortProvenance;
+  confidence: number | null;
+  label: string;
+}
 
 /** Fold the flat live port rows into one node per card. The primary consume /
  *  emit family for each card is the one that actually participates in the most
@@ -88,13 +107,23 @@ function buildNodes(rows: DeckPortRow[]): LiveNode[] {
     let f = m.get(card);
     if (!f) { f = new Map(); m.set(card, f); }
     const cur = f.get(p.fam);
-    if (!cur || tierRank[p.tier] < tierRank[cur.tier]) f.set(p.fam, p);
+    if (
+      !cur ||
+      fidelityRank(p.conditionality, p.provenance) < fidelityRank(cur.conditionality, cur.provenance)
+    )
+      f.set(p.fam, p);
   };
 
   for (const r of rows) {
     if (NOISE.has(r.family)) continue;
     if (!cons.has(r.card) && !emit.has(r.card)) order.push(r.card);
-    const port: FamPort = { fam: r.family, tier: r.tier, label: r.label };
+    const port: FamPort = {
+      fam: r.family,
+      conditionality: r.conditionality,
+      provenance: r.provenance,
+      confidence: r.confidence,
+      label: r.label,
+    };
     if (r.side === "emit") put(emit, r.card, port);
     else if (r.side === "consume") put(cons, r.card, port);
     // side-less inferred/backfill ports don't carry a direction — skip for wiring.
@@ -117,7 +146,7 @@ function buildNodes(rows: DeckPortRow[]): LiveNode[] {
     return [...ports].sort(
       (a, b) =>
         score(b.fam) - score(a.fam) ||
-        tierRank[a.tier] - tierRank[b.tier] ||
+        fidelityRank(a.conditionality, a.provenance) - fidelityRank(b.conditionality, b.provenance) ||
         a.fam.localeCompare(b.fam),
     )[0];
   };
@@ -133,9 +162,14 @@ function buildNodes(rows: DeckPortRow[]): LiveNode[] {
     const consumes = cPorts.map((p) => p.fam);
     const emits = ePorts.map((p) => p.fam);
     const shown = (pc ? 1 : 0) + (pe ? 1 : 0);
-    const tier = [...cPorts, ...ePorts].reduce<Tier>(
-      (best, p) => (tierRank[p.tier] < tierRank[best] ? p.tier : best),
-      "Declared",
+    // The highest-fidelity port across the card's ports drives the node's fidelity chip.
+    const best = [...cPorts, ...ePorts].reduce<FamPort | null>(
+      (b, p) =>
+        b === null ||
+        fidelityRank(p.conditionality, p.provenance) < fidelityRank(b.conditionality, b.provenance)
+          ? p
+          : b,
+      null,
     );
 
     const inFam = pc?.fam ?? null;
@@ -149,7 +183,9 @@ function buildNodes(rows: DeckPortRow[]): LiveNode[] {
       consumes,
       emits,
       extra: consumes.length + emits.length - shown,
-      tier,
+      conditionality: best?.conditionality ?? "",
+      provenance: best?.provenance ?? "",
+      confidence: best?.confidence ?? null,
       col: inFam ? supergroupColumnOf(inFam) : SRC_COL,
       sub: inFam ? inFam : (outFam ?? SRC_NONE),
     });
@@ -660,7 +696,7 @@ export default function SynergyWeb() {
                               <span style={{ color: "#75798c", fontSize: 9 }}>▸</span>
                               {dot(p.out)}
                             </span>
-                            <TierChip tier={p.tier} />
+                            <PortFidelity conditionality={p.conditionality} provenance={p.provenance} confidence={p.confidence} />
                           </span>
                         </div>
                         <div

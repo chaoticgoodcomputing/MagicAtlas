@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { PORT_UNCONDITIONAL } from "./data/mock";
 
 // Trax schema path for [TraxQueryModel(Namespace = "atlas")]:
 //   discover.atlas.<fieldName>  where fieldName = camelCase plural of the entity class.
@@ -220,15 +221,21 @@ export const CARD_SEARCH_QUERY = gql`
   }
 `;
 
-// Live port counts per fidelity tier — powers the tier legend volumes.
+// Live port counts for the legend volumes. ADR 0004 #43: the port tier is retired,
+// so these no longer filter on `tier`. They filter on the two split-out dimensions
+// instead — provenance (parsed / Inferred / Declared) and, within parsed ports,
+// conditionality (unconditional vs conditional). The `green`/`amber` aliases are
+// kept only so the four-token legend maps cleanly: green = parsed-unconditional,
+// amber = parsed-conditional. The unconditional sentinel is the provisional
+// `PORT_UNCONDITIONAL` string.
 export const TIER_COUNTS_QUERY = gql`
   query TierCounts {
     discover {
       atlas {
-        green: portRows(first: 1, where: { tier: { eq: "Green" } }) { totalCount }
-        amber: portRows(first: 1, where: { tier: { eq: "Amber" } }) { totalCount }
-        inferred: portRows(first: 1, where: { tier: { eq: "Inferred" } }) { totalCount }
-        declared: portRows(first: 1, where: { tier: { eq: "Declared" } }) { totalCount }
+        green: portRows(first: 1, where: { provenance: { eq: "" }, conditionality: { eq: "${PORT_UNCONDITIONAL}" } }) { totalCount }
+        amber: portRows(first: 1, where: { provenance: { eq: "" }, conditionality: { neq: "${PORT_UNCONDITIONAL}" } }) { totalCount }
+        inferred: portRows(first: 1, where: { provenance: { eq: "Inferred" } }) { totalCount }
+        declared: portRows(first: 1, where: { provenance: { eq: "Declared" } }) { totalCount }
       }
     }
   }
@@ -322,7 +329,7 @@ export const CARD_PROFILE_QUERY = gql`
           }
         }
         portRows(where: { card: { eq: $name } }, first: 50) {
-          nodes { family side tier confidence label oracleLineIndex spans stem manner isSelf }
+          nodes { family side conditionality provenance confidence label oracleLineIndex spans stem manner isSelf }
         }
       }
     }
@@ -373,13 +380,14 @@ export const CARD_ANCHOR_QUERY = gql`
 // Deck Synergy Web: every port for a set of card names (the pasted decklist).
 // One row per (card, family, side); a card carries several rows. The view
 // aggregates these into per-card consume/emit family sets and wires the deck as
-// an emit→consume port graph. `tier`/`confidence` surface each card's fidelity.
+// an emit→consume port graph. ADR 0004 #43: `conditionality`/`provenance`/
+// `confidence` surface each port's split fidelity (was `tier`).
 export const DECK_PORTS_QUERY = gql`
   query DeckPorts($cards: [String!]!) {
     discover {
       atlas {
         portRows(where: { card: { in: $cards } }, first: 1000) {
-          nodes { card family side tier confidence label }
+          nodes { card family side conditionality provenance confidence label }
         }
       }
     }

@@ -23,16 +23,25 @@ namespace MagicAtlas.Api.Resolvers;
 [ExtendObjectType("AtlasDiscoverQueries")]
 public sealed class AtlasDeckResolver
 {
-    // Tier ordering matches mock.ts `tierRank`. Unknown / not-yet-backfilled tiers sort last.
+    // Combo certainty ordering (Green > Amber > Red) for the rings/near-miss ranking below.
     private const int UnknownTierRank = 99;
 
     private static int TierRank(string? tier) => tier switch
     {
         "Green" => 0,
         "Amber" => 1,
-        "Inferred" => 2,
-        "Declared" => 3,
+        "Red" => 2,
         _ => UnknownTierRank,
+    };
+
+    // ADR 0004 #43: ports no longer carry a single tier — rank a card's ports by the split-out PROVENANCE
+    // (parsed beats inferred beats declared). Conditionality is orthogonal and is surfaced, not ranked on.
+    private static int ProvenanceRank(string? provenance) => provenance switch
+    {
+        "" or null => 0, // parsed (a real port)
+        "Inferred" => 1,
+        "Declared" => 2,
+        _ => 3,
     };
 
     private static string BestTier(string? a, string? b) => TierRank(a) <= TierRank(b) ? (a ?? "") : (b ?? "");
@@ -72,7 +81,7 @@ public sealed class AtlasDeckResolver
 
         var ports = await db.Ports
             .Where(p => p.Side == normSide && acceptable.Contains(p.Family))
-            .Select(p => new { p.Card, p.Family, p.Tier })
+            .Select(p => new { p.Card, p.Family, p.Conditionality, p.Provenance })
             .ToListAsync();
 
         if (ports.Count == 0) return Array.Empty<CandidateResult>();
@@ -87,17 +96,18 @@ public sealed class AtlasDeckResolver
             .GroupBy(c => c.Name)
             .ToDictionary(g => g.Key, g => g.Min(x => x.EdhrecRank));
 
-        // One row per card: keep the best (lowest-rank) tier port; `via` if the matched port
-        // family differs from the requested family.
+        // One row per card: keep the best (lowest provenance rank — parsed beats backfilled) port; `via` if
+        // the matched port family differs from the requested family.
         var byCard = ports
             .GroupBy(p => p.Card)
             .Select(g =>
             {
-                var best = g.OrderBy(p => TierRank(p.Tier)).First();
+                var best = g.OrderBy(p => ProvenanceRank(p.Provenance)).First();
                 return new CandidateResult(
                     Card: g.Key,
                     Port: best.Family,
-                    Tier: best.Tier ?? "",
+                    Conditionality: best.Conditionality ?? "",
+                    Provenance: best.Provenance ?? "",
                     Confidence: null,
                     Via: best.Family != family);
             });
@@ -106,7 +116,7 @@ public sealed class AtlasDeckResolver
             rankLookup.TryGetValue(card, out var r) && r.HasValue ? r.Value : int.MaxValue;
 
         return byCard
-            .OrderBy(c => TierRank(c.Tier))
+            .OrderBy(c => ProvenanceRank(c.Provenance))
             .ThenBy(c => RankOf(c.Card))
             .ThenBy(c => c.Card, StringComparer.OrdinalIgnoreCase)
             .Take(limit)
@@ -307,11 +317,14 @@ public sealed class AtlasDeckResolver
 
 // ── DTOs (mirror apps/atlas-web/src/data/mock.ts) ────────────────────────────
 
-/// <summary>A ranked candidate card (mock <c>Candidate extends PoolCard</c>).</summary>
+/// <summary>A ranked candidate card (mock <c>Candidate extends PoolCard</c>). ADR 0004 #43: the port tier
+/// is split into <see cref="Conditionality"/> (is it conditional, and how) + <see cref="Provenance"/>
+/// (parsed / Inferred / Declared).</summary>
 public sealed record CandidateResult(
     string Card,
     string Port,
-    string Tier,
+    string Conditionality,
+    string Provenance,
     double? Confidence,
     bool Via);
 

@@ -9,8 +9,9 @@ namespace MagicAtlas.Api.Data;
 /// per distinct interaction-port label it projects. <see cref="Side"/> is <c>emit</c> (produces the
 /// resource) or <c>consume</c> (a cost/trigger that uses it). The synthetic <see cref="PortId"/> gives the
 /// frontend a stable per-port deep-link id; <see cref="CardId"/> joins back to <see cref="CardRow"/>.
-/// Oracle provenance (<see cref="OracleLineIndex"/>, <see cref="Spans"/>) and <see cref="Tier"/> are
-/// populated once the MAST source-span / statistical-backfill passes land — null/default until then.
+/// Oracle provenance (<see cref="OracleLineIndex"/>, <see cref="Spans"/>) and the split fidelity
+/// dimensions (<see cref="Conditionality"/>, <see cref="Provenance"/>) are populated once the MAST
+/// source-span / statistical-backfill passes land — null/default until then.
 /// </summary>
 [TraxAllowAnonymous]
 [TraxQueryModel(
@@ -44,12 +45,20 @@ public class PortRow
     [Column("side")]
     public string Side { get; set; } = "";
 
-    /// <summary>Green | Amber | Inferred | Declared (from the backfill pass; "" until produced).</summary>
-    [Column("tier")]
-    public string? Tier { get; set; }
+    /// <summary><b>Conditionality</b> — dimension 1 of the retired four-valued port tier (ADR 0004 #43).
+    /// Plain-language answer to "is this mechanism conditional, and how?": <c>fires unconditionally</c>
+    /// (the old Green) or a "·"-joined list of the gates that apply (<c>needs to tap</c>,
+    /// <c>needs a counter on it</c>, <c>rate-limited</c>). PROVISIONAL copy. <c>""</c> for a backfill row.</summary>
+    [Column("conditionality")]
+    public string? Conditionality { get; set; }
 
-    /// <summary>Co-occurrence strength (0–1) for an <c>Inferred</c> port; null for parsed (Green/Amber)
-    /// and Declared rows.</summary>
+    /// <summary><b>Provenance</b> — dimension 2 of the retired port tier (ADR 0004 #43), orthogonal to
+    /// <see cref="Conditionality"/>. <c>""</c> = parsed (the default); <c>Inferred</c> = statistically
+    /// backfilled (carries <see cref="Confidence"/>); <c>Declared</c> = catalogued only.</summary>
+    [Column("provenance")]
+    public string? Provenance { get; set; }
+
+    /// <summary>Co-occurrence strength (0–1) for an <c>Inferred</c> port; null for parsed and Declared rows.</summary>
     [Column("confidence")]
     public double? Confidence { get; set; }
 

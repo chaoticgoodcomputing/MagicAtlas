@@ -4,7 +4,7 @@
 
 import { ORACLE, TIER, TIERS } from "../data/mock";
 import { useFamilyGraph } from "../data/atlas";
-import { ConfidenceMeter, FamilyChip, SectionHead, TierChip } from "../components/primitives";
+import { ConfidenceMeter, FamilyChip, SectionHead, TierChip, PortFidelity } from "../components/primitives";
 import { OracleText } from "../components/OracleText";
 
 const SHOWCASE = ["Midnight Reaper", "Grave Pact", "Ashnod's Altar", "Zulaport Cutthroat"];
@@ -35,9 +35,28 @@ export default function DesignSystem() {
       {/* 00 · Uncertainty language */}
       <section>
         <SectionHead kicker="00 · Foundations" title="Uncertainty language">
-          Four fidelity tiers as a two-channel encoding: hue names the tier where hue is free; texture +
-          opacity carry it where hue is already spent on a resource family. Inferred adds a 0–1 confidence.
+          A port's fidelity is two independent facts, not one tier (ADR 0004 #43). <strong>Conditionality</strong>
+          — is the mechanism conditional, and how (it fires unconditionally, or needs to tap / needs a counter /
+          is rate-limited). <strong>Provenance</strong>, separately — is the port parsed, inferred (with a 0–1
+          confidence), or catalogued only. Because they are separate, a conditional <em>and</em> inferred port
+          shows both — the conflation the old single chip could not express. Copy is PROVISIONAL, pending sign-off.
         </SectionHead>
+        <div className="panel" style={{ marginBottom: "var(--space-4)", display: "flex", flexDirection: "column", gap: 10 }}>
+          {[
+            { label: "parsed · unconditional", conditionality: "fires unconditionally", provenance: "" as const, confidence: null },
+            { label: "parsed · conditional", conditionality: "needs to tap · rate-limited", provenance: "" as const, confidence: null },
+            { label: "inferred · conditional (both facts at once)", conditionality: "rate-limited", provenance: "Inferred" as const, confidence: 0.61 },
+            { label: "catalogued only", conditionality: "", provenance: "Declared" as const, confidence: null },
+          ].map((r) => (
+            <div key={r.label} style={{ display: "grid", gridTemplateColumns: "260px 1fr", alignItems: "center", gap: "var(--space-4)" }}>
+              <span style={{ fontSize: 12, color: "var(--atlas-muted)" }}>{r.label}</span>
+              <PortFidelity conditionality={r.conditionality} provenance={r.provenance} confidence={r.confidence} />
+            </div>
+          ))}
+        </div>
+        <h5 style={{ color: "var(--atlas-muted)", margin: "0 0 var(--space-3)" }}>
+          Combo &amp; edge certainty (a reconstructed cycle / resource line — distinct from port fidelity)
+        </h5>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "var(--space-3)" }}>
           {TIERS.map((t) => (
             <div key={t.key} className="panel" style={{ display: "flex", flexDirection: "column", gap: 10 }}>

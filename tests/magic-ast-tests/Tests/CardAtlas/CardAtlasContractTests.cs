@@ -123,6 +123,70 @@ public class CardAtlasContractTests
     );
   }
 
+  /// <summary>ADR 0004 #43 — the retired four-valued port tier is split into two orthogonal dimensions:
+  /// a conditionality facet and a provenance marker. This pins the invariants the API/UI rely on and,
+  /// crucially, that the two are independent — a port's conditionality never encodes its provenance, so a
+  /// conditional inferred port (the conflation the enum could not hold) is expressible.</summary>
+  [Test]
+  public void D1_splits_the_port_tier_into_conditionality_and_provenance()
+  {
+    Assert.Multiple(() =>
+    {
+      foreach (var p in Ports)
+      {
+        // Provenance is one of the three markers; it never leaks into the conditionality axis.
+        Assert.That(
+          p.Provenance,
+          Is.AnyOf("", "Inferred", "Declared"),
+          $"{p.Card}/{p.Label} provenance"
+        );
+        Assert.That(
+          p.Conditionality,
+          Is.Not.AnyOf("Inferred", "Declared", "Green", "Amber"),
+          $"{p.Card}/{p.Label} conditionality must not carry a provenance/legacy-tier value"
+        );
+
+        if (string.IsNullOrEmpty(p.Provenance))
+          // A parsed port describes its conditionality (unconditional, or a gate list).
+          Assert.That(
+            p.Conditionality,
+            Is.Not.Empty,
+            $"parsed port {p.Card}/{p.Label} must carry a conditionality phrase"
+          );
+        else
+          // A backfill marker has no parsed mechanism to describe.
+          Assert.That(
+            p.Conditionality,
+            Is.Empty,
+            $"backfill port {p.Card}/{p.Label} carries no conditionality"
+          );
+      }
+    });
+  }
+
+  [Test]
+  public void D1_parsed_ports_use_the_conditionality_renderer_vocabulary()
+  {
+    // Every parsed port's conditionality is a phrase PortConditionality can produce — the "green" case
+    // (fires unconditionally) or a "·"-joined list of the known gate phrases. No opaque values.
+    var known = new HashSet<string>(
+      new[]
+      {
+        MagicAST.Interaction.PortConditionality.Unconditional,
+        MagicAST.Interaction.PortConditionality.TapGated,
+        MagicAST.Interaction.PortConditionality.RequiresCounter,
+        MagicAST.Interaction.PortConditionality.RateLimited,
+      },
+      StringComparer.Ordinal
+    );
+    Assert.Multiple(() =>
+    {
+      foreach (var p in Ports.Where(p => string.IsNullOrEmpty(p.Provenance)))
+        foreach (var phrase in p.Conditionality.Split(" · "))
+          Assert.That(known, Does.Contain(phrase), $"{p.Card}/{p.Label}: '{phrase}'");
+    });
+  }
+
   // ── D4 ComboInstances ─────────────────────────────────────────────────────────────────────────
 
   [Test]

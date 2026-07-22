@@ -62,12 +62,15 @@ public static class WidenedAttributesStep
       foreach (var ci in inputs.CardInputs)
         byName.TryAdd(ci.Input.Name, ci.Input);
 
-      var tier = new Dictionary<(string, string), string>();
+      // ADR 0004 #43: conditionality index over PARSED ports only (Provenance == "") — the old Green/Amber
+      // signal, read off the split-out conditionality dimension.
+      var cond = new Dictionary<(string, string), string>();
       var cardSet = new HashSet<string>(StringComparer.Ordinal);
       foreach (var p in inputs.Ports)
       {
         cardSet.Add(p.Card);
-        tier[(p.Card, p.Label)] = p.Tier;
+        if (string.IsNullOrEmpty(p.Provenance))
+          cond[(p.Card, p.Label)] = p.Conditionality;
       }
       var cards = cardSet.OrderBy(c => c, StringComparer.Ordinal).ToList();
 
@@ -118,7 +121,8 @@ public static class WidenedAttributesStep
         {
           var greens = w
             .AffectedPortLabels.Where(l =>
-              tier.TryGetValue((card, l), out var t) && string.Equals(t, "Green", StringComparison.Ordinal)
+              cond.TryGetValue((card, l), out var c)
+              && string.Equals(c, PortConditionality.Unconditional, StringComparison.Ordinal)
             )
             .ToList();
           rows.Add(
@@ -168,7 +172,8 @@ public static class WidenedAttributesStep
         AmberPortsWidened = rows
           .SelectMany(r =>
             r.AffectedPorts.Where(l =>
-                tier.TryGetValue((r.Card, l), out var t) && string.Equals(t, "Amber", StringComparison.Ordinal)
+                cond.TryGetValue((r.Card, l), out var c)
+                && !string.Equals(c, PortConditionality.Unconditional, StringComparison.Ordinal)
               )
               .Select(l => (r.Card, l))
           )

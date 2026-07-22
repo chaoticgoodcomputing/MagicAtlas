@@ -63,17 +63,27 @@ public partial record CardPortRow
   [SerializedLabel("spans")]
   public int[][]? Spans { get; init; }
 
-  /// <summary>Product fidelity tier (upstream-atlas-data-plan §1.3): <c>Green</c> = the port's mechanism
-  /// fires unconditionally; <c>Amber</c> = gated/conditional (a hard rate limit, a <c>{T}</c> tap gate,
-  /// a counter-gate, or an intervening-if); <c>Inferred</c> = statistically backfilled from the card's
-  /// combo co-stars (carries <see cref="Confidence"/>, no parsed span); <c>Declared</c> = catalogued
-  /// (appears in a combo) with no usable inference signal.</summary>
-  [SerializedLabel("tier")]
-  public required string Tier { get; init; }
+  /// <summary><b>Dimension 1 of the retired port tier (ADR 0004 #43): conditionality.</b> The plain-language
+  /// answer to "is this mechanism conditional, and how?" — rendered by <see cref="PortConditionality"/> from
+  /// the port's <see cref="PortNode.Gated"/>/<see cref="PortNode.TapGated"/>/<see cref="PortNode.RequiresCounter"/>
+  /// axes: <c>fires unconditionally</c> (the old Green), or a "·"-joined list of the gates that apply
+  /// (<c>needs to tap</c>, <c>needs a counter on it</c>, <c>rate-limited</c>). PROVISIONAL copy pending
+  /// sign-off. <c>""</c> for a backfill row (no parsed mechanism to describe). Unlike the old Amber this is
+  /// lossless — a tap-and-rate-limited port says both.</summary>
+  [SerializedLabel("conditionality")]
+  public required string Conditionality { get; init; }
+
+  /// <summary><b>Dimension 2 of the retired port tier (ADR 0004 #43): provenance.</b> The independent answer
+  /// to "where did this port come from?" — <c>""</c> = parsed (the default, a real port with a source span);
+  /// <c>Inferred</c> = statistically backfilled from the card's combo co-stars (carries
+  /// <see cref="Confidence"/>, no parsed span); <c>Declared</c> = catalogued (appears in a combo) with no
+  /// usable inference signal. Orthogonal to <see cref="Conditionality"/>, so a conditional inferred port is
+  /// now expressible — the conflation the four-valued tier could not hold.</summary>
+  [SerializedLabel("provenance")]
+  public required string Provenance { get; init; }
 
   /// <summary>Co-occurrence strength (0–1) of an <c>Inferred</c> port — the fraction of the card's
-  /// parse-ready combo co-stars that share the inferred family. <c>null</c> for parsed (Green/Amber) and
-  /// Declared rows.</summary>
+  /// parse-ready combo co-stars that share the inferred family. <c>null</c> for parsed and Declared rows.</summary>
   [SerializedLabel("confidence")]
   public double? Confidence { get; init; }
 

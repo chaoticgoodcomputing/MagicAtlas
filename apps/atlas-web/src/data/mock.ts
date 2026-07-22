@@ -12,8 +12,24 @@
 // death·sacrifice·token archetype) and schema-faithful mocks elsewhere.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ── Combo / edge certainty tier ──────────────────────────────────────────────
+// NOTE (ADR 0004 #43): this four-valued token is the *combo & edge* certainty
+// vocabulary (a reconstructed cycle / resource line is Green = certified, Amber =
+// conditional; the mock also uses Inferred/Declared illustratively). It is NO
+// LONGER the port fidelity tier — that conflated dimension was retired and split
+// into a conditionality facet + a provenance marker (see CardPort below). Ports
+// never reference this type anymore.
 export type Tier = "Green" | "Amber" | "Inferred" | "Declared";
 export type Side = "consume" | "emit";
+
+// ── Port fidelity, split into two orthogonal dimensions (ADR 0004 #43) ────────
+// Dimension 1 (conditionality) is a plain-language string the pipeline renders and
+// the API serves verbatim; `PORT_UNCONDITIONAL` is the "fires unconditionally"
+// sentinel (the old Green), mirrored from C# `PortConditionality.Unconditional`
+// (PROVISIONAL copy, pending sign-off). Dimension 2 (provenance) is one of
+// "" (parsed) | "Inferred" | "Declared".
+export const PORT_UNCONDITIONAL = "fires unconditionally";
+export type PortProvenance = "" | "Inferred" | "Declared";
 
 export const TIER_ORDER: Tier[] = ["Green", "Amber", "Inferred", "Declared"];
 export const tierRank: Record<Tier, number> = { Green: 0, Amber: 1, Inferred: 2, Declared: 3 };
