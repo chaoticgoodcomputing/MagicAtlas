@@ -65,10 +65,7 @@
                 "Subtypes": [
                   "Treasure"
                 ],
-                "IsCopy": false,
-                "AbilityText": [
-                  "{T}, Sacrifice this artifact: Add one mana of any color."
-                ]
+                "IsCopy": false
               }
             }
           ],

@@ -27,8 +27,9 @@ using MagicAST.AST.References;
 /// the parenthetical reminder ("It's an artifact with ...") that the trigger parser strips
 /// into the ability's Reminder field and discards from the effect AST (CR 207.2: reminder
 /// text has no rules meaning). The token is identified structurally by its artifact type +
-/// named subtype. Treasure/Food/Clue/Blood retain their AbilityText body for back-compat
-/// with the existing golds; Powerstone, added clean, omits it (no free-text residual).
+/// named subtype, and its intrinsic affordance is resolved downstream from that subtype via
+/// PredefinedTokens.Registry. No predefined token re-asserts its ability body as free text
+/// (ADR-0004 recursive-body de-string, issue #40): Treasure/Food/Clue/Blood/Powerstone all omit it.
 ///
 /// Priority 96: sits above <see cref="CreateTokenRule"/> (default priority 50) so the
 /// tapped variant is matched before the plain vanilla path, which would fail anyway because
@@ -66,21 +67,18 @@ public sealed class CreateTappedPredefinedTokenRule : ITriggeredRule
       {
         Types = ["artifact"],
         Subtypes = ["Food"],
-        AbilityText = ["{2}, {T}, Sacrifice this artifact: You gain 3 life."],
         EntersTapped = true,
       },
       "Clue" => new TokenDefinition
       {
         Types = ["artifact"],
         Subtypes = ["Clue"],
-        AbilityText = ["{2}, Sacrifice this artifact: Draw a card."],
         EntersTapped = true,
       },
       "Blood" => new TokenDefinition
       {
         Types = ["artifact"],
         Subtypes = ["Blood"],
-        AbilityText = ["{1}, {T}, Discard a card, Sacrifice this artifact: Draw a card."],
         EntersTapped = true,
       },
       // Powerstone: a colorless artifact predefined token (CR 111.10). Its predefined

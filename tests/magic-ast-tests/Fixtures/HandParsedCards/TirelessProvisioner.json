@@ -73,10 +73,7 @@
                           "Subtypes": [
                             "Food"
                           ],
-                          "IsCopy": false,
-                          "AbilityText": [
-                            "{2}, {T}, Sacrifice this artifact: You gain 3 life."
-                          ]
+                          "IsCopy": false
                         }
                       }
                     ],
@@ -103,10 +100,7 @@
                           "Subtypes": [
                             "Treasure"
                           ],
-                          "IsCopy": false,
-                          "AbilityText": [
-                            "{T}, Sacrifice this artifact: Add one mana of any color."
-                          ]
+                          "IsCopy": false
                         }
                       }
                     ],

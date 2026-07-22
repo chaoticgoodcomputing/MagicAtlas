@@ -3,6 +3,7 @@ namespace MagicAST.AST.Effects.TokenCopy;
 using System.Text.Json.Serialization;
 using MagicAST.AST.Abilities;
 using MagicAST.AST.Quantities;
+using MagicAST.AST.References;
 using MagicAST.Serialization;
 using MagicAST.Serialization.DiscriminatorAttributes;
 
@@ -47,17 +48,40 @@ public sealed record TypeAdder : CopyModification
 }
 
 /// <summary>
-/// "except it has [keyword/ability]" — adds an ability to the copy. Free-text
-/// for now; future refinement can carry a structured Ability node.
+/// "except it has [ability]" — adds an ability to the copy whose structure has no
+/// dedicated node yet. Free-text escape hatch: the keyword case is structured by
+/// <see cref="KeywordAbilityAdder"/>, quoted triggered/activated abilities by
+/// <see cref="TriggeredAbilityAdder"/>/<see cref="ActivatedAbilityAdder"/>. Only a
+/// residual "except it has [X]" clause that matches none of those falls here.
 /// </summary>
 [CopyModificationKind("abilityAdder")]
 public sealed record AbilityAdder : CopyModification
 {
   /// <summary>
-  /// The ability text gained, e.g. "flying", "haste".
+  /// The ability text gained, e.g. an unrecognised or complex ability body.
   /// </summary>
   [FreeTextField]
   public required string AbilityText { get; init; }
+}
+
+/// <summary>
+/// "except it has [keyword]" / "that token gains [keyword]" — adds one or more
+/// structured keyword abilities (CR 702) to the copy token (CR 707.2 copiable
+/// values). The keyword analogue of <see cref="TriggeredAbilityAdder"/> and
+/// <see cref="ActivatedAbilityAdder"/>: used when the "except"/"gains" clause names
+/// a bare keyword ability such as "haste" (Kiki-Jiki, Heat Shimmer, Electroduplicate,
+/// Helm of the Host) — a rules-meaningful keyword identity (e.g. CR 702.10 Haste, which
+/// lets the token attack and use {T} abilities the turn it is created) rather than the
+/// free text held by <see cref="AbilityAdder.AbilityText"/>. Keywords are the typed
+/// <see cref="KeywordAbility"/> members so the grant is casing-proof and matchable
+/// (ADR 0001), and a multi-keyword "except it has flying and haste" collapses to one
+/// modification carrying the list.
+/// </summary>
+[CopyModificationKind("keywordAbilityAdder")]
+public sealed record KeywordAbilityAdder : CopyModification
+{
+  /// <summary>The keyword abilities granted to the copy (e.g. [Haste]).</summary>
+  public required IReadOnlyList<KeywordAbility> Keywords { get; init; }
 }
 
 /// <summary>

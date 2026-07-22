@@ -52,7 +52,7 @@ public sealed class CreateCopyTokenYouControlWithHasteAndEndStepSacrificeRule : 
       },
       Modifications =
       [
-        new AbilityAdder { AbilityText = "haste" },
+        new KeywordAbilityAdder { Keywords = [KeywordAbility.Haste] },
         new TriggeredAbilityAdder
         {
           Ability = new TriggeredAbility
