@@ -96,13 +96,22 @@ public sealed record TokenDefinition
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public bool? EntersAttacking { get; init; }
 
-  // Factory methods for common tokens
+  // Factory methods for common tokens.
+  //
+  // CR 111.10 predefined tokens (Treasure, Food, Clue, Blood, …) have their activated ability
+  // defined by the game rules, not by the creating card. The oracle text of a card that creates
+  // one prints that ability only as parenthetical reminder text (CR 207.2 — reminder text has no
+  // rules meaning), which the parser strips. Following the Map/Powerstone clean precedent, the
+  // predefined ability body is therefore NOT re-asserted here as free text: the token is identified
+  // structurally by its artifact type + named subtype, and its intrinsic affordance is resolved
+  // downstream from that subtype via PredefinedTokens.Registry (mast-interaction, ADR-0002 §9).
+  // Nothing reads <see cref="AbilityText"/> on these tokens; carrying it only created a free-text
+  // residual (ADR-0004 recursive-body de-string initiative, issue #40).
   public static TokenDefinition Treasure() =>
     new()
     {
       Types = ["artifact"],
       Subtypes = ["Treasure"],
-      AbilityText = ["{T}, Sacrifice this artifact: Add one mana of any color."],
     };
 
   public static TokenDefinition TappedTreasure() =>
@@ -110,7 +119,6 @@ public sealed record TokenDefinition
     {
       Types = ["artifact"],
       Subtypes = ["Treasure"],
-      AbilityText = ["{T}, Sacrifice this artifact: Add one mana of any color."],
       EntersTapped = true,
     };
 
@@ -119,7 +127,6 @@ public sealed record TokenDefinition
     {
       Types = ["artifact"],
       Subtypes = ["Food"],
-      AbilityText = ["{2}, {T}, Sacrifice this artifact: You gain 3 life."],
     };
 
   public static TokenDefinition Clue() =>
@@ -127,7 +134,6 @@ public sealed record TokenDefinition
     {
       Types = ["artifact"],
       Subtypes = ["Clue"],
-      AbilityText = ["{2}, Sacrifice this artifact: Draw a card."],
     };
 
   public static TokenDefinition Blood() =>
@@ -135,7 +141,6 @@ public sealed record TokenDefinition
     {
       Types = ["artifact"],
       Subtypes = ["Blood"],
-      AbilityText = ["{1}, {T}, Discard a card, Sacrifice this artifact: Draw a card."],
     };
 
   /// <summary>

@@ -8,12 +8,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "AFR/UnexpectedWindfall",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "ATQ/Endoskeleton",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -48,12 +42,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "AncientCopperDragon",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
       "card": "AnimateDead",
@@ -102,12 +90,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
-    },
-    {
-      "card": "CMR/SailorOfMeans",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "CN2/GrenzoSRuffians",
@@ -162,18 +144,6 @@
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
       "reason": "PB-9 (c): 'single target' - spell target-COUNT metadata ('target spell with a single target', CR 115). Out-of-scope targeting predicate; no structured target-count axis."
-    },
-    {
-      "card": "ELD/FierceWitchstalker",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
-      "card": "ELD/FortifyingProvisions",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "EMA/GiantTortoise",
@@ -254,18 +224,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "HazelsBrewmaster",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life.) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "RapaciousGuest",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life.) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
       "card": "HeatShimmer",
       "sink": "AbilityText",
       "tag": "irreducible",
@@ -338,12 +296,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "LCI/WarrenSoultrader",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "LRW/GaddockTeeg",
       "sink": "OtherCharacteristic",
       "tag": "irreducible",
@@ -354,12 +306,6 @@
       "sink": "UnstructuredEffect",
       "tag": "debt",
       "reason": "L1 shell fallback (fidelity ladder): ability kind + trigger/cost structured, effect interior held verbatim; burn down to L2 when the grammar lands"
-    },
-    {
-      "card": "LTR/PeregrinTook",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "M12/CarnageWurm",
@@ -378,12 +324,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "MH2/AcademyManufactor",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "MH3/PestRescuer",
@@ -422,28 +362,10 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "MagdaBrazenOutlaw",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "MalcolmKeenEyedNavigator",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
       "card": "MasterofCruelties",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'attacks a player and isn't blocked' is a compound attack-target + unblocked-state predicate; no structured AttacksPlayerAndIsntBlockedCondition node exists yet"
-    },
-    {
-      "card": "NEO/CrackOpen",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "ODY/AshenFirebeast",
@@ -500,12 +422,6 @@
       "reason": "L1 shell fallback (fidelity ladder): back-face attack trigger structured (Whenever this creature attacks), effect interior 'target attacking creature without flying gains flying until end of turn' held verbatim; distinct gainAbility target-filter family (attacking + without-flying), burn down to L2 when that grammar lands"
     },
     {
-      "card": "PIP/NukaColaVendingMachine",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "PouncingLynx",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -516,12 +432,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "RIX/PitilessPlunderer",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "RIX/SkymarcharAspirant",
@@ -572,18 +482,6 @@
       "reason": "PB-9 (c): 'your commander' - CR 903 format-defined commander status; no structured IsCommander axis; singleton."
     },
     {
-      "card": "RosieCottonofSouthLane",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
-      "card": "SPM/HotDogCart",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "STX/FurycalmSnarl",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -594,12 +492,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "Sanar",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     },
     {
       "card": "SelvalaHeartoftheWilds",
@@ -624,12 +516,6 @@
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 cluster G type-disjunction: 'creature or Vehicle' cross-axis OR (card type OR artifact subtype). No structured OR field. NOVEL (Opus). Same family as SwiftReconfiguration/DFT-BroodheartEngine."
-    },
-    {
-      "card": "SmotheringTithe",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative (Treasure token ability text)"
     },
     {
       "card": "Spelunking",
@@ -668,18 +554,6 @@
       "reason": "PB-9 (c): 'targeting this creature' - relational spell-targets-self predicate (Heroic, CR 702.85). Targeting is stack-time engine state; same irreducible category as BFZ/FathomFeeder 'targeting'."
     },
     {
-      "card": "TLA/ForecastingFortuneTeller",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
-      "card": "TMT/CourierofComestibles",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Food token activated-ability body ({2}, {T}, Sacrifice: You gain 3 life.) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
-    },
-    {
       "card": "TSP/Stingscourger",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -708,18 +582,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'The Reality Chip is attached to a creature' is an attachment-state predicate; no IsAttachedToCreature condition arm exists yet (CR 702.151b)"
-    },
-    {
-      "card": "TheReaverCleaver",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token ability text (separate de-string initiative)"
-    },
-    {
-      "card": "TirelessProvisioner",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
     },
     {
       "card": "ToralfGodofFuryToralfsHammer",
@@ -758,12 +620,6 @@
       "reason": "PB-9 MIXED: (1) '-3 target permanent that's one or more colors' -> new ObjectFilter.IsColored bool (complement of IsColorless, CR 105.2), cluster I NOVEL (Opus); (2) '+1 top card of library' positional 'top' remains IRREDUCIBLE (library order, no Position axis)."
     },
     {
-      "card": "VOW/BloodServitor",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "VraskaBetrayalsSting",
       "sink": "AbilityText",
       "tag": "debt",
@@ -788,22 +644,10 @@
       "reason": "bespoke history predicate — deferred adjunct"
     },
     {
-      "card": "XLN/RuthlessKnave",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — separate de-string initiative"
-    },
-    {
       "card": "ZEN/BloodchiefAscension",
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'an opponent lost N+ life this turn' is a turn-scoped life-history predicate with no current HistoryCondition arm; requires a new quantity (LifeLostThisTurn by player) or HistoryCondition variant"
-    },
-    {
-      "card": "GimliOfTheGlitteringCaves",
-      "sink": "AbilityText",
-      "tag": "irreducible",
-      "reason": "recursive token/granted-ability body parsing — Treasure token activated-ability body ({T}, Sacrifice: Add mana) is reminder text on TokenDefinition.AbilityText; separate de-string initiative"
     }
   ]
 }

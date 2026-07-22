@@ -87,10 +87,7 @@
                 "Subtypes": [
                   "Food"
                 ],
-                "IsCopy": false,
-                "AbilityText": [
-                  "{2}, {T}, Sacrifice this artifact: You gain 3 life."
-                ]
+                "IsCopy": false
               },
               "SourceSpan": {
                 "Start": 62,

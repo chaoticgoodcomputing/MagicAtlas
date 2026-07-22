@@ -59,9 +59,6 @@
                       "Subtypes": [
                         "Clue"
                       ],
-                      "AbilityText": [
-                        "{2}, Sacrifice this artifact: Draw a card."
-                      ],
                       "IsCopy": false
                     }
                   },
@@ -81,9 +78,6 @@
                       "Subtypes": [
                         "Food"
                       ],
-                      "AbilityText": [
-                        "{2}, {T}, Sacrifice this artifact: You gain 3 life."
-                      ],
                       "IsCopy": false
                     }
                   },
@@ -102,9 +96,6 @@
                       ],
                       "Subtypes": [
                         "Treasure"
-                      ],
-                      "AbilityText": [
-                        "{T}, Sacrifice this artifact: Add one mana of any color."
                       ],
                       "IsCopy": false
                     }

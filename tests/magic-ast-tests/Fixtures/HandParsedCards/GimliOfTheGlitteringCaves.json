@@ -127,9 +127,6 @@
                 ],
                 "Subtypes": [
                   "Treasure"
-                ],
-                "AbilityText": [
-                  "{T}, Sacrifice this artifact: Add one mana of any color."
                 ]
               },
               "SourceSpan": {
