@@ -426,12 +426,63 @@ public sealed class ClauseSplitter
         }
       }
 
+      // EOE "Void" trailing conditional-magnitude override (Plasma Bolt, Tragic
+      // Trajectory): a base spell value line ("~ deals N damage to any target." /
+      // "Target creature gets -X/-Y until end of turn.") immediately followed by a
+      // "Void — ~ [same effect at a new magnitude] instead if <void disjunction>"
+      // paragraph is ONE spell ability whose magnitude is conditionally overridden —
+      // NOT two independent abilities (two abilities would read additively, the
+      // "instead" makes the second magnitude a REPLACEMENT). Join the override
+      // continuation onto its base line so the whole two-sentence text reaches
+      // SpellAbilityParser as a single clause, where VoidInsteadOverrideSpellRule
+      // stitches it into a ConditionalEffect (Then = override magnitude, Else = base).
+      // Anchored on the fixed Void event-history disjunction (CR 207.2c: "void" is an
+      // ability word with no rules meaning — the printed disjunction is byte-identical
+      // on every Void card), so ONLY these trailing-"instead if" override cards join;
+      // the leading "Void — If <void>, …" spells and "Void — <trigger>" cards, which
+      // never carry the "… instead if <void>" tail, are untouched.
+      if (
+        i + 1 < paragraphs.Count
+        && IsVoidOverrideBaseLine(paragraphText)
+        && IsVoidInsteadOverrideContinuation(paragraphs[i + 1].Text)
+      )
+      {
+        var joined = paragraphText + "\n" + paragraphs[i + 1].Text;
+        clauses.Add(CreateClause(joined, paragraphStart));
+        i += 1;
+        continue;
+      }
+
       var paragraphClauses = ProcessParagraph(paragraphText, paragraphStart);
       clauses.AddRange(paragraphClauses);
     }
 
     return clauses;
   }
+
+  // "~ deals N damage to any target." / "Target creature gets -X/-Y until end of turn."
+  // — the base value line an EOE Void trailing conditional-magnitude override sits atop.
+  private static readonly System.Text.RegularExpressions.Regex VoidOverrideBaseLinePattern =
+    new(
+      @"^(?:.+\s+deals?\s+\d+\s+damage\s+to\s+any\s+target|Target\s+creature\s+gets\s+[+-]\d+/[+-]\d+\s+until\s+end\s+of\s+turn)\.?$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        | System.Text.RegularExpressions.RegexOptions.Compiled
+    );
+
+  private static bool IsVoidOverrideBaseLine(string text) =>
+    VoidOverrideBaseLinePattern.IsMatch(text.Trim());
+
+  // "Void — … instead if a nonland permanent left the battlefield this turn or a spell
+  // was warped this turn." — the trailing conditional-magnitude override continuation.
+  private static readonly System.Text.RegularExpressions.Regex VoidInsteadOverridePattern =
+    new(
+      @"^Void\s+—\s+.+\s+instead\s+if\s+a\s+nonland\s+permanent\s+left\s+the\s+battlefield\s+this\s+turn\s+or\s+a\s+spell\s+was\s+warped\s+this\s+turn\.?$",
+      System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        | System.Text.RegularExpressions.RegexOptions.Compiled
+    );
+
+  private static bool IsVoidInsteadOverrideContinuation(string text) =>
+    VoidInsteadOverridePattern.IsMatch(text.Trim());
 
   /// <summary>
   /// True if the paragraph ends with a "roll a dN" / "roll N dN" /

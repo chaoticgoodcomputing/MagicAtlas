@@ -2,24 +2,9 @@
   "_doc": "Explicit whitelist of golds permitted to carry an IUnparsed node (UnparsedAbility/UnparsedEffect). STATELESS INVARIANT (GoldFixtureUnparsedTests): any gold NOT listed here must be unparsed-free, else loud failure; a listed gold that no longer carries an unparsed node fails too (remove it). ADR-0001 goal (b): a gold must never assert a parse failure as truth. Each entry is a NAMED, justified carve-out (tag debt = slated for a burndown slice, see libs/magic-ast/docs/gold-burndown-plan.md; tag irreducible = permanent). De-ratcheted from the in-test KnownUnparsedGold HashSet 2026-06-16. TARGET: empty.",
   "entries": [
     {
-      "card": "DGM/WearTear",
-      "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
-    },
-    {
-      "card": "EOE/PlasmaBolt",
-      "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
-    },
-    {
-      "card": "EOE/TragicTrajectory",
-      "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
-    },
-    {
       "card": "SOM/PrecursorGolem",
       "tag": "debt",
-      "reason": "PB-8 unparsed grammar gap"
+      "reason": "copy-for-each engine (corpus text: 'Whenever a player casts an instant or sorcery spell that targets only a single Golem, that player copies that spell for each other Golem that spell could target. Each copy targets a different one of those Golems.'). CopyEffect + CountQuantity + Player=ThatPlayer + a SpellCast trigger already exist, but faithful structuring is blocked on TWO AST axes with no node today: (a) 'that spell could target' — a legal-target filter (ObjectFilter has Targets + TargetCountComparison but no could-be-targeted-by axis), and (b) 'Each copy targets a different one of those Golems' — a per-copy distinct-target distribution constraint (CopyEffect.MayChooseNewTargets is the nearest flag and does not express it). Dropping (b) would be a WRONG structure (ADR-0004 reference-not-resolution): the one-copy-per-Golem distribution is the whole combo mechanism. Also needs a new 'targets only a single [subtype]' arm in SpellCastConditionRule (it handles 'instant or sorcery' + Heroic 'targets this creature'=Self, not a filtered non-self referent + TargetCountComparison=1). DEFERRED not degraded: Precursor is a combo-relevant copy engine — structuring it adds copy ports the unparsed shell hid, which risks bench tier movement (STOP-and-escalate per the wave gate). Gold Input.OracleText is separately drift-quarantined (oracle-text-quarantine.json) and must be re-pointed to the corpus text before structuring."
     }
   ]
 }

@@ -3,7 +3,7 @@
     "Name": "Plasma Bolt",
     "ManaCost": "{R}",
     "TypeLine": "Sorcery",
-    "OracleText": "Plasma Bolt deals 2 damage to any target.\nVoid — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "OracleText": "Plasma Bolt deals 2 damage to any target.\nVoid \u2014 Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
     "Power": null,
     "Toughness": null,
     "Colors": [
@@ -22,54 +22,49 @@
       ]
     },
     "Oracle": {
-      "RawText": "Plasma Bolt deals 2 damage to any target.\nVoid — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "RawText": "Plasma Bolt deals 2 damage to any target.\nVoid \u2014 Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
       "Abilities": [
         {
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "dealDamage",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 2
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "void"
               },
-              "Target": {
-                "Kind": "AnyTarget"
+              "Then": {
+                "EffectType": "dealDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 3
+                },
+                "Target": {
+                  "Kind": "AnyTarget"
+                },
+                "Source": {
+                  "Kind": "Self"
+                }
               },
-              "Source": {
-                "Kind": "Self"
+              "Else": {
+                "EffectType": "dealDamage",
+                "Amount": {
+                  "QuantityType": "literal",
+                  "Value": 2
+                },
+                "Target": {
+                  "Kind": "AnyTarget"
+                },
+                "Source": {
+                  "Kind": "Self"
+                }
               }
             }
           ],
           "SourceSpan": {
             "Start": 0,
-            "Length": 41
+            "Length": 170
           },
           "OracleLineIndex": 0
-        },
-        {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 42,
-            "Length": 128
-          },
-          "RawText": "Void — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
-          "Diagnostics": [
-            {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 42,
-                "Length": 128
-              },
-              "RawText": "Void — Plasma Bolt deals 3 damage instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
-              "Pattern": "ConditionalEffect",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 42
-            }
-          ],
-          "AbilityWord": "Void",
-          "OracleLineIndex": 1
         }
       ]
     },
