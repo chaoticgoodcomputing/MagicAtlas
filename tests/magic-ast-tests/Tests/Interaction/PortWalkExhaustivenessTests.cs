@@ -1,246 +1,275 @@
 namespace MagicAST.Interaction.Tests;
 
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using MagicAST.AST.Abilities;
-using MagicAST.AST.Triggers;
-using MagicAST.Interaction;
-using MagicAST.Schema;
+using MagicAtlas.Ast.Tests.Flows.DerivedBacklog;
 
 /// <summary>
-/// Exhaustiveness invariant for <see cref="PortWalk"/> (alignment initiative 03 #1, de-ratcheted
-/// 2026-06-16). Every AST discriminator that PortWalk dispatches on — every <c>EffectType</c>,
-/// <c>CostType</c>, trigger <c>Event</c>, and restriction kind — must be EITHER semantically projected
-/// (declared in <see cref="PortWalkProjection"/>) OR carry an EXPLICIT, justified entry in the named
-/// whitelist <c>libs/mast-interaction/known-coarse-projections.json</c>.
+/// Exhaustiveness invariant for <see cref="PortWalk"/> (alignment initiative 03 #1; de-ratcheted
+/// 2026-06-16; <b>re-pointed at the derived backlog 2026-07-22, ADR-0004 §2 / issue #32</b>). Every AST
+/// discriminator that PortWalk dispatches on — every <c>EffectType</c>, <c>CostType</c>, trigger
+/// <c>Event</c>, and restriction — must be EITHER semantically projected (declared in
+/// <see cref="PortWalkProjection"/>) OR <b>accounted for</b> by the derived backlog: it is in the backlog
+/// (an unserved projection with no gold), a decision (an unserved projection an asserted-absence gold
+/// removes), or an excluded not-a-port-candidate (a parse-ledger escape hatch). A discriminator that is
+/// none of those fails loudly.
 ///
-/// Why: a discriminator with no semantic projection falls through to a coarse totality label
-/// (<c>emit:&lt;x&gt;</c> / <c>pay:&lt;x&gt;</c> / a coarse trigger role) that no flow rule reads — the
-/// port exists but yields zero recall. Every TDD batch that adds an effect type silently degrades
-/// interactions while the parser tests stay green. This invariant converts that drift into a failing
-/// test: a new discriminator that is neither projected NOR whitelisted fails here, forcing a conscious
-/// projection decision. The whitelist is an EXPLICIT NAMED LIST of the discriminators permitted to be
-/// coarse, each justified by a reason — not a count and not a moving baseline (same stateless-invariant
-/// + explicit-named-carve-out shape as the gold free-text whitelist). A whitelisted discriminator that
-/// later becomes projected, or one that no longer exists, fails until removed — the list stays honest by
-/// being a list of NAMES.
+/// <para><b>What changed.</b> This gate used to read a hand-maintained named whitelist
+/// (<c>libs/mast-interaction/known-coarse-projections.json</c>) — every non-projected discriminator carried
+/// a prose "reason" that nothing checked as the corpus/parser moved under it (ADR-0004's Context table: the
+/// whitelist "edited three times in one session; nothing checks whether the prose is still true"). That
+/// file is <b>deleted</b>. The blind-spot set is now DERIVED — <c>all discriminators − PortWalkProjection −
+/// asserted-unarmable(golds)</c> is exactly ADR-0004 §2's backlog — and the loud signal survives without a
+/// name list: a new discriminator that is neither projected nor an asserted-absence gold simply appears in
+/// the backlog, and this gate proves the accounting is complete and non-vacuous.</para>
 ///
-/// The whitelist size is the interaction layer's known-blind-spot metric — see
-/// docs/scratch/alignment-session/03-portwalk-exhaustiveness-findings.md.
+/// <para><b>Stateless by construction</b>, like the cross-track join gates: it re-runs the pure
+/// <see cref="BacklogDerivation.Compute"/> over the live schema + engine + golds, never reading the
+/// gitignored <c>_08_Reporting/derived-backlog.json</c> the flow writes — a gate that read the artifact it
+/// is meant to check would verify the derivation against itself.</para>
 /// </summary>
 [TestFixture]
 public class PortWalkExhaustivenessTests
 {
-  private const string WhitelistRelPath = "libs/mast-interaction/known-coarse-projections.json";
+  private static readonly string Root = BacklogSources.RepoRoot();
 
-  // The four dispatch dimensions: display key -> (full vocabulary, declared-projected set).
-  private static IReadOnlyDictionary<string, (IReadOnlySet<string> All, IReadOnlySet<string> Projected)> Dimensions()
+  private static readonly Lazy<Live> Computed = new(() =>
   {
-    var schema = SchemaExport.Build();
-    IReadOnlySet<string> baseDiscriminators(string discriminatorKey) =>
-      schema
-        .Bases.Where(b => b.DiscriminatorKey == discriminatorKey)
-        .SelectMany(b => b.Types.Select(t => t.Discriminator))
-        .ToHashSet(StringComparer.Ordinal);
+    var all = BacklogDerivation.AllByDimension();
+    var served = BacklogDerivation.ServedByDimension();
+    var decisionSources = BacklogSources.LoadAssertedUnarmable(BacklogSources.GoldsDir(Root), all);
+    var result = BacklogDerivation.Compute(
+      all,
+      served,
+      decisionSources.Select(d => d.Term).ToHashSet(),
+      BacklogDerivation.NotPortCandidates
+    );
+    return new Live(all, served, decisionSources, result);
+  });
 
-    var restrictions = Enum.GetNames<ActivationRestriction>()
-      .Concat(Enum.GetNames<TriggeredAbilityRestriction>())
-      .ToHashSet(StringComparer.Ordinal);
+  private sealed record Live(
+    IReadOnlyDictionary<string, IReadOnlySet<string>> All,
+    IReadOnlyDictionary<string, IReadOnlySet<string>> Served,
+    IReadOnlyList<BacklogSources.DecisionSource> DecisionSources,
+    BacklogDerivation.BacklogResult Result
+  );
 
-    return new Dictionary<string, (IReadOnlySet<string>, IReadOnlySet<string>)>
-    {
-      ["effectType"] = (baseDiscriminators("EffectType"), PortWalkProjection.EffectTypes),
-      ["costType"] = (baseDiscriminators("CostType"), PortWalkProjection.CostTypes),
-      ["triggerEvent"] = (Enum.GetNames<TriggerEvent>().ToHashSet(StringComparer.Ordinal), PortWalkProjection.TriggerEvents),
-      ["restriction"] = (restrictions, PortWalkProjection.GatingRestrictions),
-    };
-  }
+  // ── THE GATE: every unprojected discriminator is accounted for ────────────────────────────────────
 
   /// <summary>
-  /// Pure ratchet logic — kept separate from the schema so it can be self-tested with synthetic input.
-  /// Returns a human-readable failure per violation; empty list == pass.
+  /// The invariant, re-pointed at the backlog: for every dispatch dimension, the unserved discriminators
+  /// (<c>all − served</c>) are EXACTLY the union of the derived backlog, the decisions, and the excluded
+  /// not-a-port-candidates. Nothing unprojected falls through unaccounted, and nothing is invented — the
+  /// analog of the old "every discriminator is projected or explicitly whitelisted", now derived.
   /// </summary>
-  internal static List<string> CheckDimension(
-    string dimension,
-    IReadOnlySet<string> all,
-    IReadOnlySet<string> projected,
-    IReadOnlyDictionary<string, string> whitelist
-  )
-  {
-    var failures = new List<string>();
-
-    // 1) Every discriminator is projected or explicitly whitelisted by name.
-    foreach (var d in all.OrderBy(x => x, StringComparer.Ordinal))
-      if (!projected.Contains(d) && !whitelist.ContainsKey(d))
-        failures.Add(
-          $"[{dimension}] \"{d}\" is neither projected (PortWalkProjection) nor on the coarse-projection whitelist. "
-            + "Add a semantic projection to PortWalk, or add a justified named entry to known-coarse-projections.json."
-        );
-
-    // 2) Declared-projected entries must be real discriminators (typo guard).
-    foreach (var p in projected.OrderBy(x => x, StringComparer.Ordinal))
-      if (!all.Contains(p))
-        failures.Add($"[{dimension}] PortWalkProjection declares \"{p}\" but no such discriminator exists (typo/stale).");
-
-    // 3) Whitelist entries must stay honest: a now-projected or vanished name fails until removed, and
-    //    every name carries a non-empty reason (it is an EXPLICIT, justified carve-out, not a count).
-    foreach (var (key, reason) in whitelist.OrderBy(kv => kv.Key, StringComparer.Ordinal))
-    {
-      if (projected.Contains(key))
-        failures.Add($"[{dimension}] \"{key}\" is whitelisted as coarse but is now projected — remove it from known-coarse-projections.json.");
-      else if (!all.Contains(key))
-        failures.Add($"[{dimension}] whitelist entry \"{key}\" is not a known discriminator (stale — remove it).");
-      if (string.IsNullOrWhiteSpace(reason))
-        failures.Add($"[{dimension}] whitelist entry \"{key}\" has an empty reason — name why it is permitted to be a coarse projection.");
-    }
-
-    return failures;
-  }
-
   [Test]
-  public void Every_discriminator_is_projected_or_justified()
+  public void Every_unprojected_discriminator_is_accounted_for()
   {
-    var whitelist = LoadWhitelist();
-    var failures = new List<string>();
-    foreach (var (dim, (all, projected)) in Dimensions())
-      failures.AddRange(CheckDimension(dim, all, projected, whitelist.GetValueOrDefault(dim, new())));
+    var live = Computed.Value;
+    var accounted = live
+      .Result.Backlog.Concat(live.Result.Decisions)
+      .Concat(live.Result.Excluded)
+      .ToHashSet();
+
+    var unaccounted = new List<string>();
+    foreach (var (dim, all) in live.All)
+    {
+      var served = live.Served.GetValueOrDefault(dim, new HashSet<string>(StringComparer.Ordinal));
+      foreach (var d in all.Where(x => !served.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
+        if (!accounted.Contains(new BacklogDerivation.Term(dim, d)))
+          unaccounted.Add($"[{dim}] {d}");
+    }
 
     Assert.That(
-      failures,
+      unaccounted,
       Is.Empty,
-      "PortWalk projection exhaustiveness invariant failed:\n  " + string.Join("\n  ", failures)
+      "ADR-0004 §2: these unprojected discriminators are in neither the backlog, the decisions, nor the "
+        + "not-a-port-candidate exclusions — the derivation dropped them:\n  "
+        + string.Join("\n  ", unaccounted)
     );
   }
 
-  // ----- self-tests of the invariant logic (synthetic, no real schema) -----
-
+  /// <summary>Declared-projected entries must be real discriminators (the typo/stale guard, retained):
+  /// <c>served ⊆ all</c>, or PortWalkProjection names a discriminator that no longer exists.</summary>
   [Test]
-  public void Fails_a_new_unprojected_unwhitelisted_discriminator()
+  public void Projected_entries_are_real_discriminators()
   {
-    var failures = CheckDimension(
-      "effectType",
-      all: new HashSet<string> { "createToken", "brandNewEffect" },
-      projected: new HashSet<string> { "createToken" },
-      whitelist: new Dictionary<string, string>()
-    );
-    Assert.That(failures, Has.Some.Contains("brandNewEffect"));
-  }
-
-  [Test]
-  public void Passes_when_new_discriminator_is_whitelisted()
-  {
-    var failures = CheckDimension(
-      "effectType",
-      all: new HashSet<string> { "createToken", "brandNewEffect" },
-      projected: new HashSet<string> { "createToken" },
-      whitelist: new Dictionary<string, string> { ["brandNewEffect"] = "inert; no flow rule consumes it" }
-    );
-    Assert.That(failures, Is.Empty);
-  }
-
-  [Test]
-  public void Fails_a_whitelisted_entry_that_is_now_projected()
-  {
-    var failures = CheckDimension(
-      "effectType",
-      all: new HashSet<string> { "createToken" },
-      projected: new HashSet<string> { "createToken" },
-      whitelist: new Dictionary<string, string> { ["createToken"] = "stale" }
-    );
-    Assert.That(failures, Has.Some.Contains("now projected"));
-  }
-
-  [Test]
-  public void Fails_an_empty_reason_and_a_stale_entry()
-  {
-    var empty = CheckDimension("costType", new HashSet<string> { "mana" }, new HashSet<string> { "mana" }, new Dictionary<string, string>());
-    Assert.That(empty, Is.Empty, "baseline sanity");
-
-    var emptyReason = CheckDimension("costType", new HashSet<string> { "mana", "discard" }, new HashSet<string> { "mana" }, new Dictionary<string, string> { ["discard"] = "  " });
-    Assert.That(emptyReason, Has.Some.Contains("empty reason"));
-
-    var stale = CheckDimension("costType", new HashSet<string> { "mana" }, new HashSet<string> { "mana" }, new Dictionary<string, string> { ["goneAway"] = "x" });
-    Assert.That(stale, Has.Some.Contains("not a known discriminator"));
-  }
-
-  // ----- whitelist IO -----
-
-  private static string WhitelistPath() => Path.Combine(RepoRoot(), WhitelistRelPath);
-
-  // Reserved top-level prose key (a string, not a dimension) — the named-whitelist doc-string.
-  private const string DocKey = "_doc";
-
-  private static Dictionary<string, Dictionary<string, string>> LoadWhitelist()
-  {
-    var path = WhitelistPath();
-    Assert.That(File.Exists(path), Is.True, $"Missing coarse-projection whitelist at {path}. Seed it via the [Explicit] Regenerate test.");
-
-    using var doc = JsonDocument.Parse(File.ReadAllText(path));
-    var result = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
-    foreach (var dim in doc.RootElement.EnumerateObject())
+    var live = Computed.Value;
+    var stale = new List<string>();
+    foreach (var (dim, served) in live.Served)
     {
-      if (dim.Name == DocKey)
-        continue; // the prose doc-string, not a dispatch dimension
-      var map = new Dictionary<string, string>(StringComparer.Ordinal);
-      foreach (var entry in dim.Value.EnumerateObject())
-        map[entry.Name] = entry.Value.GetString() ?? "";
-      result[dim.Name] = map;
+      var all = live.All.GetValueOrDefault(dim, new HashSet<string>(StringComparer.Ordinal));
+      foreach (var p in served.Where(x => !all.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
+        stale.Add($"[{dim}] PortWalkProjection declares \"{p}\" but no such discriminator exists (typo/stale).");
     }
 
-    return result;
+    Assert.That(stale, Is.Empty, string.Join("\n", stale));
   }
 
   /// <summary>
-  /// Seeds / refreshes known-coarse-projections.json: every non-projected discriminator gets a named
-  /// entry, preserving existing reasons and defaulting new ones. Projected discriminators are dropped (the
-  /// whitelist holds only live, coarse names). Run after a deliberate projection change:
-  /// <c>nx run mast:test -- --filter Regenerate_coarse_projection_whitelist</c> (or the dotnet
-  /// equivalent), then edit reasons and commit.
+  /// Every decision (asserted-unarmable subtrahend member) must trace to a gold — "every asserted-unarmable
+  /// one has a gold" (Appendix C, handover step 2). A decision with no gold, or a gold asserting
+  /// <c>no_arm</c> over a discriminator that is SERVED or does not exist (a dangling decision), is a stale
+  /// or contradictory claim and fails — the analog of the old "whitelisted but now projected" / "stale
+  /// entry" checks.
   /// </summary>
-  [Test, Explicit("Writes known-coarse-projections.json to the source tree.")]
-  public void Regenerate_coarse_projection_whitelist()
+  [Test]
+  public void Every_decision_traces_to_a_gold_and_none_dangle()
   {
-    var existing = File.Exists(WhitelistPath()) ? LoadWhitelist() : new();
-    const string defaultReason =
-      "no semantic projection yet — coarse fallback no flow rule consumes; explicit named carve-out";
+    var live = Computed.Value;
+    var byTerm = live.DecisionSources.ToDictionary(d => d.Term, d => d);
 
-    // Preserve the prose doc-string as the first key on regen.
-    var output = new Dictionary<string, object>
+    Assert.Multiple(() =>
     {
-      [DocKey] =
-        "Explicit named whitelist of PortWalk dispatch discriminators permitted to be COARSE — each "
-        + "carries a reason justifying why it has no semantic projection (it falls to an emit:/pay:/role "
-        + "label no flow rule reads). STATELESS INVARIANT (PortWalkExhaustivenessTests): every "
-        + "discriminator must be EITHER projected (PortWalkProjection) OR named here; a new one that is "
-        + "neither fails loudly. A name here that becomes projected, or that no longer exists, fails until "
-        + "removed. This is a list of NAMES, each justified — not a count and not a moving ratchet. The "
-        + "size is the interaction layer's known-blind-spot metric (see "
-        + "docs/scratch/alignment-session/03-portwalk-exhaustiveness-findings.md).",
-    };
-    foreach (var (dim, (all, projected)) in Dimensions())
-    {
-      var dimMap = new Dictionary<string, string>();
-      foreach (var d in all.Where(x => !projected.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
-        dimMap[d] = existing.GetValueOrDefault(dim, new()).GetValueOrDefault(d, defaultReason);
-      output[dim] = dimMap;
-    }
-
-    File.WriteAllText(
-      WhitelistPath(),
-      JsonSerializer.Serialize(output, new JsonSerializerOptions { WriteIndented = true }) + "\n"
-    );
-    TestContext.Out.WriteLine($"Wrote {WhitelistPath()}");
-    foreach (var (dim, map) in output)
-      if (map is Dictionary<string, string> d)
-        TestContext.Out.WriteLine($"  {dim}: {d.Count} coarse");
+      Assert.That(
+        live.Result.DanglingDecisions,
+        Is.Empty,
+        "a gold asserts no_arm over a discriminator that is served or does not exist:\n  "
+          + string.Join("\n  ", live.Result.DanglingDecisions.Select(t => t.ToString()))
+      );
+      foreach (var d in live.Result.Decisions)
+        Assert.That(
+          byTerm.ContainsKey(d),
+          Is.True,
+          $"decision {d} has no witnessing gold — a decision must be an asserted-absence gold, never a bare exclusion"
+        );
+    });
   }
 
-  private static string RepoRoot()
+  // ── non-vacuity ───────────────────────────────────────────────────────────────────────────────────
+
+  /// <summary>
+  /// The join must not pass because a side came back empty. A corpus-less checkout still has the full schema
+  /// (projected), engine (served) and committed golds (the subtrahend), so all three terms are live here.
+  /// The known decision <c>anyNumberInDeck</c> must be present and trace to its gold — the standing proof
+  /// that the subtrahend is wired to real golds, not baked.
+  /// </summary>
+  [Test]
+  public void Backlog_is_non_vacuous()
   {
-    var dir = new DirectoryInfo(AppContext.BaseDirectory);
-    while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "nx.json")))
-      dir = dir.Parent;
-    return dir?.FullName
-      ?? throw new InvalidOperationException("Could not locate repo root (no nx.json above test dir).");
+    var live = Computed.Value;
+
+    Assert.Multiple(() =>
+    {
+      Assert.That(live.All.Values.Sum(s => s.Count), Is.GreaterThan(0), "no discriminators were reflected");
+      Assert.That(live.Served.Values.Sum(s => s.Count), Is.GreaterThan(0), "no served discriminators were reflected");
+      Assert.That(live.Result.Backlog, Is.Not.Empty, "the derived backlog is empty — the subtrahend or served set swallowed everything");
+      Assert.That(live.DecisionSources, Is.Not.Empty, "no asserted-unarmable gold was read — the subtrahend is not wired to the golds");
+
+      var anyNumber = new BacklogDerivation.Term("effectType", "anyNumberInDeck");
+      Assert.That(
+        live.Result.Decisions,
+        Does.Contain(anyNumber),
+        "anyNumberInDeck is not a decision — the rat-colony asserted-absence gold is not removing its port"
+      );
+      Assert.That(
+        live.Result.Backlog,
+        Does.Not.Contain(anyNumber),
+        "anyNumberInDeck is in the backlog despite its gold — the subtrahend is not live"
+      );
+      Assert.That(
+        live.DecisionSources.Single(d => d.Term == anyNumber).Gold,
+        Is.EqualTo("rat-colony-deck-construction-terminal"),
+        "the anyNumberInDeck decision does not trace to the rat-colony gold"
+      );
+    });
+
+    TestContext.WriteLine(
+      $"derived backlog: {live.Result.Backlog.Count} discriminators, {live.Result.Decisions.Count} decisions, "
+        + $"{live.Result.Excluded.Count} excluded (not-a-port-candidate) over {live.DecisionSources.Count} gold-sourced probes"
+    );
+    foreach (var (dim, c) in live.Result.ByDimension.OrderBy(kv => kv.Key, StringComparer.Ordinal))
+      TestContext.WriteLine($"  {dim}: all={c.All} served={c.Served} backlog={c.Backlog} decisions={c.Decisions} excluded={c.Excluded}");
+  }
+
+  // ── self-tests of the pure derivation (synthetic, no real schema) — the teeth ─────────────────────
+
+  private static IReadOnlyDictionary<string, IReadOnlySet<string>> Dim(string dim, params string[] xs) =>
+    new Dictionary<string, IReadOnlySet<string>>(StringComparer.Ordinal)
+    {
+      [dim] = xs.ToHashSet(StringComparer.Ordinal),
+    };
+
+  [Test]
+  public void Unprojected_with_no_gold_is_backlog()
+  {
+    var result = BacklogDerivation.Compute(
+      Dim("effectType", "createToken", "brandNewEffect"),
+      Dim("effectType", "createToken"),
+      assertedUnarmable: new HashSet<BacklogDerivation.Term>(),
+      notPortCandidates: new HashSet<BacklogDerivation.Term>()
+    );
+    Assert.Multiple(() =>
+    {
+      Assert.That(result.Backlog, Does.Contain(new BacklogDerivation.Term("effectType", "brandNewEffect")));
+      Assert.That(result.Decisions, Is.Empty);
+    });
+  }
+
+  [Test]
+  public void Unprojected_with_a_gold_is_a_decision_not_backlog()
+  {
+    var decided = new BacklogDerivation.Term("effectType", "brandNewEffect");
+    var result = BacklogDerivation.Compute(
+      Dim("effectType", "createToken", "brandNewEffect"),
+      Dim("effectType", "createToken"),
+      assertedUnarmable: new HashSet<BacklogDerivation.Term> { decided },
+      notPortCandidates: new HashSet<BacklogDerivation.Term>()
+    );
+    Assert.Multiple(() =>
+    {
+      Assert.That(result.Decisions, Does.Contain(decided), "an unserved projection WITH a gold is a decision");
+      Assert.That(result.Backlog, Does.Not.Contain(decided), "…and therefore not backlog — the whole-job distinction");
+    });
+  }
+
+  /// <summary>An EMPTY subtrahend is the normal case (ADR-0004 §2 / #28's strong-prior-backlog), not an
+  /// error: the same discriminator that was a decision above is backlog with no gold, and the derivation
+  /// neither throws nor warns.</summary>
+  [Test]
+  public void Empty_subtrahend_is_the_normal_case_not_an_error()
+  {
+    var result = BacklogDerivation.Compute(
+      Dim("effectType", "createToken", "brandNewEffect"),
+      Dim("effectType", "createToken"),
+      assertedUnarmable: new HashSet<BacklogDerivation.Term>(), // empty
+      notPortCandidates: new HashSet<BacklogDerivation.Term>()
+    );
+    Assert.Multiple(() =>
+    {
+      Assert.That(result.Backlog, Does.Contain(new BacklogDerivation.Term("effectType", "brandNewEffect")));
+      Assert.That(result.Decisions, Is.Empty);
+      Assert.That(result.DanglingDecisions, Is.Empty);
+    });
+  }
+
+  [Test]
+  public void Not_a_port_candidate_is_excluded_not_backlog()
+  {
+    var hatch = new BacklogDerivation.Term("effectType", "unparsed");
+    var result = BacklogDerivation.Compute(
+      Dim("effectType", "createToken", "unparsed"),
+      Dim("effectType", "createToken"),
+      assertedUnarmable: new HashSet<BacklogDerivation.Term>(),
+      notPortCandidates: new HashSet<BacklogDerivation.Term> { hatch }
+    );
+    Assert.Multiple(() =>
+    {
+      Assert.That(result.Excluded, Does.Contain(hatch), "a parse-ledger escape hatch is excluded, not backlog");
+      Assert.That(result.Backlog, Does.Not.Contain(hatch));
+    });
+  }
+
+  /// <summary>Teeth on the dangling case: a gold asserting no_arm over a SERVED discriminator (someone armed
+  /// the port under it) must surface as dangling — the analog of the old "whitelisted but now projected".</summary>
+  [Test]
+  public void A_gold_asserting_over_a_served_discriminator_dangles()
+  {
+    var served = new BacklogDerivation.Term("effectType", "createToken");
+    var result = BacklogDerivation.Compute(
+      Dim("effectType", "createToken"),
+      Dim("effectType", "createToken"),
+      assertedUnarmable: new HashSet<BacklogDerivation.Term> { served },
+      notPortCandidates: new HashSet<BacklogDerivation.Term>()
+    );
+    Assert.That(result.DanglingDecisions, Does.Contain(served), "a decision over a served port is stale/contradictory");
   }
 }

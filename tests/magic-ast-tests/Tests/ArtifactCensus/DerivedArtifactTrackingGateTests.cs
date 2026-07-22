@@ -93,16 +93,9 @@ public class DerivedArtifactTrackingGateTests
         + "regenerates it.",
       Gate: "SchemaExportTests"
     ),
-    new(
-      Path: "libs/mast-interaction/known-coarse-projections.json",
-      Why: "IN TRANSIT, not an endorsed exception. ADR 0004 §1 dissolves this file into asserted-absence "
-        + "golds and Stage 4 deletes it (issue #28, in flight concurrently with #23). Gitignoring a file "
-        + "that is about to be deleted, while another branch is editing it, buys nothing and costs a "
-        + "conflict. Listed so the invariant stays honest about it rather than silently tolerant. The "
-        + "gate named here does not re-derive the file — it fails when a whitelisted coarse projection "
-        + "stops being coarse — which is precisely the weakness ADR 0004 §1 cites when it dissolves it.",
-      Gate: "PortWalkExhaustivenessTests"
-    ),
+    // libs/mast-interaction/known-coarse-projections.json — DELETED by issue #32. The blind-spot set is now
+    // the derived backlog (ADR-0004 §2, Data/_08_Reporting/derived-backlog.json), and PortWalkExhaustivenessTests
+    // re-derives it in-process rather than reading any committed file. No committed exception remains.
     new(
       Path: "libs/mtg-rules/Data/_03_Primary/Datasets/type-ontology.json",
       Why: "The one copyright-clean artifact of libs/mtg-rules, whose own .gitignore withholds every "
