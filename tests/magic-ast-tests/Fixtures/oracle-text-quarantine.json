@@ -77,11 +77,6 @@
       "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
     },
     {
-      "card": "DGM/WearTear",
-      "tag": "debt",
-      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
-    },
-    {
       "card": "DKA/NiblisOfTheUrn",
       "tag": "debt",
       "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"

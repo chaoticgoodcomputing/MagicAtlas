@@ -3,9 +3,6 @@
     "Name": "Wear // Tear",
     "ManaCost": "{1}{R} // {W}",
     "TypeLine": "Instant // Instant",
-    "OracleText": "Destroy target artifact.\n//\nDeal 2 damage to target enchantment or creature.\nFuse (You may cast one or both halves of this card from your hand.)",
-    "Power": null,
-    "Toughness": null,
     "Colors": [
       "R",
       "W"
@@ -13,6 +10,24 @@
     "ColorIdentity": [
       "R",
       "W"
+    ],
+    "Keywords": [
+      "Fuse"
+    ],
+    "Layout": "split",
+    "CardFaces": [
+      {
+        "Name": "Wear",
+        "ManaCost": "{1}{R}",
+        "TypeLine": "Instant",
+        "OracleText": "Destroy target artifact.\nFuse (You may cast one or both halves of this card from your hand.)"
+      },
+      {
+        "Name": "Tear",
+        "ManaCost": "{W}",
+        "TypeLine": "Instant",
+        "OracleText": "Destroy target enchantment.\nFuse (You may cast one or both halves of this card from your hand.)"
+      }
     ]
   },
   "Output": {
@@ -26,101 +41,8 @@
       ]
     },
     "Oracle": {
-      "RawText": "Destroy target artifact.\n//\nDeal 2 damage to target enchantment or creature.\nFuse (You may cast one or both halves of this card from your hand.)",
-      "Abilities": [
-        {
-          "Kind": "spell",
-          "Effects": [
-            {
-              "EffectType": "destroy",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "artifact"
-                  ]
-                }
-              },
-              "CantBeRegenerated": false
-            }
-          ],
-          "SourceSpan": {
-            "Start": 0,
-            "Length": 24
-          },
-          "OracleLineIndex": 0
-        },
-        {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 25,
-            "Length": 2
-          },
-          "RawText": "//",
-          "Diagnostics": [
-            {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 25,
-                "Length": 2
-              },
-              "RawText": "//",
-              "Pattern": "AmbiguousStructure",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 25
-            }
-          ],
-          "OracleLineIndex": 1
-        },
-        {
-          "Kind": "spell",
-          "Effects": [
-            {
-              "EffectType": "dealDamage",
-              "Amount": {
-                "QuantityType": "literal",
-                "Value": 2
-              },
-              "Source": {
-                "Kind": "Self"
-              },
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "enchantment",
-                    "creature"
-                  ]
-                }
-              }
-            }
-          ],
-          "SourceSpan": {
-            "Start": 28,
-            "Length": 48
-          },
-          "OracleLineIndex": 2
-        },
-        {
-          "Kind": "static",
-          "Effects": [
-            {
-              "EffectType": "keywordAbility",
-              "Keyword": "Fuse"
-            }
-          ],
-          "KeywordSource": "Fuse",
-          "Reminder": {
-            "Text": "(You may cast one or both halves of this card from your hand.)"
-          },
-          "SourceSpan": {
-            "Start": 77,
-            "Length": 67
-          },
-          "OracleLineIndex": 3
-        }
-      ]
+      "RawText": "",
+      "Abilities": []
     },
     "Attributes": [
       {
@@ -159,6 +81,156 @@
         "ColorIdentity": [
           "W",
           "R"
+        ]
+      },
+      {
+        "Kind": "layout",
+        "Layout": "split"
+      }
+    ],
+    "Faces": [
+      {
+        "Name": "Wear",
+        "TypeLine": {
+          "Raw": "Instant",
+          "Types": [
+            "Instant"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Destroy target artifact.\nFuse (You may cast one or both halves of this card from your hand.)",
+          "Abilities": [
+            {
+              "Kind": "spell",
+              "Effects": [
+                {
+                  "EffectType": "destroy",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "artifact"
+                      ]
+                    }
+                  },
+                  "CantBeRegenerated": false
+                }
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 24
+              },
+              "OracleLineIndex": 0
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Fuse"
+                }
+              ],
+              "KeywordSource": "Fuse",
+              "Reminder": {
+                "Text": "(You may cast one or both halves of this card from your hand.)"
+              },
+              "SourceSpan": {
+                "Start": 25,
+                "Length": 67
+              },
+              "OracleLineIndex": 1
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{1}{R}",
+            "Symbols": [
+              {
+                "Kind": "generic",
+                "GenericAmount": 1
+              },
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "R"
+                ]
+              }
+            ],
+            "ManaValue": 2,
+            "IsVariable": false
+          }
+        ]
+      },
+      {
+        "Name": "Tear",
+        "TypeLine": {
+          "Raw": "Instant",
+          "Types": [
+            "Instant"
+          ]
+        },
+        "Oracle": {
+          "RawText": "Destroy target enchantment.\nFuse (You may cast one or both halves of this card from your hand.)",
+          "Abilities": [
+            {
+              "Kind": "spell",
+              "Effects": [
+                {
+                  "EffectType": "destroy",
+                  "Target": {
+                    "Kind": "Target",
+                    "Filter": {
+                      "CardTypes": [
+                        "enchantment"
+                      ]
+                    }
+                  },
+                  "CantBeRegenerated": false
+                }
+              ],
+              "SourceSpan": {
+                "Start": 0,
+                "Length": 27
+              },
+              "OracleLineIndex": 0
+            },
+            {
+              "Kind": "static",
+              "Effects": [
+                {
+                  "EffectType": "keywordAbility",
+                  "Keyword": "Fuse"
+                }
+              ],
+              "KeywordSource": "Fuse",
+              "Reminder": {
+                "Text": "(You may cast one or both halves of this card from your hand.)"
+              },
+              "SourceSpan": {
+                "Start": 28,
+                "Length": 67
+              },
+              "OracleLineIndex": 1
+            }
+          ]
+        },
+        "Attributes": [
+          {
+            "Kind": "manaCost",
+            "Raw": "{W}",
+            "Symbols": [
+              {
+                "Kind": "colored",
+                "Colors": [
+                  "W"
+                ]
+              }
+            ],
+            "ManaValue": 1,
+            "IsVariable": false
+          }
         ]
       }
     ]

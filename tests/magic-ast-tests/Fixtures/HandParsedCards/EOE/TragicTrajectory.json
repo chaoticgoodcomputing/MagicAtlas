@@ -3,7 +3,7 @@
     "Name": "Tragic Trajectory",
     "ManaCost": "{B}",
     "TypeLine": "Sorcery",
-    "OracleText": "Target creature gets -2/-2 until end of turn.\nVoid — That creature gets -10/-10 until end of turn instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+    "OracleText": "Target creature gets -2/-2 until end of turn.\nVoid \u2014 That creature gets -10/-10 until end of turn instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
     "Power": null,
     "Toughness": null,
     "Colors": [
@@ -22,67 +22,75 @@
       ]
     },
     "Oracle": {
-      "RawText": "Target creature gets -2/-2 until end of turn.\nVoid — That creature gets -10/-10 until end of turn instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
+      "RawText": "Target creature gets -2/-2 until end of turn.\nVoid \u2014 That creature gets -10/-10 until end of turn instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
       "Abilities": [
         {
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "modifyPT",
-              "Target": {
-                "Kind": "Target",
-                "Filter": {
-                  "CardTypes": [
-                    "creature"
-                  ]
+              "EffectType": "conditional",
+              "Condition": {
+                "ConditionType": "void"
+              },
+              "Then": {
+                "EffectType": "modifyPT",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  }
+                },
+                "PowerModifier": {
+                  "QuantityType": "literal",
+                  "Value": -10
+                },
+                "ToughnessModifier": {
+                  "QuantityType": "literal",
+                  "Value": -10
+                },
+                "Duration": {
+                  "DurationType": "untilTime",
+                  "Until": {
+                    "Part": "Turn",
+                    "Edge": "End"
+                  }
                 }
               },
-              "PowerModifier": {
-                "QuantityType": "literal",
-                "Value": -2
-              },
-              "ToughnessModifier": {
-                "QuantityType": "literal",
-                "Value": -2
-              },
-              "Duration": {
-                "DurationType": "untilTime",
-                "Until": {
-                  "Part": "Turn",
-                  "Edge": "End"
+              "Else": {
+                "EffectType": "modifyPT",
+                "Target": {
+                  "Kind": "Target",
+                  "Filter": {
+                    "CardTypes": [
+                      "creature"
+                    ]
+                  }
+                },
+                "PowerModifier": {
+                  "QuantityType": "literal",
+                  "Value": -2
+                },
+                "ToughnessModifier": {
+                  "QuantityType": "literal",
+                  "Value": -2
+                },
+                "Duration": {
+                  "DurationType": "untilTime",
+                  "Until": {
+                    "Part": "Turn",
+                    "Edge": "End"
+                  }
                 }
               }
             }
           ],
           "SourceSpan": {
             "Start": 0,
-            "Length": 45
+            "Length": 192
           },
           "OracleLineIndex": 0
-        },
-        {
-          "Kind": "unparsed",
-          "SourceSpan": {
-            "Start": 46,
-            "Length": 146
-          },
-          "RawText": "Void — That creature gets -10/-10 until end of turn instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
-          "Diagnostics": [
-            {
-              "Severity": "error",
-              "Message": "Static ability parser not yet implemented",
-              "Location": {
-                "Start": 46,
-                "Length": 146
-              },
-              "RawText": "Void — That creature gets -10/-10 until end of turn instead if a nonland permanent left the battlefield this turn or a spell was warped this turn.",
-              "Pattern": "ConditionalEffect",
-              "LastAttemptedRule": "StaticAbilityParser.Parse",
-              "FailurePosition": 46
-            }
-          ],
-          "AbilityWord": "Void",
-          "OracleLineIndex": 1
         }
       ]
     },
