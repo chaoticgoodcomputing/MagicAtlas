@@ -184,3 +184,21 @@ public sealed record OtherHistoryPredicate : HistoryPredicate, IResidual
 /// </summary>
 [HistoryPredicateKind("lostLifeThisTurn")]
 public sealed record LostLifeThisTurnPredicate : HistoryPredicate;
+
+/// <summary>
+/// "that attacked this turn" — a backward-looking predicate restricting a filter to
+/// objects that were declared as attackers during the current turn window (CR 508.1:
+/// declaring attackers; the "this turn" window bounds it to the current turn per the
+/// turn structure). Rowdy Research: "This spell costs {1} less to cast for each creature
+/// that attacked this turn." — the count scales with creatures that attacked this turn.
+///
+/// <para>
+/// A marker (no fields), mirroring <see cref="LostLifeThisTurnPredicate"/>'s field-less
+/// convention: WHICH objects are checked (creature, controller/owner side) is carried on
+/// the enclosing <see cref="ObjectFilter"/> axes, not duplicated here. Descriptive only —
+/// MAST records that the oracle text names an attacked-this-turn history, leaving the
+/// per-turn tracking to the engine (descriptive-not-engine doctrine).
+/// </para>
+/// </summary>
+[HistoryPredicateKind("attackedThisTurn")]
+public sealed record AttackedThisTurnPredicate : HistoryPredicate;

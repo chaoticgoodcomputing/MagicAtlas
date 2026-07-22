@@ -39,12 +39,9 @@
                 "spell"
               ],
               "Controller": "You",
-              "Characteristics": [
-                {
-                  "CharacteristicType": "other",
-                  "Description": "targeting this creature"
-                }
-              ]
+              "Targets": {
+                "Kind": "Self"
+              }
             },
             "SourceSpan": {
               "Start": 9,

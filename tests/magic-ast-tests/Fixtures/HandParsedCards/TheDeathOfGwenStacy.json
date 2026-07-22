@@ -106,16 +106,14 @@
                     "EffectType": "exile",
                     "Target": {
                       "Kind": "Target",
+                      "Quantity": {
+                        "QuantityType": "anyAmount"
+                      },
                       "Filter": {
                         "CardTypes": [
                           "card"
                         ],
-                        "Characteristics": [
-                          {
-                            "CharacteristicType": "other",
-                            "Description": "in any number of target players' graveyards"
-                          }
-                        ],
+                        "Owner": "Target",
                         "Zone": "Graveyard"
                       }
                     }

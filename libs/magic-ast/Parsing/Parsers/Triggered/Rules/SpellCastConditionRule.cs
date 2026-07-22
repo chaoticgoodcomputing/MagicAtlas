@@ -105,11 +105,11 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
       characteristics.Add("this spell from anywhere other than exile");
     }
 
-    // Heroic ability-word (Rule 702.108): "...a spell that targets this creature".
-    if (Regex.IsMatch(lower, @"\bthat\s+targets?\s+this\s+(creature|permanent|card)\b"))
-    {
-      characteristics.Add("targeting this creature");
-    }
+    // Heroic ability-word (Rule 702.108 / CR 702.85): "...a spell that targets this
+    // creature". Structured on the relational ObjectFilter.Targets axis (referent = the
+    // source object, Self) rather than a free-text characteristic.
+    var targetsSelf = Regex.IsMatch(
+      lower, @"\bthat\s+targets?\s+this\s+(creature|permanent|card)\b");
 
     // Multicolored qualifier: "a multicolored spell" (Rule 105.5). Encoded on
     // IsMulticolored rather than Colors to preserve the two-or-more constraint.
@@ -122,7 +122,7 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
     // Build filter. Suppress CardTypes=["spell"] when no qualifiers were detected
     // and the controller is non-You (matches RhysticStudy's gold).
     var hasAnyQualifier =
-      characteristics.Count > 0 || excludedCardTypes.Count > 0 || colors.Count > 0 || isMulticolored == true;
+      characteristics.Count > 0 || excludedCardTypes.Count > 0 || colors.Count > 0 || isMulticolored == true || targetsSelf;
     IReadOnlyList<string>? cardTypes = hasAnyQualifier ? new List<string> { "spell" } : null;
 
     var filter = QualifierAxisMapper.Apply(
@@ -133,6 +133,7 @@ public sealed class SpellCastConditionRule : ITriggerConditionRule
         Colors = colors.Count > 0 ? colors : null,
         IsMulticolored = isMulticolored,
         Controller = controller,
+        Targets = targetsSelf ? ObjectReference.Self() : null,
       },
       characteristics
     );

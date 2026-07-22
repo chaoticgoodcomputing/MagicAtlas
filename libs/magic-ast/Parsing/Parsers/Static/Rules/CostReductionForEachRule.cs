@@ -47,10 +47,8 @@ public sealed class CostReductionForEachRule : IStaticRule
       perObject = new ObjectFilter
       {
         CardTypes = ["creature"],
-        History = new MagicAST.AST.References.OtherHistoryPredicate
-        {
-          Description = "attacked this turn",
-        },
+        // "that attacked this turn" — turn-scoped attacked-history predicate (CR 508.1).
+        History = new MagicAST.AST.References.AttackedThisTurnPredicate(),
       };
     }
     // "creature on the battlefield" — Blasphemous Act's sweeper-discount:

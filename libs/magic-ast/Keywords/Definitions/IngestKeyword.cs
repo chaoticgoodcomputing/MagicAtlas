@@ -63,11 +63,10 @@ public sealed class IngestKeyword : IKeyword
             {
               CardTypes = ["card"],
               Zone = Zone.Library,
-              Characteristics =
-              [
-                Characteristic.Other("top"),
-                Characteristic.Other("that player's"),
-              ],
+              // "the top card of their library" — positional (CR 401.1) + owned by the
+              // damaged player ("their" = that player, established by the trigger, CR 108.3).
+              LibraryPosition = new LibraryPosition { Position = ZonePosition.Top },
+              Owner = ControllerFilter.ThatPlayer,
             },
           },
         },

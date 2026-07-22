@@ -44,12 +44,6 @@
       "reason": "PB-7 structured-condition buckets — 'this is the second time this ability has resolved this turn' / \"it's the third time\" are ordinal ability-history predicates; no structured NthTimeAbilityResolvedCondition node exists yet (same family as LCI/NissaResurgentAnimist)"
     },
     {
-      "card": "BFZ/FathomFeeder",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): positional 'top' (top card of a library - library order, no Position axis on ObjectFilter) plus owner-of-actor 'that player's'. No clean structured node. Same residual category as M20/MysticForge, DemonicConsultation."
-    },
-    {
       "card": "BNG/EpharaGodOfThePolis",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -66,12 +60,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "'no mana was spent to cast it' — cost-zero cast gate; needs a structured NoManaSpentCondition arm (PB-7 structured-condition buckets)"
-    },
-    {
-      "card": "CN2/GrenzoSRuffians",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): anaphoric 'each other opponent' - exclusion relative to the opponent just dealt combat damage (CR 109.5 'other'), a runtime-bound referent, NOT the ability source (so not ObjectFilter.ExcludeSelf). No structured axis."
     },
     {
       "card": "CN2/MarchesasEmissary",
@@ -108,18 +96,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "DemonicConsultation",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): positional 'top' (top card of library - library order, no Position axis on ObjectFilter). Same residual category as M20/MysticForge and BFZ/FathomFeeder."
-    },
-    {
-      "card": "Divert",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): 'single target' - spell target-COUNT metadata ('target spell with a single target', CR 115). Out-of-scope targeting predicate; no structured target-count axis."
     },
     {
       "card": "EOE/ChoraleoftheVoid",
@@ -230,12 +206,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "LRW/GaddockTeeg",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): '{X} in their mana costs' - mana-cost-symbol-presence predicate (CR 107.3 {X}); no structured mana-cost-symbol axis; singleton."
-    },
-    {
       "card": "LRW/WindbriskHeights",
       "sink": "UnstructuredEffect",
       "tag": "debt",
@@ -246,12 +216,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "M20/MysticForge",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): positional 'top' (top card of library - library order, no Position axis on ObjectFilter). Same residual category as BFZ/FathomFeeder and DemonicConsultation."
     },
     {
       "card": "M21/BarrinTolarianArchmage",
@@ -362,12 +326,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — 'during your turn' timing scope shared by BOTH the cast-prohibition and the activate-prohibition, same bucket as DragonlordDromoka/RazorkinNeedlehead's 'during your turn'"
     },
     {
-      "card": "RoadOfReturn",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): 'your commander' - CR 903 format-defined commander status; no structured IsCommander axis; singleton."
-    },
-    {
       "card": "STX/FurycalmSnarl",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -434,12 +392,6 @@
       "reason": "PB-7 structured-condition buckets — 'it was a creature' is a last-known-information type predicate (LKI on card type at dies-trigger look-back time, CR 603.10); no TriggeringObjectTypeCondition node exists yet"
     },
     {
-      "card": "THS/TritonFortuneHunter",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): 'targeting this creature' - relational spell-targets-self predicate (Heroic, CR 702.85). Targeting is stack-time engine state; same irreducible category as BFZ/FathomFeeder 'targeting'."
-    },
-    {
       "card": "TSP/Stingscourger",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -450,12 +402,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'you didn't activate a loyalty ability of a planeswalker this turn' is an activation-history predicate (CR 606.3 once-per-turn gate, checked at end step); no ActivationHistoryCondition arm exists yet"
-    },
-    {
-      "card": "TheDeathOfGwenStacy",
-      "sink": "OtherCharacteristic",
-      "tag": "irreducible",
-      "reason": "PB-9 (c): 'in any number of target players' graveyards' - multi-target-player zone-ownership predicate (CR 115 multi-target). No structured axis."
     },
     {
       "card": "TheNecrobloom",
@@ -522,12 +468,6 @@
       "sink": "UnstructuredEffect",
       "tag": "debt",
       "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
-    },
-    {
-      "card": "WOE/RowdyResearch",
-      "sink": "OtherHistoryPredicate",
-      "tag": "irreducible",
-      "reason": "bespoke history predicate — deferred adjunct"
     },
     {
       "card": "ZEN/BloodchiefAscension",

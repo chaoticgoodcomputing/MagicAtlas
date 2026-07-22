@@ -53,7 +53,8 @@ public sealed class CantBeCastRestrictionRule : IStaticRule
           {
             CardTypes = ["spell"],
             ExcludedCardTypes = ["creature"],
-            Characteristics = [Characteristic.Other("with {X} in their mana costs")],
+            // "with {X} in their mana costs" — mana-cost-symbol presence (CR 107.3).
+            ManaCostSymbols = ["X"],
           },
         },
       ];

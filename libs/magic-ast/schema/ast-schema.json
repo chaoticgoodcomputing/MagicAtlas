@@ -3113,6 +3113,12 @@
       "DiscriminatorKey": "PredicateType",
       "Types": [
         {
+          "Type": "AttackedThisTurnPredicate",
+          "Discriminator": "attackedThisTurn",
+          "IsUnparsed": false,
+          "Fields": []
+        },
+        {
           "Type": "CastThisTurnPredicate",
           "Discriminator": "castThisTurn",
           "IsUnparsed": false,
@@ -3437,5 +3443,5 @@
       ]
     }
   ],
-  "SchemaHash": "b7d99e80007c31de60ecf7c57b12f81eae96b826a3e1e2aaf4206ff17e973ef5"
+  "SchemaHash": "ce63e9f46a531596b81617461d6ad87b3014166cf84c7967623b589509826ce5"
 }

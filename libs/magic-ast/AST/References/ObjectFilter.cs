@@ -280,6 +280,55 @@ public sealed record ObjectFilter
   public bool? IsMonocolored { get; init; }
 
   /// <summary>
+  /// Filters to the player's commander — CR 903.3: a designated legendary creature
+  /// card is that player's commander. "Your commander" (Road of Return: "Put your
+  /// commander into your hand from the command zone."). A named, format-defined game
+  /// quality (CR 903, the Commander variant), not a card type, subtype, or supertype:
+  /// it cannot be expressed on the existing type axes without falsely asserting
+  /// "Commander" is a printed characteristic (a legendary-creature card gains the
+  /// status by designation, not by printing). Parallels <see cref="IsHistoric"/>
+  /// (CR 700.6) and <see cref="InParty"/> (CR 700.8) as a boolean CR 700/900-level
+  /// game-quality axis on the filter; used with <see cref="Owner"/>/<see cref="Zone"/>
+  /// ("your commander … from the command zone" → <c>IsCommander=true, Owner=You,
+  /// Zone=CommandZone</c>).
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public bool? IsCommander { get; init; }
+
+  /// <summary>
+  /// Mana-cost symbols the object's mana cost must CONTAIN — a contains-any set over
+  /// the printed mana-cost symbols (CR 107.3 / 202.1). Gaddock Teeg: "Noncreature
+  /// spells with {X} in their mana costs can't be cast." → <c>ManaCostSymbols=["X"]</c>.
+  /// Each entry is a symbol as printed inside the braces — <c>"X"</c> for the {X}
+  /// variable placeholder (CR 107.3), a colour letter for a coloured symbol (CR 107.4),
+  /// etc. A filter matches an object whose mana cost includes at least one of the listed
+  /// symbols. Distinct from <see cref="ManaValueComparison"/> (which constrains the numeric
+  /// mana VALUE, CR 202.3, not the presence of a particular symbol) and from
+  /// <see cref="Colors"/> (colour is derived from the cost but is a separate
+  /// characteristic, CR 105.2): a {X} symbol contributes 0 to mana value and no colour,
+  /// so its presence is expressible on neither of those axes.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public IReadOnlyList<string>? ManaCostSymbols { get; init; }
+
+  /// <summary>
+  /// Ordered-zone positional restriction — "the top card of [a] library", "the top six
+  /// cards of your library" (CR 401.1: the cards in a library are a single ordered pile a
+  /// player can't reorder). Carries which end of the ordered zone the cards are taken from
+  /// (<see cref="ZonePosition.Top"/>/<see cref="ZonePosition.Bottom"/>) and, optionally,
+  /// how many from that end (<see cref="LibraryPosition.Count"/> for "the top SIX cards").
+  /// Used with <see cref="Zone.Library"/>. A first-class ordering axis — position is a
+  /// property of the ordered pile, not of the card, so "the top card" cannot be expressed
+  /// on any of the flat characteristic axes: the same "top" residual appeared on Mystic
+  /// Forge, Fathom Feeder, and Demonic Consultation, and the axis generalizes to the
+  /// scry/surveil/impulse-draw tail ("look at the top N cards of your library").
+  /// Descriptive-only: MAST records the positional designation, not the runtime library
+  /// order.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public LibraryPosition? LibraryPosition { get; init; }
+
+  /// <summary>
   /// Who controls the objects: You, Opponent, Any.
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -424,6 +473,22 @@ public sealed record ObjectFilter
   public Comparison? ManaValueComparison { get; init; }
 
   /// <summary>
+  /// Constraint on how many targets a spell/ability on the stack has — "target spell
+  /// with a single target" (Divert: <c>TargetCountComparison = Equal 1</c>; CR 115).
+  /// A spell "with a single target" is one that has exactly one target (CR 115.1a: a
+  /// spell's targets are chosen as it is cast). Mirrors <see cref="PowerComparison"/>/
+  /// <see cref="ManaValueComparison"/> as a <see cref="Comparison"/>-valued axis, but
+  /// ranges over the object's target COUNT rather than a printed characteristic — the
+  /// count of objects the spell is targeting, a stack-time property of the object,
+  /// recorded descriptively (the engine tracks the actual targets). Distinct from
+  /// <see cref="MagicAST.AST.References.ObjectReference.Quantity"/> (how many objects
+  /// THIS reference selects): this constrains the target count of the referenced spell,
+  /// not the cardinality of the reference to it.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public Comparison? TargetCountComparison { get; init; }
+
+  /// <summary>
   /// Backward-looking lifecycle predicate restricting the filter.
   /// e.g., "a creature dealt damage by Zurgo this turn".
   /// </summary>
@@ -438,6 +503,38 @@ public sealed record ObjectFilter
   /// </summary>
   [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
   public ObjectReference? AttachedTo { get; init; }
+
+  /// <summary>
+  /// Relational axis: the object (a spell/ability on the stack) must TARGET the
+  /// referenced object — Heroic's "a spell that targets this creature" (Triton
+  /// Fortune Hunter: <c>Targets = Self</c>; CR 115, CR 702.85). The referent is an
+  /// <see cref="ObjectReference"/> (Heroic's "this creature" = <c>Self</c>). Mirrors
+  /// <see cref="AttachedTo"/> (an <see cref="ObjectReference"/>-valued relational
+  /// predicate): where AttachedTo relates an object to what it is attached to, this
+  /// relates a spell to what it targets. Descriptive-only per ADR 0004
+  /// reference-not-resolution — MAST records that the spell's target set includes the
+  /// referent, not the runtime target choice. Distinct from a target-COUNT constraint
+  /// (<see cref="TargetCountComparison"/>): this names WHICH object is targeted, that
+  /// counts HOW MANY.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Targets { get; init; }
+
+  /// <summary>
+  /// Relational exclusion axis: the filtered set EXCLUDES the referenced object —
+  /// "each other opponent" (Grenzo's Ruffians: it deals combat damage to an opponent,
+  /// then "deals that much damage to each other opponent", <c>Excludes = ThatPlayer</c>;
+  /// CR 109.5, "other" means other than the named object). The referent is an
+  /// <see cref="ObjectReference"/> — here <c>ThatPlayer</c>, the opponent just dealt
+  /// combat damage (a runtime-bound referent established earlier in the ability), NOT
+  /// the ability's own source. Generalizes the boolean <see cref="ExcludeSelf"/> (whose
+  /// implicit referent is fixed to the source object) to an arbitrary referent:
+  /// where <see cref="ExcludeSelf"/> omits <em>self</em>, this omits whatever object the
+  /// <see cref="ObjectReference"/> names. An <see cref="ObjectReference"/>-valued predicate,
+  /// mirroring <see cref="AttachedTo"/>/<see cref="Targets"/>.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public ObjectReference? Excludes { get; init; }
 
   /// <summary>
   /// Location in source text. Only present for unparsed or partially-parsed nodes.
@@ -457,6 +554,41 @@ public sealed record ObjectFilter
 
   public static ObjectFilter Player(TextSpan? span = null) =>
     new() { CardTypes = ["player"], SourceSpan = span };
+}
+
+/// <summary>
+/// A positional restriction within an ordered zone — "the top card of your library",
+/// "the top six cards of your library" (CR 401.1: a library is a single ordered pile).
+/// Carries which <see cref="ZonePosition"/> end the cards are taken from and, optionally,
+/// how many from that end. The structured home for the "top"/"bottom" positional residual
+/// (used with <see cref="ObjectFilter.LibraryPosition"/> and <see cref="Zone.Library"/>).
+/// </summary>
+public sealed record LibraryPosition
+{
+  /// <summary>Which end of the ordered zone — <see cref="ZonePosition.Top"/> or <see cref="ZonePosition.Bottom"/>.</summary>
+  public required ZonePosition Position { get; init; }
+
+  /// <summary>
+  /// How many cards from that end ("the top SIX cards" → <c>Count = 6</c>). Null for the
+  /// singular "the top card" (a single card at that end). Descriptive of the positional
+  /// block named by the oracle text; distinct from an effect's own quantity, which counts
+  /// how many objects the effect acts on.
+  /// </summary>
+  [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+  public int? Count { get; init; }
+}
+
+/// <summary>
+/// Which end of an ordered zone a <see cref="LibraryPosition"/> designates (CR 401.1).
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum ZonePosition
+{
+  /// <summary>"the top card of [a] library" — the card(s) at the top of the ordered pile.</summary>
+  Top,
+
+  /// <summary>"the bottom card of [a] library" — the card(s) at the bottom of the ordered pile.</summary>
+  Bottom,
 }
 
 /// <summary>

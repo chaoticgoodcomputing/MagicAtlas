@@ -41,12 +41,10 @@
                   ],
                   "Zone": "Library",
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "top"
-                    }
-                  ]
+                  "LibraryPosition": {
+                    "Position": "Top",
+                    "Count": 6
+                  }
                 },
                 "Quantity": {
                   "QuantityType": "literal",
