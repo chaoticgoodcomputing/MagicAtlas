@@ -33,6 +33,24 @@ public sealed record PortEdge
   public string? Reason { get; init; }
 
   /// <summary>
+  /// The <b>structural mechanism</b> that formed this edge (ADR-0004 §2/Stage 6, issue #34 — the
+  /// edge-provenance seam). Recorded by the engine at formation; purely structural, names no rule. See
+  /// <see cref="EdgeMechanism"/>. The soundness half of §2's bijection joins this (with the endpoints'
+  /// <see cref="PortNode.Structure"/> stems and <see cref="Arm"/>) against the gold-derived rollup, so the
+  /// rule ↔ code correspondence is <c>structure ↔ structure</c> and no rule-id string lives in engine code.
+  /// This is the public surface issue #39 consumes for the standing per-loop unwitnessed-capability check.
+  /// </summary>
+  public EdgeMechanism Mechanism { get; init; } = EdgeMechanism.CardDefined;
+
+  /// <summary>
+  /// The specific <see cref="PortFlowMatcher.FlowArm"/> that formed this edge when
+  /// <see cref="Mechanism"/> is <see cref="EdgeMechanism.FlowArm"/>; <c>null</c> otherwise. The FINE
+  /// structural mechanism — the arm <see cref="PortFlowMatcher.SelectArm"/> selected from the endpoints'
+  /// structures — which, with the endpoints' stems, is the structural identity the rollup rule joins on.
+  /// </summary>
+  public PortFlowMatcher.FlowArm? Arm { get; init; }
+
+  /// <summary>
   /// Deterministic, content-addressed edge identity (ADR-0004 "Edge-level provenance labeling",
   /// Migration Stage 0/1). Hashed from <c>(fromCard, fromLabel, toCard, toLabel, family)</c> — stable
   /// across repeated materializations of the same corpus state, unlike a positional/surrogate id, so
@@ -111,6 +129,7 @@ public sealed record PortEdge
       To = to,
       Provenance = EdgeProvenance.CardDefined,
       Family = family,
+      Mechanism = EdgeMechanism.CardDefined,
       Overlap = FilterRelation.Overlaps,
       Reliability = witnessed ? Trilean.Yes : Trilean.Unknown,
       Reason = witnessed
@@ -356,8 +375,11 @@ public sealed class PortGraphEngine
     foreach (var emit in emits)
       foreach (var consume in consumes)
       {
-        if (_matcher.Captures(emit, consume))
-          AddRulesEdge(edges, emit, consume, EdgeFamily.Flow);
+        // ADR-0004 issue #34: tag the edge with the very arm that formed it (the fine structural
+        // mechanism), read from the single source that also decides whether it forms — so the tag and the
+        // edge can never disagree.
+        if (_matcher.CapturingArm(emit, consume) is { } arm)
+          AddRulesEdge(edges, emit, consume, EdgeFamily.Flow, EdgeMechanism.FlowArm, arm);
       }
 
     // (2b) Untap-lands → mana (the mana-untap enabler). An "untap up to N lands" effect (Peregrine Drake)
@@ -380,7 +402,7 @@ public sealed class PortGraphEngine
     // (PortFlowMatcher.SacrificeDeathToTrigger) at step (2) above — no curated consume→consume edge.
     foreach (var emit in emits.Where(p => IsTokenEmit(p)))
       foreach (var intercept in intercepts)
-        AddRulesEdge(edges, emit, intercept, EdgeFamily.Modifier);
+        AddRulesEdge(edges, emit, intercept, EdgeFamily.Modifier, EdgeMechanism.Modifier);
 
     return edges;
   }
@@ -706,6 +728,7 @@ public sealed class PortGraphEngine
       Overlap = FilterRelation.Overlaps,
       Reliability = Trilean.Unknown,
       Reason = "untapped lands' colours/count are unknown — can't certify they cover the cost (CR 107.4)",
+      Mechanism = EdgeMechanism.UntapLandsToMana,
     };
 
   /// <summary>Synthesize the closing edge from the inherited untap to the copier's <c>tap:self</c> cost
@@ -732,6 +755,7 @@ public sealed class PortGraphEngine
       Overlap = FilterRelation.Overlaps,
       Reliability = reliability,
       Reason = reliability == Trilean.Yes ? null : "inherited untap is optional/conditional",
+      Mechanism = EdgeMechanism.GraftClosing,
     };
   }
 
@@ -1096,7 +1120,14 @@ public sealed class PortGraphEngine
       ? tokenTypes.Any(t => _ontology.PermanentTypes.Contains(t, StringComparer.OrdinalIgnoreCase))
       : tokenTypes.Contains(required, StringComparer.OrdinalIgnoreCase);
 
-  private void AddRulesEdge(List<PortEdge> edges, PortNode from, PortNode to, EdgeFamily family)
+  private void AddRulesEdge(
+    List<PortEdge> edges,
+    PortNode from,
+    PortNode to,
+    EdgeFamily family,
+    EdgeMechanism mechanism,
+    PortFlowMatcher.FlowArm? arm = null
+  )
   {
     if (ReferenceEquals(from, to))
       return;
@@ -1144,6 +1175,8 @@ public sealed class PortGraphEngine
         Overlap = overlap.Relation,
         Reliability = reliability.Value,
         Reason = overlap.Relation == FilterRelation.Unknown ? overlap.Reason : reliability.Reason,
+        Mechanism = mechanism,
+        Arm = arm,
       }
     );
   }

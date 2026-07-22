@@ -140,12 +140,20 @@ public sealed class PortFlowMatcher
   /// guard. Returns false for an unconverted family (either port has a null <see cref="PortNode.Structure"/>)
   /// — the honest "not yet on the structure" answer.
   /// </summary>
-  public bool Captures(PortNode emit, PortNode consume)
+  public bool Captures(PortNode emit, PortNode consume) => CapturingArm(emit, consume) is not null;
+
+  /// <summary>
+  /// The <see cref="FlowArm"/> that connects this emit→consume, or <c>null</c> when none does. Identical
+  /// decision to <see cref="Captures"/>, but returns <em>which</em> arm fired — the fine structural
+  /// mechanism the engine tags onto the formed edge (<see cref="PortEdge.Arm"/>, ADR-0004 issue #34).
+  /// Keeping this the single source of the arm means the tag and the edge's existence can never disagree.
+  /// </summary>
+  public PortFlowMatcher.FlowArm? CapturingArm(PortNode emit, PortNode consume)
   {
     if (emit.Structure is null || consume.Structure is null)
-      return false;
+      return null;
     var arm = SelectArm(emit.Structure, consume.Structure);
-    return arm switch
+    var applies = arm switch
     {
       FlowArm.TokenToSac => _engine.TokenSatisfiesAtCreation(emit, consume),
       FlowArm.ManaToPay => PortGraphEngine.ManaColorFeeds(
@@ -164,7 +172,8 @@ public sealed class PortFlowMatcher
       FlowArm.SpellRecursionToCast => _engine.SpellRecursionSatisfiesCast(emit, consume),
       FlowArm.SpellCopyToCast => _engine.SpellCopyReFiresEffects(emit, consume),
       FlowArm.SacrificeDeathToTrigger => _engine.SacrificeDeathFeedsTrigger(emit, consume),
-      null => false,
+      _ => false, // null (no arm) or any unnamed enum value — no flow
     };
+    return applies ? arm : null;
   }
 }
