@@ -70,11 +70,19 @@
           },
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "attach this Equipment to target creature you control.",
+              "EffectType": "attach",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Controller": "You"
+                }
+              },
               "SourceSpan": {
-                "Start": 30,
-                "Length": 182
+                "Start": 71,
+                "Length": 141
               }
             }
           ],

@@ -53,11 +53,14 @@
           },
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "copy that spell or ability. You may choose new targets for the copy.",
+              "EffectType": "copy",
+              "Target": {
+                "Kind": "It"
+              },
+              "MayChooseNewTargets": true,
               "SourceSpan": {
-                "Start": 0,
-                "Length": 239
+                "Start": 127,
+                "Length": 112
               }
             }
           ],

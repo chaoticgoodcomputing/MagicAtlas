@@ -86,8 +86,16 @@
           ],
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "Turn target face-down creature face up.",
+              "EffectType": "turnFaceUp",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "IsFaceDown": true
+                }
+              },
               "SourceSpan": {
                 "Start": 38,
                 "Length": 40
