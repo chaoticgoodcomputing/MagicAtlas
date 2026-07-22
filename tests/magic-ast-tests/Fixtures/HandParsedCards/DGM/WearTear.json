@@ -77,11 +77,22 @@
           "Kind": "spell",
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "Deal 2 damage to target enchantment or creature.",
-              "SourceSpan": {
-                "Start": 28,
-                "Length": 48
+              "EffectType": "dealDamage",
+              "Amount": {
+                "QuantityType": "literal",
+                "Value": 2
+              },
+              "Source": {
+                "Kind": "Self"
+              },
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "enchantment",
+                    "creature"
+                  ]
+                }
               }
             }
           ],

@@ -38,12 +38,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
     },
     {
-      "card": "DGM/WearTear",
-      "sink": "UnstructuredEffect",
-      "tag": "debt",
-      "reason": "L1 shell fallback (fidelity ladder): ability kind + trigger/cost structured, effect interior held verbatim; burn down to L2 when the grammar lands"
-    },
-    {
       "card": "DKA/SpellSnuff",
       "sink": "Instructions",
       "tag": "debt",
@@ -59,7 +53,7 @@
       "card": "EOE/ChoraleoftheVoid",
       "sink": "UnstructuredEffect",
       "tag": "debt",
-      "reason": "L1 shell fallback (fidelity ladder): trigger structured, effect interior held verbatim; burn down to L2 when the effect grammar lands"
+      "reason": "RESIDUAL NARROWED (ADR 0004 #40 wave-3): the attack-trigger reanimation ('put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking') is now structured (ReturnToBattlefieldEffect with the new Attacking bool + Controller=DefendingPlayer). The remaining UnstructuredEffect is the Void end-step 'sacrifice this Aura unless a nonland permanent left the battlefield this turn or a spell was warped this turn' — a compound unless-condition (PB-7 structured-condition buckets, sibling ConditionParser territory), not an effect-grammar gap"
     },
     {
       "card": "FreshFacedRecruit",
@@ -83,7 +77,7 @@
       "card": "KnowledgeExploitation",
       "sink": "UnstructuredEffect",
       "tag": "debt",
-      "reason": "L1 shell fallback (fidelity ladder) — the non-target second ability ('Search target opponent's library for an instant or sorcery card. You may cast that card without paying its mana cost. Then that player shuffles.') is out of scope for the Prowl-keyword TDD slice; mirrors the parser's current StaticAbilityParser/spell L1 shell, not freshly authored"
+      "reason": "WAVE-4 COMPOSITE (ADR 0004 #40 wave-3, analyzed not forced): the three leaf nodes exist (SearchLibraryEffect, CastWithoutPayingEffect, ShuffleEffect) but a faithful 'Search target opponent's library for an instant or sorcery card. You may cast that card without paying its mana cost. Then that player shuffles.' composite is blocked on two cross-cutting gaps: (1) SearchLibraryEffect.Destination is required and has no value for 'found-but-not-relocated, cast from the library' — the search moves the card to no zone; (2) 'target opponent's library' needs a whose-library targeting axis on the search Filter (ObjectFilter/reference territory, sibling-owned; no existing exemplar for search-opponent-library). Forcing it would be lossy (wrong Destination) or make unilateral ObjectFilter decisions outside this slice — held for a dedicated wave-4 slice coordinated with the ObjectFilter owner"
     },
     {
       "card": "KodamaoftheEastTree",
@@ -101,7 +95,7 @@
       "card": "LRW/WindbriskHeights",
       "sink": "UnstructuredEffect",
       "tag": "debt",
-      "reason": "L1 shell fallback (fidelity ladder): ability kind + trigger/cost structured, effect interior held verbatim; burn down to L2 when the grammar lands"
+      "reason": "BLOCKED ON CONDITION SLICE (ADR 0004 #40 wave-3): the effect half 'you may play the exiled card without paying its mana cost' is structurable (MayPlayFromExileEffect over Cards={Zone:Exile, ExiledWith:Self}, plus a WithoutPayingManaCost adjunct), but the trailing gate 'if you attacked with three or more creatures this turn' is a COUNT-gated attack-history condition with no structured node (YouAttackedThisTurnCondition is the field-less Raid yes/no, not a >=N attacker count) — sibling ConditionParser territory. Structuring the effect alone would relocate the sink UnstructuredEffect->OtherCondition without reducing debt, so held whole pending a coordinated condition slice"
     },
     {
       "card": "M12/CarnageWurm",
@@ -144,12 +138,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract)"
-    },
-    {
-      "card": "OteclanLandmark",
-      "sink": "UnstructuredEffect",
-      "tag": "debt",
-      "reason": "L1 shell fallback (fidelity ladder): back-face attack trigger structured (Whenever this creature attacks), effect interior 'target attacking creature without flying gains flying until end of turn' held verbatim; distinct gainAbility target-filter family (attacking + without-flying), burn down to L2 when that grammar lands"
     },
     {
       "card": "PouncingLynx",
@@ -206,12 +194,6 @@
       "reason": "PB-7 structured-condition buckets — 'you put a Cave onto the battlefield this way' is a causation-gate (CR 603.12 reflexive) plus subtype filter compound; requires a new PutSubtypeThisWayCondition arm with no current peer"
     },
     {
-      "card": "T45PowerArmor",
-      "sink": "UnstructuredEffect",
-      "tag": "debt",
-      "reason": "the upkeep 'you may pay {E}. If you do, untap equipped creature, then put your choice of a menace, trample, or lifelink counter on it.' consequent needs a choice-among-enumerated-named-counter-types node (menace/trample/lifelink keyword counters, CR 122.1e) that doesn't exist yet — PutCountersEffect.CounterType is a fixed required string across every counter node (PutCountersEffect/RemoveCountersEffect/MoveCountersEffect/PutCountersCost/ObjectHasCounterCondition/TriggerCondition), so recording a controller-chosen SUBSET of named options (not the open ChosenColor-style full domain) requires a new node; the trigger itself (At the beginning of your upkeep) and the ETB energy gain both parse fully structured"
-    },
-    {
       "card": "TheRealityChip",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -222,18 +204,6 @@
       "sink": "OtherCharacteristic",
       "tag": "debt",
       "reason": "PB-9 partial: 'without flying' half structured (LacksKeywords); 'that's attacking you' half is a combat-state predicate (creature attacking the controller, CR 508/509) — DEFERRED-DEBT structurable via an attacking-player/combat-defender axis, NOT irreducible (per the 2026-07-22 adjudication: singleton/combat-state != irreducible; the CR has a word for it). Batch-4 combat-predicate slice."
-    },
-    {
-      "card": "UgintheIneffable",
-      "sink": "OtherCharacteristic",
-      "tag": "debt",
-      "reason": "PB-9 MIXED: (1) '-3 target permanent that's one or more colors' -> new ObjectFilter.IsColored bool (complement of IsColorless, CR 105.2), cluster I NOVEL (Opus); (2) '+1 top card of library' positional 'top' remains IRREDUCIBLE (library order, no Position axis)."
-    },
-    {
-      "card": "VraskaBetrayalsSting",
-      "sink": "AbilityText",
-      "tag": "debt",
-      "reason": "PB-9 LoseAbilityEffect residual — 'all other abilities' is the AbilityScope.AllOther case; the field now exists (LoseAbilityEffect.Scope, ADR 0004 #40 wave-2, closed via StopCold's plain 'all abilities' exemplar) but wasn't extended to this card's more entangled 4-effect BecomesTreasureArtifactEffectRule — wave-3 mechanical follow-up"
     }
   ]
 }

@@ -176,7 +176,7 @@
               "Target": {
                 "Kind": "It"
               },
-              "AbilityText": "all other abilities",
+              "Scope": "AllOther",
               "SourceSpan": {
                 "Start": 179,
                 "Length": 153

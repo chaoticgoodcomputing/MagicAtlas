@@ -65,11 +65,25 @@
           },
           "Effects": [
             {
-              "EffectType": "unstructured",
-              "Text": "put target creature card from defending player's graveyard onto the battlefield under your control tapped and attacking.",
+              "EffectType": "returnToBattlefield",
+              "Target": {
+                "Kind": "Target",
+                "Filter": {
+                  "CardTypes": [
+                    "creature"
+                  ],
+                  "Zone": "Graveyard",
+                  "Controller": "DefendingPlayer"
+                }
+              },
+              "Tapped": true,
+              "Attacking": true,
+              "UnderControl": {
+                "Kind": "You"
+              },
               "SourceSpan": {
-                "Start": 29,
-                "Length": 157
+                "Start": 65,
+                "Length": 121
               }
             }
           ],

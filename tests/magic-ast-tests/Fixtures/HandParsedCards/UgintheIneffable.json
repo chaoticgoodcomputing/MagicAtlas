@@ -60,13 +60,10 @@
                   "CardTypes": [
                     "card"
                   ],
+                  "LibraryPosition": {
+                    "Position": "Top"
+                  },
                   "Controller": "You",
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "top"
-                    }
-                  ],
                   "Zone": "Library"
                 }
               },

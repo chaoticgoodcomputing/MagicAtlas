@@ -27,8 +27,8 @@ using MagicAST.AST.References;
 ///   <c>{T}, Sacrifice this artifact: Add one mana of any color</c> as a
 ///   nested <see cref="ActivatedAbility"/>.</item>
 ///   <item><see cref="LoseAbilityEffect"/> — the "loses all other … abilities"
-///   clause, carrying the AbilityText residual
-///   <c>"all other abilities"</c>.</item>
+///   clause, structured as <see cref="AbilityScope.AllOther"/> (the granted Treasure
+///   mana ability survives the strip; CR 613.1f).</item>
 /// </list>
 /// </para>
 ///
@@ -121,11 +121,13 @@ public sealed class BecomesTreasureArtifactEffectRule : IActivatedEffectRule, IM
       GainedAbility = treasureActivatedAbility,
     };
 
-    // 4. Lose all other abilities.
+    // 4. Lose all other abilities — an unbounded scope determiner (CR 613.1f), not a
+    //    named ability. Structured as AbilityScope.AllOther (the granted Treasure mana
+    //    ability from effect 3 survives the strip).
     var loseAbilities = new LoseAbilityEffect
     {
       Target = it,
-      AbilityText = "all other abilities",
+      Scope = AbilityScope.AllOther,
     };
 
     effects = new List<Effect>
