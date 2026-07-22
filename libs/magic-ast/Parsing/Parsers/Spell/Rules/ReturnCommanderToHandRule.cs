@@ -28,7 +28,9 @@ public sealed class ReturnCommanderToHandRule : ISpellRule
         Kind = ObjectReferenceKind.Designated,
         Filter = new ObjectFilter
         {
-          Characteristics = [Characteristic.Other("your commander")],
+          // "your commander" — CR 903 designated-commander status, owned by you.
+          IsCommander = true,
+          Owner = ControllerFilter.You,
           Zone = Zone.CommandZone,
         },
       },

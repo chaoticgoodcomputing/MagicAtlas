@@ -99,7 +99,9 @@ public sealed class ChooseNameExileTopThenRevealUntilExileRestRule : ISpellRule,
           CardTypes = ["card"],
           Zone = Zone.Library,
           Controller = ControllerFilter.You,
-          Characteristics = [Characteristic.Other("top")],
+          // "the top six cards of your library" — positional block of N off the top
+          // (CR 401.1); Count mirrors the exiled Quantity below.
+          LibraryPosition = new LibraryPosition { Position = ZonePosition.Top, Count = count },
         },
         Quantity = LiteralQuantity.Of(count),
       },

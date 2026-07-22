@@ -52,10 +52,8 @@ public sealed class ExileTopCardOfLibraryEffectRule : IActivatedEffectRule
           CardTypes = ["card"],
           Zone = Zone.Library,
           Controller = ControllerFilter.You,
-          Characteristics =
-          [
-            Characteristic.Other("top"),
-          ],
+          // "the top card of your library" — positional designation (CR 401.1).
+          LibraryPosition = new LibraryPosition { Position = ZonePosition.Top },
         },
       },
     };

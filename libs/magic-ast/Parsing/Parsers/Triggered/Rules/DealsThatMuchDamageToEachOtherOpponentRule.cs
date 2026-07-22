@@ -15,9 +15,10 @@ using MagicAST.AST.References;
 ///
 /// Rule 120.1: a source deals damage. Rule 510 (Combat Damage Step): the trigger
 /// fires when combat damage is dealt to an opponent. "Each other opponent" is the
-/// set of opponents excluding the one already hit; this is recorded descriptively
-/// as an EachOpponent reference with Characteristics: ["other"] — the "other"
-/// predicate's runtime resolution (relative to the trigger's opponent) is engine
+/// set of opponents excluding the one already hit; this is recorded as an EachOpponent
+/// reference whose filter carries the relational <see cref="ObjectFilter.Excludes"/>
+/// axis pointing at ThatPlayer (the opponent just dealt combat damage, CR 109.5). The
+/// exclusion's runtime resolution (relative to the trigger's opponent) is engine
 /// territory per the descriptive-not-engine doctrine.
 ///
 /// Rule 702.121 (Melee) lists Grenzo's Ruffians as a canonical example of this
@@ -49,7 +50,9 @@ public sealed class DealsThatMuchDamageToEachOtherOpponentRule : ITriggeredRule
         Kind = ObjectReferenceKind.EachOpponent,
         Filter = new MagicAST.AST.References.ObjectFilter
         {
-          Characteristics = [Characteristic.Other("other")],
+          // "each OTHER opponent" — excludes the opponent just dealt combat damage
+          // (that player, established by the trigger), CR 109.5.
+          Excludes = new ObjectReference { Kind = ObjectReferenceKind.ThatPlayer },
         },
       },
     };

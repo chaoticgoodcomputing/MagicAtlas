@@ -63,12 +63,8 @@
                     "Target": {
                       "Kind": "Designated",
                       "Filter": {
-                        "Characteristics": [
-                          {
-                            "CharacteristicType": "other",
-                            "Description": "your commander"
-                          }
-                        ],
+                        "IsCommander": true,
+                        "Owner": "You",
                         "Zone": "CommandZone"
                       }
                     }

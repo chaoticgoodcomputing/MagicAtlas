@@ -35,12 +35,10 @@
                   "CardTypes": [
                     "spell"
                   ],
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "single target"
-                    }
-                  ]
+                  "TargetCountComparison": {
+                    "Operator": "Equal",
+                    "Value": 1
+                  }
                 }
               }
             }

@@ -22,16 +22,10 @@
               "card"
             ],
             "Zone": "Library",
-            "Characteristics": [
-              {
-                "CharacteristicType": "other",
-                "Description": "top"
-              },
-              {
-                "CharacteristicType": "other",
-                "Description": "that player's"
-              }
-            ]
+            "Owner": "ThatPlayer",
+            "LibraryPosition": {
+              "Position": "Top"
+            }
           }
         }
       }

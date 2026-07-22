@@ -35,7 +35,8 @@ public sealed class ChangeTargetRule : ISpellRule
         Filter = new()
         {
           CardTypes = ["spell"],
-          Characteristics = [Characteristic.Other("single target")],
+          // "with a single target" — the spell has exactly one target (CR 115).
+          TargetCountComparison = new Comparison { Operator = ComparisonOperator.Equal, Value = 1 },
         },
       },
     };

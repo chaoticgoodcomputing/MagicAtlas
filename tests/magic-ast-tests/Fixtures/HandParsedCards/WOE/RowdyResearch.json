@@ -38,8 +38,7 @@
                   "creature"
                 ],
                 "History": {
-                  "PredicateType": "other",
-                  "Description": "attacked this turn"
+                  "PredicateType": "attackedThisTurn"
                 }
               }
             }

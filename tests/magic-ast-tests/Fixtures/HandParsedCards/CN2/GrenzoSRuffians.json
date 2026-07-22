@@ -98,12 +98,9 @@
               "Target": {
                 "Kind": "EachOpponent",
                 "Filter": {
-                  "Characteristics": [
-                    {
-                      "CharacteristicType": "other",
-                      "Description": "other"
-                    }
-                  ]
+                  "Excludes": {
+                    "Kind": "ThatPlayer"
+                  }
                 }
               },
               "SourceSpan": {

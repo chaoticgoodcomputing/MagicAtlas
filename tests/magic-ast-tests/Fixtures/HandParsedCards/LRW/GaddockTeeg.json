@@ -72,11 +72,8 @@
             "ExcludedCardTypes": [
               "creature"
             ],
-            "Characteristics": [
-              {
-                "CharacteristicType": "other",
-                "Description": "with {X} in their mana costs"
-              }
+            "ManaCostSymbols": [
+              "X"
             ]
           },
           "SourceSpan": {
