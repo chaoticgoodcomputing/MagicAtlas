@@ -337,11 +337,6 @@
       "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
     },
     {
-      "card": "SOM/PrecursorGolem",
-      "tag": "debt",
-      "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"
-    },
-    {
       "card": "THS/GodsWilling",
       "tag": "debt",
       "reason": "gold oracle text drifts from authoritative Scryfall — re-point to the real card (gold-fidelity cleanup)"

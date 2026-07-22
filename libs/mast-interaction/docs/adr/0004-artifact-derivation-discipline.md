@@ -645,6 +645,19 @@ paraphrase with no structured form, a standard reminder-text body) are ruled so 
 re-derivation**, recorded in the gold, not moved to a side file — which is exactly why the whitelist can be
 deleted rather than migrated.
 
+**COMPLETE (2026-07-22).** Both ledgers reached the required state and were deleted:
+`whitelist-freetext.json` burned **167 → 0** across the Opus/Sonnet waves; `whitelist-unparsed.json` went
+**4 → 0**, with three of its four entries structured to real parser slices and the last — `SOM/PrecursorGolem`
+(copy-for-each-targeted, needing a target-distribution AST subsystem) — **sent back to triage** by removing
+its gold rather than carrying a one-entry ledger. The adjudication held: **nothing proved genuinely
+irreducible** (0 of 10 arguable cases; all became deferred debt with a concrete cloned-template AST). The
+two gates were **kept, not deleted** — `GoldFreeTextWhitelistTests` and `GoldFixtureUnparsedTests` both
+already treat an absent whitelist as an empty exception set, so with the ledgers gone they now run as **pure
+stateless invariants over every gold** (*no gold may carry a free-text sink or an unparsed node, full stop*),
+which is strictly stronger than the ratcheting debt-baseline they replaced and preserves ~1,584 per-gold
+assertions. This makes the governing principle literally true: the only hand-authored data artifacts are
+MAST-loop fixtures. CORE ring green (7298/0/7), bench green (104/0).
+
 ## Consequences
 
 - **The mast-loop and interaction-judge doctrine change.** A worker may no longer "update" a status,

@@ -393,11 +393,11 @@ public class Program
             FreeTextResidualCensusFlow.Create(catalog, ArtifactClassifier.RepoRoot(basePath))
         )
         .WithDescription(
-          "Initiative-05 free-text (de-string) burn-down census: per-sink instance/card counts over "
-            + "every committed gold under Fixtures/HandParsedCards/**, joined to the named "
-            + "Fixtures/whitelist-freetext.json carve-outs → "
-            + "Data/_08_Reporting/free-text-residual-census.json. Replaces the frozen "
-            + "destring-worklist.json. Never a gate; the GATE is the NUnit GoldFreeTextWhitelistTests."
+          "Free-text (de-string) residual census: per-sink instance/card counts over every committed "
+            + "gold under Fixtures/HandParsedCards/** → Data/_08_Reporting/free-text-residual-census.json. "
+            + "As of ADR-0004 #40 the de-string migration is complete and the count is zero — the "
+            + "whitelist-freetext.json ledger and its gate were removed (2026-07-22); this report is the "
+            + "standing burn-down surface should any free-text residual reappear."
         );
 
       // ADR-0004 §1, issue #38: the near-duplicate discriminator check, demoted from a CORE-ring gate to
