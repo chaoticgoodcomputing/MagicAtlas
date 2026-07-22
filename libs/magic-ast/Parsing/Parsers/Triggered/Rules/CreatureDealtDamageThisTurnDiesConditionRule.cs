@@ -73,7 +73,7 @@ public sealed class CreatureDealtDamageThisTurnDiesConditionRule : ITriggerCondi
         History = new DealtDamageByPredicate
         {
           Source = source,
-          Timeframe = "this turn",
+          Window = DamageWindow.ThisTurn,
         },
       },
     };

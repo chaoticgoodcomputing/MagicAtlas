@@ -82,7 +82,7 @@ public sealed class DamageThenExileInsteadReplacementRule : IStaticRule
               History = new DealtDamageByPredicate
               {
                 Source = ObjectReference.Self(),
-                Timeframe = "this way",
+                Window = DamageWindow.ThisWay,
               },
             },
           },

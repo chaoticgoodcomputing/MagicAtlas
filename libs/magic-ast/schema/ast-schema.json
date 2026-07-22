@@ -3118,7 +3118,7 @@
           "IsUnparsed": false,
           "Fields": [
             "Source",
-            "Timeframe"
+            "Window"
           ]
         },
         {
@@ -3420,5 +3420,5 @@
       ]
     }
   ],
-  "SchemaHash": "f6cddb1d6dc3dadc03b32d9ccb301a907a780b5be33a6023797738708fcdce5e"
+  "SchemaHash": "4b39e99d0e86c7b0451eef8697c7a17f71a28de297373de2daddd5834ac28ce4"
 }

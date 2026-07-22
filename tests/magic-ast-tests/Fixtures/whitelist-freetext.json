@@ -362,12 +362,6 @@
       "reason": "PB-7 structured-condition buckets (entangled: reference-not-resolution engine contract) — cumulative upkeep's CR 702.24a intervening-if 'this permanent is on the battlefield', same residual category as InnerSanctum's (the sibling draw-cost cumulative-upkeep printing)."
     },
     {
-      "card": "KLD/IncendiaryFlow",
-      "sink": "Timeframe",
-      "tag": "debt",
-      "reason": "DealtDamageByPredicate.Timeframe free-text (\"this way\") — deferred enum structuring of the damage-provenance/linked-ability window (CR 607.1); same family as SengirBats"
-    },
-    {
       "card": "KTK/AbzanSkycaptain",
       "sink": "OtherCondition",
       "tag": "debt",
@@ -774,12 +768,6 @@
       "sink": "OtherCondition",
       "tag": "debt",
       "reason": "PB-7 structured-condition buckets — 'its power is greater than each other creature's power' is a relative-maximum-power comparison (no structured GreatestPowerCondition node exists yet; the predicate spans the full set of creatures rather than a single comparator)"
-    },
-    {
-      "card": "SengirBats",
-      "sink": "Timeframe",
-      "tag": "debt",
-      "reason": "DealtDamageByPredicate.Timeframe free-text (\"this turn\") — deferred enum structuring of the damage-provenance window"
     },
     {
       "card": "SephirothFabledSOLDIERSephirothOneWingedAngel",
