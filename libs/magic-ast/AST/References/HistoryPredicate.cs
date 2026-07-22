@@ -22,8 +22,9 @@ using MagicAST.Serialization.DiscriminatorAttributes;
 public abstract record HistoryPredicate;
 
 /// <summary>
-/// "[object] dealt damage by [source] [timeframe]". e.g.
-/// "a creature dealt damage by Zurgo this turn".
+/// "[object] dealt damage by [source] [window]". e.g.
+/// "a creature dealt damage by Zurgo this turn" or
+/// "a creature dealt damage this way".
 /// </summary>
 [HistoryPredicateKind("dealtDamageBy")]
 public sealed record DealtDamageByPredicate : HistoryPredicate
@@ -34,11 +35,37 @@ public sealed record DealtDamageByPredicate : HistoryPredicate
   public required ObjectReference Source { get; init; }
 
   /// <summary>
-  /// Free-text timeframe descriptor — "this turn", "since your last turn",
-  /// "this combat", etc. Structured timeframes can be added later.
+  /// Which damage-events the predicate looks back over — see <see cref="DamageWindow"/>.
+  /// Structured (was free text): the two observed surfaces "this turn" (a turn-scoped
+  /// temporal window) and "this way" (a CR 607.1 linked-ability provenance link) are
+  /// distinct CR concepts, so this is a <see cref="DamageWindow"/> enum, not a string.
   /// </summary>
-  [FreeTextField]
-  public required string Timeframe { get; init; }
+  public required DamageWindow Window { get; init; }
+}
+
+/// <summary>
+/// The scope over which a <see cref="DealtDamageByPredicate"/> looks back for the damage
+/// it references. NOT a pure timeframe: the two members are two different CR concepts that
+/// both happen to restrict "dealt damage" — one temporal, one provenance-linked.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum DamageWindow
+{
+  /// <summary>
+  /// "this turn" — a turn-scoped temporal window: the object was dealt damage at some
+  /// point during the current turn (CR 514 / the turn structure bounds "this turn" to the
+  /// current turn). e.g. Sengir Bats, "a creature dealt damage by this creature this turn".
+  /// </summary>
+  ThisTurn,
+
+  /// <summary>
+  /// "this way" — a CR 607.1 linked-ability provenance link, NOT a temporal window: the
+  /// object was dealt damage by the resolution of this very spell/ability, which the phrase
+  /// "this way" points back to. e.g. Incendiary Flow, "If a creature dealt damage this way
+  /// would die this turn, exile it instead" (the "this turn" there bounds the death event,
+  /// not this predicate).
+  /// </summary>
+  ThisWay,
 }
 
 /// <summary>

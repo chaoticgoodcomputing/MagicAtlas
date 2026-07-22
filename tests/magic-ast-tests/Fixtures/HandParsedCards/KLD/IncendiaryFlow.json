@@ -61,7 +61,7 @@
                     "Source": {
                       "Kind": "Self"
                     },
-                    "Timeframe": "this way"
+                    "Window": "ThisWay"
                   }
                 }
               },
