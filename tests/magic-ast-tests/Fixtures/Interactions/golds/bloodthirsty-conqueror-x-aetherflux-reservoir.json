@@ -1,0 +1,157 @@
+{
+  "id": "bloodthirsty-conqueror-x-aetherflux-reservoir",
+  "unit": "pairwise",
+  "cards": [
+    "Bloodthirsty Conqueror",
+    "Aetherflux Reservoir"
+  ],
+  "source": {
+    "note": "CROSS-CARD witness of the life-GAIN -> pay-life-COST arm (PortFlowMatcher.LifeCostToPay, guard PortGraphEngine.LifeGainFeedsCost): one card's life-gain emit replenishes another card's 'Pay N life' cost. This is the ADR-0004 #34 finding closed: LifeCostToPay fired live ONLY on Aetherflux Reservoir alone (a single-card gold whose two edges are both card-defined), so NO rollup rule witnessed the arm as a rules-defined cross-card edge. Here Bloodthirsty Conqueror's 'you gain that much life' emit (emit:life:gain:controlled) feeds Aetherflux Reservoir's 'Pay 50 life' cost (consume:paylife) -- a rules-defined, cross-card LifeCostToPay edge. Oracle text verified vs the committed parse golds (HandParsedCards/BloodthirstyConqueror.json, HandParsedCards/AER/AetherfluxReservoir.json): Bloodthirsty Conqueror = 'Flying, deathtouch / Whenever an opponent loses life, you gain that much life. (Damage causes loss of life.)' ({3}{B}{B} Creature - Vampire Knight); Aetherflux Reservoir = 'Whenever you cast a spell, you gain 1 life for each spell you've cast this turn. / Pay 50 life: This artifact deals 50 damage to any target.' ({4} Artifact). Live engine ports (PortWalk projection of those parse golds): Bloodthirsty Conqueror consume trigger:life:loss:opponent (Event=LosesLife, Filter Controller=Opponent -> stem=life, direction=loss, recipient=opponent) + emit:life:gain:controlled (gainLife, DerivedFrom=LifeLost, Player=You -> stem=life, direction=gain, recipient=you); Aetherflux Reservoir consume pay:paylife (CostType payLife, Amount 50 -> stem=paylife, PayLifeFamily 2026-07-18 precision-fix, no attrs -- amount rides as Quantity) + emit:damage:noncombat:any (dealDamage Source=Self Amount=50 Target=AnyTarget). REAL-PLAY: Aetherflux Reservoir + Bloodthirsty Conqueror is a genuine, Commander-Spellbook-attested 2-card infinite: Pay 50 life -> Aetherflux deals 50 damage to an opponent -> that opponent loses 50 life -> Bloodthirsty Conqueror's trigger makes you gain 50 life -> Pay 50 again -> unbounded damage (life-neutral each iteration: 50 gained = 50 paid). THE WITNESSED UNIT is the smallest honest one: the single cross-card feed emit:life:gain -> consume:paylife (E1), authored as unit=pairwise like soul-warden-x-ajanis-pridemate. The loop's OTHER (return) hop -- Aetherflux's 50 damage causing an opponent to LOSE life, feeding Conqueror's 'whenever an opponent loses life' trigger -- is a damage->life-loss resource crossing the engine does NOT model as a flow arm (SelectArm has no E(\"damage\") && C(\"life\") hop; the DamageToTrigger arm requires a damage-trigger consume, not a life-loss trigger), so the engine reconstructs only the life:gain->paylife arm and the cycle does not close in-engine -> honestly unit=pairwise, no loop_tier claimed (assertion no_loop). No exact popularity figure available in this worktree (no combo-instances dump present) -> source.popularity omitted (not fabricated)."
+  },
+  "judge": {
+    "verdict": "PASS",
+    "ref": "interaction-judge PASS (ADR-0004 #40 lifecost-witness, 2026-07-22): the life:gain -> paylife edge (E1) certified GREEN and the new policy:life-supplies-cost ruled CR-sound and genuinely distinct from policy:counter-supplies-cost (life is a fungible persistent pool, not a per-object counter) and from policy:life-direction-match (a resource-supply to a COST, not a subscription feed); direction-only guard (gain feeds, loss never) verified against LifeGainFeedsCost; card-defined internal edges (E2 Conqueror flip, E3 Aetherflux cost->effect) self-certifying; no_loop ruled correct (damage->opponent-life-loss return hop is an unmodeled crossing)."
+  },
+  "ports": {
+    "Bloodthirsty Conqueror": [
+      {
+        "id": "BC1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "loss",
+          "recipient": "opponent"
+        },
+        "note": "'Whenever an opponent loses life' -- a life subscription (triggered ability, CR 603.2 / 119.9) watching an OPPONENT's life-loss. Parse gold: Trigger Event=LosesLife, Filter Controller=Opponent. direction=loss, recipient=opponent. No qty facet (any nonzero opponent life-loss fires it, CR 119.9). MANDATORY ('Whenever ...', no 'you may') -> ungated. Live label trigger:life:loss:opponent. In the real combo this is the RETURN-hop consumer (Aetherflux's 50 damage makes an opponent lose 50 life), but that return hop's damage->life-loss crossing is NOT an engine flow arm (see source.note), so BC1 is documentation of the real loop, not part of the witnessed pairwise edge."
+      },
+      {
+        "id": "BC2",
+        "side": "emit",
+        "kind": "STATE",
+        "stem": "life",
+        "attrs": {
+          "direction": "gain",
+          "recipient": "you",
+          "qty": "that-many"
+        },
+        "note": "THE WITNESS (emit side) -- 'you gain that much life' -- a life STATE emit (CR 119.3), direction=gain, recipient=you (controlled), qty=that-many (bound to the opponent's life lost, DerivedFrom=LifeLost). Live label emit:life:gain:controlled. This gain is what SUPPLIES Aetherflux's pay-life cost (E1). Same emit shape as Soul Warden's S1 / Exquisite Blood's EB2 (direction=gain, recipient=you)."
+      }
+    ],
+    "Aetherflux Reservoir": [
+      {
+        "id": "AR1",
+        "side": "consume",
+        "kind": "STATE",
+        "stem": "paylife",
+        "attrs": {
+          "qty": 50
+        },
+        "note": "THE WITNESS (consume side) -- 'Pay 50 life:' -- an activation cost paid by spending life (CR 118.1 cost / 119.4 paying life subtracts from the life total). Parse gold: CostType=payLife, Amount literal 50. stem=paylife (PayLifeFamily, 2026-07-18 precision-fix: its OWN stem, distinct from the life-TRIGGER 'life' stem, so PortFlowMatcher.SelectArm's (life,paylife)->LifeCostToPay is unambiguous and does not collide with (life,life)->LifeToTrigger). PayLifeFamily projects NO attributes -- the amount rides as PortNode.Quantity and the payer as PortNode.Subject; qty:50 here is documentation of the literal cost, not an engine attr. Live label pay:paylife. This is the consume the arm feeds."
+      },
+      {
+        "id": "AR2",
+        "side": "emit",
+        "kind": "EVENT",
+        "stem": "damage-dealt",
+        "attrs": {
+          "combat": "noncombat",
+          "recipient": "any",
+          "subject": "self"
+        },
+        "note": "'This artifact deals 50 damage to any target' -- a noncombat damage EVENT (CR 120), combat=noncombat, recipient=any, subject=self (Aetherflux is the source, isSelf=true). Parse gold: dealDamage Source=Self, Amount literal 50, Target=AnyTarget. Live label emit:damage:noncombat:any. In the real combo the 50 damage to an opponent is what causes that opponent to lose 50 life (CR 120.3), closing the loop back onto BC1 -- but that damage->life-loss crossing is NOT an engine flow arm (SelectArm has no damage->life hop), so AR2 documents the real loop's return hop, not a witnessed engine edge."
+      }
+    ]
+  },
+  "edges": [
+    {
+      "id": "E1",
+      "from": "Bloodthirsty Conqueror.BC2",
+      "to": "Aetherflux Reservoir.AR1",
+      "mechanism": "match_policy",
+      "rule": "policy:life-supplies-cost",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "THE WITNESSED EDGE (the #34 finding, closed cross-card): Bloodthirsty Conqueror's life-gain emit (BC2, direction=gain) SUPPLIES Aetherflux Reservoir's 'Pay 50 life' cost (AR1, stem=paylife). This is the LifeCostToPay flow arm (PortFlowMatcher.SelectArm: E(\"life\") && C(\"paylife\") -> LifeCostToPay), gated by LifeGainFeedsCost(emit): only a life-GAIN emit (direction=gain) supplies the cost -- a life-LOSS emit would be a further drain, never a refund, and would NOT arm this edge (the false-GREEN the guard exists to prevent).",
+        "GREEN tiering: life is a persistent, FUNGIBLE resource -- your life total (CR 119). A life-gain adds directly to that total (CR 119.3); a 'Pay N life' cost is paid from that same total (CR 119.4). So the gained life is directly available to pay the cost -- no targeting, no placement, no opponent interference, no timing loss (life persists between activations, unlike mana). The amount-sufficiency ('you need >= 50 life to pay 50', CR 118.3/119.4) is a FIRABILITY precondition on activating the ability, NOT a reliability defect of the feed -- exactly as a single mana source that cannot alone cover a large mana cost does not make ManaToPay AMBER. So the resource-supply relation is GREEN, the life analogue of the mana->pay:mana supply and of policy:counter-supplies-cost (a fungible pool is even cleaner than a placed counter: no target step).",
+        "direction is load-bearing: BC2.direction=gain arms the cost; a life-LOSS emit (e.g. Blood Artist's 'target player loses 1 life') would NOT (LifeGainFeedsCost, CR 119.4 -- paying life is itself a loss, so a loss cannot refund it)."
+      ]
+    },
+    {
+      "id": "E2",
+      "from": "Bloodthirsty Conqueror.BC1",
+      "to": "Bloodthirsty Conqueror.BC2",
+      "mechanism": "card-defined",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "internal (Bloodthirsty Conqueror's own loss->gain conversion): 'Whenever an opponent loses life' (BC1) resolves into 'you gain that much life' (BC2). Intra-ability causality, GREEN by construction (CR 603.2 the trigger fires -> CR 119.3 you gain life). Self-certifying (mechanism=card-defined cites no rule). qty=that-many carries the opponent's life lost through to your gain. This is the loss->gain FLIP that, in the real combo, turns Aetherflux's opponent-damage into the life-gain that refuels the Pay-50 cost -- documented here (the flip lives INSIDE Conqueror, card-defined), not a cross-card rule."
+      ]
+    },
+    {
+      "id": "E3",
+      "from": "Aetherflux Reservoir.AR1",
+      "to": "Aetherflux Reservoir.AR2",
+      "mechanism": "card-defined",
+      "residuals": [],
+      "tier": "GREEN",
+      "notes": [
+        "internal (Aetherflux's activated ability cost->effect): 'Pay 50 life: This artifact deals 50 damage to any target' -- the life cost (AR1) gates the damage effect (AR2). Intra-ability causality, GREEN by construction (CR 602.1 activated ability / 118.1 cost -> CR 120 the damage). Self-certifying. Identical to aetherflux-reservoir.json's E2 (arm B)."
+      ]
+    }
+  ],
+  "declares": {
+    "polarity": [],
+    "match_policy": [
+      {
+        "id": "policy:life-supplies-cost",
+        "consume_kind": "argument",
+        "subject": "cover",
+        "axis": "direction",
+        "lattice": "gain supplies a pay-life cost ; loss NEVER supplies a cost (a life-loss emit is a further drain, not a refund) -- the LifeGainFeedsCost direction guard",
+        "desc": "a life STATE emit that is a life-GAIN (CR 119.3) supplies the life resource a 'Pay N life' activation/casting COST consumes (CR 118.1 cost / 119.4 paying life subtracts from the life total) -- the life analogue of the mana->pay:mana supply and of policy:counter-supplies-cost. Implements PortFlowMatcher.FlowArm.LifeCostToPay + the PortGraphEngine.LifeGainFeedsCost guard. DIRECTION is the load-bearing prune: ONLY a life-GAIN emit supplies the cost; a life-LOSS emit is a further drain and never a refund (the false-GREEN the guard prevents, CR 119.4 -- paying life is itself a loss). GREEN reliability: life is a persistent, fungible pool (your life total, CR 119), so a gain is directly available to pay the cost with no targeting/placement/timing step; amount-sufficiency ('life total >= amount', CR 118.3/119.4) is a firability precondition on activation, not a feed defect (mirrors how a mana source that cannot alone cover a cost does not make the mana supply AMBER). DISTINCT from policy:counter-supplies-cost (that supplies a per-object +1/+1 COUNTER covered by counter-type; a counter is not an object and must be PLACED on the payer -- life needs no placement and has no type, only direction) and from policy:life-direction-match (that is a life emit feeding a life-TRIGGER SUBSCRIPTION on matching direction; this is a life emit supplying an actual resource COST -- consume_kind=argument vs subscription, distinct consume stem paylife vs life).",
+        "cr": [
+          "118.1",
+          "118.3",
+          "119.3",
+          "119.4"
+        ]
+      }
+    ],
+    "guards": [],
+    "bridges": []
+  },
+  "assertions": [
+    {
+      "claim": "edge.E1.tier == GREEN",
+      "because": "policy:life-supplies-cost: Bloodthirsty Conqueror's life-GAIN emit (BC2, direction=gain) supplies Aetherflux Reservoir's 'Pay 50 life' cost (AR1, stem=paylife) -- the LifeCostToPay arm gated by LifeGainFeedsCost (gain only). Life is a fungible persistent pool (CR 119): the gain adds to the life total (119.3) that the cost is paid from (119.4), with no targeting/placement/interference -> the resource supply is reliable -> GREEN. Amount-sufficiency (CR 118.3/119.4) is a firability precondition, not a feed cap. Rests on policy:life-supplies-cost, confirmed by this gold's judge PASS."
+    },
+    {
+      "claim": "edge.E1.mechanism == match_policy",
+      "because": "the life:gain -> paylife feed is certified by policy:life-supplies-cost (a resource-supply match implementing FlowArm.LifeCostToPay), not a structural subsumption or card-defined edge -- it is a cross-card rules-defined edge, which is precisely why it (and not Aetherflux's own card-defined intra-card edges) is what witnesses the LifeCostToPay arm for ADR-0004 #34."
+    },
+    {
+      "claim": "life_cost_direction_prune",
+      "because": "BC2.direction=gain arms Aetherflux's pay-life cost, but a life-LOSS emit would NEVER arm it (LifeGainFeedsCost requires direction=gain, CR 119.4 -- paying life is itself a loss, so a loss event cannot refund a life cost). If the engine ignored direction it would false-GREEN a life-loss emit into a life cost. Direction-match (gain-only) is load-bearing."
+    },
+    {
+      "claim": "policy_life_supplies_cost_distinct",
+      "because": "policy:life-supplies-cost is neither a sibling of policy:counter-supplies-cost nor of policy:life-direction-match. vs counter-supplies-cost: that supplies a per-object +1/+1 COUNTER whose type must COVER the removal cost and that must be PLACED on the payer (a counter is not an object, CR 122.1); life is a fungible untyped pool needing no placement -- the prune axis is direction, not counter-type. vs life-direction-match: that feeds a life-TRIGGER SUBSCRIPTION (consume_kind=subscription, stem=life) on matching direction; this supplies an actual resource COST (consume_kind=argument, distinct stem=paylife). Different consume stem, different consume_kind, different relation."
+    },
+    {
+      "claim": "no_loop",
+      "because": "unit=pairwise: the engine reconstructs only the one cross-card arm emit:life:gain(BC2) -> consume:paylife(AR1). The real Aetherflux + Bloodthirsty Conqueror combo IS a closed infinite in play, but its return hop -- Aetherflux's 50 damage (AR2) causing an opponent to LOSE life, feeding Conqueror's 'whenever an opponent loses life' trigger (BC1) -- is a damage->life-loss resource crossing with NO engine flow arm (SelectArm has no E(\"damage\") && C(\"life\") hop; DamageToTrigger requires a damage-trigger consume, not a life-loss trigger). So no cycle closes in-engine; no S10 SDF balance is claimed. The witnessed unit is the smallest honest one, exactly as soul-warden-x-ajanis-pridemate witnessed a single life feed without closing a loop."
+    }
+  ],
+  "cr": [
+    "118.1",
+    "118.3",
+    "119.3",
+    "119.4",
+    "119.6",
+    "120.3",
+    "602.1",
+    "603.2"
+  ]
+}

@@ -8,6 +8,7 @@
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
     "birds-of-paradise-x-horseshoe-crab",
+    "bloodthirsty-conqueror-x-aetherflux-reservoir",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -268,6 +269,7 @@
         "aetherflux-reservoir",
         "aggravated-assault-x-sword-of-feast-and-famine",
         "ancient-copper-dragon",
+        "bloodthirsty-conqueror-x-aetherflux-reservoir",
         "brazen-dwarf",
         "captain-rex-nebula",
         "combat-celebrant",
@@ -375,6 +377,7 @@
       ],
       "witnesses": [
         "aetherflux-reservoir",
+        "bloodthirsty-conqueror-x-aetherflux-reservoir",
         "gravecrawler-x-ashnods-altar-x-blood-artist",
         "gravecrawler-x-phyrexian-altar-x-blood-artist",
         "heliod-sun-crowned-x-walking-ballista",
@@ -508,6 +511,16 @@
       "witnesses": [
         "stone-calendar",
         "thorn-of-amethyst"
+      ]
+    },
+    "paylife": {
+      "kind": "STATE",
+      "status": "witnessed",
+      "attrs": [
+        "qty"
+      ],
+      "witnesses": [
+        "bloodthirsty-conqueror-x-aetherflux-reservoir"
       ]
     },
     "recur": {
@@ -808,6 +821,7 @@
         "deployment:creature",
         "life",
         "mana",
+        "paylife",
         "removal:creature",
         "structure:untap"
       ],

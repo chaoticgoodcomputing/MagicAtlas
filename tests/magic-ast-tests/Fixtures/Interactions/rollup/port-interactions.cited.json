@@ -8,6 +8,7 @@
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
     "birds-of-paradise-x-horseshoe-crab",
+    "bloodthirsty-conqueror-x-aetherflux-reservoir",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -148,6 +149,22 @@
         "119.9"
       ],
       "corroborates": "policy:life-direction-match"
+    },
+    {
+      "id": "policy:life-supplies-cost",
+      "consume_kind": "argument",
+      "subject": "cover",
+      "status": "confirmed",
+      "witnesses": [
+        "bloodthirsty-conqueror-x-aetherflux-reservoir"
+      ],
+      "desc": "a life STATE emit that is a life-GAIN (CR 119.3) supplies the life resource a \u0027Pay N life\u0027 activation/casting COST consumes (CR 118.1 cost / 119.4 paying life subtracts from the life total) -- the life analogue of the mana-\u003Epay:mana supply and of policy:counter-supplies-cost. Implements PortFlowMatcher.FlowArm.LifeCostToPay \u002B the PortGraphEngine.LifeGainFeedsCost guard. DIRECTION is the load-bearing prune: ONLY a life-GAIN emit supplies the cost; a life-LOSS emit is a further drain and never a refund (the false-GREEN the guard prevents, CR 119.4 -- paying life is itself a loss). GREEN reliability: life is a persistent, fungible pool (your life total, CR 119), so a gain is directly available to pay the cost with no targeting/placement/timing step; amount-sufficiency (\u0027life total \u003E= amount\u0027, CR 118.3/119.4) is a firability precondition on activation, not a feed defect (mirrors how a mana source that cannot alone cover a cost does not make the mana supply AMBER). DISTINCT from policy:counter-supplies-cost (that supplies a per-object \u002B1/\u002B1 COUNTER covered by counter-type; a counter is not an object and must be PLACED on the payer -- life needs no placement and has no type, only direction) and from policy:life-direction-match (that is a life emit feeding a life-TRIGGER SUBSCRIPTION on matching direction; this is a life emit supplying an actual resource COST -- consume_kind=argument vs subscription, distinct consume stem paylife vs life).",
+      "cr": [
+        "118.1",
+        "118.3",
+        "119.3",
+        "119.4"
+      ]
     },
     {
       "id": "policy:reanimate:external-trigger-return",

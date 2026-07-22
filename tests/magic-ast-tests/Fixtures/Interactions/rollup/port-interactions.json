@@ -8,6 +8,7 @@
     "archaeomancer",
     "archaeomancer-x-ghostly-flicker",
     "birds-of-paradise-x-horseshoe-crab",
+    "bloodthirsty-conqueror-x-aetherflux-reservoir",
     "boggart-brute",
     "brazen-dwarf",
     "captain-rex-nebula",
@@ -99,6 +100,12 @@
       "id": "policy:life-direction-match",
       "consume_kind": "subscription",
       "subject": "facet-feeds",
+      "status": "confirmed"
+    },
+    {
+      "id": "policy:life-supplies-cost",
+      "consume_kind": "argument",
+      "subject": "cover",
       "status": "confirmed"
     },
     {
