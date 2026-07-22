@@ -271,6 +271,7 @@ public class Program
       var comboAnchorReportPath = Path.Combine(
         dataPath,
         "_08_Reporting",
+        "dumps",
         "combo-anchor-report.json"
       );
       var portTopologyCitedPath = Path.Combine(

@@ -2,9 +2,12 @@
 
 The analytics datasets that power the API + frontend (ports, families, edges,
 combos, archetypes, anchors — the D1–D4 dumps) are produced by the Flowthru
-pipeline in **`libs/atlas-flows`** and run through the **`tests/atlas-flow-test`**
-harness. As of the W3 promotion, a fresh clone can regenerate everything
-end-to-end from the shippable lib (no test-project-only step in the path).
+CardAtlas pipeline in **`tests/magic-ast-tests`** (the `mast` project). That flow
+had been forked into `libs/atlas-flows` for a "shippable lib" promotion, but the
+two copies diverged — the libs copy regressed the port `side`/`intercept` role and
+never emitted the ADR-0003 structured facets, silently blanking the frontend. The
+fork was deleted and `nx run flowthru:dumps` **repointed** to drive the `mast`
+copy end-to-end, which is now the single source of truth.
 
 The intermediate + output datasets are **gitignored** (`Data/**`, `dumps/`), so a
 clean checkout has none of them. That is deliberate — see *Generate on demand*
@@ -16,20 +19,23 @@ below.
 nx run flowthru:dumps
 ```
 
-That is the whole recipe. It runs the four flows in dependency order and then
-**publishes** the results to the repo-root `dumps/` directory the consumers read:
+That is the whole recipe. The target lives on the `flowthru` project (so every
+consumer error message and doc that names `nx run flowthru:dumps` keeps
+resolving) but its commands now run in `tests/magic-ast-tests`. It runs the four
+stages in dependency order and then **publishes** the results to the repo-root
+`dumps/` directory the consumers read:
 
 | Step | Produces |
 | --- | --- |
-| `--flow CorpusParse` | Scryfall oracle-cards bulk → `card-inputs.json` + `parse-records.json` (includes the ~38k-card MagicAST corpus parse — the slow step) |
-| `--flow FetchCombos` | Commander Spellbook variants dump (~510 MB) → `combos.json` |
-| `--flow CardAtlas` | `card-ports.json`, `card-meta.json`, `combo-instances.json`, `resource-graph.json`, `archetype-catalog.json`, `extended-recall-report.json` |
-| `--flow ComboAnchors` | `combo-anchor-report.json` |
+| `--only ParseCorpus` | Scryfall oracle-cards bulk → `card-inputs.json` + `parse-records.json` (includes the ~38k-card MagicAST corpus parse — the slow step) |
+| `--only FetchCombos` | Commander Spellbook variants dump (~510 MB) → `combos.json` |
+| `--flow CardAtlas` | `card-ports.json`, `card-meta.json`, `combo-instances.json`, `resource-graph.json`, `archetype-catalog.json`, `extended-recall-report.json` — all under `_08_Reporting/dumps/` |
+| `--only RankComboAnchors` | `combo-anchor-report.json` (under `_08_Reporting/dumps/`) |
 | publish | `cp Data/_08_Reporting/dumps/*.json` → `<repo>/dumps/` |
 
 Any step can still be run alone —
-`dotnet run --project tests/atlas-flow-test -- --flow <Name>` — when you want a
-single dataset and know its inputs are already present.
+`dotnet run --project tests/magic-ast-tests -- --flow <Name>` (or `--only <Step>`)
+— when you want a single dataset and know its inputs are already present.
 
 Raw fetches (Scryfall bulk, the CSB dump) are HTTP-cached (~weekly), so
 re-running is cheap after the first pull. `CorpusParse` and `FetchCombos` are
@@ -172,13 +178,14 @@ are FRESH, so a clean checkout inherited a cache claiming steps were satisfied b
 output files that clone did not have. `git rm --cached` removed it; the ignore
 rule (`tests/atlas-flow-test/.gitignore:24`) already covered it.
 
-### Not yet closed: `libs/atlas-flows` / `tests/atlas-flow-test`
+### Closed for the dump path (repoint): runs through `tests/magic-ast-tests`
 
-The fix above is installed in the `tests/magic-ast-tests` harness only (the CORE
-ring). `libs/atlas-flows` has the identical hole — `CorpusParseFlow`'s
-`ParseCorpusStep` is the same `OracleParser` wrapper — and its own
-`tests/atlas-flow-test/.flowthru/cache.json`. Closing it needs `StepCodeIdentity`
-in a place both projects can compile (neither references the other today), or the
-same idea pushed upstream into Flowthru's `StepMetadataGenerator`. Until then the
-dump-regeneration path above is still code-blind: pass `--no-cache` when
-regenerating dumps after a parser change.
+`StepCodeIdentity` (the code-aware cache-key fix) is installed in the
+`tests/magic-ast-tests` harness. Because `nx run flowthru:dumps` now drives that
+harness, the dump-regeneration path is **no longer code-blind** — a parser change
+correctly re-runs `ParseCorpus`. (The old libs path lacked the fix and needed
+`--no-cache` after a parser change; that caveat is retired for the dump target.)
+`--no-cache` remains the escape hatch for out-of-band edits to input *files* (the
+mtime caveat above). `libs/atlas-flows`'s own `CorpusParse`/`FetchCombos`/
+`ComboAnchors` flows still have the un-fixed keying, but they are no longer on any
+regeneration path (candidate cleanup once the two harnesses fully dedupe).

@@ -40,7 +40,7 @@ public partial class Catalog
   public IItem<ComboAnchorReport> ComboAnchorReport =>
     CreateItem(() => Item.Of<ComboAnchorReport>("ComboAnchorReport")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/combo-anchor-report.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/combo-anchor-report.json")
       .Build());
 
   /// <summary>The abstract label-level interaction graph (the known-families grammar, flattened) — left viz subplot.</summary>
@@ -105,14 +105,14 @@ public partial class Catalog
   public IItem<IEnumerable<CardMetaRow>> CardMeta =>
     CreateItem(() => Item.Of<IEnumerable<CardMetaRow>>("CardMeta")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/card-meta.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/card-meta.json")
       .Build());
 
   /// <summary>D1 — the card↔port index (one row per card, distinct port label; family + emit/consume side).</summary>
   public IItem<IEnumerable<CardPortRow>> CardPorts =>
     CreateItem(() => Item.Of<IEnumerable<CardPortRow>>("CardPorts")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/card-ports.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/card-ports.json")
       .Build());
 
   /// <summary>The span-witness error-check (mast-loop Error-check track entry): parsed ports whose span
@@ -148,28 +148,28 @@ public partial class Catalog
   public IItem<IEnumerable<ComboInstanceRow>> ComboInstances =>
     CreateItem(() => Item.Of<IEnumerable<ComboInstanceRow>>("ComboInstances")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/combo-instances.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/combo-instances.json")
       .Build());
 
   /// <summary>The wide reconstruction-recall measurement (co-produced with D4; measurement, never a gate).</summary>
   public IItem<ExtendedRecallReport> ExtendedRecall =>
     CreateItem(() => Item.Of<ExtendedRecallReport>("ExtendedRecall")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/extended-recall-report.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/extended-recall-report.json")
       .Build());
 
   /// <summary>D2 — the family subway map (stations + realized-combo-annotated directed lines).</summary>
   public IItem<ResourceGraph> ResourceGraph =>
     CreateItem(() => Item.Of<ResourceGraph>("ResourceGraph")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/resource-graph.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/resource-graph.json")
       .Build());
 
   /// <summary>D3 — the realized combo-shape catalog (family-signatures with ≥1 reconstructed combo).</summary>
   public IItem<ArchetypeCatalog> ArchetypeCatalog =>
     CreateItem(() => Item.Of<ArchetypeCatalog>("ArchetypeCatalog")
       .Json()
-      .AtPath($"{_basePath}/_08_Reporting/archetype-catalog.json")
+      .AtPath($"{_basePath}/_08_Reporting/dumps/archetype-catalog.json")
       .Build());
 
   /// <summary>The port-graph structural atlas (diagnostic): SCC decomposition + hub census + economy-cut

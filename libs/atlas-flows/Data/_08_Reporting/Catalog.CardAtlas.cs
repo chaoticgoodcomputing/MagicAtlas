@@ -6,11 +6,19 @@ using MagicAtlas.Data._08_Reporting.Schemas;
 namespace MagicAtlas.Data;
 
 /// <summary>
-/// Catalog wiring for the promoted CardAtlas reporting flow (D1–D4) and the combo-anchor pick surface
-/// (upstream-atlas-data-plan §0/§6 P0). The three <b>inputs</b> are file-drops the offline pipeline
-/// produces (combos.json / card-inputs.json / parse-records.json — the gitignored corpus); the seven
-/// <b>outputs</b> land under <c>{basePath}/_08_Reporting/dumps/</c>, the known directory the atlas-api
-/// seeder (plan §2 Option A) reads. Diagnostics; never gates.
+/// Catalog wiring for the corpus/combo file-drop inputs and the combo-anchor pick surface consumed by
+/// this library's <c>CorpusParse</c> / <c>FetchCombos</c> / <c>ComboAnchors</c> flows.
+///
+/// <para>The CardAtlas D1–D4 reporting flow was DELETED here: it had diverged from the current copy in
+/// <c>tests/magic-ast-tests/Flows/CardAtlas</c> (missing the PortNode-role <c>Side</c> fix aeaf18b3 and
+/// the ADR-0003 Stage-4 structured facets 86e88db4) and was silently regressing the published dumps. The
+/// owner's decision was to make the tests copy the single source of truth. The <c>nx run flowthru:dumps</c>
+/// target now drives the <c>mast</c> project, which produces the D1–D4 dumps under
+/// <c>tests/magic-ast-tests/Data/_08_Reporting/dumps/</c> and publishes them to the repo-root
+/// <c>dumps/</c> the atlas-api seeder reads.</para>
+///
+/// <para>The three <b>inputs</b> below are file-drops the offline pipeline produces (combos.json /
+/// card-inputs.json / parse-records.json — the gitignored corpus). Diagnostics; never gates.</para>
 /// </summary>
 public partial class Catalog
 {
@@ -48,61 +56,7 @@ public partial class Catalog
         .Build()
     );
 
-  // ── Outputs — the five headline dumps (+ two co-products) under _08_Reporting/dumps/. ─────────────
-
-  /// <summary>D1 — per-card deckbuilding metadata (colour identity, mana value, type line, port count).</summary>
-  public IItem<IEnumerable<CardMetaRow>> CardMeta =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<CardMetaRow>>("CardMeta")
-        .Json()
-        .AtPath($"{_basePath}/_08_Reporting/dumps/card-meta.json")
-        .Build()
-    );
-
-  /// <summary>D1 — the card↔port index (one row per card, distinct port label; family + emit/consume side).</summary>
-  public IItem<IEnumerable<CardPortRow>> CardPorts =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<CardPortRow>>("CardPorts")
-        .Json()
-        .AtPath($"{_basePath}/_08_Reporting/dumps/card-ports.json")
-        .Build()
-    );
-
-  /// <summary>D4 — per-combo reconstructed loops (named cards, family-signature, tier, result).</summary>
-  public IItem<IEnumerable<ComboInstanceRow>> ComboInstances =>
-    CreateItem(() =>
-      Item.Of<IEnumerable<ComboInstanceRow>>("ComboInstances")
-        .Json()
-        .AtPath($"{_basePath}/_08_Reporting/dumps/combo-instances.json")
-        .Build()
-    );
-
-  /// <summary>The wide reconstruction-recall measurement (co-produced with D4; measurement, never a gate).</summary>
-  public IItem<ExtendedRecallReport> ExtendedRecall =>
-    CreateItem(() =>
-      Item.Of<ExtendedRecallReport>("ExtendedRecall")
-        .Json()
-        .AtPath($"{_basePath}/_08_Reporting/dumps/extended-recall-report.json")
-        .Build()
-    );
-
-  /// <summary>D2 — the family subway map (stations + realized-combo-annotated directed lines).</summary>
-  public IItem<ResourceGraph> ResourceGraph =>
-    CreateItem(() =>
-      Item.Of<ResourceGraph>("ResourceGraph")
-        .Json()
-        .AtPath($"{_basePath}/_08_Reporting/dumps/resource-graph.json")
-        .Build()
-    );
-
-  /// <summary>D3 — the realized combo-shape catalog (family-signatures with ≥1 reconstructed combo).</summary>
-  public IItem<ArchetypeCatalog> ArchetypeCatalog =>
-    CreateItem(() =>
-      Item.Of<ArchetypeCatalog>("ArchetypeCatalog")
-        .Json()
-        .AtPath($"{_basePath}/_08_Reporting/dumps/archetype-catalog.json")
-        .Build()
-    );
+  // ── Output — the combo-anchor pick surface (produced by this library's ComboAnchors flow). ─────────
 
   /// <summary>The combo-anchored pick surface: unparsed hub cards ranked by the combo-popularity value
   /// each gates, with sole-blocker counts, co-star neighborhood, and a block-reason split.</summary>

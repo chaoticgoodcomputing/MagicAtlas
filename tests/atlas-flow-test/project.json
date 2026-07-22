@@ -14,18 +14,18 @@
       }
     },
     "dumps": {
-      "//": "ADR-0004 §3 / issue #23 — THE regeneration target for the D1–D4 CardAtlas dumps. Runs the four flows in dependency order (CorpusParse → FetchCombos → CardAtlas → ComboAnchors), then PUBLISHES the produced dumps to the repo-root gitignored `dumps/` — the known path the atlas-api seeder reads (Atlas:*Path in apps/atlas-api/appsettings.json). Consumers never fall back to a committed copy: they fail loudly naming this target. Cold cost is dominated by the ~38k-card corpus parse (measured 48.8 s in the mast harness, issue #22); warm runs are cache-served in well under a second. Only the LEAF copy is rewritten — no upstream artifact is touched, which matters because Flowthru fingerprints file items on mtime:size, not content (flowthru#148), so rewriting an upstream file cascades a full re-run of everything below it even when the bytes are identical.",
+      "//": "ADR-0004 §3 / issue #23 — THE regeneration target for the D1–D4 CardAtlas dumps. REPOINTED: the CardAtlas flow was forked into libs/atlas-flows AND tests/magic-ast-tests and the copies diverged (the libs copy regressed `side`/intercept + the ADR-0003 structured facets). The owner's decision was to make the tests copy the single source of truth, so this target now drives the `mast` project (tests/magic-ast-tests) end-to-end rather than the deleted libs CardAtlas flow. It runs the four stages in dependency order — ParseCorpus (Scryfall bulk → card-inputs.json + parse-records.json, the slow ~49 s corpus parse), FetchCombos (CSB variants dump → combos.json), CardAtlas (D1–D4 dumps under _08_Reporting/dumps/), RankComboAnchors (combo-anchor-report.json under _08_Reporting/dumps/) — then PUBLISHES the produced dumps to the repo-root gitignored `dumps/` (the known path the atlas-api seeder reads: Atlas:*Path in apps/atlas-api/appsettings.json). Consumers never fall back to a committed copy: they fail loudly naming this target. Bonus: the mast harness carries the StepCodeIdentity cache-keying fix (ADR-0004 #22) the libs harness lacked, so this path is no longer code-blind. The target id stays `flowthru:dumps` so every consumer error message and doc that names it keeps resolving. Only the LEAF dumps are copied — no upstream artifact is rewritten, which matters because Flowthru fingerprints file items on mtime:size, not content (flowthru#148).",
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "dotnet run -- --flow CorpusParse",
-          "dotnet run -- --flow FetchCombos",
+          "dotnet run -- --only ParseCorpus",
+          "dotnet run -- --only FetchCombos",
           "dotnet run -- --flow CardAtlas",
-          "dotnet run -- --flow ComboAnchors",
+          "dotnet run -- --only RankComboAnchors",
           "mkdir -p ../../dumps",
           "cp Data/_08_Reporting/dumps/*.json ../../dumps/"
         ],
-        "cwd": "tests/atlas-flow-test",
+        "cwd": "tests/magic-ast-tests",
         "parallel": false
       }
     },

@@ -15,7 +15,7 @@ set -euo pipefail
 LABEL="${1:?usage: recall-log.sh <label> [--dry]}"
 DRY="${2:-}"
 ROOT="$(git -C "$(dirname "$0")/.." rev-parse --show-toplevel)"
-REPORT="$ROOT/tests/magic-ast-tests/Data/_08_Reporting/extended-recall-report.json"
+REPORT="$ROOT/tests/magic-ast-tests/Data/_08_Reporting/dumps/extended-recall-report.json"
 LOG="$ROOT/docs/judgments/recall-log.jsonl"
 
 [ -f "$REPORT" ] || { echo "recall-log: $REPORT not found — run 'nx run mast:recall-report' first" >&2; exit 1; }
