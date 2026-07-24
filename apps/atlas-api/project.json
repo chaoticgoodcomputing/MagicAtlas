@@ -41,6 +41,18 @@
         "parallel": false
       }
     },
+    "db:reset": {
+      "//": "DESTRUCTIVE clean-slate: drop the Postgres volume and bring it back up empty, so the next `serve` rebuilds EVERY atlas table from the current EF model and reseeds. Use this whenever a commit adds/changes a column — `CreateMissingObjectsAsync` is additive by object NAME (creates missing tables/indexes) and never ALTERs an existing table's columns, so a pre-existing volume silently keeps the old schema and either crashes startup (a new index on a missing column, e.g. port_edges.edge_id) or errors a resolver at runtime (e.g. ports.conditionality → portRows `Unexpected Execution Error`). Card re-seed streams ~38k from Scryfall unless dumps/oracle-cards.json exists (fast local path).",
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "if command -v docker >/dev/null 2>&1; then docker compose down --volumes; else podman compose down --volumes; fi",
+          "if command -v docker >/dev/null 2>&1; then docker compose up -d; else podman compose up -d; fi"
+        ],
+        "cwd": "apps/atlas-api",
+        "parallel": false
+      }
+    },
     "serve": {
       "//": "Run the GraphQL server at http://localhost:55250/trax/graphql (self-seeds Scryfall on first run). dependsOn db brings Postgres up first; the server itself is long-running, so it can never be a dependsOn of anything else — depend on 'db' or a future one-shot 'data' target instead.",
       "executor": "nx:run-commands",
