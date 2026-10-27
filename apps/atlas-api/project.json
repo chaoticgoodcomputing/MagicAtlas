@@ -54,7 +54,8 @@
       }
     },
     "serve": {
-      "//": "Run the GraphQL server at http://localhost:55250/trax/graphql (self-seeds Scryfall on first run). dependsOn db brings Postgres up first; the server itself is long-running, so it can never be a dependsOn of anything else — depend on 'db' or a future one-shot 'data' target instead.",
+      "//": "Run the GraphQL server at http://localhost:25250/trax/graphql (self-seeds Scryfall on first run). dependsOn db brings Postgres up first. Marked continuous (long-running), so other targets can dependsOn it — Nx starts it alongside them instead of waiting for it to exit (e.g. atlas-web:dev:live).",
+      "continuous": true,
       "executor": "nx:run-commands",
       "options": {
         "commands": ["dotnet run"],
@@ -64,7 +65,8 @@
       "dependsOn": ["db"]
     },
     "watch": {
-      "//": "Hot-reload dev server (dotnet watch run) at :55250.",
+      "//": "Hot-reload dev server (dotnet watch run) at :25250.",
+      "continuous": true,
       "executor": "nx:run-commands",
       "options": {
         "commands": ["dotnet watch run"],

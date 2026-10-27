@@ -2,6 +2,7 @@ using HotChocolate;
 using HotChocolate.Types;
 using MagicAtlas.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using Trax.Effect.Attributes;
 
 namespace MagicAtlas.Api.Resolvers;
 
@@ -57,6 +58,7 @@ public sealed class AtlasDeckResolver
     /// <c>via</c> flags a supergroup/subgroup (transitive) match where the port family differs from the
     /// requested family. Ranked by tier, then card popularity (<see cref="CardRow.EdhrecRank"/> asc).
     /// </summary>
+    [TraxAllowAnonymous]
     public async Task<IReadOnlyList<CandidateResult>> Candidates(
         string family,
         string side,
@@ -128,6 +130,7 @@ public sealed class AtlasDeckResolver
     /// with super/subgroup rollups), complete tiered <c>rings</c> whose card set is a subset of the deck,
     /// and <c>nearMiss</c> combos that are exactly one card short. Powers the Deck Lens.
     /// </summary>
+    [TraxAllowAnonymous]
     public async Task<DeckAnalysis> AnalyzeDeck(
         IReadOnlyList<string> cards,
         [Service] IDbContextFactory<AtlasDbContext> dbFactory)

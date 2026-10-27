@@ -435,7 +435,10 @@ public class Program
       {
         var metadataPath = Path.Combine(basePath, "Metadata");
         meta.AddJsonMetadata(opt => opt.WithOutputDirectory(metadataPath));
-        meta.AddMermaidMetadata(opt => opt.WithOutputDirectory(metadataPath));
+        meta.AddMermaidMetadata(opt =>
+          opt.WithOutputDirectory(metadataPath)
+          .WithPerFlow(p => p.WithMode(Flowthru.Diagnostics.Mermaid.PerFlowMode.Disabled))
+        );
       });
     });
   }

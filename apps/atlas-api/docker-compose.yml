@@ -7,8 +7,10 @@ services:
       POSTGRES_PASSWORD: atlas
       POSTGRES_DB: atlas
     ports:
-      # Host 55432 → container 5432, to avoid colliding with a stock local Postgres.
-      - "55432:5432"
+      # Host 25432 → container 5432, to avoid colliding with a stock local Postgres. All atlas dev
+      # ports (PG 25432 / GQL 25250 / Vite 25173) sit below Linux's ephemeral range (32768–60999):
+      # inside it, any client socket on the box can randomly hold the port and block the bind.
+      - "25432:5432"
     volumes:
       - atlas-pgdata:/var/lib/postgresql/data
 

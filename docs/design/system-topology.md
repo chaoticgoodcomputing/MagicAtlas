@@ -33,10 +33,10 @@ layer. Settled 2026-07-16 alongside [ADR 0003](../../libs/mast-interaction/docs/
                    runs on API startup)                       reseed = truncate + restart)
                          │
 5. API             Postgres → GraphQL                         apps/atlas-api
-                   http://localhost:55250/trax/graphql        (Trax + HotChocolate; non-default
-                                                              ports: PG 55432 / GQL 55250)
+                   http://localhost:25250/trax/graphql        (Trax + HotChocolate; non-default
+                                                              ports: PG 25432 / GQL 25250)
                          │
-6. WEBSITE         GraphQL → concept explorer → user          apps/atlas-web (Vite :55173)
+6. WEBSITE         GraphQL → concept explorer → user          apps/atlas-web (Vite :25173)
                    card explorer / metro / station /
                    deck lens / synergy web
 ```

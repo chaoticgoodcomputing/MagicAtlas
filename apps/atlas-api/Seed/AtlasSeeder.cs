@@ -1,4 +1,6 @@
 using System.Data;
+using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MagicAtlas.Api.Data;
@@ -95,16 +97,11 @@ public sealed class AtlasSeeder
 
         // Prefer a local bulk file when one is configured and present (fast path for machines that
         // already have it). Otherwise stream the oracle-cards bulk straight from Scryfall over HTTPS —
-        // the same two-stage (metadata → download_uri → stream) fetch the rulings seed uses. No manual
-        // curl, no browser: a fresh clone self-seeds.
-        await using var stream = await OpenCardsBulkStreamAsync(ct);
-
-        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-
+        // the same bulk fetch the rulings seed uses. No manual curl, no browser: a fresh clone self-seeds.
         var batch = new List<CardRow>(capacity: 250);
         var total = 0;
 
-        await foreach (var raw in JsonSerializer.DeserializeAsyncEnumerable<RawCard>(stream, options, ct))
+        await foreach (var raw in ReadCardsBulkAsync(ct))
         {
             if (raw is null) continue;
             if (raw.Lang != "en") continue;
@@ -130,29 +127,55 @@ public sealed class AtlasSeeder
     }
 
     /// <summary>
-    /// Opens the oracle-cards bulk as a stream: the local file at <c>Atlas:ScryfallBulkPath</c> when
-    /// it exists, else Scryfall's HTTPS bulk download (resolve the rotating <c>download_uri</c> from
-    /// the stable metadata endpoint, then stream it). Caller owns disposal.
+    /// Reads the oracle-cards bulk: the local file at <c>Atlas:ScryfallBulkPath</c> (a JSON array,
+    /// as the old Scryfall <c>download_uri</c> served) when it exists, else Scryfall's HTTPS bulk.
     /// </summary>
-    private async Task<Stream> OpenCardsBulkStreamAsync(CancellationToken ct)
+    private async IAsyncEnumerable<RawCard?> ReadCardsBulkAsync([EnumeratorCancellation] CancellationToken ct)
     {
         if (!string.IsNullOrWhiteSpace(_cardsBulkPath) && File.Exists(_cardsBulkPath))
         {
             _logger.LogInformation("Seeding cards from local bulk file {Path}...", _cardsBulkPath);
-            return File.OpenRead(_cardsBulkPath);
+            await using var file = File.OpenRead(_cardsBulkPath);
+            await foreach (var raw in JsonSerializer.DeserializeAsyncEnumerable<RawCard>(file, BulkJsonOptions, ct))
+                yield return raw;
+            yield break;
         }
 
+        await foreach (var raw in StreamScryfallBulkAsync<RawCard>("oracle-cards", ct))
+            yield return raw;
+    }
+
+    private static readonly JsonSerializerOptions BulkJsonOptions = new(JsonSerializerDefaults.Web);
+
+    /// <summary>
+    /// Streams one Scryfall bulk-data file. Resolves the rotating download URL from the stable
+    /// metadata endpoint, then decodes it record by record. Scryfall serves bulk data only as
+    /// gzipped JSON Lines (<c>jsonl_download_uri</c>, <c>application/gzip</c> with no
+    /// Content-Encoding, so it is decompressed here); the old JSON-array <c>download_uri</c> is gone.
+    /// </summary>
+    private async IAsyncEnumerable<T?> StreamScryfallBulkAsync<T>(
+        string bulkType, [EnumeratorCancellation] CancellationToken ct)
+    {
         var http = _httpFactory.CreateClient("scryfall");
 
-        _logger.LogInformation("Resolving Scryfall oracle-cards bulk URL...");
+        _logger.LogInformation("Resolving Scryfall {Type} bulk URL...", bulkType);
         var bulkInfo = await http.GetFromJsonAsync<BulkDataInfo>(
-            "https://api.scryfall.com/bulk-data/oracle-cards", ct)
-            ?? throw new InvalidOperationException("Failed to resolve oracle-cards bulk-data info.");
+            $"https://api.scryfall.com/bulk-data/{bulkType}", ct);
+        if (string.IsNullOrEmpty(bulkInfo?.JsonlDownloadUri))
+            throw new InvalidOperationException($"Failed to resolve {bulkType} bulk-data info.");
 
-        _logger.LogInformation("Downloading oracle-cards from {Uri} ({SizeMb} MB)...",
-            bulkInfo.DownloadUri, bulkInfo.Size / (1024 * 1024));
+        _logger.LogInformation("Downloading {Type} from {Uri} ({SizeMb} MB compressed)...",
+            bulkType, bulkInfo.JsonlDownloadUri, bulkInfo.CompressedSize / (1024 * 1024));
 
-        return await http.GetStreamAsync(bulkInfo.DownloadUri, ct);
+        await using var body = await http.GetStreamAsync(bulkInfo.JsonlDownloadUri, ct);
+        await using var gzip = new GZipStream(body, CompressionMode.Decompress);
+        using var reader = new StreamReader(gzip);
+
+        while (await reader.ReadLineAsync(ct) is { } line)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            yield return JsonSerializer.Deserialize<T>(line, BulkJsonOptions);
+        }
     }
 
     // ── Rulings ──────────────────────────────────────────────────────────
@@ -167,23 +190,10 @@ public sealed class AtlasSeeder
             return;
         }
 
-        var http = _httpFactory.CreateClient("scryfall");
-
-        _logger.LogInformation("Resolving Scryfall rulings bulk URL...");
-        var bulkInfo = await http.GetFromJsonAsync<BulkDataInfo>(
-            "https://api.scryfall.com/bulk-data/rulings", ct)
-            ?? throw new InvalidOperationException("Failed to resolve rulings bulk-data info.");
-
-        _logger.LogInformation("Downloading rulings from {Uri} ({SizeMb} MB)...",
-            bulkInfo.DownloadUri, bulkInfo.Size / (1024 * 1024));
-
-        await using var stream = await http.GetStreamAsync(bulkInfo.DownloadUri, ct);
-        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-
         var batch = new List<RulingRow>(capacity: 500);
         var total = 0;
 
-        await foreach (var raw in JsonSerializer.DeserializeAsyncEnumerable<RawRuling>(stream, options, ct))
+        await foreach (var raw in StreamScryfallBulkAsync<RawRuling>("rulings", ct))
         {
             if (raw is null) continue;
 
@@ -1125,8 +1135,8 @@ public sealed class AtlasSeeder
 
     private sealed class BulkDataInfo
     {
-        [JsonPropertyName("download_uri")] public string DownloadUri { get; set; } = "";
-        [JsonPropertyName("size")] public long Size { get; set; }
+        [JsonPropertyName("jsonl_download_uri")] public string JsonlDownloadUri { get; set; } = "";
+        [JsonPropertyName("compressed_size")] public long CompressedSize { get; set; }
     }
 
     private sealed class RawCard

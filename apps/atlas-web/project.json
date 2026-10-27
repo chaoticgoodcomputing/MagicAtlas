@@ -5,10 +5,10 @@
   "sourceRoot": "apps/atlas-web/src",
   "targets": {
     "dev": {
-      "//": "Vite dev server for the concept explorer at localhost:55173. The concept surfaces run on the in-file sample corpus and need no backend; only the Embedding view talks to atlas-api (use dev:live for that).",
+      "//": "Vite dev server for the concept explorer at localhost:25173. The concept surfaces run on the in-file sample corpus and need no backend; only the Embedding view talks to atlas-api (use dev:live for that).",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["vite"],
+        "commands": [ "vite" ],
         "cwd": "apps/atlas-web"
       }
     },
@@ -16,27 +16,27 @@
       "//": "Typecheck (tsc -b) then bundle to dist/. Add build-time one-shots (e.g. a future GraphQL 'codegen' target) to dependsOn so they run before the bundle.",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["tsc -b", "vite build"],
+        "commands": [ "tsc -b", "vite build" ],
         "cwd": "apps/atlas-web",
         "parallel": false
       },
-      "outputs": ["{projectRoot}/dist"],
-      "dependsOn": ["^build"]
+      "outputs": [ "{projectRoot}/dist" ],
+      "dependsOn": [ "^build" ]
     },
     "preview": {
       "//": "Serve the production build from dist/ (run build first).",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["vite preview"],
+        "commands": [ "vite preview" ],
         "cwd": "apps/atlas-web"
       },
-      "dependsOn": ["build"]
+      "dependsOn": [ "build" ]
     },
     "lint": {
       "//": "Type-only check (no emit).",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["tsc --noEmit"],
+        "commands": [ "tsc --noEmit" ],
         "cwd": "apps/atlas-web",
         "parallel": false
       }
@@ -44,7 +44,7 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["npx prettier src --write"],
+        "commands": [ "npx prettier src --write" ],
         "cwd": "apps/atlas-web",
         "parallel": false
       }
@@ -52,20 +52,20 @@
     "format:check": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["npx prettier src --check"],
+        "commands": [ "npx prettier src --check" ],
         "cwd": "apps/atlas-web",
         "parallel": false
       }
     },
     "dev:live": {
-      "//": "Dev server wired for the live Embedding view: ensures atlas-api's Postgres is up first (cross-project dependsOn atlas-api:db). Start the GraphQL API separately — `nx serve atlas-api` — since a long-running server cannot be a dependsOn. This is the template for future GQL/data-run dependencies: add one-shot targets and list them here.",
+      "//": "Dev server wired to live data: dependsOn the continuous atlas-api:serve target (which itself brings Postgres up via atlas-api:db), so one command runs the GraphQL API and Vite together. Add further one-shot or continuous data targets here.",
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["vite"],
+        "commands": [ "vite" ],
         "cwd": "apps/atlas-web"
       },
-      "dependsOn": [{ "projects": "atlas-api", "target": "db" }]
+      "dependsOn": [ { "projects": "atlas-api", "target": "serve" } ]
     }
   },
-  "tags": ["type:app", "scope:web"]
+  "tags": [ "type:app", "scope:web" ]
 }

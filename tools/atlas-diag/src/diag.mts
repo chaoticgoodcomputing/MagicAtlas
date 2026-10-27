@@ -271,7 +271,7 @@ async function cmdCard(flags: Record<string, string | boolean>, positional: stri
 
   // api diff
   if (flags["no-api"]) return;
-  const apiUrl = (flags.api as string) ?? process.env.ATLAS_API_URL ?? "http://localhost:55250/trax/graphql";
+  const apiUrl = (flags.api as string) ?? process.env.ATLAS_API_URL ?? "http://localhost:25250/trax/graphql";
   const api = await apiPorts(apiUrl, exact);
   console.log("\n" + bold("API diff") + dim(`  (${apiUrl})`));
   if (!api.ok) {

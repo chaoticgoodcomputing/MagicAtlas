@@ -13,7 +13,7 @@
 // at it in appsettings.Development.json — present-and-readable wins over the HTTP fetch.
 //
 // Try it:
-//   http://localhost:55250/trax/graphql  — Banana Cake Pop IDE
+//   http://localhost:25250/trax/graphql  — Banana Cake Pop IDE
 //
 //   query {
 //     atlas {
